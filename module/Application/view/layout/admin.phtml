@@ -1,0 +1,356 @@
+<?php
+use Zend\Session\Container;
+$alertContainer = new Container('alert');
+$sessionLogin = new Container('admin_credo');
+//$role = $sessionLogin->roleCode;
+$roleId = $sessionLogin->roleId;
+
+$adminMenu = "";
+$recentActivity = "";
+
+
+ // $adminMenu.="<li class='nav-main-item '><a class='nav-main-link admin-matter-keyword' href=". $this->url('admin-matter-keyword', array('action' => 'index')) . "><span class='nav-main-link-name'>Matter Merge Fields</span></a></li>";
+
+?>
+
+<!doctype html>
+<html lang="en">
+<head>
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+     <meta name="google-signin-client_id" content="273649797410-njv7tbff3776t15b3l11sa13d94eu06k.apps.googleusercontent.com">
+
+     <title>Recency Management</title>
+     <!-- Icons -->
+     <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+     <link rel="shortcut icon" href="<?php echo $this->basePath().'/assets/media/favicons/favicon.png';?>">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/alert.css'?>" rel="stylesheet">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/select2-new.min.css' ?>">
+
+
+
+
+     <link rel="icon" type="image/png" sizes="192x192" href="<?php echo $this->basePath().'/assets/media/favicons/favicon-192x192.png';?>">
+     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $this->basePath().'/assets/media/favicons/apple-touch-icon-180x180.png';?>">
+
+     <!-- END Icons -->
+          <style>
+               .mandatory{
+                    color:red;
+               }
+          </style>
+     <!-- Stylesheets -->
+     <!-- Fonts and Dashmix framework -->
+
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/dashmix.min.css'?>" rel="stylesheet">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css'?>" rel="stylesheet">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/select2-new.min.css' ?>">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/datatables/dataTables.bootstrap4.css'?>" rel="stylesheet">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css'?>" rel="stylesheet">
+
+     <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+     <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/xwork.min.css"> -->
+     <!-- END Stylesheets -->
+</head>
+<body>
+     <!-- Page Container -->
+
+     <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header-fixed page-header-dark main-content-narrow">
+          <!-- Side Overlay-->
+          <aside id="side-overlay">
+               <!-- Side Header -->
+               <div class="bg-image" style="background-image: url('<?php echo $this->basePath().'/assets/media/various/bg_side_overlay_header.jpg';?>');">
+                    <div class="bg-primary-op">
+                         <div class="content-header">
+                              <!-- User Avatar -->
+                              <a class="img-link mr-1" href="be_pages_generic_profile.html">
+                                   <img class="img-avatar img-avatar48" src="<?php echo $this->basePath().'/assets/media/avatars/avatar10.jpg';?>" alt="">
+                              </a>
+                              <!-- END User Avatar -->
+
+                              <!-- User Info -->
+                              <div class="ml-2">
+                                   <a class="text-white font-w600" href="#">Admin Name</a>
+                                   <div class="text-white-75 font-size-sm font-italic">Full Stack Developer</div>
+                              </div>
+                              <!-- END User Info -->
+
+                              <!-- Close Side Overlay -->
+                              <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                              <a class="ml-auto text-white" href="javascript:void(0)" data-toggle="layout" data-action="side_overlay_close">
+                                   <i class="fa fa-times-circle"></i>
+                              </a>
+                              <!-- END Close Side Overlay -->
+                         </div>
+                    </div>
+               </div>
+               <!-- END Side Header -->
+
+          </aside>
+          <!-- END Side Overlay -->
+
+          <nav id="sidebar" aria-label="Main Navigation">
+               <!-- Side Header -->
+               <div class="bg-header-dark">
+                    <div class="content-header bg-white-10">
+                         <!-- Logo -->
+                         <a class="link-fx font-w600 font-size-lg text-white" href="">
+                              <span class="text-white-75">Recency</span><span class="text-white"> Web</span>
+                         </a>
+                         <!-- END Logo -->
+
+                         <!-- Options -->
+                         <div>
+                              <!-- <a class="js-class-toggle text-white-75" data-target="#sidebar-style-toggler" data-class="fa-toggle-off fa-toggle-on" data-toggle="layout" data-action="sidebar_style_toggle" href="javascript:void(0)">
+                                   <i class="fa fa-toggle-off" id="sidebar-style-toggler"></i>
+                              </a> -->
+
+                              <!-- Close Sidebar, Visible only on mobile screens -->
+                              <a class="d-lg-none text-white ml-2" data-toggle="layout" data-action="sidebar_close" href="javascript:void(0)">
+                                   <i class="fa fa-times-circle"></i>
+                              </a>
+                              <!-- END Close Sidebar -->
+                         </div>
+                         <!-- END Options -->
+                    </div>
+               </div>
+               <!-- END Side Header -->
+
+               <!-- Side Navigation -->
+               <div class="content-side content-side-full">
+                    <ul class="nav-main">
+                         <li class="nav-main-item">
+                         <a class="btn btn-hero-sm btn-hero-light" href="/admin" style="background-color: #dbe4ef;">
+                                   <i class="fa fa-fw fa-home mr-1"></i>Home
+                                   <!-- <span class="nav-main-link-badge badge badge-pill badge-success">5</span> -->
+                              </a>
+                         </li>
+                         <li class="nav-main-heading">Admin</li>
+                         <li class="nav-main-item open" id="manage">
+                              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                                   <i class="nav-main-link-icon si si-grid"></i>
+                                   <span class="nav-main-link-name ">Manage</span>
+                              </a>
+
+                              <ul class="nav-main-submenu">
+                                   <?php echo $adminMenu;?>
+                              </ul>
+                         </li>
+
+                         <!-- <li class="nav-main-heading">Reports</li> -->
+                         <li class="nav-main-item">
+                              <!-- <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                                   <i class="nav-main-link-icon si si-chemistry"></i>
+                                   <span class="nav-main-link-name">Recent Activity</span>
+                              </a> -->
+                              <ul class="nav-main-submenu">
+                                   <?php echo $recentActivity;?>
+                              </ul>
+                              <ul class="nav-main-submenu">
+                                   <li class="nav-main-item">
+                                        <a class="nav-main-link" href="#">
+                                             <span class="nav-main-link-name">Test</span>
+                                        </a>
+                                   </li>
+                              </ul>
+                         </li>
+                    </ul>
+               </div>
+               <!-- END Side Navigation -->
+          </nav>
+          <!-- END Sidebar -->
+
+          <!-- Header -->
+          <header id="page-header">
+               <!-- Header Content -->
+               <div class="content-header">
+                    <!-- Left Section -->
+                    <div>
+                         <!-- Toggle Sidebar -->
+                         <button type="button" class="btn btn-dual mr-1" data-toggle="layout" data-action="sidebar_toggle">
+                              <i class="fa fa-fw fa-bars"></i>
+                         </button>
+                         <!-- END Toggle Sidebar -->
+
+                         <!-- Open Search Section -->
+                         <!-- <button type="button" class="btn btn-dual" data-toggle="layout" data-action="header_search_on">
+                         <i class="fa fa-fw fa-search"></i> <span class="ml-1 d-none d-sm-inline-block">Search</span>
+                    </button> -->
+                    <!-- END Open Search Section -->
+               </div>
+               <!-- END Left Section -->
+
+               <!-- Right Section -->
+               <div>
+                    <!-- User Dropdown -->
+                    <div class="dropdown d-inline-block">
+                         <button type="button" class="btn btn-dual" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fa fa-fw fa-user d-sm-none"></i>
+                              <span class="d-none d-sm-inline-block">Admin</span>
+                              <i class="fa fa-fw fa-angle-down ml-1 d-none d-sm-inline-block"></i>
+                         </button>
+                         <div class="dropdown-menu dropdown-menu-right p-0" aria-labelledby="page-header-user-dropdown">
+                              <!-- <div class="bg-primary-darker rounded-top font-w600 text-white text-center p-3">
+                              User Options
+                         </div> -->
+                         <div class="p-2">
+
+                                   <div role="separator" class="dropdown-divider"></div>
+                                   <a class="dropdown-item"  href="/admin/login/logout">
+                                        <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> Sign Out
+                                   </a>
+                              </div>
+                         </div>
+                    </div>
+                    <!-- END User Dropdown -->
+
+                    <!-- Notifications Dropdown -->
+
+                    <!-- END Notifications Dropdown -->
+
+                    <!-- Toggle Side Overlay -->
+                    <!-- <button type="button" class="btn btn-dual" data-toggle="layout" data-action="side_overlay_toggle">
+                    <i class="far fa-fw fa-list-alt"></i>
+               </button> -->
+               <!-- END Toggle Side Overlay -->
+          </div>
+          <!-- END Right Section -->
+     </div>
+     <!-- END Header Content -->
+
+     <!-- Header Search -->
+
+     <!-- <div id="page-header-search" class="overlay-header bg-primary">
+     <div class="content-header">
+     <form class="w-100" action="be_pages_generic_search.html" method="post">
+     <div class="input-group">
+     <div class="input-group-prepend">
+     <button type="button" class="btn btn-primary" data-toggle="layout" data-action="header_search_off">
+     <i class="fa fa-fw fa-times-circle"></i>
+</button>
+</div>
+<input type="text" class="form-control border-0" placeholder="Search or hit ESC.." id="page-header-search-input" name="page-header-search-input">
+</div>
+</form>
+</div>
+</div> -->
+<!-- END Header Search -->
+
+<!-- Header Loader -->
+<!-- Please check out the Loaders page under Components category to see examples of showing/hiding it -->
+<div id="page-header-loader" class="overlay-header bg-primary-darker">
+     <div class="content-header">
+          <div class="w-100 text-center">
+               <i class="fa fa-fw fa-2x fa-sun fa-spin text-white"></i>
+          </div>
+     </div>
+</div>
+<!-- END Header Loader -->
+</header>
+<!-- END Header -->
+
+
+<main id="main-container">
+     <!-- Hero -->
+     <?php echo $this->content; ?>
+     <!-- END Hero -->
+
+     <!-- Page Content -->
+     <!-- <div class="content">
+
+</div> -->
+<!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+<!-- Footer -->
+<footer id="page-footer" class="bg-body-light">
+     <div class="content py-0">
+          <div class="row font-size-sm">
+               <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-right">
+                    <!-- Powered with <i class="fa fa-heart text-danger"></i> by <a class="font-w600" href="#" target="_blank">   </a> -->
+               </div>
+               <div class="col-sm-6 order-sm-1 text-center text-sm-left">
+                    <strong>Copyright &copy; <?php echo date('Y');?> <a href="#"></a></strong> All rights reserved.
+               </div>
+          </div>
+     </div>
+</footer>
+<!-- END Footer -->
+</div>
+<!-- END Page Container -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/dashmix.core.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'; ?>"></script>
+
+<script src="<?php echo $this->basePath() . '/assets/js/dashmix.app.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/pages/be_forms_validation.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/jquery-validation/jquery.validate.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/jquery-validation/additional-methods.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/pages/deforayValidation.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/jquery.blockUI.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/alert.js'; ?>"></script>
+
+
+
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/jquery.dataTables.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/dataTables.bootstrap4.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/buttons.print.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/buttons.html5.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/buttons.flash.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/buttons.colVis.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/pages/be_tables_datatables.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
+
+
+<script>jQuery(function(){ Dashmix.helpers(['datepicker', 'colorpicker', 'maxlength', 'select2', 'rangeslider']); });</script>
+<!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+
+
+<script type="text/javascript">
+
+  $(function () {
+    str=$(location).attr('pathname');
+    splitsUrl=str.split("/",4);
+    if( splitsUrl[1]=='admin-matter-type' || splitsUrl[1]=='company' )
+
+    {
+      $('.nav-main-link').removeClass('active');
+      $('#manage').addClass('open');
+      $('.'+splitsUrl[1]).addClass('active');
+    }
+  });
+  $(function () {
+
+      <?php
+      if (isset($alertContainer->alertMsg) && $alertContainer->alertMsg != "") {
+            ?>
+            alert("<?php echo $alertContainer->alertMsg; ?>");
+            <?php
+            $alertContainer->alertMsg = "";
+            unset($alertContainer->alertMsg);
+      }
+      ?>
+  });
+  jQuery(".checkNum").keydown(function (e) {
+      // Allow: backspace, delete, tab, escape, enter and .
+      if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+      // Allow: Ctrl+A
+      (e.keyCode == 65 && e.ctrlKey === true) ||
+      // Allow: home, end, left, right
+      (e.keyCode >= 35 && e.keyCode <= 39)) {
+            // let it happen, don't do anything
+            return;
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+      }
+  });
+</script>
+</body>
+</html>
