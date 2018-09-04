@@ -21,16 +21,16 @@ return array(
                     ),
                ),
 
-                 // 'login' => array(
-                 //       'type' => 'segment',
-                 //       'options' => array(
-                 //            'route'    => '/login[/:action]',
-                 //            'defaults' => array(
-                 //                 'controller' => 'Application\Controller\Login',
-                 //                 'action' => 'index',
-                 //            ),
-                 //       ),
-                 // ),
+                 'login' => array(
+                       'type' => 'segment',
+                       'options' => array(
+                            'route'    => '/login[/:action]',
+                            'defaults' => array(
+                                 'controller' => 'Application\Controller\Login',
+                                 'action' => 'index',
+                            ),
+                       ),
+                 ),
             'logout' => array(
                   'type' => 'Zend\Mvc\Router\Http\Literal',
                   'options' => array(
@@ -120,22 +120,9 @@ return array(
      'controllers' => array(
           'invokables' => array(
 
-
                'Application\Controller\Index' => 'Application\Controller\IndexController',
                'Application\Controller\Common' => 'Application\Controller\CommonController',
-
-               'Application\Controller\Roles' => 'Application\Controller\RolesController',
                'Application\Controller\Login' => 'Application\Controller\LoginController',
-               'Application\Controller\RecentActivity' => 'Application\Controller\RecentActivityController',
-               'Application\Controller\FeeEarner' => 'Application\Controller\FeeEarnerController',
-               'Application\Controller\Clients' => 'Application\Controller\ClientsController',
-               'Application\Controller\MatterType' => 'Application\Controller\MatterTypeController',
-                'Application\Controller\Company' => 'Application\Controller\CompanyController',
-               'Application\Controller\DocumentKeyword' => 'Application\Controller\DocumentKeywordController',
-               'Application\Controller\SuperAdmin' => 'Application\Controller\SuperAdminController',
-
-
-
           ),
      ),
      'controller_plugins' => array(

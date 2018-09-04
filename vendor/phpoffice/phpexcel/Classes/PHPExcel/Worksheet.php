@@ -1230,7 +1230,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
         $this->_cachedHighestRow = max($this->_cachedHighestRow, $aCoordinates[1]);
 
         // Cell needs appropriate xfIndex from dimensions records
-		//    but don't create dimension records if they don't already exists
+		//    but don't create dimension records if they don't already exist
         $rowDimension    = $this->getRowDimension($aCoordinates[1], FALSE);
         $columnDimension = $this->getColumnDimension($aCoordinates[0], FALSE);
 
@@ -1687,7 +1687,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
             // get the cells in the range
             $aReferences = PHPExcel_Cell::extractAllCellReferencesInRange($pRange);
 
-            // create upper left cell if it does not already exists
+            // create upper left cell if it does not already exist
             $upperLeft = $aReferences[0];
             if (!$this->cellExists($upperLeft)) {
                 $this->getCell($upperLeft)->setValueExplicit(null, PHPExcel_Cell_DataType::TYPE_NULL);
@@ -2445,7 +2445,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
             // Loop through columns in the current row
             for ($col = $minCol; $col != $maxCol; ++$col) {
                 $cRef = ($returnCellRef) ? $col : ++$c;
-                //    Using getCell() will create a new cell if it doesn't already exists. We don't want that to happen
+                //    Using getCell() will create a new cell if it doesn't already exist. We don't want that to happen
                 //        so we test and retrieve directly against _cellCollection
                 if ($this->_cellCollection->isDataSet($col.$row)) {
                     // Cell exists

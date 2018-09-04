@@ -203,7 +203,7 @@ class PHPUnit_Framework_MockObject_Generator
             if (!$reflect->implementsInterface("PHPUnit_Framework_MockObject_MockObject")) {
                 throw new PHPUnit_Framework_MockObject_RuntimeException(
                     sprintf(
-                        'Class "%s" already existss.',
+                        'Class "%s" already exists.',
                         $mockClassName
                     )
                 );

@@ -323,7 +323,7 @@ class PHPExcel
 	}
 
 	/**
-     * Check if a sheet with a specified code name already existss
+     * Check if a sheet with a specified code name already exists
      *
      * @param string $pSheetCodeName  Name of the worksheet to check
      * @return boolean
@@ -482,7 +482,7 @@ class PHPExcel
     }
 
     /**
-     * Check if a sheet with a specified name already existss
+     * Check if a sheet with a specified name already exists
      *
      * @param  string $pSheetName  Name of the worksheet to check
      * @return boolean

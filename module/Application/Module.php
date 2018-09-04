@@ -64,13 +64,12 @@ class Module{
      }
 
      public function preSetter(MvcEvent $e) {
-        if (($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Login') &&
-            ($e->getRouteMatch()->getParam('controller') != 'Admin\Controller\Login')) {
+        if (($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Login')) {
             $tempName=explode('Controller',$e->getRouteMatch()->getParam('controller'));
-            if(substr($tempName[0], 0, -1) == 'Admin' || substr($tempName[0], 0, -1) == 'Application'){
-                $session = new Container('admin_credo');
+            if(substr($tempName[0], 0, -1) == 'Application'){
+                $session = new Container('credo');
                 if (!isset($session->adminId) || $session->adminId == "") {
-                        $url = $e->getRouter()->assemble(array(), array('name' => 'admin-login'));
+                        $url = $e->getRouter()->assemble(array(), array('name' => 'login'));
                         $response = $e->getResponse();
                         $response->getHeaders()->addHeaderLine('Location', $url);
                         $response->setStatusCode(302);

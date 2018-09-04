@@ -6,7 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'phpseclib\\' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'Zend\\XmlRpc\\' => array($vendorDir . '/zendframework/zend-xmlrpc/src'),
     'Zend\\View\\' => array($vendorDir . '/zendframework/zend-view/src'),
     'Zend\\Version\\' => array($vendorDir . '/zendframework/zend-version/src'),
@@ -57,15 +56,4 @@ return array(
     'Zend\\Barcode\\' => array($vendorDir . '/zendframework/zend-barcode/src'),
     'Zend\\Authentication\\' => array($vendorDir . '/zendframework/zend-authentication/src'),
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
-    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
-    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
-    'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
-    'PhpOffice\\PhpWord\\' => array($vendorDir . '/phpoffice/phpword/src/PhpWord'),
-    'PhpOffice\\Common\\' => array($vendorDir . '/phpoffice/common/src/Common'),
-    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
-    'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),
-    'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
-    'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
-    'Google\\Auth\\' => array($vendorDir . '/google/auth/src'),
-    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
 );

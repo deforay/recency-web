@@ -264,7 +264,7 @@ class PHPExcel_Worksheet_AutoFilter
 	 *	Shift an AutoFilter Column Rule to a different column
 	 *
 	 *	Note: This method bypasses validation of the destination column to ensure it is within this AutoFilter range.
-	 *		Nor does it verify whether any column rule already existss at $toColumn, but will simply overrideany existing value.
+	 *		Nor does it verify whether any column rule already exists at $toColumn, but will simply overrideany existing value.
 	 *		Use with caution.
 	 *
 	 *	@param	string	$fromColumn		Column name (e.g. A)

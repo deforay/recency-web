@@ -11,7 +11,5 @@ return array(
     'ZendService\\Google\\Gcm\\' => array($vendorDir . '/zendframework/zendservice-google-gcm/library'),
     'ZendService\\Google\\Exception\\' => array($vendorDir . '/zendframework/zendservice-google-gcm/library'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
-    'Google_Service_' => array($vendorDir . '/google/apiclient-services/src'),
-    'Google_' => array($vendorDir . '/google/apiclient/src'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src'),
 );

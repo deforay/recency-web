@@ -423,7 +423,7 @@
   // Description :
   //   This method supports two synopsis. The first one is historical.
   //   This methods add the list of files in an existing archive.
-  //   If a file with the same name already existss, it is added at the end of the
+  //   If a file with the same name already exists, it is added at the end of the
   //   archive, the first one is still present.
   //   If the archive does not exist, it is created.
   // Parameters :
@@ -621,9 +621,9 @@
   //                ok : OK !
   //                filtered : the file / dir is not extracted (filtered by user)
   //                already_a_directory : the file can not be extracted because a
-  //                                      directory with the same name already existss
+  //                                      directory with the same name already exists
   //                write_protected : the file can not be extracted because a file
-  //                                  with the same name already existss and is
+  //                                  with the same name already exists and is
   //                                  write protected
   //                newer_exist : the file was not extracted because a newer file exists
   //                path_creation_fail : the file is not extracted because the folder
@@ -675,7 +675,7 @@
   //   folder indicated in $p_path.
   //   If you want to ignore the 'root' part of path of the memorized files
   //   you can indicate this in the optional $p_remove_path parameter.
-  //   By default, if a newer file with the same name already existss, the
+  //   By default, if a newer file with the same name already exists, the
   //   file is not extracted.
   //
   //   If both PCLZIP_OPT_PATH and PCLZIP_OPT_ADD_PATH aoptions
@@ -1151,7 +1151,7 @@
   // Function : duplicate()
   // Description :
   //   This method creates an archive by copying the content of an other one. If
-  //   the archive already exists, it is replaced by the new one without any warning.
+  //   the archive already exist, it is replaced by the new one without any warning.
   // Parameters :
   //   $p_archive : The filename of a valid archive, or
   //                a valid PclZip object.

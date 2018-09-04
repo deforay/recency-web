@@ -158,7 +158,7 @@
       and resume the extract of the zip.
     - Add optional attribute PCLZIP_OPT_REPLACE_NEWER. This will force, during an extract' the
       replacement of the file, even if a  newer version of the file exists.
-      Note that today if a file with the same name already existss but is older it will be
+      Note that today if a file with the same name already exists but is older it will be
       replaced by the extracted one.
     - Improve PclZipUtilOption()
     - Support of zip archive with trailing bytes. Before 2.2, PclZip checks that the central
@@ -211,7 +211,7 @@
       path is the same
       as a zipped dir. The dir is not zipped (['status'] = filtered), only its content.
     - Add better support for windows paths (thanks for help from manus@manusfreedom.com).
-    - Corrected bug : When the archive file already existss with size=0, the add() method
+    - Corrected bug : When the archive file already exists with size=0, the add() method
       fails. Corrected in 2.0.
     - Remove the use of OS_WINDOWS constant. Use php_uname() function rather.
     - Control the order of index ranges in extract by index feature.
@@ -365,7 +365,7 @@
     - Path given to methods must be in the unix format (/) and not the Windows format (\).
       Workaround : Use only / directory separators.
     - PclZip is using temporary files that are sometime the name of the file with a .tmp or .gz
-      added suffix. Files with these names may already exists and may be overwritten.
+      added suffix. Files with these names may already exist and may be overwritten.
       Workaround : none.
     - PclZip does not check if the zlib extension is present. If it is absent, the zip
       file is not created and the lib abort without warning.

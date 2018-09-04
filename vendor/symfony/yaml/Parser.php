@@ -184,7 +184,7 @@ class Parser
                             }
                         } else {
                             // If the value associated with the key is a single mapping node, each of its key/value pairs is inserted into the
-                            // current mapping, unless the key already existss in it.
+                            // current mapping, unless the key already exists in it.
                             foreach ($parsed as $key => $value) {
                                 if (!isset($data[$key])) {
                                     $data[$key] = $value;
