@@ -66,7 +66,6 @@ class RecencyService {
         try {
             $recencyDb = $this->sm->get('RecencyTable');
             $result = $recencyDb->updateRecencyDetails($params);
-            \Zend\Debug\Debug::dump($result);die;
             if($result > 0){
                 $adapter->commit();
 

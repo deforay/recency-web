@@ -195,9 +195,8 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_recency_result' => $params['hivRecencyResult'],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
-                
             );
-            $updateResult = $this->update($data,array('recency_id'=>base64_decode($params['recencyId'])));
+            $updateResult = $this->update($data,array('recency_id'=>$params['recencyId']));
         }
         return $updateResult;
     }
