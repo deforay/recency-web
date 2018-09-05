@@ -195,10 +195,40 @@ class FacilitiesTable extends AbstractTableGateway {
         }
         return $updateResult;
     }
-
+    
     public function fetchFacilitiesAllDetails()
     {
         return $this->select()->toArray();
+    }
+    
+    public function fetchFacilitiesDetailsApi($userId)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        if($email!=''){
+            $sQuery = $sql->select()->from(array( 'f' => 'facilities' ))
+                                ->join(array('r' => 'recency'), 'r.facility = f.facility_id', array(''))
+                                ->where(array('status'=>'active','added_by'=>$userId));
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+            $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+            $sQuery = $sql->select()->from(array( 'f' => 'facilities' ))
+                                ->join(array('r' => 'recency'), 'r.facility != f.facility_id', array(''))
+                                ->where(array('status'=>'active'));
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+            $faResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            if(count($fResult)>0){
+                return array_merge($fResult,$faResult);
+            }else{
+                return $faResult;
+            }
+        }else{
+            $sQuery = $sql->select()->from(array('f'=>'facilities'))
+                                ->where(array('status'=>'active'));
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            return $rResult;
+        }
     }
 }
 ?>

@@ -11,5 +11,6 @@ INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `role_status`) VALUES 
 -- Recency Table Alter Thanaseelan 05-09-2018
 ALTER TABLE `recency` CHANGE `facility` `facility_id` INT(11) NOT NULL;
 ALTER TABLE `recency` CHANGE `added_by` `added_by` INT(11) NULL DEFAULT NULL;
-ALTER TABLE `recency` ADD CONSTRAINT `user_foreign_key` FOREIGN KEY (`added_by`) REFERENCES `users`(`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-ALTER TABLE `recency` ADD CONSTRAINT `facility_forign_key` FOREIGN KEY (`facility_id`) REFERENCES `facilities`(`facility_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+-- sarabvanan 05-sep-2018
+ALTER TABLE `users` ADD `auth_token` VARCHAR(255) NULL DEFAULT NULL AFTER `server_password`;

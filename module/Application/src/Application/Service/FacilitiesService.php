@@ -37,11 +37,6 @@ class FacilitiesService {
             $result = $facilityDb->addFacilitiesDetails($params);
             if($result > 0){
                 $adapter->commit();
-
-               // $eventAction = 'Added a new Role Detail with the name as - '.ucwords($params['roleName']);
-               // $resourceName = 'Roles';
-               // $eventLogDb = $this->sm->get('EventLogTable');
-               // $eventLogDb->addEventLog($eventAction, $resourceName);
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Facility details added successfully';
             }
@@ -69,11 +64,6 @@ class FacilitiesService {
             if($result > 0){
                 $adapter->commit();
 
-                // $eventAction = 'Updated Role Detail with the name as - '.ucwords($params['roleName']);
-                //  $resourceName = 'Roles';
-                //  $eventLogDb = $this->sm->get('EventLogTable');
-                //  $eventLogDb->addEventLog($eventAction, $resourceName);
-
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Facility details updated successfully';
             }
@@ -89,6 +79,12 @@ class FacilitiesService {
     {
         $facilityDb = $this->sm->get('FacilitiesTable');
         return $facilityDb->fetchFacilitiesAllDetails();
+    }
+    
+    public function getAllFacilityListApi($userId)
+    {
+        $facilityDb = $this->sm->get('FacilitiesTable');
+        return $facilityDb->fetchFacilitiesDetailsApi($userId);
     }
 }
 

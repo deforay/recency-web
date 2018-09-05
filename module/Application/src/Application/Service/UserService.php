@@ -38,10 +38,6 @@ class UserService {
             if($result > 0){
                 $adapter->commit();
 
-               // $eventAction = 'Added a new Role Detail with the name as - '.ucwords($params['roleName']);
-               // $resourceName = 'Roles';
-               // $eventLogDb = $this->sm->get('EventLogTable');
-               // $eventLogDb->addEventLog($eventAction, $resourceName);
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'User details added successfully';
             }
@@ -68,12 +64,6 @@ class UserService {
             $result = $userDb->updateUserDetails($params);
             if($result > 0){
                 $adapter->commit();
-
-                // $eventAction = 'Updated Role Detail with the name as - '.ucwords($params['roleName']);
-                //  $resourceName = 'Roles';
-                //  $eventLogDb = $this->sm->get('EventLogTable');
-                //  $eventLogDb->addEventLog($eventAction, $resourceName);
-
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'User details updated successfully';
             }
@@ -91,6 +81,11 @@ class UserService {
         return $roleDb->fetchRoleAllDetails();
     }
 
+    public function userLoginApi($params)
+    {
+        $userDb = $this->sm->get('UserTable');
+        return $userDb->userLoginApi($params);
+    }
 }
 
 ?>
