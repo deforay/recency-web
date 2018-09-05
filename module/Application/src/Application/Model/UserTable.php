@@ -7,7 +7,6 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Expression;
 use Application\Service\CommonService;
-use Zend\Config\Writer\PhpArray;
 
 class UserTable extends AbstractTableGateway {
 
@@ -192,7 +191,6 @@ class UserTable extends AbstractTableGateway {
                 'status' => $params['userStatus']
                 
             );
-            // \Zend\Debug\Debug::dump($data);die;
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
         }
@@ -232,5 +230,48 @@ class UserTable extends AbstractTableGateway {
         return $updateResult;
     }
 
+    //login by api
+    public function userLoginApi($params)
+    {
+
+        $common = new CommonService();
+        $config = new \Zend\Config\Reader\Ini();
+        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+		        
+        $password = sha1($params['password'] . $configResult["password"]["salt"]);
+		
+		  $sQuery = $sql->select()->from(array('u' => 'users'))
+                    ->where(array('email' =>$params['email'], 'server_password' => $password))
+                    ;
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            
+            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+		
+        if(isset($rResult['user_id']) && $rResult['user_id']!='' && $rResult['status']=='active') {
+            $auth = $common->generateRandomString(15);
+            $id = $this->update(array('auth_token'=>$auth),array('user_id'=>$rResult['user_id']));
+            if($id>0){
+                $response['status']='success';
+                $response["userDetails"] = array(
+                    'userId' => $rResult->user_id,
+                    'userName' => $rResult->user_name,
+                    'userEmailAddress' => $rResult->email
+                );
+                $response["message"] = "Logged in successfully";
+            }else{
+                $response["status"] = "fail";
+                $response["message"] = "Please try again!";
+            }
+        } else if($rResult['status']=='inactive'){
+            $response["status"] = "fail";
+            $response["message"] = "Your status is Inactive!";
+        } else {
+            $response["status"] = "fail";
+            $response["message"] = "Please check your login credentials!";
+        }
+       return $response;
+    }
 }
 ?>

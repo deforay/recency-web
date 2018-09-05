@@ -2,7 +2,7 @@
 namespace Application;
 
 use Zend\Session\Container;
-use Application\Model\GoogleConnector;
+
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
