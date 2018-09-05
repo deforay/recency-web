@@ -11,6 +11,7 @@ use Zend\View\Model\ViewModel;
 use Application\Model\UserTable;
 use Application\Model\FacilitiesTable;
 use Application\Model\RoleTable;
+use Application\Model\RecencyTable;
 
 
 // Service
@@ -18,6 +19,7 @@ use Application\Model\RoleTable;
 use Application\Service\CommonService;
 use Application\Service\UserService;
 use Application\Service\FacilitiesService;
+use Application\Service\RecencyService;
 
 
 class Module{
@@ -90,6 +92,11 @@ class Module{
                         $table = new RoleTable($dbAdapter);
                         return $table;
                     },
+                    'RecencyTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new RecencyTable($dbAdapter);
+                        return $table;
+                    },
 
                     //service
 
@@ -103,6 +110,9 @@ class Module{
                     },
                     'FacilitiesService' => function($sm) {
                         return new FacilitiesService($sm);
+                    },
+                    'RecencyService' => function($sm) {
+                        return new RecencyService($sm);
                     },
 
                )

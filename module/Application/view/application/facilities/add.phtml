@@ -26,36 +26,48 @@ $sessionLogin = new Container('credo');
                <div class="col-md-12 table-responsive" id="hide">
                     <form name="facilityInformation" id="facilityInformation"  class="mb-5" action="<?php echo $this->url('facilities', array('action' => 'add')); ?>" method="post">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="keyword">Facility Name<span class="mandatory">*</span></label>
+                            <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Enter the facility name" title="Please enter the facility name" onblur="checkNameValidation('facility', 'facility_name', this,'NULL', 'The facility name that you entered already exists . Please try another name..');">
                             </div>
 
-                            <label class="col-sm-2 col-form-label" for="keyword">Province<span class="mandatory">*</span></label>
+                            <label class="col-sm-2 col-form-label" for="">Province<span class="mandatory">*</span></label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control isRequired" id="province" name="province" placeholder="Enter the province" title="Please enter the province">
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="keyword">District<span class="mandatory">*</span></label>
+                            <label class="col-sm-2 col-form-label" for="">District<span class="mandatory">*</span></label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control isRequired" id="district" name="district" placeholder="Enter the district name" title="Please enter the district name">
                             </div>
 
-                            <label class="col-sm-2 col-form-label" for="keyword">Email</label>
+                            <label class="col-sm-2 col-form-label" for="">Email</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="keyword">Alternate Email</label>
+                            <label class="col-sm-2 col-form-label" for="">Latitude</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Enter the latitude" title="Please enter the latitude">
+                            </div>
+
+                            <label class="col-sm-2 col-form-label" for="">Longitude</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Enter the longitude" title="Please enter the longitude">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
                             </div>
 
-                            <label class="col-sm-2 col-form-label" for="keywordType">Status<span class="mandatory">*</span></label>
+                            <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
                             <div class="col-sm-4">
                                 <select class="form-control isRequired" id="facilityStatus" name="facilityStatus" title="Please select the facility status">
                                     <option value="active">Active</option>

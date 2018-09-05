@@ -1,62 +1,31 @@
 <?php
 namespace Application\Model;
 
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Expression;
 use Zend\Session\Container;
 use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Sql;
-use Zend\Db\TableGateway\AbstractTableGateway;
-use Zend\Db\Sql\Expression;
-use Application\Service\CommonService;
 use Zend\Config\Writer\PhpArray;
+use Application\Service\CommonService;
+use Zend\Db\TableGateway\AbstractTableGateway;
 
-class UserTable extends AbstractTableGateway {
+class RecencyTable extends AbstractTableGateway {
 
-    protected $table = 'users';
+    protected $table = 'recency';
 
     public function __construct(Adapter $adapter) {
           $this->adapter = $adapter;
     }
 
-    public function loginProcessDetails($params){
-		$alertContainer = new Container('alert');
-        $logincontainer = new Container('credo');
-        if(isset($params['userName']) && trim($params['userName'])!="" && trim($params['loginPassword'])!=""){
-            $dbAdapter = $this->adapter;
-            $sql = new Sql($dbAdapter);
-            $sQuery = $sql->select()->from(array('u' => 'users'))
-                    ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
-				    ->where(array('u.user_name' => $params['userName'], 'u.server_password' => $params['loginPassword']));
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            // echo $sQueryStr;die;
-            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
-            if($rResult) {
-                        $logincontainer->userId = $rResult->user_id;
-                        $logincontainer->roleId = $rResult->role_id;
-                        $logincontainer->roleCode = $rResult->role_code;
-                        $logincontainer->userName = ucwords($rResult->user_name);
-                        $logincontainer->userEmail = ucwords($rResult->email);
-
-                        return 'facilities';
-            }else {
-                $alertContainer->alertMsg = 'The login id or password that you entered is incorrect';
-                return 'login';
-            }
-        }else {
-            $alertContainer->alertMsg = 'The login id or password that you entered is incorrect';
-            return 'login';
-        }
-    }
-
-    public function fetchUserDetails($parameters) {
+    public function fetchRecencyDetails($parameters) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
         * you want to insert a non-database field (for example a counter or static image)
         */
         $sessionLogin = new Container('credo');
         $common = new CommonService();
-        $aColumns = array('u.user_name','r.role_name','u.email','u.server_password','u.alt_email','u.mobile','u.alt_mobile','u.job_responsibility','u.comments','u.status');
-        $orderColumns = array('u.user_name','r.role_name','u.email','u.server_password','u.alt_email','u.mobile','u.alt_mobile','u.job_responsibility','u.comments','u.status');
+        $aColumns = array('r.sample_id','r.patient_id','r.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.added_on','r.added_by');
+        $orderColumns = array('r.sample_id','r.patient_id','r.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.added_on','r.added_by');
 
         /* Paging */
         $sLimit = "";
@@ -126,8 +95,8 @@ class UserTable extends AbstractTableGateway {
           $sql = new Sql($dbAdapter);
           $roleId=$sessionLogin->roleId;
 
-          $sQuery = $sql->select()->from(array( 'u' => 'users' ))
-                                ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_name'));
+          $sQuery = $sql->select()->from(array( 'r' => 'recency' ))
+                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
 
           if (isset($sWhere) && $sWhere != "") {
                   $sQuery->where($sWhere);
@@ -164,75 +133,73 @@ class UserTable extends AbstractTableGateway {
           foreach ($rResult as $aRow) {
 
               $row = array();
-              $row[] = ucwords($aRow['user_name']);
-              $row[] = ucwords($aRow['role_name']);
-              $row[] = $aRow['email'];
-              $row[] = $aRow['mobile'];
-              $row[] = $aRow['job_responsibility'];
-              $row[] = ucwords($aRow['status']);
-              $row[] = '<a href="/user/edit/' . base64_encode($aRow['user_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+              $row[] = $aRow['sample_id'];
+              $row[] = $aRow['patient_id'];
+              $row[] = ucwords($aRow['facility_name']);
+              $row[] = $aRow['hiv_diagnosis_date'];
+              $row[] = $aRow['hiv_recency_date'];
+              $row[] = $aRow['hiv_recency_result'];
+              $row[] = '<a href="/recency/edit/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
               $output['aaData'][] = $row;
           }
 
           return $output;
       }
 
-    public function addUserDetails($params)
+    public function addRecencyDetails($params)
     {
-        if(isset($params['userName']) && trim($params['userName'])!="")
+        $logincontainer = new Container('credo');
+        $common = new CommonService();
+        if(isset($params['sampleId']) && trim($params['sampleId'])!="")
         {
             $data = array(
-                'user_name' => $params['userName'],
-                'role_id' => base64_decode($params['roleName']),
-                'email' => $params['email'],
-                'server_password' => $params['servPass'],
-                'alt_email' => $params['altEmail'],
-                'mobile' => $params['mobile'],
-                'alt_mobile' => $params['altMobile'],
-                'job_responsibility' => $params['JobResponse'],
-                'comments' => $params['comments'],
-                'status' => $params['userStatus']
-                
+                'sample_id' => $params['sampleId'],
+                'patient_id' => $params['patientId'],
+                'facility_id' => base64_decode($params['facilityId']),
+                'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
+                'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
+                'hiv_recency_result' => $params['hivRecencyResult'],
+                'added_on' => date("Y-m-d H:i:s"),
+                'added_by' => $logincontainer->userId
+
             );
-            // \Zend\Debug\Debug::dump($data);die;
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
         }
         return $lastInsertedId;
     }
 
-    public function fetchUserDetailsById($userId)
+    public function fetchRecencyDetailsById($facilityId)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $sQuery = $sql->select()->from('users')
-                                ->where(array('user_id' => $userId));
+        $sQuery = $sql->select()->from('recency')
+                                ->where(array('recency_id' => $facilityId));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }
 
-    public function updateUserDetails($params)
+    public function updateRecencyDetails($params)
     {
-        if(isset($params['userId']) && trim($params['userId'])!="")
+        $logincontainer = new Container('credo');
+        $common = new CommonService();
+        if(isset($params['recencyId']) && trim($params['recencyId'])!="")
         {
             $data = array(
-                'user_name' => $params['userName'],
-                'role_id' => base64_decode($params['roleName']),
-                'email' => $params['email'],
-                'server_password' => $params['servPass'],
-                'alt_email' => $params['altEmail'],
-                'mobile' => $params['mobile'],
-                'alt_mobile' => $params['altMobile'],
-                'job_responsibility' => $params['JobResponse'],
-                'comments' => $params['comments'],
-                'status' => $params['userStatus']
-
+                'sample_id' => $params['sampleId'],
+                'patient_id' => $params['patientId'],
+                'facility_id' => base64_decode($params['facilityId']),
+                'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
+                'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
+                'hiv_recency_result' => $params['hivRecencyResult'],
+                'added_on' => date("Y-m-d H:i:s"),
+                'added_by' => $logincontainer->userId
+                
             );
-            $updateResult = $this->update($data,array('user_id'=>base64_decode($params['userId'])));
+            $updateResult = $this->update($data,array('recency_id'=>base64_decode($params['recencyId'])));
         }
         return $updateResult;
     }
-
 }
 ?>

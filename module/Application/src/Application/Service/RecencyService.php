@@ -10,7 +10,7 @@ use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 
-class FacilitiesService {
+class RecencyService {
 
     public $sm = null;
 
@@ -22,19 +22,19 @@ class FacilitiesService {
         return $this->sm;
     }
 
-    public function getFacilitiesDetails($params)
+    public function getRecencyDetails($params)
     {
-        $facilityDb = $this->sm->get('FacilitiesTable');
-        return $facilityDb->fetchFacilitiesDetails($params);
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecencyDetails($params);
     }
 
-    public function addFacilitiesDetails($params)
+    public function addRecencyDetails($params)
     {
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
-            $facilityDb = $this->sm->get('FacilitiesTable');
-            $result = $facilityDb->addFacilitiesDetails($params);
+            $recencyDb = $this->sm->get('RecencyTable');
+            $result = $recencyDb->addRecencyDetails($params);
             if($result > 0){
                 $adapter->commit();
 
@@ -43,7 +43,7 @@ class FacilitiesService {
                // $eventLogDb = $this->sm->get('EventLogTable');
                // $eventLogDb->addEventLog($eventAction, $resourceName);
                 $alertContainer = new Container('alert');
-                $alertContainer->alertMsg = 'Facility details added successfully';
+                $alertContainer->alertMsg = 'Recency details added successfully';
             }
 
         }
@@ -54,18 +54,19 @@ class FacilitiesService {
         }
     }
 
-    public function getFacilitiesDetailsById($facilityId)
+    public function getRecencyDetailsById($recencyId)
     {
-        $facilityDb = $this->sm->get('FacilitiesTable');
-        return $facilityDb->fetchFacilitiesDetailsById($facilityId);
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecencyDetailsById($recencyId);
     }
 
-    public function updateFacilitiesDetails($params){
+    public function updateRecencyDetails($params){
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
-            $facilityDb = $this->sm->get('FacilitiesTable');
-            $result = $facilityDb->updateFacilitiesDetails($params);
+            $recencyDb = $this->sm->get('RecencyTable');
+            $result = $recencyDb->updateRecencyDetails($params);
+            \Zend\Debug\Debug::dump($result);die;
             if($result > 0){
                 $adapter->commit();
 
@@ -75,7 +76,7 @@ class FacilitiesService {
                 //  $eventLogDb->addEventLog($eventAction, $resourceName);
 
                 $alertContainer = new Container('alert');
-                $alertContainer->alertMsg = 'Facility details updated successfully';
+                $alertContainer->alertMsg = 'Recency details updated successfully';
             }
         }
         catch (Exception $exc) {
@@ -83,12 +84,6 @@ class FacilitiesService {
             error_log($exc->getMessage());
             error_log($exc->getTraceAsString());
         }
-    }
-
-    public function getFacilitiesAllDetails()
-    {
-        $facilityDb = $this->sm->get('FacilitiesTable');
-        return $facilityDb->fetchFacilitiesAllDetails();
     }
 }
 

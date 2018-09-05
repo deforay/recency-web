@@ -2,12 +2,16 @@
 use Zend\Session\Container;
 $alertContainer = new Container('alert');
 $sessionLogin = new Container('credo');
-$role = $sessionLogin->roleCode;
+$role = $sessionLogin->roleId;
+$roleCode = $sessionLogin->roleCode;
+// \Zend\Debug\Debug::dump($roleCode);die;
 
 $userMenu = "";
 $userMenu.="<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=". $this->url('facilities', array('action' => 'index')) ."><span class='nav-main-link-name'>Facilities</span></a></li>";
 $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $this->url('user', array('action' => 'index')) ."><span class='nav-main-link-name'>User</span></a></li>";
 
+$recencyMenu = "";
+$recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'>Manage Recency</span></a></li>";
 
 ?>
 
@@ -47,7 +51,6 @@ $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $t
     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/select2-new.min.css' ?>">
     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/datatables/dataTables.bootstrap4.css'?>" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css'?>" rel="stylesheet">
-
   </head>
   <body>
     <!-- Page Container -->
@@ -67,8 +70,8 @@ $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $t
 
               <!-- User Info -->
               <div class="ml-2">
-                <a class="text-white font-w600" href="#">Admin Name</a>
-                <div class="text-white-75 font-size-sm font-italic">Full Stack Developer</div>
+                <a class="text-white font-w600" href="#"></a>
+                <div class="text-white-75 font-size-sm font-italic"></div>
               </div>
               <!-- END User Info -->
 
@@ -109,16 +112,30 @@ $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $t
               <!-- <span class="nav-main-link-badge badge badge-pill badge-success">5</span> -->
             </a>
           </li>
-          <li class="nav-main-heading"></li>
-          <li class="nav-main-item " id="manage">
-            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-              <i class="nav-main-link-icon si si-grid"></i>
-              <span class="nav-main-link-name ">Manage</span>
-            </a>
-            <ul class="nav-main-submenu">
-                <?php echo $userMenu;?>
-            </ul>
-          </li>
+          <?php if($roleCode == 'admin'){ ?>
+            <li class="nav-main-heading"></li>
+            <li class="nav-main-item " id="manage">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                <i class="nav-main-link-icon si si-grid"></i>
+                <span class="nav-main-link-name ">Manage</span>
+              </a>
+              <ul class="nav-main-submenu">
+                  <?php echo $userMenu;?>
+              </ul>
+            </li>
+          <?php }else{ ?>
+            <li class="nav-main-heading"></li>
+            <li class="nav-main-item " id="recency-menu">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                <i class="nav-main-link-icon si si-grid"></i>
+                <span class="nav-main-link-name ">Recency Users</span>
+              </a>
+              <ul class="nav-main-submenu">
+                  <?php echo $recencyMenu;?>
+              </ul>
+            </li>
+          <?php } ?>
+
         </ul>
       </div>
       <!-- END Side Navigation -->
@@ -204,8 +221,7 @@ $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $t
     <script src="<?php echo $this->basePath() . '/assets/js/plugins/jquery-validation/additional-methods.js'; ?>"></script>
     <script src="<?php echo $this->basePath() . '/assets/js/pages/deforayValidation.js'; ?>"></script>
     <script src="<?php echo $this->basePath() . '/assets/js/jquery.blockUI.js'; ?>"></script>
-
-
+    
     <script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/jquery.dataTables.min.js'; ?>"></script>
     <script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/dataTables.bootstrap4.min.js'; ?>"></script>
     <script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js'; ?>"></script>
@@ -223,10 +239,18 @@ $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $t
       str=$(location).attr('pathname');
       splitsUrl=str.split("/",4);
 
-      if(splitsUrl[1]=='facilities' || splitsUrl[1]=='user')
+      if(splitsUrl[1]=='facilities' || splitsUrl[1]=='user' || splitsUrl[1]=='recency' )
       {
-        $('#manage').addClass('open');
-        $('#'+splitsUrl[1]).addClass('active');
+        if(splitsUrl[1] != 'recency'){
+
+          $('#recency-menu').removeClass('open');
+          $('#manage').addClass('open');
+          $('#'+splitsUrl[1]).addClass('active');
+        }else if(splitsUrl[1] == 'recency'){
+          $('#manage').removeClass('open');
+          $('#recency-menu').addClass('open');
+          $('#'+splitsUrl[1]).addClass('active');
+        }
       }
     });
     </script>

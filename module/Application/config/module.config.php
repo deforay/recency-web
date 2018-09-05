@@ -74,6 +74,16 @@ return array(
                               ),
                         ),
                   ),
+                  'recency' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                              'route' => '/recency[/:action][/][:id]',
+                              'defaults' => array(
+                                    'controller' => 'Application\Controller\Recency',
+                                    'action' => 'index',
+                              ),
+                        ),
+                  ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -135,7 +145,8 @@ return array(
                'Application\Controller\Common' => 'Application\Controller\CommonController',
                'Application\Controller\Login' => 'Application\Controller\LoginController',
                'Application\Controller\Facilities' => 'Application\Controller\FacilitiesController',
-               'Application\Controller\User' => 'Application\Controller\UserController'
+               'Application\Controller\User' => 'Application\Controller\UserController',
+               'Application\Controller\Recency' => 'Application\Controller\RecencyController'
           ),
      ),
      'controller_plugins' => array(

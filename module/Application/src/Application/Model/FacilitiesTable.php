@@ -152,6 +152,8 @@ class FacilitiesTable extends AbstractTableGateway {
                 'facility_name' => $params['facilityName'],
                 'province' => $params['province'],
                 'district' => $params['district'],
+                'latitude' => $params['latitude'],
+                'longitude' => $params['longitude'],
                 'email' => $params['email'],
                 'alt_email' => $params['altEmail'],
                 'status' => $params['facilityStatus']
@@ -182,6 +184,8 @@ class FacilitiesTable extends AbstractTableGateway {
                 'facility_name' => $params['facilityName'],
                 'province' => $params['province'],
                 'district' => $params['district'],
+                'latitude' => $params['latitude'],
+                'longitude' => $params['longitude'],
                 'email' => $params['email'],
                 'alt_email' => $params['altEmail'],
                 'status' => $params['facilityStatus']
@@ -190,6 +194,11 @@ class FacilitiesTable extends AbstractTableGateway {
             $updateResult = $this->update($data,array('facility_id'=>base64_decode($params['facilityId'])));
         }
         return $updateResult;
+    }
+
+    public function fetchFacilitiesAllDetails()
+    {
+        return $this->select()->toArray();
     }
 }
 ?>

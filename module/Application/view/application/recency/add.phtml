@@ -1,0 +1,98 @@
+<?php
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+?>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>"><li class="breadcrumb-item">Recency Details</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+               <h3 class="block-title">Add Recency Details</h3>
+          </div>
+          <div class="block-content">
+               <div class="col-md-12 table-responsive" id="hide">
+                    <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="">Sample Id<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control isRequired" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
+                            </div>
+
+                            <label class="col-sm-2 col-form-label" for="">Patient Id<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control isRequired" id="facilityId" name="facilityId" title="Please select the facility name">
+                                    <option value="">--Select--</option>
+                                    <?php foreach($facilityResult as $facility){?>
+                                        <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                            <label class="col-sm-2 col-form-label" for="">HIV Diagnosis Date<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="js-datepicker form-control isRequired" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="js-datepicker form-control isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
+                            </div>
+
+                            <label class="col-sm-2 col-form-label" for="">HIV Recency Result<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control isRequired" id="hivRecencyResult" name="hivRecencyResult" placeholder="Enter the HIV recency result" title="Please enter the HIV recency result">
+                            </div>
+                        </div>
+
+                        <div class="row items-push">
+                            <div class="col-lg-7 offset-lg-4">
+                                <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+function validateNow() {
+     flag = deforayValidator.init({
+          formId: 'recencyInformation'
+     });
+     if (flag) {
+        $.blockUI();
+        getmatterid();
+        document.getElementById('recencyInformation').submit();
+     }
+}
+$(document).ready(function(){
+    
+});
+
+</script>
