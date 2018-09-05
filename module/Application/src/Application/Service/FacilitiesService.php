@@ -81,10 +81,10 @@ class FacilitiesService {
         return $facilityDb->fetchFacilitiesAllDetails();
     }
     
-    public function getAllFacilityListApi($userId)
+    public function getAllFacilityListApi($params)
     {
         $facilityDb = $this->sm->get('FacilitiesTable');
-        return $facilityDb->fetchFacilitiesDetailsApi($userId);
+        return $facilityDb->fetchFacilitiesDetailsApi($params);
     }
 }
 

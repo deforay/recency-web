@@ -187,7 +187,7 @@ class Result implements
      */
     protected function loadDataFromMysqliStatement()
     {
-        // build the default reference based bind structure, if it does not already exists
+        // build the default reference based bind structure, if it does not already exist
         if ($this->statementBindValues['keys'] === null) {
             $this->statementBindValues['keys'] = array();
             $resultResource = $this->resource->result_metadata();

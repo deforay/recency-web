@@ -151,7 +151,7 @@ class MongoDB implements SaveHandlerInterface
         ));
 
         /* Note: a MongoCursorException will be thrown if a record with this ID
-         * already existss with a different session name, since the upsert query
+         * already exists with a different session name, since the upsert query
          * cannot insert a new document with the same ID and new session name.
          * This should only happen if ID's are not unique or if the session name
          * is altered mid-process.

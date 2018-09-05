@@ -29,63 +29,62 @@ if($result->hiv_recency_date!= '' && $result->hiv_recency_date!= null && $result
 
 
 <div class="content">
-     <div class="block block-rounded block-bordered">
-          <div class="block-header block-header-default">
-               <h3 class="block-title">Edit Recency Details</h3>
-          </div>
-          <div class="block-content">
-               <div class="col-md-12 table-responsive" id="hide">
-                    <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'edit')); ?>" method="post">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">Sample Id<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['sample_id']; ?>" class="form-control isRequired" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
-                            </div>
-
-                            <label class="col-sm-2 col-form-label" for="">Patient Id<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['patient_id']; ?>" class="form-control isRequired" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
-                            </div>
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Edit Recency Details</h3>
+        </div>
+        <div class="block-content">
+            <div class="col-md-12 table-responsive" id="hide">
+                <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'edit')); ?>" method="post">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Sample Id<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['sample_id']; ?>" class="form-control isRequired" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
                         </div>
 
-                        <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <select class="form-control isRequired" id="facilityId" name="facilityId" title="Please select the facility name">
-                                    <option value="">--Select--</option>
-                                    <?php foreach($facilityResult as $facility){?>
-                                        <option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo $facility['facility_name']; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
+                        <label class="col-sm-2 col-form-label" for="">Patient Id<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['patient_id']; ?>" class="form-control isRequired" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
+                        </div>
+                    </div>
 
-                            <label class="col-sm-2 col-form-label" for="">HIV Diagnosis Date<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $hivDiagnosisDate; ?>" class="js-datepicker form-control isRequired" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
-                            </div>
+                    <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control isRequired" id="facilityId" name="facilityId" title="Please select the facility name">
+                                <option value="">--Select--</option>
+                                <?php foreach($facilityResult as $facility){?>
+                                    <option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo $facility['facility_name']; ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $hivRecencyDate; ?>" class="js-datepicker form-control isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
-                            </div>
+                        <label class="col-sm-2 col-form-label" for="">HIV Diagnosis Date<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $hivDiagnosisDate; ?>" class="js-datepicker form-control isRequired" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
+                        </div>
+                    </div>
 
-                            <label class="col-sm-2 col-form-label" for="">HIV Recency Result<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['hiv_recency_result']; ?>" class="form-control isRequired" id="hivRecencyResult" name="hivRecencyResult" placeholder="Enter the HIV recency result" title="Please enter the HIV recency result">
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $hivRecencyDate; ?>" class="js-datepicker form-control isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
                         </div>
 
-                        <div class="row items-push">
-                            <div class="col-lg-7 offset-lg-4">
-                                <input type="hidden" name="recencyId" value="<?php echo $result['recency_id'];?>" />
-                                <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
-                                <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
-                            </div>
+                        <label class="col-sm-2 col-form-label" for="">HIV Recency Result<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['hiv_recency_result']; ?>" class="form-control isRequired" id="hivRecencyResult" name="hivRecencyResult" placeholder="Enter the HIV recency result" title="Please enter the HIV recency result">
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="row items-push">
+                        <div class="col-lg-7 offset-lg-4">
+                            <input type="hidden" name="recencyId" value="<?php echo $result['recency_id'];?>" />
+                            <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                            <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

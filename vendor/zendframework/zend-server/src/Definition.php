@@ -80,7 +80,7 @@ class Definition implements Countable, Iterator
         }
 
         if (!$this->overwriteExistingMethods && array_key_exists($name, $this->methods)) {
-            throw new Exception\InvalidArgumentException(sprintf('Method by name of "%s" already existss', $name));
+            throw new Exception\InvalidArgumentException(sprintf('Method by name of "%s" already exists', $name));
         }
         $this->methods[$name] = $method;
         return $this;

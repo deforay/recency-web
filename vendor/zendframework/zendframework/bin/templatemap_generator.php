@@ -131,7 +131,7 @@ if (isset($opts->o)) {
             . $opts->getUsageMessage();
         exit(2);
     } elseif (file_exists($output) && !$opts->getOption('w') && !$appending) {
-        echo "Template map file already existss at '$output'," . PHP_EOL
+        echo "Template map file already exists at '$output'," . PHP_EOL
             . "but 'overwrite' or 'appending' flag was not specified; aborting." . PHP_EOL
             . PHP_EOL
             . $opts->getUsageMessage();
@@ -199,7 +199,7 @@ foreach ($l as $file) {
 // Create a file with the map.
 
 if ($appending && file_exists($output) && is_array(include $output)) {
-    // Append mode and the output file already existss: retrieve its
+    // Append mode and the output file already exists: retrieve its
     // content and merges with the new map
     // Remove the last line as it is the end of the array, and we want to
     // append our new templates

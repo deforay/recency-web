@@ -19,87 +19,86 @@ $sessionLogin = new Container('credo');
 
 
 <div class="content">
-     <div class="block block-rounded block-bordered">
-          <div class="block-header block-header-default">
-               <h3 class="block-title">Edit Users Details</h3>
-          </div>
-          <div class="block-content">
-               <div class="col-md-12 table-responsive" id="hide">
-                    <form name="userInformation" id="userInformation"  class="mb-5" action="<?php echo $this->url('user', array('action' => 'edit')); ?>" method="post">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">User Name<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['user_name']; ?>" class="form-control isRequired" id="userName" name="userName" placeholder="Enter the user name" title="Please enter the user name" onblur="checkNameValidation('user', 'user_name', this,'NULL', 'The user name that you entered already exists . Please try another name..');">
-                            </div>
-
-                            <label class="col-sm-2 col-form-label" for="">Role<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <select class="form-control isRequired" id="roleName" name="roleName" title="Please select the role name">
-                                    <option value="">--Select--</option>
-                                    <?php foreach($roleResult as $role){?>
-                                        <option value="<?php echo base64_encode($role['role_id']); ?>" <?php echo($result['role_id'] == $role['role_id'] )?'selected="selected"':''; ?>><?php echo $role['role_name']; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Edit Users Details</h3>
+        </div>
+        <div class="block-content">
+            <div class="col-md-12 table-responsive" id="hide">
+                <form name="userInformation" id="userInformation"  class="mb-5" action="<?php echo $this->url('user', array('action' => 'edit')); ?>" method="post">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">User Name<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['user_name']; ?>" class="form-control isRequired" id="userName" name="userName" placeholder="Enter the user name" title="Please enter the user name" onblur="checkNameValidation('user', 'user_name', this,'NULL', 'The user name that you entered already exists . Please try another name..');">
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">Email<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="email" value="<?php echo $result['email']; ?>" class="form-control isRequired" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
-                            </div>
+                        <label class="col-sm-2 col-form-label" for="">Role<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control isRequired" id="roleName" name="roleName" title="Please select the role name">
+                                <option value="">--Select--</option>
+                                <?php foreach($roleResult as $role){?>
+                                    <option value="<?php echo base64_encode($role['role_id']); ?>" <?php echo($result['role_id'] == $role['role_id'] )?'selected="selected"':''; ?>><?php echo $role['role_name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
 
-                            <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
-                            <div class="col-sm-4">
-                                <input type="email" value="<?php echo $result['alt_email']; ?>" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Email<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="email" value="<?php echo $result['email']; ?>" class="form-control isRequired" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">Password<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="password" value="<?php echo $result['server_password']; ?>" class="form-control isRequired" id="servPass" name="servPass" placeholder="Enter the Password" title="Please enter the password">
-                            </div>
+                        <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
+                        <div class="col-sm-4">
+                            <input type="email" value="<?php echo $result['alt_email']; ?>" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
+                        </div>
+                    </div>
 
-                            <label class="col-sm-2 col-form-label" for="">Mobile<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="number" value="<?php echo $result['mobile']; ?>" class="form-control isRequired" id="mobile" name="mobile" placeholder="Enter the mobile" title="Please enter the mobile">
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Password<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="password"class="form-control isRequired" id="servPass" name="servPass" placeholder="Enter the Password" title="Please enter the password">
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">Alternate Mobile</label>
-                            <div class="col-sm-4">
-                                <input type="number" value="<?php echo $result['alt_mobile']; ?>" class="form-control" id="altMobile" name="altMobile" placeholder="Enter the alternate mobile" title="Please enter the alternate mobile">
-                            </div>
-                            
-                            <label class="col-sm-2 col-form-label" for="">Job Responsibility<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['job_responsibility']; ?>" class="form-control isRequired" id="JobResponse" name="JobResponse" placeholder="Enter the job responsibility" title="Please enter the job responsibility">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">Comments</label>
-                            <div class="col-sm-4">
-                                <textarea rows="4" cols="50" class="form-control" id="comments" name="comments" placeholder="Enter the comments" title="Please enter the comments"><?php echo $result['comments']; ?></textarea>
-                            </div>
 
-                            <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <select class="form-control isRequired" id="userStatus" name="userStatus" title="Please select the user status">
-                                    <option value="active" <?php echo($result['status'] == 'active' )?'selected="selected"':''; ?>>Active</option>
-                                    <option value="inactive" <?php echo($result['status'] == 'inactive' )?'selected="selected"':''; ?>>Inactive</option>
-                                </select>
-                            </div>
+                        <label class="col-sm-2 col-form-label" for="">Mobile<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="number" value="<?php echo $result['mobile']; ?>" class="form-control isRequired" id="mobile" name="mobile" placeholder="Enter the mobile" title="Please enter the mobile">
                         </div>
-                        <div class="row items-push">
-                            <div class="col-lg-7 offset-lg-4">
-                            <input type="hidden" name="userId" value="<?php echo base64_encode($result['user_id']); ?>"/>
-                                <a href="<?php echo $this->url('user', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
-                                <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
-                            </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Alternate Mobile</label>
+                        <div class="col-sm-4">
+                            <input type="number" value="<?php echo $result['alt_mobile']; ?>" class="form-control" id="altMobile" name="altMobile" placeholder="Enter the alternate mobile" title="Please enter the alternate mobile">
                         </div>
-                    </form>
-                </div>
+                        
+                        <label class="col-sm-2 col-form-label" for="">Job Responsibility<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['job_responsibility']; ?>" class="form-control isRequired" id="JobResponse" name="JobResponse" placeholder="Enter the job responsibility" title="Please enter the job responsibility">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Comments</label>
+                        <div class="col-sm-4">
+                            <textarea rows="4" cols="50" class="form-control" id="comments" name="comments" placeholder="Enter the comments" title="Please enter the comments"><?php echo $result['comments']; ?></textarea>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control isRequired" id="userStatus" name="userStatus" title="Please select the user status">
+                                <option value="active" <?php echo($result['status'] == 'active' )?'selected="selected"':''; ?>>Active</option>
+                                <option value="inactive" <?php echo($result['status'] == 'inactive' )?'selected="selected"':''; ?>>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row items-push">
+                        <div class="col-lg-7 offset-lg-4">
+                        <input type="hidden" name="userId" value="<?php echo base64_encode($result['user_id']); ?>"/>
+                            <a href="<?php echo $this->url('user', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                            <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

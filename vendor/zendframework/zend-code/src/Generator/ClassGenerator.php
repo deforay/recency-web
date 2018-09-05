@@ -490,7 +490,7 @@ class ClassGenerator extends AbstractGenerator
 
         if (isset($this->constants[$constantName])) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'A constant by name %s already existss in this class.',
+                'A constant by name %s already exists in this class.',
                 $constantName
             ));
         }
@@ -616,7 +616,7 @@ class ClassGenerator extends AbstractGenerator
 
         if (isset($this->properties[$propertyName])) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'A property by name %s already existss in this class.',
+                'A property by name %s already exists in this class.',
                 $propertyName
             ));
         }
@@ -749,7 +749,7 @@ class ClassGenerator extends AbstractGenerator
 
         if ($this->hasMethod($methodName)) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'A method by name %s already existss in this class.',
+                'A method by name %s already exists in this class.',
                 $methodName
             ));
         }

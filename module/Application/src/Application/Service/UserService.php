@@ -22,6 +22,12 @@ class UserService {
         return $this->sm;
     }
 
+    public function loginProcess($params)
+    {
+        $userDb = $this->sm->get('UserTable');
+        return $userDb->loginProcessDetails($params);
+    }
+
     public function getUserDetails($params)
     {
         $userDb = $this->sm->get('UserTable');

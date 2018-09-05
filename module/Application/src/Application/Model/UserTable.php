@@ -19,12 +19,15 @@ class UserTable extends AbstractTableGateway {
     public function loginProcessDetails($params){
 		$alertContainer = new Container('alert');
         $logincontainer = new Container('credo');
+        $config = new \Zend\Config\Reader\Ini();
+        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         if(isset($params['userName']) && trim($params['userName'])!="" && trim($params['loginPassword'])!=""){
+            $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
             $sQuery = $sql->select()->from(array('u' => 'users'))
                     ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
-				    ->where(array('u.user_name' => $params['userName'], 'u.server_password' => $params['loginPassword']));
+				    ->where(array('u.user_name' => $params['userName'], 'u.server_password' => $password));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             // echo $sQueryStr;die;
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
@@ -35,8 +38,13 @@ class UserTable extends AbstractTableGateway {
                         $logincontainer->roleCode = $rResult->role_code;
                         $logincontainer->userName = ucwords($rResult->user_name);
                         $logincontainer->userEmail = ucwords($rResult->email);
+                        if($rResult->role_code != 'admin'){
 
-                        return 'facilities';
+                            return 'recency';
+                        }else{
+                            
+                            return 'facilities';
+                        }
             }else {
                 $alertContainer->alertMsg = 'The login id or password that you entered is incorrect';
                 return 'login';
@@ -180,11 +188,14 @@ class UserTable extends AbstractTableGateway {
     {
         if(isset($params['userName']) && trim($params['userName'])!="")
         {
+            $config = new \Zend\Config\Reader\Ini();
+            $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+            $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
             $data = array(
                 'user_name' => $params['userName'],
                 'role_id' => base64_decode($params['roleName']),
                 'email' => $params['email'],
-                'server_password' => $params['servPass'],
+                'server_password' => $password,
                 'alt_email' => $params['altEmail'],
                 'mobile' => $params['mobile'],
                 'alt_mobile' => $params['altMobile'],
@@ -212,13 +223,16 @@ class UserTable extends AbstractTableGateway {
 
     public function updateUserDetails($params)
     {
+        $config = new \Zend\Config\Reader\Ini();
+        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+        $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
         if(isset($params['userId']) && trim($params['userId'])!="")
         {
             $data = array(
                 'user_name' => $params['userName'],
                 'role_id' => base64_decode($params['roleName']),
                 'email' => $params['email'],
-                'server_password' => $params['servPass'],
+                'server_password' => $password,
                 'alt_email' => $params['altEmail'],
                 'mobile' => $params['mobile'],
                 'alt_mobile' => $params['altMobile'],
@@ -244,22 +258,24 @@ class UserTable extends AbstractTableGateway {
 		        
         $password = sha1($params['password'] . $configResult["password"]["salt"]);
 		
-		  $sQuery = $sql->select()->from(array('u' => 'users'))
-                    ->where(array('email' =>$params['email'], 'server_password' => $password))
-                    ;
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            
-            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $sQuery = $sql->select()->from(array('u' => 'users'))
+                ->where(array('status' => 'active','email' =>$params['email'], 'server_password' => $password))
+                ;
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 		
         if(isset($rResult['user_id']) && $rResult['user_id']!='' && $rResult['status']=='active') {
             $auth = $common->generateRandomString(15);
+            // \Zend\Debug\Debug::dump($rResult['user_id']);die;
             $id = $this->update(array('auth_token'=>$auth),array('user_id'=>$rResult['user_id']));
             if($id>0){
                 $response['status']='success';
                 $response["userDetails"] = array(
                     'userId' => $rResult->user_id,
                     'userName' => $rResult->user_name,
-                    'userEmailAddress' => $rResult->email
+                    'userEmailAddress' => $rResult->email,
+                    'authToken' => $auth
                 );
                 $response["message"] = "Logged in successfully";
             }else{

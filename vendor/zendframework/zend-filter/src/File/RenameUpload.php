@@ -237,7 +237,7 @@ class RenameUpload extends AbstractFilter
                 unlink($targetFile);
             } else {
                 throw new Exception\InvalidArgumentException(
-                    sprintf("File '%s' could not be renamed. It already existss.", $targetFile)
+                    sprintf("File '%s' could not be renamed. It already exists.", $targetFile)
                 );
             }
         }

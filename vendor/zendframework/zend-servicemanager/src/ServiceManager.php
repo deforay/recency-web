@@ -242,7 +242,7 @@ class ServiceManager implements ServiceLocatorInterface
         if ($this->has(array($cName, $name), false)) {
             if ($this->allowOverride === false) {
                 throw new Exception\InvalidServiceNameException(sprintf(
-                    'A service by the name or alias "%s" already existss and cannot be overridden; please use an alternate name',
+                    'A service by the name or alias "%s" already exists and cannot be overridden; please use an alternate name',
                     $name
                 ));
             }
@@ -282,7 +282,7 @@ class ServiceManager implements ServiceLocatorInterface
         if ($this->has(array($cName, $name), false)) {
             if ($this->allowOverride === false) {
                 throw new Exception\InvalidServiceNameException(sprintf(
-                    'A service by the name or alias "%s" already existss and cannot be overridden, please use an alternate name',
+                    'A service by the name or alias "%s" already exists and cannot be overridden, please use an alternate name',
                     $name
                 ));
             }
@@ -392,7 +392,7 @@ class ServiceManager implements ServiceLocatorInterface
         if ($this->has($cName, false)) {
             if ($this->allowOverride === false) {
                 throw new Exception\InvalidServiceNameException(sprintf(
-                    '%s: A service by the name "%s" or alias already existss and cannot be overridden, please use an alternate name.',
+                    '%s: A service by the name "%s" or alias already exists and cannot be overridden, please use an alternate name.',
                     get_class($this) . '::' . __FUNCTION__,
                     $name
                 ));
@@ -836,7 +836,7 @@ class ServiceManager implements ServiceLocatorInterface
 
         if ($this->allowOverride === false && $this->has(array($cAlias, $alias), false)) {
             throw new Exception\InvalidServiceNameException(sprintf(
-                'An alias by the name "%s" or "%s" already existss',
+                'An alias by the name "%s" or "%s" already exists',
                 $cAlias,
                 $alias
             ));
@@ -1246,7 +1246,7 @@ class ServiceManager implements ServiceLocatorInterface
      * Unregister a service
      *
      * Called when $allowOverride is true and we detect that a service being
-     * added to the instance already existss. This will remove the duplicate
+     * added to the instance already exists. This will remove the duplicate
      * entry, and also any shared flags previously registered.
      *
      * @param  string $canonical

@@ -104,7 +104,7 @@ if (isset($opts->o)) {
             . $opts->getUsageMessage();
         exit(2);
     } elseif (file_exists($output) && !$opts->getOption('w') && !$appending) {
-        echo "Autoload file already existss at '$output'," . PHP_EOL
+        echo "Autoload file already exists at '$output'," . PHP_EOL
             . "but 'overwrite' or 'appending' flag was not specified; aborting." . PHP_EOL
             . PHP_EOL
             . $opts->getUsageMessage();

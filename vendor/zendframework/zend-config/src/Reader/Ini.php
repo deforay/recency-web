@@ -203,7 +203,7 @@ class Ini implements ReaderInterface
                 }
             } elseif (!is_array($config[$pieces[0]])) {
                 throw new Exception\RuntimeException(
-                    sprintf('Cannot create sub-key for "%s", as key already existss', $pieces[0])
+                    sprintf('Cannot create sub-key for "%s", as key already exists', $pieces[0])
                 );
             }
 

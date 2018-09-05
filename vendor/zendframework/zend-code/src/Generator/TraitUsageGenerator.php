@@ -165,7 +165,7 @@ class TraitUsageGenerator extends AbstractGenerator
             throw new Exception\InvalidArgumentException('Invalid Alias: $alias must be a string or array.');
         }
         if ($this->classGenerator->hasMethod($alias)) {
-            throw new Exception\InvalidArgumentException('Invalid Alias: Method name already existss on this class.');
+            throw new Exception\InvalidArgumentException('Invalid Alias: Method name already exists on this class.');
         }
         if (null !== $visibility
             && $visibility !== ReflectionMethod::IS_PUBLIC
@@ -317,7 +317,7 @@ class TraitUsageGenerator extends AbstractGenerator
             // validation check
             if ($this->classGenerator->hasMethod($alias['alias'])) {
                 throw new Exception\RuntimeException(sprintf(
-                    'Generation Error: Aliased method %s already existss on this class',
+                    'Generation Error: Aliased method %s already exists on this class',
                     $alias['alias']
                 ));
             }

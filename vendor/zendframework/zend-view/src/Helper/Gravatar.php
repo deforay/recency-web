@@ -346,7 +346,7 @@ class Gravatar extends AbstractHtmlElement
      * You shouldn't set an own url value!
      * It sets value, uses protected method getAvatarUrl.
      *
-     * If already existss, it will be overwritten.
+     * If already exists, it will be overwritten.
      *
      * @return void
      */

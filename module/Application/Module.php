@@ -63,7 +63,6 @@ class Module{
                         return $response;
                     }
             }else{
-
                 if ($e->getRequest()->isXmlHttpRequest()) {
                     return;
                 }

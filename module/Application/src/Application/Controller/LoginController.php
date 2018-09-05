@@ -14,9 +14,9 @@ class LoginController extends AbstractActionController{
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $commonService = $this->getServiceLocator()->get('CommonService');
-            $redirectUrl = $commonService->loginProcess($params);
-            // \Zend\Debug\Debug::dump($redirectUrl);die;
+            // \Zend\Debug\Debug::dump($params);die;
+            $userService = $this->getServiceLocator()->get('UserService');
+            $redirectUrl = $userService->loginProcess($params);
             return $this->redirect()->toRoute($redirectUrl);
         }
         if (isset($logincontainer->userId) && $logincontainer->userId != "") {
@@ -33,6 +33,8 @@ class LoginController extends AbstractActionController{
     {
         $logincontainer = new Container('credo');
         $alertContainer = new Container('alert');
+        $logincontainer->roleId = "";
+        $logincontainer->roleCode = ""; 
 
         $logincontainer->getManager()->getStorage()->clear('credo');
         return $this->redirect()->toRoute("login");

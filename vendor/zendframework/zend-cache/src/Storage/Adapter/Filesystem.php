@@ -1387,7 +1387,7 @@ class Filesystem extends AbstractAdapter implements
             return;
         }
 
-        // Directory structure already existss
+        // Directory structure already exists
         $pathname = dirname($file);
         if (file_exists($pathname)) {
             return;

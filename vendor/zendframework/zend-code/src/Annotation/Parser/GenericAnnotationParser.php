@@ -104,7 +104,7 @@ class GenericAnnotationParser implements ParserInterface
 
         if (in_array($class, $this->annotationNames)) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'An annotation for this class %s already existss',
+                'An annotation for this class %s already exists',
                 $class
             ));
         }

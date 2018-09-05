@@ -46,7 +46,7 @@ class Registry
 
         if ($this->has($roleId)) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Role id "%s" already existss in the registry',
+                'Role id "%s" already exists in the registry',
                 $roleId
             ));
         }

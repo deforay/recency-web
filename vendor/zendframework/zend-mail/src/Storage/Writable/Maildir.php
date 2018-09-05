@@ -32,7 +32,7 @@ class Maildir extends Folder\Maildir implements WritableInterface
      *
      * If the given dir is already a valid maildir this will not fail.
      *
-     * @param string $dir directory for the new maildir (may already exists)
+     * @param string $dir directory for the new maildir (may already exist)
      * @throws \Zend\Mail\Storage\Exception\RuntimeException
      * @throws \Zend\Mail\Storage\Exception\InvalidArgumentException
      */
@@ -40,7 +40,7 @@ class Maildir extends Folder\Maildir implements WritableInterface
     {
         if (file_exists($dir)) {
             if (!is_dir($dir)) {
-                throw new StorageException\InvalidArgumentException('maildir must be a directory if already existss');
+                throw new StorageException\InvalidArgumentException('maildir must be a directory if already exists');
             }
         } else {
             ErrorHandler::start();
@@ -123,7 +123,7 @@ class Maildir extends Folder\Maildir implements WritableInterface
             // ok
         }
         if ($exists) {
-            throw new StorageException\RuntimeException('folder already existss');
+            throw new StorageException\RuntimeException('folder already exists');
         }
 
         if (strpos($folder, $this->delim . $this->delim) !== false) {

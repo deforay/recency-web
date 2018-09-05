@@ -58,7 +58,7 @@ class PrototypeClassFactory
         $prototypeName = $this->normalizeName($prototype->getName());
 
         if (isset($this->prototypes[$prototypeName])) {
-            throw new Exception\InvalidArgumentException('A prototype with this name already existss in this manager');
+            throw new Exception\InvalidArgumentException('A prototype with this name already exists in this manager');
         }
 
         $this->prototypes[$prototypeName] = $prototype;

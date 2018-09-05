@@ -367,7 +367,7 @@ class FileCipher
         }
         if (file_exists($fileOut)) {
             throw new Exception\InvalidArgumentException(sprintf(
-                "The file %s already existss", $fileOut
+                "The file %s already exists", $fileOut
             ));
         }
     }

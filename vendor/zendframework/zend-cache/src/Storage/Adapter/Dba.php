@@ -411,7 +411,7 @@ class Dba extends AbstractAdapter implements
         }
 
         // Workaround for PHP-Bug #54242 & #62489
-        // dba_insert returns true if key already existss
+        // dba_insert returns true if key already exists
         ErrorHandler::start();
         $result = dba_insert($internalKey, $value, $this->handle);
         $error  = ErrorHandler::stop();

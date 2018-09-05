@@ -256,7 +256,7 @@ class Zip extends AbstractCompressionAlgorithm
                 return 'No such file within the ZIP Archive';
 
             case ZipArchive::ER_EXISTS:
-                return 'ZIP Archive already existss';
+                return 'ZIP Archive already exists';
 
             case ZipArchive::ER_OPEN:
                 return 'Can not open ZIP Archive';

@@ -239,7 +239,7 @@ class Acl implements AclInterface
         $resourceId = $resource->getResourceId();
 
         if ($this->hasResource($resourceId)) {
-            throw new Exception\InvalidArgumentException("Resource id '$resourceId' already existss in the ACL");
+            throw new Exception\InvalidArgumentException("Resource id '$resourceId' already exists in the ACL");
         }
 
         $resourceParent = null;

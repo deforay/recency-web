@@ -84,6 +84,11 @@ class RecencyService {
             error_log($exc->getTraceAsString());
         }
     }
-}
 
+    public function getAllRecencyListApi($params)
+    {
+        $userDb = $this->sm->get('RecencyTable');
+        return $userDb->fetchAllRecencyListApi($params);
+    }
+}
 ?>

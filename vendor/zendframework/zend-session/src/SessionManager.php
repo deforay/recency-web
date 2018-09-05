@@ -407,7 +407,7 @@ class SessionManager extends AbstractManager
     /**
      * Set the session cookie lifetime
      *
-     * If a session already existss, destroys it (without sending an expiration
+     * If a session already exists, destroys it (without sending an expiration
      * cookie), regenerates the session ID, and restarts the session.
      *
      * @param  int $ttl

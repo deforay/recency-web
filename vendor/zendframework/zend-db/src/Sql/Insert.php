@@ -108,7 +108,7 @@ class Insert extends AbstractPreparableSql
         }
         if ($this->select && $flag == self::VALUES_MERGE) {
             throw new Exception\InvalidArgumentException(
-                'An array of values cannot be provided with the merge flag when a Zend\Db\Sql\Select instance already existss as the value source'
+                'An array of values cannot be provided with the merge flag when a Zend\Db\Sql\Select instance already exists as the value source'
             );
         }
 

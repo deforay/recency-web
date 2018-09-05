@@ -110,7 +110,7 @@ if (isset($opts->o)) {
         exit(2);
     } elseif (file_exists($output)) {
         if (!$opts->getOption('w') && !$appending) {
-            echo "Plugin map file already existss at '$output'," . PHP_EOL
+            echo "Plugin map file already exists at '$output'," . PHP_EOL
                 . "but 'overwrite' flag was not specified; aborting." . PHP_EOL
                 . PHP_EOL
                 . $opts->getUsageMessage();

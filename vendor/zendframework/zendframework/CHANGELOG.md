@@ -3108,7 +3108,7 @@ class.
   (https://github.com/zendframework/zf2/issues/3164)
 - 3166: [#2678] Sqlsrv driver incorrectly throwing exception when
   $sqlOrResource... (https://github.com/zendframework/zf2/issues/3166)
-- 3167: Fix #3161 by checking if the server port already existss in the
+- 3167: Fix #3161 by checking if the server port already exists in the
   host (https://github.com/zendframework/zf2/issues/3167)
 - 3169: Fixing issue #3036 (https://github.com/zendframework/zf2/issues/3169)
 - 3170: Fixing issue #2554 (https://github.com/zendframework/zf2/issues/3170)

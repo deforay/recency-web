@@ -283,7 +283,7 @@ class CaptureCache extends AbstractPattern
      */
     protected function createDirectoryStructure($pathname)
     {
-        // Directory structure already existss
+        // Directory structure already exists
         if (file_exists($pathname)) {
             return;
         }

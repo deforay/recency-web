@@ -23,6 +23,8 @@ class RecencyTable extends AbstractTableGateway {
         * you want to insert a non-database field (for example a counter or static image)
         */
         $sessionLogin = new Container('credo');
+        $role = $sessionLogin->roleId;
+        $roleCode = $sessionLogin->roleCode;
         $common = new CommonService();
         $aColumns = array('r.sample_id','r.patient_id','r.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.added_on','r.added_by');
         $orderColumns = array('r.sample_id','r.patient_id','r.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.added_on','r.added_by');
@@ -139,7 +141,12 @@ class RecencyTable extends AbstractTableGateway {
               $row[] = $aRow['hiv_diagnosis_date'];
               $row[] = $aRow['hiv_recency_date'];
               $row[] = $aRow['hiv_recency_result'];
-              $row[] = '<a href="/recency/edit/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+              if($roleCode == "user"){
+
+                  $row[] = '<a href="/recency/edit/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+              }else{
+                $row[] = "";
+              }
               $output['aaData'][] = $row;
           }
 
@@ -199,6 +206,43 @@ class RecencyTable extends AbstractTableGateway {
             $updateResult = $this->update($data,array('recency_id'=>$params['recencyId']));
         }
         return $updateResult;
+    }
+
+    public function fetchAllRecencyListApi($params)
+    {
+        $common = new CommonService();
+        $config = new \Zend\Config\Reader\Ini();
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        
+        $sQuery = $sql->select()->from(array('u' => 'users'))
+                                ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('sample_id','patient_id','hiv_diagnosis_date','hiv_recency_date','hiv_recency_result'))
+                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'))
+                                ->where(array('auth_token' =>$params['authToken']));
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+		// \Zend\Debug\Debug::dump($rResult);die;
+        if(isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['status']=='active') {
+            $response['status']='success';
+            foreach($rResult as $result){
+                $response["recency"][] = array(
+                    'sampleId' => $result['sample_id'],
+                    'patientId' => $result['patient_id'],
+                    'hivDiagnosisDate' => $result['hiv_diagnosis_date'],
+                    'hivRecencyDate' => $result['hiv_recency_date'],
+                    'hivRecencyResult' => $result['hiv_recency_result'],
+                    'facilityName' => $result['facility_name'],
+                    'province' => $result['province'],
+                );
+            }
+        } else if($rResult['status']=='inactive'){
+            $response["status"] = "fail";
+            $response["message"] = "Your status is Inactive!";
+        } else {
+            $response["status"] = "fail";
+            $response["message"] = "Please check your token credentials!";
+        }
+       return $response;
     }
 }
 ?>

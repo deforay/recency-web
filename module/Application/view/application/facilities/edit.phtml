@@ -19,72 +19,71 @@ $sessionLogin = new Container('credo');
 
 
 <div class="content">
-     <div class="block block-rounded block-bordered">
-          <div class="block-header block-header-default">
-               <h3 class="block-title">Edit Facilities Details</h3>
-          </div>
-          <div class="block-content">
-               <div class="col-md-12 table-responsive" id="hide">
-                    <form name="facilityInformation" id="facilityInformation"  class="mb-5" action="<?php echo $this->url('facilities', array('action' => 'edit')); ?>" method="post">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['facility_name']; ?>" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Enter the facility name" title="Please enter the facility name" onblur="checkNameValidation('facility', 'facility_name', this,'NULL', 'The facility name that you entered already exists . Please try another name..');">
-                            </div>
-
-                            <label class="col-sm-2 col-form-label" for="">Province<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['province']; ?>" class="form-control isRequired" id="province" name="province" placeholder="Enter the province" title="Please enter the province">
-                            </div>
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Edit Facilities Details</h3>
+        </div>
+        <div class="block-content">
+            <div class="col-md-12 table-responsive" id="hide">
+                <form name="facilityInformation" id="facilityInformation"  class="mb-5" action="<?php echo $this->url('facilities', array('action' => 'edit')); ?>" method="post">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['facility_name']; ?>" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Enter the facility name" title="Please enter the facility name" onblur="checkNameValidation('facility', 'facility_name', this,'NULL', 'The facility name that you entered already exists . Please try another name..');">
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">District<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['district']; ?>" class="form-control isRequired" id="district" name="district" placeholder="Enter the district name" title="Please enter the district name">
-                            </div>
+                        <label class="col-sm-2 col-form-label" for="">Province<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['province']; ?>" class="form-control isRequired" id="province" name="province" placeholder="Enter the province" title="Please enter the province">
+                        </div>
+                    </div>
 
-                            <label class="col-sm-2 col-form-label" for="">Email</label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['email']; ?>" class="form-control" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">District<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['district']; ?>" class="form-control isRequired" id="district" name="district" placeholder="Enter the district name" title="Please enter the district name">
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">Latitude</label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['latitude']; ?>"  class="form-control" id="latitude" name="latitude" placeholder="Enter the latitude" title="Please enter the latitude">
-                            </div>
+                        <label class="col-sm-2 col-form-label" for="">Email</label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['email']; ?>" class="form-control" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
+                        </div>
+                    </div>
 
-                            <label class="col-sm-2 col-form-label" for="">Longitude</label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['longitude']; ?>"  class="form-control" id="longitude" name="longitude" placeholder="Enter the longitude" title="Please enter the longitude">
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Latitude</label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['latitude']; ?>"  class="form-control" id="latitude" name="latitude" placeholder="Enter the latitude" title="Please enter the latitude">
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $result['alt_email']; ?>" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
-                            </div>
+                        <label class="col-sm-2 col-form-label" for="">Longitude</label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['longitude']; ?>"  class="form-control" id="longitude" name="longitude" placeholder="Enter the longitude" title="Please enter the longitude">
+                        </div>
+                    </div>
 
-                            <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
-                            <div class="col-sm-4">
-                                <select class="form-control isRequired" id="facilityStatus" name="facilityStatus" title="Please select the facility status">
-                                    <option value="active" <?php echo($result['status'] == 'active' )?'selected="selected"':''; ?>>Active</option>
-                                    <option value="inactive" <?php echo($result['status'] == 'inactive' )?'selected="selected"':''; ?>>Inactive</option>
-                                </select>
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['alt_email']; ?>" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
                         </div>
-                        <div class="row items-push">
-                            <div class="col-lg-7 offset-lg-4">
-                                <input type="hidden" name="facilityId" value="<?php echo base64_encode($result['facility_id']); ?>"/>
-                                <a href="<?php echo $this->url('facilities', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
-                                <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
-                            </div>
+
+                        <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control isRequired" id="facilityStatus" name="facilityStatus" title="Please select the facility status">
+                                <option value="active" <?php echo($result['status'] == 'active' )?'selected="selected"':''; ?>>Active</option>
+                                <option value="inactive" <?php echo($result['status'] == 'inactive' )?'selected="selected"':''; ?>>Inactive</option>
+                            </select>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="row items-push">
+                        <div class="col-lg-7 offset-lg-4">
+                            <input type="hidden" name="facilityId" value="<?php echo base64_encode($result['facility_id']); ?>"/>
+                            <a href="<?php echo $this->url('facilities', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                            <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

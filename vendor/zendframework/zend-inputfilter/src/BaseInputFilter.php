@@ -92,7 +92,7 @@ class BaseInputFilter implements
         }
 
         if (isset($this->inputs[$name]) && $this->inputs[$name] instanceof InputInterface) {
-            // The element already existss, so merge the config. Please note
+            // The element already exists, so merge the config. Please note
             // that this merges the new input into the original.
             $original = $this->inputs[$name];
             $original->merge($input);

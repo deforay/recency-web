@@ -201,26 +201,20 @@ class FacilitiesTable extends AbstractTableGateway {
         return $this->select()->toArray();
     }
     
-    public function fetchFacilitiesDetailsApi($userId)
+    public function fetchFacilitiesDetailsApi($params)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        if($email!=''){
+        // \Zend\Debug\Debug::dump($params['userId']);die;
+        if($params['userId']!=''){
             $sQuery = $sql->select()->from(array( 'f' => 'facilities' ))
-                                ->join(array('r' => 'recency'), 'r.facility = f.facility_id', array(''))
-                                ->where(array('status'=>'active','added_by'=>$userId));
+                                ->join(array('r' => 'recency'), 'f.facility_id = r.facility_id', array('sample_id'))
+                                ->where(array('f.status'=>'active','r.added_by'=>$params['userId']));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
             $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-            $sQuery = $sql->select()->from(array( 'f' => 'facilities' ))
-                                ->join(array('r' => 'recency'), 'r.facility != f.facility_id', array(''))
-                                ->where(array('status'=>'active'));
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-            $faResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if(count($fResult)>0){
-                return array_merge($fResult,$faResult);
-            }else{
-                return $faResult;
+                return $fResult;
             }
         }else{
             $sQuery = $sql->select()->from(array('f'=>'facilities'))
