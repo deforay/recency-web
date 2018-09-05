@@ -16,9 +16,10 @@ class LoginController extends AbstractActionController{
             $params = $request->getPost();
             $commonService = $this->getServiceLocator()->get('CommonService');
             $redirectUrl = $commonService->loginProcess($params);
+            // \Zend\Debug\Debug::dump($redirectUrl);die;
             return $this->redirect()->toRoute($redirectUrl);
         }
-        if (isset($logincontainer->adminId) && $logincontainer->adminId != "") {
+        if (isset($logincontainer->userId) && $logincontainer->userId != "") {
              $alertContainer = new Container('alert');
             return $this->redirect()->toRoute("home");
         } else {

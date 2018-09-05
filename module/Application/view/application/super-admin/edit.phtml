@@ -44,7 +44,7 @@
 
                          <div class="row items-push">
                               <div class="col-lg-7 offset-lg-4">
-                                   <input type="hidden" name="superAdminId" value="<?php echo base64_encode($result->admin_id); ?>"/>
+                                   <input type="hidden" name="superuserId" value="<?php echo base64_encode($result->admin_id); ?>"/>
 
                                    <a href="<?php echo $this->url('super-admin', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
                                    <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit

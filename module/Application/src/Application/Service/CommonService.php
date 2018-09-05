@@ -516,7 +516,7 @@ class CommonService {
        }
        public function loginProcess($params)
        {
-            $superDb = $this->sm->get('SuperAdminTable');
+            $superDb = $this->sm->get('UserTable');
             return $superDb->loginProcessDetails($params);
        }
 

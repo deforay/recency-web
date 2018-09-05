@@ -22,9 +22,6 @@ if($env == 'development'){
                     'username' => 'root',
                     'password' => 'zaq12345',
                 );
-    $local['google'] = array(
-                    'redirect' => 'http://legalcm.co/login/google-oauth'
-                );
 }
 
 
@@ -34,9 +31,6 @@ if($env == 'testing'){
                     'username' => 'root',
                     'password' => 'zaq12345',
                 );
-    $local['google'] = array(
-                    'redirect' => 'http://legalcm.deforay.in/login/google-oauth'
-                );                
 }
 
 
@@ -46,10 +40,6 @@ if($env == 'production'){
                     'username' => 'root',
                     'password' => 'zaq12345',
                 );
-    $local['google'] = array(
-                   // 'redirect' => 'https://makka.co.uk/login/google-oauth'
-                   'redirect' => 'http://legalcm.co/login/google-oauth'
-                );                
 }
 
 

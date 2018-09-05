@@ -9,60 +9,71 @@
 
 return array(
      'router' => array(
-          'routes' => array(
-               'home' => array(
-                    'type' => 'Zend\Mvc\Router\Http\Literal',
-                    'options' => array(
-                         'route'    => '/',
-                         'defaults' => array(
+            'routes' => array(
+                  'home' => array(
+                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => array(
+                              'route'    => '/',
+                              'defaults' => array(
                               'controller' => 'Application\Controller\Index',
                               'action'     => 'index',
-                         ),
-                    ),
-               ),
-
-                 'login' => array(
-                       'type' => 'segment',
-                       'options' => array(
-                            'route'    => '/login[/:action]',
-                            'defaults' => array(
-                                 'controller' => 'Application\Controller\Login',
-                                 'action' => 'index',
-                            ),
-                       ),
-                 ),
-            'logout' => array(
-                  'type' => 'Zend\Mvc\Router\Http\Literal',
-                  'options' => array(
-                       'route'    => '/logout',
-                       'defaults' => array(
-                            'controller' => 'Application\Controller\Login',
-                            'action'     => 'logout',
-                       ),
+                              ),
+                        ),
                   ),
-             ),
 
-            'common' => array(
-                  'type' => 'segment',
-                  'options' => array(
-                       'route' => '/common[/:action][/][:id]',
-                       'defaults' => array(
-                            'controller' => 'Application\Controller\Common',
-                            'action' => 'index',
-                       ),
+                  'login' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                              'route'    => '/login[/:action]',
+                              'defaults' => array(
+                                    'controller' => 'Application\Controller\Login',
+                                    'action' => 'index',
+                              ),
+                        ),
                   ),
-            ),
+                  
+                  'logout' => array(
+                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => array(
+                        'route'    => '/logout',
+                        'defaults' => array(
+                              'controller' => 'Application\Controller\Login',
+                              'action'     => 'logout',
+                        ),
+                        ),
+                  ),
 
-          'super-admin' => array(
-                'type' => 'segment',
-                'options' => array(
-                    'route' => '/super-admin[/:action][/][:id]',
-                    'defaults' => array(
-                         'controller' => 'Application\Controller\SuperAdmin',
-                         'action' => 'index',
-                    ),
-                ),
-          ),
+                  'common' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                        'route' => '/common[/:action][/][:id]',
+                        'defaults' => array(
+                              'controller' => 'Application\Controller\Common',
+                              'action' => 'index',
+                        ),
+                        ),
+                  ),
+
+                  'facilities' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                              'route' => '/facilities[/:action][/][:id]',
+                              'defaults' => array(
+                                    'controller' => 'Application\Controller\Facilities',
+                                    'action' => 'index',
+                              ),
+                        ),
+                  ),
+                  'user' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                              'route' => '/user[/:action][/][:id]',
+                              'defaults' => array(
+                                    'controller' => 'Application\Controller\User',
+                                    'action' => 'index',
+                              ),
+                        ),
+                  ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -123,6 +134,8 @@ return array(
                'Application\Controller\Index' => 'Application\Controller\IndexController',
                'Application\Controller\Common' => 'Application\Controller\CommonController',
                'Application\Controller\Login' => 'Application\Controller\LoginController',
+               'Application\Controller\Facilities' => 'Application\Controller\FacilitiesController',
+               'Application\Controller\User' => 'Application\Controller\UserController'
           ),
      ),
      'controller_plugins' => array(

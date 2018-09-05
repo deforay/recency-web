@@ -8,13 +8,16 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
 // Models
-use Application\Model\SuperAdminTable;
+use Application\Model\UserTable;
+use Application\Model\FacilitiesTable;
+use Application\Model\RoleTable;
 
 
 // Service
 
 use Application\Service\CommonService;
-use Application\Service\SuperAdminService;
+use Application\Service\UserService;
+use Application\Service\FacilitiesService;
 
 
 class Module{
@@ -32,35 +35,8 @@ class Module{
 
      public function dispatchError(MvcEvent $event) {
           $error = $event->getError();
-
-          // if (empty($error) || $error != "ACL_ACCESS_DENIED") {
-          //      return;
-          // }
-
           $baseModel = new ViewModel();
           $baseModel->setTemplate('layout/layout');
-
-          // passing the ACL object
-          // $sm = $event->getApplication()->getServiceManager();
-          // $acl = $sm->get('AppAcl');
-          // $baseModel->acl = $acl;
-          //
-          //
-          // $model = new ViewModel();
-          // $model->setTemplate('error/403');
-          //
-          // $baseModel->addChild($model, 'aclError');
-          // $baseModel->setTerminal(true);
-          //
-          // $event->setViewModel($baseModel);
-          //
-          // $response = $event->getResponse();
-          // $response->setStatusCode(403);
-          //
-          // $event->setResponse($response);
-          // $event->setResult($baseModel);
-
-          // return false;
      }
 
      public function preSetter(MvcEvent $e) {
@@ -68,7 +44,7 @@ class Module{
             $tempName=explode('Controller',$e->getRouteMatch()->getParam('controller'));
             if(substr($tempName[0], 0, -1) == 'Application'){
                 $session = new Container('credo');
-                if (!isset($session->adminId) || $session->adminId == "") {
+                if (!isset($session->userId) || $session->userId == "") {
                         $url = $e->getRouter()->assemble(array(), array('name' => 'login'));
                         $response = $e->getResponse();
                         $response->getHeaders()->addHeaderLine('Location', $url);
@@ -89,22 +65,6 @@ class Module{
                 if ($e->getRequest()->isXmlHttpRequest()) {
                     return;
                 }
-                // else {
-                //     $sm = $e->getApplication()->getServiceManager();
-                //     $viewModel = $e->getApplication()->getMvcEvent()->getViewModel();
-                //     $acl = $sm->get('AppAcl');
-                //     $viewModel->acl = $acl;
-                //
-                //     $params = $e->getRouteMatch()->getParams();
-                //     $resource = $params['controller'];
-                //     $privilege = $params['action'];
-                //
-                //     $role = $session->roleCode;
-                //     if (!$acl->hasResource($resource) || (!$acl->isAllowed($role, $resource, $privilege))) {
-                //         $e->setError('ACL_ACCESS_DENIED')->setParam('route', $e->getRouteMatch());
-                //         $e->getApplication()->getEventManager()->trigger('dispatch.error', $e);
-                //     }
-                // }
             }
         }
     }
@@ -115,21 +75,34 @@ class Module{
 
 
 
-                    'SuperAdminTable' => function($sm) {
+                    'UserTable' => function($sm) {
                         $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                        $table = new SuperAdminTable($dbAdapter);
+                        $table = new UserTable($dbAdapter);
+                        return $table;
+                    },
+                    'FacilitiesTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new FacilitiesTable($dbAdapter);
+                        return $table;
+                    },
+                    'RoleTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new RoleTable($dbAdapter);
                         return $table;
                     },
 
-                              //service
+                    //service
 
 
                     'CommonService' => function($sm) {
                          return new CommonService($sm);
                     },
 
-                    'SuperAdminService' => function($sm) {
-                        return new SuperAdminService($sm);
+                    'UserService' => function($sm) {
+                    return new UserService($sm);
+                    },
+                    'FacilitiesService' => function($sm) {
+                        return new FacilitiesService($sm);
                     },
 
                )

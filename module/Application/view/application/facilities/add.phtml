@@ -1,0 +1,116 @@
+<?php
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+?>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Facilities</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <a href="<?php echo $this->url('facilities', array('action' => 'index')); ?>"><li class="breadcrumb-item">Facilities Details</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+               <h3 class="block-title">Add Facilities Details</h3>
+          </div>
+          <div class="block-content">
+               <div class="col-md-12 table-responsive" id="hide">
+                    <form name="facilityInformation" id="facilityInformation"  class="mb-5" action="<?php echo $this->url('facilities', array('action' => 'add')); ?>" method="post">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="keyword">Facility Name<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Enter the facility name" title="Please enter the facility name" onblur="checkNameValidation('facility', 'facility_name', this,'NULL', 'The facility name that you entered already exists . Please try another name..');">
+                            </div>
+
+                            <label class="col-sm-2 col-form-label" for="keyword">Province<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control isRequired" id="province" name="province" placeholder="Enter the province" title="Please enter the province">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="keyword">District<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control isRequired" id="district" name="district" placeholder="Enter the district name" title="Please enter the district name">
+                            </div>
+
+                            <label class="col-sm-2 col-form-label" for="keyword">Email</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="keyword">Alternate Email</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
+                            </div>
+
+                            <label class="col-sm-2 col-form-label" for="keywordType">Status<span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control isRequired" id="facilityStatus" name="facilityStatus" title="Please select the facility status">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row items-push">
+                            <div class="col-lg-7 offset-lg-4">
+                                <a href="<?php echo $this->url('facilities', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+duplicateName = true;
+function validateNow() {
+     flag = deforayValidator.init({
+          formId: 'facilityInformation'
+     });
+     if (flag) {
+          if (duplicateName) {
+               $.blockUI();
+               getmatterid();
+               document.getElementById('facilityInformation').submit();
+          }
+     }
+}
+function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+    checkValue = document.getElementById(obj.id).value;
+    if($.trim(checkValue)!= ''){
+        $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, companyId: companyId, existingCompanyId: existingCompanyId, fnct: fnct, srcfrom: 'SuperAdmin'},
+        function(data) {
+            if (data > 0)
+            {
+                    alert(msg);
+                    duplicateName = false;
+                    document.getElementById(obj.id).value = "";
+            }
+            else {
+                    duplicateName = true;
+            }
+        });
+    }
+}
+$(document).ready(function(){
+
+     
+});
+
+</script>
