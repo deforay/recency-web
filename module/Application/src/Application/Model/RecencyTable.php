@@ -176,12 +176,12 @@ class RecencyTable extends AbstractTableGateway {
         return $lastInsertedId;
     }
 
-    public function fetchRecencyDetailsById($facilityId)
+    public function fetchRecencyDetailsById($recencyId)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('recency')
-                                ->where(array('recency_id' => $facilityId));
+                                ->where(array('recency_id' => $recencyId));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
@@ -243,6 +243,79 @@ class RecencyTable extends AbstractTableGateway {
             $response["message"] = "Please check your token credentials!";
         }
        return $response;
+    }
+
+    public function addRecencyDetailsApi($params)
+    {
+        // \Zend\Debug\Debug::dump($params);die;
+        $common = new CommonService();
+        if(isset($params["form"])){
+            $i = 1;
+            foreach($params["form"] as $key => $recency){
+                try{
+                    if(isset($recency['sampleId']) && trim($recency['sampleId'])!="")
+                    {
+                        $data = array(
+                            'sample_id' => $recency['sampleId'],
+                            'patient_id' => $recency['patientId'],
+                            'facility_id' => $recency['facilityId'],
+                            'hiv_recency_result' => $recency['hivRecencyResult'],
+                            'added_on' => date("Y-m-d H:i:s"),
+                            'added_by' => $recency['userId']
+                            
+                        );
+                        if(isset($recency['hivRecencyDate']) && trim($recency['hivDiagnosisDate'])!=""){
+                            $data['hiv_diagnosis_date']=$common->dbDateFormat($recency['hivDiagnosisDate']);
+                        }
+                        if(isset($recency['hivRecencyDate']) && trim($recency['hivRecencyDate'])!=""){
+                            $data['hiv_recency_date']=$common->dbDateFormat($recency['hivRecencyDate']);
+                        }
+                        //  \Zend\Debug\Debug::dump($key);die;
+                        $this->insert($data);
+                        $lastInsertedId = $this->lastInsertValue;
+                        if($lastInsertedId > 0){
+                            $response['response'][$i] = 'success';
+                        }else{
+                            $response['response'][$i] = 'failed';
+                        }
+                    }
+                }
+                catch (Exception $exc) {
+                    error_log($exc->getMessage());
+                    error_log($exc->getTraceAsString());
+                }
+                $i++;
+            }
+        }else{
+            try{
+                if(isset($params['sampleId']) && trim($params['sampleId'])!="")
+                {
+                    $data = array(
+                        'sample_id' => $params['sampleId'],
+                        'patient_id' => $params['patientId'],
+                        'facility_id' => $params['facilityId'],
+                        'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
+                        'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
+                        'hiv_recency_result' => $params['hivRecencyResult'],
+                        'added_on' => date("Y-m-d H:i:s"),
+                        'added_by' => $params['userId']
+
+                    );
+                    $this->insert($data);
+                    $lastInsertedId = $this->lastInsertValue;
+                    if($lastInsertedId > 0){
+                        $response['response'] = 'success';
+                    }else{
+                        $response['response'] = 'failed';
+                    }
+                }
+            }
+            catch (Exception $exc) {
+                error_log($exc->getMessage());
+                error_log($exc->getTraceAsString());
+            }
+        }
+        return $response;
     }
 }
 ?>

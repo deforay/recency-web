@@ -71,6 +71,7 @@ $sessionLogin = new Container('credo');
                         <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
                             <select class="form-control isRequired" id="facilityStatus" name="facilityStatus" title="Please select the facility status">
+                                <option value="">--select--</option>
                                 <option value="active" <?php echo($result['status'] == 'active' )?'selected="selected"':''; ?>>Active</option>
                                 <option value="inactive" <?php echo($result['status'] == 'inactive' )?'selected="selected"':''; ?>>Inactive</option>
                             </select>
