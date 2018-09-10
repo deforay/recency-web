@@ -231,6 +231,8 @@ class RecencyTable extends AbstractTableGateway {
                     'hivDiagnosisDate' => $result['hiv_diagnosis_date'],
                     'hivRecencyDate' => $result['hiv_recency_date'],
                     'hivRecencyResult' => $result['hiv_recency_result'],
+                    'dob' => $result['dob'],
+                    'gender' => $result['gender'],
                     'facilityName' => $result['facility_name'],
                     'province' => $result['province'],
                 );
@@ -260,6 +262,7 @@ class RecencyTable extends AbstractTableGateway {
                             'patient_id' => $recency['patientId'],
                             'facility_id' => $recency['facilityId'],
                             'hiv_recency_result' => $recency['hivRecencyResult'],
+                            'gender' => $recency['gender'],
                             'added_on' => date("Y-m-d H:i:s"),
                             'added_by' => $recency['userId']
                             
@@ -269,6 +272,9 @@ class RecencyTable extends AbstractTableGateway {
                         }
                         if(isset($recency['hivRecencyDate']) && trim($recency['hivRecencyDate'])!=""){
                             $data['hiv_recency_date']=$common->dbDateFormat($recency['hivRecencyDate']);
+                        }
+                        if(isset($recency['dob']) && trim($recency['dob'])!=""){
+                            $data['dob']=$common->dbDateFormat($recency['dob']);
                         }
                         //  \Zend\Debug\Debug::dump($key);die;
                         $this->insert($data);
@@ -294,13 +300,21 @@ class RecencyTable extends AbstractTableGateway {
                         'sample_id' => $params['sampleId'],
                         'patient_id' => $params['patientId'],
                         'facility_id' => $params['facilityId'],
-                        'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
-                        'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
                         'hiv_recency_result' => $params['hivRecencyResult'],
+                        'gender' => $recency['gender'],
                         'added_on' => date("Y-m-d H:i:s"),
                         'added_by' => $params['userId']
 
                     );
+                    if(isset($recency['hivRecencyDate']) && trim($recency['hivDiagnosisDate'])!=""){
+                        $data['hiv_diagnosis_date']=$common->dbDateFormat($recency['hivDiagnosisDate']);
+                    }
+                    if(isset($recency['hivRecencyDate']) && trim($recency['hivRecencyDate'])!=""){
+                        $data['hiv_recency_date']=$common->dbDateFormat($recency['hivRecencyDate']);
+                    }
+                    if(isset($recency['dob']) && trim($recency['dob'])!=""){
+                        $data['dob']=$common->dbDateFormat($recency['dob']);
+                    }
                     $this->insert($data);
                     $lastInsertedId = $this->lastInsertValue;
                     if($lastInsertedId > 0){

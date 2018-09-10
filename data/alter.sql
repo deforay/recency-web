@@ -14,3 +14,13 @@ ALTER TABLE `recency` CHANGE `added_by` `added_by` INT(11) NULL DEFAULT NULL;
 
 -- sarabvanan 05-sep-2018
 ALTER TABLE `users` ADD `auth_token` VARCHAR(255) NULL DEFAULT NULL AFTER `server_password`;
+
+-- Thanaseelan 07-09-2018
+ALTER TABLE `recency` ADD `dob` DATE NULL DEFAULT NULL AFTER `hiv_recency_result`, ADD `gender` VARCHAR(255) NULL DEFAULT NULL AFTER `dob`;
+
+-- Thanaseelan 10-09-2018
+CREATE TABLE `risk_populations` (
+ `rp_id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(255) NOT NULL,
+ PRIMARY KEY (`rp_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

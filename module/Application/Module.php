@@ -12,6 +12,7 @@ use Application\Model\UserTable;
 use Application\Model\FacilitiesTable;
 use Application\Model\RoleTable;
 use Application\Model\RecencyTable;
+use Application\Model\RiskPopulationsTable;
 
 
 // Service
@@ -20,6 +21,7 @@ use Application\Service\CommonService;
 use Application\Service\UserService;
 use Application\Service\FacilitiesService;
 use Application\Service\RecencyService;
+use Application\Service\RiskPopulationsService;
 
 
 class Module{
@@ -96,6 +98,11 @@ class Module{
                         $table = new RecencyTable($dbAdapter);
                         return $table;
                     },
+                    'RiskPopulationsTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new RiskPopulationsTable($dbAdapter);
+                        return $table;
+                    },
 
                     //service
 
@@ -112,6 +119,9 @@ class Module{
                     },
                     'RecencyService' => function($sm) {
                         return new RecencyService($sm);
+                    },
+                    'RiskPopulationsService' => function($sm) {
+                        return new RiskPopulationsService($sm);
                     },
 
                )

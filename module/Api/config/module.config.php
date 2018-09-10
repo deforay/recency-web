@@ -42,6 +42,19 @@ return array(
                     ),
                 ),
             ),
+
+            'api-risk-populations' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/risk-populations[/:id]',
+                    'constraints' => array(
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Api\Controller\RiskPopulations',
+                    ),
+                ),
+            ),
         ),
     ),
     'controllers' => array(
@@ -49,6 +62,7 @@ return array(
             'Api\Controller\Login' => 'Api\Controller\LoginController',
             'Api\Controller\Facility' => 'Api\Controller\FacilityController',
             'Api\Controller\Recency' => 'Api\Controller\RecencyController',
+            'Api\Controller\RiskPopulations' => 'Api\Controller\RiskPopulationsController',
 
         ),
     ),
