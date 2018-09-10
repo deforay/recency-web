@@ -12,6 +12,9 @@ if($result->hiv_diagnosis_date!= '' && $result->hiv_diagnosis_date!= null && $re
 if($result->hiv_recency_date!= '' && $result->hiv_recency_date!= null && $result->hiv_recency_date!= '0000-00-00'){
     $hivRecencyDate = $common->humanDateFormat($result->hiv_recency_date);
 }
+if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
+    $dob = $common->humanDateFormat($result->dob);
+}
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -74,6 +77,68 @@ if($result->hiv_recency_date!= '' && $result->hiv_recency_date!= null && $result
                         <label class="col-sm-2 col-form-label" for="">HIV Recency Result<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" value="<?php echo $result['hiv_recency_result']; ?>" class="form-control isRequired" id="hivRecencyResult" name="hivRecencyResult" placeholder="Enter the HIV recency result" title="Please enter the HIV recency result">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">DOB<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $dob; ?>" class="js-datepicker form-control isRequired" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob"  readonly="readonly">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label" for="">Gender<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control isRequired" id="gender" name="gender" title="Please select the gender">
+                                <option value="">--Select--</option>
+                                <option value="male" <?php echo($result['gender'] == "male" )?'selected="selected"':''; ?>>Male</option>
+                                <option value="female" <?php echo($result['gender'] == "female" )?'selected="selected"':''; ?>>Female</option>
+                                <option value="transgender" <?php echo($result['gender'] == "transgender" )?'selected="selected"':''; ?>>Transgender</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Marital Status<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control isRequired" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
+                                <option value="">--Select--</option>
+                                <option value="married" <?php echo($result['marital_status'] == "married" )?'selected="selected"':''; ?>>Married</option>
+                                <option value="unmarried" <?php echo($result['marital_status'] == "unmarried" )?'selected="selected"':''; ?>>Unmarried</option>
+                            </select>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label" for="">Residence<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['residence']; ?>" class="form-control isRequired" id="residence" name="residence" placeholder="Enter the residence" title="Please enter the residence">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Education Level<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['education_level']; ?>" class="form-control isRequired" id="educationLevel" name="educationLevel" placeholder="Enter the education level" title="Please enter the education level">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label" for="">Risk Population<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control isRequired" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
+                                <option value="">--Select--</option>
+                                <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
+                                    <option value="<?php echo base64_encode($riskPo['rp_id']); ?>" <?php echo($result['risk_population'] == $riskPo['rp_id'] )?'selected="selected"':''; ?>><?php echo $riskPo['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Past HIV Testing<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['past_hiv_testing']; ?>" class="form-control isRequired" id="pastHivTesting" name="pastHivTesting" placeholder="Enter the past HIV testing" title="Please enter the past HIV testing">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label" for="">Test Last 12 Month<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['test_last_12_month']; ?>" class="form-control isRequired" id="testLast12Month" name="testLast12Month" placeholder="Enter the test last 12 month" title="Please enter the test last 12 month">
                         </div>
                     </div>
 

@@ -198,7 +198,10 @@ class FacilitiesTable extends AbstractTableGateway {
     
     public function fetchFacilitiesAllDetails()
     {
-        return $this->select()->toArray();
+        $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
+        $result = $this->select()->toArray();
+        $result['riskPopulations'] = $riskPopulationsDb->select()->toArray();
+        return $result;
     }
     
     public function fetchFacilitiesDetailsApi($params)

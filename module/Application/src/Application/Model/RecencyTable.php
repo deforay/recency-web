@@ -26,8 +26,8 @@ class RecencyTable extends AbstractTableGateway {
         $role = $sessionLogin->roleId;
         $roleCode = $sessionLogin->roleCode;
         $common = new CommonService();
-        $aColumns = array('r.sample_id','r.patient_id','r.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.added_on','r.added_by');
-        $orderColumns = array('r.sample_id','r.patient_id','r.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.added_on','r.added_by');
+        $aColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.dob','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.past_hiv_testing','r.test_last_12_month','r.added_on','r.added_by');
+        $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.dob','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.past_hiv_testing','r.test_last_12_month','r.added_on','r.added_by');
 
         /* Paging */
         $sLimit = "";
@@ -98,7 +98,8 @@ class RecencyTable extends AbstractTableGateway {
           $roleId=$sessionLogin->roleId;
 
           $sQuery = $sql->select()->from(array( 'r' => 'recency' ))
-                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
+                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
+                                ->join(array('rp' => 'risk_populations'), 'r.risk_population = rp.rp_id', array('name'),'left');
 
           if (isset($sWhere) && $sWhere != "") {
                   $sQuery->where($sWhere);
@@ -140,7 +141,15 @@ class RecencyTable extends AbstractTableGateway {
               $row[] = ucwords($aRow['facility_name']);
               $row[] = $aRow['hiv_diagnosis_date'];
               $row[] = $aRow['hiv_recency_date'];
-              $row[] = $aRow['hiv_recency_result'];
+              $row[] = ucwords($aRow['hiv_recency_result']);
+              $row[] = $common->humanDateFormat($aRow['dob']);
+              $row[] = ucwords($aRow['gender']);
+              $row[] = ucwords($aRow['marital_status']);
+              $row[] = ucwords($aRow['residence']);
+              $row[] = ucwords($aRow['education_level']);
+              $row[] = ucwords($aRow['name']);
+              $row[] = ucwords($aRow['past_hiv_testing']);
+              $row[] = ucwords($aRow['test_last_12_month']);
               if($roleCode == "user"){
 
                   $row[] = '<a href="/recency/edit/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
@@ -166,6 +175,14 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
                 'hiv_recency_result' => $params['hivRecencyResult'],
+                'dob' => $common->dbDateFormat($params['dob']),
+                'gender' => $params['gender'],
+                'marital_status' => $params['maritalStatus'],
+                'residence' => $params['residence'],
+                'education_level' => $params['educationLevel'],
+                'risk_population' => base64_decode($params['riskPopulation']),
+                'past_hiv_testing' => $params['pastHivTesting'],
+                'test_last_12_month' => $params['testLast12Month'],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
 
@@ -200,6 +217,14 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
                 'hiv_recency_result' => $params['hivRecencyResult'],
+                'dob' => $common->dbDateFormat($params['dob']),
+                'gender' => $params['gender'],
+                'marital_status' => $params['maritalStatus'],
+                'residence' => $params['residence'],
+                'education_level' => $params['educationLevel'],
+                'risk_population' => base64_decode($params['riskPopulation']),
+                'past_hiv_testing' => $params['pastHivTesting'],
+                'test_last_12_month' => $params['testLast12Month'],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
             );
@@ -231,6 +256,16 @@ class RecencyTable extends AbstractTableGateway {
                     'hivDiagnosisDate' => $result['hiv_diagnosis_date'],
                     'hivRecencyDate' => $result['hiv_recency_date'],
                     'hivRecencyResult' => $result['hiv_recency_result'],
+                    'dob' => $params['dob'],
+                    'gender' => $params['gender'],
+                    'latitude' => $params['latitude'],
+                    'longitude' => $params['longitude'],
+                    'maritalStatus' => $params['marital_status'],
+                    'residence' => $params['residence'],
+                    'educationLevel' => $params['education_level'],
+                    'risk_population riskPopulation' => $params['past_hiv_testing'],
+                    'pastHivTesting' => $params['pastHivTesting'],
+                    'testLast12Month' => $params['test_last_12_month'],
                     'dob' => $result['dob'],
                     'gender' => $result['gender'],
                     'facilityName' => $result['facility_name'],
@@ -262,7 +297,15 @@ class RecencyTable extends AbstractTableGateway {
                             'patient_id' => $recency['patientId'],
                             'facility_id' => $recency['facilityId'],
                             'hiv_recency_result' => $recency['hivRecencyResult'],
-                            'gender' => $recency['gender'],
+                            'gender' => $params['gender'],
+                            'latitude' => $params['latitude'],
+                            'longitude' => $params['longitude'],
+                            'marital_status' => $params['maritalStatus'],
+                            'residence' => $params['residence'],
+                            'education_level' => $params['educationLevel'],
+                            'risk_population' => $params['riskPopulation'],
+                            'past_hiv_testing' => $params['pastHivTesting'],
+                            'test_last_12_month' => $params['testLast12Month'],
                             'added_on' => date("Y-m-d H:i:s"),
                             'added_by' => $recency['userId']
                             
@@ -272,6 +315,9 @@ class RecencyTable extends AbstractTableGateway {
                         }
                         if(isset($recency['hivRecencyDate']) && trim($recency['hivRecencyDate'])!=""){
                             $data['hiv_recency_date']=$common->dbDateFormat($recency['hivRecencyDate']);
+                        }
+                        if(isset($recency['dob']) && trim($recency['dob'])!=""){
+                            $data['dob']=$common->dbDateFormat($recency['dob']);
                         }
                         if(isset($recency['dob']) && trim($recency['dob'])!=""){
                             $data['dob']=$common->dbDateFormat($recency['dob']);
@@ -301,7 +347,15 @@ class RecencyTable extends AbstractTableGateway {
                         'patient_id' => $params['patientId'],
                         'facility_id' => $params['facilityId'],
                         'hiv_recency_result' => $params['hivRecencyResult'],
-                        'gender' => $recency['gender'],
+                        'gender' => $params['gender'],
+                        'latitude' => $params['latitude'],
+                        'longitude' => $params['longitude'],
+                        'marital_status' => $params['maritalStatus'],
+                        'residence' => $params['residence'],
+                        'education_level' => $params['educationLevel'],
+                        'risk_population' => $params['riskPopulation'],
+                        'past_hiv_testing' => $params['pastHivTesting'],
+                        'test_last_12_month' => $params['testLast12Month'],
                         'added_on' => date("Y-m-d H:i:s"),
                         'added_by' => $params['userId']
 
@@ -311,6 +365,9 @@ class RecencyTable extends AbstractTableGateway {
                     }
                     if(isset($recency['hivRecencyDate']) && trim($recency['hivRecencyDate'])!=""){
                         $data['hiv_recency_date']=$common->dbDateFormat($recency['hivRecencyDate']);
+                    }
+                    if(isset($recency['dob']) && trim($recency['dob'])!=""){
+                        $data['dob']=$common->dbDateFormat($recency['dob']);
                     }
                     if(isset($recency['dob']) && trim($recency['dob'])!=""){
                         $data['dob']=$common->dbDateFormat($recency['dob']);
