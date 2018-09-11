@@ -56,7 +56,7 @@ if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
                         <div class="col-sm-4">
                             <select class="form-control isRequired" id="facilityId" name="facilityId" title="Please select the facility name">
                                 <option value="">--Select--</option>
-                                <?php foreach($facilityResult as $facility){?>
+                                <?php foreach($facilityResult['facility'] as $facility){?>
                                     <option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo $facility['facility_name']; ?></option>
                                 <?php } ?>
                             </select>
@@ -133,12 +133,22 @@ if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Past HIV Testing<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['past_hiv_testing']; ?>" class="form-control isRequired" id="pastHivTesting" name="pastHivTesting" placeholder="Enter the past HIV testing" title="Please enter the past HIV testing">
+                            <select class="form-control isRequired" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
+                                <option value="">--Select--</option>
+                                <option value="yes" <?php echo($result['past_hiv_testing'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                <option value="no" <?php echo($result['past_hiv_testing'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                                <option value="not-known" <?php echo($result['past_hiv_testing'] == 'not-known' )?'selected="selected"':''; ?>>Not Known</option>
+                            </select>
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Test Last 12 Month<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['test_last_12_month']; ?>" class="form-control isRequired" id="testLast12Month" name="testLast12Month" placeholder="Enter the test last 12 month" title="Please enter the test last 12 month">
+                            <select class="form-control isRequired" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
+                                <option value="">--Select--</option>
+                                <option value="yes" <?php echo($result['test_last_12_month'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                <option value="no" <?php echo($result['test_last_12_month'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                                <option value="not-known" <?php echo($result['test_last_12_month'] == 'not-known' )?'selected="selected"':''; ?>>Not Known</option>
+                            </select>
                         </div>
                     </div>
 

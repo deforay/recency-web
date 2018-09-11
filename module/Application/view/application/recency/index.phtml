@@ -1,6 +1,11 @@
 <?php
     use Zend\Session\Container;
-    $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+    $sessionLogin = new Container('credo');
+    $roleCode = $sessionLogin->roleCode;
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';;
+    if($roleCode == "user"){
+        $editAction.=',{"sClass":"center",bSortable:false}';
+    }
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -40,12 +45,18 @@
                                     <th>Risk Population</th>
                                     <th>Past Hiv Testing</th>
                                     <th>Test Last 12 Month</th>
-                                    <th>Action</th>
+                                    <?php if($roleCode == "user"){
+                                        echo "<th>Action</th>";
+                                    }?>
                               </tr>
                          </thead>
                          <tbody>
                               <tr>
-                                   <td colspan="15" class="dataTables_empty">Loading data from server</td>
+                                <?php if($roleCode == "user"){
+                                   echo "<td colspan='15' class='dataTables_empty'>Loading data from server</td>";
+                                }else{
+                                    echo "<td colspan='14' class='dataTables_empty'>Loading data from server</td>";
+                                }?> 
                               </tr>
                               <tr>
                               </tbody>

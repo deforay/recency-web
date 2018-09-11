@@ -1,5 +1,5 @@
 <?php
-// \Zend\Debug\Debug::dump($facilityResult['riskPopulations']);die;
+// \Zend\Debug\Debug::dump($facilityResult);die;
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 ?>
@@ -43,7 +43,7 @@ $sessionLogin = new Container('credo');
                         <div class="col-sm-4">
                             <select class="form-control isRequired" id="facilityId" name="facilityId" title="Please select the facility name">
                                 <option value="">--Select--</option>
-                                <?php foreach($facilityResult as $facility){?>
+                                <?php foreach($facilityResult['facility'] as $facility){ ?>
                                     <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
                                 <?php } ?>
                             </select>
@@ -76,6 +76,7 @@ $sessionLogin = new Container('credo');
                         <label class="col-sm-2 col-form-label" for="">Gender<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
                             <select class="form-control isRequired" id="gender" name="gender" title="Please select the gender">
+                                <option value="">--Select--</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                                 <option value="transgender">Transgender</option>
@@ -87,6 +88,7 @@ $sessionLogin = new Container('credo');
                         <label class="col-sm-2 col-form-label" for="">Marital Status<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
                             <select class="form-control isRequired" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
+                                <option value="">--Select--</option>
                                 <option value="married">Married</option>
                                 <option value="unmarried">Unmarried</option>
                             </select>
@@ -109,7 +111,7 @@ $sessionLogin = new Container('credo');
                             <select class="form-control isRequired" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
                                 <option value="">--Select--</option>
                                 <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
-                                    <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo $riskPo['name']; ?></option>
+                                    <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo str_replace('_', ' ', $riskPo['name']); ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -118,12 +120,22 @@ $sessionLogin = new Container('credo');
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Past HIV Testing<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="pastHivTesting" name="pastHivTesting" placeholder="Enter the past HIV testing" title="Please enter the past HIV testing">
+                            <select class="form-control isRequired" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
+                                <option value="">--Select--</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                                <option value="not-known">Not Known</option>
+                            </select>
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Test Last 12 Month<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="testLast12Month" name="testLast12Month" placeholder="Enter the test last 12 month" title="Please enter the test last 12 month">
+                            <select class="form-control isRequired" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
+                                <option value="">--Select--</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                                <option value="not-known">Not Known</option>
+                            </select>
                         </div>
                     </div>
 
