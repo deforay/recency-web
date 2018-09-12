@@ -34,6 +34,12 @@ class GlobalConfigService {
         return $globalConfigDb->fetchGlobalConfigAllDetails();
     }
 
+    public function getGlobalConfigAllDetailsApi()
+    {
+        $globalConfigDb = $this->sm->get('GlobalConfigTable');
+        return $globalConfigDb->fetchGlobalConfigAllDetailsApi();
+    }
+
     public function updateGlobalConfigDetails($params){
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();

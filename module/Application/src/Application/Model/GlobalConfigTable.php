@@ -144,6 +144,14 @@ class GlobalConfigTable extends AbstractTableGateway {
     {
         return $this->select()->toArray();
     }
+
+    public function fetchGlobalConfigAllDetailsApi()
+    {
+        $response['status'] = 'success' ;
+        $response['config'] = $this->select()->toArray();
+        return $response;
+    }
+
     public function updateGlobalConfigDetails($params)
     {
         $n = count($params['gobalConfigId']);

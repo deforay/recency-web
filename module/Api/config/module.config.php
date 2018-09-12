@@ -55,6 +55,19 @@ return array(
                     ),
                 ),
             ),
+
+            'api-global-config' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/api/global-config[/:id]',
+                    'constraints' => array(
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Api\Controller\GlobalConfig',
+                    ),
+                ),
+            ),
         ),
     ),
     'controllers' => array(
@@ -63,6 +76,7 @@ return array(
             'Api\Controller\Facility' => 'Api\Controller\FacilityController',
             'Api\Controller\Recency' => 'Api\Controller\RecencyController',
             'Api\Controller\RiskPopulations' => 'Api\Controller\RiskPopulationsController',
+            'Api\Controller\GlobalConfig' => 'Api\Controller\GlobalConfigController',
 
         ),
     ),
