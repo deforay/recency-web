@@ -1,0 +1,71 @@
+<?php
+// \Zend\Debug\Debug::dump($globalConfigResult);die;
+use Zend\Session\Container;
+use Application\Service\CommonService;
+$sessionLogin = new Container('credo');
+$common = new CommonService();
+?>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Global Config</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <a href="<?php echo $this->url('global-config', array('action' => 'index')); ?>"><li class="breadcrumb-item">Global Config Details</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Edit</li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+
+<div class="content">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Edit Global Config Details</h3>
+        </div>
+        <div class="block-content">
+            <div class="col-md-12 table-responsive" id="hide">
+                <form name="globalConfigTable" id="globalConfigTable"  class="mb-5" action="<?php echo $this->url('global-config', array('action' => 'edit')); ?>" method="post">
+                    <div class="form-group row">
+                    <?php foreach($globalConfigResult as $config){ ?>
+                        <div class="col-md-6">
+                            <label class="col-form-label" for=""><?php echo ucfirst($config['display_name']); ?><span class="mandatory">*</span></label>
+                            <div class="">
+                                <input type="text" value="<?php echo $config['global_value']; ?>" class="form-control isRequired" id="configValue" name="configValue[]" placeholder="Enter the config value" title="Please enter the config value">
+                                <input type="hidden" name="gobalConfigId[]" value="<?php echo base64_encode($config['config_id']);?>" />
+                            </div>
+                        </div>
+                    <?php } ?>
+                    </div>
+
+                    <div class="row items-push">
+                        <div class="col-lg-7 offset-lg-4">
+                            <a href="<?php echo $this->url('global-config', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                            <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i>Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+function validateNow() {
+     flag = deforayValidator.init({
+          formId: 'globalConfigTable'
+     });
+     if (flag) {
+        $.blockUI();
+        getmatterid();
+        document.getElementById('globalConfigTable').submit();
+     }
+}
+$(document).ready(function(){
+    
+});
+
+</script>

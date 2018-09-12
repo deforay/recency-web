@@ -7,8 +7,9 @@ $roleCode = $sessionLogin->roleCode;
 // \Zend\Debug\Debug::dump($roleCode);die;
 
 $userMenu = "";
-$userMenu.="<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=". $this->url('facilities', array('action' => 'index')) ."><span class='nav-main-link-name'>Facilities</span></a></li>";
+$userMenu.="<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=". $this->url('global-config', array('action' => 'index')) ."><span class='nav-main-link-name'>Global Config</span></a></li>";
 $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $this->url('user', array('action' => 'index')) ."><span class='nav-main-link-name'>User</span></a></li>";
+$userMenu.="<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=". $this->url('facilities', array('action' => 'index')) ."><span class='nav-main-link-name'>Facilities</span></a></li>";
 
 $recencyMenu = "";
 $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'>Manage Recency</span></a></li>";
@@ -248,10 +249,9 @@ $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href
       str=$(location).attr('pathname');
       splitsUrl=str.split("/",4);
 
-      if(splitsUrl[1]=='facilities' || splitsUrl[1]=='user' || splitsUrl[1]=='recency' )
+      if(splitsUrl[1]=='facilities' || splitsUrl[1]=='user' || splitsUrl[1]=='recency' || splitsUrl[1]=='global-config' )
       {
         if(splitsUrl[1] != 'recency'){
-
           $('#recency-menu').removeClass('open');
           $('#manage').addClass('open');
           $('#'+splitsUrl[1]).addClass('active');

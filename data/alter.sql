@@ -34,3 +34,16 @@ ALTER TABLE `recency` CHANGE `education_levl` `education_level` VARCHAR(255) CHA
 ALTER TABLE `recency` CHANGE `sample_id` `sample_id` VARCHAR(255) NULL DEFAULT NULL;
 
 ALTER TABLE `recency` CHANGE `patient_id` `patient_id` VARCHAR(255) NULL DEFAULT NULL;
+
+
+--Thana 12-sep-2018
+ALTER TABLE `recency` ADD `pregnancy_status` VARCHAR(255) NULL DEFAULT NULL AFTER `risk_population`, ADD `current_sexual_partner` VARCHAR(255) NULL DEFAULT NULL AFTER `pregnancy_status`;
+ALTER TABLE `recency` ADD `age` VARCHAR(255) NULL DEFAULT NULL AFTER `dob`;
+ALTER TABLE `recency` ADD `location_one` VARCHAR(255) NULL DEFAULT NULL AFTER `test_last_12_month`, ADD `location_two` VARCHAR(255) NULL DEFAULT NULL AFTER `location_one`, ADD `location_three` VARCHAR(255) NULL DEFAULT NULL AFTER `location_two`;
+CREATE TABLE `global_config` (
+ `config_id` int(11) NOT NULL AUTO_INCREMENT,
+ `display_name` varchar(255) DEFAULT NULL,
+ `global_name` varchar(255) DEFAULT NULL,
+ `global_value` varchar(255) DEFAULT NULL,
+ PRIMARY KEY (`config_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1

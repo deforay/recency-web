@@ -84,6 +84,16 @@ return array(
                               ),
                         ),
                   ),
+                  'global-config' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                              'route' => '/global-config[/:action][/][:id]',
+                              'defaults' => array(
+                                    'controller' => 'Application\Controller\GlobalConfig',
+                                    'action' => 'index',
+                              ),
+                        ),
+                  ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -146,7 +156,8 @@ return array(
                'Application\Controller\Login' => 'Application\Controller\LoginController',
                'Application\Controller\Facilities' => 'Application\Controller\FacilitiesController',
                'Application\Controller\User' => 'Application\Controller\UserController',
-               'Application\Controller\Recency' => 'Application\Controller\RecencyController'
+               'Application\Controller\Recency' => 'Application\Controller\RecencyController',
+               'Application\Controller\GlobalConfig' => 'Application\Controller\GlobalConfigController'
           ),
      ),
      'controller_plugins' => array(

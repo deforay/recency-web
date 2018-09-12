@@ -27,14 +27,14 @@ $sessionLogin = new Container('credo');
             <div class="col-md-12 table-responsive" id="hide">
                 <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Sample Id<span class="mandatory">*</span></label>
+                        <label class="col-sm-2 col-form-label" for="">Sample Id</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
+                            <input type="text" class="form-control" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id" onchange="check(this);">
                         </div>
 
-                        <label class="col-sm-2 col-form-label" for="">Patient Id<span class="mandatory">*</span></label>
+                        <label class="col-sm-2 col-form-label" for="">Patient Id</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
+                            <input type="text" class="form-control" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
                         </div>
                     </div>
 
@@ -70,12 +70,19 @@ $sessionLogin = new Container('credo');
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">DOB<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="text" class="js-datepicker form-control isRequired" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob"  readonly="readonly">
+                            <input type="text" class="js-datepicker form-control" id="dobDate" name="dobDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
                         </div>
 
+                        <label class="col-sm-2 col-form-label" for="">Age<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="dob" name="dob" value="" placeholder="Enter the age" title="Please enter the age">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Gender<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <select class="form-control isRequired" id="gender" name="gender" title="Please select the gender">
+                            <select class="form-control" id="gender" name="gender" title="Please select the gender">
                                 <option value="">--Select--</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
@@ -87,28 +94,31 @@ $sessionLogin = new Container('credo');
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Marital Status<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <select class="form-control isRequired" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
+                            <select class="form-control" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
                                 <option value="">--Select--</option>
-                                <option value="married">Married</option>
-                                <option value="unmarried">Unmarried</option>
+                                <option value="never-married">Never Married</option>
+                                <option value="married-cohabited">Married - Cohabited</option>
+                                <option value="married-cohabiting">Married cohabiting</option>
+                                <option value="widow">Widow</option>
+                                <option value="divorce-separated">Divorce - Separated</option>
                             </select>
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Residence<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="residence" name="residence" placeholder="Enter the residence" title="Please enter the residence">
+                            <input type="text" class="form-control" id="residence" name="residence" placeholder="Enter the residence" title="Please enter the residence">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Education Level<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="educationLevel" name="educationLevel" placeholder="Enter the education level" title="Please enter the education level">
+                            <input type="text" class="form-control" id="educationLevel" name="educationLevel" placeholder="Enter the education level" title="Please enter the education level">
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Risk Population<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <select class="form-control isRequired" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
+                            <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
                                 <option value="">--Select--</option>
                                 <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
                                     <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo str_replace('_', ' ', $riskPo['name']); ?></option>
@@ -120,7 +130,7 @@ $sessionLogin = new Container('credo');
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Past HIV Testing<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <select class="form-control isRequired" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
+                            <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
                                 <option value="">--Select--</option>
                                 <option value="yes">Yes</option>
                                 <option value="no">No</option>
@@ -130,7 +140,7 @@ $sessionLogin = new Container('credo');
 
                         <label class="col-sm-2 col-form-label" for="">Test Last 12 Month<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <select class="form-control isRequired" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
+                            <select class="form-control" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
                                 <option value="">--Select--</option>
                                 <option value="yes">Yes</option>
                                 <option value="no">No</option>
@@ -153,18 +163,40 @@ $sessionLogin = new Container('credo');
 
 
 <script type="text/javascript">
-function validateNow() {
-     flag = deforayValidator.init({
-          formId: 'recencyInformation'
-     });
-     if (flag) {
-        $.blockUI();
-        getmatterid();
-        document.getElementById('recencyInformation').submit();
-     }
-}
-$(document).ready(function(){
-    
-});
+    function validateNow() {
+        if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
+                alert("Please enter required field");
+                if( $("#sampleId").val() == "" ){
+                    $("#sampleId").focus();
+                }else{
+                    $("#patientId").focus();
+                }
+        }else{
+            flag = deforayValidator.init({
+                formId: 'recencyInformation'
+            });
+            if (flag) {
+                $.blockUI();
+                getmatterid();
+                document.getElementById('recencyInformation').submit();
+            }
+        }
+    }
+    $(document).ready(function(){
+        
+    });
+
+    function ageCalculate(){
+        var today = new Date();
+        var birthDate = new Date($("#dobDate").val());
+        var dob = diff_years(today,birthDate);
+        $("#dob").val(dob);
+    }
+    function diff_years(dt2, dt1) 
+    {
+        var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+        diff /= (60 * 60 * 24);
+        return Math.abs(Math.round(diff/365.25));
+    }
 
 </script>

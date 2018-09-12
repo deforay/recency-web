@@ -13,6 +13,7 @@ use Application\Model\FacilitiesTable;
 use Application\Model\RoleTable;
 use Application\Model\RecencyTable;
 use Application\Model\RiskPopulationsTable;
+use Application\Model\GlobalConfigTable;
 
 
 // Service
@@ -22,6 +23,7 @@ use Application\Service\UserService;
 use Application\Service\FacilitiesService;
 use Application\Service\RecencyService;
 use Application\Service\RiskPopulationsService;
+use Application\Service\GlobalConfigService;
 
 
 class Module{
@@ -103,6 +105,11 @@ class Module{
                         $table = new RiskPopulationsTable($dbAdapter);
                         return $table;
                     },
+                    'GlobalConfigTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new GlobalConfigTable($dbAdapter);
+                        return $table;
+                    },
 
                     //service
 
@@ -122,6 +129,9 @@ class Module{
                     },
                     'RiskPopulationsService' => function($sm) {
                         return new RiskPopulationsService($sm);
+                    },
+                    'GlobalConfigService' => function($sm) {
+                        return new GlobalConfigService($sm);
                     },
 
                )
