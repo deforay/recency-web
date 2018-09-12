@@ -174,18 +174,29 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
                 'hiv_recency_result' => $params['hivRecencyResult'],
-                'dob' => $common->dbDateFormat($params['dob']),
                 'gender' => $params['gender'],
+                'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
                 'residence' => $params['residence'],
                 'education_level' => $params['educationLevel'],
                 'risk_population' => base64_decode($params['riskPopulation']),
+                'pregnancy_status' => $params['pregnancyStatus'],
+                'current_sexual_partner' => $params['currentSexualPartner'],
                 'past_hiv_testing' => $params['pastHivTesting'],
                 'test_last_12_month' => $params['testLast12Month'],
+                'location_one' => $params['configValue'][0],
+                'location_two' => $params['configValue'][1],
+                'location_three' => $params['configValue'][2],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
 
             );
+            if(isset($params['dob']) && trim($params['dob']) != ""){
+                $data['dob']=$common->dbDateFormat($params['dob']);
+            }else{
+                $data['dob'] = 'NULL';
+            }
+            // \Zend\Debug\Debug::dump($data);die;
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
         }
@@ -216,17 +227,27 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
                 'hiv_recency_result' => $params['hivRecencyResult'],
-                'dob' => $common->dbDateFormat($params['dob']),
                 'gender' => $params['gender'],
+                'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
                 'residence' => $params['residence'],
                 'education_level' => $params['educationLevel'],
                 'risk_population' => base64_decode($params['riskPopulation']),
+                'pregnancy_status' => $params['pregnancyStatus'],
+                'current_sexual_partner' => $params['currentSexualPartner'],
                 'past_hiv_testing' => $params['pastHivTesting'],
                 'test_last_12_month' => $params['testLast12Month'],
+                'location_one' => $params['configValue'][0],
+                'location_two' => $params['configValue'][1],
+                'location_three' => $params['configValue'][2],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
             );
+            if(isset($params['dob']) && trim($params['dob']) != ""){
+                $data['dob']=$common->dbDateFormat($params['dob']);
+            }else{
+                $data['dob']= 'NULL';
+            }
             $updateResult = $this->update($data,array('recency_id'=>$params['recencyId']));
         }
         return $updateResult;
@@ -296,18 +317,23 @@ class RecencyTable extends AbstractTableGateway {
                             'patient_id' => $recency['patientId'],
                             'facility_id' => $recency['facilityId'],
                             'hiv_recency_result' => $recency['hivRecencyResult'],
-                            'gender' => $params['gender'],
-                            'latitude' => $params['latitude'],
-                            'longitude' => $params['longitude'],
-                            'marital_status' => $params['maritalStatus'],
-                            'residence' => $params['residence'],
-                            'education_level' => $params['educationLevel'],
-                            'risk_population' => $params['riskPopulation'],
-                            'past_hiv_testing' => $params['pastHivTesting'],
-                            'test_last_12_month' => $params['testLast12Month'],
+                            'gender' => $recency['gender'],
+                            'latitude' => $recency['latitude'],
+                            'longitude' => $recency['longitude'],
+                            'age' => $recency['age'],
+                            'marital_status' => $recency['maritalStatus'],
+                            'residence' => $recency['residence'],
+                            'education_level' => $recency['educationLevel'],
+                            'risk_population' => $recency['riskPopulation'],
+                            'pregnancy_status' => $recency['pregnancyStatus'],
+                            'current_sexual_partner' => $recency['currentSexualPartner'],
+                            'past_hiv_testing' => $recency['pastHivTesting'],
+                            'test_last_12_month' => $recency['testLast12Month'],
+                            'location_one' => $recency['locationOne'],
+                            'location_two' => $recency['locationTwo'],
+                            'location_three' => $recency['locationThree'],
                             'added_on' => date("Y-m-d H:i:s"),
                             'added_by' => $recency['userId']
-                            
                         );
                         if(isset($recency['hivRecencyDate']) && trim($recency['hivDiagnosisDate'])!=""){
                             $data['hiv_diagnosis_date']=$common->dbDateFormat($recency['hivDiagnosisDate']);
@@ -318,10 +344,6 @@ class RecencyTable extends AbstractTableGateway {
                         if(isset($recency['dob']) && trim($recency['dob'])!=""){
                             $data['dob']=$common->dbDateFormat($recency['dob']);
                         }
-                        if(isset($recency['dob']) && trim($recency['dob'])!=""){
-                            $data['dob']=$common->dbDateFormat($recency['dob']);
-                        }
-                        //  \Zend\Debug\Debug::dump($key);die;
                         $this->insert($data);
                         $lastInsertedId = $this->lastInsertValue;
                         if($lastInsertedId > 0){
@@ -343,33 +365,36 @@ class RecencyTable extends AbstractTableGateway {
                 {
                     $data = array(
                         'sample_id' => $params['sampleId'],
-                        'patient_id' => $params['patientId'],
-                        'facility_id' => $params['facilityId'],
-                        'hiv_recency_result' => $params['hivRecencyResult'],
-                        'gender' => $params['gender'],
-                        'latitude' => $params['latitude'],
-                        'longitude' => $params['longitude'],
-                        'marital_status' => $params['maritalStatus'],
-                        'residence' => $params['residence'],
-                        'education_level' => $params['educationLevel'],
-                        'risk_population' => $params['riskPopulation'],
-                        'past_hiv_testing' => $params['pastHivTesting'],
-                        'test_last_12_month' => $params['testLast12Month'],
-                        'added_on' => date("Y-m-d H:i:s"),
-                        'added_by' => $params['userId']
+                            'patient_id' => $params['patientId'],
+                            'facility_id' => $params['facilityId'],
+                            'hiv_recency_result' => $params['hivRecencyResult'],
+                            'gender' => $params['gender'],
+                            'latitude' => $params['latitude'],
+                            'longitude' => $params['longitude'],
+                            'age' => $params['age'],
+                            'marital_status' => $params['maritalStatus'],
+                            'residence' => $params['residence'],
+                            'education_level' => $params['educationLevel'],
+                            'risk_population' => $params['riskPopulation'],
+                            'pregnancy_status' => $params['pregnancyStatus'],
+                            'current_sexual_partner' => $params['currentSexualPartner'],
+                            'past_hiv_testing' => $params['pastHivTesting'],
+                            'test_last_12_month' => $params['testLast12Month'],
+                            'location_one' => $params['locationOne'],
+                            'location_two' => $params['locationTwo'],
+                            'location_three' => $params['locationThree'],
+                            'added_on' => date("Y-m-d H:i:s"),
+                            'added_by' => $params['userId']
 
                     );
-                    if(isset($recency['hivRecencyDate']) && trim($recency['hivDiagnosisDate'])!=""){
-                        $data['hiv_diagnosis_date']=$common->dbDateFormat($recency['hivDiagnosisDate']);
+                    if(isset($params['hivRecencyDate']) && trim($params['hivDiagnosisDate'])!=""){
+                        $data['hiv_diagnosis_date']=$common->dbDateFormat($params['hivDiagnosisDate']);
                     }
-                    if(isset($recency['hivRecencyDate']) && trim($recency['hivRecencyDate'])!=""){
-                        $data['hiv_recency_date']=$common->dbDateFormat($recency['hivRecencyDate']);
+                    if(isset($params['hivRecencyDate']) && trim($params['hivRecencyDate'])!=""){
+                        $data['hiv_recency_date']=$common->dbDateFormat($params['hivRecencyDate']);
                     }
-                    if(isset($recency['dob']) && trim($recency['dob'])!=""){
-                        $data['dob']=$common->dbDateFormat($recency['dob']);
-                    }
-                    if(isset($recency['dob']) && trim($recency['dob'])!=""){
-                        $data['dob']=$common->dbDateFormat($recency['dob']);
+                    if(isset($params['dob']) && trim($params['dob'])!=""){
+                        $data['dob']=$common->dbDateFormat($params['dob']);
                     }
                     $this->insert($data);
                     $lastInsertedId = $this->lastInsertValue;
