@@ -260,42 +260,23 @@ class RecencyTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         
-        $sQuery = $sql->select()->from(array('u' => 'users'))
-                                ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('sample_id','patient_id','hiv_diagnosis_date','hiv_recency_date','hiv_recency_result'))
+        $sQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
+                                ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'))
                                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'))
                                 ->where(array('auth_token' =>$params['authToken']));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-		// \Zend\Debug\Debug::dump($rResult);die;
         if(isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['status']=='active') {
             $response['status']='success';
             foreach($rResult as $result){
-                $response["recency"][] = array(
-                    'sampleId' => $result['sample_id'],
-                    'patientId' => $result['patient_id'],
-                    'hivDiagnosisDate' => $result['hiv_diagnosis_date'],
-                    'hivRecencyDate' => $result['hiv_recency_date'],
-                    'hivRecencyResult' => $result['hiv_recency_result'],
-                    'dob' => $params['dob'],
-                    'gender' => $params['gender'],
-                    'latitude' => $params['latitude'],
-                    'longitude' => $params['longitude'],
-                    'maritalStatus' => $params['marital_status'],
-                    'residence' => $params['residence'],
-                    'educationLevel' => $params['education_level'],
-                    'risk_population riskPopulation' => $params['past_hiv_testing'],
-                    'pastHivTesting' => $params['pastHivTesting'],
-                    'testLast12Month' => $params['test_last_12_month'],
-                    'dob' => $result['dob'],
-                    'gender' => $result['gender'],
-                    'facilityName' => $result['facility_name'],
-                    'province' => $result['province'],
-                );
+                $response['recency'] = $result;
             }
-        } else if($rResult['status']=='inactive'){
+        }
+        else if($rResult['status']=='inactive'){
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
-        } else {
+        }
+        else {
             $response["status"] = "fail";
             $response["message"] = "Please check your token credentials!";
         }
@@ -304,7 +285,6 @@ class RecencyTable extends AbstractTableGateway {
 
     public function addRecencyDetailsApi($params)
     {
-        // \Zend\Debug\Debug::dump($params);die;
         $common = new CommonService();
         if(isset($params["form"])){
             $i = 1;

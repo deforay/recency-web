@@ -165,7 +165,7 @@ if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
                             <select class="form-control" id="currentSexualPartner" name="currentSexualPartner" title="Please select the current sexual partner">
                             <option value="">--Select--</option>
                             <option value="1" <?php echo($result['current_sexual_partner'] == '1' )?'selected="selected"':''; ?>>1</option>
-                            <option value="2" <?php echo($result['current_sexual_partner'] == '2' )?'selected="selected"':''; ?>>2</option>
+                            <option value="2_3" <?php echo($result['current_sexual_partner'] == '2_3' )?'selected="selected"':''; ?>>2 - 3</option>
                             <option value=">3" <?php echo($result['current_sexual_partner'] == '>3' )?'selected="selected"':''; ?>>>3</option>
                             </select>
                         </div>
