@@ -142,14 +142,14 @@ class RecencyTable extends AbstractTableGateway {
               $row[] = $aRow['hiv_diagnosis_date'];
               $row[] = $aRow['hiv_recency_date'];
               $row[] = ucwords($aRow['hiv_recency_result']);
-              $row[] = $common->humanDateFormat($aRow['dob']);
-              $row[] = ucwords($aRow['gender']);
-              $row[] = ucwords($aRow['marital_status']);
-              $row[] = ucwords($aRow['residence']);
-              $row[] = ucwords($aRow['education_level']);
-              $row[] = ucwords(str_replace('_', ' ', $aRow['name']));
-              $row[] = ucwords($aRow['past_hiv_testing']);
-              $row[] = ucwords($aRow['test_last_12_month']);
+            //   $row[] = $common->humanDateFormat($aRow['dob']);
+            //   $row[] = ucwords($aRow['gender']);
+            //   $row[] = ucwords($aRow['marital_status']);
+            //   $row[] = ucwords($aRow['residence']);
+            //   $row[] = ucwords($aRow['education_level']);
+            //   $row[] = ucwords(str_replace('_', ' ', $aRow['name']));
+            //   $row[] = ucwords($aRow['past_hiv_testing']);
+            //   $row[] = ucwords($aRow['test_last_12_month']);
               if($roleCode == "user"){
                   $row[] = '<a href="/recency/edit/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
               }else{

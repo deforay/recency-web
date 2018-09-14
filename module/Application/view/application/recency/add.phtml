@@ -27,14 +27,14 @@ $sessionLogin = new Container('credo');
             <div class="col-md-12 table-responsive" id="hide">
                 <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Sample Id<span class="mandatory">*</span></label>
+                        <label class="col-sm-2 col-form-label" for="">Sample Id</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
+                            <input type="text" class="form-control" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
                         </div>
 
-                        <label class="col-sm-2 col-form-label" for="">Patient Id<span class="mandatory">*</span></label>
+                        <label class="col-sm-2 col-form-label" for="">Patient Id</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
+                            <input type="text" class="form-control" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
                         </div>
                     </div>
 
@@ -89,9 +89,6 @@ $sessionLogin = new Container('credo');
                                 <option value="transgender">Transgender</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Marital Status</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
@@ -103,7 +100,9 @@ $sessionLogin = new Container('credo');
                                 <option value="divorce_separated">Divorce - Separated</option>
                             </select>
                         </div>
+                    </div>
 
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Residence</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="residence" name="residence" title="Please select the residence">
@@ -112,9 +111,6 @@ $sessionLogin = new Container('credo');
                             <option value="rural">Rural</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Education Level</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="educationLevel" name="educationLevel" title="Please select the education level">
@@ -123,7 +119,9 @@ $sessionLogin = new Container('credo');
                             <option value="university_or_higher">University or Higher</option>
                             </select>
                         </div>
+                    </div>
 
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Risk Population</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
@@ -133,9 +131,6 @@ $sessionLogin = new Container('credo');
                                 <?php } ?>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Pregnancy Status</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="pregnancyStatus" name="pregnancyStatus" title="Please select the pregnancy status">
@@ -145,7 +140,9 @@ $sessionLogin = new Container('credo');
                             <option value="not_known">Not Known</option>
                             </select>
                         </div>
+                    </div>
 
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Current Sexual Partner</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="currentSexualPartner" name="currentSexualPartner" title="Please select the current sexual partner">
@@ -155,9 +152,6 @@ $sessionLogin = new Container('credo');
                             <option value=">3">>3</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Past HIV Testing</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
@@ -167,7 +161,9 @@ $sessionLogin = new Container('credo');
                                 <option value="not_known">Not Known</option>
                             </select>
                         </div>
+                    </div>
 
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Test Last 12 Month</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
@@ -177,15 +173,12 @@ $sessionLogin = new Container('credo');
                                 <option value="not_known">Not Known</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-group row">
-                    <?php foreach($globalConfigResult as $config){ ?>
-                            <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['display_name']); ?></label>
-                            <div class="col-sm-4">
-                                <input type="text" value="<?php echo $config['global_value']; ?>" class="form-control" id="configValue" name="configValue[]" placeholder="Enter the location" title="Please enter the location">
-                            </div>
-                    <?php } ?>
+                        <?php foreach($globalConfigResult as $config){ ?>
+                                <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="configValue" name="configValue[]" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>">
+                                </div>
+                        <?php } ?>
                     </div>
 
                     <div class="row items-push">
@@ -203,23 +196,19 @@ $sessionLogin = new Container('credo');
 
 <script type="text/javascript">
     function validateNow() {
-        // if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
-        //         alert("Please enter required field");
-        //         if( $("#sampleId").val() == "" ){
-        //             $("#sampleId").focus();
-        //         }else{
-        //             $("#patientId").focus();
-        //         }
-        // }else{
-            flag = deforayValidator.init({
-                formId: 'recencyInformation'
-            });
-            if (flag) {
-                $.blockUI();
-                getmatterid();
-                document.getElementById('recencyInformation').submit();
-            }
-        // }
+        if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
+        flag = deforayValidator.init({
+            formId: 'recencyInformation'
+        });
+        if (flag) {
+            $.blockUI();
+            document.getElementById('recencyInformation').submit();
+        }
+        }else{
+            $("#sampleId").focus();
+            $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
+            alert("Please enter eaither sample or patient id  ",'err');
+        }
     }
     $(document).ready(function(){
         

@@ -2,7 +2,8 @@
     use Zend\Session\Container;
     $sessionLogin = new Container('credo');
     $roleCode = $sessionLogin->roleCode;
-    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';;
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+    // ,{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';;
     if($roleCode == "user"){
         $editAction.=',{"sClass":"center",bSortable:false}';
     }
@@ -37,14 +38,14 @@
                                     <th>HIV Diagnosis Date</th>
                                     <th>HIV Recency Date</th>
                                     <th>HIV Recency Result</th>
-                                    <th>DOB</th>
+                                    <!-- <th>DOB</th>
                                     <th>Gender</th>
                                     <th>Marital Status</th>
                                     <th>Residence</th>
                                     <th>Education Level</th>
                                     <th>Risk Population</th>
                                     <th>Past Hiv Testing</th>
-                                    <th>Test Last 12 Month</th>
+                                    <th>Test Last 12 Month</th> -->
                                     <?php if($roleCode == "user"){
                                         echo "<th>Action</th>";
                                     }?>
@@ -53,9 +54,9 @@
                          <tbody>
                               <tr>
                                 <?php if($roleCode == "user"){
-                                   echo "<td colspan='15' class='dataTables_empty'>Loading data from server</td>";
+                                   echo "<td colspan='7' class='dataTables_empty'>Loading data from server</td>";
                                 }else{
-                                    echo "<td colspan='14' class='dataTables_empty'>Loading data from server</td>";
+                                    echo "<td colspan='6' class='dataTables_empty'>Loading data from server</td>";
                                 }?> 
                               </tr>
                               <tr>

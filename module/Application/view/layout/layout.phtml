@@ -245,6 +245,16 @@ $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href
     <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     <script type="text/javascript">
 
+    $(document).ready(function() {
+      <?php
+        if (isset($alertContainer->alertMsg) && $alertContainer->alertMsg != "") {
+        ?>
+          alert("<?php echo $alertContainer->alertMsg; ?>"); <?php 
+          $alertContainer->alertMsg = "";
+          unset($alertContainer->alertMsg);
+        }
+      ?>
+    });
     $(function () {
       str=$(location).attr('pathname');
       splitsUrl=str.split("/",4);

@@ -65,6 +65,7 @@ var deforayValidator = {
                 }
 
 		error = deforayValidatorInternal(formInputs , useTitleToShowMessage);
+		console.log(error);
 		return error;
 	},
 	printError: function (error) {

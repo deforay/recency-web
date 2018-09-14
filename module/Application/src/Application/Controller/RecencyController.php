@@ -55,7 +55,10 @@ class RecencyController extends AbstractActionController
             $facilityService = $this->getServiceLocator()->get('FacilitiesService');
             $facilityResult=$facilityService->getFacilitiesAllDetails();
             $result=$recencyService->getRecencyDetailsById($recencyId);
+            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+            $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
             return new ViewModel(array(
+                'globalConfigResult' => $globalConfigResult,
                 'facilityResult' => $facilityResult,
                 'result' => $result
             ));
