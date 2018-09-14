@@ -114,7 +114,7 @@ class RecencyTable extends AbstractTableGateway {
                 $sQuery->offset($sOffset);
           }
           if($roleCode=='user'){
-            $sQuery = $sQuery->where('user_id='.$sessionLogin->userId);
+            $sQuery = $sQuery->where('r.added_by='.$sessionLogin->userId);
           }
 
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); 
@@ -132,7 +132,7 @@ class RecencyTable extends AbstractTableGateway {
           $iQuery = $sql->select()->from(array( 'r' => 'recency' ))
                         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
             if($roleCode=='user'){
-             $iQuery = $iQuery->where('user_id='.$sessionLogin->userId);
+             $iQuery = $iQuery->where('r.added_by='.$sessionLogin->userId);
           }
             $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
             $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();

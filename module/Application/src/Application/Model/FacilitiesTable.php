@@ -240,7 +240,6 @@ class FacilitiesTable extends AbstractTableGateway {
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        // \Zend\Debug\Debug::dump($params['userId']);die;
         if($params['userId']!=''){
             $sQuery = $sql->select()->from(array( 'f' => 'facilities' ))
                                 ->join(array('r' => 'recency'), 'f.facility_id = r.facility_id', array('sample_id'))
