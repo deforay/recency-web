@@ -80,58 +80,30 @@ class CommonService {
         $fieldName = $params['fieldName'];
         $value = trim($params['value']);
         $fnct = $params['fnct'];
-
-        $companyId=(isset($params['companyId']) && (trim($params['companyId'])!="") && (base64_decode($params['companyId'])!=0)) ? base64_decode($params['companyId']) : '';
-        $companyIdList= array($companyId,0);
-        
         try {
             $sql = new Sql($adapter);
             if ($fnct == '' || $fnct == 'null') {
-                $select = $sql->select()->from($tableName)
-                ->where(array($fieldName => $value));
-
-                    if(trim($companyId)!=""){
-                        $select = $select->where(array('company_id'=>$companyIdList));
-                    }
-               
-
+                $select = $sql->select()->from($tableName)->where(array($fieldName => $value));
+                //$statement=$adapter->query('SELECT * FROM '.$tableName.' WHERE '.$fieldName." = '".$value."'");
                 $statement = $sql->prepareStatementForSqlObject($select);
                 $result = $statement->execute();
                 $data = count($result);
             } else {
                 $table = explode("##", $fnct);
-                if ($fieldName == 'password' || $fieldName == 'employee_password') {
+                if ($fieldName == 'password') {
                     //Password encrypted
                     $config = new \Zend\Config\Reader\Ini();
                     $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
                     $password = sha1($value . $configResult["password"]["salt"]);
                     //$password = $value;
-                    $select = $sql->select()->from($tableName)
-                                ->where(array($fieldName=>$password,$table[0]=>$table[1]));
-                    if(trim($companyId)!=""){
-                        $select = $select->where(array('company_id'=>$companyIdList));
-                    }
+                    $select = $sql->select()->from($tableName)->where(array($fieldName=>$password,$table[0]=>$table[1]));
                     $statement = $sql->prepareStatementForSqlObject($select);
                     $result = $statement->execute();
                     $data = count($result);
                 }else{
                     // first trying $table[1] without quotes. If this does not work, then in catch we try with single quotes
                     //$statement=$adapter->query('SELECT * FROM '.$tableName.' WHERE '.$fieldName." = '".$value."' and ".$table[0]."!=".$table[1] );
-                    $select = $sql->select()->from( $tableName)->where(array("$fieldName='$value'"));
-
-                    if( ( trim($companyId) != "" )|| ( base64_decode( $params['companyId'] ) == '0' && ( $params['existingCompanyId'] == $params['companyId'] ) ) )
-                    {
-                        if( isset( $params['existingCompanyId'] ) )
-                        {
-                            if( $params['existingCompanyId'] == $params['companyId'] )
-                                $select = $select->where(array( $table[0] . "!=" . "'$table[1]'"));
-                        }
-                        $select = $select->where(array( 'company_id'=>$companyIdList));
-                    }
-                    if( ! isset( $params['existingCompanyId'] ) )
-                    {
-                        $select = $select->where(array( $table[0] . "!=" . "'$table[1]'"));
-                    }
+                    $select = $sql->select()->from($tableName)->where(array("$fieldName='$value'", $table[0] . "!=" . "'$table[1]'"));
                     $statement = $sql->prepareStatementForSqlObject($select);
                     $result = $statement->execute();
                     $data = count($result);

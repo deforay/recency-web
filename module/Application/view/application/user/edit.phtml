@@ -46,7 +46,7 @@ $sessionLogin = new Container('credo');
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Email<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="email" value="<?php echo $result['email']; ?>" class="form-control isRequired" id="email" name="email" placeholder="Enter the email" title="Please enter the email"onblur="checkNameValidation('user', 'email', this,'<?php echo "user_id##".$result['user_id'];?>', 'The email that you entered already exists . Please try another name..');">
+                            <input type="email" value="<?php echo $result['email']; ?>" class="form-control isRequired" id="email" name="email" placeholder="Enter the email" title="Please enter the email" onblur="checkNameValidation('users', 'email', this,'<?php echo "user_id##".$result['user_id'];?>', 'The email that you entered already exists . Please try another name..');">
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
@@ -56,9 +56,9 @@ $sessionLogin = new Container('credo');
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Password<span class="mandatory">*</span></label>
+                        <label class="col-sm-2 col-form-label" for="">Password</label>
                         <div class="col-sm-4">
-                            <input type="password"class="form-control isRequired" id="servPass" name="servPass" placeholder="Enter the Password" title="Please enter the password">
+                            <input type="password"class="form-control " id="servPass" name="servPass" placeholder="Enter the Password" title="Please enter the password">
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Mobile<span class="mandatory">*</span></label>
@@ -121,7 +121,7 @@ $sessionLogin = new Container('credo');
     function checkNameValidation(tableName, fieldName, obj, fnct, msg){
         checkValue = document.getElementById(obj.id).value;
         if($.trim(checkValue)!= ''){
-            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, companyId: companyId, existingCompanyId: existingCompanyId, fnct: fnct, srcfrom: 'SuperAdmin'},
+            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
             function(data) {
                 if (data > 0)
                 {

@@ -26,8 +26,8 @@ class RecencyTable extends AbstractTableGateway {
         $role = $sessionLogin->roleId;
         $roleCode = $sessionLogin->roleCode;
         $common = new CommonService();
-        $aColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.dob','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.past_hiv_testing','r.test_last_12_month','r.added_on','r.added_by');
-        $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result','r.dob','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.past_hiv_testing','r.test_last_12_month','r.added_on','r.added_by');
+        $aColumns = array('r.sample_id','r.patient_id','f.facility_name','DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.hiv_recency_result');
+        $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result');
 
         /* Paging */
         $sLimit = "";
@@ -139,8 +139,8 @@ class RecencyTable extends AbstractTableGateway {
               $row[] = $aRow['sample_id'];
               $row[] = $aRow['patient_id'];
               $row[] = ucwords($aRow['facility_name']);
-              $row[] = $aRow['hiv_diagnosis_date'];
-              $row[] = $aRow['hiv_recency_date'];
+              $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
+              $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
               $row[] = ucwords($aRow['hiv_recency_result']);
             //   $row[] = $common->humanDateFormat($aRow['dob']);
             //   $row[] = ucwords($aRow['gender']);
@@ -327,9 +327,9 @@ class RecencyTable extends AbstractTableGateway {
                         $this->insert($data);
                         $lastInsertedId = $this->lastInsertValue;
                         if($lastInsertedId > 0){
-                            $response['response'][$i] = 'success';
+                            $response['response'][$key] = 'success';
                         }else{
-                            $response['response'][$i] = 'failed';
+                            $response['response'][$key] = 'failed';
                         }
                     }
                 }

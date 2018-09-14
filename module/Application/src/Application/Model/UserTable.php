@@ -224,22 +224,24 @@ class UserTable extends AbstractTableGateway {
     {
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-        $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
+        
         if(isset($params['userId']) && trim($params['userId'])!="")
         {
             $data = array(
                 'user_name' => $params['userName'],
                 'role_id' => base64_decode($params['roleName']),
                 'email' => $params['email'],
-                'server_password' => $password,
                 'alt_email' => $params['altEmail'],
                 'mobile' => $params['mobile'],
                 'alt_mobile' => $params['altMobile'],
                 'job_responsibility' => $params['JobResponse'],
                 'comments' => $params['comments'],
                 'status' => $params['userStatus']
-
             );
+            if($params['password']!=''){
+                $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
+                $data['server_password'] = $password;
+            }
             $updateResult = $this->update($data,array('user_id'=>base64_decode($params['userId'])));
         }
         return $updateResult;
