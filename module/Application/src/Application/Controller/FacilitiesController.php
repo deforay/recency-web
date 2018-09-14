@@ -36,10 +36,16 @@ class FacilitiesController extends AbstractActionController
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
-                // \Zend\Debug\Debug::dump($params);die;
                 $facilityService = $this->getServiceLocator()->get('FacilitiesService');
                 $result = $facilityService->addFacilitiesDetails($params);
                 return $this->_redirect()->toRoute('facilities');
+            }else{
+                // \Zend\Debug\Debug::dump("hi");die;
+                $userService = $this->getServiceLocator()->get('UserService');
+                $userResult = $userService->getAllUserDetails();
+                return new ViewModel(array(
+                    'userResult' => $userResult
+                ));
             }
         }
     }
@@ -61,9 +67,11 @@ class FacilitiesController extends AbstractActionController
             else
             {
                 $facilityId=base64_decode( $this->params()->fromRoute('id') );
-                // \Zend\Debug\Debug::dump($facilityId);die;
                 $result=$facilityService->getFacilitiesDetailsById($facilityId);
+                $userService = $this->getServiceLocator()->get('UserService');
+                $userResult = $userService->getAllUserDetails();
                 return new ViewModel(array(
+                    'userResult' => $userResult,
                     'result' => $result
                 ));
             }

@@ -146,6 +146,7 @@ class FacilitiesTable extends AbstractTableGateway {
 
     public function addFacilitiesDetails($params)
     {
+        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
         if(isset($params['facilityName']) && trim($params['facilityName'])!="")
         {
             $data = array(
@@ -162,6 +163,14 @@ class FacilitiesTable extends AbstractTableGateway {
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
         }
+        if($lastInsertedId > 0)
+        {
+            $mapData = array(
+                'user_id' => $params['user'],
+                'facility_id' => $lastInsertedId
+            );
+            $mapDb->insert($mapData);
+        }
         return $lastInsertedId;
     }
 
@@ -169,15 +178,17 @@ class FacilitiesTable extends AbstractTableGateway {
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $sQuery = $sql->select()->from('facilities')
-                                ->where(array('facility_id' => $facilityId));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQuery = $sql->select()->from(array('f' => 'facilities'))
+                                ->join(array('um' => 'user_facility_map'), 'f.facility_id = um.facility_id', array('user_id'))
+                                ->where(array('f.facility_id' => $facilityId));
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); 
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }
 
     public function updateFacilitiesDetails($params)
     {
+        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
         if(isset($params['facilityId']) && trim($params['facilityId'])!="")
         {
             $data = array(
@@ -192,8 +203,16 @@ class FacilitiesTable extends AbstractTableGateway {
 
             );
             $updateResult = $this->update($data,array('facility_id'=>base64_decode($params['facilityId'])));
+            $lastId = base64_decode($params['facilityId']);
+            if($lastId > 0)
+            {
+                $mapData = array(
+                    'user_id' => $params['user'],
+                );
+                $mapDb->update($mapData,array('facility_id'=>base64_decode($params['facilityId'])));
+            }
         }
-        return $updateResult;
+        return $lastId;
     }
     
     public function fetchFacilitiesAllDetails()
