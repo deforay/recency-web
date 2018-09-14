@@ -178,10 +178,20 @@ class UserTable extends AbstractTableGateway {
               $row[] = ucwords($aRow['status']);
               $row[] = '<a href="/user/edit/' . base64_encode($aRow['user_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
               $output['aaData'][] = $row;
-          }
+        }
 
-          return $output;
-      }
+        return $output;
+    }
+
+    public function fetchAllUserDetails(){
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery =  $sql->select()->from('users')
+                        ->where(array('status' => 'active'));
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        return $rResult;
+    }
 
     public function addUserDetails($params)
     {

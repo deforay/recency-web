@@ -14,6 +14,7 @@ use Application\Model\RoleTable;
 use Application\Model\RecencyTable;
 use Application\Model\RiskPopulationsTable;
 use Application\Model\GlobalConfigTable;
+use Application\Model\UserFacilityMapTable;
 
 
 // Service
@@ -108,6 +109,11 @@ class Module{
                     'GlobalConfigTable' => function($sm) {
                         $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                         $table = new GlobalConfigTable($dbAdapter);
+                        return $table;
+                    },
+                    'UserFacilityMapTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new UserFacilityMapTable($dbAdapter);
                         return $table;
                     },
 

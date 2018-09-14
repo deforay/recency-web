@@ -34,6 +34,12 @@ class UserService {
         return $userDb->fetchUserDetails($params);
     }
 
+    public function getAllUserDetails()
+    {
+        $userDb = $this->sm->get('UserTable');
+        return $userDb->fetchAllUserDetails();
+    }
+
     public function addUserDetails($params)
     {
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
