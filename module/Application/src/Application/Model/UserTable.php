@@ -27,7 +27,7 @@ class UserTable extends AbstractTableGateway {
             $sql = new Sql($dbAdapter);
             $sQuery = $sql->select()->from(array('u' => 'users'))
                     ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
-				    ->where(array('u.user_name' => $params['userName'], 'u.server_password' => $password));
+				    ->where(array('u.email' => $params['userName'], 'u.server_password' => $password));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
@@ -45,11 +45,11 @@ class UserTable extends AbstractTableGateway {
                             return 'facilities';
                         }
             }else {
-                $alertContainer->alertMsg = 'The login id or password that you entered is incorrect';
+                $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
                 return 'login';
             }
         }else {
-            $alertContainer->alertMsg = 'The login id or password that you entered is incorrect';
+            $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
             return 'login';
         }
     }

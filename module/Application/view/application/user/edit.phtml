@@ -29,7 +29,7 @@ $sessionLogin = new Container('credo');
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">User Name<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['user_name']; ?>" class="form-control isRequired" id="userName" name="userName" placeholder="Enter the user name" title="Please enter the user name" onblur="checkNameValidation('user', 'user_name', this,'NULL', 'The user name that you entered already exists . Please try another name..');">
+                            <input type="text" value="<?php echo $result['user_name']; ?>" class="form-control isRequired" id="userName" name="userName" placeholder="Enter the user name" title="Please enter the user name" >
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Role<span class="mandatory">*</span></label>
@@ -46,7 +46,7 @@ $sessionLogin = new Container('credo');
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Email<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <input type="email" value="<?php echo $result['email']; ?>" class="form-control isRequired" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
+                            <input type="email" value="<?php echo $result['email']; ?>" class="form-control isRequired" id="email" name="email" placeholder="Enter the email" title="Please enter the email"onblur="checkNameValidation('user', 'email', this,'<?php echo "user_id##".$result['user_id'];?>', 'The email that you entered already exists . Please try another name..');">
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
