@@ -165,7 +165,7 @@ class RecencyTable extends AbstractTableGateway {
     {
         $logincontainer = new Container('credo');
         $common = new CommonService();
-        if(isset($params['sampleId']) && trim($params['sampleId'])!="")
+        if(isset($params['facilityId']) && trim($params['facilityId'])!="")
         {
             $data = array(
                 'sample_id' => $params['sampleId'],
@@ -174,6 +174,7 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
                 'hiv_recency_result' => $params['hivRecencyResult'],
+                'dob' => $common->dbDateFormat($params['dob']),
                 'gender' => $params['gender'],
                 'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
@@ -191,12 +192,6 @@ class RecencyTable extends AbstractTableGateway {
                 'added_by' => $logincontainer->userId
 
             );
-            if(isset($params['dob']) && trim($params['dob']) != ""){
-                $data['dob']=$common->dbDateFormat($params['dob']);
-            }else{
-                $data['dob'] = 'NULL';
-            }
-            // \Zend\Debug\Debug::dump($data);die;
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
         }
@@ -227,6 +222,7 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
                 'hiv_recency_result' => $params['hivRecencyResult'],
+                'dob' => $common->dbDateFormat($params['dob']),
                 'gender' => $params['gender'],
                 'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
@@ -243,11 +239,6 @@ class RecencyTable extends AbstractTableGateway {
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
             );
-            if(isset($params['dob']) && trim($params['dob']) != ""){
-                $data['dob']=$common->dbDateFormat($params['dob']);
-            }else{
-                $data['dob']= 'NULL';
-            }
             $updateResult = $this->update($data,array('recency_id'=>$params['recencyId']));
         }
         return $updateResult;
