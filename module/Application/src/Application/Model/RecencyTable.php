@@ -98,8 +98,8 @@ class RecencyTable extends AbstractTableGateway {
           $roleId=$sessionLogin->roleId;
 
           $sQuery = $sql->select()->from(array( 'r' => 'recency' ))
-                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
-                                ->join(array('rp' => 'risk_populations'), 'r.risk_population = rp.rp_id', array('name'),'left');
+                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+                                ;
 
           if (isset($sWhere) && $sWhere != "") {
                   $sQuery->where($sWhere);
@@ -110,8 +110,11 @@ class RecencyTable extends AbstractTableGateway {
           }
 
           if (isset($sLimit) && isset($sOffset)) {
-                  $sQuery->limit($sLimit);
-                  $sQuery->offset($sOffset);
+                $sQuery->limit($sLimit);
+                $sQuery->offset($sOffset);
+          }
+          if($roleCode=='user'){
+            $sQuery = $sQuery->where('user_id='.$sessionLogin->userId);
           }
 
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); 
@@ -122,17 +125,25 @@ class RecencyTable extends AbstractTableGateway {
           $sQuery->reset('limit');
           $sQuery->reset('offset');
           $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-          $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-          $iFilteredTotal = count($tResult);
+          $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+          $iFilteredTotal = count($aResultFilterTotal);
+
+          /* Total data set length */
+          $iQuery = $sql->select()->from(array( 'r' => 'recency' ))
+                        ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
+            if($roleCode=='user'){
+             $iQuery = $iQuery->where('user_id='.$sessionLogin->userId);
+          }
+            $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+            $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
           $output = array(
                   "sEcho" => intval($parameters['sEcho']),
-                  "iTotalRecords" => count($tResult),
+                  "iTotalRecords" => count($iResult),
                   "iTotalDisplayRecords" => $iFilteredTotal,
                   "aaData" => array()
           );
 
-          $role = $sessionLogin->roleCode;
-          $update = true;
           foreach ($rResult as $aRow) {
 
               $row = array();

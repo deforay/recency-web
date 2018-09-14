@@ -165,11 +165,15 @@ class FacilitiesTable extends AbstractTableGateway {
         }
         if($lastInsertedId > 0)
         {
-            $mapData = array(
-                'user_id' => $params['user'],
-                'facility_id' => $lastInsertedId
-            );
-            $mapDb->insert($mapData);
+            if(count($params['user'])>0){
+                foreach($params['user'] as $userId){
+                    $mapData = array(
+                        'user_id' => $userId,
+                        'facility_id' => $lastInsertedId
+                    );
+                    $mapDb->insert($mapData);
+                }
+            }
         }
         return $lastInsertedId;
     }
@@ -179,10 +183,14 @@ class FacilitiesTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('f' => 'facilities'))
-                                ->join(array('um' => 'user_facility_map'), 'f.facility_id = um.facility_id', array('user_id'))
                                 ->where(array('f.facility_id' => $facilityId));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); 
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        //facility map
+        $umQuery = $sql->select()->from(array('um' => 'user_facility_map'))
+                                ->where(array('um.facility_id' => $facilityId));
+        $umQueryStr = $sql->getSqlStringForSqlObject($umQuery); 
+        $rResult['facilityMap'] = $dbAdapter->query($umQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }
 
@@ -200,16 +208,21 @@ class FacilitiesTable extends AbstractTableGateway {
                 'email' => $params['email'],
                 'alt_email' => $params['altEmail'],
                 'status' => $params['facilityStatus']
-
             );
             $updateResult = $this->update($data,array('facility_id'=>base64_decode($params['facilityId'])));
             $lastId = base64_decode($params['facilityId']);
             if($lastId > 0)
             {
-                $mapData = array(
-                    'user_id' => $params['user'],
-                );
-                $mapDb->update($mapData,array('facility_id'=>base64_decode($params['facilityId'])));
+                $mapDb->delete("facility_id=" . $lastId);
+                if(count($params['user'])>0){
+                    foreach($params['user'] as $userId){
+                        $mapData = array(
+                            'user_id' => $userId,
+                            'facility_id' => $lastId
+                        );
+                        $mapDb->insert($mapData);
+                    }
+                }
             }
         }
         return $lastId;

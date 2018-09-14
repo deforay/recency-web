@@ -132,8 +132,6 @@ class RoleTable extends AbstractTableGateway {
                   "aaData" => array()
           );
 
-          $role = $sessionLogin->roleCode;
-          $update = true;
           foreach ($rResult as $aRow) {
 
               $row = array();

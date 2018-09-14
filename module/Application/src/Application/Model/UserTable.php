@@ -165,8 +165,6 @@ class UserTable extends AbstractTableGateway {
                   "aaData" => array()
           );
 
-          $role = $sessionLogin->roleCode;
-          $update = true;
           foreach ($rResult as $aRow) {
 
               $row = array();
@@ -260,7 +258,6 @@ class UserTable extends AbstractTableGateway {
     //login by api
     public function userLoginApi($params)
     {
-
         $common = new CommonService();
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');

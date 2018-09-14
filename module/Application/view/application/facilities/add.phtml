@@ -2,6 +2,11 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 ?>
+<style type="text/css">
+.select2-selection__choice{
+     color: black !important;
+}
+</style>
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -77,10 +82,9 @@ $sessionLogin = new Container('credo');
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">User<span class="mandatory">*</span></label>
+                        <label class="col-sm-2 col-form-label" for="">Map User<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <select class="form-control isRequired" id="user" name="user" title="Please select the user">
-                                <option value="active">--select user--</option>
+                            <select class="form-control select2 isRequired" multiple id="user" name="user[]" title="Please select the user">
                                 <?php foreach($userResult as $user){ ?>
                                     <option value="<?php echo $user['user_id']; ?>"><?php echo $user['user_name']; ?></option>
                                 <?php } ?>
@@ -101,6 +105,12 @@ $sessionLogin = new Container('credo');
 
 
 <script type="text/javascript">
+     $(function () {
+$(".select2").select2({
+               placeholder: "Choose user",
+               allowClear: true,
+          });
+});
 duplicateName = true;
 function validateNow() {
      flag = deforayValidator.init({
