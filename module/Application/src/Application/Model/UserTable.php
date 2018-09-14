@@ -29,7 +29,6 @@ class UserTable extends AbstractTableGateway {
                     ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
 				    ->where(array('u.user_name' => $params['userName'], 'u.server_password' => $password));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            // echo $sQueryStr;die;
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
             if($rResult) {

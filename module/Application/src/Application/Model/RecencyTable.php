@@ -114,7 +114,7 @@ class RecencyTable extends AbstractTableGateway {
                   $sQuery->offset($sOffset);
           }
 
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); 
         //   echo $sQueryStr;die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
@@ -174,7 +174,6 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
                 'hiv_recency_result' => $params['hivRecencyResult'],
-                'dob' => $common->dbDateFormat($params['dob']),
                 'gender' => $params['gender'],
                 'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
@@ -192,6 +191,11 @@ class RecencyTable extends AbstractTableGateway {
                 'added_by' => $logincontainer->userId
 
             );
+            if(isset($params['dob']) && trim($params['dob']) != ""){
+                $data['dob']=$common->dbDateFormat($params['dob']);
+            }else{
+                $data['dob'] = 'NULL';
+            }
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
         }
@@ -222,7 +226,6 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
                 'hiv_recency_result' => $params['hivRecencyResult'],
-                'dob' => $common->dbDateFormat($params['dob']),
                 'gender' => $params['gender'],
                 'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
@@ -239,6 +242,11 @@ class RecencyTable extends AbstractTableGateway {
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
             );
+            if(isset($params['dob']) && trim($params['dob']) != ""){
+                $data['dob']=$common->dbDateFormat($params['dob']);
+            }else{
+                $data['dob']= 'NULL';
+            }
             $updateResult = $this->update($data,array('recency_id'=>$params['recencyId']));
         }
         return $updateResult;
@@ -259,13 +267,14 @@ class RecencyTable extends AbstractTableGateway {
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         if(isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['status']=='active') {
             $response['status']='success';
-            foreach($rResult as $result){
-                $response['recency'] = $result;
-            }
+            $response['recency'] = $rResult;
         }
         else if($rResult['status']=='inactive'){
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
+        }else if($rResult['recency_id'] == ""){
+            $response["status"] = "fail";
+            $response["message"] = "You don't have recency data!";
         }
         else {
             $response["status"] = "fail";
@@ -300,9 +309,9 @@ class RecencyTable extends AbstractTableGateway {
                             'current_sexual_partner' => $recency['currentSexualPartner'],
                             'past_hiv_testing' => $recency['pastHivTesting'],
                             'test_last_12_month' => $recency['testLast12Month'],
-                            'location_one' => $recency['locationOne'],
-                            'location_two' => $recency['locationTwo'],
-                            'location_three' => $recency['locationThree'],
+                            'location_one' => $recency['location_one'],
+                            'location_two' => $recency['location_two'],
+                            'location_three' => $recency['location_three'],
                             'added_on' => date("Y-m-d H:i:s"),
                             'added_by' => $recency['userId']
                         );
