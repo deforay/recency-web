@@ -16,6 +16,11 @@ use Application\Model\RiskPopulationsTable;
 use Application\Model\GlobalConfigTable;
 use Application\Model\UserFacilityMapTable;
 
+use Application\Model\ProvienceTable;
+use Application\Model\DistrictTable;
+use Application\Model\CityTable;
+
+
 
 // Service
 
@@ -25,6 +30,10 @@ use Application\Service\FacilitiesService;
 use Application\Service\RecencyService;
 use Application\Service\RiskPopulationsService;
 use Application\Service\GlobalConfigService;
+
+
+
+
 
 
 class Module{
@@ -117,8 +126,25 @@ class Module{
                         return $table;
                     },
 
-                    //service
+                    'ProvienceTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new ProvienceTable($dbAdapter);
+                        return $table;
+                    },
 
+                    'DistrictTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new DistrictTable($dbAdapter);
+                        return $table;
+                    },
+
+                    'CityTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new CityTable($dbAdapter);
+                        return $table;
+                    },
+
+                    //service
 
                     'CommonService' => function($sm) {
                          return new CommonService($sm);

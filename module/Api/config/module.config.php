@@ -1,88 +1,132 @@
 <?php
 
 return array(
-    'router' => array(
-        'routes' => array(
-            
-            'api-login' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/login[/:id]',
-                    'constraints' => array(
-                        'id'     => '[0-9]+',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'Api\Controller\Login',
-                    ),
-                ),
-            ),
+     'router' => array(
+          'routes' => array(
 
-            'api-facility' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/facility[/:id]',
-                    'constraints' => array(
-                        'id'     => '[0-9]+',
+               'api-login' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/login[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\Login',
+                         ),
                     ),
-                    'defaults' => array(
-                        'controller' => 'Api\Controller\Facility',
-                    ),
-                ),
-            ),
+               ),
 
-            'api-recency' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/recency[/:id]',
-                    'constraints' => array(
-                        'id'     => '[0-9]+',
+               'api-facility' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/facility[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\Facility',
+                         ),
                     ),
-                    'defaults' => array(
-                        'controller' => 'Api\Controller\Recency',
-                    ),
-                ),
-            ),
+               ),
 
-            'api-risk-populations' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/risk-populations[/:id]',
-                    'constraints' => array(
-                        'id'     => '[0-9]+',
+               'api-recency' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/recency[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\Recency',
+                         ),
                     ),
-                    'defaults' => array(
-                        'controller' => 'Api\Controller\RiskPopulations',
-                    ),
-                ),
-            ),
+               ),
 
-            'api-global-config' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/api/global-config[/:id]',
-                    'constraints' => array(
-                        'id'     => '[0-9]+',
+               'api-risk-populations' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/risk-populations[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\RiskPopulations',
+                         ),
                     ),
-                    'defaults' => array(
-                        'controller' => 'Api\Controller\GlobalConfig',
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
-            'Api\Controller\Login' => 'Api\Controller\LoginController',
-            'Api\Controller\Facility' => 'Api\Controller\FacilityController',
-            'Api\Controller\Recency' => 'Api\Controller\RecencyController',
-            'Api\Controller\RiskPopulations' => 'Api\Controller\RiskPopulationsController',
-            'Api\Controller\GlobalConfig' => 'Api\Controller\GlobalConfigController',
+               ),
 
-        ),
-    ),
-    'view_manager' => array(
-        'strategies' => array(
-            'ViewJsonStrategy',
-        ),
-    ),
+               'api-global-config' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/global-config[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\GlobalConfig',
+                         ),
+                    ),
+               ),
+
+               'api-province' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/province[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\Province',
+                         ),
+                    ),
+               ),
+
+               'api-district' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/district[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\District',
+                         ),
+                    ),
+               ),
+
+               'api-city' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/city[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\City',
+                         ),
+                    ),
+               ),
+          ),
+     ),
+     'controllers' => array(
+          'invokables' => array(
+               'Api\Controller\Login' => 'Api\Controller\LoginController',
+               'Api\Controller\Facility' => 'Api\Controller\FacilityController',
+               'Api\Controller\Recency' => 'Api\Controller\RecencyController',
+               'Api\Controller\RiskPopulations' => 'Api\Controller\RiskPopulationsController',
+               'Api\Controller\GlobalConfig' => 'Api\Controller\GlobalConfigController',
+
+               'Api\Controller\Province' => 'Api\Controller\ProvinceController',
+               'Api\Controller\District' => 'Api\Controller\DistrictController',
+               'Api\Controller\City' => 'Api\Controller\CityController',
+
+
+          ),
+     ),
+     'view_manager' => array(
+          'strategies' => array(
+               'ViewJsonStrategy',
+          ),
+     ),
 );
