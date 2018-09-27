@@ -68,6 +68,7 @@ class UserController extends AbstractActionController
             else
             {
                 $userId=base64_decode( $this->params()->fromRoute('id') );
+                if($userId!=''){
                 $roleResult=$userService->getRoleAllDetails();
                 $result=$userService->getuserDetailsById($userId);
                 $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
@@ -77,6 +78,9 @@ class UserController extends AbstractActionController
                     'roleResult' => $roleResult,
                     'globalConfigResult' => $globalConfigResult,
                 ));
+                }else{
+                    return $this->redirect()->toRoute("user");
+                }
             }
         }
     }
@@ -92,10 +96,14 @@ class UserController extends AbstractActionController
         else
         {
             $userId=base64_decode( $this->params()->fromRoute('id'));
+            if($userId!=''){
             $result=$userService->getuserDetailsById($userId);
             return new ViewModel(array(
                 'result' => $result,
             ));
+            }else{
+                return $this->redirect()->toRoute("home");
+            }
         }
     }
 

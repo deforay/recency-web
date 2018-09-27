@@ -5,7 +5,6 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Expression;
 use Zend\Session\Container;
 use Zend\Db\Adapter\Adapter;
-use Zend\Config\Writer\PhpArray;
 use Application\Service\CommonService;
 use Zend\Db\TableGateway\AbstractTableGateway;
 
@@ -303,6 +302,7 @@ class RecencyTable extends AbstractTableGateway {
                 try{
                     if(isset($recency['sampleId']) && trim($recency['sampleId'])!="")
                     {
+                        $userId = $recency['userId'];
                         $data = array(
                             'sample_id' => $recency['sampleId'],
                             'patient_id' => $recency['patientId'],
@@ -354,6 +354,7 @@ class RecencyTable extends AbstractTableGateway {
             try{
                 if(isset($params['sampleId']) && trim($params['sampleId'])!="")
                 {
+                    $userId = $recency['userId'];
                     $data = array(
                         'sample_id' => $params['sampleId'],
                             'patient_id' => $params['patientId'],
@@ -401,7 +402,22 @@ class RecencyTable extends AbstractTableGateway {
                 error_log($exc->getTraceAsString());
             }
         }
+        $response['response']['syncCount'] = $this->getTotalSyncCount($userId);
         return $response;
+    }
+    public function getTotalSyncCount($userId)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $query = $sql->select()->from(array('r'=>'recency'))
+        ->columns(
+                  array(
+                  "Total" => new Expression('COUNT(*)'),
+                  ))
+                  ->where(array('added_by'=>$userId));
+                  $queryStr = $sql->getSqlStringForSqlObject($query);
+                $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                return $result;
     }
 }
 ?>
