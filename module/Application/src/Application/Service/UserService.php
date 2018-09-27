@@ -98,6 +98,25 @@ class UserService {
         $userDb = $this->sm->get('UserTable');
         return $userDb->userLoginApi($params);
     }
+    public function updateProfile($params)
+    {
+        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter->beginTransaction();
+        try {
+            $userDb = $this->sm->get('UserTable');
+            $result = $userDb->updateProfile($params);
+            if($result > 0){
+                $adapter->commit();
+                $alertContainer = new Container('alert');
+                $alertContainer->alertMsg = 'Profile details updated successfully';
+            }
+        }
+        catch (Exception $exc) {
+            $adapter->rollBack();
+            error_log($exc->getMessage());
+            error_log($exc->getTraceAsString());
+        }
+    }
 }
 
 ?>
