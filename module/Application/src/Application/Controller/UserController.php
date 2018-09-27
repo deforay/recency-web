@@ -33,7 +33,6 @@ class UserController extends AbstractActionController
         if($session->roleCode == 'user'){
             return $this->_redirect()->toRoute('recency');
         }else{
-
             $request = $this->getRequest();
             $userService = $this->getServiceLocator()->get('UserService');
             if ($request->isPost()) {
@@ -42,8 +41,11 @@ class UserController extends AbstractActionController
                 return $this->_redirect()->toRoute('user');
             }else{
                 $roleResult=$userService->getRoleAllDetails();
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
-                    'roleResult' => $roleResult
+                    'roleResult' => $roleResult,
+                    'globalConfigResult' => $globalConfigResult,
                 ));
             }
         }
@@ -68,9 +70,12 @@ class UserController extends AbstractActionController
                 $userId=base64_decode( $this->params()->fromRoute('id') );
                 $roleResult=$userService->getRoleAllDetails();
                 $result=$userService->getuserDetailsById($userId);
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
                     'result' => $result,
-                    'roleResult' => $roleResult
+                    'roleResult' => $roleResult,
+                    'globalConfigResult' => $globalConfigResult,
                 ));
             }
         }

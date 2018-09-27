@@ -268,5 +268,29 @@ class FacilitiesTable extends AbstractTableGateway {
                          return $rResult;
                     }
                }
+               public function fetchFacilityByLocation($params)
+               {
+                  $dbAdapter = $this->adapter;
+                  $sql = new Sql($dbAdapter);
+                  $sQuery = $sql->select()->from(array( 'f' => 'facilities'))->columns(array('facility_id','facility_name'));
+                  if($params['locationOne']!=''){
+                        $sQuery = $sQuery->where(array('province'=>$params['locationOne']));
+                        if($params['locationTwo']!=''){
+                              $sQuery = $sQuery->where(array('district'=>$params['locationTwo']));
+                        }
+                        if($params['locationThree']!=''){
+                              $sQuery = $sQuery->where(array('city'=>$params['locationThree']));
+                        }
+                  }
+                  if(isset($params['facilityId']) && $params['facilityId']!=NULL){
+                        $fDeocde = json_decode($params['facilityId']);
+                        if(!empty($fDeocde)){
+                              $sQuery = $sQuery->where('facility_id NOT IN('.implode(",",$fDeocde).')');
+                        }
+                  }
+                  $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+                  $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                  return $fResult;
+               }
           }
           ?>

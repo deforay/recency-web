@@ -1,7 +1,6 @@
 <?php
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
-// \Zend\Debug\Debug::dump($roleResult);die;
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -91,7 +90,41 @@ $sessionLogin = new Container('credo');
                             </select>
                         </div>
                     </div>
+
+<h4>Use Province,District,City filters for Facility list</h4>
+                    <div class="form-group row">
+                        <?php
+                         foreach($globalConfigResult as $config){ ?>
+                            <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
+                                    <option value="">-- Select --</option>
+                                </select>
+                            </div>
+                        <?php } ?>
+                    </div>
+
+                    <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">User Facility Map</label>
+                              <div class="col-sm-4">
+                                   <select  id="search" class="form-control" size="8" multiple="multiple">
+                                   </select>
+                              </div>
+
+                              <div class="col-md-2">
+                                   <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
+                                   <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
+                                   <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
+                                   <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
+                              </div>
+
+                              <div class="col-sm-4">
+                                   <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
+                              </div>
+                         </div>
+                    
                     <div class="row items-push">
+                    <input type="hidden" name="selectedMapFacility" id="selectedMapFacility"/>
                         <div class="col-lg-7 offset-lg-4">
                             <a href="<?php echo $this->url('user', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
                             <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
@@ -102,12 +135,19 @@ $sessionLogin = new Container('credo');
         </div>
     </div>
 </div>
+<script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
     duplicateName = true;
     function validateNow() {
         flag = deforayValidator.init({
             formId: 'userInformation'
         });
+        var selVal = [];
+          $('#search_to option').each(function(i, selected){
+               selVal[i] = $(selected).val();
+          });
+          $("#selectedMapFacility").val(selVal);
+
         if (flag) {
             if (duplicateName) {
                 $.blockUI();
@@ -133,9 +173,64 @@ $sessionLogin = new Container('credo');
             });
         }
     }
-    $(document).ready(function(){
+    $(document).ready(function($){
+        <?php
+         foreach($globalConfigResult as $config){
+             ?>
+             getLocationDeatils('<?php echo $config["global_name"];?>');
+             <?php
+             break;
+         }
+         ?>
 
+        $('#search').multiselect({
+               search: {
+                    left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+                    right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+               },
+               fireSearch: function(value) {
+                    return value.length > 3;
+               }
+          });
         
     });
+    function getLocationDeatils(globalName,nxtGlobalName)
+     {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
+            if(globalName=='location_one' && selectValue==''){
+                path = 'get-province';
+                innerId = 'location_one';
+            }else if(globalName=='location_one' && selectValue!=''){
+                path = 'get-district';
+                innerId = 'location_two';
+                $("#location_three").html("<option value=''>-- Select --</option>");
+            }else if(globalName=='location_two' && selectValue!=''){
+                path = 'get-city';
+                innerId = 'location_three';
+            }else if(globalName=='location_three' || globalName=='location_two'){
+                getFacilityListByLocation(globalName);
+            }
+            if(path!=''){
+                $.blockUI();
+                $.post("/common/"+path, {selectValue:selectValue},
+                function(data) {
+                    $("#"+innerId).html(data);
+                    getFacilityListByLocation(globalName);
+                    $.unblockUI();
+                });
+            }
+     }
+     function getFacilityListByLocation(globalName)
+     {
+        $.blockUI();
+        $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),globalName:globalName},
+        function(data) {
+            $("#search").html(data);
+            $.unblockUI();
+        });
+     }
+
 
 </script>

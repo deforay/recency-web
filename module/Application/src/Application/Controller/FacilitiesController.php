@@ -83,4 +83,18 @@ class FacilitiesController extends AbstractActionController
             }
         }
     }
+    public function getFacilityByLocationAction()
+    {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $result = $facilityService->getFacilityByLocation($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+    }
 }
