@@ -1,0 +1,264 @@
+<?php
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+?>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>"><li class="breadcrumb-item">Recency Details</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+<!-- /.content -->
+
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+               <h3 class="block-title">View Recency Details</h3>
+          </div>
+          <div class="col-12 text-right">
+               <div>
+                    <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-primary">Back</a>
+               </div>
+          </div>
+
+
+          <section class="content">
+               <!-- left column -->
+               <div class="">
+                    <div class="box box-primary">
+                         <div class="box-header">
+                         </div><!-- /.box-header -->
+                         <div class="box-body">
+                              <h4>Recency</h4>
+
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="company" class="col-lg-4 control-label">Sample Id</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                                  <?php echo ucwords($result['sample_id']); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="company" class="col-lg-4 control-label">Patient Id</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                                  <?php echo ucwords($result->patient_id); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="orderDate" class="col-lg-4 control-label">Facility Name</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->facility_id); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="orderDate" class="col-lg-4 control-label">HIV Diagnosis Date</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->hiv_diagnosis_date); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="termsOfPay" class="col-lg-4 control-label">HIV Recency Date</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->hiv_recency_date); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label"> HIV Recency Result</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php
+                                                  if($result['hiv_recency_result'] == 'invalid')
+                                                  {
+                                                       echo "Invalid - Control Line Absent";
+                                                  }
+                                                  elseif ($result['hiv_recency_result'] == 'long-term') {
+                                                       echo "Long Term - Long Term Line Present";
+                                                  }
+                                                  elseif ($result['hiv_recency_result'] == 'recent') {
+                                                       echo "Recent - Long Term Line Absent";
+                                                  }
+
+                                                  ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="termsOfPay" class="col-lg-4 control-label">DOB</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->dob); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label"> Age</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->age); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="termsOfPay" class="col-lg-4 control-label">Gender</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->gender); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+
+                              </div>
+                         </div>
+
+                    <h4>Behaviours</h4>
+                         <div class="box-body">
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="company" class="col-lg-4 control-label">Marital Status</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                                  <?php echo ucwords($result->marital_status); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="company" class="col-lg-4 control-label">Residence</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                                  <?php echo ucwords($result->residence); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="orderDate" class="col-lg-4 control-label">Education Level</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->education_level); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="orderDate" class="col-lg-4 control-label">Risk Population</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->risk_population); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="termsOfPay" class="col-lg-4 control-label">Pregnancy Status</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->pregnancy_status); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Current Sexual Partner</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->current_sexual_partner); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="termsOfPay" class="col-lg-4 control-label">Past HIV Testing</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->past_hiv_testing); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Test Last 12 Month</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->test_last_12_month); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="termsOfPay" class="col-lg-4 control-label">Pregnancy Status</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->pregnancy_status); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Current Sexual Partner</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->current_sexual_partner); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+
+
+
+
+                    </div>
+               </div>
+          </section>
+     </div>
+</div>

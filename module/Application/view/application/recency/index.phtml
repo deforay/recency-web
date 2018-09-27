@@ -2,11 +2,11 @@
     use Zend\Session\Container;
     $sessionLogin = new Container('credo');
     $roleCode = $sessionLogin->roleCode;
-    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
     // ,{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';;
-    if($roleCode == "user"){
-        $editAction.=',{"sClass":"center",bSortable:false}';
-    }
+    // if($roleCode == "user"){
+    //     $editAction.=',{"sClass":"center",bSortable:false}';
+    // }
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -15,9 +15,13 @@
                     <a href="<?php echo $this->url('home'); ?>">Home</h1> </a>
                     <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                          <ol class="breadcrumb">
+
                               <li class="breadcrumb-item">
-                              <a href="<?php echo $this->url('recency',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Recency</a>
+                                   <?php if($roleCode == "user"){ ?>
+                                   <a href="<?php echo $this->url('recency',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Recency</a>
+                              <?php     }?>
                               </li>
+
                          </ol>
                     </nav>
                </div>
@@ -46,9 +50,8 @@
                                     <th>Risk Population</th>
                                     <th>Past Hiv Testing</th>
                                     <th>Test Last 12 Month</th> -->
-                                    <?php if($roleCode == "user"){
-                                        echo "<th>Action</th>";
-                                    }?>
+
+                                    <th>Action</th>
                               </tr>
                          </thead>
                          <tbody>
@@ -57,7 +60,7 @@
                                    echo "<td colspan='7' class='dataTables_empty'>Loading data from server</td>";
                                 }else{
                                     echo "<td colspan='6' class='dataTables_empty'>Loading data from server</td>";
-                                }?> 
+                                }?>
                               </tr>
                               <tr>
                               </tbody>

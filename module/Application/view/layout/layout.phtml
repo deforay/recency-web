@@ -25,7 +25,7 @@ $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href
 
 
     <title>Recency Management</title>
-    
+
     <link rel="shortcut icon" href="<?php echo $this->basePath().'/assets/media/favicons/favicon.png';?>">
 
 
@@ -128,7 +128,7 @@ $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href
               <li class="nav-main-item " id="recency-menu">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <i class="nav-main-link-icon si si-grid"></i>
-                  <span class="nav-main-link-name ">Recency Users</span>
+                  <span class="nav-main-link-name ">Recency</span>
                 </a>
                 <ul class="nav-main-submenu">
                     <?php echo $recencyMenu;?>
@@ -232,7 +232,7 @@ $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href
     <script src="<?php echo $this->basePath() . '/assets/js/plugins/jquery-validation/additional-methods.js'; ?>"></script>
     <script src="<?php echo $this->basePath() . '/assets/js/pages/deforayValidation.js'; ?>"></script>
     <script src="<?php echo $this->basePath() . '/assets/js/jquery.blockUI.js'; ?>"></script>
-    
+
     <script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/jquery.dataTables.min.js'; ?>"></script>
     <script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/dataTables.bootstrap4.min.js'; ?>"></script>
     <script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js'; ?>"></script>
@@ -244,13 +244,17 @@ $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href
     <script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
     <script>jQuery(function(){ Dashmix.helpers(['datepicker', 'colorpicker', 'maxlength', 'select2', 'rangeslider']); });</script>
     <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+
+    <script src="<?php echo $this->basePath() . '/assets/js/plugins/jquery-bootstrap-wizard/bs4/jquery.bootstrap.wizard.min.js'; ?>"></script>
+    <script src="<?php echo $this->basePath() . '/assets/js/pages/be_forms_wizard.min.js'; ?>"></script>
+
     <script type="text/javascript">
 
     $(document).ready(function() {
       <?php
         if (isset($alertContainer->alertMsg) && $alertContainer->alertMsg != "") {
         ?>
-          alert("<?php echo $alertContainer->alertMsg; ?>"); <?php 
+          alert("<?php echo $alertContainer->alertMsg; ?>"); <?php
           $alertContainer->alertMsg = "";
           unset($alertContainer->alertMsg);
         }

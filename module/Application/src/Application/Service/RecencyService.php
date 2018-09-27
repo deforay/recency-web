@@ -96,5 +96,11 @@ class RecencyService {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->addRecencyDetailsApi($params);
     }
+
+     public function getRecencyOrderDetails($id)
+     {
+          $recencyDb = $this->sm->get('RecencyTable');
+          return $recencyDb->fetchRecencyOrderDetails($id);
+     }
 }
 ?>

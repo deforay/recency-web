@@ -64,4 +64,20 @@ class RecencyController extends AbstractActionController
             ));
         }
     }
+
+    public function viewAction()
+    {
+         $recencyService=$this->getServiceLocator()->get('RecencyService');
+         $recencyNo=base64_decode($this->params()->fromRoute('id'));
+
+         $result=$recencyService->getRecencyOrderDetails($recencyNo);
+
+         if ($result) {
+              return new ViewModel(array(
+                   'result' => $result,
+              ));
+         } else {
+              return $this->redirect()->toRoute("recency");
+         }
+   }
 }

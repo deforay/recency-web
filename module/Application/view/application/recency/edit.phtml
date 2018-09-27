@@ -31,192 +31,241 @@ if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
      </div>
 </div>
 
+<!-- Start -->
+
 
 <div class="content">
-    <div class="block block-rounded block-bordered">
-        <div class="block-header block-header-default">
-            <h3 class="block-title">Edit Recency Details</h3>
-        </div>
-        <div class="block-content">
-            <div class="col-md-12 table-responsive" id="hide">
-                <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'edit')); ?>" method="post">
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Sample Id</label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['sample_id']; ?>" class="form-control" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
-                        </div>
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+               <h3 class="block-title">Edit Recency Details</h3>
+          </div>
 
-                        <label class="col-sm-2 col-form-label" for="">Patient Id</label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['patient_id']; ?>" class="form-control" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
-                        </div>
+          <!--  Start Tab view-->
+          <div class="row">
+               <div class="col-md-12">
+                    <div class="js-wizard-simple block block block-rounded block-bordered">
+                         <ul class="nav nav-tabs nav-tabs-block nav-justified" role="tablist">
+                              <li class="nav-item">
+                                   <a class="nav-link active" href="#wizard-progress-step1" data-toggle="tab">1. Recency Test</a>
+                              </li>
+                              <li class="nav-item">
+                                   <a class="nav-link" href="#wizard-progress-step2" data-toggle="tab">2. Behaviour</a>
+                              </li>
+                         </ul>
+                         <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'edit')); ?>" method="post">
+
+                              <div class="block-content block-content-sm">
+                                   <!-- <div class="progress" data-wizard="progress" style="height: 8px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                   </div> -->
+                              </div>
+                              <div class="block-content block-content-full tab-content" style="min-height: 300px;">
+
+                                   <div class="tab-pane active" id="wizard-progress-step1" role="tabpanel">
+
+                                        <div class="form-group row">
+                                             <label class="col-sm-2 col-form-label" for="">Sample Id</label>
+                                             <div class="col-sm-4">
+                                                  <input type="text" value="<?php echo $result['sample_id']; ?>" class="form-control" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
+                                             </div>
+
+                                             <label class="col-sm-2 col-form-label" for="">Patient Id</label>
+                                             <div class="col-sm-4">
+                                                  <input type="text" value="<?php echo $result['patient_id']; ?>" class="form-control" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
+                                             </div>
+                                        </div>
+                                        <div class="form-group row">
+                                             <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control isRequired" id="facilityId" name="facilityId" title="Please select the facility name">
+                                                     <option value="">--Select--</option>
+                                                     <?php foreach($facilityResult['facility'] as $facility){?>
+                                                          <option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo $facility['facility_name']; ?></option>
+                                                     <?php } ?>
+                                                  </select>
+                                             </div>
+
+                                             <label class="col-sm-2 col-form-label" for="">HIV Diagnosis Date<span class="mandatory">*</span></label>
+                                             <div class="col-sm-4">
+                                                  <input type="text" value="<?php echo $hivDiagnosisDate; ?>" class="js-datepicker form-control isRequired" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
+                                             </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                             <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
+                                             <div class="col-sm-4">
+                                                   <input type="text" value="<?php echo $hivRecencyDate; ?>" class="js-datepicker form-control isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
+                                             </div>
+
+                                             <label class="col-sm-2 col-form-label" for="">HIV Recency Result<span class="mandatory">*</span></label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="hivRecencyResult" name="hivRecencyResult" title="Please select the HIV recency result">
+                                                  <option value="">--Select--</option>
+                                                  <option value="recent" <?php echo($result['hiv_recency_result'] == 'recent' )?'selected="selected"':''; ?>>Recent - Long Term Line Absent</option>
+                                                  <option value="long-term" <?php echo($result['hiv_recency_result'] == 'long-term' )?'selected="selected"':''; ?>>Long Term - Long Term Line Present</option>
+                                                  <option value="invalid" <?php echo($result['hiv_recency_result'] == 'invalid' )?'selected="selected"':''; ?>>Invalid - Control Line Absent</option>
+                                                  </select>
+                                             </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                             <label class="col-sm-2 col-form-label" for="">DOB</label>
+                                             <div class="col-sm-4">
+                                                  <input type="text" value="<?php echo $dob;?>" class="js-datepicker form-control" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
+                                             </div>
+
+                                             <label class="col-sm-2 col-form-label" for="">Age</label>
+                                             <div class="col-sm-4">
+                                                  <input type="text" value="<?php echo $result['age'];?>" class="form-control" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
+                                             </div>
+                                        </div>
+                                        <div class="form-group row">
+                                             <label class="col-sm-2 col-form-label" for="">Gender</label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="gender" name="gender" title="Please select the gender">
+                                                      <option value="">--Select--</option>
+                                                      <option value="male" <?php echo($result['gender'] == 'male' )?'selected="selected"':''; ?>>Male</option>
+                                                      <option value="female" <?php echo($result['gender'] == 'female' )?'selected="selected"':''; ?>>Female</option>
+                                                      <option value="transgender" <?php echo($result['gender'] == 'transgender' )?'selected="selected"':''; ?>>Transgender</option>
+                                                  </select>
+                                             </div>
+                                             <?php
+                                             $i=0;
+                                             $keyVal = 'one';
+                                             foreach($globalConfigResult as $key=>$config){ ?>
+                                                     <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+                                                     <div class="col-sm-4">
+                                                         <input type="text" value="<?php echo $result['location_'.$keyVal];?>" class="form-control" id="configValue" name="configValue[]" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the location <?php echo lcfirst($config['global_value']); ?>">
+                                                     </div>
+                                             <?php
+                                             $i++;
+                                                 if($i == 2){
+                                                     $keyVal = 'two';
+                                                 }else if($i > 2){
+                                                     $keyVal = 'three';
+                                                 }
+                                             } ?>
+                                        </div>
+
+                                   </div>
+
+                                   <div class="tab-pane" id="wizard-progress-step2" role="tabpanel">
+                                        <div class="form-group row">
+                                             <label class="col-sm-2 col-form-label" for="">Residence</label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="residence" name="residence" title="Please select the residence">
+                                                  <option value="">--Select--</option>
+                                                  <option value="urban" <?php echo($result['residence'] == 'urban' )?'selected="selected"':''; ?>>Urban</option>
+                                                  <option value="rural" <?php echo($result['residence'] == 'rural' )?'selected="selected"':''; ?>>Rural</option>
+                                                  </select>
+                                             </div>
+
+                                             <label class="col-sm-2 col-form-label" for="">Marital Status</label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
+                                                      <option value="">--Select--</option>
+                                                      <option value="never_married" <?php echo($result['marital_status'] == 'never_married' )?'selected="selected"':''; ?>>Never Married</option>
+                                                      <option value="married_cohabited" <?php echo($result['marital_status'] == 'married_cohabited' )?'selected="selected"':''; ?>>Married - Cohabited</option>
+                                                      <option value="married_cohabiting" <?php echo($result['marital_status'] == 'married_cohabiting' )?'selected="selected"':''; ?>>Married cohabiting</option>
+                                                      <option value="widow" <?php echo($result['marital_status'] == 'widow' )?'selected="selected"':''; ?>>Widow</option>
+                                                      <option value="divorce_separated" <?php echo($result['marital_status'] == 'divorce_separated' )?'selected="selected"':''; ?>>Divorce - Separated</option>
+                                                  </select>
+                                             </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                             <label class="col-sm-2 col-form-label" for="">Education Level</label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="educationLevel" name="educationLevel" title="Please select the education level">
+                                                       <option value="">--Select--</option>
+                                                       <option value="primary" <?php echo($result['education_level'] == 'primary' )?'selected="selected"':''; ?>>Primary</option>
+                                                       <option value="university_or_higher" <?php echo($result['education_level'] == 'university_or_higher' )?'selected="selected"':''; ?>>University or Higher</option>
+                                                  </select>
+                                             </div>
+                                             <label class="col-sm-2 col-form-label" for="">Risk Population</label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
+                                                      <option value="">--Select--</option>
+                                                      <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
+                                                          <option value="<?php echo base64_encode($riskPo['rp_id']); ?>" <?php echo($result['risk_population'] == $riskPo['rp_id'] )?'selected="selected"':''; ?>><?php echo str_replace('_', ' ', $riskPo['name']); ?></option>
+                                                      <?php } ?>
+                                                  </select>
+                                             </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                             <label class="col-sm-2 col-form-label" for="">Pregnancy Status</label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="pregnancyStatus" name="pregnancyStatus" title="Please select the pregnancy status">
+                                                       <option value="">--Select--</option>
+                                                       <option value="currently_pregnant" <?php echo($result['pregnancy_status'] == 'currently_pregnant' )?'selected="selected"':''; ?>>Currently Pregnant</option>
+                                                       <option value="not_pregnant" <?php echo($result['pregnancy_status'] == 'not_pregnant' )?'selected="selected"':''; ?>>Not Pregnant</option>
+                                                       <option value="not_known" <?php echo($result['pregnancy_status'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
+                                                  </select>
+                                             </div>
+
+                                             <label class="col-sm-2 col-form-label" for="">Current Sexual Partner</label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="currentSexualPartner" name="currentSexualPartner" title="Please select the current sexual partner">
+                                                       <option value="">--Select--</option>
+                                                       <option value="1" <?php echo($result['current_sexual_partner'] == '1' )?'selected="selected"':''; ?>>1</option>
+                                                       <option value="2_3" <?php echo($result['current_sexual_partner'] == '2_3' )?'selected="selected"':''; ?>>2 - 3</option>
+                                                       <option value=">3" <?php echo($result['current_sexual_partner'] == '>3' )?'selected="selected"':''; ?>>>3</option>
+                                                  </select>
+                                             </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                             <label class="col-sm-2 col-form-label" for="">Past HIV Testing</label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
+                                                      <option value="">--Select--</option>
+                                                      <option value="yes" <?php echo($result['past_hiv_testing'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                                      <option value="no" <?php echo($result['past_hiv_testing'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                                                      <option value="not_known" <?php echo($result['past_hiv_testing'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
+                                                  </select>
+                                             </div>
+                                             <label class="col-sm-2 col-form-label" for="">Test Last 12 Month</label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
+                                                      <option value="">--Select--</option>
+                                                      <option value="yes" <?php echo($result['test_last_12_month'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                                      <option value="no" <?php echo($result['test_last_12_month'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                                                      <option value="not_known" <?php echo($result['test_last_12_month'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
+                                                  </select>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                              <!-- END Steps Content -->
+                              <div class="block-content block-content-sm block-content-full bg-body-light rounded-bottom">
+                                   <div class="row">
+                                        <div class="col-6">
+                                             <button type="button" class="btn btn-secondary" data-wizard="prev">
+                                                  <i class="fa fa-angle-left mr-1"></i> Previous
+                                             </button>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                             <button type="button" class="btn btn-secondary" data-wizard="next">
+                                                  Next <i class="fa fa-angle-right ml-1"></i>
+                                             </button>
+
+                                             <input type="hidden" name="recencyId" value="<?php echo $result['recency_id'];?>" />
+                                             <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger d-none" data-wizard="finish" >Cancel</a>&nbsp;
+                                             <button type="submit" class="btn btn-primary d-none" data-wizard="finish" onclick="validateNow();return false;"><i class="fa fa-check mr-1"></i> Submit</button>
+                                        </div>
+                                   </div>
+                              </div>
+                         </form>
                     </div>
-
-                    <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <select class="form-control isRequired" id="facilityId" name="facilityId" title="Please select the facility name">
-                                <option value="">--Select--</option>
-                                <?php foreach($facilityResult['facility'] as $facility){?>
-                                    <option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo $facility['facility_name']; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-
-                        <label class="col-sm-2 col-form-label" for="">HIV Diagnosis Date<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $hivDiagnosisDate; ?>" class="js-datepicker form-control isRequired" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $hivRecencyDate; ?>" class="js-datepicker form-control isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
-                        </div>
-
-                        <label class="col-sm-2 col-form-label" for="">HIV Recency Result<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['hiv_recency_result']; ?>" class="form-control isRequired" id="hivRecencyResult" name="hivRecencyResult" placeholder="Enter the HIV recency result" title="Please enter the HIV recency result">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">DOB</label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $dob;?>" class="js-datepicker form-control" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
-                        </div>
-
-                        <label class="col-sm-2 col-form-label" for="">Age</label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['age'];?>" class="form-control" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Gender</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="gender" name="gender" title="Please select the gender">
-                                <option value="">--Select--</option>
-                                <option value="male" <?php echo($result['gender'] == 'male' )?'selected="selected"':''; ?>>Male</option>
-                                <option value="female" <?php echo($result['gender'] == 'female' )?'selected="selected"':''; ?>>Female</option>
-                                <option value="transgender" <?php echo($result['gender'] == 'transgender' )?'selected="selected"':''; ?>>Transgender</option>
-                            </select>
-                        </div>
-                        <label class="col-sm-2 col-form-label" for="">Marital Status</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
-                                <option value="">--Select--</option>
-                                <option value="never_married" <?php echo($result['marital_status'] == 'never_married' )?'selected="selected"':''; ?>>Never Married</option>
-                                <option value="married_cohabited" <?php echo($result['marital_status'] == 'married_cohabited' )?'selected="selected"':''; ?>>Married - Cohabited</option>
-                                <option value="married_cohabiting" <?php echo($result['marital_status'] == 'married_cohabiting' )?'selected="selected"':''; ?>>Married cohabiting</option>
-                                <option value="widow" <?php echo($result['marital_status'] == 'widow' )?'selected="selected"':''; ?>>Widow</option>
-                                <option value="divorce_separated" <?php echo($result['marital_status'] == 'divorce_separated' )?'selected="selected"':''; ?>>Divorce - Separated</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Residence</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="residence" name="residence" title="Please select the residence">
-                            <option value="">--Select--</option>
-                            <option value="urban" <?php echo($result['residence'] == 'urban' )?'selected="selected"':''; ?>>Urban</option>
-                            <option value="rural" <?php echo($result['residence'] == 'rural' )?'selected="selected"':''; ?>>Rural</option>
-                            </select>
-                        </div>
-                        <label class="col-sm-2 col-form-label" for="">Education Level</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="educationLevel" name="educationLevel" title="Please select the education level">
-                            <option value="">--Select--</option>
-                            <option value="primary" <?php echo($result['education_level'] == 'primary' )?'selected="selected"':''; ?>>Primary</option>
-                            <option value="university_or_higher" <?php echo($result['education_level'] == 'university_or_higher' )?'selected="selected"':''; ?>>University or Higher</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Risk Population</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
-                                <option value="">--Select--</option>
-                                <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
-                                    <option value="<?php echo base64_encode($riskPo['rp_id']); ?>" <?php echo($result['risk_population'] == $riskPo['rp_id'] )?'selected="selected"':''; ?>><?php echo str_replace('_', ' ', $riskPo['name']); ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <label class="col-sm-2 col-form-label" for="">Pregnancy Status</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="pregnancyStatus" name="pregnancyStatus" title="Please select the pregnancy status">
-                            <option value="">--Select--</option>
-                            <option value="currently_pregnant" <?php echo($result['pregnancy_status'] == 'currently_pregnant' )?'selected="selected"':''; ?>>Currently Pregnant</option>
-                            <option value="not_pregnant" <?php echo($result['pregnancy_status'] == 'not_pregnant' )?'selected="selected"':''; ?>>Not Pregnant</option>
-                            <option value="not_known" <?php echo($result['pregnancy_status'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Current Sexual Partner</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="currentSexualPartner" name="currentSexualPartner" title="Please select the current sexual partner">
-                            <option value="">--Select--</option>
-                            <option value="1" <?php echo($result['current_sexual_partner'] == '1' )?'selected="selected"':''; ?>>1</option>
-                            <option value="2_3" <?php echo($result['current_sexual_partner'] == '2_3' )?'selected="selected"':''; ?>>2 - 3</option>
-                            <option value=">3" <?php echo($result['current_sexual_partner'] == '>3' )?'selected="selected"':''; ?>>>3</option>
-                            </select>
-                        </div>
-                        <label class="col-sm-2 col-form-label" for="">Past HIV Testing</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
-                                <option value="">--Select--</option>
-                                <option value="yes" <?php echo($result['past_hiv_testing'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
-                                <option value="no" <?php echo($result['past_hiv_testing'] == 'no' )?'selected="selected"':''; ?>>No</option>
-                                <option value="not_known" <?php echo($result['past_hiv_testing'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Test Last 12 Month</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
-                                <option value="">--Select--</option>
-                                <option value="yes" <?php echo($result['test_last_12_month'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
-                                <option value="no" <?php echo($result['test_last_12_month'] == 'no' )?'selected="selected"':''; ?>>No</option>
-                                <option value="not_known" <?php echo($result['test_last_12_month'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
-                            </select>
-                        </div>
-                        <?php
-                        $i=0;
-                        $keyVal = 'one';
-                        foreach($globalConfigResult as $key=>$config){ ?>
-                                <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
-                                <div class="col-sm-4">
-                                    <input type="text" value="<?php echo $result['location_'.$keyVal];?>" class="form-control" id="configValue" name="configValue[]" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the location <?php echo lcfirst($config['global_value']); ?>">
-                                </div>
-                        <?php
-                        $i++;
-                            if($i == 2){
-                                $keyVal = 'two';
-                            }else if($i > 2){
-                                $keyVal = 'three';
-                            }
-                        } ?>
-                    </div>
-
-                    <div class="row items-push">
-                        <div class="col-lg-7 offset-lg-4">
-                            <input type="hidden" name="recencyId" value="<?php echo $result['recency_id'];?>" />
-                            <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
-                            <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+               </div>
+          </div>
+          <!--  end tab view-->
+     </div>
 </div>
+
+<!-- End -->
+
 
 
 <script type="text/javascript">
@@ -236,7 +285,7 @@ function validateNow() {
     }
 }
 $(document).ready(function(){
-    
+
 });
 function ageCalculate(){
     var today = new Date();
@@ -244,7 +293,7 @@ function ageCalculate(){
     var dob = diff_years(today,birthDate);
     $("#age").val(dob);
 }
-function diff_years(dt2, dt1) 
+function diff_years(dt2, dt1)
 {
     var diff =(dt2.getTime() - dt1.getTime()) / 1000;
     diff /= (60 * 60 * 24);

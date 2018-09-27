@@ -117,7 +117,7 @@ class RecencyTable extends AbstractTableGateway {
             $sQuery = $sQuery->where('r.added_by='.$sessionLogin->userId);
           }
 
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); 
+          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         //   echo $sQueryStr;die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
@@ -162,9 +162,13 @@ class RecencyTable extends AbstractTableGateway {
             //   $row[] = ucwords($aRow['past_hiv_testing']);
             //   $row[] = ucwords($aRow['test_last_12_month']);
               if($roleCode == "user"){
-                  $row[] = '<a href="/recency/edit/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
-              }else{
-                $row[] = "";
+                    $link1= '<a href="/recency/edit/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+                    $link2= '<a href="/recency/view/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="View"><i class="far fa-view"></i>View</a>';
+                    $row[]= $link1.'  '.$link2;
+              }
+              else{
+                   $row[]= '<a href="/recency/view/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="View"><i class="far fa-view"></i>View</a>';
+
               }
               $output['aaData'][] = $row;
           }
@@ -226,6 +230,7 @@ class RecencyTable extends AbstractTableGateway {
 
     public function updateRecencyDetails($params)
     {
+
         $logincontainer = new Container('credo');
         $common = new CommonService();
         if(isset($params['recencyId']) && trim($params['recencyId'])!="")
@@ -269,7 +274,7 @@ class RecencyTable extends AbstractTableGateway {
         $config = new \Zend\Config\Reader\Ini();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        
+
         $sQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
                                 ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'))
                                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'))
@@ -403,5 +408,11 @@ class RecencyTable extends AbstractTableGateway {
         }
         return $response;
     }
+     public function fetchRecencyOrderDetails($id)
+          {
+               $fetchResult = '';
+               $fetchResult=$this->select(array('recency_id'=>$id))->current();
+               return $fetchResult;
+          }
 }
 ?>
