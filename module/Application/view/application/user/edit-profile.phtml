@@ -6,11 +6,11 @@ $facilityId = array();
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Users</h1>
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Edit Profile</h1>
                <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                         <a href="<?php echo $this->url('user', array('action' => 'index')); ?>"><li class="breadcrumb-item">Edit Profile Details</li></a>
-                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Edit</li>
+                         <a href="/"><li class="breadcrumb-item">Home</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Edit Profile</li>
                     </ol>
                </nav>
           </div>
@@ -71,7 +71,7 @@ $facilityId = array();
                     <div class="row items-push">
                         <div class="col-lg-7 offset-lg-4">
                         <input type="hidden" name="userId" value="<?php echo base64_encode($result['user_id']); ?>"/>
-                            <a href="<?php echo $this->url('user', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                            <a href="/" class="btn btn-danger">Cancel</a>&nbsp;
                             <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
                         </div>
                     </div>
