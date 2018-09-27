@@ -68,6 +68,7 @@ class UserController extends AbstractActionController
             else
             {
                 $userId=base64_decode( $this->params()->fromRoute('id') );
+                if($userId!=''){
                 $roleResult=$userService->getRoleAllDetails();
                 $result=$userService->getuserDetailsById($userId);
                 $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
@@ -77,7 +78,33 @@ class UserController extends AbstractActionController
                     'roleResult' => $roleResult,
                     'globalConfigResult' => $globalConfigResult,
                 ));
+                }else{
+                    return $this->redirect()->toRoute("user");
+                }
             }
         }
     }
+    public function editProfileAction()
+    {
+        $userService = $this->getServiceLocator()->get('UserService');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $userService->updateProfile($params);
+            return $this->redirect()->toRoute("home");
+        }
+        else
+        {
+            $userId=base64_decode( $this->params()->fromRoute('id'));
+            if($userId!=''){
+            $result=$userService->getuserDetailsById($userId);
+            return new ViewModel(array(
+                'result' => $result,
+            ));
+            }else{
+                return $this->redirect()->toRoute("home");
+            }
+        }
+    }
+
 }
