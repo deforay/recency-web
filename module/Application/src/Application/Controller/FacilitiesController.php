@@ -43,8 +43,11 @@ class FacilitiesController extends AbstractActionController
             }else{
                 $userService = $this->getServiceLocator()->get('UserService');
                 $userResult = $userService->getAllUserDetails();
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
-                    'userResult' => $userResult
+                    'userResult' => $userResult,
+                    'globalConfigResult' => $globalConfigResult,
                 ));
             }
         }
@@ -70,9 +73,12 @@ class FacilitiesController extends AbstractActionController
                 $result=$facilityService->getFacilitiesDetailsById($facilityId);
                 $userService = $this->getServiceLocator()->get('UserService');
                 $userResult = $userService->getAllUserDetails();
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
                     'userResult' => $userResult,
-                    'result' => $result
+                    'result' => $result,
+                    'globalConfigResult' => $globalConfigResult,
                 ));
             }
         }

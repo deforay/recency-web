@@ -319,10 +319,9 @@ class CommonService {
 
      public function getAllProvienceListApi()
      {
-         $provienceDb = $this->sm->get('ProvienceTable');
+         $provienceDb = $this->sm->get('ProvinceTable');
          return $provienceDb->fetchAllProvienceListApi();
      }
-
 
      public function getAllDistrictListApi($params)
      {
@@ -334,6 +333,22 @@ class CommonService {
      {
          $cityDb = $this->sm->get('CityTable');
          return $cityDb->fetchAllCityListApi($params);
+     }
+
+     public function getProvinceDetails($params)
+     {
+         $provienceDb = $this->sm->get('ProvinceTable');
+         return $provienceDb->fetchProvinceDetails($params);
+     }
+     public function getDistrictDetails($params)
+     {
+         $provienceDb = $this->sm->get('DistrictTable');
+         return $provienceDb->fetchDistrictDetails($params);
+     }
+     public function getCityDetails($params)
+     {
+         $provienceDb = $this->sm->get('CityTable');
+         return $provienceDb->fetchCityDetails($params);
      }
 }
 

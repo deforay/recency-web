@@ -48,6 +48,15 @@ class CityTable extends AbstractTableGateway {
                }
                return $response;
           }
+          public function fetchCityDetails($params)
+          {
+               $dbAdapter = $this->adapter;
+               $sql = new Sql($dbAdapter);
+                $sQuery = $sql->select()->from(array('cd' => 'city_details'))->columns(array('city_id','district_id','city_name'))
+                                    ->where(array('district_id' => $params['selectValue'] ));
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               return $rResult;
+          }
      }
-
 ?>
