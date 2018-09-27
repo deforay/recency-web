@@ -6,6 +6,7 @@ $sessionLogin = new Container('credo');
 .select2-selection__choice{
      color: black !important;
 }
+
 </style>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -23,127 +24,162 @@ $sessionLogin = new Container('credo');
 
 
 <div class="content">
-    <div class="block block-rounded block-bordered">
-        <div class="block-header block-header-default">
-            <h3 class="block-title">Add Facilities Details</h3>
-        </div>
-        <div class="block-content">
-            <div class="col-md-12 table-responsive" id="hide">
-                <form name="facilityInformation" id="facilityInformation"  class="mb-5" action="<?php echo $this->url('facilities', array('action' => 'add')); ?>" method="post">
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Enter the facility name" title="Please enter the facility name" onblur="checkNameValidation('facility', 'facility_name', this,'NULL', 'The facility name that you entered already exists . Please try another name..');">
-                        </div>
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+               <h3 class="block-title">Add Facilities Details</h3>
+          </div>
+          <div class="block-content">
+               <div class="col-md-12 table-responsive" id="hide">
+                    <form name="facilityInformation" id="facilityInformation"  class="mb-5" action="<?php echo $this->url('facilities', array('action' => 'add')); ?>" method="post">
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Facility Name<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Enter the facility name" title="Please enter the facility name" onblur="checkNameValidation('facility', 'facility_name', this,'NULL', 'The facility name that you entered already exists . Please try another name..');">
+                              </div>
 
-                        <label class="col-sm-2 col-form-label" for="">Province<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="province" name="province" placeholder="Enter the province" title="Please enter the province">
-                        </div>
-                    </div>
+                              <label class="col-sm-2 col-form-label" for="">Province<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control isRequired" id="province" name="province" placeholder="Enter the province" title="Please enter the province">
+                              </div>
+                         </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">District<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control isRequired" id="district" name="district" placeholder="Enter the district name" title="Please enter the district name">
-                        </div>
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">District<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control isRequired" id="district" name="district" placeholder="Enter the district name" title="Please enter the district name">
+                              </div>
 
-                        <label class="col-sm-2 col-form-label" for="">Email</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
-                        </div>
-                    </div>
+                              <label class="col-sm-2 col-form-label" for="">Email</label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
+                              </div>
+                         </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Latitude</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Enter the latitude" title="Please enter the latitude">
-                        </div>
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Latitude</label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Enter the latitude" title="Please enter the latitude">
+                              </div>
 
-                        <label class="col-sm-2 col-form-label" for="">Longitude</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Enter the longitude" title="Please enter the longitude">
-                        </div>
-                    </div>
+                              <label class="col-sm-2 col-form-label" for="">Longitude</label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Enter the longitude" title="Please enter the longitude">
+                              </div>
+                         </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
-                        </div>
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
+                              </div>
 
-                        <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <select class="form-control isRequired" id="facilityStatus" name="facilityStatus" title="Please select the facility status">
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
+                              <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control isRequired" id="facilityStatus" name="facilityStatus" title="Please select the facility status">
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                   </select>
+                              </div>
+                         </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Map User<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <select class="form-control select2 isRequired" multiple id="user" name="user[]" title="Please select the user">
-                                <?php foreach($userResult as $user){ ?>
-                                    <option value="<?php echo $user['user_id']; ?>"><?php echo $user['user_name']; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row items-push">
-                        <div class="col-lg-7 offset-lg-4">
-                            <a href="<?php echo $this->url('facilities', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
-                            <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Map User<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select name="user[]" id="search" class="form-control" size="8" multiple="multiple">
+                                        <?php foreach($userResult as $user){ ?>
+                                             <option value="<?php echo $user['user_id']; ?>"><?php echo $user['user_name']; ?></option>
+                                        <?php } ?>
+                                   </select>
+                              </div>
+
+                              <div class="col-md-2">
+                                   <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
+                                   <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
+                                   <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
+                                   <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
+                              </div>
+
+                              <div class="col-sm-4">
+                                   <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
+                              </div>
+                         </div>
+
+                         <div class="row items-push">
+                              <div class="col-lg-7 offset-lg-4">
+                                   <input type="hidden" name="selectedMapUser" id="selectedMapUser"/>
+
+                                   <a href="<?php echo $this->url('facilities', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                   <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                              </div>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
 </div>
 
-
+<script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
+
      $(function () {
-$(".select2").select2({
+          $(".select2").select2({
                placeholder: "Choose user",
                allowClear: true,
           });
-});
-duplicateName = true;
-function validateNow() {
-     flag = deforayValidator.init({
-          formId: 'facilityInformation'
      });
-     if (flag) {
-          if (duplicateName) {
-               $.blockUI();
-               
-               document.getElementById('facilityInformation').submit();
+
+     jQuery(document).ready(function($) {
+          $('#search').multiselect({
+               search: {
+                    left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+                    right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+               },
+               fireSearch: function(value) {
+                    return value.length > 3;
+               }
+          });
+
+     });
+
+
+     duplicateName = true;
+     function validateNow() {
+
+          var selVal = [];
+          $('#search_to option').each(function(i, selected){
+               selVal[i] = $(selected).val();
+          });
+          $("#selectedMapUser").val(selVal);
+
+
+
+          flag = deforayValidator.init({
+               formId: 'facilityInformation'
+          });
+          if (flag) {
+               if (duplicateName) {
+                    $.blockUI();
+
+                    document.getElementById('facilityInformation').submit();
+               }
           }
      }
-}
-function checkNameValidation(tableName, fieldName, obj, fnct, msg){
-    checkValue = document.getElementById(obj.id).value;
-    if($.trim(checkValue)!= ''){
-        $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, companyId: companyId, existingCompanyId: existingCompanyId, fnct: fnct, srcfrom: 'SuperAdmin'},
-        function(data) {
-            if (data > 0)
-            {
-                    alert(msg);
-                    duplicateName = false;
-                    document.getElementById(obj.id).value = "";
-            }
-            else {
-                    duplicateName = true;
-            }
-        });
-    }
-}
-$(document).ready(function(){
-
-     
-});
+     function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+          checkValue = document.getElementById(obj.id).value;
+          if($.trim(checkValue)!= ''){
+               $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, companyId: companyId, existingCompanyId: existingCompanyId, fnct: fnct, srcfrom: 'SuperAdmin'},
+               function(data) {
+                    if (data > 0)
+                    {
+                         alert(msg);
+                         duplicateName = false;
+                         document.getElementById(obj.id).value = "";
+                    }
+                    else {
+                         duplicateName = true;
+                    }
+               });
+          }
+     }
 
 </script>

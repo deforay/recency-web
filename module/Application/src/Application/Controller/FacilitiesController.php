@@ -38,9 +38,9 @@ class FacilitiesController extends AbstractActionController
                 $params = $request->getPost();
                 $facilityService = $this->getServiceLocator()->get('FacilitiesService');
                 $result = $facilityService->addFacilitiesDetails($params);
+                // \Zend\Debug\Debug::dump($params);die;
                 return $this->_redirect()->toRoute('facilities');
             }else{
-                // \Zend\Debug\Debug::dump("hi");die;
                 $userService = $this->getServiceLocator()->get('UserService');
                 $userResult = $userService->getAllUserDetails();
                 return new ViewModel(array(

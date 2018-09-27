@@ -5,12 +5,15 @@ $uId = array();
 foreach($result['facilityMap'] as $data){
     $uId[] = $data['user_id'];
 }
+
+// \Zend\Debug\Debug::dump($userResult);die;
 ?>
 <style type="text/css">
   .select2-selection__choice{
     color: black !important;
   }
 </style>
+
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -86,7 +89,7 @@ foreach($result['facilityMap'] as $data){
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Map User<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
                             <select class="form-control isRequired select2" multiple id="user" name="user[]" title="Please select the user">
@@ -95,10 +98,39 @@ foreach($result['facilityMap'] as $data){
                                 <?php } ?>
                             </select>
                         </div>
+                    </div> -->
+
+                    <div class="form-group row">
+                         <label class="col-sm-2 col-form-label" for="">Map User<span class="mandatory">*</span></label>
+                         <div class="col-sm-4">
+                              <select name="from[]" id="search" class="form-control" size="8" multiple="multiple">
+                                   <?php foreach($userResult as $user){ ?>
+                                        <option value="<?php echo $user['user_id']; ?>"><?php echo (in_array($user["user_id"],$uId))?"selected='selected'":"";?>><?php echo $user['user_name']; ?></option>
+                                   <?php } ?>
+                              </select>
+                         </div>
+
+                         <div class="col-md-2">
+                              <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
+                              <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
+                              <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
+                              <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
+                         </div>
+
+                         <div class="col-sm-4">
+                              <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
+
+
+                              </select>
+
+
+                         </div>
                     </div>
 
                     <div class="row items-push">
                         <div class="col-lg-7 offset-lg-4">
+
+                             <input type="hidden" name="selectedMapUser" id="selectedMapUser"/>
                             <input type="hidden" name="facilityId" value="<?php echo base64_encode($result['facility_id']); ?>"/>
                             <a href="<?php echo $this->url('facilities', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
                             <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
@@ -110,42 +142,63 @@ foreach($result['facilityMap'] as $data){
     </div>
 </div>
 
-
+<script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
-duplicateName = true;
-function validateNow() {
-     flag = deforayValidator.init({
-          formId: 'facilityInformation'
+
+     jQuery(document).ready(function($) {
+          $('#search').multiselect({
+               search: {
+                    left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+                    right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+               },
+               fireSearch: function(value) {
+                    return value.length > 3;
+               }
+          });
      });
-     if (flag) {
-          if (duplicateName) {
-               $.blockUI();
-               document.getElementById('facilityInformation').submit();
+
+     duplicateName = true;
+     function validateNow() {
+
+          var selVal = [];
+          $('#search_to option').each(function(i, selected){
+               selVal[i] = $(selected).val();
+          });
+          $("#selectedFacility").val(selVal);
+
+
+          flag = deforayValidator.init({
+               formId: 'facilityInformation'
+          });
+          if (flag) {
+               if (duplicateName) {
+                    $.blockUI();
+                    document.getElementById('facilityInformation').submit();
+               }
           }
      }
-}
-function checkNameValidation(tableName, fieldName, obj, fnct, msg){
-    checkValue = document.getElementById(obj.id).value;
-    if($.trim(checkValue)!= ''){
-        $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, companyId: companyId, existingCompanyId: existingCompanyId, fnct: fnct, srcfrom: 'SuperAdmin'},
-        function(data) {
-            if (data > 0)
-            {
-                    alert(msg);
-                    duplicateName = false;
-                    document.getElementById(obj.id).value = "";
-            }
-            else {
-                    duplicateName = true;
-            }
-        });
-    }
-}
-$(document).ready(function(){
-    $(".select2").select2({
-               placeholder: "Choose user",
-               allowClear: true,
-          });
-});
+     function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+         checkValue = document.getElementById(obj.id).value;
+         if($.trim(checkValue)!= ''){
+             $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, companyId: companyId, existingCompanyId: existingCompanyId, fnct: fnct, srcfrom: 'SuperAdmin'},
+             function(data) {
+                 if (data > 0)
+                 {
+                         alert(msg);
+                         duplicateName = false;
+                         document.getElementById(obj.id).value = "";
+                 }
+                 else {
+                         duplicateName = true;
+                 }
+             });
+         }
+     }
+     $(document).ready(function(){
+         $(".select2").select2({
+                    placeholder: "Choose user",
+                    allowClear: true,
+               });
+     });
 
 </script>
