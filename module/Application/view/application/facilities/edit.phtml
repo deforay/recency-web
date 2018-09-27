@@ -68,7 +68,7 @@ foreach($result['facilityMap'] as $data){
                         <?php foreach($globalConfigResult as $config){ ?>
                                     <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
                                     <div class="col-sm-4">
-                                        <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>',null);">
+                                        <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>',null,null,null);">
                                             <option value="">-- Select --</option>
                                         </select>
                                     </div>
@@ -135,17 +135,17 @@ foreach($result['facilityMap'] as $data){
          foreach($globalConfigResult as $config){
              if($config['global_name']=='location_one'){
              ?>
-             getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['province'];?>');
+             getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['province'];?>',null,null);
              <?php
              }else if($config['global_name']=='location_two')
              {
                  ?>
-                getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['province'];?>');
+                getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['province'];?>','<?php echo $result['district'];?>',null);
                 <?php
              }else if($config['global_name']=='location_three')
              {
                  ?>
-                getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['district'];?>');
+                getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['province'];?>','<?php echo $result['district'];?>','<?php echo $result['city'];?>');
                 <?php
              }
          }
@@ -199,24 +199,30 @@ foreach($result['facilityMap'] as $data){
              });
          }
      }
-    function getLocationDeatils(globalName,value)
+    function getLocationDeatils(globalName,value1,value2,value3)
      {
+         
         var selectValue = document.getElementById(globalName).value;
         var innerId = '';
         var path = '';
-        if(value!='' && value!=null)
+        var selectedValue = '';
+        if(value1!=null || value2!=null || value3!=null)
         {
             if(globalName=='location_one'){
                 path = 'get-province';
                 innerId = 'location_one';
+                selectValue = value1;
+                selectedValue = value1;
             }else if(globalName=='location_two'){
                 path = 'get-district';
                 innerId = 'location_two';
-                selectValue = value;
+                selectValue = value1;
+                selectedValue = value2;
             }else if(globalName=='location_three'){
                 path = 'get-city';
                 innerId = 'location_three';
-                selectValue = value;
+                selectValue = value2;
+                selectedValue = value3;
             }
         }else{
             if(globalName=='location_one' && selectValue==''){
@@ -237,8 +243,8 @@ foreach($result['facilityMap'] as $data){
                 $.post("/common/"+path, {selectValue:selectValue},
                 function(data) {
                     $("#"+innerId).html(data);
-                    if(value!=''){
-                        $("#"+innerId).val(value);
+                    if(selectedValue!=''){
+                        $("#"+innerId).val(selectedValue);
                     }
                     $.unblockUI();
                 });
