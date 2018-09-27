@@ -1,6 +1,8 @@
 <?php
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
+// \Zend\Debug\Debug::dump($facilityResult['riskPopulations']);die;
+
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -184,7 +186,7 @@ $sessionLogin = new Container('credo');
                                              <label for="orderDate" class="col-lg-4 control-label">Risk Population</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->risk_population); ?>
+                                                  <?php echo ucwords($result->name); ?>
                                              </span>
                                         </div>
                                    </div>
@@ -230,33 +232,7 @@ $sessionLogin = new Container('credo');
                                         </div>
                                    </div>
                               </div>
-
-                              <div class="row">
-                                   <div class="col-md-6">
-                                        <div class="form-group">
-                                             <label for="termsOfPay" class="col-lg-4 control-label">Pregnancy Status</label>
-                                             <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->pregnancy_status); ?>
-                                             </span>
-                                        </div>
-                                   </div>
-                                   <div class="col-md-6">
-                                        <div class="form-group">
-                                             <label for="otherRef" class="col-lg-4 control-label">Current Sexual Partner</label>
-                                             <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->current_sexual_partner); ?>
-                                             </span>
-                                        </div>
-                                   </div>
-                              </div>
                          </div>
-
-
-
-
-
                     </div>
                </div>
           </section>

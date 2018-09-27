@@ -199,9 +199,12 @@ class RecencyTable extends AbstractTableGateway {
                 'current_sexual_partner' => $params['currentSexualPartner'],
                 'past_hiv_testing' => $params['pastHivTesting'],
                 'test_last_12_month' => $params['testLast12Month'],
-                'location_one' => $params['configValue'][0],
-                'location_two' => $params['configValue'][1],
-                'location_three' => $params['configValue'][2],
+                'location_one' => $params['location_one'],
+                'location_two' => $params['location_two'],
+                'location_three' => $params['location_three'],
+                // 'location_one' => $params['configValue'][0],
+                // 'location_two' => $params['configValue'][1],
+                // 'location_three' => $params['configValue'][2],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
 
@@ -252,9 +255,12 @@ class RecencyTable extends AbstractTableGateway {
                 'current_sexual_partner' => $params['currentSexualPartner'],
                 'past_hiv_testing' => $params['pastHivTesting'],
                 'test_last_12_month' => $params['testLast12Month'],
-                'location_one' => $params['configValue'][0],
-                'location_two' => $params['configValue'][1],
-                'location_three' => $params['configValue'][2],
+                'location_one' => $params['location_one'],
+                'location_two' => $params['location_two'],
+                'location_three' => $params['location_three'],
+                // 'location_one' => $params['configValue'][0],
+                // 'location_two' => $params['configValue'][1],
+                // 'location_three' => $params['configValue'][2],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
             );
@@ -410,9 +416,18 @@ class RecencyTable extends AbstractTableGateway {
     }
      public function fetchRecencyOrderDetails($id)
           {
-               $fetchResult = '';
-               $fetchResult=$this->select(array('recency_id'=>$id))->current();
-               return $fetchResult;
+               // $fetchResult = '';
+               // $fetchResult=$this->select(array('recency_id'=>$id))->current();
+               // return $fetchResult;
+               $dbAdapter = $this->adapter;
+               $sql = new Sql($dbAdapter);
+
+               $sQuery = $sql->select()->from(array('r' => 'recency'))
+                                      ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'))
+                                      ->where(array('recency_id' =>$id));
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+               return $rResult;
           }
 }
 ?>

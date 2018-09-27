@@ -72,9 +72,13 @@ class RecencyController extends AbstractActionController
 
          $result=$recencyService->getRecencyOrderDetails($recencyNo);
 
+          $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+          $facilityResult=$facilityService->getFacilitiesAllDetails();
+          
          if ($result) {
               return new ViewModel(array(
                    'result' => $result,
+                   'facilityResult' => $facilityResult
               ));
          } else {
               return $this->redirect()->toRoute("recency");
