@@ -240,10 +240,21 @@ class FacilitiesTable extends AbstractTableGateway {
 
                public function fetchFacilitiesAllDetails()
                {
-                    $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
-                    $result['facility'] = $this->select()->toArray();
-                    $result['riskPopulations'] = $riskPopulationsDb->select()->toArray();
-                    return $result;
+                  $dbAdapter = $this->adapter;
+                  $sql = new Sql($dbAdapter);
+                  $logincontainer = new Container('credo');
+                  $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
+                  if($logincontainer->roleCode=='user'){
+                        $sQuery = $sql->select()->from(array( 'ufm' => 'user_facility_map' ))
+                                    ->join(array('f' => 'facilities'), 'f.facility_id = ufm.facility_id', array('facility_name','facility_id'))
+                                    ->where(array('f.status'=>'active','ufm.user_id'=>$logincontainer->userId));
+                         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+                         $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                  }else{
+                        $result['facility'] = $this->select()->toArray();
+                  }
+                  $result['riskPopulations'] = $riskPopulationsDb->select()->toArray();
+                  return $result;
                }
 
                public function fetchFacilitiesDetailsApi($params)
