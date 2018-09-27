@@ -36,19 +36,6 @@ $sessionLogin = new Container('credo');
                               <div class="col-sm-4">
                                    <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Enter the facility name" title="Please enter the facility name" onblur="checkNameValidation('facility', 'facility_name', this,'NULL', 'The facility name that you entered already exists . Please try another name..');">
                               </div>
-
-                              <label class="col-sm-2 col-form-label" for="">Province<span class="mandatory">*</span></label>
-                              <div class="col-sm-4">
-                                   <input type="text" class="form-control isRequired" id="province" name="province" placeholder="Enter the province" title="Please enter the province">
-                              </div>
-                         </div>
-
-                         <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">District<span class="mandatory">*</span></label>
-                              <div class="col-sm-4">
-                                   <input type="text" class="form-control isRequired" id="district" name="district" placeholder="Enter the district name" title="Please enter the district name">
-                              </div>
-
                               <label class="col-sm-2 col-form-label" for="">Email</label>
                               <div class="col-sm-4">
                                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
@@ -56,22 +43,34 @@ $sessionLogin = new Container('credo');
                          </div>
 
                          <div class="form-group row">
+                         <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
+                              </div>
                               <label class="col-sm-2 col-form-label" for="">Latitude</label>
                               <div class="col-sm-4">
                                    <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Enter the latitude" title="Please enter the latitude">
                               </div>
 
-                              <label class="col-sm-2 col-form-label" for="">Longitude</label>
-                              <div class="col-sm-4">
-                                   <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Enter the longitude" title="Please enter the longitude">
-                              </div>
+                              
                          </div>
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
+                             
+                         <label class="col-sm-2 col-form-label" for="">Longitude</label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
+                                   <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Enter the longitude" title="Please enter the longitude">
                               </div>
+
+                                <?php foreach($globalConfigResult as $config){ ?>
+                                    <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
+                                            <option value="">-- Select --</option>
+                                        </select>
+                                    </div>
+                                <?php } ?>
+
 
                               <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
@@ -83,11 +82,11 @@ $sessionLogin = new Container('credo');
                          </div>
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Map User<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">User Facility Map</label>
                               <div class="col-sm-4">
-                                   <select name="user[]" id="search" class="form-control" size="8" multiple="multiple">
+                                   <select  id="search" class="form-control" size="8" multiple="multiple">
                                         <?php foreach($userResult as $user){ ?>
-                                             <option value="<?php echo $user['user_id']; ?>"><?php echo $user['user_name']; ?></option>
+                                             <option value="<?php echo $user['user_id']; ?>"><?php echo ucwords($user['user_name']); ?></option>
                                         <?php } ?>
                                    </select>
                               </div>
@@ -121,14 +120,15 @@ $sessionLogin = new Container('credo');
 <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
 
-     $(function () {
-          $(".select2").select2({
-               placeholder: "Choose user",
-               allowClear: true,
-          });
-     });
-
      jQuery(document).ready(function($) {
+         <?php
+         foreach($globalConfigResult as $config){
+             ?>
+             getLocationDeatils('<?php echo $config["global_name"];?>');
+             <?php
+             break;
+         }
+         ?>
           $('#search').multiselect({
                search: {
                     left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
@@ -138,20 +138,15 @@ $sessionLogin = new Container('credo');
                     return value.length > 3;
                }
           });
-
      });
-
 
      duplicateName = true;
      function validateNow() {
-
           var selVal = [];
           $('#search_to option').each(function(i, selected){
                selVal[i] = $(selected).val();
           });
           $("#selectedMapUser").val(selVal);
-
-
 
           flag = deforayValidator.init({
                formId: 'facilityInformation'
@@ -165,21 +160,46 @@ $sessionLogin = new Container('credo');
           }
      }
      function checkNameValidation(tableName, fieldName, obj, fnct, msg){
-          checkValue = document.getElementById(obj.id).value;
-          if($.trim(checkValue)!= ''){
-               $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, companyId: companyId, existingCompanyId: existingCompanyId, fnct: fnct, srcfrom: 'SuperAdmin'},
-               function(data) {
-                    if (data > 0)
-                    {
-                         alert(msg);
-                         duplicateName = false;
-                         document.getElementById(obj.id).value = "";
-                    }
-                    else {
-                         duplicateName = true;
-                    }
-               });
-          }
+        checkValue = document.getElementById(obj.id).value;
+        if($.trim(checkValue)!= ''){
+            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, companyId: companyId, existingCompanyId: existingCompanyId, fnct: fnct, srcfrom: 'SuperAdmin'},
+            function(data) {
+                if (data > 0)
+                {
+                        alert(msg);
+                        duplicateName = false;
+                        document.getElementById(obj.id).value = "";
+                }
+                else {
+                        duplicateName = true;
+                }
+            });
+        }
+     }
+     function getLocationDeatils(globalName)
+     {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
+            if(globalName=='location_one' && selectValue==''){
+                path = 'get-province';
+                innerId = 'location_one';
+            }else if(globalName=='location_one' && selectValue!=''){
+                path = 'get-district';
+                innerId = 'location_two';
+                $("#location_three").html("<option value=''>-- Select --</option>");
+            }else if(globalName=='location_two' && selectValue!=''){
+                path = 'get-city';
+                innerId = 'location_three';
+            }
+            if(path!=''){
+                $.blockUI();
+                $.post("/common/"+path, {selectValue:selectValue},
+                function(data) {
+                    $("#"+innerId).html(data);
+                    $.unblockUI();
+                });
+            }
      }
 
 </script>

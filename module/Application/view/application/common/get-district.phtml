@@ -1,0 +1,10 @@
+<option value="">-- Select --</option>
+<?php
+if(count($result)>0){
+    foreach($result as $name){
+        ?>
+        <option value="<?php echo $name['district_id'];?>"><?php echo $name['district_name'];?></option>
+        <?php
+    }
+}
+?>

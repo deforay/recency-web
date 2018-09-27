@@ -2,11 +2,10 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $uId = array();
+//\Zend\Debug\Debug::dump($result['facilityMap']);die;
 foreach($result['facilityMap'] as $data){
     $uId[] = $data['user_id'];
 }
-
-// \Zend\Debug\Debug::dump($userResult);die;
 ?>
 <style type="text/css">
   .select2-selection__choice{
@@ -28,7 +27,6 @@ foreach($result['facilityMap'] as $data){
      </div>
 </div>
 
-
 <div class="content">
     <div class="block block-rounded block-bordered">
         <div class="block-header block-header-default">
@@ -42,19 +40,6 @@ foreach($result['facilityMap'] as $data){
                         <div class="col-sm-4">
                             <input type="text" value="<?php echo $result['facility_name']; ?>" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Enter the facility name" title="Please enter the facility name" onblur="checkNameValidation('facility', 'facility_name', this,'NULL', 'The facility name that you entered already exists . Please try another name..');">
                         </div>
-
-                        <label class="col-sm-2 col-form-label" for="">Province<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['province']; ?>" class="form-control isRequired" id="province" name="province" placeholder="Enter the province" title="Please enter the province">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">District<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['district']; ?>" class="form-control isRequired" id="district" name="district" placeholder="Enter the district name" title="Please enter the district name">
-                        </div>
-
                         <label class="col-sm-2 col-form-label" for="">Email</label>
                         <div class="col-sm-4">
                             <input type="text" value="<?php echo $result['email']; ?>" class="form-control" id="email" name="email" placeholder="Enter the email" title="Please enter the email">
@@ -62,22 +47,32 @@ foreach($result['facilityMap'] as $data){
                     </div>
 
                     <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
+                        <div class="col-sm-4">
+                            <input type="text" value="<?php echo $result['alt_email']; ?>" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
+                        </div>
                         <label class="col-sm-2 col-form-label" for="">Latitude</label>
                         <div class="col-sm-4">
                             <input type="text" value="<?php echo $result['latitude']; ?>"  class="form-control" id="latitude" name="latitude" placeholder="Enter the latitude" title="Please enter the latitude">
                         </div>
 
-                        <label class="col-sm-2 col-form-label" for="">Longitude</label>
-                        <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['longitude']; ?>"  class="form-control" id="longitude" name="longitude" placeholder="Enter the longitude" title="Please enter the longitude">
-                        </div>
+                        
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Alternate Email</label>
+                    <label class="col-sm-2 col-form-label" for="">Longitude</label>
                         <div class="col-sm-4">
-                            <input type="text" value="<?php echo $result['alt_email']; ?>" class="form-control" id="altEmail" name="altEmail" placeholder="Enter the alternate email" title="Please enter the alternate email">
+                            <input type="text" value="<?php echo $result['longitude']; ?>"  class="form-control" id="longitude" name="longitude" placeholder="Enter the longitude" title="Please enter the longitude">
                         </div>
+
+                        <?php foreach($globalConfigResult as $config){ ?>
+                                    <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>',null);">
+                                            <option value="">-- Select --</option>
+                                        </select>
+                                    </div>
+                                <?php } ?>
 
                         <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
@@ -89,24 +84,16 @@ foreach($result['facilityMap'] as $data){
                         </div>
                     </div>
 
-                    <!-- <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Map User<span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <select class="form-control isRequired select2" multiple id="user" name="user[]" title="Please select the user">
-                                <?php foreach($userResult as $user){ ?>
-                                    <option value="<?php echo $user['user_id']; ?>" <?php echo (in_array($user["user_id"],$uId))?"selected='selected'":"";?>><?php echo $user['user_name']; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div> -->
-
                     <div class="form-group row">
-                         <label class="col-sm-2 col-form-label" for="">Map User<span class="mandatory">*</span></label>
+                         <label class="col-sm-2 col-form-label" for="">Map User</label>
                          <div class="col-sm-4">
                               <select name="from[]" id="search" class="form-control" size="8" multiple="multiple">
-                                   <?php foreach($userResult as $user){ ?>
-                                        <option value="<?php echo $user['user_id']; ?>"><?php echo (in_array($user["user_id"],$uId))?"selected='selected'":"";?>><?php echo $user['user_name']; ?></option>
-                                   <?php } ?>
+                                   <?php foreach($userResult as $user){
+                                       if(!in_array($user["user_id"],$uId)){
+                                        ?>
+                                        <option value="<?php echo $user['user_id']; ?>" ><?php echo ucwords($user['user_name']); ?></option>
+                                   <?php }
+                                   } ?>
                               </select>
                          </div>
 
@@ -119,17 +106,16 @@ foreach($result['facilityMap'] as $data){
 
                          <div class="col-sm-4">
                               <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
-
-
+                                <?php foreach($result['facilityMap'] as $user){ ?>
+                                        <option value="<?php echo $user['user_id']; ?>" selected='selected'><?php echo ucwords($user['user_name']); ?></option>
+                                   <?php } ?>
                               </select>
-
 
                          </div>
                     </div>
 
                     <div class="row items-push">
                         <div class="col-lg-7 offset-lg-4">
-
                              <input type="hidden" name="selectedMapUser" id="selectedMapUser"/>
                             <input type="hidden" name="facilityId" value="<?php echo base64_encode($result['facility_id']); ?>"/>
                             <a href="<?php echo $this->url('facilities', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
@@ -141,11 +127,30 @@ foreach($result['facilityMap'] as $data){
         </div>
     </div>
 </div>
-
 <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
 
      jQuery(document).ready(function($) {
+        <?php
+         foreach($globalConfigResult as $config){
+             if($config['global_name']=='location_one'){
+             ?>
+             getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['province'];?>');
+             <?php
+             }else if($config['global_name']=='location_two')
+             {
+                 ?>
+                getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['province'];?>');
+                <?php
+             }else if($config['global_name']=='location_three')
+             {
+                 ?>
+                getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['district'];?>');
+                <?php
+             }
+         }
+         ?>
+
           $('#search').multiselect({
                search: {
                     left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
@@ -164,7 +169,7 @@ foreach($result['facilityMap'] as $data){
           $('#search_to option').each(function(i, selected){
                selVal[i] = $(selected).val();
           });
-          $("#selectedFacility").val(selVal);
+          $("#selectedMapUser").val(selVal);
 
 
           flag = deforayValidator.init({
@@ -194,11 +199,49 @@ foreach($result['facilityMap'] as $data){
              });
          }
      }
-     $(document).ready(function(){
-         $(".select2").select2({
-                    placeholder: "Choose user",
-                    allowClear: true,
-               });
-     });
-
+    function getLocationDeatils(globalName,value)
+     {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
+        if(value!='' && value!=null)
+        {
+            if(globalName=='location_one'){
+                path = 'get-province';
+                innerId = 'location_one';
+            }else if(globalName=='location_two'){
+                path = 'get-district';
+                innerId = 'location_two';
+                selectValue = value;
+            }else if(globalName=='location_three'){
+                path = 'get-city';
+                innerId = 'location_three';
+                selectValue = value;
+            }
+        }else{
+            if(globalName=='location_one' && selectValue==''){
+                path = 'get-province';
+                innerId = 'location_one';
+            }else if(globalName=='location_one' && selectValue!=''){
+                path = 'get-district';
+                innerId = 'location_two';
+                $("#location_three").html("<option value=''>-- Select --</option>");
+            }else if(globalName=='location_two' && selectValue!=''){
+                path = 'get-city';
+                innerId = 'location_three';
+                
+            }
+        }
+            if(path!=''){
+                $.blockUI();
+                $.post("/common/"+path, {selectValue:selectValue},
+                function(data) {
+                    $("#"+innerId).html(data);
+                    if(value!=''){
+                        $("#"+innerId).val(value);
+                    }
+                    $.unblockUI();
+                });
+            }
+     }
 </script>

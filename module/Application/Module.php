@@ -16,7 +16,7 @@ use Application\Model\RiskPopulationsTable;
 use Application\Model\GlobalConfigTable;
 use Application\Model\UserFacilityMapTable;
 
-use Application\Model\ProvienceTable;
+use Application\Model\ProvinceTable;
 use Application\Model\DistrictTable;
 use Application\Model\CityTable;
 
@@ -126,9 +126,9 @@ class Module{
                         return $table;
                     },
 
-                    'ProvienceTable' => function($sm) {
+                    'ProvinceTable' => function($sm) {
                         $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                        $table = new ProvienceTable($dbAdapter);
+                        $table = new ProvinceTable($dbAdapter);
                         return $table;
                     },
 

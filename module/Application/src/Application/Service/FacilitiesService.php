@@ -86,6 +86,11 @@ class FacilitiesService {
         $facilityDb = $this->sm->get('FacilitiesTable');
         return $facilityDb->fetchFacilitiesDetailsApi($params);
     }
+    public function getFacilityByLocation($params)
+    {
+        $facilityDb = $this->sm->get('FacilitiesTable');
+        return $facilityDb->fetchFacilityByLocation($params);
+    }
 }
 
 ?>

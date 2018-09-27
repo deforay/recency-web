@@ -193,6 +193,7 @@ class UserTable extends AbstractTableGateway {
 
     public function addUserDetails($params)
     {
+        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
         if(isset($params['userName']) && trim($params['userName'])!="")
         {
             $config = new \Zend\Config\Reader\Ini();
@@ -213,6 +214,19 @@ class UserTable extends AbstractTableGateway {
             );
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
+            if($lastInsertedId > 0)
+            {
+                if($params['selectedMapFacility']!=''){
+                    $mapArray = explode(",",$params['selectedMapFacility']);
+                    foreach($mapArray as $facilityId){
+                        $mapData = array(
+                            'user_id' => $lastInsertedId,
+                            'facility_id' => $facilityId
+                        );
+                        $mapDb->insert($mapData);
+                    }
+                }
+            }
         }
         return $lastInsertedId;
     }
@@ -225,6 +239,12 @@ class UserTable extends AbstractTableGateway {
                                 ->where(array('user_id' => $userId));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        //facility map
+        $umQuery = $sql->select()->from(array('um' => 'user_facility_map'))
+                ->join(array('f'=>'facilities'),'f.facility_id=um.facility_id',array('facility_name'))
+                ->where(array('um.user_id' => $userId));
+        $umQueryStr = $sql->getSqlStringForSqlObject($umQuery);
+        $rResult['facilityMap'] = $dbAdapter->query($umQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }
 
@@ -232,7 +252,8 @@ class UserTable extends AbstractTableGateway {
     {
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-        
+        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
+
         if(isset($params['userId']) && trim($params['userId'])!="")
         {
             $data = array(
@@ -251,8 +272,21 @@ class UserTable extends AbstractTableGateway {
                 $data['server_password'] = $password;
             }
             $updateResult = $this->update($data,array('user_id'=>base64_decode($params['userId'])));
+            $lastInsertedId = base64_decode($params['userId']);
+
+            $mapDb->delete("user_id=" . $lastInsertedId);
+            if($params['selectedMapFacility']!=''){
+                $mapArray = explode(",",$params['selectedMapFacility']);
+                foreach($mapArray as $facilityId){
+                    $mapData = array(
+                        'user_id' => $lastInsertedId,
+                        'facility_id' => $facilityId
+                    );
+                    $mapDb->insert($mapData);
+                }
+            }
         }
-        return $updateResult;
+        return $lastInsertedId;
     }
 
     //login by api

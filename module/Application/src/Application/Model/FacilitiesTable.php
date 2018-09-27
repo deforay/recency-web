@@ -24,8 +24,8 @@ class FacilitiesTable extends AbstractTableGateway {
           */
           $sessionLogin = new Container('credo');
           $common = new CommonService();
-          $aColumns = array('f.facility_name','f.province','f.district','f.email','f.status');
-          $orderColumns = array('f.facility_name','f.province','f.district','f.email','f.status');
+          $aColumns = array('f.facility_name','p.province_name','d.district_name','f.email','f.status');
+          $orderColumns = array('f.facility_name','p.province_name','d.district_name','f.email','f.status');
 
           /* Paging */
           $sLimit = "";
@@ -95,7 +95,10 @@ class FacilitiesTable extends AbstractTableGateway {
                     $sql = new Sql($dbAdapter);
                     $roleId=$sessionLogin->roleId;
 
-                    $sQuery = $sql->select()->from(array( 'f' => 'facilities' ));
+                    $sQuery = $sql->select()->from(array( 'f' => 'facilities' ))
+                                          ->join(array('p'=>'province_details'),'p.province_id=f.province',array('province_name'),'left')
+                                          ->join(array('d'=>'district_details'),'d.district_id=f.district',array('district_name'),'left')
+                                          ;
 
                     if (isset($sWhere) && $sWhere != "") {
                          $sQuery->where($sWhere);
@@ -133,8 +136,8 @@ class FacilitiesTable extends AbstractTableGateway {
 
                          $row = array();
                          $row[] = ucwords($aRow['facility_name']);
-                         $row[] = ucwords($aRow['province']);
-                         $row[] = ucwords($aRow['district']);
+                         $row[] = ucwords($aRow['province_name']);
+                         $row[] = ucwords($aRow['district_name']);
                          $row[] = $aRow['email'];
                          $row[] = ucwords($aRow['status']);
                          $row[] = '<a href="/facilities/edit/' . base64_encode($aRow['facility_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
@@ -146,13 +149,15 @@ class FacilitiesTable extends AbstractTableGateway {
 
                public function addFacilitiesDetails($params)
                {
+                     //\Zend\Debug\Debug::dump($params);die;
                     $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
                     if(isset($params['facilityName']) && trim($params['facilityName'])!="")
                     {
                          $data = array(
                               'facility_name' => $params['facilityName'],
-                              'province' => $params['province'],
-                              'district' => $params['district'],
+                              'province' => $params['location_one'],
+                              'district' => $params['location_two'],
+                              'city' => $params['location_three'],
                               'latitude' => $params['latitude'],
                               'longitude' => $params['longitude'],
                               'email' => $params['email'],
@@ -166,10 +171,9 @@ class FacilitiesTable extends AbstractTableGateway {
 
                     if($lastInsertedId > 0)
                     {
-                         if(count(['user'])>0){
+                         if($params['selectedMapUser']!=''){
                                $mapArray = explode(",",$params['selectedMapUser']);
                               foreach($mapArray as $userId){
-
                                    $mapData = array(
                                         'user_id' => $userId,
                                         'facility_id' => $lastInsertedId
@@ -191,7 +195,8 @@ class FacilitiesTable extends AbstractTableGateway {
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                     //facility map
                     $umQuery = $sql->select()->from(array('um' => 'user_facility_map'))
-                    ->where(array('um.facility_id' => $facilityId));
+                                          ->join(array('u'=>'users'),'u.user_id=um.user_id',array('user_name'))
+                                          ->where(array('um.facility_id' => $facilityId));
                     $umQueryStr = $sql->getSqlStringForSqlObject($umQuery);
                     $rResult['facilityMap'] = $dbAdapter->query($umQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                     return $rResult;
@@ -204,8 +209,9 @@ class FacilitiesTable extends AbstractTableGateway {
                     {
                          $data = array(
                               'facility_name' => $params['facilityName'],
-                              'province' => $params['province'],
-                              'district' => $params['district'],
+                              'province' => $params['location_one'],
+                              'district' => $params['location_two'],
+                              'city' => $params['location_three'],
                               'latitude' => $params['latitude'],
                               'longitude' => $params['longitude'],
                               'email' => $params['email'],
@@ -217,8 +223,9 @@ class FacilitiesTable extends AbstractTableGateway {
                          if($lastId > 0)
                          {
                               $mapDb->delete("facility_id=" . $lastId);
-                              if(count($params['user'])>0){
-                                   foreach($params['user'] as $userId){
+                              if($params['selectedMapUser']!=''){
+                                    $mapArray = explode(",",$params['selectedMapUser']);
+                                   foreach($mapArray as $userId){
                                         $mapData = array(
                                              'user_id' => $userId,
                                              'facility_id' => $lastId
@@ -260,6 +267,30 @@ class FacilitiesTable extends AbstractTableGateway {
                          $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                          return $rResult;
                     }
+               }
+               public function fetchFacilityByLocation($params)
+               {
+                  $dbAdapter = $this->adapter;
+                  $sql = new Sql($dbAdapter);
+                  $sQuery = $sql->select()->from(array( 'f' => 'facilities'))->columns(array('facility_id','facility_name'));
+                  if($params['locationOne']!=''){
+                        $sQuery = $sQuery->where(array('province'=>$params['locationOne']));
+                        if($params['locationTwo']!=''){
+                              $sQuery = $sQuery->where(array('district'=>$params['locationTwo']));
+                        }
+                        if($params['locationThree']!=''){
+                              $sQuery = $sQuery->where(array('city'=>$params['locationThree']));
+                        }
+                  }
+                  if(isset($params['facilityId']) && $params['facilityId']!=NULL){
+                        $fDeocde = json_decode($params['facilityId']);
+                        if(!empty($fDeocde)){
+                              $sQuery = $sQuery->where('facility_id NOT IN('.implode(",",$fDeocde).')');
+                        }
+                  }
+                  $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+                  $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                  return $fResult;
                }
           }
           ?>

@@ -43,8 +43,11 @@ class FacilitiesController extends AbstractActionController
             }else{
                 $userService = $this->getServiceLocator()->get('UserService');
                 $userResult = $userService->getAllUserDetails();
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
-                    'userResult' => $userResult
+                    'userResult' => $userResult,
+                    'globalConfigResult' => $globalConfigResult,
                 ));
             }
         }
@@ -70,11 +73,28 @@ class FacilitiesController extends AbstractActionController
                 $result=$facilityService->getFacilitiesDetailsById($facilityId);
                 $userService = $this->getServiceLocator()->get('UserService');
                 $userResult = $userService->getAllUserDetails();
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
                     'userResult' => $userResult,
-                    'result' => $result
+                    'result' => $result,
+                    'globalConfigResult' => $globalConfigResult,
                 ));
             }
         }
+    }
+    public function getFacilityByLocationAction()
+    {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $result = $facilityService->getFacilityByLocation($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
     }
 }
