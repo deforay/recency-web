@@ -13,7 +13,7 @@ $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $t
 $userMenu.="<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=". $this->url('facilities', array('action' => 'index')) ."><span class='nav-main-link-name'>Facilities</span></a></li>";
 
 $recencyMenu = "";
-$recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'>Manage Recency</span></a></li>";
+$recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Recency Data</span></a></li>";
 
 ?>
 
@@ -108,7 +108,7 @@ $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href
             <li class="nav-main-item">
             <!--  -->
               <a class="btn btn-hero-sm btn-hero-light" href="/" style="background-color: #dbe4ef;">
-                <i class="fa fa-fw fa-home mr-1"></i>Home
+                <i class="si si-pie-chart mr-1"></i>Dashboard
                 <!-- <span class="nav-main-link-badge badge badge-pill badge-success">5</span> -->
               </a>
             </li>
@@ -123,29 +123,10 @@ $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href
                     <?php echo $userMenu;?>
                 </ul>
               </li>
-
-              <li class="nav-main-heading"></li>
-              <li class="nav-main-item " id="recency-menu">
-                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon si si-grid"></i>
-                  <span class="nav-main-link-name ">Recency</span>
-                </a>
-                <ul class="nav-main-submenu">
-                    <?php echo $recencyMenu;?>
-                </ul>
-              </li>
-            <?php }else{ ?>
-              <li class="nav-main-heading"></li>
-              <li class="nav-main-item " id="recency-menu">
-                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon si si-grid"></i>
-                  <span class="nav-main-link-name ">Recency Users</span>
-                </a>
-                <ul class="nav-main-submenu">
-                    <?php echo $recencyMenu;?>
-                </ul>
-              </li>
-            <?php } ?>
+              <?php } ?>
+              <li class="nav-main-heading" style="padding:5px;"></li>
+              <?php echo $recencyMenu;?>
+            
 
           </ul>
         </div>
