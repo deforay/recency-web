@@ -337,9 +337,9 @@ class RecencyTable extends AbstractTableGateway {
                         $this->insert($data);
                         $lastInsertedId = $this->lastInsertValue;
                         if($lastInsertedId > 0){
-                            $response['response'][$key] = 'success';
+                            $response['syncData']['response'][$key] = 'success';
                         }else{
-                            $response['response'][$key] = 'failed';
+                            $response['syncData']['response'][$key] = 'failed';
                         }
                     }
                 }
@@ -390,9 +390,9 @@ class RecencyTable extends AbstractTableGateway {
                     $this->insert($data);
                     $lastInsertedId = $this->lastInsertValue;
                     if($lastInsertedId > 0){
-                        $response['response'] = 'success';
+                        $response['syncData']['response'] = 'success';
                     }else{
-                        $response['response'] = 'failed';
+                        $response['syncData']['response'] = 'failed';
                     }
                 }
             }
@@ -401,7 +401,7 @@ class RecencyTable extends AbstractTableGateway {
                 error_log($exc->getTraceAsString());
             }
         }
-        $response['response']['syncCount'] = $this->getTotalSyncCount($userId);
+        $response['syncCount']['response'] = $this->getTotalSyncCount($userId);
         return $response;
     }
      public function fetchRecencyOrderDetails($id)

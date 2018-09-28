@@ -18,6 +18,9 @@ if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
 }
 // \Zend\Debug\Debug::dump($result);die;
 ?>
+<style>
+.btnHide{display:none;}
+</style>
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -47,10 +50,10 @@ if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
                     <div class="js-wizard-simple block block block-rounded block-bordered">
                          <ul class="nav nav-tabs nav-tabs-block nav-justified" role="tablist">
                               <li class="nav-item">
-                                   <a class="nav-link active" href="#wizard-progress-step1" data-toggle="tab">1. Recency Test</a>
+                              <a class="nav-link active" href="javascript:void()" id="step1" onclick="validateStep2()">1. Recency Test</a>
                               </li>
                               <li class="nav-item">
-                                   <a class="nav-link" href="#wizard-progress-step2" data-toggle="tab">2. Behaviour</a>
+                              <a class="nav-link" href="javascript:void()" id="step2" onclick="validateStep1();">2. Behaviour</a>
                               </li>
                          </ul>
                          <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'edit')); ?>" method="post">
@@ -235,16 +238,16 @@ if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
                          <div class="block-content block-content-sm block-content-full bg-body-light rounded-bottom">
                               <div class="row">
                                    <div class="col-6">
-                                        <button type="button" class="btn btn-secondary" data-wizard="prev">
+                                        <button type="button" class="btn btn-secondary hideBtn" onclick="validateStep2()">
                                              <i class="fa fa-angle-left mr-1"></i> Previous
                                         </button>
 
-                                        <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger d-none" data-wizard="finish" >Cancel</a>&nbsp;
-                                        <button type="submit" class="btn btn-primary d-none" data-wizard="finish" onclick="validateNow();return false;"><i class="fa fa-check mr-1"></i> Submit</button>
+                                        <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger d-none btnHide" data-wizard="finish" >Cancel</a>&nbsp;
+                                        <button type="submit" class="btn btn-primary d-none btnHide" data-wizard="finish" onclick="validateNow();return false;"><i class="fa fa-check mr-1"></i> Submit</button>
 
                                    </div>
                                    <div class="col-6 text-right">
-                                        <button type="button" class="btn btn-secondary" data-wizard="next">
+                                        <button type="button" class="btn btn-secondary nxtBtn" onclick="validateStep1();">
                                              Next <i class="fa fa-angle-right ml-1"></i>
                                         </button>
 
@@ -287,6 +290,33 @@ jQuery(document).ready(function($) {
      }
      ?>
 });
+
+function validateStep1()
+{
+    if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
+        flag = deforayValidator.init({
+                    formId: 'recencyInformation'
+        });
+        if (flag) {
+            $("#step1,#wizard-progress-step1").removeClass("active");
+            $("#step2,#wizard-progress-step2").addClass("active");
+            $(".btnHide").show();
+            $(".nxtBtn").hide();
+        }
+    }else{
+            $(".btnHide").hide();
+            $("#sampleId").focus();
+            $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
+            alert("Please enter either sample or patient id  ",'err');
+    }
+}
+function validateStep2()
+{
+    $("#step1,#wizard-progress-step1").addClass("active");
+    $("#step2,#wizard-progress-step2").removeClass("active");
+    $(".btnHide").hide();
+    $(".nxtBtn").show();
+}
 
 function validateNow() {
      if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
