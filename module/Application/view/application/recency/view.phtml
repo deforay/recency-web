@@ -7,7 +7,7 @@ $sessionLogin = new Container('credo');
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency</h1>
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">View Recency Data</h1>
                <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                          <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>"><li class="breadcrumb-item">Recency Details</li></a>
@@ -23,13 +23,9 @@ $sessionLogin = new Container('credo');
 <div class="content">
      <div class="block block-rounded block-bordered">
           <div class="block-header block-header-default">
-               <h3 class="block-title">View Recency Details</h3>
+            <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-primary">Back</a>
           </div>
-          <div class="col-12 text-right">
-               <div>
-                    <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-primary">Back</a>
-               </div>
-          </div>
+          
 
 
           <section class="content">

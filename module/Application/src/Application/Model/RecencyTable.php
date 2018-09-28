@@ -152,23 +152,11 @@ class RecencyTable extends AbstractTableGateway {
               $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
               $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
               $row[] = ucwords($aRow['hiv_recency_result']);
-            //   $row[] = $common->humanDateFormat($aRow['dob']);
-            //   $row[] = ucwords($aRow['gender']);
-            //   $row[] = ucwords($aRow['marital_status']);
-            //   $row[] = ucwords($aRow['residence']);
-            //   $row[] = ucwords($aRow['education_level']);
-            //   $row[] = ucwords(str_replace('_', ' ', $aRow['name']));
-            //   $row[] = ucwords($aRow['past_hiv_testing']);
-            //   $row[] = ucwords($aRow['test_last_12_month']);
-              if($roleCode == "user"){
-                    $link1= '<a href="/recency/edit/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
-                    $link2= '<a href="/recency/view/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="View"><i class="far fa-view"></i>View</a>';
-                    $row[]= $link1.'  '.$link2;
-              }
-              else{
-                   $row[]= '<a href="/recency/view/' . base64_encode($aRow['recency_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="View"><i class="far fa-view"></i>View</a>';
+              $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
+                            <a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>
+                            <a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
+                        </div>';
 
-              }
               $output['aaData'][] = $row;
           }
 
@@ -425,9 +413,10 @@ class RecencyTable extends AbstractTableGateway {
                $sql = new Sql($dbAdapter);
 
                $sQuery = $sql->select()->from(array('r' => 'recency'))
-                                      ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'))
+                                      ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'),'left')
                                       ->where(array('recency_id' =>$id));
                $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //echo $sQueryStr;die;
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                return $rResult;
           }
