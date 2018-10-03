@@ -25,8 +25,8 @@ class RecencyTable extends AbstractTableGateway {
         $role = $sessionLogin->roleId;
         $roleCode = $sessionLogin->roleCode;
         $common = new CommonService();
-        $aColumns = array('r.sample_id','r.patient_id','f.facility_name','DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.hiv_recency_result');
-        $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.hiv_recency_result');
+        $aColumns = array('r.sample_id','r.patient_id','f.facility_name','DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.long_term_verification_line');
+        $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.long_term_verification_line');
 
         /* Paging */
         $sLimit = "";
@@ -151,7 +151,7 @@ class RecencyTable extends AbstractTableGateway {
               $row[] = ucwords($aRow['facility_name']);
               $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
               $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
-              $row[] = ucwords($aRow['hiv_recency_result']);
+              $row[] = ucwords($aRow['long_term_verification_line']);
               $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                             <a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>
                             <a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
@@ -175,7 +175,7 @@ class RecencyTable extends AbstractTableGateway {
                 'facility_id' => base64_decode($params['facilityId']),
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
-                'hiv_recency_result' => $params['hivRecencyResult'],
+                'long_term_verification_line' => $params['hivRecencyResult'],
                 'gender' => $params['gender'],
                 'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
@@ -231,7 +231,7 @@ class RecencyTable extends AbstractTableGateway {
                 'facility_id' => base64_decode($params['facilityId']),
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
-                'hiv_recency_result' => $params['hivRecencyResult'],
+                'long_term_verification_line' => $params['hivRecencyResult'],
                 'gender' => $params['gender'],
                 'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
@@ -306,7 +306,9 @@ class RecencyTable extends AbstractTableGateway {
                             'sample_id' => $recency['sampleId'],
                             'patient_id' => $recency['patientId'],
                             'facility_id' => $recency['facilityId'],
-                            'hiv_recency_result' => $recency['hivRecencyResult'],
+                            'control_line' => $recency['ctrlLine'],
+                            'positive_verification_line' => $recency['positiveLine'],
+                            'long_term_verification_line' => $recency['longTermLine'],
                             'gender' => $recency['gender'],
                             'latitude' => $recency['latitude'],
                             'longitude' => $recency['longitude'],
@@ -358,7 +360,9 @@ class RecencyTable extends AbstractTableGateway {
                         'sample_id' => $params['sampleId'],
                             'patient_id' => $params['patientId'],
                             'facility_id' => $params['facilityId'],
-                            'hiv_recency_result' => $params['hivRecencyResult'],
+                            'control_line' => $recency['ctrlLine'],
+                            'positive_verification_line' => $recency['positiveLine'],
+                            'long_term_verification_line' => $recency['longTermLine'],
                             'gender' => $params['gender'],
                             'latitude' => $params['latitude'],
                             'longitude' => $params['longitude'],

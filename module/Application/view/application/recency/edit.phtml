@@ -105,9 +105,9 @@ if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
                                         <div class="col-sm-4">
                                              <select class="form-control" id="hivRecencyResult" name="hivRecencyResult" title="Please select the HIV recency result">
                                                   <option value="">--Select--</option>
-                                                  <option value="recent" <?php echo($result['hiv_recency_result'] == 'recent' )?'selected="selected"':''; ?>>Recent - Long Term Line Absent</option>
-                                                  <option value="long-term" <?php echo($result['hiv_recency_result'] == 'long-term' )?'selected="selected"':''; ?>>Long Term - Long Term Line Present</option>
-                                                  <option value="invalid" <?php echo($result['hiv_recency_result'] == 'invalid' )?'selected="selected"':''; ?>>Invalid - Control Line Absent</option>
+                                                  <option value="recent" <?php echo($result['long_term_verification_line'] == 'recent' )?'selected="selected"':''; ?>>Recent - Long Term Line Absent</option>
+                                                  <option value="long-term" <?php echo($result['long_term_verification_line'] == 'long-term' )?'selected="selected"':''; ?>>Long Term - Long Term Line Present</option>
+                                                  <option value="invalid" <?php echo($result['long_term_verification_line'] == 'invalid' )?'selected="selected"':''; ?>>Invalid - Control Line Absent</option>
                                              </select>
                                         </div>
                                    </div>
