@@ -199,5 +199,31 @@ class GlobalConfigTable extends AbstractTableGateway {
         }
        return $response;
     }
+
+    public function fetchRecencyMandatoryDetailsApi()
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $arr = array();
+        $resultArr = array();
+        $rResult = $this->select()->toArray();
+        for ($i = 0; $i < sizeof($rResult); $i++) {
+            $arr[$rResult[$i]['global_name']] = $rResult[$i]['global_value'];
+        }
+        if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
+            $explodField = explode(",",$arr['mandatory_fields']);
+            for($f=0;$f<count($explodField); $f++){
+                $resultArr[] = str_replace(' ', '_', strtolower($explodField[$f]));
+            }
+        }
+        if(isset($resultArr) && $resultArr !='') {
+            $response['status']='success';
+            $response['fields'] = $resultArr;
+        } else {
+            $response["status"] = "failed";
+            $response["message"] = "Date not found!";
+        }
+       return $response;
+    }
 }
 ?>

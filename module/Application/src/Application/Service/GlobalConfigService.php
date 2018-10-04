@@ -58,5 +58,11 @@ class GlobalConfigService {
             error_log($exc->getTraceAsString());
         }
     }
+
+    public function getRecencyMandatoryDetailsApi()
+    {
+        $globalConfigDb = $this->sm->get('GlobalConfigTable');
+        return $globalConfigDb->fetchRecencyMandatoryDetailsApi();
+    }
 }
 ?>
