@@ -424,19 +424,16 @@ class RecencyTable extends AbstractTableGateway {
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                return $rResult;
           }
-	    public function getTotalSyncCount($userId)
+    public function getTotalSyncCount($userId)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $query = $sql->select()->from(array('r'=>'recency'))
-        ->columns(
-                  array(
-                  "Total" => new Expression('COUNT(*)'),
-                  ))
+                    ->columns(array("Total" => new Expression('COUNT(*)'),))
                   ->where(array('added_by'=>$userId));
-                  $queryStr = $sql->getSqlStringForSqlObject($query);
-                $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                return $result;
+        $queryStr = $sql->getSqlStringForSqlObject($query);
+        $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        return $result;
     }
 }
 ?>

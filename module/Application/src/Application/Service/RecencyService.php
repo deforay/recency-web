@@ -97,10 +97,10 @@ class RecencyService {
         return $recencyDb->addRecencyDetailsApi($params);
     }
 
-     public function getRecencyOrderDetails($id)
-     {
-          $recencyDb = $this->sm->get('RecencyTable');
-          return $recencyDb->fetchRecencyOrderDetails($id);
-     }
+    public function getRecencyOrderDetails($id)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecencyOrderDetails($id);
+    }
 }
 ?>

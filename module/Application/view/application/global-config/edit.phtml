@@ -1,10 +1,38 @@
 <?php
-// \Zend\Debug\Debug::dump($globalConfigResult);die;
 use Zend\Session\Container;
 use Application\Service\CommonService;
 $sessionLogin = new Container('credo');
 $common = new CommonService();
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
+    $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
+}
+$resultArr = array();
+//Set selected field
+if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
+  $explodField = explode(",",$arr['mandatory_fields']);
+  for($f=0;$f<count($explodField); $f++){
+    $resultArr[] = $explodField[$f];
+  }
+}
+// \Zend\Debug\Debug::dump($resultArr);die;
+
 ?>
+<style>
+    .select2-selection__choice{
+        color: black !important;
+    }
+    button#search_rightAll, button#search_rightSelected, button#search_leftSelected, button#search_leftAll {
+        background-color: #e1effe;
+        color: dimgray;
+    }
+    button#search_rightAll:hover, button#search_rightSelected:hover, button#search_leftSelected:hover, button#search_leftAll:hover {
+        background-color: #dbe4ef;
+        color: black;
+        font-weight : 700;
+    }
+</style>
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -31,17 +59,66 @@ $common = new CommonService();
                     <div class="form-group row">
                     <?php foreach($globalConfigResult as $config){ ?>
                         <div class="col-md-6">
-                            <label class="col-form-label" for=""><?php echo ucfirst($config['display_name']); ?><span class="mandatory">*</span></label>
-                            <div class="">
-                                <input type="text" value="<?php echo $config['global_value']; ?>" class="form-control isRequired" id="configValue" name="configValue[]" placeholder="Enter the config value" title="Please enter the config value">
-                                <input type="hidden" name="gobalConfigId[]" value="<?php echo base64_encode($config['config_id']);?>" />
-                            </div>
+                            <?php if($config['global_name'] != 'mandatory_fields'){ ?>
+                                <label class="col-form-label" for=""><?php echo ucfirst($config['display_name']); ?><span class="mandatory">*</span></label>
+                                <div class="">
+                                    <input type="text" value="<?php echo $config['global_value']; ?>" class="form-control isRequired" id="configValue" name="configValue[]" placeholder="Enter the config value" title="Please enter the config value">
+                                </div>
+                            <?php } ?>
+                            <input type="hidden" name="gobalConfigId[]" value="<?php echo base64_encode($config['config_id']);?>" />
                         </div>
                     <?php } ?>
                     </div>
 
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[3]['display_name']); ?><span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select  id="search" class="form-control" size="8" multiple="multiple">
+                                <option value="Sample Id" <?php echo(in_array("Sample Id",$resultArr)?"selected='selected'":""); ?>>Sample ID</option>
+                                <option value="Patient Id" <?php echo(in_array("Patient Id",$resultArr)?"selected='selected'":""); ?>>Patient ID</option>
+                                <option value="Facility Id" <?php echo(in_array("Facility Id",$resultArr)?"selected='selected'":""); ?>>Facility ID</option>
+                                <option value="Hiv Diagnosis Date" <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"selected='selected'":""); ?>>HIV Diagnosis Date</option>
+                                <option value="Hiv Recency Date" <?php echo(in_array("Hiv Recency Date",$resultArr)?"selected='selected'":""); ?>>HIV Recency Date</option>
+                                <option value="Control Line" <?php echo(in_array("Control Line",$resultArr)?"selected='selected'":""); ?>>Control Line</option>
+                                <option value="Positive Verification Line" <?php echo(in_array("Positive Verification Line",$resultArr)?"selected='selected'":""); ?>>Positive Verification Line</option>
+                                <option value="Long Term Verification Line" <?php echo(in_array("Long Term Verification Line",$resultArr)?"selected='selected'":""); ?>>Long Term Verification Line</option>
+                                <option value="Dob" <?php echo(in_array("Dob",$resultArr)?"selected='selected'":""); ?>>Date Of Birth</option>
+                                <option value="Age" <?php echo(in_array("Age",$resultArr)?"selected='selected'":""); ?>>Age</option>
+                                <option value="Latitude" <?php echo(in_array("Latitude",$resultArr)?"selected='selected'":""); ?>>Latitude</option>
+                                <option value="Longitude" <?php echo(in_array("Longitude",$resultArr)?"selected='selected'":""); ?>>Longitude</option>
+                                <option value="Marital Status" <?php echo(in_array("Marital Status",$resultArr)?"selected='selected'":""); ?>>Marital Status</option>
+                                <option value="Residence" <?php echo(in_array("Residence",$resultArr)?"selected='selected'":""); ?>>Residence</option>
+                                <option value="Education Level" <?php echo(in_array("Education Level",$resultArr)?"selected='selected'":""); ?>>Education Level</option>
+                                <option value="Risk Population" <?php echo(in_array("Risk Population",$resultArr)?"selected='selected'":""); ?>>Risk Population</option>
+                                <option value="Pregnancy Status" <?php echo(in_array("Pregnancy Status",$resultArr)?"selected='selected'":""); ?>>Pregnancy Status</option>
+                                <option value="Current Sexual Partner" <?php echo(in_array("Current Sexual Partner",$resultArr)?"selected='selected'":""); ?>>Current Sexual Partner</option>
+                                <option value="Past Hiv Testing" <?php echo(in_array("Past Hiv Testing",$resultArr)?"selected='selected'":""); ?>>Past HIV Testing</option>
+                                <option value="Test Last 12 Month" <?php echo(in_array("Test Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Test Last 12 Month</option>
+                                <option value="Location One" <?php echo(in_array("Location One",$resultArr)?"selected='selected'":""); ?>>Location One</option>
+                                <option value="Location Two" <?php echo(in_array("Location Two",$resultArr)?"selected='selected'":""); ?>>Location Two</option>
+                                <option value="Location Three" <?php echo(in_array("Location Three",$resultArr)?"selected='selected'":""); ?>>Location Three</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
+                            <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
+                            <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
+                            <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
+                                <?php foreach($resultArr as $result){ ?>
+                                    <option value="<?php echo $result; ?>"><?php echo ucwords($result); ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="row items-push">
                         <div class="col-lg-7 offset-lg-4">
+                            <input type="hidden" name="selectedRecencyUser" id="selectedRecencyUser"/>
                             <a href="<?php echo $this->url('global-config', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
                             <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i>Submit</button>
                         </div>
@@ -51,10 +128,14 @@ $common = new CommonService();
         </div>
     </div>
 </div>
-
-
+<script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
 function validateNow() {
+    var selVal = [];
+    $('#search_to option').each(function(i, selected){
+        selVal[i] = $(selected).val();
+    });
+    $("#selectedRecencyUser").val(selVal);
      flag = deforayValidator.init({
           formId: 'globalConfigTable'
      });
@@ -64,8 +145,16 @@ function validateNow() {
         document.getElementById('globalConfigTable').submit();
      }
 }
-$(document).ready(function(){
-    
+$(document).ready(function($){
+    $('#search').multiselect({
+        search: {
+            left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+            right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+        },
+        fireSearch: function(value) {
+            return value.length > 3;
+        }
+    });
 });
 
 </script>

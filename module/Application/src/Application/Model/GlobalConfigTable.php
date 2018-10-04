@@ -156,8 +156,9 @@ class GlobalConfigTable extends AbstractTableGateway {
     {
         $n = count($params['gobalConfigId']);
         $result = 0;
+        $i = 0;
         for($i=0;$i<$n;$i++){
-            if(isset($params['gobalConfigId'][$i]) && trim($params['gobalConfigId'][$i])!="")
+            if(isset($params['configValue'][$i]) && trim($params['configValue'][$i])!="")
             {
                 $data = array(
                     'global_value' => $params['configValue'][$i]
@@ -167,6 +168,12 @@ class GlobalConfigTable extends AbstractTableGateway {
                     $result = 1;
                 }
             }
+            $lastConfigId = base64_decode($params['gobalConfigId'][$i]);
+        }
+        $selectedRecencyUser['global_value'] = $params['selectedRecencyUser'];
+        $MantatoryUpdateResult = $this->update($selectedRecencyUser,array('config_id'=>$lastConfigId));
+        if($MantatoryUpdateResult > 0){
+            $result = 1;
         }
         return $result;
     }
