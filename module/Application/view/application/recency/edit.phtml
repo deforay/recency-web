@@ -135,13 +135,15 @@ if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
                                         </div>
 
                                         <?php foreach($globalConfigResult as $config){ ?>
+                                            <?php if($config['global_name'] != 'mandatory_fields'){ ?>
                                              <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
                                              <div class="col-sm-4">
                                                   <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>',null,null,null);">
                                                        <option value="">-- Select --</option>
                                                   </select>
                                              </div>
-                                        <?php } ?>
+                                            <?php } 
+                                        }?>
                                    </div>
 
                               </div>

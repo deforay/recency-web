@@ -216,9 +216,37 @@ class GlobalConfigTable extends AbstractTableGateway {
                 $resultArr[] = str_replace(' ', '_', strtolower($explodField[$f]));
             }
         }
+        // \Zend\Debug\Debug::dump($explodField);die;
+        $row[] = in_array("Sample Id",$explodField)?"sampleId":"";
+        $row[] = in_array("Patient Id",$explodField)?"patientId":"";
+        $row[] = in_array("Facility Name",$explodField)?"facilityId":"";
+        $row[] = in_array("Hiv Diagnosis Date",$explodField)?"hivDiagnosisDate":"";
+        $row[] = in_array("Hiv Recency Date",$explodField)?"hivRecencyDate":"";
+        $row[] = in_array("Control Line",$explodField)?"ctrlLine":"";
+        $row[] = in_array("Positive Verification Line",$explodField)?"positiveLine":"";
+        $row[] = in_array("Long Term Verification Line",$explodField)?"longTermLine":"";
+        $row[] = in_array("Dob",$explodField)?"dob":"";
+        $row[] = in_array("Age",$explodField)?"age":"";
+        $row[] = in_array("Gender",$explodField)?"gender":"";
+        $row[] = in_array("Location One",$explodField)?"location_one":"";
+        $row[] = in_array("Location Two",$explodField)?"location_two":"";
+        $row[] = in_array("Location Three",$explodField)?"location_three":"";
+        $row[] = in_array("Marital Status",$explodField)?"maritalStatus":"";
+        $row[] = in_array("Residence",$explodField)?"residence":"";
+        $row[] = in_array("Education Level",$explodField)?"educationLevel":"";
+        $row[] = in_array("Risk Population",$explodField)?"riskPopulation":"";
+        // $row[] = in_array("Other Risk Population",$explodField)?"otherriskPopulation":"";
+        $row[] = in_array("Pregnancy Status",$explodField)?"pregnancyStatus":"";
+        $row[] = in_array("Current Sexual Partner",$explodField)?"currentSexualPartner":"";
+        $row[] = in_array("Past Hiv Testing",$explodField)?"pastHivTesting":"";
+        $row[] = in_array("Test Last 12 Month",$explodField)?"testLast12Month":"";
+        $row[] = in_array("Latitude",$explodField)?"latitude":"";
+        $row[] = in_array("Longitude",$explodField)?"longitude":"";
+
+        $output = array_filter($row);
         if(isset($resultArr) && $resultArr !='') {
             $response['status']='success';
-            $response['fields'] = $resultArr;
+            $response['fields'] = array_values($output);
         } else {
             $response["status"] = "failed";
             $response["message"] = "Date not found!";
