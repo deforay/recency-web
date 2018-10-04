@@ -15,6 +15,28 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
   }
 }
 // \Zend\Debug\Debug::dump($resultArr);die;
+$sample = in_array("Sample Id",$resultArr)?"isRequired":"";
+$patient = in_array("Patient Id",$resultArr)?"isRequired":"";
+$facility = in_array("Facility Name",$resultArr)?"isRequired":"";
+$hivDiagnosisDate = in_array("Hiv Diagnosis Date",$resultArr)?"isRequired":"";
+$hivRecencyDate = in_array("Hiv Recency Date",$resultArr)?"isRequired":"";
+$hivRecencyResult = in_array("Hiv Diagnosis Result",$resultArr)?"isRequired":"";
+$dob = in_array("Dob",$resultArr)?"isRequired":"";
+$age = in_array("Age",$resultArr)?"isRequired":"";
+$gender = in_array("Gender",$resultArr)?"isRequired":"";
+$locationOne = in_array("Location One",$resultArr)?"isRequired":"";
+$locationTwo = in_array("Location Two",$resultArr)?"isRequired":"";
+$locationThree = in_array("Location Three",$resultArr)?"isRequired":"";
+
+$residence = in_array("Residence",$resultArr)?"isRequired":"";
+$marital = in_array("Marital Status",$resultArr)?"isRequired":"";
+$education = in_array("Education Level",$resultArr)?"isRequired":"";
+$risk = in_array("Risk Population",$resultArr)?"isRequired":"";
+$pregnancy = in_array("Pregnancy Status",$resultArr)?"isRequired":"";
+$partner = in_array("Current Sexual Partner",$resultArr)?"isRequired":"";
+$testing = in_array("Past Hiv Testing",$resultArr)?"isRequired":"";
+$last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
+
 ?>
 <style>
 .btnHide{display:none;}
@@ -63,20 +85,20 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                               <div class="tab-pane active" id="wizard-progress-step1" role="tabpanel">
 
                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Sample Id <?php echo(in_array("Sample Id",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Sample Id<?php echo(in_array("Sample Id",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <input type="text" class="form-control <?php echo(in_array("Sample Id",$resultArr)?"isRequired":""); ?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
+                                             <input type="text" class="form-control <?php echo $sample; ?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label" for="">Patient Id <?php echo(in_array("Patient Id",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Patient Id <?php echo(in_array("Patient Id",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <input type="text" class="form-control <?php echo(in_array("Patient Id",$resultArr)?"isRequired":""); ?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
+                                             <input type="text" class="form-control <?php echo $patient; ?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
                                         </div>
                                    </div>
                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Facility Name <?php echo(in_array("Facility Name",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Facility Name <?php echo(in_array("Facility Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Facility Name",$resultArr)?"isRequired":""); ?>" id="facilityId" name="facilityId" title="Please select the facility name">
+                                             <select class="form-control <?php echo $facility; ?>" id="facilityId" name="facilityId" title="Please select the facility name">
                                                   <option value="">--Select--</option>
                                                   <?php foreach($facilityResult['facility'] as $facility){ ?>
                                                        <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
@@ -84,21 +106,21 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                              </select>
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label" for="">HIV Diagnosis Date <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">HIV Diagnosis Date <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <input type="text" class="js-datepicker form-control <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"isRequired":""); ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
+                                             <input type="text" class="js-datepicker form-control <?php echo $hivDiagnosisDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
                                         </div>
                                    </div>
 
                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">HIV Recency Date <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">HIV Recency Date<?php echo(in_array("Hiv Recency Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <input type="text" class="js-datepicker form-control <?php echo(in_array("Hiv Recency Date",$resultArr)?"isRequired":""); ?>" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
+                                             <input type="text" class="js-datepicker form-control <?php echo $hivRecencyDate; ?>" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label" for="">HIV Recency Result <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">HIV Recency Result <?php echo(in_array("Hiv Diagnosis Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"isRequired":""); ?>" id="hivRecencyResult" name="hivRecencyResult" title="Please select the HIV recency result">
+                                             <select class="form-control <?php echo $hivRecencyResult; ?>" id="hivRecencyResult" name="hivRecencyResult" title="Please select the HIV recency result">
                                                   <option value="">--Select--</option>
                                                   <option value="recent">Recent - Long Term Line Absent</option>
                                                   <option value="long-term">Long Term - Long Term Line Present</option>
@@ -108,20 +130,20 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                    </div>
 
                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">DOB <?php echo(in_array("Dob",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">DOB <?php echo(in_array("Dob",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <input type="text" class="js-datepicker form-control <?php echo(in_array("Dob",$resultArr)?"isRequired":""); ?>" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
+                                             <input type="text" class="js-datepicker form-control <?php echo $dob; ?>" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label" for="">Age <?php echo(in_array("Age",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Age <?php echo(in_array("Age",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <input type="text" class="form-control <?php echo(in_array("Age",$resultArr)?"isRequired":""); ?>" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
+                                             <input type="text" class="form-control <?php echo $age; ?>" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
                                         </div>
                                    </div>
                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Gender <?php echo(in_array("Gender",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Gender <?php echo(in_array("Gender",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Gender",$resultArr)?"isRequired":""); ?>" id="gender" name="gender" title="Please select the gender">
+                                             <select class="form-control <?php echo $gender; ?>" id="gender" name="gender" title="Please select the gender">
                                                   <option value="">--Select--</option>
                                                   <option value="male">Male</option>
                                                   <option value="female">Female</option>
@@ -129,16 +151,26 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                              </select>
                                         </div>
 
-                                        <?php foreach($globalConfigResult as $config){ ?>
-                                            <?php if($config['global_name'] != 'mandatory_fields'){ ?>
-                                             <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
-                                             <div class="col-sm-4">
-                                                  <select class="form-control " id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
-                                                       <option value="">-- Select --</option>
-                                                  </select>
-                                             </div>
-                                            <?php } 
-                                        }?>
+                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[0]['global_value']); ?><?php echo(in_array("Location One",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name'];?>');">
+                                                <option value="">-- Select --</option>
+                                            </select>
+                                        </div>
+
+                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[1]['global_value']); ?><?php echo(in_array("Location Two",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name'];?>');">
+                                                <option value="">-- Select --</option>
+                                            </select>
+                                        </div>
+
+                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[2]['global_value']); ?><?php echo(in_array("Location Three",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control <?php echo $locationThree; ?>" id="<?php echo $globalConfigResult[2]['global_name']; ?>" name="<?php echo $globalConfigResult[2]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[2]['global_name'];?>');">
+                                                <option value="">-- Select --</option>
+                                            </select>
+                                        </div>
 
                                    </div>
 
@@ -146,18 +178,18 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
 
                               <div class="tab-pane" id="wizard-progress-step2" role="tabpanel">
                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Residence <?php echo(in_array("Residence",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Residence <?php echo(in_array("Residence",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Residence",$resultArr)?"isRequired":""); ?>" id="residence" name="residence" title="Please select the residence">
+                                             <select class="form-control" id="residence" name="residence" title="Please select the residence">
                                                   <option value="">--Select--</option>
                                                   <option value="urban">Urban</option>
                                                   <option value="rural">Rural</option>
                                              </select>
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label" for="">Marital Status <?php echo(in_array("Marital Status",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Marital Status <?php echo(in_array("Marital Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Marital Status",$resultArr)?"isRequired":""); ?>" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
+                                             <select class="form-control" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
                                                   <option value="">--Select--</option>
                                                   <option value="never_married">Never Married</option>
                                                   <option value="married_cohabited">Married - Cohabited</option>
@@ -169,17 +201,17 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                    </div>
 
                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Education Level <?php echo(in_array("Education Level",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Education Level <?php echo(in_array("Education Level",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Education Level",$resultArr)?"isRequired":""); ?>" id="educationLevel" name="educationLevel" title="Please select the education level">
+                                             <select class="form-control" id="educationLevel" name="educationLevel" title="Please select the education level">
                                                   <option value="">--Select--</option>
                                                   <option value="primary">Primary</option>
                                                   <option value="university_or_higher">University or Higher</option>
                                              </select>
                                         </div>
-                                        <label class="col-sm-2 col-form-label" for="">Risk Population <?php echo(in_array("Risk Population",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Risk Population <?php echo(in_array("Risk Population",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Risk Population",$resultArr)?"isRequired":""); ?>" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
+                                             <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
                                                   <option value="">--Select--</option>
                                                   <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
                                                        <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo str_replace('_', ' ', $riskPo['name']); ?></option>
@@ -189,9 +221,9 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                    </div>
 
                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Pregnancy Status <?php echo(in_array("Pregnancy Status",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Pregnancy Status<?php echo(in_array("Pregnancy Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Pregnancy Status",$resultArr)?"isRequired":""); ?>" id="pregnancyStatus" name="pregnancyStatus" title="Please select the pregnancy status">
+                                             <select class="form-control" id="pregnancyStatus" name="pregnancyStatus" title="Please select the pregnancy status">
                                                   <option value="">--Select--</option>
                                                   <option value="currently_pregnant">Currently Pregnant</option>
                                                   <option value="not_pregnant">Not Pregnant</option>
@@ -199,9 +231,9 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                              </select>
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label" for="">Current Sexual Partner <?php echo(in_array("Current Sexual Partner",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Current Sexual Partner <?php echo(in_array("Current Sexual Partner",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Current Sexual Partner",$resultArr)?"isRequired":""); ?>" id="currentSexualPartner" name="currentSexualPartner" title="Please select the current sexual partner">
+                                             <select class="form-control" id="currentSexualPartner" name="currentSexualPartner" title="Please select the current sexual partner">
                                                   <option value="">--Select--</option>
                                                   <option value="1">1</option>
                                                   <option value="2_3">2 - 3</option>
@@ -211,18 +243,18 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                    </div>
 
                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Past HIV Testing <?php echo(in_array("Past Hiv Testing",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Past HIV Testing <?php echo(in_array("Past Hiv Testing",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Past Hiv Testing",$resultArr)?"isRequired":""); ?>" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
+                                             <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
                                                   <option value="">--Select--</option>
                                                   <option value="yes">Yes</option>
                                                   <option value="no">No</option>
                                                   <option value="not_known">Not Known</option>
                                              </select>
                                         </div>
-                                        <label class="col-sm-2 col-form-label" for="">Test Last 12 Month <?php echo(in_array("Test Last 12 Month",$resultArr)?" <span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Test Last 12 Month <?php echo(in_array("Test Last 12 Month",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo(in_array("Test Last 12 Month",$resultArr)?"isRequired":""); ?>" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
+                                             <select class="form-control" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
                                                   <option value="">--Select--</option>
                                                   <option value="yes">Yes</option>
                                                   <option value="no">No</option>
@@ -280,8 +312,18 @@ function validateStep1()
                     formId: 'recencyInformation'
         });
         if (flag) {
+            $("#residence").addClass("<?php echo $residence;?>");
+            $("#maritalStatus").addClass("<?php echo $marital;?>");
+            $("#educationLevel").addClass("<?php echo $education;?>");
+            $("#riskPopulation").addClass("<?php echo $risk;?>");
+            $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
+            $("#currentSexualPartner").addClass("<?php echo $partner;?>");
+            $("#pastHivTesting").addClass("<?php echo $testing;?>");
+            $("#testLast12Month").addClass("<?php echo $last;?>");
+
             $("#step1,#wizard-progress-step1").removeClass("active");
             $("#step2,#wizard-progress-step2").addClass("active");
+
             $(".btnHide").show();
             $(".nxtBtn").hide();
         }
@@ -294,6 +336,15 @@ function validateStep1()
 }
 function validateStep2()
 {
+    $("#residence").removeClass('isRequired');
+    $("#maritalStatus").removeClass('isRequired');
+    $("#educationLevel").removeClass('isRequired');
+    $("#riskPopulation").removeClass('isRequired');
+    $("#pregnancyStatus").removeClass('isRequired');
+    $("#currentSexualPartner").removeClass('isRequired');
+    $("#pastHivTesting").removeClass('isRequired');
+    $("#testLast12Month").removeClass('isRequired');
+
     $("#step1,#wizard-progress-step1").addClass("active");
     $("#step2,#wizard-progress-step2").removeClass("active");
     $(".btnHide").hide();
