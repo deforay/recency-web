@@ -25,7 +25,7 @@ $sessionLogin = new Container('credo');
           <div class="block-header block-header-default">
             <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-primary">Back</a>
           </div>
-          
+
 
 
           <section class="content">
@@ -89,19 +89,22 @@ $sessionLogin = new Container('credo');
                                    </div>
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="otherRef" class="col-lg-4 control-label"> HIV Recency Result</label>
+                                             <label for="otherRef" class="col-lg-4 control-label">Control Line</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
                                                   <?php
-                                                  if($result['hiv_recency_result'] == 'invalid')
+                                                  if($result['control_line'] == 'present')
                                                   {
-                                                       echo "Invalid - Control Line Absent";
+                                                       echo "Present(Positive/P)";
                                                   }
-                                                  elseif ($result['hiv_recency_result'] == 'long-term') {
-                                                       echo "Long Term - Long Term Line Present";
+                                                  elseif ($result['control_line'] == 'absent') {
+                                                       echo "Absent(Negative/N)";
                                                   }
-                                                  elseif ($result['hiv_recency_result'] == 'recent') {
-                                                       echo "Recent - Long Term Line Absent";
+                                                  elseif ($result['control_line'] == 'invalid') {
+                                                       echo "Invalid";
+                                                  }
+                                                  elseif ($result['control_line'] == 'no_result') {
+                                                       echo "Result Not Available";
                                                   }
 
                                                   ?>
@@ -109,6 +112,59 @@ $sessionLogin = new Container('credo');
                                         </div>
                                    </div>
                               </div>
+
+                              <!--  -->
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Positive Verification</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php
+                                                  if($result['positive_verification_line'] == 'present')
+                                                  {
+                                                       echo "Present(Positive/P)";
+                                                  }
+                                                  elseif ($result['positive_verification_line'] == 'absent') {
+                                                       echo "Absent(Negative/N)";
+                                                  }
+                                                  elseif ($result['positive_verification_line'] == 'invalid') {
+                                                       echo "Invalid";
+                                                  }
+                                                  elseif ($result['positive_verification_line'] == 'no_result') {
+                                                       echo "Result Not Available";
+                                                  }
+
+                                                  ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Long Term Verification</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php
+                                                  if($result['long_term_verification_line'] == 'present')
+                                                  {
+                                                       echo "Present(Positive/P)";
+                                                  }
+                                                  elseif ($result['long_term_verification_line'] == 'absent') {
+                                                       echo "Absent(Negative/N)";
+                                                  }
+                                                  elseif ($result['long_term_verification_line'] == 'invalid') {
+                                                       echo "Invalid";
+                                                  }
+                                                  elseif ($result['long_term_verification_line'] == 'no_result') {
+                                                       echo "Result Not Available";
+                                                  }
+
+                                                  ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+                              <!--  -->
 
                               <div class="row">
                                    <div class="col-md-6">

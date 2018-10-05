@@ -25,8 +25,8 @@ class RecencyTable extends AbstractTableGateway {
         $role = $sessionLogin->roleId;
         $roleCode = $sessionLogin->roleCode;
         $common = new CommonService();
-        $aColumns = array('r.sample_id','r.patient_id','f.facility_name','DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.long_term_verification_line');
-        $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.long_term_verification_line');
+        $aColumns = array('r.sample_id','r.patient_id','f.facility_name','DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line');
+        $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.control_line','r.positive_verification_line','r.long_term_verification_line');
 
         /* Paging */
         $sLimit = "";
@@ -151,6 +151,8 @@ class RecencyTable extends AbstractTableGateway {
               $row[] = ucwords($aRow['facility_name']);
               $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
               $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+              $row[] = ucwords($aRow['control_line']);
+              $row[] = ucwords($aRow['positive_verification_line']);
               $row[] = ucwords($aRow['long_term_verification_line']);
               $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                             <a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>
@@ -165,9 +167,10 @@ class RecencyTable extends AbstractTableGateway {
 
     public function addRecencyDetails($params)
     {
+
         $logincontainer = new Container('credo');
         $common = new CommonService();
-        if(isset($params['facilityId']) && trim($params['facilityId'])!="")
+        if( (isset($params['sampleId']) && trim($params['sampleId'])!="") || (isset($params['patientId']) && trim($params['patientId'])!="") )
         {
             $data = array(
                 'sample_id' => $params['sampleId'],
@@ -175,7 +178,9 @@ class RecencyTable extends AbstractTableGateway {
                 'facility_id' => base64_decode($params['facilityId']),
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
-                'long_term_verification_line' => $params['hivRecencyResult'],
+                'control_line' => $params['controlLine'],
+                'positive_verification_line' => $params['positiveVerificationLine'],
+                'long_term_verification_line' => $params['longTermVerificationLine'],
                 'gender' => $params['gender'],
                 'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
@@ -189,19 +194,20 @@ class RecencyTable extends AbstractTableGateway {
                 'location_one' => $params['location_one'],
                 'location_two' => $params['location_two'],
                 'location_three' => $params['location_three'],
-                // 'location_one' => $params['configValue'][0],
-                // 'location_two' => $params['configValue'][1],
-                // 'location_three' => $params['configValue'][2],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
 
             );
+
             if(isset($params['dob']) && trim($params['dob']) != ""){
                 $data['dob']=$common->dbDateFormat($params['dob']);
             }else{
                 $data['dob'] = 'NULL';
             }
+
+
             $this->insert($data);
+
             $lastInsertedId = $this->lastInsertValue;
         }
         return $lastInsertedId;
@@ -231,7 +237,9 @@ class RecencyTable extends AbstractTableGateway {
                 'facility_id' => base64_decode($params['facilityId']),
                 'hiv_diagnosis_date' => $common->dbDateFormat($params['hivDiagnosisDate']),
                 'hiv_recency_date' => $common->dbDateFormat($params['hivRecencyDate']),
-                'long_term_verification_line' => $params['hivRecencyResult'],
+                'control_line' => $params['controlLine'],
+                'positive_verification_line' => $params['positiveVerificationLine'],
+                'long_term_verification_line' => $params['longTermVerificationLine'],
                 'gender' => $params['gender'],
                 'age' => $params['age'],
                 'marital_status' => $params['maritalStatus'],
@@ -245,9 +253,6 @@ class RecencyTable extends AbstractTableGateway {
                 'location_one' => $params['location_one'],
                 'location_two' => $params['location_two'],
                 'location_three' => $params['location_three'],
-                // 'location_one' => $params['configValue'][0],
-                // 'location_two' => $params['configValue'][1],
-                // 'location_three' => $params['configValue'][2],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
             );

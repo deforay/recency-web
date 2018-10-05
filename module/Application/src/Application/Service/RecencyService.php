@@ -30,11 +30,14 @@ class RecencyService {
 
     public function addRecencyDetails($params)
     {
+
+
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $recencyDb = $this->sm->get('RecencyTable');
             $result = $recencyDb->addRecencyDetails($params);
+            // \Zend\Debug\Debug::dump($result);die;
             if($result > 0){
                 $adapter->commit();
 

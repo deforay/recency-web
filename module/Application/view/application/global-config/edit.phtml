@@ -96,9 +96,9 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                 <option value="Current Sexual Partner" <?php echo(in_array("Current Sexual Partner",$resultArr)?"selected='selected'":""); ?>>Current Sexual Partner</option>
                                 <option value="Past Hiv Testing" <?php echo(in_array("Past Hiv Testing",$resultArr)?"selected='selected'":""); ?>>Past HIV Testing</option>
                                 <option value="Test Last 12 Month" <?php echo(in_array("Test Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Test Last 12 Month</option>
-                                <option value="Location One" <?php echo(in_array("Location One",$resultArr)?"selected='selected'":""); ?>>Location One</option>
-                                <option value="Location Two" <?php echo(in_array("Location Two",$resultArr)?"selected='selected'":""); ?>>Location Two</option>
-                                <option value="Location Three" <?php echo(in_array("Location Three",$resultArr)?"selected='selected'":""); ?>>Location Three</option>
+                                <option value="Province" <?php echo(in_array("Province",$resultArr)?"selected='selected'":""); ?>>Province</option>
+                                <option value="District" <?php echo(in_array("District",$resultArr)?"selected='selected'":""); ?>>District</option>
+                                <option value="City" <?php echo(in_array("City",$resultArr)?"selected='selected'":""); ?>>City</option>
                             </select>
                         </div>
 
@@ -143,7 +143,7 @@ function validateNow() {
      });
      if (flag) {
         $.blockUI();
-        
+
         document.getElementById('globalConfigTable').submit();
      }
 }

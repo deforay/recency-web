@@ -36,13 +36,17 @@ $patient = in_array("Patient Id",$resultArr)?"isRequired":"";
 $facility = in_array("Facility Name",$resultArr)?"isRequired":"";
 $hivDiagnosisRequiredDate = in_array("Hiv Diagnosis Date",$resultArr)?"isRequired":"";
 $hivRecencyRequiredDate = in_array("Hiv Recency Date",$resultArr)?"isRequired":"";
-$hivRecencyRequiredResult = in_array("Hiv Diagnosis Result",$resultArr)?"isRequired":"";
+
+$controlLineResult = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
+$positiveVerificationLine = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
+$longTermVerificationLine = in_array("Long Term Verification Line",$resultArr)?"isRequired":"";
+
 $dobRequired = in_array("Dob",$resultArr)?"isRequired":"";
 $age = in_array("Age",$resultArr)?"isRequired":"";
 $gender = in_array("Gender",$resultArr)?"isRequired":"";
-$locationOne = in_array("Location One",$resultArr)?"isRequired":"";
-$locationTwo = in_array("Location Two",$resultArr)?"isRequired":"";
-$locationThree = in_array("Location Three",$resultArr)?"isRequired":"";
+$locationOne = in_array("Province",$resultArr)?"isRequired":"";
+$locationTwo = in_array("District",$resultArr)?"isRequired":"";
+$locationThree = in_array("City",$resultArr)?"isRequired":"";
 
 $residence = in_array("Residence",$resultArr)?"isRequired":"";
 $marital = in_array("Marital Status",$resultArr)?"isRequired":"";
@@ -137,16 +141,49 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              <input type="text" value="<?php echo $hivRecencyDate; ?>" class="js-datepicker form-control  <?php echo $hivRecencyRequiredDate; ?>" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label" for="">HIV Recency Result<?php echo(in_array("Hiv Diagnosis Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Control Line
+                                             <?php echo(in_array("Control Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control <?php echo $hivRecencyRequiredResult; ?>" id="hivRecencyResult" name="hivRecencyResult" title="Please select the HIV recency result">
+
+                                             <select class="form-control
+                                              <?php echo $controlLineResult; ?>" id="controlLine" name="controlLine" title="Please select the control line">
                                                   <option value="">--Select--</option>
-                                                  <option value="recent" <?php echo($result['long_term_verification_line'] == 'recent' )?'selected="selected"':''; ?>>Recent - Long Term Line Absent</option>
-                                                  <option value="long-term" <?php echo($result['long_term_verification_line'] == 'long-term' )?'selected="selected"':''; ?>>Long Term - Long Term Line Present</option>
-                                                  <option value="invalid" <?php echo($result['long_term_verification_line'] == 'invalid' )?'selected="selected"':''; ?>>Invalid - Control Line Absent</option>
+                                                  <option value="present" <?php echo($result['control_line'] == 'present' )?'selected="selected"':''; ?>>Present(Positive/P)</option>
+                                                  <option value="absent" <?php echo($result['control_line'] == 'absent' )?'selected="selected"':''; ?>>Absent(Negative/N)</option>
+                                                  <option value="invalid" <?php echo($result['control_line'] == 'invalid' )?'selected="selected"':''; ?>>Invalid</option>
+                                                  <option value="no_result" <?php echo($result['control_line'] == 'no_result' )?'selected="selected"':''; ?>>Result Not Available</option>
                                              </select>
                                         </div>
                                    </div>
+
+                                   <!--  -->
+
+                                   <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="">Positive Verification
+                                             <?php echo(in_array("Positive Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control <?php echo $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line">
+                                                  <option value="">--Select--</option>
+                                                  <option value="present" <?php echo($result['positive_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present(Positive/P)</option>
+                                                  <option value="absent" <?php echo($result['positive_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent(Negative/N)</option>
+                                                  <option value="invalid" <?php echo($result['positive_verification_line'] == 'invalid' )?'selected="selected"':''; ?>>Invalid</option>
+                                                  <option value="no_result" <?php echo($result['positive_verification_line'] == 'no_result' )?'selected="selected"':''; ?>>Result Not Available</option>
+                                             </select>
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label" for="">Long Term Verification
+                                             <?php echo(in_array("Long Term Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line">
+                                                  <option value="">--Select--</option>
+                                                  <option value="present" <?php echo($result['long_term_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present(Positive/P)</option>
+                                                  <option value="absent" <?php echo($result['long_term_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent(Negative/N)</option>
+                                                  <option value="invalid" <?php echo($result['long_term_verification_line'] == 'invalid' )?'selected="selected"':''; ?>>Invalid</option>
+                                                  <option value="no_result" <?php echo($result['long_term_verification_line'] == 'no_result' )?'selected="selected"':''; ?>>Result Not Available</option>
+                                             </select>
+                                        </div>
+                                   </div>
+                                   <!--  -->
 
                                    <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" for="">DOB<?php echo(in_array("Dob",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
@@ -170,21 +207,21 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              </select>
                                         </div>
 
-                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[0]['global_value']); ?><?php echo(in_array("Location One",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[0]['global_value']); ?><?php echo(in_array("Province",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                             <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name'];?>',null,null,null);">
                                                 <option value="">-- Select --</option>
                                             </select>
                                         </div>
 
-                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[1]['global_value']); ?><?php echo(in_array("Location Two",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[1]['global_value']); ?><?php echo(in_array("District",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                             <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name'];?>',null,null,null);">
                                                 <option value="">-- Select --</option>
                                             </select>
                                         </div>
 
-                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[2]['global_value']); ?><?php echo(in_array("Location Three",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[2]['global_value']); ?><?php echo(in_array("City",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                             <select class="form-control <?php echo $locationThree; ?>" id="<?php echo $globalConfigResult[2]['global_name']; ?>" name="<?php echo $globalConfigResult[2]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[2]['global_name'];?>',null,null,null);">
                                                 <option value="">-- Select --</option>
@@ -317,7 +354,32 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
 <script type="text/javascript">
 
+
 jQuery(document).ready(function($) {
+
+          if($("#positiveVerificationLine").val() == 'absent'){
+               $("#longTermVerificationLine").prop("disabled", true);
+               $("#longTermVerificationLine").removeClass("isRequired");
+          }else{
+               $("#longTermVerificationLine").prop("disabled", false);
+               $("#longTermVerificationLine").addClass("isRequired");
+          }
+
+     $("#positiveVerificationLine").change(function() {
+          if($(this).val() == 'absent'){
+               var text = $(this).find('option:selected').text();
+               $('#longTermVerificationLine').val('');
+
+               $("#longTermVerificationLine").attr("disabled",true);
+               $("#longTermVerificationLine").removeClass("isRequired");
+          }else{
+
+               $("#longTermVerificationLine").attr("disabled",false);
+               $("#longTermVerificationLine").addClass("isRequired");
+
+          }
+     });
+
      <?php
      foreach($globalConfigResult as $config){
           if($config['global_name']=='location_one'){

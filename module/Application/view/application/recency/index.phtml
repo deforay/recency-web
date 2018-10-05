@@ -2,7 +2,7 @@
     use Zend\Session\Container;
     $sessionLogin = new Container('credo');
     $roleCode = $sessionLogin->roleCode;
-    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
     // ,{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';;
     // if($roleCode == "user"){
     //     $editAction.=',{"sClass":"center",bSortable:false}';
@@ -30,7 +30,7 @@
      <div class="content">
           <div class="block block-rounded block-bordered">
                <div class="block-header block-header-default">
-                    
+
                </div>
                <div class="block-content block-content-full">
                     <table id="facilityDataTable" class="table-responsive table table-bordered table-striped table-vcenter ">
@@ -41,7 +41,9 @@
                                     <th>Facility Name</th>
                                     <th>HIV Diagnosis Date</th>
                                     <th>HIV Recency Date</th>
-                                    <th>HIV Recency Result</th>
+                                    <th>Control Line</th>
+                                    <th>Positive Verification</th>
+                                    <th>Long Term Verification</th>
                                     <!-- <th>DOB</th>
                                     <th>Gender</th>
                                     <th>Marital Status</th>

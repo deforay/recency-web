@@ -134,7 +134,7 @@ class GlobalConfigTable extends AbstractTableGateway {
             $row = array();
             $row[] = ucwords($aRow['display_name']);
             $row[] = ucwords($aRow['global_value']);
-            
+
             $output['aaData'][] = $row;
         }
         return $output;
@@ -184,7 +184,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         $config = new \Zend\Config\Reader\Ini();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        
+
         $rResult = $this->select()->toArray();
         foreach($rResult as $result){
             if(isset($result['config_id']) && $result['config_id']!='') {
@@ -228,9 +228,9 @@ class GlobalConfigTable extends AbstractTableGateway {
         $row[] = in_array("Dob",$explodField)?"dob":"";
         $row[] = in_array("Age",$explodField)?"age":"";
         $row[] = in_array("Gender",$explodField)?"gender":"";
-        $row[] = in_array("Location One",$explodField)?"location_one":"";
-        $row[] = in_array("Location Two",$explodField)?"location_two":"";
-        $row[] = in_array("Location Three",$explodField)?"location_three":"";
+        $row[] = in_array("Province",$explodField)?"location_one":"";
+        $row[] = in_array("District",$explodField)?"location_two":"";
+        $row[] = in_array("City",$explodField)?"location_three":"";
         $row[] = in_array("Marital Status",$explodField)?"maritalStatus":"";
         $row[] = in_array("Residence",$explodField)?"residence":"";
         $row[] = in_array("Education Level",$explodField)?"educationLevel":"";
