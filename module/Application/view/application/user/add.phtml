@@ -2,6 +2,20 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 ?>
+<style type="text/css">
+.select2-selection__choice{
+     color: black !important;
+}
+button#search_rightAll, button#search_rightSelected, button#search_leftSelected, button#search_leftAll {
+    background-color: #e1effe;
+    color: dimgray;
+}
+button#search_rightAll:hover, button#search_rightSelected:hover, button#search_leftSelected:hover, button#search_leftAll:hover {
+    background-color: #dbe4ef;
+    color: black;
+    font-weight : 700;
+}
+</style>
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -90,18 +104,20 @@ $sessionLogin = new Container('credo');
                             </select>
                         </div>
                     </div>
-
-<h4>Use Province,District,City filters for Facility list</h4>
+                    <hr>
+                    <h3 class="block-title" style=" margin-bottom: 4%; ">Use Province, District, City filters for Facility list</h3>
                     <div class="form-group row">
                         <?php
                          foreach($globalConfigResult as $config){ ?>
-                            <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
-                            <div class="col-sm-4">
-                                <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
-                                    <option value="">-- Select --</option>
-                                </select>
-                            </div>
-                        <?php } ?>
+                            <?php if($config['global_name'] != 'mandatory_fields'){ ?>
+                                <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
+                                        <option value="">-- Select --</option>
+                                    </select>
+                                </div>
+                            <?php } 
+                        }?>
                     </div>
 
                     <div class="form-group row">
