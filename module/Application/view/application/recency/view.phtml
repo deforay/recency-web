@@ -1,7 +1,7 @@
 <?php
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
-// \Zend\Debug\Debug::dump($facilityResult['riskPopulations']);die;
+// \Zend\Debug\Debug::dump($result);die;
 
 ?>
 <div class="bg-body-light">
@@ -64,7 +64,7 @@ $sessionLogin = new Container('credo');
                                              <label for="orderDate" class="col-lg-4 control-label">Facility Name</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->facility_id); ?>
+                                                  <?php echo ucwords($result->facility_name); ?>
                                              </span>
                                         </div>
                                    </div>
