@@ -143,6 +143,7 @@ class RecencyTable extends AbstractTableGateway {
                   "aaData" => array()
           );
 
+
           foreach ($rResult as $aRow) {
 
               $row = array();
@@ -151,15 +152,63 @@ class RecencyTable extends AbstractTableGateway {
               $row[] = ucwords($aRow['facility_name']);
               $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
               $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
-              $row[] = ucwords($aRow['control_line']);
-              $row[] = ucwords($aRow['positive_verification_line']);
-              $row[] = ucwords($aRow['long_term_verification_line']);
-              $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
+
+              // Control Line
+               if($aRow['control_line'] == 'present'){
+                    $controlLine = "Present(Positive/P)";
+               }
+               elseif($aRow['control_line'] == 'absent'){
+                    $controlLine = "Absent(Negative/N)";
+               }
+               elseif($aRow['control_line'] == 'invalid'){
+                    $controlLine = "Invalid";
+               }
+               elseif($aRow['control_line'] == 'no_result'){
+                    $controlLine = "Result Not Available";
+               }
+               $row[] = ucwords($controlLine);
+
+               // Positive Verification
+               if($aRow['positive_verification_line'] == 'present'){
+                    $positiveVerification = "Present(Positive/P)";
+               }
+               elseif($aRow['positive_verification_line'] == 'absent'){
+                    $positiveVerification = "Absent(Negative/N)";
+               }
+               elseif($aRow['positive_verification_line'] == 'invalid'){
+                    $positiveVerification = "Invalid";
+               }
+               elseif($aRow['positive_verification_line'] == 'no_result'){
+                    $positiveVerification = "Result Not Available";
+               }
+               $row[] = ucwords($positiveVerification);
+
+               // Long Term Verification
+               if($aRow['long_term_verification_line'] == 'present'){
+                    $longTerm = "Present(Positive/P)";
+               }
+               elseif($aRow['long_term_verification_line'] == 'absent'){
+                    $longTerm = "Absent(Negative/N)";
+               }
+               elseif($aRow['long_term_verification_line'] == 'invalid'){
+                    $longTerm = "Invalid";
+               }
+               elseif($aRow['long_term_verification_line'] == 'no_result'){
+                    $longTerm = "Result Not Available";
+               }
+               elseif($aRow['long_term_verification_line'] == ''){
+                    $longTerm = "---";
+               }
+               $row[] = ucwords($longTerm);
+
+
+               $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                             <a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>
                             <a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
                         </div>';
 
               $output['aaData'][] = $row;
+
           }
 
           return $output;
