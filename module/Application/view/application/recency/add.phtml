@@ -14,7 +14,6 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
     $resultArr[] = $explodField[$f];
   }
 }
-// \Zend\Debug\Debug::dump($resultArr);die;
 $sample = in_array("Sample Id",$resultArr)?"isRequired":"";
 $patient = in_array("Patient Id",$resultArr)?"isRequired":"";
 $facility = in_array("Facility Name",$resultArr)?"isRequired":"";
@@ -37,12 +36,18 @@ $risk = in_array("Risk Population",$resultArr)?"isRequired":"";
 $pregnancy = in_array("Pregnancy Status",$resultArr)?"isRequired":"";
 $partner = in_array("Current Sexual Partner",$resultArr)?"isRequired":"";
 $testing = in_array("Past Hiv Testing",$resultArr)?"isRequired":"";
+
+$HivStatus = in_array("Last HIV Status",$resultArr)?"isRequired":"";
+$patientArt = in_array("Patient on ART",$resultArr)?"isRequired":"";
+
 $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
 ?>
 <style>
 .btnHide{display:none;}
+.colour{color:red;}
 </style>
+
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -183,21 +188,21 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              </select>
                                         </div>
 
-                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[0]['global_value']); ?><?php echo(in_array("Province",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[0]['global_value']); ?><?php echo(in_array("Province",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                             <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name'];?>');">
                                                 <option value="">-- Select --</option>
                                             </select>
                                         </div>
 
-                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[1]['global_value']); ?><?php echo(in_array("District",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[1]['global_value']); ?><?php echo(in_array("District",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                             <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name'];?>');">
                                                 <option value="">-- Select --</option>
                                             </select>
                                         </div>
 
-                                        <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[2]['global_value']); ?><?php echo(in_array("City",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[2]['global_value']); ?><?php echo(in_array("City",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                             <select class="form-control <?php echo $locationThree; ?>" id="<?php echo $globalConfigResult[2]['global_name']; ?>" name="<?php echo $globalConfigResult[2]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[2]['global_name'];?>');">
                                                 <option value="">-- Select --</option>
@@ -277,12 +282,13 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                    <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" for="">Past HIV Testing <?php echo(in_array("Past Hiv Testing",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
+                                             <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing" onchange="checkHivTesting(this);">
                                                   <option value="">--Select--</option>
                                                   <option value="yes">Yes</option>
                                                   <option value="no">No</option>
                                                   <option value="not_known">Not Known</option>
                                              </select>
+
                                         </div>
                                         <label class="col-sm-2 col-form-label" for="">Test Last 12 Month <?php echo(in_array("Test Last 12 Month",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
@@ -294,6 +300,28 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              </select>
                                         </div>
                                    </div>
+
+                              <div id="hivResultStatusShow" style="display:none;">
+                                   <p class="colour" > What was the Last HIV Status? </p>
+                                   <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="">Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control" id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status" onchange="checkHivStatus(this);">
+                                                  <option value="">--Select--</option>
+                                                  <option value="negative">Negative</option>
+                                                  <option value="positive">Positive</option>
+                                             </select>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label" for="">Patient on ART <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
+                                                  <option value="">--Select--</option>
+                                                  <option value="yes">Yes</option>
+                                                  <option value="no">No</option>
+                                             </select>
+                                        </div>
+                                   </div>
+                              </div>
                               </div>
                          </div>
                          <!-- END Steps Content -->
@@ -324,6 +352,25 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
 
 <script type="text/javascript">
+     function checkHivTesting(obj){
+          if( obj.value == 'yes' ){
+               $("#hivResultStatusShow").css('display','block');
+               $("#lastHivStatus").addClass('isRequired');
+          }else{
+               $("#hivResultStatusShow").css('display','none');
+               $("#lastHivStatus").removeClass('isRequired');
+               $("#patientOnArt").removeClass('isRequired');
+          }
+     }
+     function checkHivStatus(obj){
+          if( obj.value == 'positive' ){
+               $("#patientOnArt").attr("disabled",false);
+               $("#patientOnArt").addClass('isRequired');
+          }else{
+               $("#patientOnArt").attr("disabled",true);
+               $("#patientOnArt").removeClass('isRequired');
+          }
+     }
 
      jQuery(document).ready(function($) {
 
@@ -367,6 +414,10 @@ function validateStep1()
             $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
             $("#currentSexualPartner").addClass("<?php echo $partner;?>");
             $("#pastHivTesting").addClass("<?php echo $testing;?>");
+
+            $("#lastHivStatus").addClass("<?php echo $HivStatus;?>");
+            $("#patientOnArt").addClass("<?php echo $patientArt;?>");
+
             $("#testLast12Month").addClass("<?php echo $last;?>");
 
             $("#step1,#wizard-progress-step1").removeClass("active");
@@ -392,7 +443,8 @@ function validateStep2()
     $("#currentSexualPartner").removeClass('isRequired');
     $("#pastHivTesting").removeClass('isRequired');
     $("#testLast12Month").removeClass('isRequired');
-
+    $("#lastHivStatus").removeClass('isRequired');
+    $("#patientOnArt").removeClass('isRequired');
     $("#step1,#wizard-progress-step1").addClass("active");
     $("#step2,#wizard-progress-step2").removeClass("active");
     $(".btnHide").hide();

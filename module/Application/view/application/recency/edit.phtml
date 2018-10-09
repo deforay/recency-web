@@ -1,6 +1,5 @@
 <?php
 // \Zend\Debug\Debug::dump($result);die;
-// \Zend\Debug\Debug::dump($facilityResult['riskPopulations']);die;
 use Zend\Session\Container;
 use Application\Service\CommonService;
 $sessionLogin = new Container('credo');
@@ -30,7 +29,6 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
     $resultArr[] = $explodField[$f];
   }
 }
-// \Zend\Debug\Debug::dump($resultArr);die;
 $sample = in_array("Sample Id",$resultArr)?"isRequired":"";
 $patient = in_array("Patient Id",$resultArr)?"isRequired":"";
 $facility = in_array("Facility Name",$resultArr)?"isRequired":"";
@@ -55,11 +53,16 @@ $risk = in_array("Risk Population",$resultArr)?"isRequired":"";
 $pregnancy = in_array("Pregnancy Status",$resultArr)?"isRequired":"";
 $partner = in_array("Current Sexual Partner",$resultArr)?"isRequired":"";
 $testing = in_array("Past Hiv Testing",$resultArr)?"isRequired":"";
+
+$HivStatus = in_array("Last HIV Status",$resultArr)?"isRequired":"";
+$patientArt = in_array("Patient on ART",$resultArr)?"isRequired":"";
+
 $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
 ?>
 <style>
 .btnHide{display:none;}
+.colour{color:red;}
 </style>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -76,8 +79,6 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 </div>
 
 <!-- Start -->
-
-
 <div class="content">
      <div class="block block-rounded block-bordered">
           <div class="block-header block-header-default">
@@ -300,7 +301,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                    <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" for="">Past HIV Testing<?php echo(in_array("Past Hiv Testing",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing">
+                                             <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing" onchange="checkHivTesting(this);">
                                                   <option value="">--Select--</option>
                                                   <option value="yes" <?php echo($result['past_hiv_testing'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
                                                   <option value="no" <?php echo($result['past_hiv_testing'] == 'no' )?'selected="selected"':''; ?>>No</option>
@@ -317,6 +318,29 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              </select>
                                         </div>
                                    </div>
+
+                              <div id="hivResultStatusShow" style="display:none;">
+                                        <p class="colour" > What was the Last HIV Status? </p>
+                                   <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="">Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control" id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status"  onchange="checkHivStatus(this);">
+                                                  <option value="">--Select--</option>
+                                                  <option value="negative" <?php echo($result['last_hiv_status'] == 'negative' )?'selected="selected"':''; ?>>Negative</option>
+                                                  <option value="positive" <?php echo($result['last_hiv_status'] == 'positive' )?'selected="selected"':''; ?>>Positive</option>
+                                             </select>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label" for="">Patient on ART <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
+                                                  <option value="">--Select--</option>
+                                                  <option value="yes" <?php echo($result['patient_on_art'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                                  <option value="no" <?php echo($result['patient_on_art'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                                             </select>
+                                        </div>
+                                   </div>
+                              </div>
+
                               </div>
                          </div>
                          <!-- END Steps Content -->
@@ -354,6 +378,26 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
 <script type="text/javascript">
 
+     function checkHivTesting(obj){
+          if( obj.value == 'yes' ){
+               $("#hivResultStatusShow").css('display','block');
+               $("#lastHivStatus").addClass('isRequired');
+          }else{
+               $("#hivResultStatusShow").css('display','none');
+               $("#lastHivStatus").removeClass('isRequired');
+               $("#patientOnArt").removeClass('isRequired');
+          }
+     }
+
+     function checkHivStatus(obj){
+          if( obj.value == 'positive' ){
+               $("#patientOnArt").attr("disabled",false);
+               $("#patientOnArt").addClass('isRequired');
+          }else{
+               $("#patientOnArt").attr("disabled",true);
+               $("#patientOnArt").removeClass('isRequired');
+          }
+     }
 
 jQuery(document).ready(function($) {
 
@@ -421,6 +465,26 @@ function validateStep1()
             $("#step2,#wizard-progress-step2").addClass("active");
             $(".btnHide").show();
             $(".nxtBtn").hide();
+
+            <?php if($result['past_hiv_testing'] == 'yes') { ?>
+                 $("#hivResultStatusShow").css('display','block');
+                 $("#lastHivStatus").addClass('isRequired');
+            <?php }else{ ?>
+                 $("#hivResultStatusShow").css('display','none');
+                 $("#lastHivStatus").removeClass('isRequired');
+                 $("#patientOnArt").removeClass('isRequired');
+            <?php }?>
+
+            <?php if($result['last_hiv_status'] == 'positive') { ?>
+                 $("#patientOnArt").attr("disabled",false);
+                 $("#lastHivStatus").addClass('isRequired');
+                 $("#patientOnArt").addClass('isRequired');//
+
+            <?php }else{ ?>
+                 $("#patientOnArt").attr("disabled",true);
+                 $("#patientOnArt").removeClass('isRequired');
+            <?php } ?>
+
         }
     }else{
             $(".btnHide").hide();
@@ -439,6 +503,10 @@ function validateStep2()
     $("#currentSexualPartner").removeClass('isRequired');
     $("#pastHivTesting").removeClass('isRequired');
     $("#testLast12Month").removeClass('isRequired');
+
+    $("#lastHivStatus").removeClass('isRequired');
+    $("#patientOnArt").removeClass('isRequired');
+
 
     $("#step1,#wizard-progress-step1").addClass("active");
     $("#step2,#wizard-progress-step2").removeClass("active");

@@ -239,6 +239,10 @@ class GlobalConfigTable extends AbstractTableGateway {
         $row[] = in_array("Pregnancy Status",$explodField)?"pregnancyStatus":"";
         $row[] = in_array("Current Sexual Partner",$explodField)?"currentSexualPartner":"";
         $row[] = in_array("Past Hiv Testing",$explodField)?"pastHivTesting":"";
+
+        $row[] = in_array("Last HIV Status",$explodField)?"lastHivStatus":"";
+        $row[] = in_array("Patient on ART",$explodField)?"patientOnArt":"";
+
         $row[] = in_array("Test Last 12 Month",$explodField)?"testLast12Month":"";
         $row[] = in_array("Latitude",$explodField)?"latitude":"";
         $row[] = in_array("Longitude",$explodField)?"longitude":"";
