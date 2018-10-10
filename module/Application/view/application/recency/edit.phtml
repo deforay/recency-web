@@ -6,6 +6,7 @@ $sessionLogin = new Container('credo');
 $common = new CommonService();
 $dob = '';
 $file_open_date = '';
+
 if($result['risk_population'] == 9){
     $riskDisplay = 'class="col-sm-2"';
     $otherRiskDisplay = 'style=" display:block; "';
@@ -44,11 +45,9 @@ $patient = in_array("Patient Id",$resultArr)?"isRequired":"";
 $facility = in_array("Facility Name",$resultArr)?"isRequired":"";
 $hivDiagnosisRequiredDate = in_array("Hiv Diagnosis Date",$resultArr)?"isRequired":"";
 $hivRecencyRequiredDate = in_array("Hiv Recency Date",$resultArr)?"isRequired":"";
-
 $controlLineResult = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
 $positiveVerificationLine = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
 $longTermVerificationLine = in_array("Long Term Verification Line",$resultArr)?"isRequired":"";
-
 $dobRequired = in_array("Dob",$resultArr)?"isRequired":"";
 $age = in_array("Age",$resultArr)?"isRequired":"";
 $gender = in_array("Gender",$resultArr)?"isRequired":"";
@@ -60,6 +59,7 @@ $residence = in_array("Residence",$resultArr)?"isRequired":"";
 $marital = in_array("Marital Status",$resultArr)?"isRequired":"";
 $education = in_array("Education Level",$resultArr)?"isRequired":"";
 $risk = in_array("Risk Population",$resultArr)?"isRequired":"";
+
 $pregnancy = in_array("Pregnancy Status",$resultArr)?"isRequired":"";
 $partner = in_array("Current Sexual Partner",$resultArr)?"isRequired":"";
 $testing = in_array("Past Hiv Testing",$resultArr)?"isRequired":"";
@@ -284,8 +284,9 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <?php } ?>
                                              </select>
                                         </div>
+
                                         <div id="otherRiskPopulationInput" class="col-sm-2" <?php echo $otherRiskDisplay; ?>>
-                                        <input type="text" value="<?php echo $result['other_risk_population'];?>" class="form-control" id="otherRiskPopulation" name="otherRiskPopulation" value="" placeholder="Other risk population" title="Please enter the other risk population">
+                                             <input type="text" value="<?php echo $result['other_risk_population'];?>" class="form-control" id="otherRiskPopulation" name="otherRiskPopulation" title="Please select the risk population" value="" placeholder="Other risk population"  >
                                         </div>
                                    </div>
 
@@ -469,7 +470,7 @@ function validateStep1()
             $("#maritalStatus").addClass("<?php echo $marital;?>");
             $("#educationLevel").addClass("<?php echo $education;?>");
             $("#riskPopulation").addClass("<?php echo $risk;?>");
-            $("#otherRiskPopulationInput").addClass("<?php echo $otherRequired;?>");
+            $("#otherRiskPopulation").addClass("<?php echo $otherRequired;?>");
             $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
             $("#currentSexualPartner").addClass("<?php echo $partner;?>");
             $("#pastHivTesting").addClass("<?php echo $testing;?>");
@@ -509,17 +510,16 @@ function validateStep1()
 }
 
 function riskPopulationCheck(obj){
-    console.log(Base64.decode(obj.value));
     if( Base64.decode(obj.value) == '9' ){
         $("#riskPopulationSelect").removeClass('col-sm-4');
         $("#riskPopulationSelect").addClass('col-sm-2');
         $("#otherRiskPopulationInput").css('display','block');
-        $("#otherRiskPopulationInput").addClass('isRequired');
+        $("#otherRiskPopulation").addClass('isRequired');
     }else{
         $("#riskPopulationSelect").removeClass('col-sm-2');
         $("#riskPopulationSelect").addClass('col-sm-4');
         $("#otherRiskPopulationInput").css('display','none');
-        $("#otherRiskPopulationInput").removeClass('isRequired');
+        $("#otherRiskPopulation").removeClass('isRequired');
     }
 }
 
@@ -530,7 +530,7 @@ function validateStep2()
     $("#educationLevel").removeClass('isRequired');
     $("#riskPopulation").removeClass('isRequired');
     $("#otherRiskPopulation").removeClass('isRequired');
-    $("#otherRiskPopulationInput").removeClass('isRequired');
+    $("#otherRiskPopulation").removeClass('isRequired');
     $("#pregnancyStatus").removeClass('isRequired');
     $("#currentSexualPartner").removeClass('isRequired');
     $("#pastHivTesting").removeClass('isRequired');

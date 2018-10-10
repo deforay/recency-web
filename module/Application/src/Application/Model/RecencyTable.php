@@ -236,6 +236,7 @@ class RecencyTable extends AbstractTableGateway {
                 'residence' => $params['residence'],
                 'education_level' => $params['educationLevel'],
                 'risk_population' => base64_decode($params['riskPopulation']),
+                'other_risk_population' => $params['otherRiskPopulation'],
                 'pregnancy_status' => $params['pregnancyStatus'],
                 'current_sexual_partner' => $params['currentSexualPartner'],
                 'past_hiv_testing' => $params['pastHivTesting'],
@@ -297,6 +298,7 @@ class RecencyTable extends AbstractTableGateway {
                 'residence' => $params['residence'],
                 'education_level' => $params['educationLevel'],
                 'risk_population' => base64_decode($params['riskPopulation']),
+                    'other_risk_population' => $params['otherRiskPopulation'],
                 'pregnancy_status' => $params['pregnancyStatus'],
                 'current_sexual_partner' => $params['currentSexualPartner'],
                 'past_hiv_testing' => $params['pastHivTesting'],
@@ -309,6 +311,7 @@ class RecencyTable extends AbstractTableGateway {
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId
             );
+
             if(isset($params['dob']) && trim($params['dob']) != ""){
                 $data['dob']=$common->dbDateFormat($params['dob']);
             }else{
@@ -387,6 +390,8 @@ class RecencyTable extends AbstractTableGateway {
                             'residence' => $recency['residence'],
                             'education_level' => $recency['educationLevel'],
                             'risk_population' => $recency['riskPopulation'],
+                            'other_risk_population' => $recency['otherRiskPopulation'],
+
                             'pregnancy_status' => $recency['pregnancyStatus'],
                             'current_sexual_partner' => $recency['currentSexualPartner'],
                             'past_hiv_testing' => $recency['pastHivTesting'],
@@ -443,6 +448,7 @@ class RecencyTable extends AbstractTableGateway {
                             'residence' => $params['residence'],
                             'education_level' => $params['educationLevel'],
                             'risk_population' => $params['riskPopulation'],
+                            'other_risk_population' => $params['otherRiskPopulation'],
                             'pregnancy_status' => $params['pregnancyStatus'],
                             'current_sexual_partner' => $params['currentSexualPartner'],
                             'past_hiv_testing' => $params['pastHivTesting'],
@@ -489,7 +495,6 @@ class RecencyTable extends AbstractTableGateway {
 
                $sQuery = $sql->select()->from(array('r' => 'recency'))
                                       ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'),'left')
-
                                       ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
 
                                       ->where(array('recency_id' =>$id));

@@ -70,3 +70,6 @@ INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global
 
 -- Thanaseelan 09-Oct-2018
 ALTER TABLE `recency` ADD `last_hiv_status` VARCHAR(255) NULL DEFAULT NULL AFTER `past_hiv_testing`, ADD `patient_on_art` VARCHAR(255) NULL DEFAULT NULL AFTER `last_hiv_status`;
+
+-- Vivek 10-Oct-2018
+ALTER TABLE `recency` ADD `other_risk_population` VARCHAR(255) NULL DEFAULT NULL AFTER `risk_population`;
