@@ -338,18 +338,24 @@ class RecencyTable extends AbstractTableGateway {
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         if( isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['role_code']=='admin' ){
             $response['status']='success';
-            $sQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
+            $rececnyQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
                                 ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
-                                ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'),'left')
-                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'),'left')
-                                ->where(array('auth_token' =>$params['authToken']));
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-            $response['recency'] = $this->select()->toArray();
+                                ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'))
+                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'));
+            $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+            $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            $response['recency'] = $recencyResult;
         }
         else if(isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['status']=='active') {
             $response['status']='success';
-            $response['recency'] = $rResult;
+            $rececnyQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
+                                ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
+                                ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'))
+                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'))
+                                ->where(array('auth_token' =>$params['authToken']));
+            $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+            $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            $response['recency'] = $recencyResult;
         }
         else if($rResult['status']=='inactive'){
             $response["status"] = "fail";
