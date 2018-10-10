@@ -6,6 +6,16 @@ $sessionLogin = new Container('credo');
 $common = new CommonService();
 $dob = '';
 $file_open_date = '';
+if($result['risk_population'] == 9){
+    $riskDisplay = 'class="col-sm-2"';
+    $otherRiskDisplay = 'style=" display:block; "';
+    $otherRequired = 'isRequired';
+}else{
+    $riskDisplay = 'class="col-sm-4"';
+    $otherRiskDisplay = 'style=" display:none; "';
+    $otherRequired = '';
+}
+
 if($result->hiv_diagnosis_date!= '' && $result->hiv_diagnosis_date!= null && $result->hiv_diagnosis_date!= '0000-00-00'){
      $hivDiagnosisDate = $common->humanDateFormat($result->hiv_diagnosis_date);
 }
@@ -204,7 +214,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <option value="">--Select--</option>
                                                   <option value="male" <?php echo($result['gender'] == 'male' )?'selected="selected"':''; ?>>Male</option>
                                                   <option value="female" <?php echo($result['gender'] == 'female' )?'selected="selected"':''; ?>>Female</option>
-                                                  <option value="transgender" <?php echo($result['gender'] == 'transgender' )?'selected="selected"':''; ?>>Transgender</option>
+                                                  <option value="not_reported" <?php echo($result['gender'] == 'not_reported' )?'selected="selected"':''; ?>>Not Reported</option>
                                              </select>
                                         </div>
 
@@ -266,13 +276,16 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              </select>
                                         </div>
                                         <label class="col-sm-2 col-form-label" for="">Risk Population<?php echo(in_array("Risk Population",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population">
+                                        <div id="riskPopulationSelect" <?php echo $riskDisplay; ?>>
+                                             <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
                                                   <option value="">--Select--</option>
                                                   <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
                                                        <option value="<?php echo base64_encode($riskPo['rp_id']); ?>" <?php echo($result['risk_population'] == $riskPo['rp_id'] )?'selected="selected"':''; ?>><?php echo str_replace('_', ' ', $riskPo['name']); ?></option>
                                                   <?php } ?>
                                              </select>
+                                        </div>
+                                        <div id="otherRiskPopulationInput" class="col-sm-2" <?php echo $otherRiskDisplay; ?>>
+                                        <input type="text" value="<?php echo $result['other_risk_population'];?>" class="form-control" id="otherRiskPopulation" name="otherRiskPopulation" value="" placeholder="Other risk population" title="Please enter the other risk population">
                                         </div>
                                    </div>
 
@@ -330,7 +343,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <option value="positive" <?php echo($result['last_hiv_status'] == 'positive' )?'selected="selected"':''; ?>>Positive</option>
                                              </select>
                                         </div>
-                                        <label class="col-sm-2 col-form-label" for="">Patient on ART <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Is the Patient on ART? <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                              <select class="form-control" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
                                                   <option value="">--Select--</option>
@@ -377,7 +390,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
 
 <script type="text/javascript">
-
+    var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
      function checkHivTesting(obj){
           if( obj.value == 'yes' ){
                $("#hivResultStatusShow").css('display','block');
@@ -456,6 +469,7 @@ function validateStep1()
             $("#maritalStatus").addClass("<?php echo $marital;?>");
             $("#educationLevel").addClass("<?php echo $education;?>");
             $("#riskPopulation").addClass("<?php echo $risk;?>");
+            $("#otherRiskPopulationInput").addClass("<?php echo $otherRequired;?>");
             $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
             $("#currentSexualPartner").addClass("<?php echo $partner;?>");
             $("#pastHivTesting").addClass("<?php echo $testing;?>");
@@ -493,12 +507,30 @@ function validateStep1()
             alert("Please enter either sample or patient id  ",'err');
     }
 }
+
+function riskPopulationCheck(obj){
+    console.log(Base64.decode(obj.value));
+    if( Base64.decode(obj.value) == '9' ){
+        $("#riskPopulationSelect").removeClass('col-sm-4');
+        $("#riskPopulationSelect").addClass('col-sm-2');
+        $("#otherRiskPopulationInput").css('display','block');
+        $("#otherRiskPopulationInput").addClass('isRequired');
+    }else{
+        $("#riskPopulationSelect").removeClass('col-sm-2');
+        $("#riskPopulationSelect").addClass('col-sm-4');
+        $("#otherRiskPopulationInput").css('display','none');
+        $("#otherRiskPopulationInput").removeClass('isRequired');
+    }
+}
+
 function validateStep2()
 {
     $("#residence").removeClass('isRequired');
     $("#maritalStatus").removeClass('isRequired');
     $("#educationLevel").removeClass('isRequired');
     $("#riskPopulation").removeClass('isRequired');
+    $("#otherRiskPopulation").removeClass('isRequired');
+    $("#otherRiskPopulationInput").removeClass('isRequired');
     $("#pregnancyStatus").removeClass('isRequired');
     $("#currentSexualPartner").removeClass('isRequired');
     $("#pastHivTesting").removeClass('isRequired');

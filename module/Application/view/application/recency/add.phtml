@@ -139,6 +139,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                         </div>
                                    </div>
 
+
                                    <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" for="">Positive Verification
                                              <?php echo(in_array("Positive Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
@@ -184,7 +185,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <option value="">--Select--</option>
                                                   <option value="male">Male</option>
                                                   <option value="female">Female</option>
-                                                  <option value="transgender">Transgender</option>
+                                                  <option value="not_reported">Not Reported</option>
                                              </select>
                                         </div>
 
@@ -312,7 +313,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <option value="positive">Positive</option>
                                              </select>
                                         </div>
-                                        <label class="col-sm-2 col-form-label" for="">Patient on ART <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Is the Patient on ART? <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                              <select class="form-control" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
                                                   <option value="">--Select--</option>
@@ -336,8 +337,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                    </div>
                                    <div class="col-6 text-right">
                                         <!-- <button type="button" class="btn btn-secondary" data-wizard="next"> -->
-                                        <button type="button" class="btn btn-secondary nxtBtn" onclick="validateStep1()">
-                                             Next <i class="fa fa-angle-right ml-1"></i>
+                                            <button type="button" class="btn btn-secondary nxtBtn" onclick="validateStep1()">Next <i class="fa fa-angle-right ml-1"></i>
                                         </button>
                                    </div>
                               </div>

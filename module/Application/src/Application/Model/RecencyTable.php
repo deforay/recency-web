@@ -327,12 +327,24 @@ class RecencyTable extends AbstractTableGateway {
         $sql = new Sql($dbAdapter);
 
         $sQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
-                                ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'))
-                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'))
+                                ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
+                                ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'),'left')
+                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'),'left')
                                 ->where(array('auth_token' =>$params['authToken']));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        if(isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['status']=='active') {
+        if( isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['role_code']=='admin' ){
+            $response['status']='success';
+            $sQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
+                                ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
+                                ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'),'left')
+                                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'),'left')
+                                ->where(array('auth_token' =>$params['authToken']));
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            $response['recency'] = $this->select()->toArray();
+        }
+        else if(isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['status']=='active') {
             $response['status']='success';
             $response['recency'] = $rResult;
         }
@@ -378,6 +390,8 @@ class RecencyTable extends AbstractTableGateway {
                             'pregnancy_status' => $recency['pregnancyStatus'],
                             'current_sexual_partner' => $recency['currentSexualPartner'],
                             'past_hiv_testing' => $recency['pastHivTesting'],
+                            'last_hiv_status' => $recency['lastHivStatus'],
+                            'patient_on_art' => $recency['patientOnArt'],
                             'test_last_12_month' => $recency['testLast12Month'],
                             'location_one' => $recency['location_one'],
                             'location_two' => $recency['location_two'],
@@ -418,9 +432,9 @@ class RecencyTable extends AbstractTableGateway {
                         'sample_id' => $params['sampleId'],
                             'patient_id' => $params['patientId'],
                             'facility_id' => $params['facilityId'],
-                            'control_line' => $recency['ctrlLine'],
-                            'positive_verification_line' => $recency['positiveLine'],
-                            'long_term_verification_line' => $recency['longTermLine'],
+                            'control_line' => $params['ctrlLine'],
+                            'positive_verification_line' => $params['positiveLine'],
+                            'long_term_verification_line' => $params['longTermLine'],
                             'gender' => $params['gender'],
                             'latitude' => $params['latitude'],
                             'longitude' => $params['longitude'],
@@ -432,6 +446,8 @@ class RecencyTable extends AbstractTableGateway {
                             'pregnancy_status' => $params['pregnancyStatus'],
                             'current_sexual_partner' => $params['currentSexualPartner'],
                             'past_hiv_testing' => $params['pastHivTesting'],
+                            'last_hiv_status' => $params['lastHivStatus'],
+                            'patient_on_art' => $params['patientOnArt'],
                             'test_last_12_month' => $params['testLast12Month'],
                             'location_one' => $params['locationOne'],
                             'location_two' => $params['locationTwo'],
@@ -468,9 +484,6 @@ class RecencyTable extends AbstractTableGateway {
     }
      public function fetchRecencyOrderDetails($id)
           {
-               // $fetchResult = '';
-               // $fetchResult=$this->select(array('recency_id'=>$id))->current();
-               // return $fetchResult;
                $dbAdapter = $this->adapter;
                $sql = new Sql($dbAdapter);
 
@@ -481,7 +494,6 @@ class RecencyTable extends AbstractTableGateway {
 
                                       ->where(array('recency_id' =>$id));
                $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-               //echo $sQueryStr;die;
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                return $rResult;
           }

@@ -194,7 +194,7 @@ $sessionLogin = new Container('credo');
                                              <label for="termsOfPay" class="col-lg-4 control-label">Gender</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->gender); ?>
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->gender));?>
                                              </span>
                                         </div>
                                    </div>
@@ -210,7 +210,7 @@ $sessionLogin = new Container('credo');
                                              <label for="company" class="col-lg-4 control-label">Marital Status</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-6 control-label">
-                                                  <?php echo ucwords($result->marital_status); ?>
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->marital_status));?>
                                              </span>
                                         </div>
                                    </div>
@@ -230,7 +230,7 @@ $sessionLogin = new Container('credo');
                                              <label for="orderDate" class="col-lg-4 control-label">Education Level</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->education_level); ?>
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->education_level));?>
                                              </span>
                                         </div>
                                    </div>
@@ -239,7 +239,7 @@ $sessionLogin = new Container('credo');
                                              <label for="orderDate" class="col-lg-4 control-label">Risk Population</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->name); ?>
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->name));?>
                                              </span>
                                         </div>
                                    </div>
@@ -250,7 +250,7 @@ $sessionLogin = new Container('credo');
                                              <label for="termsOfPay" class="col-lg-4 control-label">Pregnancy Status</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->pregnancy_status); ?>
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->pregnancy_status));?>
                                              </span>
                                         </div>
                                    </div>
@@ -259,7 +259,7 @@ $sessionLogin = new Container('credo');
                                              <label for="otherRef" class="col-lg-4 control-label">Current Sexual Partner</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->current_sexual_partner); ?>
+                                                  <?php echo ucwords(str_replace('_', ' - ', $result->current_sexual_partner));?>
                                              </span>
                                         </div>
                                    </div>
