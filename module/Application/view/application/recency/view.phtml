@@ -114,7 +114,6 @@ $sessionLogin = new Container('credo');
                                    </div>
                               </div>
 
-                              <!--  -->
                               <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
@@ -239,37 +238,29 @@ $sessionLogin = new Container('credo');
                                              <label for="orderDate" class="col-lg-4 control-label">Risk Population</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-
-                                                  <?php echo ucwords(str_replace('_', ' ', $result->name)); ?>
-
+                                                  <?php  echo ucwords(str_replace('_', ' ', $result->name)); ?>
                                              </span>
                                         </div>
                                    </div>
                               </div>
-                              <div class="row">
-                                   <div class="col-md-6">
-                                        <div class="form-group">
-                                             <label for="termsOfPay" class="col-lg-4 control-label">Other Risk Populations</label>
-                                             <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
 
-                                                  <?php
-
-                                                  if($result['other_risk_population'] == '')
-                                                  {
-
-                                                       echo "---";
-                                                  }
-                                                  else
-                                                  {
-                                                       echo ucwords(str_replace('_', ' ', $result->other_risk_population));
-                                                  }
-                                                  ?>
-
-                                             </span>
+                              <?php
+                                   if($result['name'] == 'Other')
+                                   { ?>
+                                        <div class="row">
+                                             <div class="col-md-6">
+                                                  <div class="form-group">
+                                                       <label for="termsOfPay" class="col-lg-4 control-label">Other Risk Populations</label>
+                                                       <label for="company" class="col-lg-1 control-label">: </label>
+                                                       <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                            <?php
+                                                                 echo ucwords(str_replace('_', ' ', $result->other_risk_population));
+                                                            ?>
+                                                       </span>
+                                                  </div>
+                                             </div>
                                         </div>
-                                   </div>
-                              </div>
+                              <?php } ?>
 
                               <div class="row">
                                    <div class="col-md-6">
@@ -318,3 +309,15 @@ $sessionLogin = new Container('credo');
           </section>
      </div>
 </div>
+<script>
+
+function riskPopulationCheck(obj){
+    if( Base64.decode(obj.value) == '9' ){
+        $("#otherRiskPopulationInput").css('display','block');
+        $("#otherRiskPopulation").addClass('isRequired');
+    }else{
+        $("#otherRiskPopulationInput").css('display','none');
+        $("#otherRiskPopulation").removeClass('isRequired');
+    }
+}
+</script>
