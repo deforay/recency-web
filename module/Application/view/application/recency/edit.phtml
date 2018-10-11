@@ -7,7 +7,7 @@ $common = new CommonService();
 $dob = '';
 $file_open_date = '';
 
-if($result['risk_population'] == 9){
+if($result['risk_population'] == 'Other'){
     $riskDisplay = 'class="col-sm-2"';
     $otherRiskDisplay = 'style=" display:block; "';
     $otherRequired = 'isRequired';
@@ -280,7 +280,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
                                                   <option value="">--Select--</option>
                                                   <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
-                                                       <option value="<?php echo base64_encode($riskPo['rp_id']); ?>" <?php echo($result['risk_population'] == $riskPo['rp_id'] )?'selected="selected"':''; ?>><?php echo str_replace('_', ' ', $riskPo['name']); ?></option>
+                                                       <option value="<?php echo $riskPo['name']; ?>" <?php echo($result['risk_population'] == $riskPo['name'] )?'selected="selected"':''; ?>><?php echo str_replace('_', ' ', $riskPo['name']); ?></option>
                                                   <?php } ?>
                                              </select>
                                         </div>
@@ -510,7 +510,7 @@ function validateStep1()
 }
 
 function riskPopulationCheck(obj){
-    if( Base64.decode(obj.value) == '9' ){
+    if( obj.value == 'Other' ){
         $("#riskPopulationSelect").removeClass('col-sm-4');
         $("#riskPopulationSelect").addClass('col-sm-2');
         $("#otherRiskPopulationInput").css('display','block');

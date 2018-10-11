@@ -1,6 +1,8 @@
 <?php
 use Zend\Session\Container;
+use Application\Service\CommonService;
 $sessionLogin = new Container('credo');
+$common = new CommonService()
 // \Zend\Debug\Debug::dump($result);die;
 
 ?>
@@ -73,7 +75,7 @@ $sessionLogin = new Container('credo');
                                              <label for="orderDate" class="col-lg-4 control-label">HIV Diagnosis Date</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->hiv_diagnosis_date); ?>
+                                                  <?php echo ($result->hiv_diagnosis_date!='' && $result->hiv_diagnosis_date!='0000:00:00')?$common->humanDateFormat($result->hiv_diagnosis_date):''; ?>
                                              </span>
                                         </div>
                                    </div>
@@ -84,7 +86,7 @@ $sessionLogin = new Container('credo');
                                              <label for="termsOfPay" class="col-lg-4 control-label">HIV Recency Date</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->hiv_recency_date); ?>
+                                                  <?php echo ($result->hiv_recency_date!='' && $result->hiv_recency_date!='0000:00:00')?$common->humanDateFormat($result->hiv_recency_date):''; ?>
                                              </span>
                                         </div>
                                    </div>
@@ -172,7 +174,7 @@ $sessionLogin = new Container('credo');
                                              <label for="termsOfPay" class="col-lg-4 control-label">DOB</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->dob); ?>
+                                                  <?php echo ($result->dob!='' && $result->dob!='0000:00:00')?$common->humanDateFormat($result->dob):''; ?>
                                              </span>
                                         </div>
                                    </div>
@@ -238,14 +240,14 @@ $sessionLogin = new Container('credo');
                                              <label for="orderDate" class="col-lg-4 control-label">Risk Population</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php  echo ucwords(str_replace('_', ' ', $result->name)); ?>
+                                                  <?php  echo ucwords(str_replace('_', ' ', $result->risk_population)); ?>
                                              </span>
                                         </div>
                                    </div>
                               </div>
 
                               <?php
-                                   if($result['name'] == 'Other')
+                                   if($result['risk_population'] == 'Other')
                                    { ?>
                                         <div class="row">
                                              <div class="col-md-6">
