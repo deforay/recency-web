@@ -16,13 +16,15 @@ if($result['risk_population'] == 'Other'){
     $otherRiskDisplay = 'style=" display:none; "';
     $otherRequired = '';
 }
-
+$hivDiagnosisDate = '';
 if($result->hiv_diagnosis_date!= '' && $result->hiv_diagnosis_date!= null && $result->hiv_diagnosis_date!= '0000-00-00'){
      $hivDiagnosisDate = $common->humanDateFormat($result->hiv_diagnosis_date);
 }
+$hivRecencyDate = '';
 if($result->hiv_recency_date!= '' && $result->hiv_recency_date!= null && $result->hiv_recency_date!= '0000-00-00'){
      $hivRecencyDate = $common->humanDateFormat($result->hiv_recency_date);
 }
+$dob = '';
 if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
      $dob = $common->humanDateFormat($result->dob);
 }
@@ -128,8 +130,8 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                         <div class="col-sm-4">
                                              <input type="text" value="<?php echo $result['patient_id']; ?>" class="form-control <?php echo $patient; ?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
                                         </div>
-                                   </div>
-                                   <div class="form-group row">
+                                        </div>
+                                        <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" for="">Facility Name<?php echo(in_array("Facility Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                              <select class="form-control  <?php echo $facility; ?>" id="facilityId" name="facilityId" title="Please select the facility name">
@@ -137,85 +139,11 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <?php foreach($facilityResult['facility'] as $facility){?>
                                                        <option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo $facility['facility_name']; ?></option>
                                                   <?php } ?>
+                                                  <option value="other">Other</option>
                                              </select>
-                                        </div>
-
-                                        <label class="col-sm-2 col-form-label" for="">HIV Diagnosis Date<?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <input type="text" value="<?php echo $hivDiagnosisDate; ?>" class="js-datepicker form-control  <?php echo $hivDiagnosisRequiredDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
-                                        </div>
-                                   </div>
-
-                                   <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">HIV Recency Date<?php echo(in_array("Hiv Recency Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <input type="text" value="<?php echo $hivRecencyDate; ?>" class="js-datepicker form-control  <?php echo $hivRecencyRequiredDate; ?>" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
-                                        </div>
-
-                                        <label class="col-sm-2 col-form-label" for="">Control Line
-                                             <?php echo(in_array("Control Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-
-                                             <select class="form-control
-                                              <?php echo $controlLineResult; ?>" id="controlLine" name="controlLine" title="Please select the control line">
-                                                  <option value="">--Select--</option>
-                                                  <option value="present" <?php echo($result['control_line'] == 'present' )?'selected="selected"':''; ?>>Present(Positive/P)</option>
-                                                  <option value="absent" <?php echo($result['control_line'] == 'absent' )?'selected="selected"':''; ?>>Absent(Negative/N)</option>
-                                                  <option value="invalid" <?php echo($result['control_line'] == 'invalid' )?'selected="selected"':''; ?>>Invalid</option>
-                                                  <option value="no_result" <?php echo($result['control_line'] == 'no_result' )?'selected="selected"':''; ?>>Result Not Available</option>
-                                             </select>
-                                        </div>
-                                   </div>
-
-                                   <!--  -->
-
-                                   <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Positive Verification
-                                             <?php echo(in_array("Positive Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <select class="form-control <?php echo $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line">
-                                                  <option value="">--Select--</option>
-                                                  <option value="present" <?php echo($result['positive_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present(Positive/P)</option>
-                                                  <option value="absent" <?php echo($result['positive_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent(Negative/N)</option>
-                                                  <option value="invalid" <?php echo($result['positive_verification_line'] == 'invalid' )?'selected="selected"':''; ?>>Invalid</option>
-                                                  <option value="no_result" <?php echo($result['positive_verification_line'] == 'no_result' )?'selected="selected"':''; ?>>Result Not Available</option>
-                                             </select>
-                                        </div>
-
-                                        <label class="col-sm-2 col-form-label" for="">Long Term Verification
-                                             <?php echo(in_array("Long Term Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <select class="form-control <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line">
-                                                  <option value="">--Select--</option>
-                                                  <option value="present" <?php echo($result['long_term_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present(Positive/P)</option>
-                                                  <option value="absent" <?php echo($result['long_term_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent(Negative/N)</option>
-                                                  <option value="invalid" <?php echo($result['long_term_verification_line'] == 'invalid' )?'selected="selected"':''; ?>>Invalid</option>
-                                                  <option value="no_result" <?php echo($result['long_term_verification_line'] == 'no_result' )?'selected="selected"':''; ?>>Result Not Available</option>
-                                             </select>
-                                        </div>
-                                   </div>
-                                   <!--  -->
-
-                                   <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">DOB<?php echo(in_array("Dob",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <input type="text" value="<?php echo $dob;?>" class="js-datepicker form-control <?php echo $dobRequired; ?>" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
-                                        </div>
-
-                                        <label class="col-sm-2 col-form-label" for="">Age<?php echo(in_array("Age",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <input type="text" value="<?php echo $result['age'];?>" class="form-control <?php echo $age; ?>" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
-                                        </div>
-                                   </div>
-                                   <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Gender<?php echo(in_array("Gender",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <select class="form-control <?php echo $gender; ?>" id="gender" name="gender" title="Please select the gender">
-                                                  <option value="">--Select--</option>
-                                                  <option value="male" <?php echo($result['gender'] == 'male' )?'selected="selected"':''; ?>>Male</option>
-                                                  <option value="female" <?php echo($result['gender'] == 'female' )?'selected="selected"':''; ?>>Female</option>
-                                                  <option value="not_reported" <?php echo($result['gender'] == 'not_reported' )?'selected="selected"':''; ?>>Not Reported</option>
-                                             </select>
+                                             &nbsp;
+                                             <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherFacilityName" name="otherFacilityName" title="Please Enter facility name" value="" placeholder="Enter facility name"  >
+                                             &nbsp;
                                         </div>
 
                                         <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[0]['global_value']); ?><?php echo(in_array("Province",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
@@ -238,12 +166,124 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                 <option value="">-- Select --</option>
                                             </select>
                                         </div>
+
+
+                                        <label class="col-sm-2 col-form-label" for="">HIV Diagnosis Date<?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <input type="text" value="<?php echo $hivDiagnosisDate; ?>" class="js-datepicker form-control  <?php echo $hivDiagnosisRequiredDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label" for="">Past HIV Testing<?php echo(in_array("Past Hiv Testing",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing" onchange="checkHivTesting(this);">
+                                                  <option value="">--Select--</option>
+                                                  <option value="yes" <?php echo($result['past_hiv_testing'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                                  <option value="no" <?php echo($result['past_hiv_testing'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                                                  <option value="not_known" <?php echo($result['past_hiv_testing'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
+                                             </select>
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label" for="">Test Last 12 Month<?php echo(in_array("Test Last 12 Month",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
+                                                  <option value="">--Select--</option>
+                                                  <option value="yes" <?php echo($result['test_last_12_month'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                                  <option value="no" <?php echo($result['test_last_12_month'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                                                  <option value="not_known" <?php echo($result['test_last_12_month'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
+                                             </select>
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label hivResultStatusShow" for="">Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4 hivResultStatusShow">
+                                             <select class="form-control" id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status"  onchange="checkHivStatus(this);">
+                                                  <option value="">--Select--</option>
+                                                  <option value="negative" <?php echo($result['last_hiv_status'] == 'negative' )?'selected="selected"':''; ?>>Negative</option>
+                                                  <option value="positive" <?php echo($result['last_hiv_status'] == 'positive' )?'selected="selected"':''; ?>>Positive</option>
+                                             </select>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label hivResultStatusShow" for="">Is the Patient on ART? <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4 hivResultStatusShow">
+                                             <select class="form-control" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
+                                                  <option value="">--Select--</option>
+                                                  <option value="yes" <?php echo($result['patient_on_art'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                                  <option value="no" <?php echo($result['patient_on_art'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                                             </select>
+                                        </div>
+                                        <label class="col-sm-2 form-check-label " for="">Recency Test not performed </label>
+                                            <div class="col-sm-4 ">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" <?php echo($result['recency_test_performed'] == 'true' )?'checked="checked"':''; ?> value="true"/>&nbsp;Yes
+                                            </div>
+
+                                        <label class="col-sm-2 col-form-label" for="">HIV Recency Date<?php echo(in_array("Hiv Recency Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <input type="text" value="<?php echo $hivRecencyDate; ?>" class="js-datepicker form-control disbaledResult <?php echo $hivRecencyRequiredDate; ?>" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label" for="">Control Line
+                                            <?php echo(in_array("Control Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control disbaledResult
+                                              <?php echo $controlLineResult; ?>" id="controlLine" name="controlLine" title="Please select the control line" onchange="changeTermLine()">
+                                                  <option value="">--Select--</option>
+                                                  <option value="present" <?php echo($result['control_line'] == 'present' )?'selected="selected"':''; ?>>Present</option>
+                                                  <option value="absent" <?php echo($result['control_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
+                                             </select>
+                                        </div>
+                                 
+                                        <label class="col-sm-2 col-form-label" for="">Positive Verification
+                                             <?php echo(in_array("Positive Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control disbaledResult <?php echo $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
+                                                  <option value="">--Select--</option>
+                                                  <option value="present" <?php echo($result['positive_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present</option>
+                                                  <option value="absent" <?php echo($result['positive_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
+                                             </select>
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label" for="">Long Term Verification
+                                             <?php echo(in_array("Long Term Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control disbaledResult <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
+                                                  <option value="">--Select--</option>
+                                                  <option value="present" <?php echo($result['long_term_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present</option>
+                                                  <option value="absent" <?php echo($result['long_term_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
+                                             </select>
+                                        </div>
+                                   <?php if($result['term_outcome']!=''){ ?>
+                                        <label class="col-sm-2 col-form-label outcome" for="">Outcome</label>
+                                            <div class="col-sm-4 outcome">
+                                                <span class="outcome form-control" style="border:none;" id="outcome"><?php echo $result['term_outcome'];?></span>
+                                                <input type="hidden" name="outcomeData" id="outcomeData" value="<?php echo $result['term_outcome'];?>"/>
+                                            </div>
+                                   <?php } ?>
                                    </div>
 
                               </div>
 
                               <div class="tab-pane" id="wizard-progress-step2" role="tabpanel">
                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="">DOB<?php echo(in_array("Dob",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <input type="text" value="<?php echo $dob;?>" class="js-datepicker form-control <?php echo $dobRequired; ?>" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label" for="">Age<?php echo(in_array("Age",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <input type="text" value="<?php echo $result['age'];?>" class="form-control <?php echo $age; ?>" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
+                                        </div>
+                                        </div>
+                                        <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="">Gender<?php echo(in_array("Gender",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <select class="form-control <?php echo $gender; ?>" id="gender" name="gender" title="Please select the gender">
+                                                  <option value="">--Select--</option>
+                                                  <option value="male" <?php echo($result['gender'] == 'male' )?'selected="selected"':''; ?>>Male</option>
+                                                  <option value="female" <?php echo($result['gender'] == 'female' )?'selected="selected"':''; ?>>Female</option>
+                                                  <option value="not_reported" <?php echo($result['gender'] == 'not_reported' )?'selected="selected"':''; ?>>Not Reported</option>
+                                             </select>
+                                        </div>
+
+
                                         <label class="col-sm-2 col-form-label" for="">Residence<?php echo(in_array("Residence",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                              <select class="form-control" id="residence" name="residence" title="Please select the residence">
@@ -253,7 +293,11 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              </select>
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label" for="">Marital Status<?php echo(in_array("Marital Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        
+                                   </div>
+
+                                   <div class="form-group row">
+                                   <label class="col-sm-2 col-form-label" for="">Marital Status<?php echo(in_array("Marital Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                              <select class="form-control" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
                                                   <option value="">--Select--</option>
@@ -264,33 +308,31 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <option value="divorce_separated" <?php echo($result['marital_status'] == 'divorce_separated' )?'selected="selected"':''; ?>>Divorce - Separated</option>
                                              </select>
                                         </div>
-                                   </div>
-
-                                   <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" for="">Education Level<?php echo(in_array("Education Level",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                              <select class="form-control" id="educationLevel" name="educationLevel" title="Please select the education level">
                                                   <option value="">--Select--</option>
                                                   <option value="primary" <?php echo($result['education_level'] == 'primary' )?'selected="selected"':''; ?>>Primary</option>
+                                                  <option value="secondary" <?php echo($result['education_level'] == 'secondary' )?'selected="selected"':''; ?>>Secondary</option>
                                                   <option value="university_or_higher" <?php echo($result['education_level'] == 'university_or_higher' )?'selected="selected"':''; ?>>University or Higher</option>
                                              </select>
-                                        </div>
-                                        <label class="col-sm-2 col-form-label" for="">Risk Population<?php echo(in_array("Risk Population",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div id="riskPopulationSelect" <?php echo $riskDisplay; ?>>
-                                             <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
-                                                  <option value="">--Select--</option>
-                                                  <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
-                                                       <option value="<?php echo $riskPo['name']; ?>" <?php echo($result['risk_population'] == $riskPo['name'] )?'selected="selected"':''; ?>><?php echo str_replace('_', ' ', $riskPo['name']); ?></option>
-                                                  <?php } ?>
-                                             </select>
-                                        </div>
-
-                                        <div id="otherRiskPopulationInput" class="col-sm-2" <?php echo $otherRiskDisplay; ?>>
-                                             <input type="text" value="<?php echo $result['other_risk_population'];?>" class="form-control" id="otherRiskPopulation" name="otherRiskPopulation" title="Please select the risk population" value="" placeholder="Other risk population"  >
                                         </div>
                                    </div>
 
                                    <div class="form-group row">
+                                   <label class="col-sm-2 col-form-label" for="">Risk Population<?php echo(in_array("Risk Population",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div id="riskPopulationSelect" <?php echo $riskDisplay; ?>>
+                                             <select class="form-control" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
+                                                  <option value="">--Select--</option>
+                                                  <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
+                                                       <option value="<?php echo base64_encode($riskPo['rp_id']); ?>" <?php echo($result['risk_population'] == $riskPo['rp_id'] )?'selected="selected"':''; ?>><?php echo $riskPo['name']; ?></option>
+                                                  <?php } ?>
+                                                  <option value="Other">Other</option>
+                                             </select>
+                                             
+                                             <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherRiskPopulation" name="otherRiskPopulation" title="Please Enter the Other Risk Population" value="" placeholder="Enter other population"  >
+                                        </div>
+
                                         <label class="col-sm-2 col-form-label" for="">Pregnancy Status<?php echo(in_array("Pregnancy Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                              <select class="form-control" id="pregnancyStatus" name="pregnancyStatus" title="Please select the pregnancy status">
@@ -310,50 +352,18 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <option value=">3" <?php echo($result['current_sexual_partner'] == '>3' )?'selected="selected"':''; ?>>>3</option>
                                              </select>
                                         </div>
-                                   </div>
 
-                                   <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Past HIV Testing<?php echo(in_array("Past Hiv Testing",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label" for="">Experienced violence in last 12 months <?php echo(in_array("experience Violence Last 12 Month",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing" onchange="checkHivTesting(this);">
+                                             <select class="form-control" id="expViolence" name="expViolence" title="Please select the experienced violence in last 12 months">
                                                   <option value="">--Select--</option>
-                                                  <option value="yes" <?php echo($result['past_hiv_testing'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
-                                                  <option value="no" <?php echo($result['past_hiv_testing'] == 'no' )?'selected="selected"':''; ?>>No</option>
-                                                  <option value="not_known" <?php echo($result['past_hiv_testing'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
+                                                  <option value="yes"<?php echo($result['exp_violence_last_12_month'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                                  <option value="no<?php echo($result['exp_violence_last_12_month'] == 'no' )?'selected="selected"':''; ?>">No</option>
+                                                  <option value="dont_know"<?php echo($result['exp_violence_last_12_month'] == 'not_known' )?'selected="selected"':''; ?>>Don't know</option>
                                              </select>
                                         </div>
-                                        <label class="col-sm-2 col-form-label" for="">Test Last 12 Month<?php echo(in_array("Test Last 12 Month",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <select class="form-control" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
-                                                  <option value="">--Select--</option>
-                                                  <option value="yes" <?php echo($result['test_last_12_month'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
-                                                  <option value="no" <?php echo($result['test_last_12_month'] == 'no' )?'selected="selected"':''; ?>>No</option>
-                                                  <option value="not_known" <?php echo($result['test_last_12_month'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
-                                             </select>
-                                        </div>
-                                   </div>
 
-                              <div id="hivResultStatusShow" style="display:none;">
-                                        <p class="colour" > What was the Last HIV Status? </p>
-                                   <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" for="">Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <select class="form-control" id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status"  onchange="checkHivStatus(this);">
-                                                  <option value="">--Select--</option>
-                                                  <option value="negative" <?php echo($result['last_hiv_status'] == 'negative' )?'selected="selected"':''; ?>>Negative</option>
-                                                  <option value="positive" <?php echo($result['last_hiv_status'] == 'positive' )?'selected="selected"':''; ?>>Positive</option>
-                                             </select>
-                                        </div>
-                                        <label class="col-sm-2 col-form-label" for="">Is the Patient on ART? <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4">
-                                             <select class="form-control" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
-                                                  <option value="">--Select--</option>
-                                                  <option value="yes" <?php echo($result['patient_on_art'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
-                                                  <option value="no" <?php echo($result['patient_on_art'] == 'no' )?'selected="selected"':''; ?>>No</option>
-                                             </select>
-                                        </div>
                                    </div>
-                              </div>
 
                               </div>
                          </div>
@@ -392,12 +402,50 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
 <script type="text/javascript">
     var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+
+    function changeTermLine()
+     {
+        var ctrlLine = $("#controlLine").val();
+        var postiveLine = $("#positiveVerificationLine").val();
+        var longTermLine = $("#longTermVerificationLine").val();
+        if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
+            if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
+                $("#outcome").html('Invalid – Please Verify').css({"color":"#de1d2b"});
+                $(".outcome").css({"display":"block"});
+            }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
+                $("#outcome").html('Invalid – Please Verify').css({"color":"#de1d2b"});
+                $(".outcome").css({"display":"block"});
+            }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
+                $("#outcome").html('Invalid – Please Verify').css({"color":"#de1d2b"});
+                $(".outcome").css({"display":"block"});
+            }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
+                $("#outcome").html('Invalid – Please Verify').css({"color":"#de1d2b"});
+                $(".outcome").css({"display":"block"});
+            }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
+                $("#outcome").html('HIV Negative').css({"color":"#de1d2b"});
+                $(".outcome").css({"display":"block"});
+            }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
+                $("#outcome").html('Invalid – Please Verify').css({"color":"#de1d2b"});
+                $(".outcome").css({"display":"block"});
+            }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
+                $("#outcome").html('Preliminary Recent').css({"color":"#de1d2b"});
+                $(".outcome").css({"display":"block"});
+            }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
+                $("#outcome").html('Long Term').css({"color":"#000000"});
+                $(".outcome").css({"display":"block"});
+            }
+        }else{
+            $("#outcome").html('').hide();
+            $(".outcome").css({"display":"none"});
+        }
+     }
+
      function checkHivTesting(obj){
           if( obj.value == 'yes' ){
-               $("#hivResultStatusShow").css('display','block');
+               $(".hivResultStatusShow").css('display','block');
                $("#lastHivStatus").addClass('isRequired');
           }else{
-               $("#hivResultStatusShow").css('display','none');
+               $(".hivResultStatusShow").css('display','none');
                $("#lastHivStatus").removeClass('isRequired');
                $("#patientOnArt").removeClass('isRequired');
           }
@@ -415,28 +463,45 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
 jQuery(document).ready(function($) {
 
-          if($("#positiveVerificationLine").val() == 'absent'){
-               $("#longTermVerificationLine").prop("disabled", true);
-               $("#longTermVerificationLine").removeClass("isRequired");
-          }else{
-               $("#longTermVerificationLine").prop("disabled", false);
-               $("#longTermVerificationLine").addClass("isRequired");
-          }
+        //   if($("#positiveVerificationLine").val() == 'absent'){
+        //        $("#longTermVerificationLine").prop("disabled", true);
+        //        $("#longTermVerificationLine").removeClass("isRequired");
+        //   }else{
+        //        $("#longTermVerificationLine").prop("disabled", false);
+        //        $("#longTermVerificationLine").addClass("isRequired");
+        //   }
 
-     $("#positiveVerificationLine").change(function() {
-          if($(this).val() == 'absent'){
-               var text = $(this).find('option:selected').text();
-               $('#longTermVerificationLine').val('');
+    //  $("#positiveVerificationLine").change(function() {
+    //       if($(this).val() == 'absent'){
+    //            var text = $(this).find('option:selected').text();
+    //            $('#longTermVerificationLine').val('');
 
-               $("#longTermVerificationLine").attr("disabled",true);
-               $("#longTermVerificationLine").removeClass("isRequired");
-          }else{
+    //            $("#longTermVerificationLine").attr("disabled",true);
+    //            $("#longTermVerificationLine").removeClass("isRequired");
+    //       }else{
 
-               $("#longTermVerificationLine").attr("disabled",false);
-               $("#longTermVerificationLine").addClass("isRequired");
-
-          }
-     });
+    //            $("#longTermVerificationLine").attr("disabled",false);
+    //            $("#longTermVerificationLine").addClass("isRequired");
+    //       }
+    //  });
+     $('#recencyTestPerformedYes').change(function() {
+            if(this.checked == true){
+                $("#hivRecencyDate","#controlLine","#positiveVerificationLine","#longTermVerificationLine").removeClass("isRequired");
+                $(".disbaledResult").attr("disabled",true);
+            }else{
+                $(".disbaledResult").attr("disabled",false);
+                <?php
+                $hivRecencyDate = in_array("Hiv Recency Date",$resultArr)?"isRequired":"";
+                $controlLineResult = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
+                $positiveVerificationLine = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
+                $longTermVerificationLine = in_array("Long Term Verification Line",$resultArr)?"isRequired":"";
+                ?>
+                $("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");
+                $("#controlLine").addClass("<?php echo $controlLineResult;?>");
+                $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
+                $("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine;?>");
+            }
+        });  
 
      <?php
      foreach($globalConfigResult as $config){
@@ -457,6 +522,32 @@ jQuery(document).ready(function($) {
           }
      }
      ?>
+        $("#facilityId").change(function(){
+            if($(this).val() == 'other'){
+                $("#otherFacilityName").addClass("isRequired").show();
+            }else{
+                $("#otherFacilityName").removeClass("isRequired").hide();
+            }
+        });
+
+        <?php if($result['past_hiv_testing'] == 'yes') { ?>
+                 $(".hivResultStatusShow").css('display','block');
+                 $("#lastHivStatus").addClass('isRequired');
+            <?php }else{ ?>
+                 $(".hivResultStatusShow").css('display','none');
+                 $("#lastHivStatus").removeClass('isRequired');
+                 $("#patientOnArt").removeClass('isRequired');
+            <?php }?>
+
+            <?php if($result['last_hiv_status'] == 'positive') { ?>
+                 $("#patientOnArt").attr("disabled",false);
+                 $("#lastHivStatus").addClass('isRequired');
+                 $("#patientOnArt").addClass('isRequired');//
+
+            <?php }else{ ?>
+                 $("#patientOnArt").attr("disabled",true);
+                 $("#patientOnArt").removeClass('isRequired');
+            <?php } ?>
 });
 
 function validateStep1()
@@ -480,46 +571,26 @@ function validateStep1()
             $("#step2,#wizard-progress-step2").addClass("active");
             $(".btnHide").show();
             $(".nxtBtn").hide();
-
-            <?php if($result['past_hiv_testing'] == 'yes') { ?>
-                 $("#hivResultStatusShow").css('display','block');
-                 $("#lastHivStatus").addClass('isRequired');
-            <?php }else{ ?>
-                 $("#hivResultStatusShow").css('display','none');
-                 $("#lastHivStatus").removeClass('isRequired');
-                 $("#patientOnArt").removeClass('isRequired');
-            <?php }?>
-
-            <?php if($result['last_hiv_status'] == 'positive') { ?>
-                 $("#patientOnArt").attr("disabled",false);
-                 $("#lastHivStatus").addClass('isRequired');
-                 $("#patientOnArt").addClass('isRequired');//
-
-            <?php }else{ ?>
-                 $("#patientOnArt").attr("disabled",true);
-                 $("#patientOnArt").removeClass('isRequired');
-            <?php } ?>
-
         }
     }else{
-            $(".btnHide").hide();
-            $("#sampleId").focus();
-            $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
-            alert("Please enter either sample or patient id  ",'err');
+        $(".btnHide").hide();
+        $("#sampleId").focus();
+        $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
+        alert("Please enter either sample or patient id  ",'err');
     }
 }
 
 function riskPopulationCheck(obj){
     if( obj.value == 'Other' ){
-        $("#riskPopulationSelect").removeClass('col-sm-4');
-        $("#riskPopulationSelect").addClass('col-sm-2');
-        $("#otherRiskPopulationInput").css('display','block');
-        $("#otherRiskPopulation").addClass('isRequired');
+        //$("#riskPopulationSelect").removeClass('col-sm-4');
+        //$("#riskPopulationSelect").addClass('col-sm-2');
+        $("#otherRiskPopulation").css('display','block').addClass('isRequired');
+        //$("#otherRiskPopulation").addClass('isRequired');
     }else{
-        $("#riskPopulationSelect").removeClass('col-sm-2');
-        $("#riskPopulationSelect").addClass('col-sm-4');
-        $("#otherRiskPopulationInput").css('display','none');
-        $("#otherRiskPopulation").removeClass('isRequired');
+        //$("#riskPopulationSelect").removeClass('col-sm-2');
+        //$("#riskPopulationSelect").addClass('col-sm-4');
+        $("#otherRiskPopulation").css('display','none').removeClass('isRequired');
+        //$("#otherRiskPopulation").removeClass('isRequired');
     }
 }
 
@@ -529,7 +600,6 @@ function validateStep2()
     $("#maritalStatus").removeClass('isRequired');
     $("#educationLevel").removeClass('isRequired');
     $("#riskPopulation").removeClass('isRequired');
-    $("#otherRiskPopulation").removeClass('isRequired');
     $("#otherRiskPopulation").removeClass('isRequired');
     $("#pregnancyStatus").removeClass('isRequired');
     $("#currentSexualPartner").removeClass('isRequired');
@@ -551,6 +621,7 @@ function validateNow() {
           flag = deforayValidator.init({
                formId: 'recencyInformation'
           });
+          document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
           if (flag) {
                $.blockUI();
                document.getElementById('recencyInformation').submit();

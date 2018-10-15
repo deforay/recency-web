@@ -21,5 +21,16 @@ class RiskPopulationsTable extends AbstractTableGateway {
     {
         return $this->select()->toArray();
     }
+
+    public function checkFacilityName($rpName)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $rpQuery = $sql->select()->from('risk_populations')->columns(array('rp_id','name'))
+                        ->where(array('name' => trim($rpName)));
+        $rpQueryStr = $sql->getSqlStringForSqlObject($rpQuery); // Get the string of the Sql, instead of the Select-instance
+        $rpResult = $dbAdapter->query($rpQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        return $rpResult;
+    }
 }
 ?>
