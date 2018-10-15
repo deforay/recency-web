@@ -161,12 +161,7 @@ class RecencyTable extends AbstractTableGateway {
                elseif($aRow['control_line'] == 'absent'){
                     $controlLine = "Absent(Negative/N)";
                }
-               elseif($aRow['control_line'] == 'invalid'){
-                    $controlLine = "Invalid";
-               }
-               elseif($aRow['control_line'] == 'no_result'){
-                    $controlLine = "Result Not Available";
-               }
+               
                $row[] = ucwords($controlLine);
 
                // Positive Verification
@@ -176,12 +171,7 @@ class RecencyTable extends AbstractTableGateway {
                elseif($aRow['positive_verification_line'] == 'absent'){
                     $positiveVerification = "Absent(Negative/N)";
                }
-               elseif($aRow['positive_verification_line'] == 'invalid'){
-                    $positiveVerification = "Invalid";
-               }
-               elseif($aRow['positive_verification_line'] == 'no_result'){
-                    $positiveVerification = "Result Not Available";
-               }
+               
                $row[] = ucwords($positiveVerification);
 
                // Long Term Verification
@@ -190,12 +180,6 @@ class RecencyTable extends AbstractTableGateway {
                }
                elseif($aRow['long_term_verification_line'] == 'absent'){
                     $longTerm = "Absent(Negative/N)";
-               }
-               elseif($aRow['long_term_verification_line'] == 'invalid'){
-                    $longTerm = "Invalid";
-               }
-               elseif($aRow['long_term_verification_line'] == 'no_result'){
-                    $longTerm = "Result Not Available";
                }
                elseif($aRow['long_term_verification_line'] == ''){
                     $longTerm = "---";
@@ -317,6 +301,8 @@ class RecencyTable extends AbstractTableGateway {
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
+        $facilityDb = new FacilitiesTable($this->adapter);
+        $riskPopulationDb = new RiskPopulationsTable($this->adapter);
         $logincontainer = new Container('credo');
         $common = new CommonService();
         if(isset($params['recencyId']) && trim($params['recencyId'])!="")
@@ -342,7 +328,7 @@ class RecencyTable extends AbstractTableGateway {
             if($params['riskPopulation']=='Other'){
                 $rpResult = $riskPopulationDb->checkExistRiskPopulation($params['otherRiskPopulation']);
                 if(isset($rpResult['name']) && $rpResult['name']!=''){
-                    $params['riskPopulation'] = base64_encode($rpResult['facility_id']);
+                    $params['riskPopulation'] = base64_encode($rpResult['rp_id']);
                 }else{
                     $rpData = array('name'=>trim($params['otherRiskPopulation']));
                     $riskPopulationDb->insert($facilityData);
@@ -371,7 +357,7 @@ class RecencyTable extends AbstractTableGateway {
                 'marital_status' => $params['maritalStatus'],
                 'residence' => $params['residence'],
                 'education_level' => $params['educationLevel'],
-                'risk_population' => base64_encode($params['riskPopulation']),
+                'risk_population' => base64_decode($params['riskPopulation']),
                     //'other_risk_population' => ($params['riskPopulation']=='Other')?$params['otherRiskPopulation']:NULL,
                 'pregnancy_status' => $params['pregnancyStatus'],
                 'current_sexual_partner' => $params['currentSexualPartner'],
@@ -448,6 +434,35 @@ class RecencyTable extends AbstractTableGateway {
                 try{
                     if(isset($recency['sampleId']) && trim($recency['sampleId'])!="")
                     {
+                        if($params['facilityId']=='other'){
+                            $fResult = $facilityDb->checkFacilityName($params['otherFacilityName']);
+                            if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
+                                $params['facilityId'] = $fResult['facility_id'];
+                            }else{
+                                $facilityData = array('facility_name'=>trim($params['otherFacilityName']),
+                                                    'province'=>$params['location_one'],
+                                                    'district'=>$params['location_two'],
+                                                    'city'=>$params['location_three']);
+                                $facilityDb->insert($facilityData);
+                                if($facilityDb->lastInsertValue>0){
+                                $params['facilityId'] = $facilityDb->lastInsertValue;
+                                }
+                            }
+                        }
+                        //check oher pouplation
+                        if($params['riskPopulation']=='Other'){
+                            $rpResult = $riskPopulationDb->checkExistRiskPopulation($params['otherRiskPopulation']);
+                            if(isset($rpResult['name']) && $rpResult['name']!=''){
+                                $params['riskPopulation'] = $rpResult['rp_id'];
+                            }else{
+                                $rpData = array('name'=>trim($params['otherRiskPopulation']));
+                                $riskPopulationDb->insert($facilityData);
+                                if($riskPopulationDb->lastInsertValue>0){
+                                $params['riskPopulation'] = $riskPopulationDb->lastInsertValue;
+                                }
+                            }
+                        }
+
                         $userId = $recency['userId'];
                         $data = array(
                             'sample_id' => $recency['sampleId'],
@@ -465,7 +480,7 @@ class RecencyTable extends AbstractTableGateway {
                             'education_level' => $recency['educationLevel'],
                             'risk_population' => $recency['riskPopulation'],
                             'other_risk_population' => $recency['otherriskPopulation'],
-
+'term_outcome'=>$recency['recencyOutcome'],
                             'pregnancy_status' => $recency['pregnancyStatus'],
                             'current_sexual_partner' => $recency['currentSexualPartner'],
                             'past_hiv_testing' => $recency['pastHivTesting'],
@@ -476,7 +491,15 @@ class RecencyTable extends AbstractTableGateway {
                             'location_two' => $recency['location_two'],
                             'location_three' => $recency['location_three'],
                             'added_on' => date("Y-m-d H:i:s"),
-                            'added_by' => $recency['userId']
+                            'added_by' => $recency['userId'],
+                            'exp_violence_last_12_month'=>$recency['violenceLast12Month'],
+                            'mac_no'=>$recency['macAddress'],
+                            'cell_phone_number'=>$recency['phoneNumber'],
+                            'recency_test_performed'=>$recency['testNotPerformed'],
+                            //'ip_address'=>$recency[''],
+                            'form_initiation_datetime'=>$recency['formInitDateTime'],
+                            'form_transfer_datetime'=>date("Y-m-d H:i:s"),
+
                         );
                         if(isset($recency['hivRecencyDate']) && trim($recency['hivDiagnosisDate'])!=""){
                             $data['hiv_diagnosis_date']=$common->dbDateFormat($recency['hivDiagnosisDate']);
@@ -523,6 +546,7 @@ class RecencyTable extends AbstractTableGateway {
                             'education_level' => $params['educationLevel'],
                             'risk_population' => $params['riskPopulation'],
                             'other_risk_population' => $params['otherriskPopulation'],
+                            'term_outcome'=>$params['recencyOutcome'],
                             'pregnancy_status' => $params['pregnancyStatus'],
                             'current_sexual_partner' => $params['currentSexualPartner'],
                             'past_hiv_testing' => $params['pastHivTesting'],
@@ -533,7 +557,14 @@ class RecencyTable extends AbstractTableGateway {
                             'location_two' => $params['locationTwo'],
                             'location_three' => $params['locationThree'],
                             'added_on' => date("Y-m-d H:i:s"),
-                            'added_by' => $params['userId']
+                            'added_by' => $params['userId'],
+                            'exp_violence_last_12_month'=>$params['violenceLast12Month'],
+                            'mac_no'=>$params['macAddress'],
+                            'cell_phone_number'=>$params['phoneNumber'],
+                            'recency_test_performed'=>$params['testNotPerformed'],
+                            //'ip_address'=>$recency[''],
+                            'form_initiation_datetime'=>$params['formInitDateTime'],
+                            'form_transfer_datetime'=>date("Y-m-d H:i:s"),
 
                     );
                     if(isset($params['hivRecencyDate']) && trim($params['hivDiagnosisDate'])!=""){
