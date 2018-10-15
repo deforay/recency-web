@@ -438,34 +438,34 @@ class RecencyTable extends AbstractTableGateway {
                 try{
                     if(isset($recency['sampleId']) && trim($recency['sampleId'])!="")
                     {
-                        if($params['facilityId']=='other'){
-                            $fResult = $facilityDb->checkFacilityName($params['otherFacilityName']);
-                            if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
-                                $params['facilityId'] = $fResult['facility_id'];
-                            }else{
-                                $facilityData = array('facility_name'=>trim($params['otherFacilityName']),
-                                                    'province'=>$params['location_one'],
-                                                    'district'=>$params['location_two'],
-                                                    'city'=>$params['location_three']);
-                                $facilityDb->insert($facilityData);
-                                if($facilityDb->lastInsertValue>0){
-                                $params['facilityId'] = $facilityDb->lastInsertValue;
-                                }
-                            }
-                        }
-                        //check oher pouplation
-                        if($params['riskPopulation']=='Other'){
-                            $rpResult = $riskPopulationDb->checkExistRiskPopulation($params['otherRiskPopulation']);
-                            if(isset($rpResult['name']) && $rpResult['name']!=''){
-                                $params['riskPopulation'] = $rpResult['rp_id'];
-                            }else{
-                                $rpData = array('name'=>trim($params['otherRiskPopulation']));
-                                $riskPopulationDb->insert($rpData);
-                                if($riskPopulationDb->lastInsertValue>0){
-                                $params['riskPopulation'] = $riskPopulationDb->lastInsertValue;
-                                }
-                            }
-                        }
+                         if($recency['otherfacility']!=''){
+ $fResult = $facilityDb->checkFacilityName($recency['otherfacility']);
+ if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
+ $recency['facilityId'] = $fResult['facility_id'];
+ }else{
+ $facilityData = array('facility_name'=>trim($recency['otherfacility']),
+ 'province'=>$recency['location_one'],
+ 'district'=>$recency['location_two'],
+ 'city'=>$recency['location_three']);
+ $facilityDb->insert($facilityData);
+ if($facilityDb->lastInsertValue>0){
+ $recency['facilityId'] = $facilityDb->lastInsertValue;
+ }
+ }
+ }
+ //check oher pouplation
+ if($recency['otherriskPopulation']!=''){
+ $rpResult = $riskPopulationDb->checkExistRiskPopulation($recency['otherriskPopulation']);
+ if(isset($rpResult['name']) && $rpResult['name']!=''){
+ $recency['riskPopulation'] = $rpResult['rp_id'];
+ }else{
+ $rpData = array('name'=>trim($recency['otherriskPopulation']));
+ $riskPopulationDb->insert($rpData);
+ if($riskPopulationDb->lastInsertValue>0){
+ $recency['riskPopulation'] = $riskPopulationDb->lastInsertValue;
+ }
+ }
+ }
 
                         $userId = $recency['userId'];
                         $data = array(
@@ -483,7 +483,7 @@ class RecencyTable extends AbstractTableGateway {
                             'residence' => $recency['residence'],
                             'education_level' => $recency['educationLevel'],
                             'risk_population' => $recency['riskPopulation'],
-                            'other_risk_population' => $recency['otherriskPopulation'],
+                            //'other_risk_population' => $recency['otherriskPopulation'],
                             'term_outcome'=>$recency['recencyOutcome'],
                             'pregnancy_status' => $recency['pregnancyStatus'],
                             'current_sexual_partner' => $recency['currentSexualPartner'],

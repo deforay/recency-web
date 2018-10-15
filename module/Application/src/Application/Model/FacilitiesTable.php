@@ -308,7 +308,7 @@ class FacilitiesTable extends AbstractTableGateway {
                {
                   $dbAdapter = $this->adapter;
                   $sql = new Sql($dbAdapter);
-                  $fQuery = $sql->select()->from('facility_details')->columns(array('facility_id','facility_name'))
+                  $fQuery = $sql->select()->from('facilities')->columns(array('facility_id','facility_name'))
                                     ->where(array('facility_name' => trim($fName)));
                   $fQueryStr = $sql->getSqlStringForSqlObject($fQuery); // Get the string of the Sql, instead of the Select-instance
                   $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
