@@ -247,7 +247,7 @@ class RecencyTable extends AbstractTableGateway {
             if($params['riskPopulation']=='Other'){
                 $rpResult = $riskPopulationDb->checkExistRiskPopulation($params['otherRiskPopulation']);
                 if(isset($rpResult['name']) && $rpResult['name']!=''){
-                    $params['riskPopulation'] = base64_encode($rpResult['facility_id']);
+                    $params['riskPopulation'] = base64_encode($rpResult['rp_id']);
                 }else{
                     $rpData = array('name'=>trim($params['otherRiskPopulation']));
                     $riskPopulationDb->insert($facilityData);
@@ -294,7 +294,7 @@ class RecencyTable extends AbstractTableGateway {
                 'form_transfer_datetime'=> date("Y-m-d H:i:s"),
             );
 
-
+            \Zend\Debug\Debug::dump($data);die;
             $this->insert($data);
 
             $lastInsertedId = $this->lastInsertValue;

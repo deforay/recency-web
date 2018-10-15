@@ -22,7 +22,7 @@ class RiskPopulationsTable extends AbstractTableGateway {
         return $this->select()->toArray();
     }
 
-    public function checkFacilityName($rpName)
+    public function checkExistRiskPopulation($rpName)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
