@@ -463,7 +463,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
         //   });
         $('#recencyTestPerformedYes').change(function() {
             if(this.checked == true){
-                $("#hivRecencyDate","#controlLine","#positiveVerificationLine","#longTermVerificationLine").removeClass("isRequired");
+                $(".disbaledResult").removeClass("isRequired");
                 $(".disbaledResult").attr("disabled",true);
             }else{
                 $(".disbaledResult").attr("disabled",false);
