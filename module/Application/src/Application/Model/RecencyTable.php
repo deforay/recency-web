@@ -161,12 +161,7 @@ class RecencyTable extends AbstractTableGateway {
                elseif($aRow['control_line'] == 'absent'){
                     $controlLine = "Absent(Negative/N)";
                }
-               elseif($aRow['control_line'] == 'invalid'){
-                    $controlLine = "Invalid";
-               }
-               elseif($aRow['control_line'] == 'no_result'){
-                    $controlLine = "Result Not Available";
-               }
+               
                $row[] = ucwords($controlLine);
 
                // Positive Verification
@@ -176,12 +171,7 @@ class RecencyTable extends AbstractTableGateway {
                elseif($aRow['positive_verification_line'] == 'absent'){
                     $positiveVerification = "Absent(Negative/N)";
                }
-               elseif($aRow['positive_verification_line'] == 'invalid'){
-                    $positiveVerification = "Invalid";
-               }
-               elseif($aRow['positive_verification_line'] == 'no_result'){
-                    $positiveVerification = "Result Not Available";
-               }
+               
                $row[] = ucwords($positiveVerification);
 
                // Long Term Verification
@@ -190,12 +180,6 @@ class RecencyTable extends AbstractTableGateway {
                }
                elseif($aRow['long_term_verification_line'] == 'absent'){
                     $longTerm = "Absent(Negative/N)";
-               }
-               elseif($aRow['long_term_verification_line'] == 'invalid'){
-                    $longTerm = "Invalid";
-               }
-               elseif($aRow['long_term_verification_line'] == 'no_result'){
-                    $longTerm = "Result Not Available";
                }
                elseif($aRow['long_term_verification_line'] == ''){
                     $longTerm = "---";
@@ -373,7 +357,7 @@ class RecencyTable extends AbstractTableGateway {
                 'marital_status' => $params['maritalStatus'],
                 'residence' => $params['residence'],
                 'education_level' => $params['educationLevel'],
-                'risk_population' => base64_encode($params['riskPopulation']),
+                'risk_population' => base64_decode($params['riskPopulation']),
                     //'other_risk_population' => ($params['riskPopulation']=='Other')?$params['otherRiskPopulation']:NULL,
                 'pregnancy_status' => $params['pregnancyStatus'],
                 'current_sexual_partner' => $params['currentSexualPartner'],
@@ -496,7 +480,7 @@ class RecencyTable extends AbstractTableGateway {
                             'education_level' => $recency['educationLevel'],
                             'risk_population' => $recency['riskPopulation'],
                             'other_risk_population' => $recency['otherriskPopulation'],
-
+'term_outcome'=>$recency['recencyOutcome'],
                             'pregnancy_status' => $recency['pregnancyStatus'],
                             'current_sexual_partner' => $recency['currentSexualPartner'],
                             'past_hiv_testing' => $recency['pastHivTesting'],
@@ -562,6 +546,7 @@ class RecencyTable extends AbstractTableGateway {
                             'education_level' => $params['educationLevel'],
                             'risk_population' => $params['riskPopulation'],
                             'other_risk_population' => $params['otherriskPopulation'],
+                            'term_outcome'=>$params['recencyOutcome'],
                             'pregnancy_status' => $params['pregnancyStatus'],
                             'current_sexual_partner' => $params['currentSexualPartner'],
                             'past_hiv_testing' => $params['pastHivTesting'],
