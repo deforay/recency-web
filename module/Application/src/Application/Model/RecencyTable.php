@@ -155,36 +155,41 @@ class RecencyTable extends AbstractTableGateway {
               $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
 
               // Control Line
-               if($aRow['control_line'] == 'present'){
-                    $controlLine = "Present(Positive/P)";
-               }
-               elseif($aRow['control_line'] == 'absent'){
-                    $controlLine = "Absent(Negative/N)";
-               }
-               
-               $row[] = ucwords($controlLine);
+               // if($aRow['control_line'] == 'present'){
+               //      $controlLine = "Present(Positive/P)";
+               // }
+               // elseif($aRow['control_line'] == 'absent'){
+               //      $controlLine = "Absent(Negative/N)";
+               // }
+               $row[] = ucwords($aRow['control_line']);
+
+               // $row[] = ucwords($controlLine);
 
                // Positive Verification
-               if($aRow['positive_verification_line'] == 'present'){
-                    $positiveVerification = "Present(Positive/P)";
-               }
-               elseif($aRow['positive_verification_line'] == 'absent'){
-                    $positiveVerification = "Absent(Negative/N)";
-               }
-               
-               $row[] = ucwords($positiveVerification);
+               // if($aRow['positive_verification_line'] == 'present'){
+               //      $positiveVerification = "Present(Positive/P)";
+               // }
+               // elseif($aRow['positive_verification_line'] == 'absent'){
+               //      $positiveVerification = "Absent(Negative/N)";
+               // }
+
+               $row[] = ucwords($aRow['positive_verification_line']);
+
+               // $row[] = ucwords($positiveVerification);
 
                // Long Term Verification
-               if($aRow['long_term_verification_line'] == 'present'){
-                    $longTerm = "Present(Positive/P)";
-               }
-               elseif($aRow['long_term_verification_line'] == 'absent'){
-                    $longTerm = "Absent(Negative/N)";
-               }
-               elseif($aRow['long_term_verification_line'] == ''){
-                    $longTerm = "---";
-               }
-               $row[] = ucwords($longTerm);
+               // if($aRow['long_term_verification_line'] == 'present'){
+               //      $longTerm = "Present(Positive/P)";
+               // }
+               // elseif($aRow['long_term_verification_line'] == 'absent'){
+               //      $longTerm = "Absent(Negative/N)";
+               // }
+               // elseif($aRow['long_term_verification_line'] == ''){
+               //      $longTerm = "---";
+               // }
+
+               $row[] = ucwords($aRow['long_term_verification_line']);
+               // $row[] = ucwords($longTerm);
 
 
                $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
@@ -201,7 +206,6 @@ class RecencyTable extends AbstractTableGateway {
 
     public function addRecencyDetails($params)
     {
-//\Zend\Debug\Debug::dump($params);die;
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $logincontainer = new Container('credo');
@@ -234,7 +238,7 @@ class RecencyTable extends AbstractTableGateway {
                     $params['riskPopulation'] = base64_encode($rpResult['rp_id']);
                 }else{
                     $rpData = array('name'=>trim($params['otherRiskPopulation']));
-                    $riskPopulationDb->insert($facilityData);
+                    $riskPopulationDb->insert($rpData);
                     if($riskPopulationDb->lastInsertValue>0){
                     $params['riskPopulation'] = base64_encode($riskPopulationDb->lastInsertValue);
                     }else{
@@ -278,7 +282,7 @@ class RecencyTable extends AbstractTableGateway {
                 'form_transfer_datetime'=> date("Y-m-d H:i:s"),
             );
 
-            //\Zend\Debug\Debug::dump($data);die;
+            // \Zend\Debug\Debug::dump($data);die;
             $this->insert($data);
 
             $lastInsertedId = $this->lastInsertValue;
@@ -331,7 +335,7 @@ class RecencyTable extends AbstractTableGateway {
                     $params['riskPopulation'] = base64_encode($rpResult['rp_id']);
                 }else{
                     $rpData = array('name'=>trim($params['otherRiskPopulation']));
-                    $riskPopulationDb->insert($facilityData);
+                    $riskPopulationDb->insert($rpData);
                     if($riskPopulationDb->lastInsertValue>0){
                     $params['riskPopulation'] = base64_encode($riskPopulationDb->lastInsertValue);
                     }else{
@@ -456,7 +460,7 @@ class RecencyTable extends AbstractTableGateway {
                                 $params['riskPopulation'] = $rpResult['rp_id'];
                             }else{
                                 $rpData = array('name'=>trim($params['otherRiskPopulation']));
-                                $riskPopulationDb->insert($facilityData);
+                                $riskPopulationDb->insert($rpData);
                                 if($riskPopulationDb->lastInsertValue>0){
                                 $params['riskPopulation'] = $riskPopulationDb->lastInsertValue;
                                 }
@@ -480,7 +484,7 @@ class RecencyTable extends AbstractTableGateway {
                             'education_level' => $recency['educationLevel'],
                             'risk_population' => $recency['riskPopulation'],
                             'other_risk_population' => $recency['otherriskPopulation'],
-'term_outcome'=>$recency['recencyOutcome'],
+                            'term_outcome'=>$recency['recencyOutcome'],
                             'pregnancy_status' => $recency['pregnancyStatus'],
                             'current_sexual_partner' => $recency['currentSexualPartner'],
                             'past_hiv_testing' => $recency['pastHivTesting'],

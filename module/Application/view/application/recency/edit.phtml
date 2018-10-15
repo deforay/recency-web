@@ -66,7 +66,7 @@ $pregnancy = in_array("Pregnancy Status",$resultArr)?"isRequired":"";
 $partner = in_array("Current Sexual Partner",$resultArr)?"isRequired":"";
 $testing = in_array("Past Hiv Testing",$resultArr)?"isRequired":"";
 
-$HivStatus = in_array("Last HIV Status",$resultArr)?"isRequired":"";
+$hivStatus = in_array("Last HIV Status",$resultArr)?"isRequired":"";
 $patientArt = in_array("Patient on ART",$resultArr)?"isRequired":"";
 
 $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
@@ -175,7 +175,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
                                         <label class="col-sm-2 col-form-label" for="">Past HIV Testing<?php echo(in_array("Past Hiv Testing",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing" onchange="checkHivTesting(this);">
+                                             <select class="form-control <?php echo $testing; ?>" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing" onchange="checkHivTesting(this);">
                                                   <option value="">--Select--</option>
                                                   <option value="yes" <?php echo($result['past_hiv_testing'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
                                                   <option value="no" <?php echo($result['past_hiv_testing'] == 'no' )?'selected="selected"':''; ?>>No</option>
@@ -185,7 +185,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 
                                         <label class="col-sm-2 col-form-label" for="">Test Last 12 Month<?php echo(in_array("Test Last 12 Month",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <select class="form-control" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
+                                             <select class="form-control <?php echo $last; ?>" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
                                                   <option value="">--Select--</option>
                                                   <option value="yes" <?php echo($result['test_last_12_month'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
                                                   <option value="no" <?php echo($result['test_last_12_month'] == 'no' )?'selected="selected"':''; ?>>No</option>
@@ -193,9 +193,9 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              </select>
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label hivResultStatusShow" for="">Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label hivResultStatusShow" for="">Last HIV Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4 hivResultStatusShow">
-                                             <select class="form-control" id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status"  onchange="checkHivStatus(this);">
+                                             <select class="form-control <?php echo $hivStatus; ?>" id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status"  onchange="checkHivStatus(this);">
                                                   <option value="">--Select--</option>
                                                   <option value="negative" <?php echo($result['last_hiv_status'] == 'negative' )?'selected="selected"':''; ?>>Negative</option>
                                                   <option value="positive" <?php echo($result['last_hiv_status'] == 'positive' )?'selected="selected"':''; ?>>Positive</option>
@@ -203,7 +203,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                         </div>
                                         <label class="col-sm-2 col-form-label hivResultStatusShow" for="">Is the Patient on ART? <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4 hivResultStatusShow">
-                                             <select class="form-control" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
+                                             <select class="form-control <?php echo $patientArt; ?>" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
                                                   <option value="">--Select--</option>
                                                   <option value="yes" <?php echo($result['patient_on_art'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
                                                   <option value="no" <?php echo($result['patient_on_art'] == 'no' )?'selected="selected"':''; ?>>No</option>
@@ -229,7 +229,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <option value="absent" <?php echo($result['control_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
                                              </select>
                                         </div>
-                                 
+
                                         <label class="col-sm-2 col-form-label" for="">Positive Verification
                                              <?php echo(in_array("Positive Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
@@ -264,12 +264,12 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                    <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" for="">DOB<?php echo(in_array("Dob",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <input type="text" value="<?php echo $dob;?>" class="js-datepicker form-control <?php echo $dobRequired; ?>" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
+                                             <input type="text" value="<?php echo $dob;?>" class="js-datepicker form-control" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
                                         </div>
 
                                         <label class="col-sm-2 col-form-label" for="">Age<?php echo(in_array("Age",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <input type="text" value="<?php echo $result['age'];?>" class="form-control <?php echo $age; ?>" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
+                                             <input type="text" value="<?php echo $result['age'];?>" class="form-control " id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
                                         </div>
                                         </div>
                                         <div class="form-group row">
@@ -293,7 +293,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                              </select>
                                         </div>
 
-                                        
+
                                    </div>
 
                                    <div class="form-group row">
@@ -329,7 +329,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                                                   <?php } ?>
                                                   <option value="Other">Other</option>
                                              </select>
-                                             
+
                                              <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherRiskPopulation" name="otherRiskPopulation" title="Please Enter the Other Risk Population" value="" placeholder="Enter other population"  >
                                         </div>
 
@@ -456,12 +456,24 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
                $("#patientOnArt").attr("disabled",false);
                $("#patientOnArt").addClass('isRequired');
           }else{
+                $("#patientOnArt").val("")
                $("#patientOnArt").attr("disabled",true);
                $("#patientOnArt").removeClass('isRequired');
           }
      }
 
 jQuery(document).ready(function($) {
+
+     if($('input[id=recencyTestPerformedYes]').prop('checked')==true)
+     {
+          $(".disbaledResult").removeClass("isRequired");
+          $(".disbaledResult").attr("disabled",true);
+     }else{
+          $(".disbaledResult").addClass("isRequired");
+          $(".disbaledResult").attr("disabled",false);
+
+     }
+
 
         //   if($("#positiveVerificationLine").val() == 'absent'){
         //        $("#longTermVerificationLine").prop("disabled", true);
@@ -486,6 +498,14 @@ jQuery(document).ready(function($) {
     //  });
      $('#recencyTestPerformedYes').change(function() {
             if(this.checked == true){
+                 $("#hivRecencyDate").val("")
+                 $("#controlLine").val("")
+                 $("#positiveVerificationLine").val("")
+                 $("#longTermVerificationLine").val("")
+                 $("#outcome").html('').hide();
+                 $(".outcome").hide();
+
+
                 $(".disbaledResult").removeClass("isRequired");
                 $(".disbaledResult").attr("disabled",true);
             }else{
@@ -501,7 +521,7 @@ jQuery(document).ready(function($) {
                 $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
                 $("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine;?>");
             }
-        });  
+        });
 
      <?php
      foreach($globalConfigResult as $config){
@@ -566,6 +586,8 @@ function validateStep1()
             $("#currentSexualPartner").addClass("<?php echo $partner;?>");
             $("#pastHivTesting").addClass("<?php echo $testing;?>");
             $("#testLast12Month").addClass("<?php echo $last;?>");
+            $("#patientOnArt").removeClass("<?php echo $patientArt;?>");
+            $("#lastHivStatus").removeClass("<?php echo $hivStatus;?>");
 
             $("#step1,#wizard-progress-step1").removeClass("active");
             $("#step2,#wizard-progress-step2").addClass("active");
