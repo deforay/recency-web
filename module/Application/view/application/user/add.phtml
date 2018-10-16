@@ -84,16 +84,20 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                         <div class="col-sm-4">
                             <input type="number" class="form-control" id="altMobile" name="altMobile" placeholder="Enter the alternate mobile" title="Please enter the alternate mobile">
                         </div>
-                        
+
                         <label class="col-sm-2 col-form-label" for="">Job Responsibility<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control isRequired" id="JobResponse" name="JobResponse" placeholder="Enter the job responsibility" title="Please enter the job responsibility">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Comments</label>
+                        <label class="col-sm-2 col-form-label" for="">Online Web Access<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <textarea rows="4" cols="50" class="form-control" id="comments" name="comments" placeholder="Enter the comments" title="Please enter the comments"></textarea>
+                             <select class="form-control isRequired" id="webAccess" name="webAccess" title="Please select the web access status">
+                                  <option value="">Select</option>
+                                 <option value="yes">Yes</option>
+                                 <option value="no">No</option>
+                             </select>
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
@@ -102,6 +106,12 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Comments</label>
+                        <div class="col-sm-4">
+                            <textarea rows="4" cols="50" class="form-control" id="comments" name="comments" placeholder="Enter the comments" title="Please enter the comments"></textarea>
                         </div>
                     </div>
                     <hr>
@@ -116,7 +126,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                                         <option value="">-- Select --</option>
                                     </select>
                                 </div>
-                            <?php } 
+                            <?php }
                         }?>
                     </div>
 
@@ -138,7 +148,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                                    <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
                               </div>
                          </div>
-                    
+
                     <div class="row items-push">
                     <input type="hidden" name="selectedMapFacility" id="selectedMapFacility"/>
                         <div class="col-lg-7 offset-lg-4">
@@ -167,7 +177,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
         if (flag) {
             if (duplicateName) {
                 $.blockUI();
-                
+
                 document.getElementById('userInformation').submit();
             }
         }
@@ -208,7 +218,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                     return value.length > 3;
                }
           });
-        
+
     });
     function getLocationDeatils(globalName,nxtGlobalName)
      {

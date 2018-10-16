@@ -85,16 +85,21 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                         <div class="col-sm-4">
                             <input type="number" value="<?php echo $result['alt_mobile']; ?>" class="form-control" id="altMobile" name="altMobile" placeholder="Enter the alternate mobile" title="Please enter the alternate mobile">
                         </div>
-                        
+
                         <label class="col-sm-2 col-form-label" for="">Job Responsibility<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" value="<?php echo $result['job_responsibility']; ?>" class="form-control isRequired" id="JobResponse" name="JobResponse" placeholder="Enter the job responsibility" title="Please enter the job responsibility">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="">Comments</label>
+                        <label class="col-sm-2 col-form-label" for="">Online Web Access</label>
                         <div class="col-sm-4">
-                            <textarea rows="4" cols="50" class="form-control" id="comments" name="comments" placeholder="Enter the comments" title="Please enter the comments"><?php echo $result['comments']; ?></textarea>
+
+                             <select class="form-control isRequired" id="webAccess" name="webAccess" title="Please select the  web access status">
+                                 <option value="">--select--</option>
+                                 <option value="yes" <?php echo($result['web_access'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                                 <option value="no" <?php echo($result['web_access'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                             </select>
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
@@ -104,6 +109,12 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                                 <option value="active" <?php echo($result['status'] == 'active' )?'selected="selected"':''; ?>>Active</option>
                                 <option value="inactive" <?php echo($result['status'] == 'inactive' )?'selected="selected"':''; ?>>Inactive</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="">Comments</label>
+                        <div class="col-sm-4">
+                            <textarea rows="4" cols="50" class="form-control" id="comments" name="comments" placeholder="Enter the comments" title="Please enter the comments"><?php echo $result['comments']; ?></textarea>
                         </div>
                     </div>
                     <hr>
@@ -119,7 +130,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                                         <option value="">-- Select --</option>
                                     </select>
                                 </div>
-                            <?php } 
+                            <?php }
                         }?>
                     </div>
                     <div class="form-group row">
@@ -174,7 +185,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
         if (flag) {
             if (duplicateName) {
                 $.blockUI();
-                
+
                 document.getElementById('userInformation').submit();
             }
         }
@@ -205,7 +216,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
              break;
          }
          ?>
-         
+
         $('#search').multiselect({
                search: {
                     left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
