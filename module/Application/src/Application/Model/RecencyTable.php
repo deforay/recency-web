@@ -282,7 +282,6 @@ class RecencyTable extends AbstractTableGateway {
                 'form_transfer_datetime'=> date("Y-m-d H:i:s"),
             );
 
-            // \Zend\Debug\Debug::dump($data);die;
             $this->insert($data);
 
             $lastInsertedId = $this->lastInsertValue;
