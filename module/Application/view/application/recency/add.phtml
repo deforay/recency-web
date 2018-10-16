@@ -37,7 +37,6 @@ $testing = in_array("Past Hiv Testing",$resultArr)?"isRequired":"";
 
 $hivStatus = in_array("Last HIV Status",$resultArr)?"isRequired":"";
 $patientArt = in_array("Patient on ART",$resultArr)?"isRequired":"";
-
 $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 $expViolence = in_array("Experience Violence Last 12 Month",$resultArr)?"isRequired":"";
 
@@ -163,8 +162,6 @@ $lineOutComeColor2 = "#000000";
                                                   <option value="not_known">Not Known</option>
                                              </select>
                                         </div>
-
-                                            <!-- <p class="colour hivResultStatusShow" > What was the Last HIV Status? </p> -->
                                             <label class="col-sm-2 col-form-label hivResultStatusShow" for="">Last HIV Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                             <div class="col-sm-4 hivResultStatusShow">
                                                 <select class="form-control <?php echo $hivStatus; ?> " id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status" onchange="checkHivStatus(this);">
