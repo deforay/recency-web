@@ -436,7 +436,7 @@ class RecencyTable extends AbstractTableGateway {
             $i = 1;
             foreach($params["form"] as $key => $recency){
                 try{
-                    if(isset($recency['sampleId']) && trim($recency['sampleId'])!="")
+                    if(isset($recency['sampleId']) && trim($recency['sampleId'])!="" || isset($recency['patientId']) && trim($recency['patientId'])!="")
                     {
                          if($recency['otherfacility']!=''){
  $fResult = $facilityDb->checkFacilityName($recency['otherfacility']);
