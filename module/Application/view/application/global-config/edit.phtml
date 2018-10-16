@@ -11,12 +11,8 @@ for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
 $resultArr = array();
 //Set selected field
 if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
-  $explodField = explode(",",$arr['mandatory_fields']);
-  for($f=0;$f<count($explodField); $f++){
-    $resultArr[] = $explodField[$f];
-  }
+  $resultArr = explode(",",$arr['mandatory_fields']);
 }
-// \Zend\Debug\Debug::dump($resultArr);die;
 
 ?>
 <style>
@@ -77,7 +73,14 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                 <option value="Sample Id" <?php echo(in_array("Sample Id",$resultArr)?"selected='selected'":""); ?>>Sample ID</option>
                                 <option value="Patient Id" <?php echo(in_array("Patient Id",$resultArr)?"selected='selected'":""); ?>>Patient ID</option>
                                 <option value="Facility Name" <?php echo(in_array("Facility Name",$resultArr)?"selected='selected'":""); ?>>Facility Name</option>
+                                <option value="Province" <?php echo(in_array("Province",$resultArr)?"selected='selected'":""); ?>>Province</option>
+                                <option value="District" <?php echo(in_array("District",$resultArr)?"selected='selected'":""); ?>>District</option>
+                                <option value="City" <?php echo(in_array("City",$resultArr)?"selected='selected'":""); ?>>City</option>
                                 <option value="Hiv Diagnosis Date" <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"selected='selected'":""); ?>>HIV Diagnosis Date</option>
+                                <option value="Past Hiv Testing" <?php echo(in_array("Past Hiv Testing",$resultArr)?"selected='selected'":""); ?>>Past HIV Testing</option>
+                                <option value="Test Last 12 Month" <?php echo(in_array("Test Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Test Last 12 Month</option>
+                                <option value="Last HIV Status" <?php echo(in_array("Last HIV Status",$resultArr)?"selected='selected'":""); ?>>Last HIV Status</option>
+                                <option value="Patient on ART" <?php echo(in_array("Patient on ART",$resultArr)?"selected='selected'":""); ?>>Patient on ART</option>
                                 <option value="Hiv Recency Date" <?php echo(in_array("Hiv Recency Date",$resultArr)?"selected='selected'":""); ?>>HIV Recency Date</option>
                                 <option value="Control Line" <?php echo(in_array("Control Line",$resultArr)?"selected='selected'":""); ?>>Control Line</option>
                                 <option value="Positive Verification Line" <?php echo(in_array("Positive Verification Line",$resultArr)?"selected='selected'":""); ?>>Positive Verification Line</option>
@@ -85,24 +88,13 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                                 <option value="Dob" <?php echo(in_array("Dob",$resultArr)?"selected='selected'":""); ?>>Date Of Birth</option>
                                 <option value="Age" <?php echo(in_array("Age",$resultArr)?"selected='selected'":""); ?>>Age</option>
                                 <option value="Gender" <?php echo(in_array("Gender",$resultArr)?"selected='selected'":""); ?>>Gender</option>
-                                <option value="Latitude" <?php echo(in_array("Latitude",$resultArr)?"selected='selected'":""); ?>>Latitude</option>
-                                <option value="Longitude" <?php echo(in_array("Longitude",$resultArr)?"selected='selected'":""); ?>>Longitude</option>
                                 <option value="Marital Status" <?php echo(in_array("Marital Status",$resultArr)?"selected='selected'":""); ?>>Marital Status</option>
                                 <option value="Residence" <?php echo(in_array("Residence",$resultArr)?"selected='selected'":""); ?>>Residence</option>
                                 <option value="Education Level" <?php echo(in_array("Education Level",$resultArr)?"selected='selected'":""); ?>>Education Level</option>
                                 <option value="Risk Population" <?php echo(in_array("Risk Population",$resultArr)?"selected='selected'":""); ?>>Risk Population</option>
-                                <!-- <option value="Other Risk Population" < ?php echo(in_array("Other Risk Population",$resultArr)?"selected='selected'":""); ?>>Other Risk Population</option> -->
                                 <option value="Pregnancy Status" <?php echo(in_array("Pregnancy Status",$resultArr)?"selected='selected'":""); ?>>Pregnancy Status</option>
                                 <option value="Current Sexual Partner" <?php echo(in_array("Current Sexual Partner",$resultArr)?"selected='selected'":""); ?>>Current Sexual Partner</option>
-                                <option value="Past Hiv Testing" <?php echo(in_array("Past Hiv Testing",$resultArr)?"selected='selected'":""); ?>>Past HIV Testing</option>
-
-                                <option value="Last HIV Status" <?php echo(in_array("Last HIV Status",$resultArr)?"selected='selected'":""); ?>>Last HIV Status</option>
-                                <option value="Patient on ART" <?php echo(in_array("Patient on ART",$resultArr)?"selected='selected'":""); ?>>Patient on ART</option>
-
-                                <option value="Test Last 12 Month" <?php echo(in_array("Test Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Test Last 12 Month</option>
-                                <option value="Province" <?php echo(in_array("Province",$resultArr)?"selected='selected'":""); ?>>Province</option>
-                                <option value="District" <?php echo(in_array("District",$resultArr)?"selected='selected'":""); ?>>District</option>
-                                <option value="City" <?php echo(in_array("City",$resultArr)?"selected='selected'":""); ?>>City</option>
+                                <option value="Experience Violence Last 12 Month" <?php echo(in_array("Experience Violence Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Experience Violence Last 12 Month</option>
                             </select>
                         </div>
 
