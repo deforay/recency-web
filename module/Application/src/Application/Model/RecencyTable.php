@@ -222,7 +222,8 @@ class RecencyTable extends AbstractTableGateway {
                     $facilityData = array('facility_name'=>trim($params['otherFacilityName']),
                                         'province'=>$params['location_one'],
                                         'district'=>$params['location_two'],
-                                        'city'=>$params['location_three']);
+                                        'city'=>$params['location_three'],
+                                        'status'=>'active');
                     $facilityDb->insert($facilityData);
                     if($facilityDb->lastInsertValue>0){
                     $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
@@ -325,7 +326,8 @@ class RecencyTable extends AbstractTableGateway {
                     $facilityData = array('facility_name'=>trim($params['otherFacilityName']),
                                         'province'=>$params['location_one'],
                                         'district'=>$params['location_two'],
-                                        'city'=>$params['location_three']);
+                                        'city'=>$params['location_three'],
+                                        'status'=>'active');
                     $facilityDb->insert($facilityData);
                     if($facilityDb->lastInsertValue>0){
                     $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
@@ -440,6 +442,10 @@ class RecencyTable extends AbstractTableGateway {
 
     public function addRecencyDetailsApi($params)
     {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $facilityDb = new FacilitiesTable($this->adapter);
+        $riskPopulationDb = new RiskPopulationsTable($this->adapter);
         $common = new CommonService();
         if(isset($params["form"])){
             $i = 1;
@@ -455,7 +461,9 @@ class RecencyTable extends AbstractTableGateway {
  $facilityData = array('facility_name'=>trim($recency['otherfacility']),
  'province'=>$recency['location_one'],
  'district'=>$recency['location_two'],
- 'city'=>$recency['location_three']);
+ 'city'=>$recency['location_three'],
+ 'status'=>'active'
+);
  $facilityDb->insert($facilityData);
  if($facilityDb->lastInsertValue>0){
  $recency['facilityId'] = $facilityDb->lastInsertValue;
