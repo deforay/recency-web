@@ -6,6 +6,17 @@ $common = new CommonService()
 // \Zend\Debug\Debug::dump($result);die;
 
 ?>
+<style>
+<?php
+if($result['term_outcome']==''){
+?>
+.outcome{display:none;}
+<?php
+}
+?>
+.colour{color:red;}
+</style>
+
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -94,7 +105,7 @@ $common = new CommonService()
                                              <label for="otherRef" class="col-lg-4 control-label">Test Last 12 Month</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords($result->test_last_12_month); ?>
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->test_last_12_month)); ?>
                                              </span>
                                         </div>
                                    </div>
@@ -171,6 +182,15 @@ $common = new CommonService()
                                                   }
 
                                                   ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 outcome">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Outcome</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                              <?php echo $result['term_outcome'];?>
                                              </span>
                                         </div>
                                    </div>
@@ -284,6 +304,19 @@ $common = new CommonService()
                                         </div>
                                    </div>
                               </div>
+
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Comments</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->notes));?>
+                                             </span>
+                                        </div>
+                                   </div>
+                              </div>
+
                          </div>
                     </div>
                </div>

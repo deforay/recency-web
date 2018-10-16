@@ -386,14 +386,14 @@ if($result['term_outcome']==''){
                                              <select class="form-control section2" id="expViolence" name="expViolence" title="Please select the experienced violence in last 12 months">
                                                             <option value="">--Select--</option>
                                                             <option value="yes"<?php echo($result['exp_violence_last_12_month'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
-                                                            <option value="no<?php echo($result['exp_violence_last_12_month'] == 'no' )?'selected="selected"':''; ?>">No</option>
+                                                            <option value="no"<?php echo($result['exp_violence_last_12_month'] == 'no' )?'selected="selected"':''; ?>>No</option>
                                                   <option value="not_known"<?php echo($result['exp_violence_last_12_month'] == 'not_known' )?'selected="selected"':''; ?>>Don't know</option>
                                                        </select>
                                                   </div>
 
                                                   <label class="col-sm-2 col-form-label" for="">Comments <?php echo(in_array("Comments",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <textarea class="form-control section2" id="comments" id="comments" title="Please enter comments"><?php echo $result['notes'];?></textarea>
+                                             <textarea class="form-control section2" name="comments" id="comments" title="Please enter comments"><?php echo $result['notes'];?></textarea>
                                         </div>
 
                                              </div>
@@ -478,7 +478,8 @@ if($result['term_outcome']==''){
                $("#lastHivStatus").addClass('isRequired');
           }else{
                $(".hivResultStatusShow").css('display','none');
-               $("#lastHivStatus","#patientOnArt").removeClass('isRequired');
+               $("#lastHivStatus").removeClass('isRequired');
+               $("#patientOnArt").removeClass('isRequired');
           }
      }
 

@@ -355,7 +355,7 @@ $lineOutComeColor2 = "#000000";
 
                                         <label class="col-sm-2 col-form-label" for="">Comments <?php echo(in_array("Comments",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
-                                             <textarea class="form-control section2" id="comments" id="comments" title="Please enter comments"></textarea>
+                                             <textarea class="form-control section2" name="comments" id="comments" title="Please enter comments"></textarea>
                                         </div>
                                    </div>
 
@@ -452,7 +452,8 @@ function checkHivTesting(obj){
           $("#lastHivStatus").addClass('isRequired');
      }else{
           $(".hivResultStatusShow").css('display','none');
-               $("#lastHivStatus","#patientOnArt").removeClass('isRequired');
+               $("#lastHivStatus").removeClass('isRequired');
+               $("#patientOnArt").removeClass('isRequired');
      }
 }
 function checkHivStatus(obj){
