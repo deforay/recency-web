@@ -67,12 +67,20 @@ $hivStatus = in_array("Last HIV Status",$resultArr)?"isRequired":"";
 $patientArt = in_array("Patient on ART",$resultArr)?"isRequired":"";
 
 $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
-
+$expViolence = in_array("Experience Violence Last 12 Month",$resultArr)?"isRequired":"";
+$comment = in_array("Comments",$resultArr)?"isRequired":"";
 
 $lineOutComeColor = "#de1d2b";
 $lineOutComeColor2 = "#000000";
 ?>
 <style>
+<?php
+if($result['term_outcome']==''){
+?>
+.outcome{display:none;}
+<?php
+}
+?>
 .btnHide{display:none;}
 .colour{color:red;}
 </style>
@@ -221,8 +229,7 @@ $lineOutComeColor2 = "#000000";
                                              <?php echo(in_array("Recency Test Not Performed",$resultArr)?"<span class='mandatory'>*</span>":""); ?>
                                         </label>
                                         <div style="display:none;" class="col-sm-4 hideDiv">
-                                                  <select class="form-control
-                                                  <?php echo $recencyTestNotPerformedResult; ?>" id="recencyTestNotPerformed" name="recencyTestNotPerformed" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
+                                                  <select class="form-control" id="recencyTestNotPerformed" name="recencyTestNotPerformed" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
                                                   <option value="">--Select--</option>
                                                   <option value="no_consent_from_the_client" <?php echo($result['recency_test_not_performed'] == 'no_consent_from_the_client' )?'selected="selected"':''; ?>>No Consent</option>
                                                   <option value="no_sample_collected" <?php echo($result['recency_test_not_performed'] == 'no_sample_collected' )?'selected="selected"':''; ?>>No Sample Collected</option>
@@ -230,7 +237,7 @@ $lineOutComeColor2 = "#000000";
                                                   <option value="other" <?php echo($result['recency_test_not_performed'] == 'other' )?'selected="selected"':''; ?>>Others</option>
                                              </select>
                                              <br>
-                                                  <input style="display:none;"  value="<?php echo $result['other_recency_test_not_performed']; ?>" type="text" class="form-control col-sm-12" id="otherRecencyTestNotPerformed" name="otherRecencyTestNotPerformed" title="Please Enter the Other other recency test not performed" placeholder="Enter other recency test not performed">
+                                                  <input style="<?php echo ($result['recency_test_not_performed'] == 'other')?'display:block;':'display:none;';?>"  value="<?php echo $result['other_recency_test_not_performed']; ?>" type="text" class="form-control col-sm-12" id="otherRecencyTestNotPerformed" name="otherRecencyTestNotPerformed" title="Please Enter the Other other recency test not performed" placeholder="Enter other recency test not performed">
                                              <br>
                                         </div>
 
@@ -274,13 +281,11 @@ $lineOutComeColor2 = "#000000";
                                                             <option value="absent" <?php echo($result['long_term_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
                                                        </select>
                                                   </div>
-                                                  <?php if($result['term_outcome']!=''){ ?>
                                                        <label class="col-sm-2 col-form-label outcome" for="">Outcome</label>
                                                        <div class="col-sm-4 outcome">
                                                             <span class="outcome form-control" style="border:none;" id="outcome"><?php echo $result['term_outcome'];?></span>
                                                             <input type="hidden" name="outcomeData" id="outcomeData" value="<?php echo $result['term_outcome'];?>"/>
                                                        </div>
-                                                  <?php } ?>
                                              </div>
                                         </div>
 
@@ -385,6 +390,11 @@ $lineOutComeColor2 = "#000000";
                                                   <option value="not_known"<?php echo($result['exp_violence_last_12_month'] == 'not_known' )?'selected="selected"':''; ?>>Don't know</option>
                                                        </select>
                                                   </div>
+
+                                                  <label class="col-sm-2 col-form-label" for="">Comments <?php echo(in_array("Comments",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <textarea class="form-control section2" id="comments" id="comments" title="Please enter comments"><?php echo $result['notes'];?></textarea>
+                                        </div>
 
                                              </div>
 
@@ -497,25 +507,25 @@ $lineOutComeColor2 = "#000000";
           if($('input[id=recencyTestPerformedYes]').prop('checked')==true)
           {
           $(".disbaledResult").attr("disabled",true).removeClass("isRequired");
-
+          $(".hideDiv").css('display','block');
           }else{
           $(".disbaledResult").attr("disabled",false).addClass("isRequired");
+          $(".hideDiv").css('display','none');
           }
 
-        //   if($("#positiveVerificationLine").val() == 'absent'){
-               console.log("hi");
-          $(".hideDiv").css('display','block');
-        //        $("#longTermVerificationLine").prop("disabled", true);
-        //        $("#longTermVerificationLine").removeClass("isRequired");
-        //   }else{
-          $(".hideDiv").css('display','none');
      $('#recencyTestPerformedYes').change(function() {
             if(this.checked == true){
                 $("#outcome").html('').hide();
                 $(".outcome").hide();
                 $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+                // vivek 16th
+               $(".hideDiv").css('display','block');
+               $("#recencyTestNotPerformed").addClass("isRequired");
             }else{
                 $(".disbaledResult").attr("disabled",false);
+                $(".hideDiv").css('display','none');
+               $("#recencyTestNotPerformed").val("").removeClass("isRequired");
+               $("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
                 $("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");
                 $("#controlLine").addClass("<?php echo $controlLineResult;?>");
                 $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
@@ -579,7 +589,6 @@ function validateStep1()
             $("#maritalStatus").addClass("<?php echo $marital;?>");
             $("#educationLevel").addClass("<?php echo $education;?>");
             $("#riskPopulation").addClass("<?php echo $risk;?>");
-            $("#otherRiskPopulation").addClass("<?php echo $otherRiskPopInpt;?>");
             $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
             $("#currentSexualPartner").addClass("<?php echo $partner;?>");
             $("#expViolence").addClass("<?php echo $expViolence;?>");

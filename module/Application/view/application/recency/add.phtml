@@ -22,7 +22,7 @@ $positiveVerificationLine = in_array("Positive Verification Line",$resultArr)?"i
 $longTermVerificationLine = in_array("Long Term Verification Line",$resultArr)?"isRequired":"";
 $dob = in_array("Dob",$resultArr)?"isRequired":"";
 
-$comment = in_array("Test Comments",$resultArr)?"isRequired":"";
+$comment = in_array("Comments",$resultArr)?"isRequired":"";
 
 $age = in_array("Age",$resultArr)?"isRequired":"";
 $gender = in_array("Gender",$resultArr)?"isRequired":"";
@@ -33,7 +33,6 @@ $residence = in_array("Residence",$resultArr)?"isRequired":"";
 $marital = in_array("Marital Status",$resultArr)?"isRequired":"";
 $education = in_array("Education Level",$resultArr)?"isRequired":"";
 $risk = in_array("Risk Population",$resultArr)?"isRequired":"";
-$otherRiskPopInpt = in_array("Other Risk Population Input Type",$resultArr)?"isRequired":"";
 $pregnancy = in_array("Pregnancy Status",$resultArr)?"isRequired":"";
 $partner = in_array("Current Sexual Partner",$resultArr)?"isRequired":"";
 $testing = in_array("Past Hiv Testing",$resultArr)?"isRequired":"";
@@ -193,8 +192,7 @@ $lineOutComeColor2 = "#000000";
                                         </label>
 
                                         <div style="display:none;" class="col-sm-4 hideDiv">
-                                                  <select class="form-control
-                                                  <?php echo $recencyTestNotPerformedResult; ?>" id="recencyTestNotPerformed" name="recencyTestNotPerformed" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
+                                                  <select class="form-control" id="recencyTestNotPerformed" name="recencyTestNotPerformed" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
                                                   <option value="">--Select--</option>
                                                   <option value="no_consent_from_the_client">No Consent</option>
                                                   <option value="no_sample_collected">No Sample Collected</option>
@@ -355,6 +353,10 @@ $lineOutComeColor2 = "#000000";
                                              </select>
                                         </div>
 
+                                        <label class="col-sm-2 col-form-label" for="">Comments <?php echo(in_array("Comments",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4">
+                                             <textarea class="form-control section2" id="comments" id="comments" title="Please enter comments"></textarea>
+                                        </div>
                                    </div>
 
 
@@ -469,19 +471,15 @@ jQuery(document).ready(function($) {
                 $(".outcome").hide();
                 $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
                // vivek 16th
-               $("#recencyTestNotPerformed").val("")
-               $("#otherRecencyTestNotPerformed").val("")
                $(".hideDiv").css('display','block');
                $("#recencyTestNotPerformed").addClass("isRequired");
           }else{
-
                $(".disbaledResult").addClass("isRequired");
                $(".disbaledResult").attr("disabled",false);
                // vivek 16th
                $(".hideDiv").css('display','none');
-               $("#recencyTestNotPerformed").removeClass("isRequired");
-               $("#otherRecencyTestNotPerformed").removeClass("isRequired");
-
+               $("#recencyTestNotPerformed").val("").removeClass("isRequired");
+               $("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
 
                $("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");
                $("#controlLine").addClass("<?php echo $controlLineResult;?>");
@@ -522,12 +520,10 @@ function validateStep1()
                $("#maritalStatus").addClass("<?php echo $marital;?>");
                $("#educationLevel").addClass("<?php echo $education;?>");
                $("#riskPopulation").addClass("<?php echo $risk;?>");
-               $("#otherRiskPopulation").addClass("<?php echo $otherRiskPopInpt;?>");
                $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
                $("#currentSexualPartner").addClass("<?php echo $partner;?>");
-            $("#expViolence").addClass("<?php echo $expViolence;?>");
+                $("#expViolence").addClass("<?php echo $expViolence;?>");
                $("#comments").addClass("<?php echo $comment;?>");
-               // $("#recencyTestNotPerformed").removeClass("<?php echo $recencyTestNotPerformedResult;?>");
 
 
                $("#step1,#wizard-progress-step1").removeClass("active");
@@ -548,7 +544,6 @@ function validateStep2()
     $(".section2").removeClass('isRequired');
      $("#step1,#wizard-progress-step1").addClass("active");
      $("#step2,#wizard-progress-step2").removeClass("active");
-     $("#comments").removeClass('isRequired');
 
      $(".btnHide").hide();
      $(".nxtBtn").show();
