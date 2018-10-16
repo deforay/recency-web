@@ -27,11 +27,13 @@ class UserTable extends AbstractTableGateway {
             $sql = new Sql($dbAdapter);
             $sQuery = $sql->select()->from(array('u' => 'users'))
                     ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
-				    ->where(array('u.email' => $params['userName'], 'u.server_password' => $password));
+				    ->where(array('u.email' => $params['userName'], 'u.server_password' => $password,'u.web_access'=>'yes' ));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
+
             if($rResult) {
+                         $logincontainer->userId = $rResult->web_access;
                         $logincontainer->userId = $rResult->user_id;
                         $logincontainer->roleId = $rResult->role_id;
                         $logincontainer->roleCode = $rResult->role_code;
@@ -41,7 +43,7 @@ class UserTable extends AbstractTableGateway {
 
                             return 'recency';
                         }else{
-                            
+
                             return 'facilities';
                         }
             }else {
@@ -209,8 +211,11 @@ class UserTable extends AbstractTableGateway {
                 'alt_mobile' => $params['altMobile'],
                 'job_responsibility' => $params['JobResponse'],
                 'comments' => $params['comments'],
-                'status' => $params['userStatus']
-                
+                'status' => $params['userStatus'],
+                'web_access' => $params['webAccess']
+
+
+
             );
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
@@ -265,7 +270,9 @@ class UserTable extends AbstractTableGateway {
                 'alt_mobile' => $params['altMobile'],
                 'job_responsibility' => $params['JobResponse'],
                 'comments' => $params['comments'],
-                'status' => $params['userStatus']
+                'status' => $params['userStatus'],
+                'web_access' => $params['webAccess']
+
             );
             if($params['password']!=''){
                 $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
@@ -297,16 +304,16 @@ class UserTable extends AbstractTableGateway {
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-		        
+
         $password = sha1($params['password'] . $configResult["password"]["salt"]);
-		
+
         $sQuery = $sql->select()->from(array('u' => 'users'))
                 ->where(array('status' => 'active','email' =>$params['email'], 'server_password' => $password))
                 ;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-        
+
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-		
+
         if(isset($rResult['user_id']) && $rResult['user_id']!='' && $rResult['status']=='active') {
             $auth = $common->generateRandomString(15);
             // \Zend\Debug\Debug::dump($rResult['user_id']);die;
