@@ -212,6 +212,7 @@ class RecencyTable extends AbstractTableGateway {
         $facilityDb = new FacilitiesTable($this->adapter);
         $riskPopulationDb = new RiskPopulationsTable($this->adapter);
         $common = new CommonService();
+        // echo $params['recencyTestPerformed'];die;
         if( (isset($params['sampleId']) && trim($params['sampleId'])!="") || (isset($params['patientId']) && trim($params['patientId'])!="") )
         {
             if($params['facilityId']=='other'){
@@ -247,6 +248,8 @@ class RecencyTable extends AbstractTableGateway {
                 }
             }
 
+
+
             $data = array(
                 'sample_id' => $params['sampleId'],
                 'patient_id' => $params['patientId'],
@@ -254,7 +257,11 @@ class RecencyTable extends AbstractTableGateway {
                 'dob'=>($params['dob']!='')?$common->dbDateFormat($params['dob']):NULL,
                 'hiv_diagnosis_date' => ($params['hivDiagnosisDate']!='')?$common->dbDateFormat($params['hivDiagnosisDate']):NULL,
                 'hiv_recency_date' => (isset($params['hivRecencyDate']) && $params['hivRecencyDate']!='')?$common->dbDateFormat($params['hivRecencyDate']):NULL,
-                'recency_test_performed'=>($params['recencyTestPerformed'])?$params['recencyTestPerformed']:'false',
+                'recency_test_performed'=>$params['recencyTestPerformed'],
+
+                'recency_test_not_performed' => $params['recencyTestNotPerformed'],
+                'other_recency_test_not_performed' => $params['otherRecencyTestNotPerformed'],
+
                 'control_line' => (isset($params['controlLine']) && $params['controlLine']!='')?$params['controlLine']:NULL,
                 'positive_verification_line' => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine']!='')?$params['positiveVerificationLine']:NULL,
                 'long_term_verification_line' => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine']!='')?$params['longTermVerificationLine']:NULL,
@@ -276,11 +283,14 @@ class RecencyTable extends AbstractTableGateway {
                 'location_two' => $params['location_two'],
                 'location_three' => $params['location_three'],
                 'exp_violence_last_12_month'=>$params['expViolence'],
+                'notes'=>$params['comments'],
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId,
                 'form_initiation_datetime'=> date("Y-m-d H:i:s"),
                 'form_transfer_datetime'=> date("Y-m-d H:i:s"),
             );
+            \Zend\Debug\Debug::dump($data);die;
+
 
             $this->insert($data);
 
@@ -308,6 +318,8 @@ class RecencyTable extends AbstractTableGateway {
         $riskPopulationDb = new RiskPopulationsTable($this->adapter);
         $logincontainer = new Container('credo');
         $common = new CommonService();
+
+
         if(isset($params['recencyId']) && trim($params['recencyId'])!="")
         {
             if($params['facilityId']=='other'){
@@ -350,7 +362,8 @@ class RecencyTable extends AbstractTableGateway {
                 'dob' => ($params['dob']!='')?$common->dbDateFormat($params['dob']):NULL,
                 'hiv_diagnosis_date' => ($params['hivDiagnosisDate']!='')?$common->dbDateFormat($params['hivDiagnosisDate']):NULL,
                 'hiv_recency_date' => (isset($params['hivRecencyDate']) && $params['hivRecencyDate']!='')?$common->dbDateFormat($params['hivRecencyDate']):NULL,
-                'recency_test_performed'=>($params['recencyTestPerformed']!='')?$params['recencyTestPerformed']:'false',
+                'recency_test_performed' => $params['recencyTestNotPerformed'],
+                'other_recency_test_not_performed' => (isset($params['recencyTestPerformed']) && $params['recencyTestPerformed']='others')?$params['otherRecencyTestNotPerformed']: "",
                 'control_line' => (isset($params['controlLine']) && $params['controlLine']!='')?$params['controlLine']:NULL,
                 'positive_verification_line' => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine']!='')?$params['positiveVerificationLine']:NULL,
                 'long_term_verification_line' => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine']!='')?$params['longTermVerificationLine']:NULL,
@@ -374,6 +387,7 @@ class RecencyTable extends AbstractTableGateway {
                 'exp_violence_last_12_month'=>$params['expViolence'],
             );
 
+            // \Zend\Debug\Debug::dump($data);die;
             $updateResult = $this->update($data,array('recency_id'=>$params['recencyId']));
         }
         return $updateResult;
