@@ -463,16 +463,16 @@ function checkHivTesting(obj){
 }
 
 // vivek 17th
-function genderCheck(obj){
-     if( obj.value == 'male' ){
-          $(".hidePregnancyResult").css('display','none');
-          $("#pregnancyStatus").removeClass('isRequired');
+     function genderCheck(obj){
+          if( obj.value == 'male' ){
+               $(".hidePregnancyResult").css('display','none');
+               $("#pregnancyStatus").removeClass('isRequired');
+          }
+          else{
+               $(".hidePregnancyResult").css('display','block');
+               $("#pregnancyStatus").addClass('isRequired');
+          }
      }
-     else{
-          $(".hidePregnancyResult").css('display','block');
-          $("#pregnancyStatus").addClass('isRequired');
-     }
-}
 
 function checkHivStatus(obj){
      if( obj.value == 'positive' ){
@@ -483,6 +483,11 @@ function checkHivStatus(obj){
 }
 
 jQuery(document).ready(function($) {
+
+     <?php ?>
+
+
+
 
      $('#recencyTestPerformedYes').change(function() {
           if(this.checked == true){

@@ -486,7 +486,6 @@ if($result['term_outcome']==''){
 
           }
      }
-
      // vivek 17th
      function genderCheck(obj){
           if( obj.value == 'male' ){
@@ -520,6 +519,8 @@ if($result['term_outcome']==''){
      }
 
      jQuery(document).ready(function($) {
+
+
 
           if($('input[id=recencyTestPerformedYes]').prop('checked')==true)
           {
@@ -576,15 +577,6 @@ if($result['term_outcome']==''){
                }
           });
 
-          <?php if($result['gender'] == 'male') { ?>
-               $(".hidePregnancyResult").css('display','none');
-               $("#pregnancyStatus").removeClass('isRequired');
-
-               <?php }
-               else{ ?>
-                    $(".hidePregnancyResult").css('display','block');
-                    $("#pregnancyStatus").addClass('isRequired');
-                    <?php }?>
 
           <?php if($result['past_hiv_testing'] == 'yes') { ?>
                $(".hivResultStatusShow").css('display','block');
@@ -619,7 +611,17 @@ if($result['term_outcome']==''){
                                         $("#maritalStatus").addClass("<?php echo $marital;?>");
                                         $("#educationLevel").addClass("<?php echo $education;?>");
                                         $("#riskPopulation").addClass("<?php echo $risk;?>");
-                                        $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
+
+                                        <?php if($result['gender'] == 'male') { ?>
+                                             $(".hidePregnancyResult").css('display','none');
+                                             $("#pregnancyStatus").removeClass('isRequired');
+
+                                             <?php }
+                                        else{ ?>
+                                             $(".hidePregnancyResult").css('display','block');
+                                             $("#pregnancyStatus").addClass('isRequired');
+                                             <?php }?>
+
                                         $("#currentSexualPartner").addClass("<?php echo $partner;?>");
                                         $("#expViolence").addClass("<?php echo $expViolence;?>");
                                         $("#step1,#wizard-progress-step1").removeClass("active");
@@ -669,6 +671,17 @@ if($result['term_outcome']==''){
                               }
                          }
                          $(document).ready(function(){
+
+                              <?php if($result['gender'] == 'male') { ?>
+                                   $(".hidePregnancyResult").css('display','none');
+                                   $("#pregnancyStatus").removeClass('isRequired');
+
+                                   <?php }
+                              else{ ?>
+                                   $(".hidePregnancyResult").css('display','block');
+                                   $("#pregnancyStatus").addClass('isRequired');
+                                   <?php }?>
+
 
                          });
                          function ageCalculate(){
