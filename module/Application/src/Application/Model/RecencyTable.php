@@ -360,7 +360,7 @@ class RecencyTable extends AbstractTableGateway {
                 'hiv_diagnosis_date' => ($params['hivDiagnosisDate']!='')?$common->dbDateFormat($params['hivDiagnosisDate']):NULL,
                 'hiv_recency_date' => (isset($params['hivRecencyDate']) && $params['hivRecencyDate']!='')?$common->dbDateFormat($params['hivRecencyDate']):NULL,
                 'recency_test_performed' => $params['recencyTestPerformed'],
-                
+
                 'recency_test_not_performed' => ($params['recencyTestPerformed']=='true')?$params['recencyTestNotPerformed']:NULL,
                 'other_recency_test_not_performed' => (isset($params['recencyTestPerformed']) && $params['recencyTestPerformed']='other')?$params['otherRecencyTestNotPerformed']: NULL,
 
