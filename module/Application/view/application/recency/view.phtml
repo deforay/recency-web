@@ -4,7 +4,6 @@ use Application\Service\CommonService;
 $sessionLogin = new Container('credo');
 $common = new CommonService()
 // \Zend\Debug\Debug::dump($result);die;
-
 ?>
 <style>
 <?php
@@ -38,9 +37,6 @@ if($result['term_outcome']==''){
           <div class="block-header block-header-default">
             <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-primary">Back</a>
           </div>
-
-
-
           <section class="content">
                <!-- left column -->
                <div class="">
@@ -49,8 +45,6 @@ if($result['term_outcome']==''){
                          </div><!-- /.box-header -->
                          <div class="box-body">
                               <h3 class="block-title" style=" margin-bottom: 4%; ">Recency</h3>
-                              <!-- <h4>Recency</h4> -->
-
                               <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
@@ -70,7 +64,7 @@ if($result['term_outcome']==''){
                                              </span>
                                         </div>
                                    </div>
-                              
+
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="orderDate" class="col-lg-4 control-label">Facility Name</label>
@@ -90,6 +84,7 @@ if($result['term_outcome']==''){
                                         </div>
                                    </div>
 
+
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="termsOfPay" class="col-lg-4 control-label">Past HIV Testing</label>
@@ -99,10 +94,10 @@ if($result['term_outcome']==''){
                                              </span>
                                         </div>
                                    </div>
-                              
+                                   <?php if($result->past_hiv_testing == 'yes'){ ?>
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="otherRef" class="col-lg-4 control-label">Test Last 12 Month</label>
+                                             <label for="otherRef" class="col-lg-4 control-label">Tested In Last 12 Months?</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
                                                   <?php echo ucwords(str_replace('_', ' ', $result->test_last_12_month)); ?>
@@ -112,79 +107,146 @@ if($result['term_outcome']==''){
 
                                    <div class="col-md-6">
                                         <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Last HIV Status?</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->last_hiv_status)); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <?php } ?>
+
+                                   <?php if($result->last_hiv_status == 'positive'){ ?>
+                                        <div class="col-md-6">
+                                             <div class="form-group">
+                                                  <label for="otherRef" class="col-lg-4 control-label">Is the Patient on ART? </label>
+                                                  <label for="company" class="col-lg-1 control-label">: </label>
+                                                  <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                       <?php echo ucwords(str_replace('_', ' ', $result->patient_on_art)); ?>
+                                                  </span>
+                                             </div>
+                                        </div>
+
+
+                                        <?php
+                                        }
+                                        elseif ($result->last_hiv_status == 'negative')
+                                        { ?>
+
+                                        <div class="col-md-6">
+                                             <div class="form-group">
+                                                  <label for="company" class="col-lg-1 control-label"> </label>
+                                                  <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+
+                                                  </span>
+                                             </div>
+                                        </div>
+
+                                        <?php
+                                        } ?>
+
+                                   <div class="col-md-6">
+                                        <div class="form-group">
                                              <label for="otherRef" class="col-lg-4 control-label">Recency Test not performed</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                             <input type="checkbox" disabled class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" <?php echo($result['recency_test_performed'] == 'true' )?'checked="checked"':''; ?> value="true"/>&nbsp;Yes
+                                             <input type="checkbox" disabled class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes"
+                                             <?php echo($result['recency_test_performed'] == 'true' )?'checked="checked"':''; ?> value="true"/>&nbsp;Yes
                                              </span>
                                         </div>
                                    </div>
+                                   <?php if($result->recency_test_performed == '')
+                                   {
+                                    ?>
+                                    <div class="col-md-6">
+                                         <div class="form-group">
+                                              <label for="termsOfPay" class="col-lg-4 control-label">HIV Recency Date</label>
+                                              <label for="company" class="col-lg-1 control-label">: </label>
+                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                   <?php echo ($result->hiv_recency_date!='' && $result->hiv_recency_date!='0000:00:00')?$common->humanDateFormat($result->hiv_recency_date):''; ?>
+                                              </span>
+                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                         <div class="form-group">
+                                              <label for="otherRef" class="col-lg-4 control-label">Control Line</label>
+                                              <label for="company" class="col-lg-1 control-label">: </label>
+                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                   <?php
+                                                   if($result['control_line'] == 'present')
+                                                   {
+                                                        echo "Present";
+                                                   }
+                                                   elseif ($result['control_line'] == 'absent') {
+                                                        echo "Absent";
+                                                   }
+                                                   ?>
+                                              </span>
+                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                         <div class="form-group">
+                                              <label for="otherRef" class="col-lg-4 control-label">Positive Verification</label>
+                                              <label for="company" class="col-lg-1 control-label">: </label>
+                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                   <?php
+                                                   if($result['positive_verification_line'] == 'present')
+                                                   {
+                                                        echo "Present";
+                                                   }
+                                                   elseif ($result['positive_verification_line'] == 'absent') {
+                                                        echo "Absent";
+                                                   }
 
+                                                   ?>
+                                              </span>
+                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                         <div class="form-group">
+                                              <label for="otherRef" class="col-lg-4 control-label">Long Term Verification</label>
+                                              <label for="company" class="col-lg-1 control-label">: </label>
+                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                   <?php
+                                                   if($result['long_term_verification_line'] == 'present')
+                                                   {
+                                                        echo "Present";
+                                                   }
+                                                   elseif ($result['long_term_verification_line'] == 'absent') {
+                                                        echo "Absent";
+                                                   }
+
+                                                   ?>
+                                              </span>
+                                         </div>
+                                    </div>
+                                   <?php
+                                   }
+                                   elseif ($result->recency_test_performed == 'true')
+                                   { ?>
 
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="termsOfPay" class="col-lg-4 control-label">HIV Recency Date</label>
+                                             <label for="otherRef" class="col-lg-4 control-label">Reason of Recency Test Not Performed</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ($result->hiv_recency_date!='' && $result->hiv_recency_date!='0000:00:00')?$common->humanDateFormat($result->hiv_recency_date):''; ?>
-                                             </span>
-                                        </div>
-                                   </div>
-                                   <div class="col-md-6">
-                                        <div class="form-group">
-                                             <label for="otherRef" class="col-lg-4 control-label">Control Line</label>
-                                             <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+
                                                   <?php
-                                                  if($result['control_line'] == 'present')
+                                                  if($result['recency_test_not_performed'] == 'other')
                                                   {
-                                                       echo "Present";
+                                                        echo ucwords(str_replace('_', ' ', $result->other_recency_test_not_performed));
+                                                  }else
+                                                  {
+                                                       echo ucwords(str_replace('_', ' ', $result->recency_test_not_performed));
                                                   }
-                                                  elseif ($result['control_line'] == 'absent') {
-                                                       echo "Absent";
-                                                  }
-
                                                   ?>
+
                                              </span>
                                         </div>
                                    </div>
-                              
-                                   <div class="col-md-6">
-                                        <div class="form-group">
-                                             <label for="otherRef" class="col-lg-4 control-label">Positive Verification</label>
-                                             <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php
-                                                  if($result['positive_verification_line'] == 'present')
-                                                  {
-                                                       echo "Present";
-                                                  }
-                                                  elseif ($result['positive_verification_line'] == 'absent') {
-                                                       echo "Absent";
-                                                  }
 
-                                                  ?>
-                                             </span>
-                                        </div>
-                                   </div>
-                                   <div class="col-md-6">
-                                        <div class="form-group">
-                                             <label for="otherRef" class="col-lg-4 control-label">Long Term Verification</label>
-                                             <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php
-                                                  if($result['long_term_verification_line'] == 'present')
-                                                  {
-                                                       echo "Present";
-                                                  }
-                                                  elseif ($result['long_term_verification_line'] == 'absent') {
-                                                       echo "Absent";
-                                                  }
-
-                                                  ?>
-                                             </span>
-                                        </div>
-                                   </div>
+                                   <?php
+                                   } ?>
                                    <div class="col-md-6 outcome">
                                         <div class="form-group">
                                              <label for="otherRef" class="col-lg-4 control-label">Outcome</label>
@@ -196,8 +258,6 @@ if($result['term_outcome']==''){
                                    </div>
                               </div>
                               <!--  -->
-
-                              
                          </div>
                          <hr>
                          <h3 class="block-title" style=" margin-bottom: 4%; ">Behaviours</h3>
@@ -233,16 +293,23 @@ if($result['term_outcome']==''){
                                              </span>
                                         </div>
                                    </div>
+
+
+
+                              <?php if($result->gender != 'male') {  ?>
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="company" class="col-lg-4 control-label">Residence</label>
+                                             <label for="termsOfPay" class="col-lg-4 control-label">Pregnancy Status</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
-                                                  <?php echo ucwords($result->residence); ?>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->pregnancy_status));?>
                                              </span>
                                         </div>
                                    </div>
+
+                              <?php } ?>
                               </div>
+
                               <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
@@ -275,13 +342,14 @@ if($result['term_outcome']==''){
                                    </div>
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="termsOfPay" class="col-lg-4 control-label">Pregnancy Status</label>
+                                             <label for="company" class="col-lg-4 control-label">Residence</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                  <?php echo ucwords(str_replace('_', ' ', $result->pregnancy_status));?>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                                  <?php echo ucwords($result->residence); ?>
                                              </span>
                                         </div>
                                    </div>
+
                               </div>
 
                               <div class="row">
