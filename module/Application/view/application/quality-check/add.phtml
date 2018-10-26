@@ -1,0 +1,262 @@
+<?php
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+
+$lineOutComeColor = "#de1d2b";
+$lineOutComeColor2 = "#000000";
+
+?>
+<style type="text/css">
+
+.outcome{display:none;}
+.colour{color:red;}
+
+</style>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Quality Check</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <a href="<?php echo $this->url('quality-check', array('action' => 'index')); ?>"><li class="breadcrumb-item">Quality Test Details</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+               <h3 class="block-title">Add Quality Check Testing Details</h3>
+          </div>
+          <div class="block-content">
+               <div class="col-md-12 table-responsive" id="hide">
+                    <form name="qcAddInformation" id="qcAddInformation"  class="mb-5" action="<?php echo $this->url('quality-check', array('action' => 'add')); ?>" method="post">
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Qc Sample Id <span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control isRequired" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC Sample id" title="Please enter the QC Sample id" >
+                              </div>
+
+                              <label class="col-sm-2 col-form-label" for="">Qc Test Date<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="js-datepicker form-control isRequired" id="qcTestDate" name="qcTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the QC test date" title="Please enter the QC test date"  readonly="readonly">
+                              </div>
+                         </div>
+                         <br>
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Reference Result <span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control isRequired" id="referenceResult" name="referenceResult" title="Please select the Reference Result">
+                                        <option value="">--Select--</option>
+                                        <option value="preliminary_recent_sample">Preliminary Recent Sample</option>
+                                        <option value="long_term_sample">Long term Sample</option>
+                                        <option value="hiv_negative_sample">HIV Negative Sample</option>
+                                   </select>
+                              </div>
+
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot No <span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" placeholder="Enter the test Kit Lot No" title="Please enter the test Kit Lot No">
+                              </div>
+                         </div>
+
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="js-datepicker form-control isRequired" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
+                              </div>
+                              <label class="col-sm-2 col-form-label" for="">Not Performed Recency Result Yes ? <span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" value="true"/>&nbsp;Yes
+                              </div>
+                         </div>
+
+                         <div class="form-group row" id="reasonNotPerform">
+                              <label class="col-sm-2 col-form-label" for="">Reason Why Test Not Performed ? <span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control removeClassReq" id="recencyTestNotPerformedReason" name="recencyTestNotPerformedReason" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
+                                        <option value="">--Select--</option>
+                                        <option value="no_consent_from_the_client">No Consent</option>
+                                        <option value="no_sample_collected">No Sample Collected</option>
+                                        <option value="newly_not_diagnosed">No New Diagnosis</option>
+                                        <option value="other">Others</option>
+                                   </select>
+                              </div>
+
+                              <label style="display:none;" class="col-sm-2 col-form-label" id="otherRecencyTestNotPerformedReasonLabel" for="">Other Recency Test Not Performed<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input style="display:none;" type="text" class="form-control removeClassReq" id="otherRecencyTestNotPerformedReason" name="otherRecencyTestNotPerformedReason" placeholder="Enter other recency test not performed" title="Please Enter the Other recency test not performed">
+                              </div>
+                         </div>
+
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="js-datepicker form-control disbaledResult isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
+                              </div>
+
+                              <label class="col-sm-2 col-form-label" for="">Control Line<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control disbaledResult isRequired" id="controlLine" name="controlLine" title="Please select the control line"  onchange="changeTermLine()">
+                                        <option value="">--Select--</option>
+                                        <option value="present">Present</option>
+                                        <option value="absent">Absent</option>
+                                   </select>
+                              </div>
+                         </div>
+
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Positive Verification<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control disbaledResult isRequired" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line"  onchange="changeTermLine()">
+                                        <option value="">--Select--</option>
+                                        <option value="present">Present</option>
+                                        <option value="absent">Absent</option>
+                                   </select>
+                              </div>
+                              <label class="col-sm-2 col-form-label" for="">Long Term Verification<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line"  onchange="changeTermLine()">
+                                        <option value="">--Select--</option>
+                                        <option value="present">Present</option>
+                                        <option value="absent">Absent</option>
+                                   </select>
+                                   <br>
+                              </div>
+
+                              <label class="col-sm-2 col-form-label outcome" for="">Outcome</label>
+                              <div class="col-sm-4 outcome">
+                                   <span class="outcome form-control" style="border:none;" id="outcome"></span>
+                                   <input type="hidden" name="outcomeData" id="outcomeData"/>
+                              </div>
+                         </div>
+
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Tester Name<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" name="testerName" id="testerName" class="form-control isRequired" placeholder="Enter the tester name" title="Please enter the tester name"/>
+                              </div>
+                              <label class="col-sm-2 col-form-label" for="">Comments</label>
+                              <div class="col-sm-4">
+                                   <textarea type="text" name="comment" id="comment" class="form-control" placeholder="Enter the comment" title="Please enter the comment"/></textarea>
+                              </div>
+                         </div>
+
+
+
+                         <div class="row items-push">
+                              <div class="col-lg-7 offset-lg-4">
+                                   <a href="<?php echo $this->url('quality-check', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                   <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                              </div>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+
+<script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+<script type="text/javascript">
+
+function changeTermLine()
+{
+     var ctrlLine = $("#controlLine").val();
+     var postiveLine = $("#positiveVerificationLine").val();
+     var longTermLine = $("#longTermVerificationLine").val();
+     if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
+          if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
+               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+               $(".outcome").css({"display":"block"});
+          }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
+               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+               $(".outcome").css({"display":"block"});
+          }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
+               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+               $(".outcome").css({"display":"block"});
+          }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
+               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+               $(".outcome").css({"display":"block"});
+          }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
+               $("#outcome").html('HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
+               $(".outcome").css({"display":"block"});
+          }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
+               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+               $(".outcome").css({"display":"block"});
+          }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
+               $("#outcome").html('Preliminary Recent').css({"color":"<?php echo $lineOutComeColor;?>"});
+               $(".outcome").css({"display":"block"});
+          }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
+               $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+               $(".outcome").css({"display":"block"});
+          }
+     }else{
+          $("#outcome").html('').hide();
+          $(".outcome").css({"display":"none"});
+     }
+}
+
+
+function otherRecencyTestNotPerfomedCheck(obj){
+     if( obj.value == 'other' ){
+          $("#otherRecencyTestNotPerformedReason").css('display','block');
+          $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
+          $(".removeClassReq").addClass("isRequired");
+
+     }else{
+          $("#otherRecencyTestNotPerformedReason").css('display','none');
+          $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
+          $(".removeClassReq").removeClass("isRequired");
+
+     }
+}
+
+duplicateName = true;
+var rowCount=1;
+
+function validateNow() {
+
+     flag = deforayValidator.init({
+          formId: 'qcAddInformation'
+     });
+     document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+     if (flag) {
+          if (duplicateName) {
+               $.blockUI();
+               alert(formId);
+               document.getElementById('qcAddInformation').submit();
+          }
+     }
+}
+
+jQuery(document).ready(function($) {
+     $('#reasonNotPerform').hide();
+
+     $('#recencyTestPerformedYes').change(function() {
+          if(this.checked == true){
+               $('#reasonNotPerform').show();
+               $("#outcome").html('').hide();
+               $(".outcome").hide();
+               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+               $(".removeClassReq").addClass("isRequired");
+
+          }else{
+               $(".disbaledResult").addClass("isRequired");
+               $(".disbaledResult").attr("disabled",false);
+               $('#reasonNotPerform').hide();
+               $(".removeClassReq").removeClass("isRequired");
+
+               // $("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");
+               // $("#controlLine").addClass("<?php echo $controlLineResult;?>");
+               // $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
+               // $("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine;?>");
+          }
+     });
+
+});
+
+</script>

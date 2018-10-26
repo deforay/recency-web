@@ -6,13 +6,13 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 
-class RecencyMandatoryController extends AbstractRestfulController
+class TesterNameController extends AbstractRestfulController
 {
     public function getList()
     {
         $params=$this->getRequest()->getQuery();
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $response = $globalConfigService->getRecencyMandatoryDetailsApi();
+        $recencyService = $this->getServiceLocator()->get('RecencyService');
+        $response = $recencyService->getTesterNameAllDetailsApi();
         return new JsonModel($response);
     }
 }

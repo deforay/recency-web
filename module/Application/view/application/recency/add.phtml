@@ -21,9 +21,7 @@ $controlLineResult = in_array("Positive Verification Line",$resultArr)?"isRequir
 $positiveVerificationLine = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
 $longTermVerificationLine = in_array("Long Term Verification Line",$resultArr)?"isRequired":"";
 $dob = in_array("Dob",$resultArr)?"isRequired":"";
-
 $comment = in_array("Comments",$resultArr)?"isRequired":"";
-
 $age = in_array("Age",$resultArr)?"isRequired":"";
 $gender = in_array("Gender",$resultArr)?"isRequired":"";
 $locationOne = in_array("Province",$resultArr)?"isRequired":"";
@@ -36,18 +34,38 @@ $risk = in_array("Risk Population",$resultArr)?"isRequired":"";
 $pregnancy = in_array("Pregnancy Status",$resultArr)?"isRequired":"";
 $partner = in_array("Current Sexual Partner",$resultArr)?"isRequired":"";
 $testing = in_array("Past Hiv Testing",$resultArr)?"isRequired":"";
-
 $hivStatus = in_array("Last HIV Status",$resultArr)?"isRequired":"";
 $patientArt = in_array("Patient on ART",$resultArr)?"isRequired":"";
 $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 $expViolence = in_array("Experience Violence Last 12 Month",$resultArr)?"isRequired":"";
 
+$kitLotNo = in_array("Test Kit Lot No",$resultArr)?"isRequired":"";
+$KitExpiryDate = in_array("Kit Expiry Date",$resultArr)?"isRequired":"";
+$testerName = in_array("Tester Name",$resultArr)?"isRequired":"";
+
+
 $lineOutComeColor = "#de1d2b";
 $lineOutComeColor2 = "#000000";
 ?>
+
 <style>
 .btnHide,.hivResultStatusShow,.outcome{display:none;}
 .colour{color:red;}
+
+/* Search Start*/
+/*
+.typeahead { border: 1px solid #d4d4d4;border-radius: 4px;background: #ffff;padding: 8px 12px;max-width: 300px;min-width: 290px;
+    color: #495057;}
+	input.typeahead {min-width: 265px;}
+	.tt-menu { width:300px; }
+	ul.typeahead{margin:0px;padding:0px;background: #fafafa;}
+     .dropdown-item.active, .dropdown-item:active {color: #fff;text-decoration: none;background-color: #68bced !important;
+     }
+	ul.typeahead.dropdown-menu li a {padding: 10px !important;	border-bottom:#d4d4d4 1px solid;color:black;}
+	ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
+
+/* Search End */
+
 </style>
 
 <div class="bg-body-light">
@@ -85,9 +103,6 @@ $lineOutComeColor2 = "#000000";
                          </ul>
                          <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
                               <div class="block-content block-content-sm">
-                                   <!-- <div class="progress" data-wizard="progress" style="height: 8px;">
-                                   <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div> -->
                          </div>
                          <div class="block-content block-content-full tab-content" style="min-height: 300px;">
 
@@ -187,7 +202,7 @@ $lineOutComeColor2 = "#000000";
                                         </div>
 
 
-                                        <label style="display:none;" class="col-sm-2 col-form-label hideDiv" for="">Reason of Recency Test Not Performed
+                                        <label style="display:none;" class="col-sm-2 col-form-label hideDiv" for="">Reason  Recency Test Not Performed
                                              <?php echo(in_array("Recency Test Not Performed",$resultArr)?"<span class='mandatory'>*</span>":""); ?>
                                         </label>
 
@@ -203,7 +218,6 @@ $lineOutComeColor2 = "#000000";
                                              <input style="display:none;" type="text" class="form-control col-sm-12" id="otherRecencyTestNotPerformed" name="otherRecencyTestNotPerformed" title="Please Enter the Other other recency test not performed" value="" placeholder="Enter other recency test not performed">
                                              <br>
                                         </div>
-
 
                                         <label class="col-sm-2 col-form-label" for="">HIV Recency Date<?php echo(in_array("Hiv Recency Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
@@ -248,9 +262,27 @@ $lineOutComeColor2 = "#000000";
                                                   <span class="outcome form-control" style="border:none;" id="outcome"></span>
                                                   <input type="hidden" name="outcomeData" id="outcomeData"/>
                                              </div>
+                                             <br>
+                                             <br>
+                                             <br>
+                                             <!-- tEST Kitter  -->
+                                             <label class="col-sm-2 col-form-label" for="">Test Kit Lot No. <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                             <div class="col-sm-4">
+                                                  <input type="text" class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" placeholder="Enter kit lot no." title="Please enter the kit lot no.">
+                                             </div>
 
+                                             <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date <?php echo(in_array("Kit Expiry Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                             <div class="col-sm-4">
+                                                  <input type="text" class="js-datepicker form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  placeholder="Enter the kit expiry date"  value="" title="Please enter the Kit Expiry date"  readonly="readonly">
+                                             </div>
+                                             <br>
+                                             <br>
+                                             <br>
+                                             <label class="col-sm-2 col-form-label" for="">Tester Name <?php echo(in_array("Tester Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                             <div class="col-sm-4">
+                                                  <input type="text" name="testerName" id="testerName" class="typeahead form-control <?php echo $testerName; ?>" placeholder="Enter the tester name" title="Please enter the tester name"/>
+                                             </div>
                                         </div>
-
                                    </div>
 
                                    <div class="tab-pane" id="wizard-progress-step2" role="tabpanel">
@@ -387,82 +419,85 @@ $lineOutComeColor2 = "#000000";
           <!--  end tab view-->
      </div>
 </div>
+<!-- vivek -->
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/namesearch/typeahead.js'; ?>"></script>
+
+<!-- <script type="text/javascript" src="typeahead.js"></script> -->
 
 
 <script type="text/javascript">
 
-function changeTermLine()
-{
-     var ctrlLine = $("#controlLine").val();
-     var postiveLine = $("#positiveVerificationLine").val();
-     var longTermLine = $("#longTermVerificationLine").val();
-     if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
-          if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
-               $("#outcome").html('HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
-               $("#outcome").html('Preliminary Recent').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
-               $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-               $(".outcome").css({"display":"block"});
+     function changeTermLine()
+     {
+          var ctrlLine = $("#controlLine").val();
+          var postiveLine = $("#positiveVerificationLine").val();
+          var longTermLine = $("#longTermVerificationLine").val();
+          if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
+               if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
+                    $("#outcome").html('HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
+                    $("#outcome").html('Preliminary Recent').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
+                    $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $(".outcome").css({"display":"block"});
+               }
+          }else{
+               $("#outcome").html('').hide();
+               $(".outcome").css({"display":"none"});
           }
-     }else{
-          $("#outcome").html('').hide();
-          $(".outcome").css({"display":"none"});
-     }
-}
-
-function riskPopulationCheck(obj){
-     if( obj.value == 'Other' ){
-          $("#otherRiskPopulation").css('display','block').addClass('isRequired');
-     }else{
-          $("#otherRiskPopulation").css('display','none').removeClass('isRequired');
-     }
-}
-//vivek 16th oct
-function otherRecencyTestNotPerfomedCheck(obj){
-     if( obj.value == 'other' ){
-          $("#otherRecencyTestNotPerformed").css('display','block');
-          $("#otherRecencyTestNotPerformed").addClass('isRequired');
-
-     }else{
-          $("#otherRecencyTestNotPerformed").css('display','none');
-          $("#otherRecencyTestNotPerformed").removeClass('isRequired');
-     }
-}
-
-function checkHivTesting(obj){
-     if( obj.value == 'yes' ){
-          $(".hivResultStatusShow").css('display','block');
-          $("#lastHivStatus").addClass('isRequired');
-          $("#testLast12Month").addClass('isRequired');
      }
 
-     else{
-          $(".hivResultStatusShow").css('display','none');
-          $("#lastHivStatus").removeClass('isRequired');
-          $("#patientOnArt").removeClass('isRequired');
-          $("#testLast12Month").removeClass('isRequired');
+     function riskPopulationCheck(obj){
+          if( obj.value == 'Other' ){
+               $("#otherRiskPopulation").css('display','block').addClass('isRequired');
+          }else{
+               $("#otherRiskPopulation").css('display','none').removeClass('isRequired');
+          }
      }
-}
 
-// vivek 17th
+     function otherRecencyTestNotPerfomedCheck(obj){
+          if( obj.value == 'other' ){
+               $("#otherRecencyTestNotPerformed").css('display','block');
+               $("#otherRecencyTestNotPerformed").addClass('isRequired');
+
+          }else{
+               $("#otherRecencyTestNotPerformed").css('display','none');
+               $("#otherRecencyTestNotPerformed").removeClass('isRequired');
+          }
+     }
+
+     function checkHivTesting(obj){
+          if( obj.value == 'yes' ){
+               $(".hivResultStatusShow").css('display','block');
+               $("#lastHivStatus").addClass('isRequired');
+               $("#testLast12Month").addClass('isRequired');
+          }
+
+          else{
+               $(".hivResultStatusShow").css('display','none');
+               $("#lastHivStatus").removeClass('isRequired');
+               $("#patientOnArt").removeClass('isRequired');
+               $("#testLast12Month").removeClass('isRequired');
+          }
+     }
+
      function genderCheck(obj){
           if( obj.value == 'male' ){
                $(".hidePregnancyResult").css('display','none');
@@ -474,158 +509,169 @@ function checkHivTesting(obj){
           }
      }
 
-function checkHivStatus(obj){
-     if( obj.value == 'positive' ){
-          $("#patientOnArt").attr("disabled",false).addClass('isRequired');
-     }else{
-          $("#patientOnArt").attr("disabled",true).removeClass('isRequired').val("");
+     function checkHivStatus(obj){
+          if( obj.value == 'positive' ){
+               $("#patientOnArt").attr("disabled",false).addClass('isRequired');
+          }else{
+               $("#patientOnArt").attr("disabled",true).removeClass('isRequired').val("");
+          }
      }
-}
 
-jQuery(document).ready(function($) {
+     jQuery(document).ready(function($) {
 
-     <?php ?>
+          // // search Start
+          // $('#testerName').typeahead({
+          //      source: function (query, result) {
+          //           $.ajax({
+          //                 url: "/application/recency/get-tester",
+          //                data: 'query=' + query,
+          //                dataType: "json",
+          //                type: "POST",
+          //                success: function (data)
+          //                {
+          //                     result($.map(data, function (item) {
+          //                          return item;
+          //                     }));
+          //                }
+          //           });
+          //      }
+          // });
+          // // search end
 
+          $('#recencyTestPerformedYes').change(function() {
+               if(this.checked == true){
+                    $("#outcome").html('').hide();
+                    $(".outcome").hide();
+                    $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
 
+                    $(".hideDiv").css('display','block');
+                    $("#recencyTestNotPerformed").addClass("isRequired");
+               }else{
+                    $(".disbaledResult").addClass("isRequired");
+                    $(".disbaledResult").attr("disabled",false);
 
+                    $(".hideDiv").css('display','none');
+                    $("#recencyTestNotPerformed").val("").removeClass("isRequired");
+                    $("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
 
-     $('#recencyTestPerformedYes').change(function() {
-          if(this.checked == true){
-               $("#outcome").html('').hide();
-               $(".outcome").hide();
-               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
-               // vivek 16th
-               $(".hideDiv").css('display','block');
-               $("#recencyTestNotPerformed").addClass("isRequired");
-          }else{
-               $(".disbaledResult").addClass("isRequired");
-               $(".disbaledResult").attr("disabled",false);
-               // vivek 16th
-               $(".hideDiv").css('display','none');
-               $("#recencyTestNotPerformed").val("").removeClass("isRequired");
-               $("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
+                    $("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");
+                    $("#controlLine").addClass("<?php echo $controlLineResult;?>");
+                    $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
+                    $("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine;?>");
+               }
+          });
 
-               $("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");
-               $("#controlLine").addClass("<?php echo $controlLineResult;?>");
-               $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
-               $("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine;?>");
-          }
-     });
+          $("#facilityId").change(function(){
+               if($(this).val() == 'other'){
+                    $("#otherFacilityName").addClass("isRequired").show();
+               }else{
+                    $("#otherFacilityName").removeClass("isRequired").hide();
+               }
+          });
 
-     $("#facilityId").change(function(){
-          if($(this).val() == 'other'){
-               $("#otherFacilityName").addClass("isRequired").show();
-          }else{
-               $("#otherFacilityName").removeClass("isRequired").hide();
-          }
-     });
-
-
-
-     <?php
-     foreach($globalConfigResult as $config){
-          ?>
-          getLocationDeatils('<?php echo $config["global_name"];?>');
           <?php
-          break;
-     }
-     ?>
-});
-
-function validateStep1()
-{
-     if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
-          flag = deforayValidator.init({
-               formId: 'recencyInformation'
-          });
-          if (flag) {
-               $("#dob").addClass("<?php echo $dob;?>");
-               $("#gender").addClass("<?php echo $gender;?>");
-               $("#age").addClass("<?php echo $age;?>");
-               $("#residence").addClass("<?php echo $residence;?>");
-               $("#maritalStatus").addClass("<?php echo $marital;?>");
-               $("#educationLevel").addClass("<?php echo $education;?>");
-               $("#riskPopulation").addClass("<?php echo $risk;?>");
-               $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
-               $("#currentSexualPartner").addClass("<?php echo $partner;?>");
-               $("#expViolence").addClass("<?php echo $expViolence;?>");
-               $("#comments").addClass("<?php echo $comment;?>");
-
-
-               $("#step1,#wizard-progress-step1").removeClass("active");
-               $("#step2,#wizard-progress-step2").addClass("active");
-
-               $(".btnHide").show();
-               $(".nxtBtn").hide();
+          foreach($globalConfigResult as $config){
+               ?>
+                    getLocationDeatils('<?php echo $config["global_name"];?>');
+               <?php
+               break;
           }
-     }else{
+          ?>
+     });
+
+     function validateStep1()
+     {
+          if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
+               flag = deforayValidator.init({
+                    formId: 'recencyInformation'
+               });
+               if (flag) {
+                    $("#dob").addClass("<?php echo $dob;?>");
+                    $("#gender").addClass("<?php echo $gender;?>");
+                    $("#age").addClass("<?php echo $age;?>");
+                    $("#residence").addClass("<?php echo $residence;?>");
+                    $("#maritalStatus").addClass("<?php echo $marital;?>");
+                    $("#educationLevel").addClass("<?php echo $education;?>");
+                    $("#riskPopulation").addClass("<?php echo $risk;?>");
+                    $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
+                    $("#currentSexualPartner").addClass("<?php echo $partner;?>");
+                    $("#expViolence").addClass("<?php echo $expViolence;?>");
+                    $("#comments").addClass("<?php echo $comment;?>");
+
+                    $("#step1,#wizard-progress-step1").removeClass("active");
+                    $("#step2,#wizard-progress-step2").addClass("active");
+
+                    $(".btnHide").show();
+                    $(".nxtBtn").hide();
+               }
+          }else{
+               $(".btnHide").hide();
+               $("#sampleId").focus();
+               $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
+               alert("Please enter either sample or patient id  ",'err');
+          }
+     }
+     function validateStep2()
+     {
+          $(".section2").removeClass('isRequired');
+          $("#step1,#wizard-progress-step1").addClass("active");
+          $("#step2,#wizard-progress-step2").removeClass("active");
+
           $(".btnHide").hide();
-          $("#sampleId").focus();
-          $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
-          alert("Please enter either sample or patient id  ",'err');
+          $(".nxtBtn").show();
      }
-}
-function validateStep2()
-{
-     $(".section2").removeClass('isRequired');
-     $("#step1,#wizard-progress-step1").addClass("active");
-     $("#step2,#wizard-progress-step2").removeClass("active");
-
-     $(".btnHide").hide();
-     $(".nxtBtn").show();
-}
-function validateNow() {
-     if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
-          flag = deforayValidator.init({
-               formId: 'recencyInformation'
-          });
-          document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
-          if (flag) {
-               $.blockUI();
-               document.getElementById('recencyInformation').submit();
+     function validateNow() {
+          if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
+               flag = deforayValidator.init({
+                    formId: 'recencyInformation'
+               });
+               document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+               if (flag) {
+                    $.blockUI();
+                    document.getElementById('recencyInformation').submit();
+               }
+          }else{
+               $("#sampleId").focus();
+               $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
+               alert("Please enter either sample or patient id  ",'err');
           }
-     }else{
-          $("#sampleId").focus();
-          $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
-          alert("Please enter either sample or patient id  ",'err');
      }
-}
 
-function ageCalculate(){
-     var today = new Date();
-     var birthDate = new Date($("#dob").val());
-     var dob = diff_years(today,birthDate);
-     $("#age").val(dob);
-}
-function diff_years(dt2, dt1)
-{
-     var diff =(dt2.getTime() - dt1.getTime()) / 1000;
-     diff /= (60 * 60 * 24);
-     return Math.abs(Math.round(diff/365.25));
-}
-function getLocationDeatils(globalName)
-{
-     var selectValue = document.getElementById(globalName).value;
-     var innerId = '';
-     var path = '';
-     if(globalName=='location_one' && selectValue==''){
-          path = 'get-province';
-          innerId = 'location_one';
-     }else if(globalName=='location_one' && selectValue!=''){
-          path = 'get-district';
-          innerId = 'location_two';
-          $("#location_three").html("<option value=''>-- Select --</option>");
-     }else if(globalName=='location_two' && selectValue!=''){
-          path = 'get-city';
-          innerId = 'location_three';
+     function ageCalculate(){
+          var today = new Date();
+          var birthDate = new Date($("#dob").val());
+          var dob = diff_years(today,birthDate);
+          $("#age").val(dob);
      }
-     if(path!=''){
-          $.blockUI();
-          $.post("/common/"+path, {selectValue:selectValue},
-          function(data) {
-               $("#"+innerId).html(data);
-               $.unblockUI();
-          });
+     function diff_years(dt2, dt1)
+     {
+          var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+          diff /= (60 * 60 * 24);
+          return Math.abs(Math.round(diff/365.25));
      }
-}
+     function getLocationDeatils(globalName)
+     {
+          var selectValue = document.getElementById(globalName).value;
+          var innerId = '';
+          var path = '';
+          if(globalName=='location_one' && selectValue==''){
+               path = 'get-province';
+               innerId = 'location_one';
+          }else if(globalName=='location_one' && selectValue!=''){
+               path = 'get-district';
+               innerId = 'location_two';
+               $("#location_three").html("<option value=''>-- Select --</option>");
+          }else if(globalName=='location_two' && selectValue!=''){
+               path = 'get-city';
+               innerId = 'location_three';
+          }
+          if(path!=''){
+               $.blockUI();
+               $.post("/common/"+path, {selectValue:selectValue},
+               function(data) {
+                    $("#"+innerId).html(data);
+                    $.unblockUI();
+               });
+          }
+     }
 </script>

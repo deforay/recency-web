@@ -90,4 +90,15 @@ class RecencyController extends AbstractActionController
           }
 
      }
+     public function getTesterAction() {
+
+          $request = $this->getRequest();
+          if ($request->isPost()) {
+               $params = $request->getPost();
+               $val = $params['query'];
+               $recencyService = $this->getServiceLocator()->get('RecencyService');
+               $result = $recencyService->getTesterData($val);
+               return $this->getResponse()->setContent(Json::encode($result));
+          }
+     }
 }

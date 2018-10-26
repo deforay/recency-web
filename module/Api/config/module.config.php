@@ -119,6 +119,22 @@ return array(
                      ),
                 ),
            ),
+
+           'api-tester-name' => array(
+            'type'    => 'segment',
+            'options' => array(
+                 'route'    => '/api/tester-name[/:id]',
+                 'constraints' => array(
+                      'id'     => '[0-9]+',
+                 ),
+                 'defaults' => array(
+                      'controller' => 'Api\Controller\TesterName',
+                 ),
+            ),
+       ),
+
+
+
           ),
      ),
      'controllers' => array(
@@ -128,11 +144,12 @@ return array(
                'Api\Controller\Recency' => 'Api\Controller\RecencyController',
                'Api\Controller\RiskPopulations' => 'Api\Controller\RiskPopulationsController',
                'Api\Controller\GlobalConfig' => 'Api\Controller\GlobalConfigController',
-               
+
                'Api\Controller\Province' => 'Api\Controller\ProvinceController',
                'Api\Controller\District' => 'Api\Controller\DistrictController',
                'Api\Controller\City' => 'Api\Controller\CityController',
                'Api\Controller\RecencyMandatory' => 'Api\Controller\RecencyMandatoryController',
+               'Api\Controller\TesterName' => 'Api\Controller\TesterNameController',
 
 
           ),

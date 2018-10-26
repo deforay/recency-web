@@ -19,8 +19,7 @@ use Application\Model\UserFacilityMapTable;
 use Application\Model\ProvinceTable;
 use Application\Model\DistrictTable;
 use Application\Model\CityTable;
-
-
+use Application\Model\QualityCheckTable;
 
 // Service
 
@@ -30,11 +29,7 @@ use Application\Service\FacilitiesService;
 use Application\Service\RecencyService;
 use Application\Service\RiskPopulationsService;
 use Application\Service\GlobalConfigService;
-
-
-
-
-
+use Application\Service\QualityCheckService;
 
 class Module{
      public function onBootstrap(MvcEvent $e){
@@ -144,6 +139,13 @@ class Module{
                         return $table;
                     },
 
+                    'QualityCheckTable' => function($sm) {
+                         $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                         $table = new QualityCheckTable($dbAdapter);
+                         return $table;
+                         },
+
+
                     //service
 
                     'CommonService' => function($sm) {
@@ -165,6 +167,10 @@ class Module{
                     'GlobalConfigService' => function($sm) {
                         return new GlobalConfigService($sm);
                     },
+
+                    'QualityCheckService' => function($sm) {
+                         return new QualityCheckService($sm);
+               },
 
                )
           );

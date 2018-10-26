@@ -90,3 +90,15 @@ ALTER TABLE `recency` ADD `recency_test_not_performed` VARCHAR(255) NULL DEFAULT
 ALTER TABLE `recency` ADD `other_recency_test_not_performed` VARCHAR(255) NULL DEFAULT NULL AFTER `recency_test_not_performed`;
 
 ALTER TABLE `recency` ADD `notes` VARCHAR(255) NULL DEFAULT NULL AFTER `location_three`;
+
+
+-- vivek 25th-oct-2018
+CREATE TABLE `recency_app`.`quality_check_test` ( `qc_test_id` INT(11) NOT NULL AUTO_INCREMENT , `qc_test_date` DATE NULL DEFAULT NULL , `qc_sample_id` VARCHAR(255) NULL DEFAULT NULL , `reference_result` VARCHAR(255) NULL DEFAULT NULL , `kit_lot_no` VARCHAR(255) NULL DEFAULT NULL , `kit_expiry_date` DATE NULL DEFAULT NULL , `hiv_recency_date` DATE NULL DEFAULT NULL , `control_line` VARCHAR(255) NULL DEFAULT NULL , `positive_verification_line` VARCHAR(255) NULL DEFAULT NULL , `long_term_verification_line` VARCHAR(255) NULL DEFAULT NULL , `tester_name` VARCHAR(255) NULL DEFAULT NULL , `added_on` DATETIME NULL DEFAULT NULL , `added_by` INT(11) NULL DEFAULT NULL , PRIMARY KEY (`qc_test_id`)) ENGINE = InnoDB;
+
+
+-- vivek 26th-oct-2018
+ALTER TABLE `quality_check_test` ADD `term_outcome` VARCHAR(255) NULL DEFAULT NULL AFTER `long_term_verification_line`;
+ALTER TABLE `quality_check_test` ADD `comment` VARCHAR(255) NULL DEFAULT NULL AFTER `tester_name`;
+
+-- vivek 26th-oct-2018
+ALTER TABLE `quality_check_test` ADD `recency_test_performed` VARCHAR(255) NULL DEFAULT NULL AFTER `kit_expiry_date`, ADD `recency_test_not_performed_reason` VARCHAR(255) NULL DEFAULT NULL AFTER `recency_test_performed`, ADD `other_recency_test_not_performed_reason` VARCHAR(255) NULL DEFAULT NULL AFTER `recency_test_not_performed_reason`;

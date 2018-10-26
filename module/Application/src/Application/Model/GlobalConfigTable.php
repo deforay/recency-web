@@ -247,6 +247,11 @@ class GlobalConfigTable extends AbstractTableGateway {
         $row[] = in_array("Latitude",$explodField)?"latitude":"";
         $row[] = in_array("Longitude",$explodField)?"longitude":"";
 
+        $row[] = in_array("Test Kit Lot No",$explodField)?"testKitLotNo":"";
+        $row[] = in_array("Kit Expiry Date",$explodField)?"testKitExpDate":"";
+        $row[] = in_array("Tester Name",$explodField)?"testerName":"";
+
+
         $output = array_filter($row);
         if(isset($resultArr) && $resultArr !='') {
             $response['status']='success';
