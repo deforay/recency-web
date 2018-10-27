@@ -226,17 +226,17 @@ class QualityCheckTable extends AbstractTableGateway {
 
                                 $data = array(
                                     'qc_sample_id' => $qcTest['qcsampleId'],
-                                    'qc_test_date'=>($qcTest['qcTestDate']!='')?$common->dbDateFormat($params['qcTestDate']):NULL,
+                                    'qc_test_date'=>($qcTest['qcTestDate']!='')?$common->dbDateFormat($qcTest['qcTestDate']):NULL,
                                     'reference_result' => $qcTest['referenceResult'],
                                     'kit_lot_no'=>$qcTest['testKitLotNo'],
-                                    'kit_expiry_date' => ($qcTest['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
+                                    'kit_expiry_date' => ($qcTest['testKitExpDate']!='')?$common->dbDateFormat($qcTest['testKitExpDate']):NULL,
                                     //'recency_test_performed'=>$qcTest['recencyTestPerformed'],
                                     //'recency_test_not_performed_reason'=> $qcTest['recencyTestNotPerformedReason'],
                                     //'other_recency_test_not_performed_reason'=> $qcTest['otherRecencyTestNotPerformedReason'],
-                                    'hiv_recency_date' => (isset($qcTest['hivRecencyDate']) && $qcTest['hivRecencyDate']!='')?$common->dbDateFormat($params['hivRecencyDate']):NULL,
-                                    'control_line' => (isset($qcTest['ctrlLine']) && $qcTest['ctrlLine']!='')?$params['ctrlLine']:NULL,
-                                    'positive_verification_line' => (isset($qcTest['positiveLine']) && $params['positiveLine']!='')?$params['positiveLine']:NULL,
-                                    'long_term_verification_line' => (isset($qcTest['longTermLine']) && $params['longTermLine']!='')?$params['longTermLine']:NULL,
+                                    'hiv_recency_date' => (isset($qcTest['hivRecencyDate']) && $qcTest['hivRecencyDate']!='')?$common->dbDateFormat($qcTest['hivRecencyDate']):NULL,
+                                    'control_line' => (isset($qcTest['ctrlLine']) && $qcTest['ctrlLine']!='')?$qcTest['ctrlLine']:NULL,
+                                    'positive_verification_line' => (isset($qcTest['positiveLine']) && $qcTest['positiveLine']!='')?$qcTest['positiveLine']:NULL,
+                                    'long_term_verification_line' => (isset($qcTest['longTermLine']) && $qcTest['longTermLine']!='')?$qcTest['longTermLine']:NULL,
                                     'tester_name' => $qcTest['testerName'],
 
                                 );
