@@ -36,12 +36,12 @@ $lineOutComeColor2 = "#000000";
                <div class="col-md-12 table-responsive" id="hide">
                     <form name="qcAddInformation" id="qcAddInformation"  class="mb-5" action="<?php echo $this->url('quality-check', array('action' => 'add')); ?>" method="post">
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Qc Sample Id <span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Qc Sample Id </label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control isRequired" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC Sample id" title="Please enter the QC Sample id" >
+                                   <input type="text" class="form-control " id="qcSampleId" name="qcSampleId" placeholder="Enter the QC Sample id" title="Please enter the QC Sample id" >
                               </div>
 
-                              <label class="col-sm-2 col-form-label" for="">Qc Test Date<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Qc Test Date <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <input type="text" class="js-datepicker form-control isRequired" id="qcTestDate" name="qcTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the QC test date" title="Please enter the QC test date"  readonly="readonly">
                               </div>
@@ -58,24 +58,24 @@ $lineOutComeColor2 = "#000000";
                                    </select>
                               </div>
 
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot No <span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot No </label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" placeholder="Enter the test Kit Lot No" title="Please enter the test Kit Lot No">
+                                   <input type="text" class="form-control " id="testKitLotNo" name="testKitLotNo" placeholder="Enter the test Kit Lot No" title="Please enter the test Kit Lot No">
                               </div>
                          </div>
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date </label>
                               <div class="col-sm-4">
-                                   <input type="text" class="js-datepicker form-control isRequired" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
+                                   <input type="text" class="js-datepicker form-control " id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Not Performed Recency Result Yes ? <span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Not Performed Recency Result Yes ? </label>
                               <div class="col-sm-4">
                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" value="true"/>&nbsp;Yes
                               </div>
                          </div>
 
-                         <div class="form-group row" id="reasonNotPerform">
+                         <div class="form-group row" id="reasonNotPerform" style="display:none;">
                               <label class="col-sm-2 col-form-label" for="">Reason Why Test Not Performed ? <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control removeClassReq" id="recencyTestNotPerformedReason" name="recencyTestNotPerformedReason" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
@@ -136,9 +136,9 @@ $lineOutComeColor2 = "#000000";
                          </div>
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Tester Name<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Tester Name</label>
                               <div class="col-sm-4">
-                                   <input type="text" name="testerName" id="testerName" class="form-control isRequired" placeholder="Enter the tester name" title="Please enter the tester name"/>
+                                   <input type="text" name="testerName" id="testerName" class="form-control" placeholder="Enter the tester name" title="Please enter the tester name"/>
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Comments</label>
                               <div class="col-sm-4">
@@ -249,14 +249,8 @@ jQuery(document).ready(function($) {
                $(".disbaledResult").attr("disabled",false);
                $('#reasonNotPerform').hide();
                $(".removeClassReq").removeClass("isRequired");
-
-               // $("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");
-               // $("#controlLine").addClass("<?php echo $controlLineResult;?>");
-               // $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
-               // $("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine;?>");
           }
      });
-
 });
 
 </script>

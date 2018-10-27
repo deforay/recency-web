@@ -120,7 +120,7 @@ class QualityCheckTable extends AbstractTableGateway {
                          $row = array();
                          $row[] = ucwords($aRow['qc_sample_id']);
                          $row[] = $common->humanDateFormat($aRow['qc_test_date']);
-                         $row[] = ucwords($aRow['reference_result']);
+                         $row[] = str_replace("_"," ",ucwords($aRow['reference_result']));
                          $row[] = ucwords($aRow['kit_lot_no']);
                          $row[] = ucwords($aRow['tester_name']);
                          $row[] = '<a href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
@@ -136,8 +136,7 @@ class QualityCheckTable extends AbstractTableGateway {
                      $sql = new Sql($dbAdapter);
                      $logincontainer = new Container('credo');
                      $common = new CommonService();
-                     if( (isset($params['qcSampleId']) && trim($params['qcSampleId'])!="") || (isset($params['testKitLotNo']) && trim($params['testKitLotNo'])!="") )
-                     {
+                     
                           // \Zend\Debug\Debug::dump($params);die;
                           $data = array(
                                'qc_sample_id' => $params['qcSampleId'],
@@ -161,7 +160,7 @@ class QualityCheckTable extends AbstractTableGateway {
                           );
                           $this->insert($data);
                           $lastInsertedId = $this->lastInsertValue;
-                     }
+                     
                      return $lastInsertedId;
                }
 
@@ -190,7 +189,6 @@ class QualityCheckTable extends AbstractTableGateway {
 
                     if(isset($params['qualityCheckId']) && trim($params['qualityCheckId'])!="")
                     {
-                         \Zend\Debug\Debug::dump($params['qualityCheckId']);
                          $data = array(
                               'qc_sample_id' => $params['qcSampleId'],
                               'qc_test_date'=>($params['qcTestDate']!='')?$common->dbDateFormat($params['qcTestDate']):NULL,
@@ -207,92 +205,60 @@ class QualityCheckTable extends AbstractTableGateway {
                               'term_outcome'=>$params['outcomeData'],
                               'tester_name' => $params['testerName'],
                               'comment' => $params['comment'],
-                              'added_on' => date("Y-m-d H:i:s"),
-                              'added_by' => $logincontainer->userId,
 
                          );
-                         \Zend\Debug\Debug::dump($data);die;
 
                          $updateResult = $this->update($data,array('qc_test_id'=>$params['qualityCheckId']));
                     }
                     return $updateResult;
                }
+      public function addQualityCheckDetailsApi($params)
+      {
+                 $dbAdapter = $this->adapter;
+                 $sql = new Sql($dbAdapter);
+                 $facilityDb = new FacilitiesTable($this->adapter);
+                 $riskPopulationDb = new RiskPopulationsTable($this->adapter);
+                 $common = new CommonService();
+                 if(isset($params["qc"])){
+                      $i = 1;
+                      foreach($params["qc"] as $key => $qcTest){
+                           try{
 
-               public function fetchFacilitiesAllDetails()
-               {
-                  $dbAdapter = $this->adapter;
-                  $sql = new Sql($dbAdapter);
-                  $logincontainer = new Container('credo');
-                  $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
-                  if($logincontainer->roleCode=='user'){
-                        $sQuery = $sql->select()->from(array( 'ufm' => 'user_facility_map' ))
-                                    ->join(array('f' => 'facilities'), 'f.facility_id = ufm.facility_id', array('facility_name','facility_id'))
-                                    ->where(array('f.status'=>'active','ufm.user_id'=>$logincontainer->userId));
-                         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-                         $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                  }else{
-                        $result['facility'] = $this->select()->toArray();
-                  }
-                  $result['riskPopulations'] = $riskPopulationsDb->select()->toArray();
-                  return $result;
-               }
+                                $data = array(
+                                    'qc_sample_id' => $qcTest['qcsampleId'],
+                                    'qc_test_date'=>($qcTest['qcTestDate']!='')?$common->dbDateFormat($params['qcTestDate']):NULL,
+                                    'reference_result' => $qcTest['referenceResult'],
+                                    'kit_lot_no'=>$qcTest['testKitLotNo'],
+                                    'kit_expiry_date' => ($qcTest['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
+                                    //'recency_test_performed'=>$qcTest['recencyTestPerformed'],
+                                    //'recency_test_not_performed_reason'=> $qcTest['recencyTestNotPerformedReason'],
+                                    //'other_recency_test_not_performed_reason'=> $qcTest['otherRecencyTestNotPerformedReason'],
+                                    'hiv_recency_date' => (isset($qcTest['hivRecencyDate']) && $qcTest['hivRecencyDate']!='')?$common->dbDateFormat($params['hivRecencyDate']):NULL,
+                                    'control_line' => (isset($qcTest['ctrlLine']) && $qcTest['ctrlLine']!='')?$params['ctrlLine']:NULL,
+                                    'positive_verification_line' => (isset($qcTest['positiveLine']) && $params['positiveLine']!='')?$params['positiveLine']:NULL,
+                                    'long_term_verification_line' => (isset($qcTest['longTermLine']) && $params['longTermLine']!='')?$params['longTermLine']:NULL,
+                                    'tester_name' => $qcTest['testerName'],
 
-               public function fetchFacilitiesDetailsApi($params)
-               {
-                    $dbAdapter = $this->adapter;
-                    $sql = new Sql($dbAdapter);
-                    if($params['userId']!=''){
-                         $sQuery = $sql->select()->from(array( 'f' => 'facilities' ))
-                         ->join(array('r' => 'recency'), 'f.facility_id = r.facility_id', array('sample_id'))
-                         ->where(array('f.status'=>'active','r.added_by'=>$params['userId']));
-                         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-                         $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
-                         if(count($fResult)>0){
-                              return $fResult;
-                         }
-                    }else{
-                         $sQuery = $sql->select()->from(array('f'=>'facilities'))
-                         ->where(array('status'=>'active'));
-                         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-                         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                         return $rResult;
-                    }
-               }
-               public function fetchFacilityByLocation($params)
-               {
-                  $dbAdapter = $this->adapter;
-                  $sql = new Sql($dbAdapter);
-                  $sQuery = $sql->select()->from(array( 'f' => 'facilities'))->columns(array('facility_id','facility_name'));
-                  if($params['locationOne']!=''){
-                        $sQuery = $sQuery->where(array('province'=>$params['locationOne']));
-                        if($params['locationTwo']!=''){
-                              $sQuery = $sQuery->where(array('district'=>$params['locationTwo']));
-                        }
-                        if($params['locationThree']!=''){
-                              $sQuery = $sQuery->where(array('city'=>$params['locationThree']));
-                        }
-                  }
-                  if(isset($params['facilityId']) && $params['facilityId']!=NULL){
-                        $fDeocde = json_decode($params['facilityId']);
-                        if(!empty($fDeocde)){
-                              $sQuery = $sQuery->where('facility_id NOT IN('.implode(",",$fDeocde).')');
-                        }
-                  }
-                  $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-                  $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                  return $fResult;
-               }
-
-               public function checkFacilityName($fName)
-               {
-                  $dbAdapter = $this->adapter;
-                  $sql = new Sql($dbAdapter);
-                  $fQuery = $sql->select()->from('facilities')->columns(array('facility_id','facility_name'))
-                                    ->where(array('facility_name' => trim($fName)));
-                  $fQueryStr = $sql->getSqlStringForSqlObject($fQuery); // Get the string of the Sql, instead of the Select-instance
-                  $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-                  return $fResult;
-               }
-          }
-          ?>
+                                );
+                                
+                                $this->insert($data);
+                                $lastInsertedId = $this->lastInsertValue;
+                                if($lastInsertedId > 0){
+                                     $response['syncData']['response'][$key] = 'success';
+                                }else{
+                                     $response['syncData']['response'][$key] = 'failed';
+                                }
+                           
+                      }
+                      catch (Exception $exc) {
+                           error_log($exc->getMessage());
+                           error_log($exc->getTraceAsString());
+                      }
+                      $i++;
+                 }
+            }
+            $response['syncCount']['response'] = '';
+            return $response;
+      }
+}
+?>

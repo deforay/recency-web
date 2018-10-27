@@ -497,7 +497,7 @@ class RecencyTable extends AbstractTableGateway {
                                         'tester_name' => $recency['testerName'],
 
                                    );
-                                   if(isset($recency['hivRecencyDate']) && trim($recency['hivDiagnosisDate'])!=""){
+                                   if(isset($recency['hivDiagnosisDate']) && trim($recency['hivDiagnosisDate'])!=""){
                                         $data['hiv_diagnosis_date']=$common->dbDateFormat($recency['hivDiagnosisDate']);
                                    }
                                    if(isset($recency['hivRecencyDate']) && trim($recency['hivRecencyDate'])!=""){
