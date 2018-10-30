@@ -55,7 +55,8 @@ class QualityCheckService {
           return $qcTestDb->fetchQualityCheckTestDetailsById($qualityCheckId);
      }
 
-     public function updateQualityCheckDetails($params){
+     public function updateQualityCheckDetails($params)
+     {
           $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
           $adapter->beginTransaction();
           try {
@@ -75,22 +76,6 @@ class QualityCheckService {
           }
      }
 
-     public function getFacilitiesAllDetails()
-     {
-          $qcTestDb = $this->sm->get('FacilitiesTable');
-          return $qcTestDb->fetchFacilitiesAllDetails();
-     }
-
-     public function getAllFacilityListApi($params)
-     {
-          $qcTestDb = $this->sm->get('FacilitiesTable');
-          return $qcTestDb->fetchFacilitiesDetailsApi($params);
-     }
-     public function getFacilityByLocation($params)
-     {
-          $qcTestDb = $this->sm->get('FacilitiesTable');
-          return $qcTestDb->fetchFacilityByLocation($params);
-     }
 }
 
 ?>

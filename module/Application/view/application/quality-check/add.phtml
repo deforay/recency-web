@@ -163,100 +163,97 @@ $lineOutComeColor2 = "#000000";
 <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
 
-function changeTermLine()
-{
-     var ctrlLine = $("#controlLine").val();
-     var postiveLine = $("#positiveVerificationLine").val();
-     var longTermLine = $("#longTermVerificationLine").val();
-     if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
-          if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
-               $("#outcome").html('HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
-               $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
-               $("#outcome").html('Preliminary Recent').css({"color":"<?php echo $lineOutComeColor;?>"});
-               $(".outcome").css({"display":"block"});
-          }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
-               $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-               $(".outcome").css({"display":"block"});
-          }
-     }else{
-          $("#outcome").html('').hide();
-          $(".outcome").css({"display":"none"});
-     }
-}
-
-
-function otherRecencyTestNotPerfomedCheck(obj){
-     if( obj.value == 'other' ){
-          $("#otherRecencyTestNotPerformedReason").css('display','block');
-          $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
-          $(".removeClassReq").addClass("isRequired");
-
-     }else{
-          $("#otherRecencyTestNotPerformedReason").css('display','none');
-          $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
-          $(".removeClassReq").removeClass("isRequired");
-
-     }
-}
-
-duplicateName = true;
-var rowCount=1;
-
-function validateNow() {
-
-     flag = deforayValidator.init({
-          formId: 'qcAddInformation'
-     });
-     document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
-     if (flag) {
-          if (duplicateName) {
-               $.blockUI();
-               alert(formId);
-               document.getElementById('qcAddInformation').submit();
-          }
-     }
-}
-
-jQuery(document).ready(function($) {
-     $('#reasonNotPerform').hide();
-
-     $('#recencyTestPerformedYes').change(function() {
-          if(this.checked == true){
-               $('#reasonNotPerform').show();
+     function changeTermLine()
+     {
+          var ctrlLine = $("#controlLine").val();
+          var postiveLine = $("#positiveVerificationLine").val();
+          var longTermLine = $("#longTermVerificationLine").val();
+          if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
+               if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
+                    $("#outcome").html('HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
+                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
+                    $("#outcome").html('Preliminary Recent').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".outcome").css({"display":"block"});
+               }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
+                    $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $(".outcome").css({"display":"block"});
+               }
+          }else{
                $("#outcome").html('').hide();
-               $(".outcome").hide();
-               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+               $(".outcome").css({"display":"none"});
+          }
+     }
+
+
+
+     duplicateName = true;
+     var rowCount=1;
+
+     function validateNow() {
+
+          flag = deforayValidator.init({
+               formId: 'qcAddInformation'
+          });
+          document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+          if (flag) {
+               if (duplicateName) {
+                    $.blockUI();
+                    alert(formId);
+                    document.getElementById('qcAddInformation').submit();
+               }
+          }
+     }
+
+     function otherRecencyTestNotPerfomedCheck(obj){
+          if( obj.value == 'other' ){
+               $("#otherRecencyTestNotPerformedReason").css('display','block');
+               $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
                $(".removeClassReq").addClass("isRequired");
 
           }else{
-               $(".disbaledResult").addClass("isRequired");
-               $(".disbaledResult").attr("disabled",false);
-               $('#reasonNotPerform').hide();
+               $("#otherRecencyTestNotPerformedReason").css('display','none');
+               $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
                $(".removeClassReq").removeClass("isRequired");
 
-               // $("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");
-               // $("#controlLine").addClass("<?php echo $controlLineResult;?>");
-               // $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
-               // $("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine;?>");
           }
-     });
+     }
 
-});
+     jQuery(document).ready(function($) {
+          $('#reasonNotPerform').hide();
+
+          $('#recencyTestPerformedYes').change(function() {
+               if(this.checked == true){
+                    $('#reasonNotPerform').show();
+                    $("#outcome").html('').hide();
+                    $(".outcome").hide();
+                    $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+                    $(".removeClassReq").addClass("isRequired");
+
+               }else{
+                    $(".disbaledResult").addClass("isRequired");
+                    $(".disbaledResult").attr("disabled",false);
+                    $('#reasonNotPerform').hide();
+                    $(".removeClassReq").removeClass("isRequired").val("");
+
+               }
+          });
+
+     });
 
 </script>

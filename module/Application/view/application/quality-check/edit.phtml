@@ -99,8 +99,8 @@ if($result['term_outcome']==''){
                               </div>
                          </div>
 
-                         <div class="form-group row" id="reasonNotPerform">
-                              <label class="col-sm-2 col-form-label" for="">Reason Why Test Not Performed ? <span class="mandatory">*</span></label>
+                         <div class="form-group row" >
+                              <label id="recencyTestNotPerformedReasonLabel" class="col-sm-2 col-form-label" for="">Reason Why Test Not Performed ? <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control removeClassReq" id="recencyTestNotPerformedReason" name="recencyTestNotPerformedReason" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
                                         <option value="">--select--</option>
@@ -111,11 +111,16 @@ if($result['term_outcome']==''){
                                    </select>
                               </div>
 
-                              <label class="col-sm-2 col-form-label" id="otherRecencyTestNotPerformedReasonLabel" for="">Other Recency Test Not Performed<span class="mandatory">*</span></label>
+                              <label style="display:none;" class="col-sm-2 col-form-label" id="otherRecencyTestNotPerformedReasonLabel" for="">Other Recency Test Not Performed<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input  type="text" class="form-control col-sm-12 removeClassReq" value="<?php echo $result['other_recency_test_not_performed_reason']; ?>"  id="otherRecencyTestNotPerformedReason" name="otherRecencyTestNotPerformedReason"  title="Please Enter the Other recency test not performed" placeholder="Enter other recency test not performed">
+                                   <input style="display:none;"  type="text" class="form-control col-sm-12 removeClassReq" value="<?php echo $result['other_recency_test_not_performed_reason']; ?>"  id="otherRecencyTestNotPerformedReason" name="otherRecencyTestNotPerformedReason"  title="Please Enter the Other recency test not performed" placeholder="Enter other recency test not performed">
                               </div>
+
+
                          </div>
+
+
+
 
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">HIV Recency Date <span class="mandatory">*</span></label>
@@ -240,67 +245,73 @@ if($result['term_outcome']==''){
      function otherRecencyTestNotPerfomedCheck(obj){
           if( obj.value == 'other' ){
 
+               alert ("otherr");
                $("#otherRecencyTestNotPerformedReason").css('display','block');
                $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
                $(".removeClassReq").addClass("isRequired");
 
+
           }else{
-               $("#otherRecencyTestNotPerformedReason").css('display','none');
+               alert ("data");
+
+               $("#otherRecencyTestNotPerformedReason").css('display','none').val("").removeClass("isRequired");
                $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
-               $(".removeClassReq").removeClass("isRequired");
 
           }
      }
+
+
+     $('#recencyTestPerformedYes').change(function() {
+          if(this.checked == true){
+               alert("check");
+               $('#recencyTestNotPerformedReasonLabel').show();
+               $('#recencyTestNotPerformedReason').show();
+               $("#outcome").html('').hide();
+               $(".outcome").hide();
+               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+               $(".removeClassReq").addClass("isRequired");
+
+          }else{
+               alert("uncheck");
+               $(".disbaledResult").addClass("isRequired");
+               $(".disbaledResult").attr("disabled",false);
+               $('#recencyTestNotPerformedReasonLabel').hide();
+               $('#recencyTestNotPerformedReason').hide();
+               $('#otherRecencyTestNotPerformedReasonLabel').hide();
+               $('#otherRecencyTestNotPerformedReason').hide();
+               $(".removeClassReq").removeClass("isRequired").val("");
+          }
+     });
 
 
      jQuery(document).ready(function($) {
 
           if($('input[id=recencyTestPerformedYes]').prop('checked')==true)
           {
-               $('#reasonNotPerform').show();
-               $(".disbaledResult").attr("disabled",true).removeClass("isRequired");
-               $(".removeClassReq").addClass("isRequired");
+               alert("load 1");
+               $('#recencyTestNotPerformedReasonLabel').show();
+               $('#recencyTestNotPerformedReason').show();
+               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+               $("#recencyTestNotPerformedReason").addClass("isRequired");
+
 
 
           }else{
-               $('#reasonNotPerform').hide();
+               alert("load 2");
+
+               $('#recencyTestNotPerformedReasonLabel').hide();
+               $('#recencyTestNotPerformedReason').hide();
+               $(".removeClassReq").removeClass("isRequired").val("");
+               $("#recencyTestNotPerformedReason").removeClass("isRequired");
+
           }
 
-
-          $('#recencyTestPerformedYes').change(function() {
-               if(this.checked == true){
-                    $('#reasonNotPerform').show();
-
-                    $("#outcome").html('').hide();
-                    $(".outcome").hide();
-                    $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
-                    $(".removeClassReq").addClass("isRequired");
-
-               }else{
-                    $(".disbaledResult").addClass("isRequired");
-                    $(".disbaledResult").attr("disabled",false);
-                    $('#reasonNotPerform').hide();
-                    $(".removeClassReq").removeClass("isRequired");
-
-
-               }
-          });
-
-          function otherRecencyTestNotPerfomedCheck(obj){
-               if( obj.value == 'other' ){
-                    $("#otherRecencyTestNotPerformedReason").css('display','block');
-                    $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
-                    $(".removeClassReq").addClass("isRequired");
-
-               }else{
-                    $("#otherRecencyTestNotPerformedReason").css('display','none');
-                    $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
-                    $(".removeClassReq").addClass("isRequired");
-
-               }
+          if($('#recencyTestNotPerformedReason').val() == "other"){
+               alert("huihihi");
+               $('#otherRecencyTestNotPerformedReasonLabel').show();
+               $('#otherRecencyTestNotPerformedReason').show();
+               $("#otherRecencyTestNotPerformedReason").addClass("isRequired");
           }
-
      });
-
 
 </script>

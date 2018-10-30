@@ -32,24 +32,25 @@ class QualityCheckController extends AbstractActionController
           if($session->roleCode == 'user'){
                return $this->_redirect()->toRoute('recency');
           }else{
-
+               // \Zend\Debug\Debug::dump($data);die;
                $request = $this->getRequest();
                if ($request->isPost()) {
                     $params = $request->getPost();
                     $qcService = $this->getServiceLocator()->get('QualityCheckService');
                     $result = $qcService->addQcTestDetails($params);
-                    // \Zend\Debug\Debug::dump($params);die;
                     return $this->_redirect()->toRoute('quality-check');
-               }else{
-                    $userService = $this->getServiceLocator()->get('UserService');
-                    $userResult = $userService->getAllUserDetails();
-                    $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                    $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
-                    return new ViewModel(array(
-                         'userResult' => $userResult,
-                         'globalConfigResult' => $globalConfigResult,
-                    ));
                }
+               // else{
+               //
+               //      $userService = $this->getServiceLocator()->get('UserService');
+               //      $userResult = $userService->getAllUserDetails();
+               //      $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+               //      $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+               //      return new ViewModel(array(
+               //           'userResult' => $userResult,
+               //           'globalConfigResult' => $globalConfigResult,
+               //      ));
+               // }
           }
      }
 
@@ -72,30 +73,17 @@ class QualityCheckController extends AbstractActionController
                     $qualityCheckId=base64_decode( $this->params()->fromRoute('id') );
                     $result=$qcService->getQualityCheckDetailsById($qualityCheckId);
 
-                    $userService = $this->getServiceLocator()->get('UserService');
-                    $userResult = $userService->getAllUserDetails();
-                    $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                    $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+                    // $userService = $this->getServiceLocator()->get('UserService');
+                    // $userResult = $userService->getAllUserDetails();
+                    // $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                    // $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                     return new ViewModel(array(
-                         'userResult' => $userResult,
+                         // 'userResult' => $userResult,
                          'result' => $result,
-                         'globalConfigResult' => $globalConfigResult,
+                         // 'globalConfigResult' => $globalConfigResult,
                     ));
                }
           }
      }
-     public function getFacilityByLocationAction()
-     {
-          $result = "";
-          $request = $this->getRequest();
-          if ($request->isPost()) {
-               $params = $request->getPost();
-               $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-               $result = $facilityService->getFacilityByLocation($params);
-          }
-          $viewModel = new ViewModel();
-          $viewModel->setVariables(array('result' => $result))
-          ->setTerminal(true);
-          return $viewModel;
-     }
+
 }
