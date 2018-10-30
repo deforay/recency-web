@@ -74,6 +74,13 @@ class QualityCheckService {
             error_log($exc->getTraceAsString());
         }
     }
+
+    public function getQcDetails($id)
+    {
+         $qcTestDb = $this->sm->get('QualityCheckTable');
+         return $qcTestDb->fetchQcDetails($id);
+    }
+    
     public function addQualityCheckDataApi($params)
     {
         $qcTestDb = $this->sm->get('QualityCheckTable');

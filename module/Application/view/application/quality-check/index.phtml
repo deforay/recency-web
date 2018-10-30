@@ -1,21 +1,25 @@
 <?php
-    use Zend\Session\Container;
+
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
+
     $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Quality Check Testing</h1>
-                    <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
-                         <ol class="breadcrumb">
-                              <li class="breadcrumb-item">
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <li class="breadcrumb-item">
                               <a href="<?php echo $this->url('quality-check',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add QC Testing</a>
-                              </li>
-                         </ol>
-                    </nav>
-               </div>
+                         </li>
+                    </ol>
+               </nav>
           </div>
      </div>
+</div>
      <div class="content">
           <div class="block block-rounded block-bordered">
                <div class="block-header block-header-default">
@@ -35,7 +39,11 @@
                          </thead>
                          <tbody>
                               <tr>
-                                   <td colspan="10" class="dataTables_empty">Loading data from server</td>
+                                <?php if($roleCode == "user"){
+                                   echo "<td colspan='7' class='dataTables_empty'>Loading data from server</td>";
+                                }else{
+                                    echo "<td colspan='6' class='dataTables_empty'>Loading data from server</td>";
+                                }?>
                               </tr>
                               <tr>
                               </tbody>

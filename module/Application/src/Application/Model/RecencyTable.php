@@ -134,6 +134,8 @@ class RecencyTable extends AbstractTableGateway {
                     if($roleCode=='user'){
                          $iQuery = $iQuery->where('r.added_by='.$sessionLogin->userId);
                     }
+
+
                     $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
                     $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -143,7 +145,6 @@ class RecencyTable extends AbstractTableGateway {
                          "iTotalDisplayRecords" => $iFilteredTotal,
                          "aaData" => array()
                     );
-
 
                     foreach ($rResult as $aRow) {
 

@@ -1,6 +1,6 @@
 <?php
 use Zend\Session\Container;
-$sessionLogin = new Container('credo');
+namespace Application\Controller;
 
 $lineOutComeColor = "#de1d2b";
 $lineOutComeColor2 = "#000000";
@@ -12,6 +12,7 @@ $lineOutComeColor2 = "#000000";
 .colour{color:red;}
 
 </style>
+
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -146,8 +147,6 @@ $lineOutComeColor2 = "#000000";
                               </div>
                          </div>
 
-
-
                          <div class="row items-push">
                               <div class="col-lg-7 offset-lg-4">
                                    <a href="<?php echo $this->url('quality-check', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
@@ -248,7 +247,7 @@ jQuery(document).ready(function($) {
                $(".disbaledResult").addClass("isRequired");
                $(".disbaledResult").attr("disabled",false);
                $('#reasonNotPerform').hide();
-               $(".removeClassReq").removeClass("isRequired");
+               $(".removeClassReq").removeClass("isRequired").val("");
           }
      });
 });

@@ -1,0 +1,255 @@
+<?php
+use Zend\Session\Container;
+use Application\Service\CommonService;
+$sessionLogin = new Container('credo');
+$common = new CommonService()
+
+?>
+<?php
+// \Zend\Debug\Debug::dump($result);die;
+?>
+
+<style>
+<?php
+if($result['term_outcome']==''){
+?>
+.outcome{display:none;}
+<?php
+}
+
+
+?>
+.colour{color:red;}
+</style>
+
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">View Quality Check Testing</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <a href="<?php echo $this->url('quality-check', array('action' => 'index')); ?>"><li class="breadcrumb-item">Quality Check Details</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ View</li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+<!-- /.content -->
+
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+            <a href="<?php echo $this->url('quality-check', array('action' => 'index')); ?>" class="btn btn-primary">Back</a>
+          </div>
+          <section class="content">
+               <!-- left column -->
+               <div class="">
+                    <div class="box box-primary">
+                         <div class="box-header">
+                         </div><!-- /.box-header -->
+                         <div class="box-body">
+                              <h3 class="block-title" style=" margin-bottom: 4%; ">Qc Testing</h3>
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="company" class="col-lg-4 control-label">Sample Id</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                                  <?php echo ucwords($result['qc_sample_id']); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="company" class="col-lg-4 control-label">Qc Test Date</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                                  <?php echo ($result->qc_test_date!='' && $result->qc_test_date!='0000:00:00')?$common->humanDateFormat($result->qc_test_date):''; ?>
+                                             </span>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="orderDate" class="col-lg-4 control-label">Reference Result</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->reference_result)); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="orderDate" class="col-lg-4 control-label">Test Kit Lot No.</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->kit_lot_no)); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+
+
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="termsOfPay" class="col-lg-4 control-label">Test Kit Expiry Date</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ($result->kit_expiry_date!='' && $result->kit_expiry_date!='0000:00:00')?$common->humanDateFormat($result->kit_expiry_date):''; ?>
+                                             </span>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Tester Name</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->tester_name)); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+
+                              </div>
+                              <!--  -->
+                         </div>
+                         <hr>
+                         <h3 class="block-title" style=" margin-bottom: 4%; ">Recency Results</h3>
+                         <div class="box-body">
+
+                              <div class="row">
+
+
+                              <div class="col-md-6">
+                                   <div class="form-group">
+                                        <label for="otherRef" class="col-lg-4 control-label">Not Performed Recency Result Yes ?</label>
+                                        <label for="company" class="col-lg-1 control-label">: </label>
+                                        <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                        <input type="checkbox" disabled class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes"
+                                        <?php echo($result['recency_test_performed'] == 'true' )?'checked="checked"':''; ?> value="true"/>&nbsp;Yes
+                                        </span>
+                                   </div>
+                              </div>
+                              <?php if($result->recency_test_performed == '')
+                              {
+                               ?>
+                               <div class="col-md-6">
+                                    <div class="form-group">
+                                         <label for="termsOfPay" class="col-lg-4 control-label">HIV Recency Date</label>
+                                         <label for="company" class="col-lg-1 control-label">: </label>
+                                         <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                              <?php echo ($result->hiv_recency_date!='' && $result->hiv_recency_date!='0000:00:00')?$common->humanDateFormat($result->hiv_recency_date):''; ?>
+                                         </span>
+                                    </div>
+                               </div>
+
+
+                               <div class="col-md-6">
+                                    <div class="form-group">
+                                         <label for="otherRef" class="col-lg-4 control-label">Control Line</label>
+                                         <label for="company" class="col-lg-1 control-label">: </label>
+                                         <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                              <?php
+                                              if($result['control_line'] == 'present')
+                                              {
+                                                   echo "Present";
+                                              }
+                                              elseif ($result['control_line'] == 'absent') {
+                                                   echo "Absent";
+                                              }
+                                              ?>
+                                         </span>
+                                    </div>
+                               </div>
+                               <div class="col-md-6">
+                                    <div class="form-group">
+                                         <label for="otherRef" class="col-lg-4 control-label">Positive Verification</label>
+                                         <label for="company" class="col-lg-1 control-label">: </label>
+                                         <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                              <?php
+                                              if($result['positive_verification_line'] == 'present')
+                                              {
+                                                   echo "Present";
+                                              }
+                                              elseif ($result['positive_verification_line'] == 'absent') {
+                                                   echo "Absent";
+                                              }
+
+                                              ?>
+                                         </span>
+                                    </div>
+                               </div>
+                               <div class="col-md-6">
+                                    <div class="form-group">
+                                         <label for="otherRef" class="col-lg-4 control-label">Long Term Verification</label>
+                                         <label for="company" class="col-lg-1 control-label">: </label>
+                                         <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                              <?php
+                                              if($result['long_term_verification_line'] == 'present')
+                                              {
+                                                   echo "Present";
+                                              }
+                                              elseif ($result['long_term_verification_line'] == 'absent') {
+                                                   echo "Absent";
+                                              }
+
+                                              ?>
+                                         </span>
+                                    </div>
+                               </div>
+                              <?php
+                              }
+                              elseif ($result->recency_test_performed == 'true')
+                              { ?>
+
+                              <div class="col-md-6">
+                                   <div class="form-group">
+                                        <label for="otherRef" class="col-lg-4 control-label">Reason Why Test Not Performed </label>
+                                        <label for="company" class="col-lg-1 control-label">: </label>
+                                        <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+
+                                             <?php
+                                             if($result['recency_test_not_performed_reason'] == 'other')
+                                             {
+                                                   echo ucwords(str_replace('_', ' ', $result->other_recency_test_not_performed_reason));
+                                             }else
+                                             {
+                                                  echo ucwords(str_replace('_', ' ', $result->recency_test_not_performed_reason));
+                                             }
+                                             ?>
+
+                                        </span>
+                                   </div>
+                              </div>
+
+                              <?php
+                              } ?>
+                              <div class="col-md-6 outcome">
+                                   <div class="form-group">
+                                        <label for="otherRef" class="col-lg-4 control-label">Result Outcome</label>
+                                        <label for="company" class="col-lg-1 control-label">: </label>
+                                        <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                         <?php echo $result['term_outcome'];?>
+                                        </span>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-6">
+                                   <div class="form-group">
+                                        <label for="otherRef" class="col-lg-4 control-label">Comments</label>
+                                        <label for="company" class="col-lg-1 control-label">: </label>
+                                        <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                             <?php echo ucwords(str_replace('_', ' ', $result->comment));?>
+                                        </span>
+                                   </div>
+                              </div>
+                         </div>
+
+
+                         </div>
+                    </div>
+               </div>
+          </section>
+     </div>
+</div>

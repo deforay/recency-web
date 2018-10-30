@@ -5,7 +5,6 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Expression;
 use Zend\Session\Container;
 use Zend\Db\Adapter\Adapter;
-use Zend\Config\Writer\PhpArray;
 use Application\Service\CommonService;
 use Zend\Db\TableGateway\AbstractTableGateway;
 
@@ -23,6 +22,8 @@ class QualityCheckTable extends AbstractTableGateway {
           * you want to insert a non-database field (for example a counter or static image)
           */
           $sessionLogin = new Container('credo');
+          $role = $sessionLogin->roleId;
+          $roleCode = $sessionLogin->roleCode;
           $common = new CommonService();
           $aColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','qc.tester_name');
           $orderColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','qc.tester_name');
@@ -97,24 +98,52 @@ class QualityCheckTable extends AbstractTableGateway {
 
                     $sQuery = $sql->select()->from(array( 'qc' => 'quality_check_test'));
 
-                    $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+                    if (isset($sWhere) && $sWhere != "") {
+                         $sQuery->where($sWhere);
+                    }
+
+                    if (isset($sOrder) && $sOrder != "") {
+                         $sQuery->order($sOrder);
+                    }
+
+                    if (isset($sLimit) && isset($sOffset)) {
+                         $sQuery->limit($sLimit);
+                         $sQuery->offset($sOffset);
+                    }
+
+                    if($roleCode=='user'){
+                         $sQuery = $sQuery->where('qc.added_by='.$sessionLogin->userId);
+                    }
+
+                    $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                     //   echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
                     /* Data set length after filtering */
-
+                    $sQuery->reset('limit');
+                    $sQuery->reset('offset');
                     $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-                    $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-                    $iFilteredTotal = count($tResult);
+                    $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+                    $iFilteredTotal = count($aResultFilterTotal);
+
+                    /* Total data set length */
+                    $iQuery = $sql->select()->from(array( 'qc' => 'quality_check_test' ));
+
+                    if($roleCode=='user'){
+                         $iQuery = $iQuery->where('qc.added_by='.$sessionLogin->userId);
+                    }
+
+
+                    $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+                    $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
                     $output = array(
                          "sEcho" => intval($parameters['sEcho']),
-                         "iTotalRecords" => count($tResult),
+                         "iTotalRecords" => count($iResult),
                          "iTotalDisplayRecords" => $iFilteredTotal,
                          "aaData" => array()
                     );
 
-                    $role = $sessionLogin->roleCode;
-                    $update = true;
                     foreach ($rResult as $aRow) {
 
                          $row = array();
@@ -123,7 +152,15 @@ class QualityCheckTable extends AbstractTableGateway {
                          $row[] = str_replace("_"," ",ucwords($aRow['reference_result']));
                          $row[] = ucwords($aRow['kit_lot_no']);
                          $row[] = ucwords($aRow['tester_name']);
-                         $row[] = '<a href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+
+                         // $row[] = '<a href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+
+                         $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
+                         <a class="btn btn-danger" href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-pencil"></i> Edit</a>
+                         <a class="btn btn-primary" href="/quality-check/view/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-eye"></i> View</a>
+
+                         </div>';
+
                          $output['aaData'][] = $row;
                     }
 
@@ -136,8 +173,7 @@ class QualityCheckTable extends AbstractTableGateway {
                      $sql = new Sql($dbAdapter);
                      $logincontainer = new Container('credo');
                      $common = new CommonService();
-                     
-                          // \Zend\Debug\Debug::dump($params);die;
+
                           $data = array(
                                'qc_sample_id' => $params['qcSampleId'],
                                'qc_test_date'=>($params['qcTestDate']!='')?$common->dbDateFormat($params['qcTestDate']):NULL,
@@ -162,7 +198,7 @@ class QualityCheckTable extends AbstractTableGateway {
 
                           $this->insert($data);
                           $lastInsertedId = $this->lastInsertValue;
-                     
+
                      return $lastInsertedId;
                }
 
@@ -212,6 +248,20 @@ class QualityCheckTable extends AbstractTableGateway {
                     }
                     return $updateResult;
                }
+
+          public function fetchQcDetails($id)
+          {
+               $dbAdapter = $this->adapter;
+               $sql = new Sql($dbAdapter);
+
+               $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
+               ->where(array('qc_test_id' =>$id));
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+               return $rResult;
+          }
+
+
       public function addQualityCheckDetailsApi($params)
       {
                  $dbAdapter = $this->adapter;
@@ -240,7 +290,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                     'tester_name' => $qcTest['testerName'],
 
                                 );
-                                
+
                                 $this->insert($data);
                                 $lastInsertedId = $this->lastInsertValue;
                                 if($lastInsertedId > 0){
@@ -248,7 +298,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                 }else{
                                      $response['syncData']['response'][$key] = 'failed';
                                 }
-                           
+
                       }
                       catch (Exception $exc) {
                            error_log($exc->getMessage());
