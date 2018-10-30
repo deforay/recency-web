@@ -60,13 +60,13 @@ if($result['term_outcome']==''){
                     <form name="qcEditInformation" id="qcEditInformation"  class="mb-5" action="<?php echo $this->url('quality-check', array('action' => 'edit')); ?>" method="post">
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Qc Sample Id<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Qc Sample Id</label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $result['qc_sample_id']; ?>" class="form-control isRequired" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC sample id" title="Please enter the QC sample id">
+                                   <input type="text" value="<?php echo $result['qc_sample_id']; ?>" class="form-control " id="qcSampleId" name="qcSampleId" placeholder="Enter the QC sample id" title="Please enter the QC sample id">
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Qc Test Date</label>
+                              <label class="col-sm-2 col-form-label" for="">Qc Test Date<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $qcTestDateFormat; ?>" class="js-datepicker form-control" id="qcTestDate" name="qcTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the QC test date" title="Please enter the QC test date"  readonly="readonly">
+                                   <input type="text" value="<?php echo $qcTestDateFormat; ?>" class="js-datepicker form-control isRequired" id="qcTestDate" name="qcTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the QC test date" title="Please enter the QC test date"  readonly="readonly">
                               </div>
                          </div>
 
@@ -99,8 +99,8 @@ if($result['term_outcome']==''){
                               </div>
                          </div>
 
-                         <div class="form-group row" >
-                              <label id="recencyTestNotPerformedReasonLabel" class="col-sm-2 col-form-label" for="">Reason Why Test Not Performed ? <span class="mandatory">*</span></label>
+                         <div class="form-group row" id="reasonNotPerform" style="display:none;">
+                              <label class="col-sm-2 col-form-label" for="">Reason Why Test Not Performed ? <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control removeClassReq" id="recencyTestNotPerformedReason" name="recencyTestNotPerformedReason" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
                                         <option value="">--select--</option>
@@ -162,9 +162,9 @@ if($result['term_outcome']==''){
                               </div>
                          </div>
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Tester Name<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Tester Name </label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $result['tester_name']; ?>" class="form-control isRequired" id="testerName" name="testerName" placeholder="Enter the QC sample id" title="Please enter the QC sample id">
+                                   <input type="text" value="<?php echo $result['tester_name']; ?>" class="form-control " id="testerName" name="testerName" placeholder="Enter the tester name" title="Please enter the tester name">
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Comments</label>
                               <div class="col-sm-4">
@@ -261,57 +261,62 @@ if($result['term_outcome']==''){
      }
 
 
-     $('#recencyTestPerformedYes').change(function() {
-          if(this.checked == true){
-               alert("check");
-               $('#recencyTestNotPerformedReasonLabel').show();
-               $('#recencyTestNotPerformedReason').show();
-               $("#outcome").html('').hide();
-               $(".outcome").hide();
-               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
-               $(".removeClassReq").addClass("isRequired");
-
-          }else{
-               alert("uncheck");
-               $(".disbaledResult").addClass("isRequired");
-               $(".disbaledResult").attr("disabled",false);
-               $('#recencyTestNotPerformedReasonLabel').hide();
-               $('#recencyTestNotPerformedReason').hide();
-               $('#otherRecencyTestNotPerformedReasonLabel').hide();
-               $('#otherRecencyTestNotPerformedReason').hide();
-               $(".removeClassReq").removeClass("isRequired").val("");
-          }
-     });
-
-
      jQuery(document).ready(function($) {
 
           if($('input[id=recencyTestPerformedYes]').prop('checked')==true)
           {
-               alert("load 1");
-               $('#recencyTestNotPerformedReasonLabel').show();
-               $('#recencyTestNotPerformedReason').show();
-               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
-               $("#recencyTestNotPerformedReason").addClass("isRequired");
+               $('#reasonNotPerform').show();
+               $(".removeClassReq").addClass("isRequired");
+               if($("#otherRecencyTestNotPerformedReasonLabel").val() == 'other'){
+                    $("#otherRecencyTestNotPerformedReason").css('display','block');
+                    $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
+               }else{
+                    $("#otherRecencyTestNotPerformedReason").removeClass('isRequired');
+                    $("#otherRecencyTestNotPerformedReason").css('display','none');
+                    $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
+               }
 
+               $(".disbaledResult").attr("disabled",true).removeClass("isRequired");
+               
 
 
           }else{
-               alert("load 2");
-
-               $('#recencyTestNotPerformedReasonLabel').hide();
-               $('#recencyTestNotPerformedReason').hide();
-               $(".removeClassReq").removeClass("isRequired").val("");
-               $("#recencyTestNotPerformedReason").removeClass("isRequired");
-
+               $('#reasonNotPerform').hide();
           }
 
-          if($('#recencyTestNotPerformedReason').val() == "other"){
-               alert("huihihi");
-               $('#otherRecencyTestNotPerformedReasonLabel').show();
-               $('#otherRecencyTestNotPerformedReason').show();
-               $("#otherRecencyTestNotPerformedReason").addClass("isRequired");
+
+          $('#recencyTestPerformedYes').change(function() {
+               if(this.checked == true){
+                    $('#reasonNotPerform').show();
+                    $("#outcome").html('').hide();
+                    $(".outcome").hide();
+                    $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+                    $(".removeClassReq").addClass("isRequired");
+
+               }else{
+                    $(".disbaledResult").addClass("isRequired");
+                    $(".disbaledResult").attr("disabled",false);
+                    $('#reasonNotPerform').hide();
+                    $(".removeClassReq").removeClass("isRequired");
+
+
+               }
+          });
+
+          function otherRecencyTestNotPerfomedCheck(obj){
+               if( obj.value == 'other' ){
+                    $("#otherRecencyTestNotPerformedReason").css('display','block');
+                    $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
+                    $(".removeClassReq").addClass("isRequired");
+
+               }else{
+                    $("#otherRecencyTestNotPerformedReason").css('display','none');
+                    $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
+                    $(".removeClassReq").addClass("isRequired");
+
+               }
           }
+
      });
 
 </script>

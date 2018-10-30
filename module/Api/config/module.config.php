@@ -118,22 +118,19 @@ return array(
                           'controller' => 'Api\Controller\RecencyMandatory',
                      ),
                 ),
-           ),
-
-           'api-tester-name' => array(
-            'type'    => 'segment',
-            'options' => array(
-                 'route'    => '/api/tester-name[/:id]',
-                 'constraints' => array(
-                      'id'     => '[0-9]+',
-                 ),
-                 'defaults' => array(
-                      'controller' => 'Api\Controller\TesterName',
-                 ),
-            ),
-       ),
-
-
+                ),
+                'api-quality-check' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/quality-check[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\QualityCheck',
+                         ),
+                    ),
+                    ),
 
           ),
      ),
@@ -149,7 +146,7 @@ return array(
                'Api\Controller\District' => 'Api\Controller\DistrictController',
                'Api\Controller\City' => 'Api\Controller\CityController',
                'Api\Controller\RecencyMandatory' => 'Api\Controller\RecencyMandatoryController',
-               'Api\Controller\TesterName' => 'Api\Controller\TesterNameController',
+               'Api\Controller\QualityCheck' => 'Api\Controller\QualityCheckController',
 
 
           ),

@@ -110,10 +110,5 @@ class RecencyService {
           $recencyDb = $this->sm->get('RecencyTable');
           return $recencyDb->getActiveTester($val);
      }
-     public function getTesterNameAllDetailsApi()
-     {
-          $recencyDb = $this->sm->get('RecencyTable');
-          return $recencyDb->fetchTesterNameAllDetailsApi();
-     }
 }
 ?>
