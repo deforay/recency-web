@@ -120,66 +120,65 @@ if($result['term_outcome']==''){
 
                               <div class="row">
 
+                                   <!-- <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Not Performed Recency Result Yes ?</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                             <input type="checkbox" disabled class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes"
+                                             < ?php echo($result['recency_test_performed'] == 'true' )?'checked="checked"':''; ?> value="true"/>&nbsp;Yes
+                                             </span>
+                                        </div>
+                                   </div> -->
+                                   <!-- < ?php if($result->recency_test_performed == '')
+                                   {
+                                    ?> -->
+                                    <div class="col-md-6">
+                                         <div class="form-group">
+                                              <label for="termsOfPay" class="col-lg-4 control-label">HIV Recency Date</label>
+                                              <label for="company" class="col-lg-1 control-label">: </label>
+                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                   <?php echo ($result->hiv_recency_date!='' && $result->hiv_recency_date!='0000:00:00')?$common->humanDateFormat($result->hiv_recency_date):''; ?>
+                                              </span>
+                                         </div>
+                                    </div>
 
-                              <div class="col-md-6">
-                                   <div class="form-group">
-                                        <label for="otherRef" class="col-lg-4 control-label">Not Performed Recency Result Yes ?</label>
-                                        <label for="company" class="col-lg-1 control-label">: </label>
-                                        <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                        <input type="checkbox" disabled class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes"
-                                        <?php echo($result['recency_test_performed'] == 'true' )?'checked="checked"':''; ?> value="true"/>&nbsp;Yes
-                                        </span>
+
+                                    <div class="col-md-6">
+                                         <div class="form-group">
+                                              <label for="otherRef" class="col-lg-4 control-label">Control Line</label>
+                                              <label for="company" class="col-lg-1 control-label">: </label>
+                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                   <?php
+                                                   if($result['control_line'] == 'present')
+                                                   {
+                                                        echo "Present";
+                                                   }
+                                                   elseif ($result['control_line'] == 'absent') {
+                                                        echo "Absent";
+                                                   }
+                                                   ?>
+                                              </span>
+                                         </div>
                                    </div>
-                              </div>
-                              <?php if($result->recency_test_performed == '')
-                              {
-                               ?>
-                               <div class="col-md-6">
-                                    <div class="form-group">
-                                         <label for="termsOfPay" class="col-lg-4 control-label">HIV Recency Date</label>
-                                         <label for="company" class="col-lg-1 control-label">: </label>
-                                         <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                              <?php echo ($result->hiv_recency_date!='' && $result->hiv_recency_date!='0000:00:00')?$common->humanDateFormat($result->hiv_recency_date):''; ?>
-                                         </span>
-                                    </div>
-                               </div>
+                                    <div class="col-md-6">
+                                         <div class="form-group">
+                                              <label for="otherRef" class="col-lg-4 control-label">Positive Verification</label>
+                                              <label for="company" class="col-lg-1 control-label">: </label>
+                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                   <?php
+                                                   if($result['positive_verification_line'] == 'present')
+                                                   {
+                                                        echo "Present";
+                                                   }
+                                                   elseif ($result['positive_verification_line'] == 'absent') {
+                                                        echo "Absent";
+                                                   }
 
-
-                               <div class="col-md-6">
-                                    <div class="form-group">
-                                         <label for="otherRef" class="col-lg-4 control-label">Control Line</label>
-                                         <label for="company" class="col-lg-1 control-label">: </label>
-                                         <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                              <?php
-                                              if($result['control_line'] == 'present')
-                                              {
-                                                   echo "Present";
-                                              }
-                                              elseif ($result['control_line'] == 'absent') {
-                                                   echo "Absent";
-                                              }
-                                              ?>
-                                         </span>
+                                                   ?>
+                                              </span>
+                                         </div>
                                     </div>
-                               </div>
-                               <div class="col-md-6">
-                                    <div class="form-group">
-                                         <label for="otherRef" class="col-lg-4 control-label">Positive Verification</label>
-                                         <label for="company" class="col-lg-1 control-label">: </label>
-                                         <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                              <?php
-                                              if($result['positive_verification_line'] == 'present')
-                                              {
-                                                   echo "Present";
-                                              }
-                                              elseif ($result['positive_verification_line'] == 'absent') {
-                                                   echo "Absent";
-                                              }
-
-                                              ?>
-                                         </span>
-                                    </div>
-                               </div>
                                <div class="col-md-6">
                                     <div class="form-group">
                                          <label for="otherRef" class="col-lg-4 control-label">Long Term Verification</label>
@@ -198,18 +197,18 @@ if($result['term_outcome']==''){
                                          </span>
                                     </div>
                                </div>
-                              <?php
+                              <!-- < ?php
                               }
                               elseif ($result->recency_test_performed == 'true')
-                              { ?>
+                              { ?> -->
 
-                              <div class="col-md-6">
+                              <!-- <div class="col-md-6">
                                    <div class="form-group">
                                         <label for="otherRef" class="col-lg-4 control-label">Reason Why Test Not Performed </label>
                                         <label for="company" class="col-lg-1 control-label">: </label>
                                         <span style="text-align: left;" for="company" class="col-lg-4 control-label">
 
-                                             <?php
+                                             < ?php
                                              if($result['recency_test_not_performed_reason'] == 'other')
                                              {
                                                    echo ucwords(str_replace('_', ' ', $result->other_recency_test_not_performed_reason));
@@ -221,10 +220,10 @@ if($result['term_outcome']==''){
 
                                         </span>
                                    </div>
-                              </div>
+                              </div> -->
 
-                              <?php
-                              } ?>
+                              <!-- < ?php
+                              } ?> -->
                               <div class="col-md-6 outcome">
                                    <div class="form-group">
                                         <label for="otherRef" class="col-lg-4 control-label">Result Outcome</label>

@@ -92,21 +92,21 @@ if($result['term_outcome']==''){
                               <div class="col-sm-4">
                                    <input type="text" value="<?php echo $testKitExpiryDateFormat; ?>" class="js-datepicker form-control" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Not Performed Recency Result Yes ?</label>
+                              <!-- <label class="col-sm-2 col-form-label" for="">Not Performed Recency Result Yes ?</label>
                               <div class="col-sm-4">
                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" <?php echo($result['recency_test_performed'] == 'true' )?'checked="checked"':''; ?> value="true"/>&nbsp;Yes
-                              </div>
+                              </div> -->
                          </div>
 
-                         <div class="form-group row" >
+                         <!-- <div class="form-group row" >
                               <label id="recencyTestNotPerformedReasonLabel" class="col-sm-2 col-form-label" for="">Reason Why Test Not Performed ? <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control removeClassReq" id="recencyTestNotPerformedReason" name="recencyTestNotPerformedReason" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
-                                        <option value="">--select--</option>
-                                        <option value="no_consent_from_the_client" <?php echo($result['recency_test_not_performed_reason'] == 'no_consent_from_the_client' )?'selected="selected"':''; ?>>No Consent</option>
-                                        <option value="no_sample_collected" <?php echo($result['recency_test_not_performed_reason'] == 'no_sample_collected' )?'selected="selected"':''; ?>>No Sample Collected</option>
-                                        <option value="newly_not_diagnosed" <?php echo($result['recency_test_not_performed_reason'] == 'newly_not_diagnosed' )?'selected="selected"':''; ?>>No New Diagnosis</option>
-                                        <option value="other" <?php echo($result['recency_test_not_performed_reason'] == 'other' )?'selected="selected"':''; ?>>Others</option>
+                                        <option value="">select</option>
+                                        <option value="no_consent_from_the_client" <?php //echo($result['recency_test_not_performed_reason'] == 'no_consent_from_the_client' )?'selected="selected"':''; ?>>No Consent</option>
+                                        <option value="no_sample_collected" <?php // echo($result['recency_test_not_performed_reason'] == 'no_sample_collected' )?'selected="selected"':''; ?>>No Sample Collected</option>
+                                        <option value="newly_not_diagnosed" <?php// echo($result['recency_test_not_performed_reason'] == 'newly_not_diagnosed' )?'selected="selected"':''; ?>>No New Diagnosis</option>
+                                        <option value="other" <?php// echo($result['recency_test_not_performed_reason'] == 'other' )?'selected="selected"':''; ?>>Others</option>
                                    </select>
                               </div>
 
@@ -116,10 +116,7 @@ if($result['term_outcome']==''){
                               </div>
 
 
-                         </div>
-
-
-
+                         </div> -->
 
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">HIV Recency Date <span class="mandatory">*</span></label>
@@ -241,57 +238,57 @@ if($result['term_outcome']==''){
           }
      }
 
-     function otherRecencyTestNotPerfomedCheck(obj){
-          if( obj.value == 'other' ){
-               $("#otherRecencyTestNotPerformedReason").css('display','block');
-               $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
-               $(".removeClassReq").addClass("isRequired");
+     // function otherRecencyTestNotPerfomedCheck(obj){
+     //      if( obj.value == 'other' ){
+     //           $("#otherRecencyTestNotPerformedReason").css('display','block');
+     //           $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
+     //           $(".removeClassReq").addClass("isRequired");
+     //
+     //      }else{
+     //           $("#otherRecencyTestNotPerformedReason").css('display','none').val("").removeClass("isRequired");
+     //           $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
+     //      }
+     // }
 
-          }else{
-               $("#otherRecencyTestNotPerformedReason").css('display','none').val("").removeClass("isRequired");
-               $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
-          }
-     }
-
-     $('#recencyTestPerformedYes').change(function() {
-          if(this.checked == true){
-               $('#recencyTestNotPerformedReasonLabel').show();
-               $('#recencyTestNotPerformedReason').show();
-               $("#outcome").html('').hide();
-               $(".outcome").hide();
-               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
-               $(".removeClassReq").addClass("isRequired");
-
-          }else{
-               $(".disbaledResult").addClass("isRequired");
-               $(".disbaledResult").attr("disabled",false);
-               $(".removeClassReq").removeClass("isRequired").val("");
-               $('#recencyTestNotPerformedReason').hide();
-               $('#recencyTestNotPerformedReasonLabel').hide();
-               $('#otherRecencyTestNotPerformedReason').hide();
-               $('#otherRecencyTestNotPerformedReasonLabel').hide();
-          }
-     });
+     // $('#recencyTestPerformedYes').change(function() {
+     //      if(this.checked == true){
+     //           $('#recencyTestNotPerformedReasonLabel').show();
+     //           $('#recencyTestNotPerformedReason').show();
+     //           $("#outcome").html('').hide();
+     //           $(".outcome").hide();
+     //           $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+     //           $(".removeClassReq").addClass("isRequired");
+     //
+     //      }else{
+     //           $(".disbaledResult").addClass("isRequired");
+     //           $(".disbaledResult").attr("disabled",false);
+     //           $(".removeClassReq").removeClass("isRequired").val("");
+     //           $('#recencyTestNotPerformedReason').hide();
+     //           $('#recencyTestNotPerformedReasonLabel').hide();
+     //           $('#otherRecencyTestNotPerformedReason').hide();
+     //           $('#otherRecencyTestNotPerformedReasonLabel').hide();
+     //      }
+     // });
 
 
      jQuery(document).ready(function($) {
-          if($('input[id=recencyTestPerformedYes]').prop('checked')==true)
-          {
-               $('#recencyTestNotPerformedReasonLabel').show();
-               $('#recencyTestNotPerformedReason').show();
-               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
-               $("#recencyTestNotPerformedReason").addClass("isRequired");
-          }else{
-               $('#recencyTestNotPerformedReasonLabel').hide();
-               $('#recencyTestNotPerformedReason').hide();
-               $(".removeClassReq").removeClass("isRequired").val("");
-               $("#recencyTestNotPerformedReason").removeClass("isRequired");
-          }
-          if($('#recencyTestNotPerformedReason').val() == "other"){
-               $('#otherRecencyTestNotPerformedReasonLabel').show();
-               $('#otherRecencyTestNotPerformedReason').show();
-               $("#otherRecencyTestNotPerformedReason").addClass("isRequired");
-          }
+          // if($('input[id=recencyTestPerformedYes]').prop('checked')==true)
+          // {
+          //      $('#recencyTestNotPerformedReasonLabel').show();
+          //      $('#recencyTestNotPerformedReason').show();
+          //      $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+          //      $("#recencyTestNotPerformedReason").addClass("isRequired");
+          // }else{
+          //      $('#recencyTestNotPerformedReasonLabel').hide();
+          //      $('#recencyTestNotPerformedReason').hide();
+          //      $(".removeClassReq").removeClass("isRequired").val("");
+          //      $("#recencyTestNotPerformedReason").removeClass("isRequired");
+          // }
+          // if($('#recencyTestNotPerformedReason').val() == "other"){
+          //      $('#otherRecencyTestNotPerformedReasonLabel').show();
+          //      $('#otherRecencyTestNotPerformedReason').show();
+          //      $("#otherRecencyTestNotPerformedReason").addClass("isRequired");
+          // }
      });
 
 </script>

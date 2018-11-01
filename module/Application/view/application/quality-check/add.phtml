@@ -70,17 +70,17 @@ $lineOutComeColor2 = "#000000";
                               <div class="col-sm-4">
                                    <input type="text" class="js-datepicker form-control " id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Not Performed Recency Result Yes ? </label>
+                              <!-- <label class="col-sm-2 col-form-label" for="">Not Performed Recency Result Yes ? </label>
                               <div class="col-sm-4">
                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" value="true"/>&nbsp;Yes
-                              </div>
+                              </div> -->
                          </div>
 
-                         <div class="form-group row" id="reasonNotPerform" style="display:none;">
+                         <!-- <div class="form-group row" id="reasonNotPerform" style="display:none;">
                               <label class="col-sm-2 col-form-label" for="">Reason Why Test Not Performed ? <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control removeClassReq" id="recencyTestNotPerformedReason" name="recencyTestNotPerformedReason" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
-                                        <option value="">--Select--</option>
+                                        <option value="">Select</option>
                                         <option value="no_consent_from_the_client">No Consent</option>
                                         <option value="no_sample_collected">No Sample Collected</option>
                                         <option value="newly_not_diagnosed">No New Diagnosis</option>
@@ -92,7 +92,7 @@ $lineOutComeColor2 = "#000000";
                               <div class="col-sm-4">
                                    <input style="display:none;" type="text" class="form-control removeClassReq" id="otherRecencyTestNotPerformedReason" name="otherRecencyTestNotPerformedReason" placeholder="Enter other recency test not performed" title="Please Enter the Other recency test not performed">
                               </div>
-                         </div>
+                         </div> -->
 
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
@@ -200,19 +200,19 @@ $lineOutComeColor2 = "#000000";
      }
 
 
-function otherRecencyTestNotPerfomedCheck(obj){
-     if( obj.value == 'other' ){
-          $("#otherRecencyTestNotPerformedReason").css('display','block');
-          $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
-          $(".removeClassReq").addClass("isRequired");
-
-     }else{
-          $("#otherRecencyTestNotPerformedReason").css('display','none');
-          $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
-          $(".removeClassReq").removeClass("isRequired");
-
-     }
-}
+     // function otherRecencyTestNotPerfomedCheck(obj){
+     //      if( obj.value == 'other' ){
+     //           $("#otherRecencyTestNotPerformedReason").css('display','block');
+     //           $("#otherRecencyTestNotPerformedReasonLabel").css('display','block');
+     //           $(".removeClassReq").addClass("isRequired");
+     //
+     //      }else{
+     //           $("#otherRecencyTestNotPerformedReason").css('display','none');
+     //           $("#otherRecencyTestNotPerformedReasonLabel").css('display','none');
+     //           $(".removeClassReq").removeClass("isRequired");
+     //
+     //      }
+     // }
 
 duplicateName = true;
 var rowCount=1;
@@ -233,23 +233,23 @@ function validateNow() {
 }
 
 jQuery(document).ready(function($) {
-     $('#reasonNotPerform').hide();
+     // $('#reasonNotPerform').hide();
 
-     $('#recencyTestPerformedYes').change(function() {
-          if(this.checked == true){
-               $('#reasonNotPerform').show();
-               $("#outcome").html('').hide();
-               $(".outcome").hide();
-               $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
-               $(".removeClassReq").addClass("isRequired");
-
-          }else{
-               $(".disbaledResult").addClass("isRequired");
-               $(".disbaledResult").attr("disabled",false);
-               $('#reasonNotPerform').hide();
-               $(".removeClassReq").removeClass("isRequired").val("");
-          }
-     });
+     // $('#recencyTestPerformedYes').change(function() {
+     //      if(this.checked == true){
+     //           // $('#reasonNotPerform').show();
+     //           $("#outcome").html('').hide();
+     //           $(".outcome").hide();
+     //           $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+     //           $(".removeClassReq").addClass("isRequired");
+     //
+     //      }else{
+     //           $(".disbaledResult").addClass("isRequired");
+     //           $(".disbaledResult").attr("disabled",false);
+     //           $('#reasonNotPerform').hide();
+     //           $(".removeClassReq").removeClass("isRequired").val("");
+     //      }
+     // });
 });
 
 </script>
