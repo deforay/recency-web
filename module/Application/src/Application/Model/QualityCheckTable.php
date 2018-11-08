@@ -194,7 +194,6 @@ class QualityCheckTable extends AbstractTableGateway {
                                'added_by' => $logincontainer->userId,
 
                           );
-                          // \Zend\Debug\Debug::dump($data);die;
 
                           $this->insert($data);
                           $lastInsertedId = $this->lastInsertValue;
@@ -241,6 +240,8 @@ class QualityCheckTable extends AbstractTableGateway {
                               'term_outcome'=>$params['outcomeData'],
                               'tester_name' => $params['testerName'],
                               'comment' => $params['comment'],
+                              'added_on' => date("Y-m-d H:i:s"),
+                              'added_by' => $logincontainer->userId,
 
                          );
 
@@ -264,18 +265,22 @@ class QualityCheckTable extends AbstractTableGateway {
 
       public function addQualityCheckDetailsApi($params)
       {
+
                  $dbAdapter = $this->adapter;
                  $sql = new Sql($dbAdapter);
+                 $logincontainer = new Container('credo');
                  $facilityDb = new FacilitiesTable($this->adapter);
                  $riskPopulationDb = new RiskPopulationsTable($this->adapter);
                  $common = new CommonService();
+
                  if(isset($params["qc"])){
                       $i = 1;
                       foreach($params["qc"] as $key => $qcTest){
                            try{
 
+                                $userId = $qcTest['userId'];
                                 $data = array(
-                                    'qc_sample_id' => $qcTest['qcsampleId'],
+                                    'qc_sample_id' => $qcTest['qcSampleId'],
                                     'qc_test_date'=>($qcTest['qcTestDate']!='')?$common->dbDateFormat($qcTest['qcTestDate']):NULL,
                                     'reference_result' => $qcTest['referenceResult'],
                                     'kit_lot_no'=>$qcTest['testKitLotNo'],
@@ -288,6 +293,8 @@ class QualityCheckTable extends AbstractTableGateway {
                                     'positive_verification_line' => (isset($qcTest['positiveLine']) && $qcTest['positiveLine']!='')?$qcTest['positiveLine']:NULL,
                                     'long_term_verification_line' => (isset($qcTest['longTermLine']) && $qcTest['longTermLine']!='')?$qcTest['longTermLine']:NULL,
                                     'tester_name' => $qcTest['testerName'],
+                                    'added_on' => date("Y-m-d H:i:s"),
+                                    'added_by' => $qcTest['userId'],
 
                                 );
 
@@ -307,8 +314,22 @@ class QualityCheckTable extends AbstractTableGateway {
                       $i++;
                  }
             }
-            $response['syncCount']['response'] = '';
+            $response['syncCount']['response'] = $this->getTotalSyncCount($userId);
+
             return $response;
+      }
+
+      public function getTotalSyncCount($userId)
+      {
+           $dbAdapter = $this->adapter;
+           $sql = new Sql($dbAdapter);
+           $query = $sql->select()->from(array('qc'=>'quality_check_test'))
+           ->columns(array("Total" => new Expression('COUNT(*)'),))
+           ->where(array('added_by'=>$userId));
+           $queryStr = $sql->getSqlStringForSqlObject($query);
+           $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+           \Zend\Debug\Debug::dump($result);die;
+           return $result;
       }
 }
 ?>
