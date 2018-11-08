@@ -38,7 +38,7 @@ $hivStatus = in_array("Last HIV Status",$resultArr)?"isRequired":"";
 $patientArt = in_array("Patient on ART",$resultArr)?"isRequired":"";
 $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 $expViolence = in_array("Experience Violence Last 12 Month",$resultArr)?"isRequired":"";
-
+$kitName = in_array("Test Kit Name",$resultArr)?"isRequired":"";
 $kitLotNo = in_array("Test Kit Lot No",$resultArr)?"isRequired":"";
 $KitExpiryDate = in_array("Kit Expiry Date",$resultArr)?"isRequired":"";
 $testerName = in_array("Tester Name",$resultArr)?"isRequired":"";
@@ -119,6 +119,7 @@ $lineOutComeColor2 = "#000000";
                                              <input type="text" class="form-control <?php echo $patient; ?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
                                         </div>
                                    </div>
+                                   <br>
                                    <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" for="">Facility Name <?php echo(in_array("Facility Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
@@ -235,6 +236,9 @@ $lineOutComeColor2 = "#000000";
                                                   <option value="absent">Absent</option>
                                              </select>
                                         </div>
+                                        <br>
+                                        <br>
+                                        <br>
 
                                         <label class="col-sm-2 col-form-label" for="">Positive Verification
                                              <?php echo(in_array("Positive Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
@@ -265,17 +269,29 @@ $lineOutComeColor2 = "#000000";
                                              <br>
                                              <br>
                                              <br>
+
+                                             <label class="col-sm-2 col-form-label" for="">Test Kit Name<?php echo(in_array("Test Kit Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                             <div class="col-sm-4">
+                                                  <select class="form-control <?php echo $kitName; ?>" id="testKitName" name="testKitName" title="Please select test kit name" >
+                                                       <option value="">--Select--</option>
+                                                       <option value="sedia_bioscience">SEDIA Bioscience (SED)</option>
+                                                       <option value="maxim_biomedical">Maxim Biomedical (MAX)</option>
+                                                  </select>
+                                             </div>
+                                             <br>
+                                             <br>
+                                             <br>
                                              <!-- tEST Kitter  -->
                                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot No. <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                              <div class="col-sm-4">
                                                   <input type="text" class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" placeholder="Enter kit lot no." title="Please enter the kit lot no.">
                                              </div>
+                                             <br>
 
                                              <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date <?php echo(in_array("Kit Expiry Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                              <div class="col-sm-4">
                                                   <input type="text" class="js-datepicker form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  placeholder="Enter the kit expiry date"  value="" title="Please enter the Kit Expiry date"  readonly="readonly">
                                              </div>
-                                             <br>
                                              <br>
                                              <br>
                                              <label class="col-sm-2 col-form-label" for="">Tester Name <?php echo(in_array("Tester Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
@@ -297,6 +313,7 @@ $lineOutComeColor2 = "#000000";
                                                   <input type="text" class="form-control section2" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
                                              </div>
                                         </div>
+                                        <br>
                                         <div class="form-group row">
                                              <label class="col-sm-2 col-form-label" for="">Gender <?php echo(in_array("Gender",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                              <div class="col-sm-4">
@@ -341,6 +358,7 @@ $lineOutComeColor2 = "#000000";
                                                   </select>
                                              </div>
                                         </div>
+                                        <br>
                                         <div class="form-group row">
                                              <label class="col-sm-2 col-form-label" for="">Risk Population <?php echo(in_array("Risk Population",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                              <div id="riskPopulationSelect" class="col-sm-4">

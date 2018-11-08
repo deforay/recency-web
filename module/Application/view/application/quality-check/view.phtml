@@ -103,6 +103,16 @@ if($result['term_outcome']==''){
 
                                    <div class="col-md-6">
                                         <div class="form-group">
+                                             <label for="otherRef" class="col-lg-4 control-label">Test Kit Name</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords(str_replace('_', ' ', $result->kit_name)); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-6">
+                                        <div class="form-group">
                                              <label for="otherRef" class="col-lg-4 control-label">Tester Name</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
                                              <span style="text-align: left;" for="company" class="col-lg-4 control-label">

@@ -71,6 +71,7 @@ $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 $expViolence = in_array("Experience Violence Last 12 Month",$resultArr)?"isRequired":"";
 $comment = in_array("Comments",$resultArr)?"isRequired":"";
 
+$kitName = in_array("Test Kit Name",$resultArr)?"isRequired":"";
 $kitLotNo = in_array("Test Kit Lot No",$resultArr)?"isRequired":"";
 $KitExpiryDate = in_array("Kit Expiry Date",$resultArr)?"isRequired":"";
 $testerName = in_array("Tester Name",$resultArr)?"isRequired":"";
@@ -92,14 +93,14 @@ if($result['term_outcome']==''){
 
 /* Search Start*/
 /* .typeahead { border: 1px solid #d4d4d4;border-radius: 4px;background: #ffff;padding: 8px 12px;max-width: 300px;min-width: 290px;
-    color: #495057;}
-	input.typeahead {min-width: 265px;}
-	.tt-menu { width:300px; }
-	ul.typeahead{margin:0px;padding:0px;background: #fafafa;}
-     .dropdown-item.active, .dropdown-item:active {color: #fff;text-decoration: none;background-color: #68bced !important;
-     }
-	ul.typeahead.dropdown-menu li a {padding: 10px !important;	border-bottom:#d4d4d4 1px solid;color:black;}
-	ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
+color: #495057;}
+input.typeahead {min-width: 265px;}
+.tt-menu { width:300px; }
+ul.typeahead{margin:0px;padding:0px;background: #fafafa;}
+.dropdown-item.active, .dropdown-item:active {color: #fff;text-decoration: none;background-color: #68bced !important;
+}
+ul.typeahead.dropdown-menu li a {padding: 10px !important;	border-bottom:#d4d4d4 1px solid;color:black;}
+ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 /* Search End */
 
 </style>
@@ -152,7 +153,8 @@ if($result['term_outcome']==''){
                                         <div class="col-sm-4">
                                              <input type="text" value="<?php echo $result['sample_id']; ?>" class="form-control <?php echo $sample; ?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
                                         </div>
-
+                                        <br>
+                                        <br>
                                         <label class="col-sm-2 col-form-label" for="">Patient Id<?php echo(in_array("Patient Id",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                              <input type="text" value="<?php echo $result['patient_id']; ?>" class="form-control <?php echo $patient; ?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
@@ -199,6 +201,7 @@ if($result['term_outcome']==''){
                                         <div class="col-sm-4">
                                              <input type="text" value="<?php echo $hivDiagnosisDate; ?>" class="js-datepicker form-control  <?php echo $hivDiagnosisRequiredDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
                                         </div>
+                                        <br>
 
                                         <label class="col-sm-2 col-form-label" for="">Past HIV Testing<?php echo(in_array("Past Hiv Testing",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
@@ -219,7 +222,9 @@ if($result['term_outcome']==''){
                                                   <option value="not_known" <?php echo($result['test_last_12_month'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
                                              </select>
                                         </div>
-
+                                        <br>
+                                        <br>
+                                        <br>
                                         <label class="col-sm-2 col-form-label hivResultStatusShow" for="">Last HIV Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4 hivResultStatusShow">
                                              <select class="form-control <?php echo $hivStatus; ?>" id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status"  onchange="checkHivStatus(this);">
@@ -237,7 +242,9 @@ if($result['term_outcome']==''){
                                              </select>
                                         </div>
 
-
+                                        <br>
+                                        <br>
+                                        <br>
                                         <label class="col-sm-2 form-check-label " for="">Recency Test not performed </label>
                                         <div class="col-sm-4 ">
                                              &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" <?php echo($result['recency_test_performed'] == 'true' )?'checked="checked"':''; ?> value="true"/>&nbsp;Yes
@@ -259,16 +266,15 @@ if($result['term_outcome']==''){
                                              <input style="<?php echo ($result['recency_test_not_performed'] == 'other')?'display:block;':'display:none;';?>"  value="<?php echo $result['other_recency_test_not_performed']; ?>" type="text" class="form-control col-sm-12" id="otherRecencyTestNotPerformed" name="otherRecencyTestNotPerformed" title="Please Enter the Other other recency test not performed" placeholder="Enter other recency test not performed">
                                              <br>
                                         </div>
-
                                         <!--  end-->
-
-
                                         <label class="col-sm-2 col-form-label" for="">HIV Recency Date<?php echo(in_array("Hiv Recency Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4">
                                              <input type="text" value="<?php echo $hivRecencyDate; ?>" class="js-datepicker form-control disbaledResult <?php echo $hivRecencyRequiredDate; ?>" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
                                         </div>
 
-
+                                        <br>
+                                        <br>
+                                        <br>
 
                                         <label class="col-sm-2 col-form-label" for="">Control Line
                                              <?php echo(in_array("Control Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
@@ -292,6 +298,7 @@ if($result['term_outcome']==''){
                                              </div>
                                              <br>
                                              <br>
+                                             <br>
                                              <label class="col-sm-2 col-form-label" for="">Long Term Verification
                                                   <?php echo(in_array("Long Term Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                                   <div class="col-sm-4">
@@ -301,6 +308,7 @@ if($result['term_outcome']==''){
                                                             <option value="absent" <?php echo($result['long_term_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
                                                        </select>
                                                   </div>
+                                                  <br>
                                                   <label class="col-sm-2 col-form-label outcome" for="">Outcome</label>
                                                   <div class="col-sm-4 outcome">
                                                        <span class="outcome form-control" style="border:none;" id="outcome"><?php echo $result['term_outcome'];?></span>
@@ -308,6 +316,20 @@ if($result['term_outcome']==''){
                                                   </div>
                                                   <br>
                                                   <br>
+
+
+                                                  <label class="col-sm-2 col-form-label" for="">Test Kit Name
+                                                       <?php echo(in_array("Test Kit Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                                       <div class="col-sm-4">
+                                                            <select class="form-control
+                                                            <?php echo $kitName; ?>" id="testKitName" name="testKitName" title="Please select the test kit name">
+                                                            <option value="">--Select--</option>
+                                                            <option value="sedia_bioscience" <?php echo($result['kit_name'] == 'sedia_bioscience' )?'selected="selected"':''; ?>>SEDIA Bioscience (SED)</option>
+                                                            <option value="maxim_biomedical" <?php echo($result['kit_name'] == 'maxim_biomedical' )?'selected="selected"':''; ?>>Maxim Biomedical (MAX)</option>
+                                                       </select>
+                                                  </div>
+
+
                                                   <label class="col-sm-2 col-form-label" for="">Test Kit Lot Number <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                                   <div class="col-sm-4">
                                                        <input type="text" value="<?php echo $result['kit_lot_no'];?>" class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" value="" placeholder="Enter kit lot no." title="Please enter the kit lot no.">
@@ -375,6 +397,8 @@ if($result['term_outcome']==''){
                                                             <option value="divorce_separated" <?php echo($result['marital_status'] == 'divorce_separated' )?'selected="selected"':''; ?>>Divorce - Separated</option>
                                                        </select>
                                                   </div>
+                                                  <br>
+                                                  <br>
                                                   <label class="col-sm-2 col-form-label" for="">Education Level<?php echo(in_array("Education Level",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                                   <div class="col-sm-4">
                                                        <select class="form-control section2" id="educationLevel" name="educationLevel" title="Please select the education level">
@@ -469,9 +493,9 @@ if($result['term_outcome']==''){
           </div>
      </div>
      <!-- End -->
-<script src="<?php// echo $this->basePath() . '/assets/js/plugins/namesearch/typeahead.js'; ?>"></script>
+     <script src="<?php// echo $this->basePath() . '/assets/js/plugins/namesearch/typeahead.js'; ?>"></script>
 
-<script type="text/javascript">
+     <script type="text/javascript">
 
      function changeTermLine()
      {
@@ -674,137 +698,137 @@ if($result['term_outcome']==''){
                                              $("#pregnancyStatus").removeClass('isRequired');
 
                                              <?php }
-                                        else{ ?>
-                                             $(".hidePregnancyResult").css('display','block');
-                                             $("#pregnancyStatus").addClass('isRequired');
-                                             <?php }?>
+                                             else{ ?>
+                                                  $(".hidePregnancyResult").css('display','block');
+                                                  $("#pregnancyStatus").addClass('isRequired');
+                                                  <?php }?>
 
-                                        $("#currentSexualPartner").addClass("<?php echo $partner;?>");
-                                        $("#expViolence").addClass("<?php echo $expViolence;?>");
-                                        $("#step1,#wizard-progress-step1").removeClass("active");
-                                        $("#step2,#wizard-progress-step2").addClass("active");
-                                        $(".btnHide").show();
-                                        $(".nxtBtn").hide();
-                                   }
-                              }else{
-                                   $(".btnHide").hide();
-                                   $("#sampleId").focus();
-                                   $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
-                                   alert("Please enter either sample or patient id  ",'err');
-                              }
-                         }
-
-                         function riskPopulationCheck(obj){
-                              if( obj.value == 'Other' ){
-                                   $("#otherRiskPopulation").css('display','block').addClass('isRequired');
-                              }else{
-                                   $("#otherRiskPopulation").css('display','none').removeClass('isRequired');
-                              }
-                         }
-
-                         function validateStep2()
-                         {
-                              $(".section2").removeClass('isRequired');
-                              $("#step1,#wizard-progress-step1").addClass("active");
-                              $("#step2,#wizard-progress-step2").removeClass("active");
-                              $(".btnHide").hide();
-                              $(".nxtBtn").show();
-                         }
-
-                         function validateNow() {
-                              if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
-                                   flag = deforayValidator.init({
-                                        formId: 'recencyInformation'
-                                   });
-                                   document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
-                                   if (flag) {
-                                        $.blockUI();
-                                        document.getElementById('recencyInformation').submit();
-                                   }
-                              }else{
-                                   $("#sampleId").focus();
-                                   $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
-                                   alert("Please enter eaither sample or patient id  ",'err');
-                              }
-                         }
-                         $(document).ready(function(){
-
-                              <?php if($result['gender'] == 'male') { ?>
-                                   $(".hidePregnancyResult").css('display','none');
-                                   $("#pregnancyStatus").removeClass('isRequired');
-
-                                   <?php }
-                              else{ ?>
-                                   $(".hidePregnancyResult").css('display','block');
-                                   $("#pregnancyStatus").addClass('isRequired');
-                                   <?php }?>
-
-
-                         });
-                         function ageCalculate(){
-                              var today = new Date();
-                              var birthDate = new Date($("#dob").val());
-                              var dob = diff_years(today,birthDate);
-                              $("#age").val(dob);
-                         }
-                         function diff_years(dt2, dt1)
-                         {
-                              var diff =(dt2.getTime() - dt1.getTime()) / 1000;
-                              diff /= (60 * 60 * 24);
-                              return Math.abs(Math.round(diff/365.25));
-                         }
-
-
-                         function getLocationDeatils(globalName,value1,value2,value3)
-                         {
-
-                              var selectValue = document.getElementById(globalName).value;
-                              var innerId = '';
-                              var path = '';
-                              var selectedValue = '';
-                              if(value1!=null || value2!=null || value3!=null)
-                              {
-                                   if(globalName=='location_one'){
-                                        path = 'get-province';
-                                        innerId = 'location_one';
-                                        selectValue = value1;
-                                        selectedValue = value1;
-                                   }else if(globalName=='location_two'){
-                                        path = 'get-district';
-                                        innerId = 'location_two';
-                                        selectValue = value1;
-                                        selectedValue = value2;
-                                   }else if(globalName=='location_three'){
-                                        path = 'get-city';
-                                        innerId = 'location_three';
-                                        selectValue = value2;
-                                        selectedValue = value3;
-                                   }
-                              }else{
-                                   if(globalName=='location_one' && selectValue==''){
-                                        path = 'get-province';
-                                        innerId = 'location_one';
-                                   }else if(globalName=='location_one' && selectValue!=''){
-                                        path = 'get-district';
-                                        innerId = 'location_two';
-                                        $("#location_three").html("<option value=''>-- Select --</option>");
-                                   }else if(globalName=='location_two' && selectValue!=''){
-                                        path = 'get-city';
-                                        innerId = 'location_three';
-
-                                   }
-                              }
-                              if(path!=''){
-                                   $.blockUI();
-                                   $.post("/common/"+path, {selectValue:selectValue},
-                                   function(data) {
-                                        $("#"+innerId).html(data);
-                                        if(selectedValue!=''){
-                                             $("#"+innerId).val(selectedValue);
+                                                  $("#currentSexualPartner").addClass("<?php echo $partner;?>");
+                                                  $("#expViolence").addClass("<?php echo $expViolence;?>");
+                                                  $("#step1,#wizard-progress-step1").removeClass("active");
+                                                  $("#step2,#wizard-progress-step2").addClass("active");
+                                                  $(".btnHide").show();
+                                                  $(".nxtBtn").hide();
+                                             }
+                                        }else{
+                                             $(".btnHide").hide();
+                                             $("#sampleId").focus();
+                                             $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
+                                             alert("Please enter either sample or patient id  ",'err');
                                         }
-                                        $.unblockUI();
-                                   });
-                              }
-                         }
+                                   }
 
-                         </script>
+                                   function riskPopulationCheck(obj){
+                                        if( obj.value == 'Other' ){
+                                             $("#otherRiskPopulation").css('display','block').addClass('isRequired');
+                                        }else{
+                                             $("#otherRiskPopulation").css('display','none').removeClass('isRequired');
+                                        }
+                                   }
+
+                                   function validateStep2()
+                                   {
+                                        $(".section2").removeClass('isRequired');
+                                        $("#step1,#wizard-progress-step1").addClass("active");
+                                        $("#step2,#wizard-progress-step2").removeClass("active");
+                                        $(".btnHide").hide();
+                                        $(".nxtBtn").show();
+                                   }
+
+                                   function validateNow() {
+                                        if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
+                                             flag = deforayValidator.init({
+                                                  formId: 'recencyInformation'
+                                             });
+                                             document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+                                             if (flag) {
+                                                  $.blockUI();
+                                                  document.getElementById('recencyInformation').submit();
+                                             }
+                                        }else{
+                                             $("#sampleId").focus();
+                                             $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
+                                             alert("Please enter eaither sample or patient id  ",'err');
+                                        }
+                                   }
+                                   $(document).ready(function(){
+
+                                        <?php if($result['gender'] == 'male') { ?>
+                                             $(".hidePregnancyResult").css('display','none');
+                                             $("#pregnancyStatus").removeClass('isRequired');
+
+                                             <?php }
+                                             else{ ?>
+                                                  $(".hidePregnancyResult").css('display','block');
+                                                  $("#pregnancyStatus").addClass('isRequired');
+                                                  <?php }?>
+
+
+                                             });
+                                             function ageCalculate(){
+                                                  var today = new Date();
+                                                  var birthDate = new Date($("#dob").val());
+                                                  var dob = diff_years(today,birthDate);
+                                                  $("#age").val(dob);
+                                             }
+                                             function diff_years(dt2, dt1)
+                                             {
+                                                  var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+                                                  diff /= (60 * 60 * 24);
+                                                  return Math.abs(Math.round(diff/365.25));
+                                             }
+
+
+                                             function getLocationDeatils(globalName,value1,value2,value3)
+                                             {
+
+                                                  var selectValue = document.getElementById(globalName).value;
+                                                  var innerId = '';
+                                                  var path = '';
+                                                  var selectedValue = '';
+                                                  if(value1!=null || value2!=null || value3!=null)
+                                                  {
+                                                       if(globalName=='location_one'){
+                                                            path = 'get-province';
+                                                            innerId = 'location_one';
+                                                            selectValue = value1;
+                                                            selectedValue = value1;
+                                                       }else if(globalName=='location_two'){
+                                                            path = 'get-district';
+                                                            innerId = 'location_two';
+                                                            selectValue = value1;
+                                                            selectedValue = value2;
+                                                       }else if(globalName=='location_three'){
+                                                            path = 'get-city';
+                                                            innerId = 'location_three';
+                                                            selectValue = value2;
+                                                            selectedValue = value3;
+                                                       }
+                                                  }else{
+                                                       if(globalName=='location_one' && selectValue==''){
+                                                            path = 'get-province';
+                                                            innerId = 'location_one';
+                                                       }else if(globalName=='location_one' && selectValue!=''){
+                                                            path = 'get-district';
+                                                            innerId = 'location_two';
+                                                            $("#location_three").html("<option value=''>-- Select --</option>");
+                                                       }else if(globalName=='location_two' && selectValue!=''){
+                                                            path = 'get-city';
+                                                            innerId = 'location_three';
+
+                                                       }
+                                                  }
+                                                  if(path!=''){
+                                                       $.blockUI();
+                                                       $.post("/common/"+path, {selectValue:selectValue},
+                                                       function(data) {
+                                                            $("#"+innerId).html(data);
+                                                            if(selectedValue!=''){
+                                                                 $("#"+innerId).val(selectedValue);
+                                                            }
+                                                            $.unblockUI();
+                                                       });
+                                                  }
+                                             }
+
+                                        </script>

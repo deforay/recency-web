@@ -92,10 +92,14 @@ if($result['term_outcome']==''){
                               <div class="col-sm-4">
                                    <input type="text" value="<?php echo $testKitExpiryDateFormat; ?>" class="js-datepicker form-control" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                               </div>
-                              <!-- <label class="col-sm-2 col-form-label" for="">Not Performed Recency Result Yes ?</label>
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Name</label>
                               <div class="col-sm-4">
-                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" <?php echo($result['recency_test_performed'] == 'true' )?'checked="checked"':''; ?> value="true"/>&nbsp;Yes
-                              </div> -->
+                                   <select class="form-control" id="testKitName" name="testKitName" title="Please select the test kit name">
+                                        <option value="">--select--</option>
+                                        <option value="sedia_bioscience" <?php echo($result['kit_name'] == 'sedia_bioscience' )?'selected="selected"':''; ?>>SEDIA Bioscience (SED)</option>
+                                        <option value="maxim_biomedical" <?php echo($result['kit_name'] == 'maxim_biomedical' )?'selected="selected"':''; ?>>Maxim Biomedical (MAX)</option>
+                                   </select>
+                              </div>
                          </div>
 
                          <!-- <div class="form-group row" >
