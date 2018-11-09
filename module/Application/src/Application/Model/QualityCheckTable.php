@@ -286,7 +286,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                     'qc_test_date'=>($qcTest['qcTestDate']!='')?$common->dbDateFormat($qcTest['qcTestDate']):NULL,
                                     'reference_result' => $qcTest['referenceResult'],
                                     'kit_lot_no'=>$qcTest['testKitLotNo'],
-                                    'kit_name'=>$qcTest['testKitName'],
+                                    // 'kit_name'=>$qcTest['testKitName'],
                                     'kit_expiry_date' => ($qcTest['testKitExpDate']!='')?$common->dbDateFormat($qcTest['testKitExpDate']):NULL,
                                     //'recency_test_performed'=>$qcTest['recencyTestPerformed'],
                                     //'recency_test_not_performed_reason'=> $qcTest['recencyTestNotPerformedReason'],
@@ -331,7 +331,7 @@ class QualityCheckTable extends AbstractTableGateway {
            ->where(array('added_by'=>$userId));
            $queryStr = $sql->getSqlStringForSqlObject($query);
            $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-           \Zend\Debug\Debug::dump($result);die;
+           // \Zend\Debug\Debug::dump($result);die;
            return $result;
       }
 }
