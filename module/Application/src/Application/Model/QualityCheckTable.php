@@ -178,7 +178,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                'qc_sample_id' => $params['qcSampleId'],
                                'qc_test_date'=>($params['qcTestDate']!='')?$common->dbDateFormat($params['qcTestDate']):NULL,
                                'reference_result' => $params['referenceResult'],
-                               'kit_name'=>$params['testKitName'],
+                               //'kit_name'=>$params['testKitName'],
                                'kit_lot_no'=>$params['testKitLotNo'],
                                'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                                // 'recency_test_performed'=>$params['recencyTestPerformed'],
@@ -230,7 +230,7 @@ class QualityCheckTable extends AbstractTableGateway {
                               'qc_test_date'=>($params['qcTestDate']!='')?$common->dbDateFormat($params['qcTestDate']):NULL,
                               'reference_result' => $params['referenceResult'],
                               'kit_lot_no'=>$params['testKitLotNo'],
-                              'kit_name'=>$params['testKitName'],
+                              //'kit_name'=>$params['testKitName'],
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               // 'recency_test_performed'=>$params['recencyTestPerformed'],
                               // 'recency_test_not_performed_reason'=> $params['recencyTestNotPerformedReason'],
@@ -242,7 +242,7 @@ class QualityCheckTable extends AbstractTableGateway {
                               'term_outcome'=>$params['outcomeData'],
                               'tester_name' => $params['testerName'],
                               'comment' => $params['comment'],
-                              'added_on' => date("Y-m-d H:i:s"),
+                              //'added_on' => date("Y-m-d H:i:s"),
                               'added_by' => $logincontainer->userId,
 
                          );

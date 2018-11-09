@@ -250,7 +250,7 @@ class RecencyTable extends AbstractTableGateway {
                               'added_by' => $logincontainer->userId,
                               'form_initiation_datetime'=> date("Y-m-d H:i:s"),
                               'form_transfer_datetime'=> date("Y-m-d H:i:s"),
-                              'kit_name'=>$params['testKitName'],
+                              //'kit_name'=>$params['testKitName'],
                               'kit_lot_no'=>$params['testKitLotNo'],
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               'tester_name'=>$params['testerName'],
@@ -355,7 +355,7 @@ class RecencyTable extends AbstractTableGateway {
                               'exp_violence_last_12_month'=>$params['expViolence'],
                               'notes'=>$params['comments'],
                               'kit_lot_no'=>$params['testKitLotNo'],
-                              'kit_name'=>$params['testKitName'],
+                              //'kit_name'=>$params['testKitName'],
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               'tester_name'=>$params['testerName'],
                          );
@@ -498,7 +498,7 @@ class RecencyTable extends AbstractTableGateway {
                                         'form_transfer_datetime'=>date("Y-m-d H:i:s"),
 
                                         'kit_lot_no' => $recency['testKitLotNo'],
-                                        'kit_name' => $recency['testKitName'],
+                                        //'kit_name' => $recency['testKitName'],
                                         'tester_name' => $recency['testerName'],
 
                                    );
@@ -570,7 +570,7 @@ class RecencyTable extends AbstractTableGateway {
                                    //'ip_address'=>$recency[''],
                                    'form_initiation_datetime'=>$params['formInitDateTime'],
                                    'form_transfer_datetime'=>date("Y-m-d H:i:s"),
-                                   'kit_name' => $params['testKitName'],
+                                   //'kit_name' => $params['testKitName'],
                                    'kit_lot_no' => $params['testKitLotNo'],
                                    'tester_name' => $params['testerName'],
 
