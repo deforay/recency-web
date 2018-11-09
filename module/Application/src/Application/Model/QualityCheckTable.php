@@ -282,7 +282,7 @@ class QualityCheckTable extends AbstractTableGateway {
 
                                 $userId = $qcTest['userId'];
                                 $data = array(
-                                    'qc_sample_id' => $qcTest['qcSampleId'],
+                                    'qc_sample_id' => $qcTest['qcsampleId'],
                                     'qc_test_date'=>($qcTest['qcTestDate']!='')?$common->dbDateFormat($qcTest['qcTestDate']):NULL,
                                     'reference_result' => $qcTest['referenceResult'],
                                     'kit_lot_no'=>$qcTest['testKitLotNo'],
