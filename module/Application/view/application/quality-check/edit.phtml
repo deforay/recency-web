@@ -92,13 +92,9 @@ if($result['term_outcome']==''){
                               <div class="col-sm-4">
                                    <input type="text" value="<?php echo $testKitExpiryDateFormat; ?>" class="js-datepicker form-control" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Name</label>
+                              <label class="col-sm-2 col-form-label" for="">HIV Recency Date <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <select class="form-control" id="testKitName" name="testKitName" title="Please select the test kit name">
-                                        <option value="">--select--</option>
-                                        <option value="sedia_bioscience" <?php echo($result['kit_name'] == 'sedia_bioscience' )?'selected="selected"':''; ?>>SEDIA Bioscience (SED)</option>
-                                        <option value="maxim_biomedical" <?php echo($result['kit_name'] == 'maxim_biomedical' )?'selected="selected"':''; ?>>Maxim Biomedical (MAX)</option>
-                                   </select>
+                                   <input type="text" value="<?php echo $hivRecencyDateFormat; ?>" class="js-datepicker form-control disbaledResult isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
                               </div>
                          </div>
 
@@ -123,10 +119,7 @@ if($result['term_outcome']==''){
                          </div> -->
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">HIV Recency Date <span class="mandatory">*</span></label>
-                              <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $hivRecencyDateFormat; ?>" class="js-datepicker form-control disbaledResult isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
-                              </div>
+                              
 
                               <label class="col-sm-2 col-form-label" for="">Control Line<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
@@ -136,8 +129,6 @@ if($result['term_outcome']==''){
                                         <option value="absent" <?php echo($result['control_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
                                    </select>
                               </div>
-                         </div>
-                         <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Positive Verification<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control disbaledResult isRequired" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
@@ -146,6 +137,9 @@ if($result['term_outcome']==''){
                                         <option value="absent" <?php echo($result['positive_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
                                    </select>
                               </div>
+                         </div>
+                         <div class="form-group row">
+                              
                               <label class="col-sm-2 col-form-label" for="">Long Term Verification<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
@@ -160,8 +154,6 @@ if($result['term_outcome']==''){
                                    <span class="outcome form-control" style="border:none;" id="outcome"><?php echo $result['term_outcome'];?></span>
                                    <input type="hidden" name="outcomeData" id="outcomeData" value="<?php echo $result['term_outcome'];?>"/>
                               </div>
-                         </div>
-                         <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Tester Name</label>
                               <div class="col-sm-4">
                                    <input type="text" value="<?php echo $result['tester_name']; ?>" class="form-control" id="testerName" name="testerName" placeholder="Enter the tester name" title="Please enter the tester name">
@@ -171,7 +163,7 @@ if($result['term_outcome']==''){
                                    <textarea class="form-control" name="comment" id="comment" title="Please enter comments"><?php echo $result['comment'];?></textarea>
                               </div>
                          </div>
-
+                        
                          <div class="row items-push">
                               <div class="col-lg-7 offset-lg-4">
                                    <input type="hidden" name="qualityCheckId" value="<?php echo $result['qc_test_id'];?>" />

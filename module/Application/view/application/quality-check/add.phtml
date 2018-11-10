@@ -70,14 +70,9 @@ $lineOutComeColor2 = "#000000";
                               <div class="col-sm-4">
                                    <input type="text" class="js-datepicker form-control " id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                               </div>
-                              
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Name </label>
+                              <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <select class="form-control" id="testKitName" name="testKitName" title="Please select the test kit name">
-                                        <option value="">--Select--</option>
-                                        <option value="sedia_bioscience">SEDIA Bioscience (SED)</option>
-                                        <option value="maxim_biomedical">Maxim Biomedical (MAX)</option>
-                                   </select>
+                                   <input type="text" class="js-datepicker form-control disbaledResult isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
                               </div>
                          </div>
 
@@ -100,10 +95,7 @@ $lineOutComeColor2 = "#000000";
                          </div> -->
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
-                              <div class="col-sm-4">
-                                   <input type="text" class="js-datepicker form-control disbaledResult isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
-                              </div>
+                              
 
                               <label class="col-sm-2 col-form-label" for="">Control Line<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
@@ -113,9 +105,6 @@ $lineOutComeColor2 = "#000000";
                                         <option value="absent">Absent</option>
                                    </select>
                               </div>
-                         </div>
-
-                         <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Positive Verification<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control disbaledResult isRequired" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line"  onchange="changeTermLine()">
@@ -124,6 +113,10 @@ $lineOutComeColor2 = "#000000";
                                         <option value="absent">Absent</option>
                                    </select>
                               </div>
+                         </div>
+
+                         <div class="form-group row">
+                              
                               <label class="col-sm-2 col-form-label" for="">Long Term Verification<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line"  onchange="changeTermLine()">
@@ -139,9 +132,6 @@ $lineOutComeColor2 = "#000000";
                                    <span class="outcome form-control" style="border:none;" id="outcome"></span>
                                    <input type="hidden" name="outcomeData" id="outcomeData"/>
                               </div>
-                         </div>
-
-                         <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Tester Name</label>
                               <div class="col-sm-4">
                                    <input type="text" name="testerName" id="testerName" class="form-control" placeholder="Enter the tester name" title="Please enter the tester name"/>
@@ -151,6 +141,7 @@ $lineOutComeColor2 = "#000000";
                                    <textarea type="text" name="comment" id="comment" class="form-control" placeholder="Enter the comment" title="Please enter the comment"/></textarea>
                               </div>
                          </div>
+
 
                          <div class="row items-push">
                               <div class="col-lg-7 offset-lg-4">

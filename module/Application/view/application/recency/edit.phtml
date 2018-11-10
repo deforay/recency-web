@@ -17,21 +17,21 @@ if($result['risk_population'] == 'Other'){
      $otherRequired = '';
 }
 $hivDiagnosisDate = '';
-if($result->hiv_diagnosis_date!= '' && $result->hiv_diagnosis_date!= null && $result->hiv_diagnosis_date!= '0000-00-00'){
-     $hivDiagnosisDate = $common->humanDateFormat($result->hiv_diagnosis_date);
+if($result['hiv_diagnosis_date']!= '' && $result['hiv_diagnosis_date']!= null && $result['hiv_diagnosis_date']!= '0000-00-00'){
+     $hivDiagnosisDate = $common->humanDateFormat($result['hiv_diagnosis_date']);
 }
 $hivRecencyDate = '';
-if($result->hiv_recency_date!= '' && $result->hiv_recency_date!= null && $result->hiv_recency_date!= '0000-00-00'){
-     $hivRecencyDate = $common->humanDateFormat($result->hiv_recency_date);
+if($result['hiv_recency_date']!= '' && $result['hiv_recency_date']!= null && $result['hiv_recency_date']!= '0000-00-00'){
+     $hivRecencyDate = $common->humanDateFormat($result['hiv_recency_date']);
 }
 $dob = '';
-if($result->dob!= '' && $result->dob!= null && $result->dob!= '0000-00-00'){
-     $dob = $common->humanDateFormat($result->dob);
+if($result['dob']!= '' && $result['dob']!= null && $result['dob']!= '0000-00-00'){
+     $dob = $common->humanDateFormat($result['dob']);
 }
 
 $testKitExpiryDate = '';
-if($result->kit_expiry_date!= '' && $result->kit_expiry_date!= null && $result->kit_expiry_date!= '0000-00-00'){
-     $testKitExpiryDate = $common->humanDateFormat($result->kit_expiry_date);
+if($result['kit_expiry_date']!= '' && $result['kit_expiry_date']!= null && $result['kit_expiry_date']!= '0000-00-00'){
+     $testKitExpiryDate = $common->humanDateFormat($result['kit_expiry_date']);
 }
 // \Zend\Debug\Debug::dump($testKitExpiryDate);die;
 $arr = array();
@@ -131,10 +131,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                     <div class="js-wizard-simple block block block-rounded block-bordered">
                          <ul class="nav nav-tabs nav-tabs-block nav-justified" role="tablist">
                               <li class="nav-item">
-                                   <a class="nav-link active" href="javascript:void()" id="step1" onclick="validateStep2()">1. Recency Test</a>
+                                   <a class="nav-link active" href="javascript:void()" id="step1" onclick="validateStep2()"> Section 1/2</a>
                               </li>
                               <li class="nav-item">
-                                   <a class="nav-link" href="javascript:void()" id="step2" onclick="validateStep1();">2. Behaviour</a>
+                                   <a class="nav-link" href="javascript:void()" id="step2" onclick="validateStep1();"> Section 2/2</a>
                               </li>
                          </ul>
                          <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'edit')); ?>" method="post">
@@ -317,17 +317,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                   <br>
                                                   <br>
 
-
-                                                  <label class="col-sm-2 col-form-label" for="">Test Kit Name
-                                                       <?php echo(in_array("Test Kit Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                       <div class="col-sm-4">
-                                                            <select class="form-control
-                                                            <?php echo $kitName; ?>" id="testKitName" name="testKitName" title="Please select the test kit name">
-                                                            <option value="">--Select--</option>
-                                                            <option value="sedia_bioscience" <?php echo($result['kit_name'] == 'sedia_bioscience' )?'selected="selected"':''; ?>>SEDIA Bioscience (SED)</option>
-                                                            <option value="maxim_biomedical" <?php echo($result['kit_name'] == 'maxim_biomedical' )?'selected="selected"':''; ?>>Maxim Biomedical (MAX)</option>
-                                                       </select>
-                                                  </div>
+                                                       
 
 
                                                   <label class="col-sm-2 col-form-label" for="">Test Kit Lot Number <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
