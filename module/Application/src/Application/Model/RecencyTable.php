@@ -41,7 +41,7 @@ class RecencyTable extends AbstractTableGateway {
           if (isset($parameters['iSortCol_0'])) {
                for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
                     if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                         $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
+                         $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
                     }
                }
                $sOrder = substr_replace($sOrder, "", -1);
@@ -533,7 +533,7 @@ class RecencyTable extends AbstractTableGateway {
                     }
                }else{
                     try{
-                         if(isset($params['sampleId']) && trim($params['sampleId'])!="")
+                         if(isset($params['samtpleId']) && trim($params['sampleId'])!="")
                          {
                               $userId = $recency['userId'];
                               $data = array(

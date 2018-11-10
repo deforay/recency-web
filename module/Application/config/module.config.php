@@ -105,6 +105,26 @@ return array(
                             ),
                        ),
                   ),
+                  'captcha' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                             'route' => '/captcha[/][:id]',
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\Captcha',
+                                'action' => 'index',
+                            ),
+                        ),
+                    ),
+                    'checkcaptcha' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route' => '/checkcaptcha',
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\Captcha',
+                                'action' => 'check-captcha',
+                            ),
+                        ),
+                    ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -169,7 +189,8 @@ return array(
                'Application\Controller\User' => 'Application\Controller\UserController',
                'Application\Controller\Recency' => 'Application\Controller\RecencyController',
                'Application\Controller\GlobalConfig' => 'Application\Controller\GlobalConfigController',
-               'Application\Controller\QualityCheck' => 'Application\Controller\QualityCheckController'
+               'Application\Controller\QualityCheck' => 'Application\Controller\QualityCheckController',
+               'Application\Controller\Captcha' => 'Application\Controller\CaptchaController',
 
           ),
      ),

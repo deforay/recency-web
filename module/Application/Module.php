@@ -51,7 +51,7 @@ class Module{
      }
 
      public function preSetter(MvcEvent $e) {
-        if (($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Login')) {
+        if (($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Login') && ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Captcha')) {
             $tempName=explode('Controller',$e->getRouteMatch()->getParam('controller'));
             if(substr($tempName[0], 0, -1) == 'Application'){
                 $session = new Container('credo');

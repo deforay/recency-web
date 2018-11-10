@@ -55,16 +55,29 @@ $loginContainer = new Container('credo');
 
                                 <div class="row no-gutters justify-content-center">
                                     <div class="col-sm-8 col-xl-6">
-                                        <form class="js-validation-signin" action="<?php echo $this->url('login',array('action'=>'index')); ?>" method="post" autocomplete="off" onsubmit="return doLogin();return false;">
+                                        <form class="js-validation-signin" id="adminLoginInformation" action="<?php echo $this->url('login',array('action'=>'index')); ?>" method="post" autocomplete="off" onsubmit="return doLogin();return false;">
                                             <div class="py-3">
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control form-control-lg form-control-alt" id="login-username" name="userName" placeholder="Email">
+                                                    <input type="text" class="form-control isRequired form-control-lg form-control-alt" id="login-username" name="userName" placeholder="Email" title="Please enter E-mail id">
                                                 </div>
                                                 <div class="form-group">
-                                                    <input type="password" class="form-control form-control-lg form-control-alt" id="login-password" name="loginPassword" placeholder="Password">
+                                                    <input type="password" class="form-control isRequired form-control-lg form-control-alt" id="login-password" name="loginPassword" placeholder="Password" title="Please enter password">
                                                 </div>
                                             </div>
                                             <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <img id="capDiv" style="width:120px;height:61px;" src="/captcha/<?php echo rand(); ?>" />
+                                                </div>
+                                                <div class="col-md-7">
+                                                <a id="captcha-reload" href="javascript:getCaptcha('capDiv');">Get a new image</a>
+											&nbsp;
+											<input type="text" class="pull-right form-control isRequired" placeholder="Enter text image" id="challengeResponse" title="Please enter the text from the image." maxlength="5" />
+                                                </div>
+                                            </div>
+                                            
+											
+										<br/>
                                                 <button type="submit" class="btn btn-block btn-hero-lg btn-hero-primary" onClick="doLogin();return false;" >
                                                     <i class="fa fa-fw fa-sign-in-alt mr-1"></i> Sign In
                                                 </button>
@@ -100,9 +113,9 @@ $loginContainer = new Container('credo');
         <!-- END Page Container -->
 
         <script src="<?php echo $this->basePath() . '/assets/js/dashmix.core.min.js'; ?>"></script>
+        <script src="<?php echo $this->basePath() . '/assets/js/deforayValidation.js'; ?>"></script>
         <script src="<?php echo $this->basePath() . '/assets/js/plugins/jquery-validation/jquery.validate.min.js'; ?>"></script>
-        <script src="<?php echo $this->basePath() . '/assets/js/plugins/vide/jquery.vide.min.js'; ?>"></script>
-        <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+        
 
         <script type="text/javascript">
             duplicateName = true;
@@ -124,10 +137,34 @@ $loginContainer = new Container('credo');
                 });
 
                 if(flag){
+                    challenge_field = document.getElementById("challengeResponse").value;
+
+			if (challenge_field != "") {
+			$.post("<?php echo $this->url('checkcaptcha',array('action' => 'check-captcha')); ?>", {challenge_field: challenge_field},
+			function(data) {
+			    if (data == 'fail') {
+                document.getElementById("challengeResponse").value = "";
+				alert("Text you entered from the image is incorrect. Please try again","err");
+				getCaptcha('capDiv');
+				return false;
+			    } else{
                     document.getElementById('adminLoginInformation').submit();
+			    }
+			});
+			}else {
+			alert("Please enter the text from the image to proceed.","err");
+			}
+
                 }
             }
-
+            function getCaptcha(captchaDivId) {
+		var d = new Date();
+		var randstr = 'r-' + d.getFullYear() + d.getSeconds() + d.getMilliseconds() + Math.random();
+		$("#" + captchaDivId).attr("src", '/captcha/' + randstr);
+		$("#" + captchaDivId).load(function() {
+		    
+		});
+	}
 
         </script>
     </body>
