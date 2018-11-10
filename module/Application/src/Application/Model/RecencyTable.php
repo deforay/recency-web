@@ -495,6 +495,7 @@ class RecencyTable extends AbstractTableGateway {
                                         //'ip_address'=>$recency[''],
                                         'notes'=>$recency['notes'],
                                         'form_initiation_datetime'=>$recency['formInitDateTime'],
+                                        'app_version'=>$recency['appVersion'],
                                         'form_transfer_datetime'=>date("Y-m-d H:i:s"),
 
                                         'kit_lot_no' => $recency['testKitLotNo'],
@@ -567,6 +568,7 @@ class RecencyTable extends AbstractTableGateway {
                                    'mac_no'=>$params['macAddress'],
                                    'cell_phone_number'=>$params['phoneNumber'],
                                    'recency_test_performed'=>$params['testNotPerformed'],
+                                   'app_version'=>$recency['appVersion'],
                                    //'ip_address'=>$recency[''],
                                    'form_initiation_datetime'=>$params['formInitDateTime'],
                                    'form_transfer_datetime'=>date("Y-m-d H:i:s"),

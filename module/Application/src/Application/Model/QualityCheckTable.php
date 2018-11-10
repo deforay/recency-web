@@ -191,6 +191,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                'term_outcome'=>$params['outcomeData'],
                                'tester_name' => $params['testerName'],
                                'comment' => $params['comment'],
+                               
                                'added_on' => date("Y-m-d H:i:s"),
                                'added_by' => $logincontainer->userId,
 
@@ -296,6 +297,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                     'positive_verification_line' => (isset($qcTest['positiveLine']) && $qcTest['positiveLine']!='')?$qcTest['positiveLine']:NULL,
                                     'long_term_verification_line' => (isset($qcTest['longTermLine']) && $qcTest['longTermLine']!='')?$qcTest['longTermLine']:NULL,
                                     'tester_name' => $qcTest['testerName'],
+                                    'app_version'=>$qcTest['appVersion'],
                                     'added_on' => date("Y-m-d H:i:s"),
                                     'added_by' => $qcTest['userId'],
 

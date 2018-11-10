@@ -108,3 +108,9 @@ ALTER TABLE `quality_check_test` ADD `recency_test_performed` VARCHAR(255) NULL 
 ALTER TABLE `recency` ADD `kit_name` VARCHAR(40) NULL DEFAULT NULL AFTER `added_by`;
 
 ALTER TABLE `quality_check_test` ADD `kit_name` VARCHAR(40) NULL DEFAULT NULL AFTER `reference_result`;
+
+
+-- saravanan 10-nov-2018
+ALTER TABLE `recency` ADD `app_version` VARCHAR(255) NULL DEFAULT NULL AFTER `notes`;
+ALTER TABLE `quality_check_test` ADD `app_version` VARCHAR(255) NULL DEFAULT NULL AFTER `comment`;
+
