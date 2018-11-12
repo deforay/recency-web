@@ -627,9 +627,11 @@ class RecencyTable extends AbstractTableGateway {
                $sql = new Sql($dbAdapter);
 
                $sQuery = $sql->select()->from(array('r' => 'recency'))
-               ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'),'left')
-               ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
-
+                            ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+                            ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'),'left')
+                            ->join(array('pr' => 'province_details'), 'pr.province_id = f.province', array('province_name'),'left')
+                            ->join(array('dt' => 'district_details'), 'dt.district_id = f.district', array('district_name'),'left')
+                            ->join(array('cd' => 'city_details'), 'cd.city_id = f.city', array('city_name'),'left')
                ->where(array('recency_id' =>$id));
                $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();

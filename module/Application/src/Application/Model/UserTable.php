@@ -332,8 +332,10 @@ class UserTable extends AbstractTableGateway {
                 $response["message"] = "Please try again!";
             }
         } else if($rResult['status']=='inactive'){
-            $response["status"] = "fail";
-            $response["message"] = "Your status is Inactive!";
+            $adminEmail = $globalDb->getGlobalValue('admin_email');
+            $adminPhone = $globalDb->getGlobalValue('admin_phone');
+            $response['message'] = 'Your password has expired or has been locked, please contact your administrator('.$adminEmail.' or '.$adminPhone.')';
+            $response['status'] = 'fail';
         } else {
             $response["status"] = "fail";
             $response["message"] = "Please check your login credentials!";

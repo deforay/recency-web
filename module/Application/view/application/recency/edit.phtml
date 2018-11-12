@@ -580,8 +580,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             ($(this).val() == '') ? $('.stepTwo').css('visibility', 'hidden') : $('.stepTwo').css('visibility', 'visible')
         });
 
-          if($('input[id=recencyTestPerformedYes]').prop('checked')==true)
-          {
+          if($('input[id=recencyTestPerformedYes]').prop('checked')==true){
                $(".disbaledResult").attr("disabled",true).removeClass("isRequired");
                $(".hideDiv").css('display','block');
           }else{

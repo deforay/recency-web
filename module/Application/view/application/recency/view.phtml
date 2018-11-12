@@ -2,8 +2,8 @@
 use Zend\Session\Container;
 use Application\Service\CommonService;
 $sessionLogin = new Container('credo');
-$common = new CommonService()
-// \Zend\Debug\Debug::dump($result);die;
+$common = new CommonService();
+//\Zend\Debug\Debug::dump($result);die;
 ?>
 <style>
 <?php
@@ -12,6 +12,8 @@ if($result['term_outcome']==''){
 .outcome{display:none;}
 <?php
 }
+$lineOutComeColor = "#de1d2b";
+$lineOutComeColor2 = "#000000";
 ?>
 .colour{color:red;}
 </style>
@@ -44,7 +46,7 @@ if($result['term_outcome']==''){
                          <div class="box-header">
                          </div><!-- /.box-header -->
                          <div class="box-body">
-                              <h3 class="block-title" style=" margin-bottom: 4%; ">Recency</h3>
+                              <h3 class="block-title" style=" margin-bottom: 4%; ">Section 1/2</h3>
                               <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
@@ -74,6 +76,37 @@ if($result['term_outcome']==''){
                                              </span>
                                         </div>
                                    </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                              <label for="orderDate" class="col-lg-4 control-label"><?php echo ucfirst($globalConfigResult[0]['global_value']); ?></label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" id="<?php echo $globalConfigResult[0]['global_name']; ?>" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->province_name); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <?php if(isset($globalConfigResult[1]['global_value']) && $globalConfigResult[1]['global_value']!=''){ ?>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                              <label for="orderDate" class="col-lg-4 control-label"><?php echo ucfirst($globalConfigResult[1]['global_value']); ?></label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" id="<?php echo $globalConfigResult[1]['global_name']; ?>" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->district_name); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <?php } if(isset($globalConfigResult[2]['global_value']) && $globalConfigResult[2]['global_value']!=''){ ?>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                              <label for="orderDate" class="col-lg-4 control-label"><?php echo ucfirst($globalConfigResult[2]['global_value']); ?></label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" id="<?php echo $globalConfigResult[2]['global_name']; ?>" for="company" class="col-lg-4 control-label">
+                                                  <?php echo ucwords($result->city_name); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <?php } ?>
+
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="orderDate" class="col-lg-4 control-label">HIV Diagnosis Date</label>
@@ -251,23 +284,12 @@ if($result['term_outcome']==''){
                                         <div class="form-group">
                                              <label for="otherRef" class="col-lg-4 control-label">Outcome</label>
                                              <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                             <span style="text-align: left;" id="outcome" for="company" class="col-lg-4 control-label">
                                               <?php echo $result['term_outcome'];?>
                                              </span>
                                         </div>
                                    </div>
 
-                                   <div class="col-md-6">
-                                        <div class="form-group">
-                                             <label for="otherRef" class="col-lg-4 control-label">Test Kit Name</label>
-                                             <label for="company" class="col-lg-1 control-label">: </label>
-                                             <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-
-                                              <?php echo ucwords(str_replace('_', ' ', $result->kit_name));?>
-
-                                             </span>
-                                        </div>
-                                   </div>
                                    <div class="col-md-6 ">
                                         <div class="form-group">
                                              <label for="otherRef" class="col-lg-4 control-label">Test Kit No</label>
@@ -299,7 +321,7 @@ if($result['term_outcome']==''){
                               <!--  -->
                          </div>
                          <hr>
-                         <h3 class="block-title" style=" margin-bottom: 4%; ">Behaviours</h3>
+                         <h3 class="block-title" style=" margin-bottom: 4%; ">Section 2/2</h3>
                          <div class="box-body">
                          <div class="row">
                                    <div class="col-md-6">
@@ -430,3 +452,45 @@ if($result['term_outcome']==''){
           </section>
      </div>
 </div>
+<script>
+function changeTermLine()
+{
+    var ctrlLine = '<?php echo $result['control_line'];?>';
+    var postiveLine = '<?php echo $result['positive_verification_line'];?>';
+    var longTermLine = '<?php echo $result['long_term_verification_line'];?>';
+    if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
+      if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
+          $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+          $(".outcome").css({"display":"block"});
+      }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
+          $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+          $(".outcome").css({"display":"block"});
+      }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
+          $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+          $(".outcome").css({"display":"block"});
+      }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
+          $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+          $(".outcome").css({"display":"block"});
+      }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
+          $("#outcome").html('Assay HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
+          $(".outcome").css({"display":"block"});
+      }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
+          $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+          $(".outcome").css({"display":"block"});
+      }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
+          $("#outcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor;?>"});
+          $(".outcome").css({"display":"block"});
+      }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
+          $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+          $(".outcome").css({"display":"block"});
+      }
+    }else{
+          $("#outcome").html('').hide();
+          $(".outcome").css({"display":"none"});
+    }
+}
+jQuery(document).ready(function($) {
+  changeTermLine();
+  
+});
+</script>

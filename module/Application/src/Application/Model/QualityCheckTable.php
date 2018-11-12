@@ -268,11 +268,11 @@ class QualityCheckTable extends AbstractTableGateway {
 
       public function addQualityCheckDetailsApi($params)
       {
-
                  $dbAdapter = $this->adapter;
                  $sql = new Sql($dbAdapter);
                  $logincontainer = new Container('credo');
                  $facilityDb = new FacilitiesTable($this->adapter);
+                 $globalDb = new GlobalConfigTable($this->adapter);
                  $riskPopulationDb = new RiskPopulationsTable($this->adapter);
                  $common = new CommonService();
 
@@ -323,7 +323,6 @@ class QualityCheckTable extends AbstractTableGateway {
                                 }else{
                                      $response['syncData']['response'][$key] = 'failed';
                                 }
-
                       }
                       catch (Exception $exc) {
                            error_log($exc->getMessage());
