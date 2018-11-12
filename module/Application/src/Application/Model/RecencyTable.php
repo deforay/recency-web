@@ -431,7 +431,7 @@ class RecencyTable extends AbstractTableGateway {
                         if(isset($uResult['status']) && $uResult['status']=='inactive'){
                             $adminEmail = $globalDb->getGlobalValue('admin_email');
                             $adminPhone = $globalDb->getGlobalValue('admin_phone');
-                            $response['message'] = 'Your password has expired or has been locked, please contact your administrator('.$adminEmail.'or '.$adminPhone.')';
+                            $response['message'] = 'Your password has expired or has been locked, please contact your administrator('.$adminEmail.' or '.$adminPhone.')';
                             $response['status'] = 'failed';
                             return $response;
                         }

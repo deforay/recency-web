@@ -58,7 +58,7 @@ if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
                             <?php if($config['global_name'] != 'mandatory_fields'){ ?>
                                 <label class="col-form-label" for=""><?php echo ucfirst($config['display_name']); ?><span class="mandatory">*</span></label>
                                 <div class="">
-                                    <input type="text" value="<?php echo $config['global_value']; ?>" class="form-control isRequired" id="configValue" name="configValue[]" placeholder="Enter the config value" title="Please enter the config value">
+                                    <input type="text" value="<?php echo $config['global_value']; ?>" class="form-control isRequired" id="configValue" name="<?php echo $config['global_name']; ?>" placeholder="Enter the config value" title="Please enter the config value">
                                 </div>
                             <?php } ?>
                             <input type="hidden" name="gobalConfigId[]" value="<?php echo base64_encode($config['config_id']);?>" />

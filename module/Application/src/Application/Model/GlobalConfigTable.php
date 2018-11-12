@@ -131,12 +131,11 @@ class GlobalConfigTable extends AbstractTableGateway {
             $role = $sessionLogin->roleCode;
             $update = true;
             foreach ($rResult as $aRow) {
-            $row = array();
-            $row[] = ucwords($aRow['display_name']);
-            $row[] = ucwords($aRow['global_value']);
-
-            $output['aaData'][] = $row;
-        }
+                $row = array();
+                $row[] = ucwords($aRow['display_name']);
+                $row[] = ucwords($aRow['global_value']);
+                $output['aaData'][] = $row;
+            }
         return $output;
     }
 
@@ -154,24 +153,11 @@ class GlobalConfigTable extends AbstractTableGateway {
 
     public function updateGlobalConfigDetails($params)
     {
-        $n = count($params['gobalConfigId']);
-        $result = 0;
-        $i = 0;
-        for($i=0;$i<$n;$i++){
-            if(isset($params['configValue'][$i]) && trim($params['configValue'][$i])!="")
-            {
-                $data = array(
-                    'global_value' => $params['configValue'][$i]
-                );
-                $updateResult = $this->update($data,array('config_id'=>base64_decode($params['gobalConfigId'][$i])));
-                if($updateResult > 0){
-                    $result = 1;
-                }
-            }
-            $lastConfigId = base64_decode($params['gobalConfigId'][$i]);
+        $result = 1;
+        foreach ($params as $fieldName => $fieldValue) {
+            $this->update(array('global_value' => $fieldValue), array('global_name' => $fieldName));
         }
-        $selectedRecencyUser['global_value'] = $params['selectedRecencyUser'];
-        $MantatoryUpdateResult = $this->update($selectedRecencyUser,array('config_id'=>$lastConfigId));
+        $MantatoryUpdateResult = $this->update(array('global_value' => $params['selectedRecencyUser']), array('global_name' => 'mandatory_fields'));
         if($MantatoryUpdateResult > 0){
             $result = 1;
         }

@@ -131,10 +131,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                     <div class="js-wizard-simple block block block-rounded block-bordered">
                          <ul class="nav nav-tabs nav-tabs-block nav-justified" role="tablist">
                               <li class="nav-item">
-                                   <a class="nav-link active" href="javascript:void()" id="step1" onclick="validateStep2()"> Section 1/2</a>
+                                   <a class="nav-link active" href="javascript:void()" id="step1" onclick="validateStep2()"> Section 1/2 <i class="fa fa-check stepOne" style="color:green;visibility:hidden;"></i></a>
                               </li>
                               <li class="nav-item">
-                                   <a class="nav-link" href="javascript:void()" id="step2" onclick="validateStep1();"> Section 2/2</a>
+                                   <a class="nav-link" href="javascript:void()" id="step2" onclick="validateStep1();"> Section 2/2 <i class="fa fa-check stepTwo" style="color:green;visibility:hidden;"></i></a>
                               </li>
                          </ul>
                          <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'edit')); ?>" method="post">
@@ -506,13 +506,13 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
                }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
-                    $("#outcome").html('HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $("#outcome").html('Assay HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
                }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
                }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
-                    $("#outcome").html('Preliminary Recent').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $("#outcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
                }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
                     $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
@@ -572,26 +572,13 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
      jQuery(document).ready(function($) {
 
-          // search Start
-          // $('#testerName').typeahead({
-          //      source: function (query, result) {
-          //           $.ajax({
-          //                url: "/application/recency/get-tester",
-          //                data: 'query=' + query,
-          //                dataType: "json",
-          //                type: "POST",
-          //                success: function (data)
-          //                {
-          //                     result($.map(data, function (item) {
-          //                          return item;
-          //                     }));
-          //                }
-          //
-          //           });
-          //      }
-          // });
-          // search end
-
+        changeTermLine();
+        $("#wizard-progress-step1 .isRequired").each(function() {
+            ($(this).val() == '') ? $('.stepOne').css('visibility', 'hidden') : $('.stepOne').css('visibility', 'visible')
+        });
+        $("#wizard-progress-step2 .isRequired").each(function() {
+            ($(this).val() == '') ? $('.stepTwo').css('visibility', 'hidden') : $('.stepTwo').css('visibility', 'visible')
+        });
 
           if($('input[id=recencyTestPerformedYes]').prop('checked')==true)
           {
@@ -666,7 +653,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                          <?php }else{ ?>
                               $("#patientOnArt").attr("disabled",true).removeClass('isRequired');
                               <?php } ?>
-                         });
+        });
 
                          function validateStep1()
                          {
