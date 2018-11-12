@@ -263,5 +263,15 @@ class GlobalConfigTable extends AbstractTableGateway {
         }
        return $response;
     }
+
+    public function getGlobalValue($globalName) {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery = $sql->select()->from('global_config')->where(array('global_name' => $globalName));
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $configValues = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        return $configValues[0]['global_value'];
+        
+    }
 }
 ?>

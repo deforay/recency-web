@@ -114,3 +114,5 @@ ALTER TABLE `quality_check_test` ADD `kit_name` VARCHAR(40) NULL DEFAULT NULL AF
 ALTER TABLE `recency` ADD `app_version` VARCHAR(255) NULL DEFAULT NULL AFTER `notes`;
 ALTER TABLE `quality_check_test` ADD `app_version` VARCHAR(255) NULL DEFAULT NULL AFTER `comment`;
 
+-- saravanan 12-nov-2018
+INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Admin Email', 'admin_email', 'admin@gmail.com'), (NULL, 'Admin Phone', 'admin_phone', '111111111');

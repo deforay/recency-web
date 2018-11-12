@@ -417,10 +417,24 @@ class RecencyTable extends AbstractTableGateway {
                {
                     $dbAdapter = $this->adapter;
                     $sql = new Sql($dbAdapter);
+
                     $facilityDb = new FacilitiesTable($this->adapter);
                     $riskPopulationDb = new RiskPopulationsTable($this->adapter);
+                    $globalDb = new GlobalConfigTable($this->adapter);
                     $common = new CommonService();
                     if(isset($params["form"])){
+                        //check user status active or not
+                        $uQuery = $sql->select()->from('users')
+                                        ->where(array('user_id' => $params["form"][0]['userId']));
+                        $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
+                        $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                        if(isset($uResult['status']) && $uResult['status']=='inactive'){
+                            $adminEmail = $globalDb->getGlobalValue('admin_email');
+                            $adminPhone = $globalDb->getGlobalValue('admin_phone');
+                            $response['message'] = 'Your password has expired or has been locked, please contact your administrator('.$adminEmail.'or '.$adminPhone.')';
+                            $response['status'] = 'failed';
+                            return $response;
+                        }
                          $i = 1;
                          foreach($params["form"] as $key => $recency){
                               try{
