@@ -138,15 +138,17 @@ $vlDataMenu="<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href="
                                         <?php echo $userMenu;?>
                                    </ul>
                               </li>
-                         <?php } ?>
+                         <?php }
+                         if($roleCode == 'admin' || $roleCode == 'RTS'){
+                         ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
                          <?php echo $recencyMenu;?>
 
                          <li class="nav-main-heading" style="padding:5px;"></li>
                          <?php echo $qcMenu;?>
-
+                         <?php } if($roleCode=='VLTS'){ ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
-                         <?php echo $vlDataMenu;?>
+                         <?php echo $vlDataMenu; } ?>
 
                     </ul>
                </div>
