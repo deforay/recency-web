@@ -125,6 +125,16 @@ return array(
                             ),
                         ),
                     ),
+                    'vl-data' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                              'route' => '/vl-data[/:action][/][:id]',
+                              'defaults' => array(
+                                    'controller' => 'Application\Controller\VlData',
+                                    'action' => 'index',
+                              ),
+                        ),
+                  ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -191,7 +201,7 @@ return array(
                'Application\Controller\GlobalConfig' => 'Application\Controller\GlobalConfigController',
                'Application\Controller\QualityCheck' => 'Application\Controller\QualityCheckController',
                'Application\Controller\Captcha' => 'Application\Controller\CaptchaController',
-
+               'Application\Controller\VlData' => 'Application\Controller\VlDataController',
           ),
      ),
      'controller_plugins' => array(
@@ -218,7 +228,6 @@ return array(
      'view_helpers' => array(
           'invokables'=> array(
                'category_helper' => 'Application\View\Helper\CategoryHelper',
-
           )
      ),
      // Placeholder for console routes

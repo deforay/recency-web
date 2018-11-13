@@ -1,0 +1,49 @@
+<?php
+$common = new \Application\Service\CommonService();
+?>
+<hr/>
+<a href="javascript:void(0)" class="btn btn-info saveResult"  onclick="updateVlResult();">Save Result</a>
+<br/><br/>
+<table class="table table-bordered table-striped table-vcenter" id="sampleData">
+<thead>
+                        <tr>
+    <th>Sample ID</th><th>Patient ID</th><th>Recency Date</th><th>Viral Load Result</th><th>Recency Outcome</th><th>Final outcome</th>
+</tr>
+</thead>
+<?php
+if(count($result)>0){
+    foreach($result as $sample){
+    ?>
+    <tr>
+        <td><?php echo $sample['sample_id'];?></td>
+        <td><?php echo $sample['patient_id'];?></td>
+        <td><?php echo $common->humanDateFormat($sample['hiv_recency_date']);?></td>
+        <td>
+        <?php
+        if($sample['term_outcome']!='' && $sample['final_outcome']=='' && $sample['vl_result']==''){
+        ?>
+            <input type="text" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" onchange="getVlResult();"/>
+        <?php }else{ echo $sample['vl_result']; } ?>
+        </td>
+        <td><?php echo $sample['term_outcome'];?></td>
+        <td><?php echo $sample['final_outcome'];?></td>
+    </tr>
+    <?php
+    }
+}else{
+    ?>
+    <tr>
+    <td colspan="2">No data available</td>
+</tr>
+    <?php
+}
+?>
+</table>
+<br/>
+<a href="javascript:void(0)" class="btn btn-info saveResult" onclick="updateVlResult();">Save Result</a>
+<br/><br/>
+<script>
+$(document).ready(function(){
+    $('#sampleData').dataTable({"ordering": false});
+});
+</script>

@@ -304,11 +304,11 @@ class UserTable extends AbstractTableGateway {
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-
+        $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
         $password = sha1($params['password'] . $configResult["password"]["salt"]);
 
         $sQuery = $sql->select()->from(array('u' => 'users'))
-                ->where(array('status' => 'active','email' =>$params['email'], 'server_password' => $password))
+                ->where(array('email' =>$params['email'], 'server_password' => $password))
                 ;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
 

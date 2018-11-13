@@ -110,5 +110,16 @@ class RecencyService {
           $recencyDb = $this->sm->get('RecencyTable');
           return $recencyDb->getActiveTester($val);
      }
+
+     public function getSampleData($params)
+     {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchSampleData($params);
+     }
+     public function updateVlSampleResult($params)
+     {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->updateVlSampleResult($params);
+     }
 }
 ?>

@@ -118,3 +118,6 @@ ALTER TABLE `quality_check_test` ADD `app_version` VARCHAR(255) NULL DEFAULT NUL
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Admin Email', 'admin_email', 'admin@gmail.com'), (NULL, 'Admin Phone', 'admin_phone', '111111111');
 
 INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `role_status`) VALUES (NULL, 'Viral Load Testing Site', 'VLTS', 'active');
+
+-- saravanan 13-nov-2018
+ALTER TABLE `recency` ADD `vl_result` VARCHAR(255) NULL DEFAULT NULL AFTER `kit_expiry_date`, ADD `final_outcome` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_result`;

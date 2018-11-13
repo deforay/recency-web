@@ -255,7 +255,16 @@ class RecencyTable extends AbstractTableGateway {
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               'tester_name'=>$params['testerName'],
                          );
-
+                         if (strpos($params['outcomeData'], 'Long Term') !== false)
+                         {
+$data['final_outcome'] = 'Long Term';
+                         }else if (strpos($params['outcomeData'], 'Invalid') !== false)
+                         {
+$data['final_outcome'] = 'Invalid';
+                         }else if (strpos($params['outcomeData'], 'Negative') !== false)
+                         {
+$data['final_outcome'] = 'Assay Negative';
+                         }
                          // \Zend\Debug\Debug::dump($data);die;
 
                          $this->insert($data);
@@ -359,6 +368,16 @@ class RecencyTable extends AbstractTableGateway {
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               'tester_name'=>$params['testerName'],
                          );
+                         if (strpos($params['outcomeData'], 'Long Term') !== false)
+                                   {
+$data['final_outcome'] = 'Long Term';
+                                   }else if (strpos($params['outcomeData'], 'Invalid') !== false)
+                                   {
+$data['final_outcome'] = 'Invalid';
+                                   }else if (strpos($params['outcomeData'], 'Negative') !== false)
+                                   {
+$data['final_outcome'] = 'Assay Negative';
+                                   }
                          $updateResult = $this->update($data,array('recency_id'=>$params['recencyId']));
                     }
                     return $updateResult;
@@ -529,6 +548,16 @@ class RecencyTable extends AbstractTableGateway {
                                    if(isset($recency['testKitExpDate']) && trim($recency['testKitExpDate'])!=""){
                                         $data['kit_expiry_date']=$common->dbDateFormat($recency['testKitExpDate']);
                                    }
+                                   if (strpos($recency['recencyOutcome'], 'Long Term') !== false)
+                                   {
+$data['final_outcome'] = 'Long Term';
+                                   }else if (strpos($recency['recencyOutcome'], 'Invalid') !== false)
+                                   {
+$data['final_outcome'] = 'Invalid';
+                                   }else if (strpos($recency['recencyOutcome'], 'Negative') !== false)
+                                   {
+$data['final_outcome'] = 'Assay Negative';
+                                   }
 
                                    $this->insert($data);
                                    $lastInsertedId = $this->lastInsertValue;
@@ -673,7 +702,6 @@ class RecencyTable extends AbstractTableGateway {
                }
                // return array("result" => $echoResult);
                return $echoResult;
-
           }
 
           public function fetchTesterNameAllDetailsApi()
@@ -689,5 +717,46 @@ class RecencyTable extends AbstractTableGateway {
                $response['config'] = $testerNameList;
                return $response;
           }
+
+          public function fetchSampleData($params)
+          {
+            $dbAdapter = $this->adapter;
+            $sql = new Sql($dbAdapter);
+
+            $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id','patient_id','recency_id','hiv_recency_date','term_outcome','vl_result','final_outcome'))
+                         ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'));
+                         if(isset($params['province']) && $params['province']!=''){
+                            $sQuery = $sQuery->where(array('f.province'=>$params['province'])); 
+                         }
+                         if(isset($params['district']) && $params['district']!=''){
+                            $sQuery = $sQuery->where(array('f.district'=>$params['district'])); 
+                         }
+                         if(isset($params['city']) && $params['city']!=''){
+                            $sQuery = $sQuery->where(array('f.city'=>$params['city'])); 
+                         }
+                         if(isset($params['facility']) && $params['facility']!=''){
+                            $sQuery = $sQuery->where(array('f.facility_id'=>$params['facility'])); 
+                         }
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            return $rResult;
+          }
+
+          public function updateVlSampleResult($params)
+          {
+              $sampleVlResult = explode(",",$params['vlResult']);
+              $sampleVlResultId = explode(",",$params['vlResultRowId']);
+              $dataOutcome = explode(",",$params['vlDataOutCome']);
+              foreach($sampleVlResult as $key=>$result){
+                  $data = array('vl_result'=>$result);
+                if (strpos($dataOutcome[$key], 'Recent') !== false && $result >= 1000) {
+                    $data['final_outcome'] = 'RITA Recent';
+                }else if (strpos($dataOutcome[$key], 'Recent') !== false && $result <= 1000) {
+                    $data['final_outcome'] = 'Long Term';
+                }
+                $this->update($data,array('recency_id'=>$sampleVlResultId[$key]));
+              }
+          }
      }
+
      ?>
