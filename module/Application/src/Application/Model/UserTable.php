@@ -330,6 +330,7 @@ class UserTable extends AbstractTableGateway {
                     'userId' => $rResult->user_id,
                     'userName' => $rResult->user_name,
                     'userEmailAddress' => $rResult->email,
+                    'noOfDays'=>$rResult->qc_sync_in_days,
                     'authToken' => $auth
                 );
                 $response["message"] = "Logged in successfully";
