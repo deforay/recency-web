@@ -329,10 +329,10 @@ class QualityCheckTable extends AbstractTableGateway {
                            error_log($exc->getTraceAsString());
                       }
                       $i++;
-                 }
+                }
             }
             $response['syncCount']['response'] = $this->getTotalSyncCount($userId);
-
+            $response['syncCount']['tenRecord'] = $this->getQCSyncData($userId);
             return $response;
       }
 
@@ -347,6 +347,19 @@ class QualityCheckTable extends AbstractTableGateway {
            $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
            // \Zend\Debug\Debug::dump($result);die;
            return $result;
+      }
+
+      public function getQCSyncData($userId)
+      {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $query = $sql->select()->from(array('qc'=>'quality_check_test'))
+                    ->where(array('added_by'=>$userId))
+                    ->order("qc.qc_test_id DESC")
+                    ->limit(10);
+        $queryStr = $sql->getSqlStringForSqlObject($query);
+        $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        return $result;
       }
 }
 ?>

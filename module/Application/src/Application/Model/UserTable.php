@@ -25,27 +25,31 @@ class UserTable extends AbstractTableGateway {
             $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
+            $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
             $sQuery = $sql->select()->from(array('u' => 'users'))
                     ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
 				    ->where(array('u.email' => $params['userName'], 'u.server_password' => $password,'u.web_access'=>'yes' ));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
-
             if($rResult) {
-                         $logincontainer->userId = $rResult->web_access;
-                        $logincontainer->userId = $rResult->user_id;
-                        $logincontainer->roleId = $rResult->role_id;
-                        $logincontainer->roleCode = $rResult->role_code;
-                        $logincontainer->userName = ucwords($rResult->user_name);
-                        $logincontainer->userEmail = ucwords($rResult->email);
-                        if($rResult->role_code != 'admin'){
+                if($rResult->status=='inactive'){
+                    $adminEmail = $globalDb->getGlobalValue('admin_email');
+                    $adminPhone = $globalDb->getGlobalValue('admin_phone');
 
-                            return 'recency';
-                        }else{
-
-                            return 'facilities';
-                        }
+                    $alertContainer->alertMsg = 'Your password has expired or has been locked, please contact your administrator('.$adminEmail.' or '.$adminPhone.')';
+                return 'login';
+                }
+                $logincontainer->userId = $rResult->user_id;
+                $logincontainer->roleId = $rResult->role_id;
+                $logincontainer->roleCode = $rResult->role_code;
+                $logincontainer->userName = ucwords($rResult->user_name);
+                $logincontainer->userEmail = ucwords($rResult->email);
+                if($rResult->role_code != 'admin'){
+                    return 'recency';
+                }else{
+                    return 'facilities';
+                }
             }else {
                 $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
                 return 'login';
@@ -212,7 +216,8 @@ class UserTable extends AbstractTableGateway {
                 'job_responsibility' => $params['JobResponse'],
                 'comments' => $params['comments'],
                 'status' => $params['userStatus'],
-                'web_access' => $params['webAccess']
+                'web_access' => $params['webAccess'],
+                'qc_sync_in_days'=>$params['noOfDays']
 
 
 
@@ -271,7 +276,8 @@ class UserTable extends AbstractTableGateway {
                 'job_responsibility' => $params['JobResponse'],
                 'comments' => $params['comments'],
                 'status' => $params['userStatus'],
-                'web_access' => $params['webAccess']
+                'web_access' => $params['webAccess'],
+                'qc_sync_in_days'=>$params['noOfDays']
 
             );
             if($params['password']!=''){

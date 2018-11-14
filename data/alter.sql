@@ -121,3 +121,6 @@ INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `role_status`) VALUES 
 
 -- saravanan 13-nov-2018
 ALTER TABLE `recency` ADD `vl_result` VARCHAR(255) NULL DEFAULT NULL AFTER `kit_expiry_date`, ADD `final_outcome` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_result`;
+
+-- saravanan 14-nov-2018
+ALTER TABLE `users` ADD `qc_sync_in_days` VARCHAR(255) NULL DEFAULT NULL AFTER `comments`;
