@@ -5,10 +5,7 @@ use Exception;
 use Zend\Mail;
 use Zend\Db\Sql\Sql;
 use Zend\Session\Container;
-use Zend\Mime\Part as MimePart;
-use Zend\Mail\Transport\SmtpOptions;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
+use PHPExcel;
 
 class QualityCheckService {
 
@@ -86,5 +83,116 @@ class QualityCheckService {
         $qcTestDb = $this->sm->get('QualityCheckTable');
         return $qcTestDb->addQualityCheckDetailsApi($params);
     }
+
+    public function exportQcData($params)
+     {
+        try{
+            $common = new \Application\Service\CommonService();
+            $queryContainer = new Container('query');
+            $excel = new PHPExcel();
+            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
+            $cacheSettings = array('memoryCacheSize' => '80MB');
+            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $output = array();
+            $sheet = $excel->getActiveSheet();
+            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $sql = new Sql($dbAdapter);
+            
+            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportQcDataQuery);
+            $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            if(count($sResult) > 0) {
+                foreach($sResult as $aRow) {
+                    $row = array();
+                    $row[] = ucwords($aRow['qc_sample_id']);
+                         $row[] = $common->humanDateFormat($aRow['qc_test_date']);
+                         $row[] = str_replace("_"," ",ucwords($aRow['reference_result']));
+                         $row[] = ucwords($aRow['kit_lot_no']);
+                         $row[] = ucwords($aRow['tester_name']);
+                    $output[] = $row;
+               }
+            }
+            
+            $styleArray = array(
+                'font' => array(
+                    'bold' => true,
+                    'size'=>12,
+                ),
+                'alignment' => array(
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                )
+            );
+            
+           $borderStyle = array(
+                'alignment' => array(
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                )
+            );
+           
+            $sheet->mergeCells('A1:B1');
+            $sheet->mergeCells('A3:A4');
+            $sheet->mergeCells('B3:B4');
+            $sheet->mergeCells('C3:C4');
+            $sheet->mergeCells('D3:D4');
+            $sheet->mergeCells('E3:E4');
+            
+            $sheet->setCellValue('A1', html_entity_decode('Quality Check Data', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+           
+            $sheet->setCellValue('A3', html_entity_decode('Sample ID', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('B3', html_entity_decode('QC Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('C3', html_entity_decode('Reference Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D3', html_entity_decode('KIT Lot Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('E3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                        
+            $sheet->getStyle('A1:B1')->getFont()->setBold(TRUE)->setSize(16);
+            
+            $sheet->getStyle('A3:A4')->applyFromArray($styleArray);
+            $sheet->getStyle('B3:B4')->applyFromArray($styleArray);
+            $sheet->getStyle('C3:C4')->applyFromArray($styleArray);
+            $sheet->getStyle('D3:D4')->applyFromArray($styleArray);
+            $sheet->getStyle('E3:E4')->applyFromArray($styleArray);
+            
+            foreach ($output as $rowNo => $rowData) {
+                $colNo = 0;
+                foreach ($rowData as $field => $value) {
+                    if (!isset($value)) {
+                        $value = "";
+                    }
+                    if (is_numeric($value)) {
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    } else {
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    }
+                    $rRowCount = $rowNo + 5;
+                    $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->getColumn();
+                    $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+                    $sheet->getDefaultRowDimension()->setRowHeight(18);
+                    $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
+                    $sheet->getStyleByColumnAndRow($colNo, $rowNo + 5)->getAlignment()->setWrapText(true);
+                    $colNo++;
+                }
+            }
+	    
+            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+            $filename = 'Quality-check-data' . date('d-M-Y-H-i-s') . '.xls';
+            $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            return $filename;
+        }
+        catch (Exception $exc) {
+            return "";
+            error_log("GENERATE-PAYMENT-REPORT-EXCEL--" . $exc->getMessage());
+            error_log($exc->getTraceAsString());
+        }
+     }
 }
 ?>

@@ -23,6 +23,7 @@ class RecencyTable extends AbstractTableGateway {
           * you want to insert a non-database field (for example a counter or static image)
           */
           $sessionLogin = new Container('credo');
+          $queryContainer = new Container('query');
           $role = $sessionLogin->roleId;
           $roleCode = $sessionLogin->roleCode;
           $common = new CommonService();
@@ -117,6 +118,7 @@ class RecencyTable extends AbstractTableGateway {
                          $sQuery = $sQuery->where('r.added_by='.$sessionLogin->userId);
                     }
 
+                    $queryContainer->exportRecencyDataQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                     //   echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);

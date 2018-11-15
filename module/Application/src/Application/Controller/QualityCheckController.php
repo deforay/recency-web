@@ -71,4 +71,18 @@ class QualityCheckController extends AbstractActionController
 
      }
 
+     public function exportQcDataAction()
+     {
+        $request = $this->getRequest();
+        if($request->isPost())
+        {
+            $params = $request->getPost();
+            $qcService = $this->getServiceLocator()->get('QualityCheckService');
+            $result=$qcService->exportQcData($params);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' =>$result));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
+     }
 }

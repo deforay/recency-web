@@ -3,9 +3,7 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-
-    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
-
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -13,14 +11,15 @@ $roleCode = $sessionLogin->roleCode;
                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency Data</h1>
                     <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                          <ol class="breadcrumb">
-
                               <li class="breadcrumb-item">
                                    <?php //if($roleCode == "user"){ ?>
                                    <a href="<?php echo $this->url('recency',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Recency</a>
+                                   <?php if($roleCode=='admin'){ ?>
+                                   <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportRecencyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                                   <?php } ?>
                               <?php     //}
                               ?>
                               </li>
-
                          </ol>
                     </nav>
                </div>
@@ -29,7 +28,6 @@ $roleCode = $sessionLogin->roleCode;
      <div class="content">
           <div class="block block-rounded block-bordered">
                <div class="block-header block-header-default">
-
                </div>
                <div class="block-content block-content-full">
                     <table id="facilityDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
@@ -65,7 +63,7 @@ $roleCode = $sessionLogin->roleCode;
           /* Table initialisation */
           oTable = null;
           $(document).ready(function() {
-            oTable = $('#facilityDataTable').dataTable( {
+            oTable = $('#facilityDataTable').dataTable({
                 "bAutoWidth": false,
                 "bProcessing": true,
                 "bServerSide": true,
@@ -83,7 +81,20 @@ $roleCode = $sessionLogin->roleCode;
                     });
                 }
             } );
-
-          } );
-
+          });
+        
+        function exportRecencyData()
+        {
+            $.blockUI();
+            $.post("<?php echo $this->url('recency',array('action'=>'export-recency')); ?>",
+                function(data){
+                if(data == "" || data == null || data == undefined){
+                $.unblockUI();
+                alert('Unable to generate download');
+                }else{
+                $.unblockUI();
+                document.location.href = '/temporary/'+data;
+                }
+            });
+        }
      </script>

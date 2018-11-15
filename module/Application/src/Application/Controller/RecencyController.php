@@ -104,4 +104,18 @@ class RecencyController extends AbstractActionController
                return $this->getResponse()->setContent(Json::encode($result));
           }
      }
+     public function exportRecencyAction()
+     {
+        $request = $this->getRequest();
+        if($request->isPost())
+        {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result=$recencyService->exportRecencyData($params);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' =>$result));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
+     }
 }
