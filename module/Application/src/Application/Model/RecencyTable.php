@@ -27,8 +27,9 @@ class RecencyTable extends AbstractTableGateway {
           $role = $sessionLogin->roleId;
           $roleCode = $sessionLogin->roleCode;
           $common = new CommonService();
-          $aColumns = array('r.sample_id','r.patient_id','f.facility_name','DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line');
-          $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.control_line','r.positive_verification_line','r.long_term_verification_line');
+                    
+          $aColumns = array('r.sample_id','r.patient_id','f.facility_name','DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','DATE_FORMAT(r.kit_expiry_date,"%d-%b-%Y")','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','DATE_FORMAT(r.dob,"%d-%b-%Y")','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','DATE_FORMAT(r.form_initiation_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.form_transfer_datetime ,"%d-%b-%Y %H:%i:%s")');
+          $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','r.kit_expiry_date','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','r.dob','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','r.form_initiation_datetime','r.form_transfer_datetime');
 
           /* Paging */
           $sLimit = "";
@@ -100,6 +101,7 @@ class RecencyTable extends AbstractTableGateway {
 
                     $sQuery = $sql->select()->from(array( 'r' => 'recency' ))
                     ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+                    ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'))
                     ;
 
                     if (isset($sWhere) && $sWhere != "") {
@@ -151,6 +153,16 @@ class RecencyTable extends AbstractTableGateway {
                     foreach ($rResult as $aRow) {
 
                          $row = array();
+                         $formInitiationDate = '';
+                         if($aRow['form_initiation_datetime']!='' && $aRow['form_initiation_datetime']!='0000-00-00 00:00:00' && $aRow['form_initiation_datetime']!=NULL){
+                            $formInitiationAry = explode(" ",$aRow['form_initiation_datetime']);
+                            $formInitiationDate = $common->humanDateFormat($formInitiationAry[0])." ".$formInitiationAry[1];
+                         }
+                         $formTransferDate = '';
+                         if($aRow['form_transfer_datetime']!='' && $aRow['form_transfer_datetime']!='0000-00-00 00:00:00' && $aRow['form_transfer_datetime']!=NULL){
+                            $formTransferAry = explode(" ",$aRow['form_transfer_datetime']);
+                            $formTransferDate = $common->humanDateFormat($formTransferAry[0])." ".$formTransferAry[1];
+                         }
                          $row[] = $aRow['sample_id'];
                          $row[] = $aRow['patient_id'];
                          $row[] = ucwords($aRow['facility_name']);
@@ -160,6 +172,28 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = ucwords($aRow['control_line']);
                          $row[] = ucwords($aRow['positive_verification_line']);
                          $row[] = ucwords($aRow['long_term_verification_line']);
+                         $row[] = $aRow['kit_lot_no'];
+                         $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
+                         $row[] = $aRow['term_outcome'];
+                         $row[] = $aRow['final_outcome'];
+                         $row[] = $aRow['vl_result'];
+                         $row[] = ucwords($aRow['tester_name']);
+                         $row[] = $common->humanDateFormat($aRow['dob']);
+                         $row[] = $aRow['age'];
+                         $row[] = ucwords($aRow['gender']);
+                         $row[] = str_replace("_"," ",ucwords($aRow['marital_status']));
+                         $row[] = ucwords($aRow['residence']);
+                         $row[] = ucwords($aRow['education_level']);
+                         $row[] = ucwords($aRow['name']);
+                         $row[] = str_replace("_"," ",ucwords($aRow['pregnancy_status']));
+                         $row[] = str_replace("_","-",$aRow['current_sexual_partner']);
+                         $row[] = ucwords($aRow['past_hiv_testing']);
+                         $row[] = ucwords($aRow['last_hiv_status']);
+                         $row[] = ucwords($aRow['patient_on_art']);
+                         $row[] = ucwords($aRow['test_last_12_month']);
+                         $row[] = ucwords($aRow['exp_violence_last_12_month']);
+                         $row[] = $formInitiationDate;
+                         $row[] = $formTransferDate;
 
                          $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                          <a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>

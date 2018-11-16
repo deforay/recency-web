@@ -4,7 +4,7 @@ use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 
-    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -26,16 +26,21 @@ $roleCode = $sessionLogin->roleCode;
      <div class="content">
           <div class="block block-rounded block-bordered">
                <div class="block-header block-header-default">
-
                </div>
                <div class="block-content block-content-full">
-                    <table id="qcDataTable" class="table table-bordered table-striped table-vcenter">
+                    <table id="qcDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
                          <thead>
                               <tr>
-                                    <th>Qc Sample Id</th>
-                                    <th>Qc Date</th>
+                                    <th>QC Sample Id</th>
+                                    <th>QC Date</th>
                                     <th>Reference Result</th>
                                     <th>Kit Lot No.</th>
+                                    <th>Kit Expiry Date</th>
+                                    <th>HIV Recency Date</th>
+                                    <th>Control Line</th>
+                                    <th>Positive Verification</th>
+                                    <th>Long Term Verification</th>
+                                    <th>Term Outcome</th>
                                     <th>Tester Name</th>
                                     <th>Action</th>
                               </tr>

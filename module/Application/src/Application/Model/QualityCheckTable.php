@@ -26,8 +26,8 @@ class QualityCheckTable extends AbstractTableGateway {
           $role = $sessionLogin->roleId;
           $roleCode = $sessionLogin->roleCode;
           $common = new CommonService();
-          $aColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','qc.tester_name');
-          $orderColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','qc.tester_name');
+          $aColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','DATE_FORMAT(qc.kit_expiry_date,"%d-%b-%Y")','DATE_FORMAT(qc.hiv_recency_date,"%d-%b-%Y")','qc.control_line','qc.positive_verification_line','qc.long_term_verification_line','qc.term_outcome','qc.tester_name');
+          $orderColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','qc.kit_expiry_date','qc.hiv_recency_date','qc.control_line','qc.positive_verification_line','qc.long_term_verification_line','qc.term_outcome','qc.tester_name');
 
           /* Paging */
           $sLimit = "";
@@ -41,7 +41,7 @@ class QualityCheckTable extends AbstractTableGateway {
           if (isset($parameters['iSortCol_0'])) {
                for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
                     if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                         $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
+                         $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
                     }
                }
                $sOrder = substr_replace($sOrder, "", -1);
@@ -152,6 +152,12 @@ class QualityCheckTable extends AbstractTableGateway {
                          $row[] = $common->humanDateFormat($aRow['qc_test_date']);
                          $row[] = str_replace("_"," ",ucwords($aRow['reference_result']));
                          $row[] = ucwords($aRow['kit_lot_no']);
+                         $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
+                         $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                         $row[] = ucwords($aRow['control_line']);
+                         $row[] = ucwords($aRow['positive_verification_line']);
+                         $row[] = ucwords($aRow['long_term_verification_line']);
+                         $row[] = ucwords($aRow['term_outcome']);
                          $row[] = ucwords($aRow['tester_name']);
 
                          // $row[] = '<a href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';

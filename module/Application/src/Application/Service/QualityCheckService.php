@@ -104,10 +104,16 @@ class QualityCheckService {
                 foreach($sResult as $aRow) {
                     $row = array();
                     $row[] = ucwords($aRow['qc_sample_id']);
-                         $row[] = $common->humanDateFormat($aRow['qc_test_date']);
-                         $row[] = str_replace("_"," ",ucwords($aRow['reference_result']));
-                         $row[] = ucwords($aRow['kit_lot_no']);
-                         $row[] = ucwords($aRow['tester_name']);
+                    $row[] = $common->humanDateFormat($aRow['qc_test_date']);
+                    $row[] = str_replace("_"," ",ucwords($aRow['reference_result']));
+                    $row[] = ucwords($aRow['kit_lot_no']);
+                    $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                    $row[] = ucwords($aRow['control_line']);
+                    $row[] = ucwords($aRow['positive_verification_line']);
+                    $row[] = ucwords($aRow['long_term_verification_line']);
+                    $row[] = ucwords($aRow['term_outcome']);
+                    $row[] = ucwords($aRow['tester_name']);
                     $output[] = $row;
                }
             }
@@ -145,14 +151,26 @@ class QualityCheckService {
             $sheet->mergeCells('C3:C4');
             $sheet->mergeCells('D3:D4');
             $sheet->mergeCells('E3:E4');
+            $sheet->mergeCells('F3:F4');
+            $sheet->mergeCells('G3:G4');
+            $sheet->mergeCells('H3:H4');
+            $sheet->mergeCells('I3:I4');
+            $sheet->mergeCells('J3:J4');
+            $sheet->mergeCells('K3:K4');
             
             $sheet->setCellValue('A1', html_entity_decode('Quality Check Data', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
            
             $sheet->setCellValue('A3', html_entity_decode('Sample ID', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('B3', html_entity_decode('QC Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('C3', html_entity_decode('Reference Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D3', html_entity_decode('KIT Lot Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D3', html_entity_decode('Kit Lot Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('E3', html_entity_decode('Kit Expiry Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F3', html_entity_decode('HIV Recency Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G3', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('H3', html_entity_decode('Positive Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('I3', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('J3', html_entity_decode('Term Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('K3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                         
             $sheet->getStyle('A1:B1')->getFont()->setBold(TRUE)->setSize(16);
             
@@ -161,6 +179,12 @@ class QualityCheckService {
             $sheet->getStyle('C3:C4')->applyFromArray($styleArray);
             $sheet->getStyle('D3:D4')->applyFromArray($styleArray);
             $sheet->getStyle('E3:E4')->applyFromArray($styleArray);
+            $sheet->getStyle('F3:F4')->applyFromArray($styleArray);
+            $sheet->getStyle('G3:G4')->applyFromArray($styleArray);
+            $sheet->getStyle('H3:H4')->applyFromArray($styleArray);
+            $sheet->getStyle('I3:I4')->applyFromArray($styleArray);
+            $sheet->getStyle('J3:J4')->applyFromArray($styleArray);
+            $sheet->getStyle('K3:K4')->applyFromArray($styleArray);
             
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;

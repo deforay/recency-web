@@ -136,16 +136,47 @@ class RecencyService {
             if(count($sResult) > 0) {
                 foreach($sResult as $aRow) {
                     $row = array();
-                    $row[] = $aRow['sample_id'];
-                    $row[] = $aRow['patient_id'];
-                    $row[] = ucwords($aRow['facility_name']);
-                    $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
-                    $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
-                    $row[] = ucwords($aRow['control_line']);
-                    $row[] = ucwords($aRow['positive_verification_line']);
-                    $row[] = ucwords($aRow['long_term_verification_line']);
-                    $row[] = $aRow['term_outcome'];
-                    $row[] = $aRow['final_outcome'];
+                    $formInitiationDate = '';
+                         if($aRow['form_initiation_datetime']!='' && $aRow['form_initiation_datetime']!='0000-00-00 00:00:00' && $aRow['form_initiation_datetime']!=NULL){
+                            $formInitiationAry = explode(" ",$aRow['form_initiation_datetime']);
+                            $formInitiationDate = $common->humanDateFormat($formInitiationAry[0])." ".$formInitiationAry[1];
+                         }
+                         $formTransferDate = '';
+                         if($aRow['form_transfer_datetime']!='' && $aRow['form_transfer_datetime']!='0000-00-00 00:00:00' && $aRow['form_transfer_datetime']!=NULL){
+                            $formTransferAry = explode(" ",$aRow['form_transfer_datetime']);
+                            $formTransferDate = $common->humanDateFormat($formTransferAry[0])." ".$formTransferAry[1];
+                         }
+                         $row[] = $aRow['sample_id'];
+                         $row[] = $aRow['patient_id'];
+                         $row[] = ucwords($aRow['facility_name']);
+                         $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
+                         $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+
+                         $row[] = ucwords($aRow['control_line']);
+                         $row[] = ucwords($aRow['positive_verification_line']);
+                         $row[] = ucwords($aRow['long_term_verification_line']);
+                         $row[] = $aRow['kit_lot_no'];
+                         $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
+                         $row[] = $aRow['term_outcome'];
+                         $row[] = $aRow['final_outcome'];
+                         $row[] = $aRow['vl_result'];
+                         $row[] = ucwords($aRow['tester_name']);
+                         $row[] = $common->humanDateFormat($aRow['dob']);
+                         $row[] = $aRow['age'];
+                         $row[] = ucwords($aRow['gender']);
+                         $row[] = str_replace("_"," ",ucwords($aRow['marital_status']));
+                         $row[] = ucwords($aRow['residence']);
+                         $row[] = ucwords($aRow['education_level']);
+                         $row[] = ucwords($aRow['name']);
+                         $row[] = str_replace("_"," ",ucwords($aRow['pregnancy_status']));
+                         $row[] = str_replace("_","-",$aRow['current_sexual_partner']);
+                         $row[] = ucwords($aRow['past_hiv_testing']);
+                         $row[] = ucwords($aRow['last_hiv_status']);
+                         $row[] = ucwords($aRow['patient_on_art']);
+                         $row[] = ucwords($aRow['test_last_12_month']);
+                         $row[] = ucwords($aRow['exp_violence_last_12_month']);
+                         $row[] = $formInitiationDate;
+                         $row[] = $formTransferDate;
                     $output[] = $row;
                }
             }
@@ -188,6 +219,26 @@ class RecencyService {
             $sheet->mergeCells('H3:H4');
             $sheet->mergeCells('I3:I4');
             $sheet->mergeCells('J3:J4');
+            $sheet->mergeCells('K3:K4');
+            $sheet->mergeCells('L3:L4');
+            $sheet->mergeCells('M3:M4');
+            $sheet->mergeCells('N3:N4');
+            $sheet->mergeCells('O3:O4');
+            $sheet->mergeCells('P3:P4');
+            $sheet->mergeCells('Q3:Q4');
+            $sheet->mergeCells('R3:R4');
+            $sheet->mergeCells('S3:S4');
+            $sheet->mergeCells('T3:T4');
+            $sheet->mergeCells('U3:U4');
+            $sheet->mergeCells('V3:V4');
+            $sheet->mergeCells('W3:W4');
+            $sheet->mergeCells('X3:X4');
+            $sheet->mergeCells('Y3:Y4');
+            $sheet->mergeCells('Z3:Z4');
+            $sheet->mergeCells('AA3:AA4');
+            $sheet->mergeCells('AB3:AB4');
+            $sheet->mergeCells('AC3:AC4');
+            $sheet->mergeCells('AD3:AD4');
             
             $sheet->setCellValue('A1', html_entity_decode('Recency Data', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
            
@@ -199,8 +250,28 @@ class RecencyService {
             $sheet->setCellValue('F3', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('G3', html_entity_decode('Positive Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('H3', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I3', html_entity_decode('Term Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('J3', html_entity_decode('Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('I3', html_entity_decode('Kit Lot Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('J3', html_entity_decode('Kit Expiry Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('K3', html_entity_decode('Term Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('L3', html_entity_decode('Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('M3', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('N3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('O3', html_entity_decode('DOB', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('P3', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('Q3', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('R3', html_entity_decode('Martial Status', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('S3', html_entity_decode('Residence', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('T3', html_entity_decode('Education Level', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('U3', html_entity_decode('Risk Population', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('V3', html_entity_decode('Pregnancy Status', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('W3', html_entity_decode('Current Sexual Partner', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('X3', html_entity_decode('Past HIV Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('Y3', html_entity_decode('Last HIV Status', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('Z3', html_entity_decode('Patient On ART', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('AA3', html_entity_decode('Last 12 Month', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('AB3', html_entity_decode('Experienced Violence Last 12 Month', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('AC3', html_entity_decode('Form Initiation Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('AD3', html_entity_decode('Form Transfer Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             
             
             
@@ -217,6 +288,26 @@ class RecencyService {
             $sheet->getStyle('H3:H4')->applyFromArray($styleArray);
             $sheet->getStyle('I3:I4')->applyFromArray($styleArray);
             $sheet->getStyle('J3:J4')->applyFromArray($styleArray);
+            $sheet->getStyle('K3:K4')->applyFromArray($styleArray);
+            $sheet->getStyle('L3:L4')->applyFromArray($styleArray);
+            $sheet->getStyle('M3:M4')->applyFromArray($styleArray);
+            $sheet->getStyle('N3:N4')->applyFromArray($styleArray);
+            $sheet->getStyle('O3:O4')->applyFromArray($styleArray);
+            $sheet->getStyle('P3:P4')->applyFromArray($styleArray);
+            $sheet->getStyle('Q3:Q4')->applyFromArray($styleArray);
+            $sheet->getStyle('R3:R4')->applyFromArray($styleArray);
+            $sheet->getStyle('S3:S4')->applyFromArray($styleArray);
+            $sheet->getStyle('T3:T4')->applyFromArray($styleArray);
+            $sheet->getStyle('U3:U4')->applyFromArray($styleArray);
+            $sheet->getStyle('V3:V4')->applyFromArray($styleArray);
+            $sheet->getStyle('W3:W4')->applyFromArray($styleArray);
+            $sheet->getStyle('X3:X4')->applyFromArray($styleArray);
+            $sheet->getStyle('Y3:Y4')->applyFromArray($styleArray);
+            $sheet->getStyle('Z3:Z4')->applyFromArray($styleArray);
+            $sheet->getStyle('AA3:AA4')->applyFromArray($styleArray);
+            $sheet->getStyle('AB3:AB4')->applyFromArray($styleArray);
+            $sheet->getStyle('AC3:AC4')->applyFromArray($styleArray);
+            $sheet->getStyle('AD3:AD4')->applyFromArray($styleArray);
             
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;
