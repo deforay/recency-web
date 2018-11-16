@@ -107,6 +107,18 @@ class RecencyTable extends AbstractTableGateway {
                     if (isset($sWhere) && $sWhere != "") {
                          $sQuery->where($sWhere);
                     }
+                    if($parameters['fName']!=''){
+                        $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+                    }
+                    if($parameters['tOutcome']!=''){
+                        $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
+                    }
+                    if($parameters['gender']!=''){
+                        $sQuery->where(array('gender'=>$parameters['gender']));
+                    }
+                    if($parameters['finalOutcome']!=''){
+                        $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
+                    }
 
                     if (isset($sOrder) && $sOrder != "") {
                          $sQuery->order($sOrder);
@@ -183,15 +195,15 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = ucwords($aRow['gender']);
                          $row[] = str_replace("_"," ",ucwords($aRow['marital_status']));
                          $row[] = ucwords($aRow['residence']);
-                         $row[] = ucwords($aRow['education_level']);
+                         $row[] =  str_replace("_"," ",ucwords($aRow['education_level']));
                          $row[] = ucwords($aRow['name']);
                          $row[] = str_replace("_"," ",ucwords($aRow['pregnancy_status']));
                          $row[] = str_replace("_","-",$aRow['current_sexual_partner']);
                          $row[] = ucwords($aRow['past_hiv_testing']);
                          $row[] = ucwords($aRow['last_hiv_status']);
                          $row[] = ucwords($aRow['patient_on_art']);
-                         $row[] = ucwords($aRow['test_last_12_month']);
-                         $row[] = ucwords($aRow['exp_violence_last_12_month']);
+                         $row[] =  str_replace("_"," ",ucwords($aRow['test_last_12_month']));
+                         $row[] =  str_replace("_"," ",ucwords($aRow['exp_violence_last_12_month']));
                          $row[] = $formInitiationDate;
                          $row[] = $formTransferDate;
 

@@ -166,15 +166,15 @@ class RecencyService {
                          $row[] = ucwords($aRow['gender']);
                          $row[] = str_replace("_"," ",ucwords($aRow['marital_status']));
                          $row[] = ucwords($aRow['residence']);
-                         $row[] = ucwords($aRow['education_level']);
+                         $row[] = str_replace("_"," ",ucwords($aRow['education_level']));
                          $row[] = ucwords($aRow['name']);
                          $row[] = str_replace("_"," ",ucwords($aRow['pregnancy_status']));
                          $row[] = str_replace("_","-",$aRow['current_sexual_partner']);
                          $row[] = ucwords($aRow['past_hiv_testing']);
                          $row[] = ucwords($aRow['last_hiv_status']);
                          $row[] = ucwords($aRow['patient_on_art']);
-                         $row[] = ucwords($aRow['test_last_12_month']);
-                         $row[] = ucwords($aRow['exp_violence_last_12_month']);
+                         $row[] = str_replace("_"," ",ucwords($aRow['test_last_12_month']));
+                         $row[] = str_replace("_"," ",ucwords($aRow['exp_violence_last_12_month']));
                          $row[] = $formInitiationDate;
                          $row[] = $formTransferDate;
                     $output[] = $row;
@@ -272,8 +272,6 @@ class RecencyService {
             $sheet->setCellValue('AB3', html_entity_decode('Experienced Violence Last 12 Month', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('AC3', html_entity_decode('Form Initiation Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('AD3', html_entity_decode('Form Transfer Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            
-            
             
             $sheet->getStyle('A1:B1')->getFont()->setBold(TRUE)->setSize(16);
             

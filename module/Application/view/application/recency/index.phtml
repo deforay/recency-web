@@ -30,6 +30,61 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                <div class="block-header block-header-default">
                </div>
                <div class="block-content block-content-full">
+                    <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+                        <tr>
+                            <td><b>Facility Name :</b></td>
+                            <td>
+                                <select class="form-control" id="facilityName" name="facilityName"  title="Please select facility name" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <?php
+                                    foreach($facilityResult['facility'] as $name){
+                                    ?>
+                                    <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']);?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                            
+                            <td><b>Term Outcome :</b></td>
+                            <td>
+                                <select class="form-control" id="termOut" name="termOut" title="Please select term outcome" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="Invalid – Please Verify">Invalid – Please Verify</option>
+                                    <option value="Assay Recent">Assay Recent</option>
+                                    <option value="Long Term">Long Term</option>
+                                </select>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td><b>Gender :</b></td>
+                            <td>
+                                <select class="form-control" id="gender" name="gender"  title="Please select gender" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="not_reported">Not Reported</option>
+                                </select>
+                            </td>
+                            <td><b>Final Outcome :</b></td>
+                            <td>
+                                <select class="form-control" id="finalOutcome" name="finalOutcome" title="Please select fianl outcome" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="RITA Recent">RITA Recent</option>
+                                    <option value="Long Term">Long Term</option>
+                                    <option value="Invalid">Invalid</option>
+                                    <option value="Assay Negative">Assay Negative</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
+                                &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr/>
                     <table id="facilityDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
                          <thead>
                               <tr>
@@ -94,6 +149,11 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 ],
                 "sAjaxSource": "<?php echo $this->url('recency',array('action' => 'index')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
+                    aoData.push({"name": "fName", "value": $("#facilityName").val()});
+                    aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
+                    aoData.push({"name": "gender", "value": $("#gender").val()});
+                    aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
+
                     $.ajax({
                         "dataType": 'json',
                         "type": "POST",
@@ -104,6 +164,11 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 }
             } );
           });
+          function searchVlRequestData(){
+            $.blockUI();
+            oTable.fnDraw();
+            $.unblockUI();
+        }
         
         function exportRecencyData()
         {
