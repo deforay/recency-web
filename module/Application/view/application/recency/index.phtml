@@ -81,10 +81,107 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                         <tr>
                             <td colspan="4"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
                                 &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+                                &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
                             </td>
                         </tr>
                     </table>
-                    <hr/>
+                    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;width:70%;" id="showhide">
+                    
+			<div class="row" style="background:#eee;padding: 15px;border-radius:20px;font-size:13px;">
+            <div class="col-sm-12 " style=""><a href="javascript:void(0);" style="float:right;font-size:20px;color:red;font-weight:bold" onclick="closeDiv()" title="Close">X</a></div>
+					<?php $i = 0; ?>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="sample_id" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Sample Id</label>
+				    </div>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_id" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Patient Id</label> <br>
+				    </div>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Facility Name</label>
+				    </div>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="hiv_diagnosis_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">HIV Diagnosis Date</label> <br>
+				    </div>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="hiv_recency_date"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">HIV Recency Date</label>
+				    </div>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="control_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Control Line</label>
+				    </div>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="positive_verification_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Positive Verification Line</label>
+				    </div>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="long_term_verification_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Long Term Verification Line</label>
+				    </div>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="kit_lot_no"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">KIT Lot No</label>
+				    </div>
+				    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="kit_expiry_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">KIT Expiry Date</label>
+				    </div>
+						<div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="term_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Term Outcome</label>
+				    </div>
+						<div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="final_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Final Outcome</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="vl_result" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Vl Result</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="tester_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Tester Name</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="dob" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">DOB</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="age" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Age</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="gender" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Gender</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="martial_status" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Martial Status</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="residence" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Residence</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="education_level" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Education Level</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Risk Population</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="pregnancy_status" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Pregnancy Status</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="current_sexual_partner" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Current Sexual Partner</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="past_hiv_testing" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Past HIV Testing</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="last_hiv_status" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Last HIV Status</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_on_art" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Patient On ART</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="test_last_12_month" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Last 12 Month</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="exp_violence_last_12_month" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Experienced Violence Last 12 Month</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="form_initiation_datetime" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Form Initiation Datetime</label>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="form_transfer_datetime" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Form Transfer Datetime</label>
+				    </div>
+			    </div>
+			</span>
                     <table id="facilityDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
                          <thead>
                               <tr>
@@ -163,7 +260,35 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     });
                 }
             } );
-          });
+
+            $(".showhideCheckBox").change(function(){
+            if($(this).attr('checked')){
+                idpart = $(this).attr('data-showhide');
+                $("#"+idpart+"-sort").show();
+            }else{
+                idpart = $(this).attr('data-showhide');
+                $("#"+idpart+"-sort").hide();
+            }
+            });
+        
+				var i = '<?php echo $i;?>';
+        for(colNo=0;colNo <=i;colNo++){
+            $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
+            if(oTable.fnSettings().aoColumns[colNo].bVisible){
+                $("#iCol"+colNo+"-sort").show();    
+            }else{
+                $("#iCol"+colNo+"-sort").hide();    
+            }
+        }
+            } );
+        function closeDiv()
+        {
+            $("#showhide").fadeOut('slow');
+        }
+          function fnShowHide(iCol){
+                var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+                oTable.fnSetColumnVis( iCol, bVis ? false : true );
+            }
           function searchVlRequestData(){
             $.blockUI();
             oTable.fnDraw();

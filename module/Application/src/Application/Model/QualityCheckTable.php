@@ -319,9 +319,11 @@ class QualityCheckTable extends AbstractTableGateway {
                                     'term_outcome'=>$params['recencyOutcome'],
                                     'tester_name' => $qcTest['testerName'],
                                     'app_version'=>$qcTest['appVersion'],
-                                    'added_on' => date("Y-m-d H:i:s"),
-                                    'added_by' => $qcTest['userId'],
-
+                                    'added_on' => $qcTest['addedOn'],
+                                    'added_by' => $qcTest['addedBy'],
+                                    'sync_by' => $qcTest['syncedBy'],
+                                    'form_initiation_datetime'=>$recency['formInitDateTime'],
+                                    'form_transfer_datetime'=>date("Y-m-d H:i:s"),
                                 );
 
                                 $this->insert($data);
