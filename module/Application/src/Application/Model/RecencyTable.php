@@ -721,7 +721,7 @@ $data['final_outcome'] = 'Assay Negative';
                $sql = new Sql($dbAdapter);
                $query = $sql->select()->from(array('r'=>'recency'))
                ->columns(array("Total" => new Expression('COUNT(*)'),))
-               ->where(array('added_by'=>$userId));
+               ->where(array('sync_by'=>$userId));
                $queryStr = $sql->getSqlStringForSqlObject($query);
                $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                return $result;

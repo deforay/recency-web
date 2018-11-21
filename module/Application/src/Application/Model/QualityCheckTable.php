@@ -352,7 +352,7 @@ class QualityCheckTable extends AbstractTableGateway {
            $sql = new Sql($dbAdapter);
            $query = $sql->select()->from(array('qc'=>'quality_check_test'))
            ->columns(array("Total" => new Expression('COUNT(*)'),))
-           ->where(array('added_by'=>$userId));
+           ->where(array('sync_by'=>$userId));
            $queryStr = $sql->getSqlStringForSqlObject($query);
            $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
            // \Zend\Debug\Debug::dump($result);die;
