@@ -431,6 +431,7 @@ $lineOutComeColor2 = "#000000";
 </div>
 <!-- vivek -->
 <script src="<?php echo $this->basePath() . '/assets/js/plugins/namesearch/typeahead.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
 
 <!-- <script type="text/javascript" src="typeahead.js"></script> -->
 
@@ -620,6 +621,7 @@ $lineOutComeColor2 = "#000000";
      }
      function validateNow() {
           if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
+            if( ( $("#dob").val() != "" ) || ( $("#age").val() != "" ) ){
                flag = deforayValidator.init({
                     formId: 'recencyInformation'
                });
@@ -629,6 +631,11 @@ $lineOutComeColor2 = "#000000";
                     document.getElementById('recencyInformation').submit();
                }
           }else{
+                                             $("#age").focus();
+                                             $("#age").css("border","1px solid rgb(207, 51, 57)");
+                                             alert("Please enter either DOB or age  ",'err');
+                                        }
+          }else{
                $("#sampleId").focus();
                $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
                alert("Please enter either sample or patient id  ",'err');
@@ -636,17 +643,25 @@ $lineOutComeColor2 = "#000000";
      }
 
      function ageCalculate(){
-          var today = new Date();
-          var birthDate = new Date($("#dob").val());
-          var dob = diff_years(today,birthDate);
-          $("#age").val(dob);
-     }
-     function diff_years(dt2, dt1)
-     {
-          var diff =(dt2.getTime() - dt1.getTime()) / 1000;
-          diff /= (60 * 60 * 24);
-          return Math.abs(Math.round(diff/365.25));
-     }
+
+        var agYrs = '';
+        var agMnths = '';
+        var dob = changeFormat($("#dob").val());
+        if($.trim(dob)!=''){
+            //calculate age
+            var years = moment().diff(dob, 'years',false);
+            var months = (years == 0)?moment().diff(dob, 'months',false):'';
+            $("#age").val(years); // Gives difference as years
+        }
+    }
+    function changeFormat(date){
+        splitDate = date.split("-");
+        var fDate = new Date(splitDate[1] + splitDate[2]+", "+splitDate[0]);
+        var monthDigit = fDate.getMonth();
+        var fMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
+        fMonth = (fMonth<10) ? '0'+fMonth: fMonth;
+        return splitDate[2]+'-'+fMonth+'-'+splitDate[0];
+    }
      function getLocationDeatils(globalName)
      {
           var selectValue = document.getElementById(globalName).value;
