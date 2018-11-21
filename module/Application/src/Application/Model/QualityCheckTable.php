@@ -286,7 +286,7 @@ class QualityCheckTable extends AbstractTableGateway {
                  if(isset($params["qc"])){
                         //check user status active or not
                         $uQuery = $sql->select()->from('users')
-                                        ->where(array('user_id' => $params["qc"][0]['userId']));
+                                        ->where(array('user_id' => $params["qc"][0]['syncedBy']));
                         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
                         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                         if(isset($uResult['status']) && $uResult['status']=='inactive'){
@@ -301,7 +301,7 @@ class QualityCheckTable extends AbstractTableGateway {
                       foreach($params["qc"] as $key => $qcTest){
                            try{
 
-                                $userId = $qcTest['userId'];
+                                $syncedBy = $qcTest['syncedBy'];
                                 $data = array(
                                     'qc_sample_id' => $qcTest['qcsampleId'],
                                     'qc_test_date'=>($qcTest['qcTestDate']!='')?$common->dbDateFormat($qcTest['qcTestDate']):NULL,
@@ -341,30 +341,30 @@ class QualityCheckTable extends AbstractTableGateway {
                       $i++;
                 }
             }
-            $response['syncCount']['response'] = $this->getTotalSyncCount($userId);
-            $response['syncCount']['tenRecord'] = $this->getQCSyncData($userId);
+            $response['syncCount']['response'] = $this->getTotalSyncCount($syncedBy);
+            $response['syncCount']['tenRecord'] = $this->getQCSyncData($syncedBy);
             return $response;
       }
 
-      public function getTotalSyncCount($userId)
+      public function getTotalSyncCount($syncedBy)
       {
            $dbAdapter = $this->adapter;
            $sql = new Sql($dbAdapter);
            $query = $sql->select()->from(array('qc'=>'quality_check_test'))
            ->columns(array("Total" => new Expression('COUNT(*)'),))
-           ->where(array('sync_by'=>$userId));
+           ->where(array('sync_by'=>$syncedBy));
            $queryStr = $sql->getSqlStringForSqlObject($query);
            $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
            // \Zend\Debug\Debug::dump($result);die;
            return $result;
       }
 
-      public function getQCSyncData($userId)
+      public function getQCSyncData($syncedBy)
       {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $query = $sql->select()->from(array('qc'=>'quality_check_test'))
-                    ->where(array('added_by'=>$userId))
+                    ->where(array('sync_by'=>$syncedBy))
                     ->order("qc.qc_test_id DESC")
                     ->limit(10);
         $queryStr = $sql->getSqlStringForSqlObject($query);

@@ -492,7 +492,7 @@ $data['final_outcome'] = 'Assay Negative';
                     if(isset($params["form"])){
                         //check user status active or not
                         $uQuery = $sql->select()->from('users')
-                                        ->where(array('user_id' => $params["form"][0]['userId']));
+                                        ->where(array('user_id' => $params["form"][0]['syncedBy']));
                         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
                         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                         if(isset($uResult['status']) && $uResult['status']=='inactive'){
@@ -538,7 +538,7 @@ $data['final_outcome'] = 'Assay Negative';
                                         }
                                    }
 
-                                   $userId = $recency['userId'];
+                                   $syncedBy = $recency['syncedBy'];
                                    $data = array(
                                         'sample_id' => $recency['sampleId'],
                                         'patient_id' => $recency['patientId'],
@@ -627,7 +627,7 @@ $data['final_outcome'] = 'Assay Negative';
                     try{
                          if(isset($params['samtpleId']) && trim($params['sampleId'])!="")
                          {
-                              $userId = $recency['userId'];
+                              $syncedBy = $recency['syncedBy'];
                               $data = array(
                                    'sample_id' => $params['sampleId'],
                                    'patient_id' => $params['patientId'],
@@ -654,8 +654,9 @@ $data['final_outcome'] = 'Assay Negative';
                                    'location_one' => $params['locationOne'],
                                    'location_two' => $params['locationTwo'],
                                    'location_three' => $params['locationThree'],
-                                   'added_on' => date("Y-m-d H:i:s"),
-                                   'added_by' => $params['userId'],
+                                   'added_on' => $params['addedOn'],
+                                        'added_by' => $params['addedBy'],
+                                        'sync_by' => $params['syncedBy'],
                                    'exp_violence_last_12_month'=>$params['violenceLast12Month'],
                                    'mac_no'=>$params['macAddress'],
                                    'cell_phone_number'=>$params['phoneNumber'],
@@ -696,7 +697,11 @@ $data['final_outcome'] = 'Assay Negative';
                          error_log($exc->getTraceAsString());
                     }
                }
-               $response['syncCount']['response'] = $this->getTotalSyncCount($userId);
+               if($syncedBy!=''){
+                $response['syncCount']['response'] = $this->getTotalSyncCount($syncedBy);
+               }else{
+                $response['syncCount']['response'] = 0;
+               }
                return $response;
           }
           public function fetchRecencyOrderDetails($id)
@@ -715,13 +720,13 @@ $data['final_outcome'] = 'Assay Negative';
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                return $rResult;
           }
-          public function getTotalSyncCount($userId)
+          public function getTotalSyncCount($syncedBy)
           {
                $dbAdapter = $this->adapter;
                $sql = new Sql($dbAdapter);
                $query = $sql->select()->from(array('r'=>'recency'))
                ->columns(array("Total" => new Expression('COUNT(*)'),))
-               ->where(array('sync_by'=>$userId));
+               ->where(array('sync_by'=>$syncedBy));
                $queryStr = $sql->getSqlStringForSqlObject($query);
                $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                return $result;
