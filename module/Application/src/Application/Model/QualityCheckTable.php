@@ -103,6 +103,12 @@ class QualityCheckTable extends AbstractTableGateway {
                          $sQuery->where($sWhere);
                     }
 
+                        // \Zend\Debug\Debug::dump($parameters);die;
+
+                    if($parameters['tOutcome']!=''){
+                        $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
+                    }
+                    
                     if (isset($sOrder) && $sOrder != "") {
                          $sQuery->order($sOrder);
                     }

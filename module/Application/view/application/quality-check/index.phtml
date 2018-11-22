@@ -28,7 +28,76 @@ $roleCode = $sessionLogin->roleCode;
                <div class="block-header block-header-default">
                </div>
                <div class="block-content block-content-full">
+
+                    <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+                        <tr>
+                            <td><b>Term Outcome :</b></td>
+                            <td>
+                                <select class="form-control" id="termOut" name="termOut" title="Please select term outcome" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="Invalid – Please Verify">Invalid – Please Verify</option>
+                                    <option value="Assay Recent">Assay Recent</option>
+                                    <option value="Long Term">Long Term</option>
+                                </select>
+
+                    
+                                <td colspan="4"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
+                                &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+                                &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
+                                </td>
+                    
+                            </td>
+
+                            
+                        </tr>
+                      
+                    </table>
+                    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;width:70%;" id="showhide">
+                
+                        <div class="row" style="background:#eee;padding: 15px;border-radius:20px;font-size:13px;">
+                            <div class="col-sm-12 " style=""><a href="javascript:void(0);" style="float:right;font-size:20px;color:red;font-weight:bold" onclick="closeDiv()" title="Close">X</a>
+                            </div>
+                             
+                            <?php $i = 0; ?>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="qc_sample_id" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Qc Sample Id</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="qc_test_date" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">QC Date</label> <br>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="reference_result" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Reference Result</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="kit_lot_no" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Kit Lot No.</label> <br>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="kit_expiry_date"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Kit Expiry Date</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="hiv_recency_date"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">HIV Recency Date</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="control_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Control Line</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="positive_verification_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Positive Verification</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="long_term_verification_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Long Term Verification</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="term_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Term Outcome</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="tester_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Tester Name</label>
+                                </div>
+                        </div>
+                    </span>
+                     
+
                     <table id="qcDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
+                   
                          <thead>
                               <tr>
                                     <th>QC Sample Id</th>
@@ -73,6 +142,9 @@ $roleCode = $sessionLogin->roleCode;
                 ],
                 "sAjaxSource": "<?php echo $this->url('quality-check',array('action' => 'index')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
+
+                    aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
+                    
                     $.ajax({
                         "dataType": 'json',
                         "type": "POST",
@@ -83,7 +155,46 @@ $roleCode = $sessionLogin->roleCode;
                 }
             } );
 
-          } );
+            $(".showhideCheckBox").change(function(){
+                if($(this).attr('checked')){
+                    idpart = $(this).attr('data-showhide');
+                    $("#"+idpart+"-sort").show();
+                }else{
+                    idpart = $(this).attr('data-showhide');
+                    $("#"+idpart+"-sort").hide();
+                }
+            });
+         
+            var i = '<?php echo $i;?>';
+            for(colNo=0;colNo <=i;colNo++){
+                $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
+                
+                if(oTable.fnSettings().aoColumns[colNo].bVisible){
+                     $("#iCol"+colNo+"-sort").show();    
+                }else{
+                     $("#iCol"+colNo+"-sort").hide();    
+                }
+            }
+
+        } );
+
+        function closeDiv()
+        {
+             $("#showhide").fadeOut('slow');
+        }
+
+        function fnShowHide(iCol)
+        {
+            var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+                oTable.fnSetColumnVis( iCol, bVis ? false : true );
+        }
+
+        function searchVlRequestData()
+        {
+            $.blockUI();
+            oTable.fnDraw();
+            $.unblockUI();
+        }
 
         function exportQCData()
         {

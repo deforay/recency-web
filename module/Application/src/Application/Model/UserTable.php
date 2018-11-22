@@ -280,7 +280,7 @@ class UserTable extends AbstractTableGateway {
                 'qc_sync_in_days'=>$params['noOfDays']
 
             );
-            if($params['password']!=''){
+            if($params['servPass']!=''){
                 $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
                 $data['server_password'] = $password;
             }
@@ -351,10 +351,12 @@ class UserTable extends AbstractTableGateway {
     }
     public function updateProfile($params)
     {
+
+        
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
-
+        
         if(isset($params['userId']) && trim($params['userId'])!="")
         {
             $data = array(
@@ -366,10 +368,11 @@ class UserTable extends AbstractTableGateway {
                 'job_responsibility' => $params['JobResponse'],
                 'comments' => $params['comments'],
             );
-            if($params['password']!=''){
+            if($params['servPass']!=''){
                 $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
                 $data['server_password'] = $password;
             }
+            // \Zend\Debug\Debug::dump($data);die;
             $updateResult = $this->update($data,array('user_id'=>base64_decode($params['userId'])));
             $lastInsertedId = base64_decode($params['userId']);
         }

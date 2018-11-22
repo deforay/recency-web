@@ -133,8 +133,8 @@ if($result['term_outcome']==''){
                               <div class="col-sm-4">
                                    <select class="form-control disbaledResult isRequired" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
                                         <option value="">--Select--</option>
-                                        <option value="present" <?php echo($result['positive_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present</option>
-                                        <option value="absent" <?php echo($result['positive_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
+                                        <option value="present" <?php echo($result['positive_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present(Positive/P)</option>
+                                        <option value="absent" <?php echo($result['positive_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent(Negative/N)</option>
                                    </select>
                               </div>
                          </div>
@@ -144,8 +144,8 @@ if($result['term_outcome']==''){
                               <div class="col-sm-4">
                                    <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
                                         <option value="">--Select--</option>
-                                        <option value="present" <?php echo($result['long_term_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present</option>
-                                        <option value="absent" <?php echo($result['long_term_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent</option>
+                                        <option value="present" <?php echo($result['long_term_verification_line'] == 'present' )?'selected="selected"':''; ?>>Present(Long Term/LT)</option>
+                                        <option value="absent" <?php echo($result['long_term_verification_line'] == 'absent' )?'selected="selected"':''; ?>>Absent(Recent/R)</option>
                                    </select>
                                    <br>
                               </div>
@@ -199,13 +199,13 @@ if($result['term_outcome']==''){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
                }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
-                    $("#outcome").html('HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $("#outcome").html('Assay HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
                }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
                }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
-                    $("#outcome").html('Preliminary Recent').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $("#outcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
                     $(".outcome").css({"display":"block"});
                }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
                     $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
