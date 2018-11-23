@@ -30,7 +30,6 @@ class RecencyController extends AbstractActionController
           $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
-
                $recencyService = $this->getServiceLocator()->get('RecencyService');
                $result = $recencyService->addRecencyDetails($params);
                return $this->_redirect()->toRoute('recency');
@@ -85,7 +84,7 @@ class RecencyController extends AbstractActionController
           $facilityResult=$facilityService->getFacilitiesAllDetails();
           $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
           $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
-          
+
           if ($result) {
                return new ViewModel(array(
                     'globalConfigResult' => $globalConfigResult,
