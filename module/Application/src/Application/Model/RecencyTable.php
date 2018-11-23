@@ -99,10 +99,9 @@ class RecencyTable extends AbstractTableGateway {
                     $sql = new Sql($dbAdapter);
                     $roleId=$sessionLogin->roleId;
 
-                    $sQuery = $sql->select()->from(array( 'r' => 'recency' ))
-                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-                    ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'))
-                    ;
+                    $sQuery =   $sql->select()->from(array( 'r' => 'recency' ))
+                                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name') , 'left')
+                                    ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name') , 'left');
 
                     if (isset($sWhere) && $sWhere != "") {
                          $sQuery->where($sWhere);
@@ -134,7 +133,7 @@ class RecencyTable extends AbstractTableGateway {
 
                     $queryContainer->exportRecencyDataQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-                    //   echo $sQueryStr;die;
+                    //echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
                     /* Data set length after filtering */
@@ -145,8 +144,8 @@ class RecencyTable extends AbstractTableGateway {
                     $iFilteredTotal = count($aResultFilterTotal);
 
                     /* Total data set length */
-                    $iQuery = $sql->select()->from(array( 'r' => 'recency' ))
-                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
+                    $iQuery =   $sql->select()->from(array( 'r' => 'recency' ))
+                                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left');
                     if($roleCode=='user'){
                          $iQuery = $iQuery->where('r.added_by='.$sessionLogin->userId);
                     }
