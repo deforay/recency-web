@@ -37,9 +37,9 @@ $lineOutComeColor2 = "#000000";
                <div class="col-md-12 table-responsive" id="hide">
                     <form name="qcAddInformation" id="qcAddInformation"  class="mb-5" action="<?php echo $this->url('quality-check', array('action' => 'add')); ?>" method="post">
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Qc Sample Id </label>
+                              <label class="col-sm-2 col-form-label" for="">Qc Sample Id  <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control " id="qcSampleId" name="qcSampleId" placeholder="Enter the QC Sample id" title="Please enter the QC Sample id" >
+                                   <input type="text" class="form-control isRequired" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC Sample id" title="Please enter the QC Sample id" >
                               </div>
 
                               <label class="col-sm-2 col-form-label" for="">Qc Test Date <span class="mandatory">*</span></label>
@@ -59,16 +59,16 @@ $lineOutComeColor2 = "#000000";
                                    </select>
                               </div>
 
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot No </label>
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot No <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control " id="testKitLotNo" name="testKitLotNo" placeholder="Enter the test Kit Lot No" title="Please enter the test Kit Lot No">
+                                   <input type="text" class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" placeholder="Enter the test Kit Lot No" title="Please enter the test Kit Lot No">
                               </div>
                          </div>
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date </label>
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="js-datepicker form-control " id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
+                                   <input type="text" class="js-datepicker form-control isRequired " id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                               </div>
                               <label class="col-sm-2 col-form-label" for="">HIV Recency Date<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
@@ -95,9 +95,7 @@ $lineOutComeColor2 = "#000000";
                          </div> -->
 
                          <div class="form-group row">
-                              
-
-                              <label class="col-sm-2 col-form-label" for="">Control Line<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Control Line <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control disbaledResult isRequired" id="controlLine" name="controlLine" title="Please select the control line"  onchange="changeTermLine()">
                                         <option value="">--Select--</option>
@@ -116,7 +114,7 @@ $lineOutComeColor2 = "#000000";
                          </div>
 
                          <div class="form-group row">
-                              
+
                               <label class="col-sm-2 col-form-label" for="">Long Term Verification<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line"  onchange="changeTermLine()">
@@ -132,9 +130,9 @@ $lineOutComeColor2 = "#000000";
                                    <span class="outcome form-control" style="border:none;" id="outcome"></span>
                                    <input type="hidden" name="outcomeData" id="outcomeData"/>
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Tester Name</label>
+                              <label class="col-sm-2 col-form-label" for="">Tester Name<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" name="testerName" id="testerName" class="form-control" placeholder="Enter the tester name" title="Please enter the tester name"/>
+                                   <input type="text" name="testerName" id="testerName" class="form-control isRequired" placeholder="Enter the tester name" title="Please enter the tester name"/>
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Comments</label>
                               <div class="col-sm-4">
