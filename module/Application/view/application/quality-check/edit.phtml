@@ -60,9 +60,9 @@ if($result['term_outcome']==''){
                     <form name="qcEditInformation" id="qcEditInformation"  class="mb-5" action="<?php echo $this->url('quality-check', array('action' => 'edit')); ?>" method="post">
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Qc Sample Id </label>
+                              <label class="col-sm-2 col-form-label" for="">Qc Sample Id <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $result['qc_sample_id']; ?>" class="form-control" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC sample id" title="Please enter the QC sample id">
+                                   <input type="text" value="<?php echo $result['qc_sample_id']; ?>" class="form-control isRequired" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC sample id" title="Please enter the QC sample id">
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Qc Test Date<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
@@ -80,17 +80,17 @@ if($result['term_outcome']==''){
                                         <option value="hiv_negative_sample" <?php echo($result['reference_result'] == 'hiv_negative_sample' )?'selected="selected"':''; ?>>HIV Negative Sample</option>
                                    </select>
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot No.</label>
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot No.<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $result['kit_lot_no']; ?>"  class="form-control" id="testKitLotNo" name="testKitLotNo" placeholder="Enter the test Kit Lot No" title="Please enter the test Kit Lot No">
+                                   <input type="text" value="<?php echo $result['kit_lot_no']; ?>"  class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" placeholder="Enter the test Kit Lot No" title="Please enter the test Kit Lot No">
                               </div>
 
                          </div>
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date</label>
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $testKitExpiryDateFormat; ?>" class="js-datepicker form-control" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
+                                   <input type="text" value="<?php echo $testKitExpiryDateFormat; ?>" class="js-datepicker form-control isRequired" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                               </div>
                               <label class="col-sm-2 col-form-label" for="">HIV Recency Date <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
@@ -154,13 +154,13 @@ if($result['term_outcome']==''){
                                    <span class="outcome form-control" style="border:none;" id="outcome"><?php echo $result['term_outcome'];?></span>
                                    <input type="hidden" name="outcomeData" id="outcomeData" value="<?php echo $result['term_outcome'];?>"/>
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Tester Name</label>
+                              <label class="col-sm-2 col-form-label" for="">Tester Name<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $result['tester_name']; ?>" class="form-control" id="testerName" name="testerName" placeholder="Enter the tester name" title="Please enter the tester name">
+                                   <input type="text" value="<?php echo $result['tester_name']; ?>" class="form-control isRequired" id="testerName" name="testerName" placeholder="Enter the tester name" title="Please enter the tester name">
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Comments</label>
+                              <label class="col-sm-2 col-form-label" for="">Comments<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <textarea class="form-control" name="comment" id="comment" title="Please enter comments"><?php echo $result['comment'];?></textarea>
+                                   <textarea class="form-control isRequired" name="comment" id="comment" title="Please enter comments"><?php echo $result['comment'];?></textarea>
                               </div>
                          </div>
                         
@@ -285,6 +285,7 @@ if($result['term_outcome']==''){
           //      $('#otherRecencyTestNotPerformedReason').show();
           //      $("#otherRecencyTestNotPerformedReason").addClass("isRequired");
           // }
+          changeTermLine();
      });
 
 </script>

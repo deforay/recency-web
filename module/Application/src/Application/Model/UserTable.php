@@ -372,7 +372,7 @@ class UserTable extends AbstractTableGateway {
                 $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
                 $data['server_password'] = $password;
             }
-            // \Zend\Debug\Debug::dump($data);die;
+
             $updateResult = $this->update($data,array('user_id'=>base64_decode($params['userId'])));
             $lastInsertedId = base64_decode($params['userId']);
         }

@@ -790,6 +790,9 @@ $data['final_outcome'] = 'Assay Negative';
                          if(isset($params['facility']) && $params['facility']!=''){
                             $sQuery = $sQuery->where(array('f.facility_id'=>$params['facility'])); 
                          }
+                         if(isset($params['onloadData']) && $params['onloadData']=='yes'){
+                            $sQuery = $sQuery->where(array('r.vl_result is not null'));
+                         }
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             return $rResult;

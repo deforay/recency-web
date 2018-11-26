@@ -66,19 +66,19 @@ $sessionLogin = new Container('credo');
 </div>
 <script type="text/javascript">
     duplicateName = true;
-    function searchData() {
+    function searchData(onloadData=null) {
         var province = $("#location_one").val();
         var district = $("#location_two").val();
         var city = $("#location_three").val();
         var facility = $("#facilityId").val();
-        if($.trim(province)!= '' || $.trim(facility)!=''){
+        //if($.trim(province)!= '' || $.trim(facility)!=''){
             $.blockUI();
-            $.post("<?php echo $this->url('vl-data', array('action' => 'get-sample-data')); ?>", {province:province,district:district,city:city,facility:facility },
+            $.post("<?php echo $this->url('vl-data', array('action' => 'get-sample-data')); ?>", {province:province,district:district,city:city,facility:facility,onloadData:onloadData },
             function(data) {
                 $.unblockUI();
                 $("#recencyData").html(data);
             });
-        }
+        //}
     }
     
     $(document).ready(function(){
@@ -90,6 +90,7 @@ $sessionLogin = new Container('credo');
              break;
          }
          ?>
+         searchData('yes');
     });
     function getLocationDeatils(globalName,nxtGlobalName)
      {
@@ -163,5 +164,10 @@ $sessionLogin = new Container('credo');
                 searchData();
             });
         }
+     }
+     function editVlResult(id)
+     {
+         $("#span"+id).hide();
+         $("#"+id).show();
      }
 </script>

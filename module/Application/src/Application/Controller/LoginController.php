@@ -21,11 +21,7 @@ class LoginController extends AbstractActionController{
         }
         if (isset($logincontainer->userId) && $logincontainer->userId != "") {
              $alertContainer = new Container('alert');
-             if($logincontainer->roleCode=='VLTS'){
-                return $this->redirect()->toRoute("vl-data");
-             }else{
             return $this->redirect()->toRoute("home");
-             }
         } else {
             $viewModel = new ViewModel();
             $viewModel->setTerminal(true);

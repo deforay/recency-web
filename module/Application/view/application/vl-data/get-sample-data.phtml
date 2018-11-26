@@ -7,7 +7,7 @@ $common = new \Application\Service\CommonService();
 <table class="table table-bordered table-striped table-vcenter" id="sampleData">
 <thead>
                         <tr>
-    <th>Sample ID</th><th>Patient ID</th><th>Recency Date</th><th>Viral Load Result</th><th>Recency Outcome</th><th>Final outcome</th>
+    <th>Sample ID</th><th>Patient ID</th><th>Recency Date</th><th>Viral Load Result</th><th>Recency Outcome</th><th>Final outcome</th><th>Action</th>
 </tr>
 </thead>
 <?php
@@ -20,13 +20,27 @@ if(count($result)>0){
         <td><?php echo $common->humanDateFormat($sample['hiv_recency_date']);?></td>
         <td>
         <?php
-        if($sample['term_outcome']!='' && $sample['final_outcome']=='' && $sample['vl_result']==''){
-        ?>
-            <input type="text" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" onchange="getVlResult();"/>
-        <?php }else{ echo $sample['vl_result']; } ?>
+        if($sample['term_outcome']!='' && $sample['term_outcome']=='Long Term' && $sample['final_outcome']=='Long Term'){
+        }else if($sample['term_outcome']!=''){
+            if($sample['vl_result']==''){ ?>
+                <input type="text" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
+            <?php }else{ ?>
+        <span id="span<?php echo $sample['recency_id'];?>"><?php echo $sample['vl_result'];?></span>
+        <input style="display:none;" type="text" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
+            <?php }
+         } ?>
         </td>
         <td><?php echo $sample['term_outcome'];?></td>
         <td><?php echo $sample['final_outcome'];?></td>
+        <td>
+        <?php
+        if($sample['vl_result']!=''){
+            ?>
+                <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="editVlResult('<?php echo $sample['recency_id'];?>');"> <i class="fa fa-edit"></i> Edit</a>
+            <?php
+        }
+        ?>
+        </td>
     </tr>
     <?php
     }
