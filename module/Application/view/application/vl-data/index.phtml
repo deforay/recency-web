@@ -9,6 +9,13 @@ $sessionLogin = new Container('credo');
     opacity: 1;
     width: 130px;
 }
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
 </style>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -87,14 +94,13 @@ $sessionLogin = new Container('credo');
     }
     
     $(document).ready(function(){
-        <?php
-         foreach($globalConfigResult as $config){
+
+        <?php foreach($globalConfigResult as $config){
              ?>
              getLocationDeatils('<?php echo $config["global_name"];?>');
              <?php
              break;
-         }
-         ?>
+         } ?>
          searchData('yes');
     });
     function getLocationDeatils(globalName,nxtGlobalName)
