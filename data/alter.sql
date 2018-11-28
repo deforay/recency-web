@@ -127,3 +127,8 @@ ALTER TABLE `users` ADD `qc_sync_in_days` VARCHAR(255) NULL DEFAULT NULL AFTER `
 -- saravanan 21-nov-2018
 ALTER TABLE `recency` ADD `sync_by` INT NULL DEFAULT NULL AFTER `added_by`;
 ALTER TABLE `quality_check_test` ADD `form_initiation_datetime` DATETIME NULL DEFAULT NULL AFTER `app_version`, ADD `form_transfer_datetime` DATETIME NULL DEFAULT NULL AFTER `form_initiation_datetime`, ADD `sync_by` INT NULL DEFAULT NULL AFTER `form_transfer_datetime`;
+
+-- Thanaseelan 27 Nov, 2018
+ALTER TABLE `recency` ADD `vl_test_date` DATE NULL DEFAULT NULL AFTER `vl_result`;
+
+ALTER TABLE `recency` ADD `vl_result_entry_date` DATETIME NOT NULL AFTER `vl_test_date`;

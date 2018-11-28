@@ -45,7 +45,9 @@ class UserTable extends AbstractTableGateway {
                 $logincontainer->roleCode = $rResult->role_code;
                 $logincontainer->userName = ucwords($rResult->user_name);
                 $logincontainer->userEmail = ucwords($rResult->email);
-                if($rResult->role_code != 'admin'){
+                if($rResult->role_code == 'VLTS'){
+                    return 'vl-data';
+                }else if($rResult->role_code != 'admin'){
                     return 'recency';
                 }else{
                     return 'facilities';

@@ -442,28 +442,176 @@ $data['final_outcome'] = 'Assay Negative';
                     ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'),'left')
                     ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'),'left')
                     ->where(array('auth_token' =>$params['authToken']));
+
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                    
                     if( isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['role_code']=='admin' ){
-                         $response['status']='success';
                          $rececnyQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
                          ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
                          ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'))
                          ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'));
+                         if(isset($params['start']) && isset($params['end'])){
+                              $rececnyQuery = $rececnyQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
+                         }
                          $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
                          $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                         $response['recency'] = $recencyResult;
+                         if(count($recencyResult) > 0){
+                              $response['status']='success';
+                              $response['recency'] = $recencyResult;
+                         }else{
+                              $response["status"] = "fail";
+                              $response["message"] = "You don't have recency data!";
+                         }
                     }
                     else if(isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['status']=='active') {
-                         $response['status']='success';
                          $rececnyQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
                          ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
                          ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'))
                          ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'))
                          ->where(array('auth_token' =>$params['authToken']));
+                         if(isset($params['start']) && isset($params['end'])){
+                              $rececnyQuery = $rececnyQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
+                         }
                          $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
                          $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                         $response['recency'] = $recencyResult;
+                         if(count($recencyResult) > 0){
+                              $response['status']='success';
+                              $response['recency'] = $recencyResult;
+                         }else{
+                              $response["status"] = "fail";
+                              $response["message"] = "You don't have recency data!";
+                         }
+                    }
+                    else if($rResult['status']=='inactive'){
+                         $response["status"] = "fail";
+                         $response["message"] = "Your status is Inactive!";
+                    }else if($rResult['recency_id'] == ""){
+                         $response["status"] = "fail";
+                         $response["message"] = "You don't have recency data!";
+                    }
+                    else {
+                         $response["status"] = "fail";
+                         $response["message"] = "Please check your token credentials!";
+                    }
+                    return $response;
+               }
+               
+               public function fetchAllRecencyResultWithVlListApi($params)
+               {
+                    $common = new CommonService();
+                    $config = new \Zend\Config\Reader\Ini();
+                    $dbAdapter = $this->adapter;
+                    $sql = new Sql($dbAdapter);
+
+                    $sQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
+                    ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
+                    ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'),'left')
+                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'),'left')
+                    ->where(array('auth_token' =>$params['authToken']));
+
+                    $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+                    $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                    
+                    if( isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['role_code']=='admin' ){
+                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
+                                             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+                                             ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
+                         
+                         if(isset($params['start']) && isset($params['end'])){
+                              $rececnyQuery = $rececnyQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
+                         }
+                         $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+                         $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                         if(count($recencyResult) > 0){
+                              $response['status']='success';
+                              $response['recency'] = $recencyResult;
+                         }else{
+                              $response["status"] = "fail";
+                              $response["message"] = "You don't have recency data!";
+                         }
+                    }
+                    else if(isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['status']=='active') {
+                         $rececnyQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id'))
+                                             ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
+                                             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+                                             ->where(array('auth_token' =>$params['authToken']))
+                                             ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
+
+                         if(isset($params['start']) && isset($params['end'])){
+                              $rececnyQuery = $rececnyQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
+                         }
+                         $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+                         $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                         if(count($recencyResult) > 0){
+                              $response['status']='success';
+                              $response['recency'] = $recencyResult;
+                         }else{
+                              $response["status"] = "fail";
+                              $response["message"] = "You don't have recency data!";
+                         }
+                    }
+                    else if($rResult['status']=='inactive'){
+                         $response["status"] = "fail";
+                         $response["message"] = "Your status is Inactive!";
+                    }else if($rResult['recency_id'] == ""){
+                         $response["status"] = "fail";
+                         $response["message"] = "You don't have recency data!";
+                    }
+                    else {
+                         $response["status"] = "fail";
+                         $response["message"] = "Please check your token credentials!";
+                    }
+                    return $response;
+               }
+               
+               public function fetchAllPendingVlResultListApi($params)
+               {
+                    $common = new CommonService();
+                    $config = new \Zend\Config\Reader\Ini();
+                    $dbAdapter = $this->adapter;
+                    $sql = new Sql($dbAdapter);
+
+                    $sQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
+                    ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
+                    ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('*'),'left')
+                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'),'left')
+                    ->where(array('auth_token' =>$params['authToken']));
+
+                    $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+                    $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                    
+                    if( isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['role_code']=='admin' ){
+                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date', 'sample_id', 'term_outcome'))
+                                             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+                                             ->where('r.vl_result IS NULL OR r.vl_result = ""');
+                         
+                         $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+                         $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                         if(count($recencyResult) > 0){
+                              $response['status']='success';
+                              $response['recency'] = $recencyResult;
+                         }else{
+                              $response["status"] = "fail";
+                              $response["message"] = "You don't have recency data!";
+                         }
+                    }
+                    else if(isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['status']=='active') {
+                         $rececnyQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id'))
+                         ->join(array('r' => 'recency'), 'u.user_id = r.added_by', array('sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
+                         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+                         ->where(array('auth_token' =>$params['authToken']))
+                         ->where('r.vl_result IS NULL OR r.vl_result = ""');;
+                         
+                         $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+                         $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                         if(count($recencyResult) > 0){
+                              $response['status']='success';
+                              $response['recency'] = $recencyResult;
+                         }else{
+                              $response["status"] = "fail";
+                              $response["message"] = "You don't have recency data!";
+                         }
                     }
                     else if($rResult['status']=='inactive'){
                          $response["status"] = "fail";
@@ -776,7 +924,7 @@ $data['final_outcome'] = 'Assay Negative';
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
 
-            $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id','patient_id','recency_id','hiv_recency_date','term_outcome','vl_result','final_outcome'))
+            $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_date', 'term_outcome', 'vl_result', 'final_outcome'))
                          ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'));
                          if(isset($params['province']) && $params['province']!=''){
                             $sQuery = $sQuery->where(array('f.province'=>$params['province'])); 
@@ -788,7 +936,7 @@ $data['final_outcome'] = 'Assay Negative';
                             $sQuery = $sQuery->where(array('f.city'=>$params['city'])); 
                          }
                          if(isset($params['facility']) && $params['facility']!=''){
-                            $sQuery = $sQuery->where(array('f.facility_id'=>$params['facility'])); 
+                            $sQuery = $sQuery->where(array('r.vl_test_date'=>$params['vlTestDate'])); 
                          }
                          if(isset($params['onloadData']) && $params['onloadData']=='yes'){
                             $sQuery = $sQuery->where(array('r.vl_result is not null'));
@@ -800,18 +948,20 @@ $data['final_outcome'] = 'Assay Negative';
 
           public function updateVlSampleResult($params)
           {
-              $sampleVlResult = explode(",",$params['vlResult']);
-              $sampleVlResultId = explode(",",$params['vlResultRowId']);
-              $dataOutcome = explode(",",$params['vlDataOutCome']);
-              foreach($sampleVlResult as $key=>$result){
-                  $data = array('vl_result'=>$result);
-                if (strpos($dataOutcome[$key], 'Recent') !== false && $result >= 1000) {
-                    $data['final_outcome'] = 'RITA Recent';
-                }else if (strpos($dataOutcome[$key], 'Recent') !== false && $result <= 1000) {
-                    $data['final_outcome'] = 'Long Term';
-                }
-                $this->update($data,array('recency_id'=>$sampleVlResultId[$key]));
-              }
+               $common = new CommonService();
+               $sampleVlResult = explode(",",$params['vlResult']);
+               $sampleVlResultId = explode(",",$params['vlResultRowId']);
+               $dataOutcome = explode(",",$params['vlDataOutCome']);
+               foreach($sampleVlResult as $key=>$result){
+                    $data = array('vl_result'=>$result);
+                    $data = array('vl_test_date'=>$common->dbDateFormat($params['vlTestDate'][$key]));
+                    if (strpos($dataOutcome[$key], 'Recent') !== false && $result >= 1000) {
+                         $data['final_outcome'] = 'RITA Recent';
+                    }else if (strpos($dataOutcome[$key], 'Recent') !== false && $result <= 1000) {
+                         $data['final_outcome'] = 'Long Term';
+                    }
+                    $this->update($data,array('recency_id'=>$sampleVlResultId[$key]));
+               }
           }
      }
 

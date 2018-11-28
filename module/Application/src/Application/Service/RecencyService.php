@@ -88,6 +88,18 @@ class RecencyService {
           $recencyDb = $this->sm->get('RecencyTable');
           return $recencyDb->fetchAllRecencyListApi($params);
      }
+     
+     public function getAllRecencyResultWithVlListApi($params)
+     {
+          $recencyDb = $this->sm->get('RecencyTable');
+          return $recencyDb->fetchAllRecencyResultWithVlListApi($params);
+     }
+     
+     public function getAllPendingVlResultListApi($params)
+     {
+          $recencyDb = $this->sm->get('RecencyTable');
+          return $recencyDb->fetchAllPendingVlResultListApi($params);
+     }
 
      public function addRecencyDataApi($params)
      {

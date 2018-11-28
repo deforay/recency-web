@@ -156,9 +156,15 @@ $sessionLogin = new Container('credo');
      function updateVlResult()
      {
         var confrm = confirm("Are you sure want to update vl result?");
+        var vlTestDate = $("input[name='vlTestDate[]']").map(function () {
+            return this.value; 
+        }).get();
+        var recencyId = $("input[name='recencyId[]']").map(function () {
+            return this.value; 
+        }).get();
         if(confrm){
             $.blockUI();
-            $.post("<?php echo $this->url('vl-data', array('action' => 'update-vl-sample-result')); ?>", {vlResult:$("#vlEnteredDataResult").val(),vlResultRowId:$("#vlEnteredDataId").val(),vlDataOutCome:$("#vlDataOutCome").val()},
+            $.post("<?php echo $this->url('vl-data', array('action' => 'update-vl-sample-result')); ?>", {vlResult:$("#vlEnteredDataResult").val(),vlResultRowId:$("#vlEnteredDataId").val(),vlDataOutCome:$("#vlDataOutCome").val(),vlTestDate:vlTestDate,recencyId:recencyId},
             function(data) {
                 alert('VL Result updated');
                 searchData();

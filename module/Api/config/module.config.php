@@ -43,6 +43,32 @@ return array(
                     ),
                ),
 
+               'api-recency-result-with-vl' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/recency-result-with-vl[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\RecencyResultWithVl',
+                         ),
+                    ),
+               ),
+               
+               'api-pending-vl-result' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/pending-vl-result[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\PendingVlResult',
+                         ),
+                    ),
+               ),
+
                'api-risk-populations' => array(
                     'type'    => 'segment',
                     'options' => array(
@@ -139,6 +165,8 @@ return array(
                'Api\Controller\Login' => 'Api\Controller\LoginController',
                'Api\Controller\Facility' => 'Api\Controller\FacilityController',
                'Api\Controller\Recency' => 'Api\Controller\RecencyController',
+               'Api\Controller\RecencyResultWithVl' => 'Api\Controller\RecencyResultWithVlController',
+               'Api\Controller\PendingVlResult' => 'Api\Controller\PendingVlResultController',
                'Api\Controller\RiskPopulations' => 'Api\Controller\RiskPopulationsController',
                'Api\Controller\GlobalConfig' => 'Api\Controller\GlobalConfigController',
 
