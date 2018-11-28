@@ -21,9 +21,15 @@ if(count($result)>0){
         <td>
         <?php if($sample['final_outcome'] ==''){
             if($sample['vl_test_date']==''){ ?>
-                <input type="hidden" name="recencyId[]" value="<?php echo base64_encode($sample['recency_id']);?>">
+                <input type="text" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id'];?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" title="Please enter the vl test date" readonly="readonly">
             <?php }else{ ?>
-                <span><?php echo $common->humanDateFormat($sample['vl_test_date']);?></span>
+                <span id="vlDateSpan<?php echo $sample['recency_id'];?>"><?php echo $common->humanDateFormat($sample['vl_test_date']);?></span>
+                <input style="display:none;" type="text" value="<?php echo $common->humanDateFormat($sample['vl_test_date']);?>" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id'];?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" title="Please enter the vl test date" readonly="readonly">
+            <?php }
+         }else{
+            if($sample['vl_test_date']!=''){ ?>
+                <input type="hidden" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id'];?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="<?php echo $common->humanDateFormat($sample['vl_test_date']);?>" title="Please enter the vl test date">
+                <span id="vlDateSpan<?php echo $sample['recency_id'];?>"><?php echo $common->humanDateFormat($sample['vl_test_date']);?></span>
             <?php }
          } ?>
         </td>
@@ -32,6 +38,11 @@ if(count($result)>0){
             if($sample['vl_result']==''){ ?>
                 <input type="text" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
             <?php }else{ ?>
+                <span id="span<?php echo $sample['recency_id'];?>"><?php echo $sample['vl_result'];?></span>
+                <input style="display:none;" type="text" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
+            <?php }
+         }else{
+            if($sample['vl_result']!=''){ ?>
                 <span id="span<?php echo $sample['recency_id'];?>"><?php echo $sample['vl_result'];?></span>
                 <input style="display:none;" type="text" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
             <?php }

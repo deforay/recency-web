@@ -953,8 +953,10 @@ $data['final_outcome'] = 'Assay Negative';
                $sampleVlResultId = explode(",",$params['vlResultRowId']);
                $dataOutcome = explode(",",$params['vlDataOutCome']);
                foreach($sampleVlResult as $key=>$result){
-                    $data = array('vl_result'=>$result);
-                    $data = array('vl_test_date'=>$common->dbDateFormat($params['vlTestDate'][$key]));
+                    $data = array(
+                         'vl_result'=>$result,
+                         'vl_test_date'=>$common->dbDateFormat($params['vlTestDate'][$key])
+                    );
                     if (strpos($dataOutcome[$key], 'Recent') !== false && $result >= 1000) {
                          $data['final_outcome'] = 'RITA Recent';
                     }else if (strpos($dataOutcome[$key], 'Recent') !== false && $result <= 1000) {

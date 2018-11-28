@@ -4,6 +4,11 @@ $sessionLogin = new Container('credo');
 ?>
 <style>
 .saveResult { pointer-events : none;}
+.form-control:disabled, .form-control[readonly] {
+    background-color: #e9ecef00;
+    opacity: 1;
+    width: 130px;
+}
 </style>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -174,6 +179,8 @@ $sessionLogin = new Container('credo');
      function editVlResult(id)
      {
          $("#span"+id).hide();
+         $("#vlDateSpan"+id).hide();
          $("#"+id).show();
+         $("#vlTestDate"+id).show();
      }
 </script>
