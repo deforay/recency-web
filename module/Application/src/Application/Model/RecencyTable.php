@@ -591,11 +591,13 @@ $data['final_outcome'] = 'Assay Negative';
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
                     if( isset($rResult[0]['user_id']) && $rResult[0]['user_id']!='' && $rResult[0]['role_code']=='admin' ){
-                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date', 'sample_id', 'term_outcome','final_outcome'))
+                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date', 'sample_id', 'term_outcome','final_outcome','vl_result'))
                                              ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-                                             ->where('r.vl_result IS NULL OR r.vl_result = ""');
+                                             ->where( "(r.vl_result IS NULL OR r.vl_result = '') AND  r.term_outcome='Assay Recent' ");
+
 
                          $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+
                          $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                          if(count($recencyResult) > 0){
                               $response['status']='success';
@@ -633,6 +635,7 @@ $data['final_outcome'] = 'Assay Negative';
                          $response["status"] = "fail";
                          $response["message"] = "Please check your token credentials!";
                     }
+
                     return $response;
                }
 
