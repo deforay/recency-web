@@ -287,6 +287,7 @@ class QualityCheckTable extends AbstractTableGateway {
                  $facilityDb = new FacilitiesTable($this->adapter);
                  $globalDb = new GlobalConfigTable($this->adapter);
                  $riskPopulationDb = new RiskPopulationsTable($this->adapter);
+                 $globalDb = new GlobalConfigTable($this->adapter);                 
                  $common = new CommonService();
 
                  if(isset($params["qc"])){
@@ -361,7 +362,7 @@ class QualityCheckTable extends AbstractTableGateway {
            ->where(array('sync_by'=>$syncedBy));
            $queryStr = $sql->getSqlStringForSqlObject($query);
            $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-           // \Zend\Debug\Debug::dump($result);die;
+           //\Zend\Debug\Debug::dump($result);die;
            return $result;
       }
 

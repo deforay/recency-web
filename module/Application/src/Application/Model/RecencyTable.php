@@ -446,17 +446,18 @@ $data['final_outcome'] = 'Assay Negative';
                         $response["message"] = "Your status is Inactive!";
                     }else if(isset($uResult['status']) && $uResult['status']=='active'){
                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))
-                                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'));
+                                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'))
+                                    ->join(array('u' => 'users'), 'u.user_id = r.added_by', array());
                                     if($uResult['role_code']!='admin'){
-                                        $rececnyQuery = $rececnyQuery->where(array('auth_token' =>$params['authToken']));
+                                        $rececnyQuery = $rececnyQuery->where(array('u.auth_token' =>$params['authToken'],'r.added_by'=>$uResult['user_id']));
                                     }
 
                                     if(isset($params['start']) && isset($params['end'])){
                                         $rececnyQuery = $rececnyQuery->where(
                                             array(
-                                                "(r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", 
+                                                "((r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", 
                                                 "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."') OR 
-                                                (r.hiv_recency_date is null or r.hiv_recency_date = '' or r.hiv_recency_date ='0000-00-00 00:00:00')"
+                                                (r.hiv_recency_date is null or r.hiv_recency_date = '' or r.hiv_recency_date ='0000-00-00 00:00:00'))"
                                             )
                                         );
                                     }
@@ -495,9 +496,10 @@ $data['final_outcome'] = 'Assay Negative';
                     }else if(isset($uResult['status']) && $uResult['status']=='active'){
                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
                                         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+                                        ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
                                         ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
                                         if($uResult['role_code']!='admin'){
-                                            $rececnyQuery = $rececnyQuery->where(array('auth_token' =>$params['authToken']));
+                                            $rececnyQuery = $rececnyQuery->where(array('u.auth_token' =>$params['authToken']));
                                         }
                                         if(isset($params['start']) && isset($params['end'])){
                                             $rececnyQuery = $rececnyQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
@@ -537,11 +539,12 @@ $data['final_outcome'] = 'Assay Negative';
                     }else if(isset($uResult['status']) && $uResult['status']=='active'){
                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date', 'sample_id', 'term_outcome','final_outcome','vl_result'))
                                              ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-                                             ->where( "(r.vl_result IS NULL OR r.vl_result = '') AND  r.term_outcome='Assay Recent' ");
+                                             ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
+                                             ->where( "((r.vl_result IS NULL OR r.vl_result = '') AND  r.term_outcome='Assay Recent')");
                                              if($uResult['role_code']!='admin'){
-                                                $rececnyQuery = $rececnyQuery->where(array('auth_token' =>$params['authToken']));
+                                                $rececnyQuery = $rececnyQuery->where(array('u.auth_token' =>$params['authToken']));
                                             }
-                        $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+                         $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
                         $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                         if(count($recencyResult) > 0){
                             $response['status']='success';
