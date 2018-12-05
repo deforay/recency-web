@@ -36,4 +36,5 @@ class GlobalConfigController extends AbstractActionController
             ));
         }
     }
+
 }

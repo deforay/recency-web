@@ -164,7 +164,16 @@ class GlobalConfigTable extends AbstractTableGateway {
             $selectedValue[] = $decodeAllFields[$index];
         }
         $MantatoryUpdateResult = $this->update(array('global_value' => implode(",",$selectedValue) ), array('global_name' => 'mandatory_fields'));
-        if($MantatoryUpdateResult > 0){
+
+        $selectedDataIndex2 = explode(",",$params['selectedRecencyDataAttr2']);
+        sort($selectedDataIndex2);
+        $decodeAllFields2  = json_decode($params['allFields2']);
+        foreach($selectedDataIndex2 as $index){
+            $selectedValue2[] = $decodeAllFields2[$index];
+        }
+        $MantatoryUpdateResult2 = $this->update(array('global_value' => implode(",",$selectedValue2) ), array('global_name' => 'display_fields'));
+        
+        if($MantatoryUpdateResult > 0 || $MantatoryUpdateResult2 > 0){
             $result = 1;
         }
         return $result;

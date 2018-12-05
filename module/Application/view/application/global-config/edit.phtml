@@ -19,6 +19,19 @@ $formFields = array('Sample Id','Patient Id','Facility Name','Province','Distric
 ,'Dob','Age','Gender','Pregnancy Status','Marital Status','Education Level',
 'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments');
 $allFileds = json_encode($formFields);
+
+$resultArr2 = array();
+//Set selected field
+if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
+  $resultArr2 = explode(",",$arr['display_fields']);
+}
+
+$formFields2 = array('Sample Id','Patient Id','Facility Name','Province','District','City','Hiv Diagnosis Date'
+,'Past Hiv Testing','Test Last 12 Month','Last HIV Status','Patient on ART','Hiv Recency Date','Control Line',
+'Positive Verification Line','Long Term Verification Line','Test Kit Lot No','Kit Expiry Date','Tester Name'
+,'Dob','Age','Gender','Pregnancy Status','Marital Status','Education Level',
+'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments');
+$allFileds2 = json_encode($formFields2);
 ?>
 <style>
     .select2-selection__choice{
@@ -29,6 +42,16 @@ $allFileds = json_encode($formFields);
         color: dimgray;
     }
     button#search_rightAll:hover, button#search_rightSelected:hover, button#search_leftSelected:hover, button#search_leftAll:hover {
+        background-color: #dbe4ef;
+        color: black;
+        font-weight : 700;
+    }
+    
+    button#search2_rightAll, button#search2_rightSelected, button#search2_leftSelected, button#search2_leftAll {
+        background-color: #e1effe;
+        color: dimgray;
+    }
+    button#search2_rightAll:hover, button#search2_rightSelected:hover, button#search2_leftSelected:hover, button#search2_leftAll:hover {
         background-color: #dbe4ef;
         color: black;
         font-weight : 700;
@@ -60,7 +83,7 @@ $allFileds = json_encode($formFields);
                     <div class="form-group row">
                     <?php foreach($globalConfigResult as $config){ ?>
                         <div class="col-md-6">
-                            <?php if($config['global_name'] != 'mandatory_fields'){ ?>
+                            <?php if($config['global_name'] != 'mandatory_fields' && $config['global_name'] != 'display_fields'){ ?>
                                 <label class="col-form-label" for=""><?php echo ucfirst($config['display_name']); ?><span class="mandatory">*</span></label>
                                 <div class="">
                                     <input type="text" value="<?php echo $config['global_value']; ?>" class="form-control isRequired" id="configValue" name="<?php echo $config['global_name']; ?>" placeholder="Enter the config value" title="Please enter the config value">
@@ -123,12 +146,71 @@ $allFileds = json_encode($formFields);
                             </select>
                         </div>
                     </div>
+                    
+                    <div class="display-fields">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[6]['display_name']); ?><span class="mandatory">*</span></label>
+                            <div class="col-sm-4">
+                                <select  id="search2" class="form-control" size="8" multiple="multiple">
+                                    <option value="Sample Id" data-index='0' <?php echo(in_array("Sample Id",$resultArr2)?"selected='selected'":""); ?>>Sample ID</option>
+                                    <option value="Patient Id"  data-index='1' <?php echo(in_array("Patient Id",$resultArr2)?"selected='selected'":""); ?>>Patient ID</option>
+                                    <option value="Facility Name" data-index='2' <?php echo(in_array("Facility Name",$resultArr2)?"selected='selected'":""); ?>>Facility Name</option>
+                                    <option value="Province" data-index='3' <?php echo(in_array("Province",$resultArr2)?"selected='selected'":""); ?>>Province</option>
+                                    <option value="District" data-index='4' <?php echo(in_array("District",$resultArr2)?"selected='selected'":""); ?>>District</option>
+                                    <option value="City" data-index='5' <?php echo(in_array("City",$resultArr2)?"selected='selected'":""); ?>>City</option>
+                                    <option value="Hiv Diagnosis Date" data-index='6' <?php echo(in_array("Hiv Diagnosis Date",$resultArr2)?"selected='selected'":""); ?>>HIV Diagnosis Date</option>
+                                    <option value="Past Hiv Testing" data-index='7' <?php echo(in_array("Past Hiv Testing",$resultArr2)?"selected='selected'":""); ?>>Past HIV Testing</option>
+                                    <option value="Test Last 12 Month" data-index='8' <?php echo(in_array("Test Last 12 Month",$resultArr2)?"selected='selected'":""); ?>>Test Last 12 Month</option>
+                                    <option value="Last HIV Status" data-index='9' <?php echo(in_array("Last HIV Status",$resultArr2)?"selected='selected'":""); ?>>Last HIV Status</option>
+                                    <option value="Patient on ART" data-index='10' <?php echo(in_array("Patient on ART",$resultArr2)?"selected='selected'":""); ?>>Patient on ART</option>
+                                    <option value="Hiv Recency Date" data-index='11' <?php echo(in_array("Hiv Recency Date",$resultArr2)?"selected='selected'":""); ?>>HIV Recency Date</option>
+                                    <option value="Control Line" data-index='12' <?php echo(in_array("Control Line",$resultArr2)?"selected='selected'":""); ?>>Control Line</option>
+                                    <option value="Positive Verification Line" data-index='13' <?php echo(in_array("Positive Verification Line",$resultArr2)?"selected='selected'":""); ?>>Positive Verification Line</option>
+                                    <option value="Long Term Verification Line" data-index='14' <?php echo(in_array("Long Term Verification Line",$resultArr2)?"selected='selected'":""); ?>>Long Term Verification Line</option>
+                                    <option value="Test Kit Lot No" data-index='15' <?php echo(in_array("Test Kit Lot No",$resultArr2)?"selected='selected'":""); ?>>Test Kit Lot No</option>
+                                    <option value="Kit Expiry Date" data-index='16' <?php echo(in_array("Kit Expiry Date",$resultArr2)?"selected='selected'":""); ?>>Test Kit Expiry Date</option>
+                                    <option value="Tester Name" data-index='17' <?php echo(in_array("Tester Name",$resultArr2)?"selected='selected'":""); ?>>Tester Name</option>
+                                    <option value="Dob" data-index='18' <?php echo(in_array("Dob",$resultArr2)?"selected='selected'":""); ?>>Date Of Birth</option>
+                                    <option value="Age" data-index='19' <?php echo(in_array("Age",$resultArr2)?"selected='selected'":""); ?>>Age</option>
+                                    <option value="Gender" data-index='20' <?php echo(in_array("Gender",$resultArr2)?"selected='selected'":""); ?>>Gender</option>
+                                    <option value="Pregnancy Status" data-index='21' <?php echo(in_array("Pregnancy Status",$resultArr2)?"selected='selected'":""); ?>>Pregnancy Status</option>
+                                    <option value="Marital Status" data-index='22' <?php echo(in_array("Marital Status",$resultArr2)?"selected='selected'":""); ?>>Marital Status</option>
+                                    <option value="Education Level" data-index='23' <?php echo(in_array("Education Level",$resultArr2)?"selected='selected'":""); ?>>Education Level</option>
+                                    <option value="Risk Population" data-index='24' <?php echo(in_array("Risk Population",$resultArr2)?"selected='selected'":""); ?>>Risk Population</option>
+                                    <option value="Residence" data-index='25' <?php echo(in_array("Residence",$resultArr2)?"selected='selected'":""); ?>>Residence</option>
+                                    <option value="Current Sexual Partner" data-index='26' <?php echo(in_array("Current Sexual Partner",$resultArr2)?"selected='selected'":""); ?>>Current Sexual Partner</option>
+                                    <option value="Experience Violence Last 12 Month" data-index='27' <?php echo(in_array("Experience Violence Last 12 Month",$resultArr2)?"selected='selected'":""); ?>>Experience Violence Last 12 Month</option>
+                                    <option value="Comments" data-index='28' <?php echo(in_array("Comments",$resultArr2)?"selected='selected'":""); ?>>Comments</option>
+                                </select>
+                            </div>
 
+                            <div class="col-md-2">
+                                <button type="button" id="search2_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
+                                <button type="button" id="search2_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
+                                <button type="button" id="search2_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
+                                <button type="button" id="search2_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <select name="to2[]" id="search2_to" class="form-control" size="8" multiple="multiple">
+                                    <?php foreach($resultArr2 as $result){ ?>
+                                        <option data-index='<?php echo array_search($result, $formFields2);?>' value="<?php echo $result; ?>"><?php echo ucwords($result); ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="row items-push">
                         <div class="col-lg-7 offset-lg-4">
                             <input type="hidden" name="selectedRecencyUser" id="selectedRecencyUser"/>
                             <input type="hidden" name="selectedRecencyDataAttr" id="selectedRecencyDataAttr"/>
+                            
+                            <input type="hidden" name="selectedRecencyUser2" id="selectedRecencyUser2"/>
+                            <input type="hidden" name="selectedRecencyDataAttr2" id="selectedRecencyDataAttr2"/>
+                            
                             <input type="hidden" name="allFields" id="allFields" value='<?php echo $allFileds;?>'/>
+                            <input type="hidden" name="allFields2" id="allFields2" value='<?php echo $allFileds2;?>'/>
                             <a href="<?php echo $this->url('global-config', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
                             <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i>Submit</button>
                         </div>
@@ -138,17 +220,31 @@ $allFileds = json_encode($formFields);
         </div>
     </div>
 </div>
-<script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+<!-- <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script> -->
+<script src="<?php echo $this->basePath() . '/assets/js/multiselect.min.js'; ?>"></script>
+
 <script type="text/javascript">
 function validateNow() {
     var selVal = [];
     var selDataValue = [];
+    
+    var selVal2 = [];
+    var selDataValue2 = [];
+    
     $('#search_to option').each(function(i, selected){
         selVal[i] = $(selected).val();
         selDataValue[i] = selected.attributes['data-index'].nodeValue;
     });
+    $('#search2_to option').each(function(j, selected){
+        selVal2[j] = $(selected).val();
+        selDataValue2[j] = selected.attributes['data-index'].nodeValue;
+    });
+
     $("#selectedRecencyUser").val(selVal);
     $("#selectedRecencyDataAttr").val(selDataValue);
+    
+    $("#selectedRecencyUser2").val(selVal2);
+    $("#selectedRecencyDataAttr2").val(selDataValue2);
      flag = deforayValidator.init({
           formId: 'globalConfigTable'
      });
@@ -165,9 +261,28 @@ $(document).ready(function($){
             right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
         },
         fireSearch: function(value) {
-            return value.length > 3;
+            return value.length > 0;
         },
         sort : false,
     });
+    $('#search2').multiselect({
+        search: {
+            left: '<input type="text" name="q2" class="form-control" placeholder="Search..." />',
+            right: '<input type="text" name="q2" class="form-control" placeholder="Search..." />',
+        },
+        fireSearch: function(value) {
+            return value.length > 0;
+        },
+        sort : false,
+    });
+});
+
+$('#search').multiSelect({
+  afterSelect: function(values){
+    alert("Select value: "+values);
+  },
+  afterDeselect: function(values){
+    alert("Deselect value: "+values);
+  }
 });
 </script>

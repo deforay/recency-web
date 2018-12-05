@@ -435,7 +435,7 @@ $data['final_outcome'] = 'Assay Negative';
                     $common = new CommonService();
                     $dbAdapter = $this->adapter;
                     $sql = new Sql($dbAdapter);
-//check the user is active or not
+                    //check the user is active or not
                     $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
                                     ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
                                     ->where(array('auth_token' =>$params['authToken']));
@@ -679,13 +679,13 @@ $data['final_outcome'] = 'Assay Negative';
                                    }
                                    if (strpos($recency['recencyOutcome'], 'Long Term') !== false)
                                    {
-$data['final_outcome'] = 'Long Term';
+                                        $data['final_outcome'] = 'Long Term';
                                    }else if (strpos($recency['recencyOutcome'], 'Invalid') !== false)
                                    {
-$data['final_outcome'] = 'Invalid';
+                                        $data['final_outcome'] = 'Invalid';
                                    }else if (strpos($recency['recencyOutcome'], 'Negative') !== false)
                                    {
-$data['final_outcome'] = 'Assay Negative';
+                                        $data['final_outcome'] = 'Assay Negative';
                                    }
 
                                    $this->insert($data);

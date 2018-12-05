@@ -132,3 +132,7 @@ ALTER TABLE `quality_check_test` ADD `form_initiation_datetime` DATETIME NULL DE
 ALTER TABLE `recency` ADD `vl_test_date` DATE NULL DEFAULT NULL AFTER `vl_result`;
 
 ALTER TABLE `recency` ADD `vl_result_entry_date` DATETIME NOT NULL AFTER `vl_test_date`;
+
+
+-- Thanaseelan 03 Dec, 2018
+INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Recency Display Fields', 'display_fields', NULL);
