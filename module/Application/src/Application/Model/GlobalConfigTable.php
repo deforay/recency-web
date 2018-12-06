@@ -300,7 +300,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         // $response['fields'] = array_values($row);
         if(isset($explodField) && $explodField !='') {
             $response['status']='success';
-            $response['fields'] = $row;
+            $response['fields'] = array($row);
         } else {
             $response["status"] = "failed";
             $response["message"] = "Data not found!";

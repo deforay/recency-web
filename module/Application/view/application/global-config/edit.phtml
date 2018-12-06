@@ -255,7 +255,7 @@ function validateNow() {
 }
 
 $(document).ready(function($){
-    setReqValue();
+    // setReqValue();
     $('#search').multiselect({
         search: {
             left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
@@ -284,11 +284,16 @@ $("#search_leftAll").click(function(){setReqValue();});
 function setReqValue(){
     console.log($('#search2').val());
     var reqVal = [];
+    var reqVal2 = [];
     $("select#search").each(function(i, sel){
         var selectedVal = $(sel).val();
         reqVal.push(selectedVal);
-        
     });
+    $("select#search").each(function(i, sel){
+        var selectedVal = $(sel).val();
+        reqVal2.push(selectedVal);
+    });
+    $.inArray(obj.value, selectedPrintedRows)
     var valReq = reqVal.join();
     var valReq2 = valReq.split(',');
     for( i=0; i<valReq2.length; i++) {
