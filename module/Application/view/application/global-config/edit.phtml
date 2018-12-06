@@ -17,7 +17,7 @@ $formFields = array('Sample Id','Patient Id','Facility Name','Province','Distric
 ,'Past Hiv Testing','Test Last 12 Month','Last HIV Status','Patient on ART','Hiv Recency Date','Control Line',
 'Positive Verification Line','Long Term Verification Line','Test Kit Lot No','Kit Expiry Date','Tester Name'
 ,'Dob','Age','Gender','Pregnancy Status','Marital Status','Education Level',
-'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments');
+'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments','Recency Test not performed');
 $allFileds = json_encode($formFields);
 
 $resultArr2 = array();
@@ -30,7 +30,7 @@ $formFields2 = array('Sample Id','Patient Id','Facility Name','Province','Distri
 ,'Past Hiv Testing','Test Last 12 Month','Last HIV Status','Patient on ART','Hiv Recency Date','Control Line',
 'Positive Verification Line','Long Term Verification Line','Test Kit Lot No','Kit Expiry Date','Tester Name'
 ,'Dob','Age','Gender','Pregnancy Status','Marital Status','Education Level',
-'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments');
+'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments','Recency Test not performed');
 $allFileds2 = json_encode($formFields2);
 ?>
 <style>
@@ -127,6 +127,7 @@ $allFileds2 = json_encode($formFields2);
                                 <option value="Current Sexual Partner" data-index='26' <?php echo(in_array("Current Sexual Partner",$resultArr)?"selected='selected'":""); ?>>Current Sexual Partner</option>
                                 <option value="Experience Violence Last 12 Month" data-index='27' <?php echo(in_array("Experience Violence Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Experience Violence Last 12 Month</option>
                                 <option value="Comments" data-index='28' <?php echo(in_array("Comments",$resultArr)?"selected='selected'":""); ?>>Comments</option>
+                                <option value="Recency Test not performed" data-index='29' <?php echo(in_array("Recency Test not performed",$resultArr)?"selected='selected'":""); ?>>Recency Test not performed</option>
                             </select>
                         </div>
 
@@ -180,6 +181,7 @@ $allFileds2 = json_encode($formFields2);
                                     <option value="Current Sexual Partner" data-index='26' <?php echo(in_array("Current Sexual Partner",$resultArr2)?"selected='selected'":""); ?>>Current Sexual Partner</option>
                                     <option value="Experience Violence Last 12 Month" data-index='27' <?php echo(in_array("Experience Violence Last 12 Month",$resultArr2)?"selected='selected'":""); ?>>Experience Violence Last 12 Month</option>
                                     <option value="Comments" data-index='28' <?php echo(in_array("Comments",$resultArr2)?"selected='selected'":""); ?>>Comments</option>
+                                    <option value="Recency Test not performed" data-index='29' <?php echo(in_array("Recency Test not performed",$resultArr2)?"selected='selected'":""); ?>>Recency Test not performed</option>
                                 </select>
                             </div>
 

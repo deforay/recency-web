@@ -301,17 +301,13 @@ class RecencyTable extends AbstractTableGateway {
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               'tester_name'=>$params['testerName'],
                          );
-                         if (strpos($params['outcomeData'], 'Long Term') !== false)
-                         {
-$data['final_outcome'] = 'Long Term';
-                         }else if (strpos($params['outcomeData'], 'Invalid') !== false)
-                         {
-$data['final_outcome'] = 'Invalid';
-                         }else if (strpos($params['outcomeData'], 'Negative') !== false)
-                         {
-$data['final_outcome'] = 'Assay Negative';
+                         if (strpos($params['outcomeData'], 'Long Term') !== false){
+                              $data['final_outcome'] = 'Long Term';
+                         }else if (strpos($params['outcomeData'], 'Invalid') !== false){
+                              $data['final_outcome'] = 'Invalid';
+                         }else if (strpos($params['outcomeData'], 'Negative') !== false){
+                              $data['final_outcome'] = 'Assay Negative';
                          }
-                         // \Zend\Debug\Debug::dump($data);die;
 
                          $this->insert($data);
 

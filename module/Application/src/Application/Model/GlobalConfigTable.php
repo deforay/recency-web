@@ -153,6 +153,7 @@ class GlobalConfigTable extends AbstractTableGateway {
 
     public function updateGlobalConfigDetails($params)
     {
+        // \Zend\Debug\Debug::dump($params);die;
         $result = 1;
         foreach ($params as $fieldName => $fieldValue) {
             $this->update(array('global_value' => $fieldValue), array('global_name' => $fieldName));
