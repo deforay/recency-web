@@ -282,18 +282,18 @@ $("#search_rightSelected").click(function(){setReqValue();});
 $("#search_leftSelected").click(function(){setReqValue();});
 $("#search_leftAll").click(function(){setReqValue();});
 function setReqValue(){
-    console.log($('#search2').val());
     var reqVal = [];
     var reqVal2 = [];
     $("select#search").each(function(i, sel){
         var selectedVal = $(sel).val();
         reqVal.push(selectedVal);
     });
-    $("select#search").each(function(i, sel){
+    $("select#search2").each(function(i, sel){
         var selectedVal = $(sel).val();
         reqVal2.push(selectedVal);
     });
-    $.inArray(obj.value, selectedPrintedRows)
+    // var data = $.inArray(reqVal, selectedPrintedRows)
+    console.log(reqVal);
     var valReq = reqVal.join();
     var valReq2 = valReq.split(',');
     for( i=0; i<valReq2.length; i++) {
