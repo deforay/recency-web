@@ -97,7 +97,7 @@ $allFileds2 = json_encode($formFields2);
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[3]['display_name']); ?><span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <select  id="search" class="form-control" size="8" multiple="multiple">
+                            <select  id="search" class="form-control" size="8" multiple="multiple" onchange="setReqValue();">
                                 <option value="Sample Id" data-index='0' <?php echo(in_array("Sample Id",$resultArr)?"selected='selected'":""); ?>>Sample ID</option>
                                 <option value="Patient Id"  data-index='1' <?php echo(in_array("Patient Id",$resultArr)?"selected='selected'":""); ?>>Patient ID</option>
                                 <option value="Facility Name" data-index='2' <?php echo(in_array("Facility Name",$resultArr)?"selected='selected'":""); ?>>Facility Name</option>
@@ -127,7 +127,6 @@ $allFileds2 = json_encode($formFields2);
                                 <option value="Current Sexual Partner" data-index='26' <?php echo(in_array("Current Sexual Partner",$resultArr)?"selected='selected'":""); ?>>Current Sexual Partner</option>
                                 <option value="Experience Violence Last 12 Month" data-index='27' <?php echo(in_array("Experience Violence Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Experience Violence Last 12 Month</option>
                                 <option value="Comments" data-index='28' <?php echo(in_array("Comments",$resultArr)?"selected='selected'":""); ?>>Comments</option>
-                                <!-- <option value="Test Kit Name" data-index='25' < ?php echo(in_array("Test Kit Name",$resultArr)?"selected='selected'":""); ?>>Test Kit Name</option> -->
                             </select>
                         </div>
 
@@ -139,7 +138,7 @@ $allFileds2 = json_encode($formFields2);
                         </div>
 
                         <div class="col-sm-4">
-                            <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
+                            <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple" onchange="setReqValue();">
                                 <?php foreach($resultArr as $result){ ?>
                                     <option data-index='<?php echo array_search($result, $formFields);?>' value="<?php echo $result; ?>"><?php echo ucwords($result); ?></option>
                                 <?php } ?>
@@ -254,7 +253,9 @@ function validateNow() {
         document.getElementById('globalConfigTable').submit();
      }
 }
+
 $(document).ready(function($){
+    setReqValue();
     $('#search').multiselect({
         search: {
             left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
@@ -276,13 +277,22 @@ $(document).ready(function($){
         sort : false,
     });
 });
-
-$('#search').multiSelect({
-  afterSelect: function(values){
-    alert("Select value: "+values);
-  },
-  afterDeselect: function(values){
-    alert("Deselect value: "+values);
-  }
-});
+$("#search_rightAll").click(function(){setReqValue();});
+$("#search_rightSelected").click(function(){setReqValue();});
+$("#search_leftSelected").click(function(){setReqValue();});
+$("#search_leftAll").click(function(){setReqValue();});
+function setReqValue(){
+    console.log($('#search2').val());
+    var reqVal = [];
+    $("select#search").each(function(i, sel){
+        var selectedVal = $(sel).val();
+        reqVal.push(selectedVal);
+        
+    });
+    var valReq = reqVal.join();
+    var valReq2 = valReq.split(',');
+    for( i=0; i<valReq2.length; i++) {
+        $("#search2").find('option[value="'+valReq2[i]+'"]').prop('disabled', true); 
+    }
+}
 </script>

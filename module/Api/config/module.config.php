@@ -134,16 +134,28 @@ return array(
                     ),
                ),
                'api-recency-mandatory' => array(
-                'type'    => 'segment',
-                'options' => array(
-                     'route'    => '/api/recency-mandatory[/:id]',
-                     'constraints' => array(
-                          'id'     => '[0-9]+',
-                     ),
-                     'defaults' => array(
-                          'controller' => 'Api\Controller\RecencyMandatory',
-                     ),
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/recency-mandatory[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\RecencyMandatory',
+                         ),
+                    ),
                 ),
+               'api-recency-hide' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/recency-hide[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\RecencyHide',
+                         ),
+                    ),
                 ),
                 'api-quality-check' => array(
                     'type'    => 'segment',
@@ -174,6 +186,7 @@ return array(
                'Api\Controller\District' => 'Api\Controller\DistrictController',
                'Api\Controller\City' => 'Api\Controller\CityController',
                'Api\Controller\RecencyMandatory' => 'Api\Controller\RecencyMandatoryController',
+               'Api\Controller\RecencyHide' => 'Api\Controller\RecencyHideController',
                'Api\Controller\QualityCheck' => 'Api\Controller\QualityCheckController',
 
 
