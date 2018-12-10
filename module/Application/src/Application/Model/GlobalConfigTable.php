@@ -267,7 +267,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
             $explodField = explode(",",$arr['display_fields']);
         }
-        $row['sampleId'] = in_array("Sample Id",$explodField)? true:false;
+        $row['sampleId'] = in_array("Sample Id",$explodField)?true:false;
         $row['patientId'] = in_array("Patient Id",$explodField)?true:false;
         $row['facilityId'] = in_array("Facility Name",$explodField)?true:false;
         $row['location_one'] = in_array("Province",$explodField)?true:false;

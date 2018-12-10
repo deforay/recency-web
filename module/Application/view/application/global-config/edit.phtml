@@ -206,10 +206,8 @@ $allFileds2 = json_encode($formFields2);
                         <div class="col-lg-7 offset-lg-4">
                             <input type="hidden" name="selectedRecencyUser" id="selectedRecencyUser"/>
                             <input type="hidden" name="selectedRecencyDataAttr" id="selectedRecencyDataAttr"/>
-                            
                             <input type="hidden" name="selectedRecencyUser2" id="selectedRecencyUser2"/>
                             <input type="hidden" name="selectedRecencyDataAttr2" id="selectedRecencyDataAttr2"/>
-                            
                             <input type="hidden" name="allFields" id="allFields" value='<?php echo $allFileds;?>'/>
                             <input type="hidden" name="allFields2" id="allFields2" value='<?php echo $allFileds2;?>'/>
                             <a href="<?php echo $this->url('global-config', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
@@ -225,12 +223,12 @@ $allFileds2 = json_encode($formFields2);
 <script src="<?php echo $this->basePath() . '/assets/js/multiselect.min.js'; ?>"></script>
 
 <script type="text/javascript">
+var selVal = [];
+var selDataValue = [];
+
+var selVal2 = [];
+var selDataValue2 = [];
 function validateNow() {
-    var selVal = [];
-    var selDataValue = [];
-    
-    var selVal2 = [];
-    var selDataValue2 = [];
     
     $('#search_to option').each(function(i, selected){
         selVal[i] = $(selected).val();
@@ -257,7 +255,7 @@ function validateNow() {
 }
 
 $(document).ready(function($){
-    // setReqValue();
+    setReqValue();
     $('#search').multiselect({
         search: {
             left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
@@ -283,23 +281,28 @@ $("#search_rightAll").click(function(){setReqValue();});
 $("#search_rightSelected").click(function(){setReqValue();});
 $("#search_leftSelected").click(function(){setReqValue();});
 $("#search_leftAll").click(function(){setReqValue();});
+
 function setReqValue(){
-    var reqVal = [];
-    var reqVal2 = [];
-    $("select#search").each(function(i, sel){
-        var selectedVal = $(sel).val();
-        reqVal.push(selectedVal);
+    var seletedVal = [];
+    var seletedVal2 = [];
+
+    $('#search_to option').each(function(i, selected){
+        seletedVal[i] = $(selected).val();
     });
-    $("select#search2").each(function(i, sel){
-        var selectedVal = $(sel).val();
-        reqVal2.push(selectedVal);
+    $('#search2_to option').each(function(j, selected){
+        seletedVal2[j] = $(selected).val();
     });
-    // var data = $.inArray(reqVal, selectedPrintedRows)
-    console.log(reqVal);
-    var valReq = reqVal.join();
-    var valReq2 = valReq.split(',');
-    for( i=0; i<valReq2.length; i++) {
-        $("#search2").find('option[value="'+valReq2[i]+'"]').prop('disabled', true); 
-    }
+    
+    $.each(seletedVal, function(idx, val){
+        if($.inArray(val, seletedVal)){
+            $("#search2").find('option[value="'+val+'"]').prop('disabled', true); 
+        }
+        
+    });
+    $.each(seletedVal2, function(idx, val){
+        if($.inArray(val, seletedVal2)){
+            $("#search").find('option[value="'+val+'"]').prop('disabled', true); 
+        }
+    });
 }
 </script>
