@@ -136,3 +136,7 @@ ALTER TABLE `recency` ADD `vl_result_entry_date` DATETIME NOT NULL AFTER `vl_tes
 
 -- Thanaseelan 03 Dec, 2018
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Recency Display Fields', 'display_fields', NULL);
+
+
+-- Sasi & vivek 13 Dec, 2018
+ALTER TABLE `recency` ADD `form_saved_datetime` DATETIME NULL DEFAULT NULL AFTER `form_transfer_datetime`;

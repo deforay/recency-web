@@ -99,23 +99,23 @@ class RecencyTable extends AbstractTableGateway {
                     $roleId=$sessionLogin->roleId;
 
                     $sQuery =   $sql->select()->from(array( 'r' => 'recency' ))
-                                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name') , 'left')
-                                    ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name') , 'left');
+                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name') , 'left')
+                    ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name') , 'left');
 
                     if (isset($sWhere) && $sWhere != "") {
                          $sQuery->where($sWhere);
                     }
                     if($parameters['fName']!=''){
-                        $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+                         $sQuery->where(array('r.facility_id'=>$parameters['fName']));
                     }
                     if($parameters['tOutcome']!=''){
-                        $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
+                         $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
                     }
                     if($parameters['gender']!=''){
-                        $sQuery->where(array('gender'=>$parameters['gender']));
+                         $sQuery->where(array('gender'=>$parameters['gender']));
                     }
                     if($parameters['finalOutcome']!=''){
-                        $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
+                         $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
                     }
 
                     if (isset($sOrder) && $sOrder != "") {
@@ -132,7 +132,7 @@ class RecencyTable extends AbstractTableGateway {
 
                     $queryContainer->exportRecencyDataQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-                    //echo $sQueryStr;die;
+                    // echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
                     /* Data set length after filtering */
@@ -144,7 +144,7 @@ class RecencyTable extends AbstractTableGateway {
 
                     /* Total data set length */
                     $iQuery =   $sql->select()->from(array( 'r' => 'recency' ))
-                                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left');
+                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left');
                     if($roleCode=='user'){
                          $iQuery = $iQuery->where('r.added_by='.$sessionLogin->userId);
                     }
@@ -165,13 +165,13 @@ class RecencyTable extends AbstractTableGateway {
                          $row = array();
                          $formInitiationDate = '';
                          if($aRow['form_initiation_datetime']!='' && $aRow['form_initiation_datetime']!='0000-00-00 00:00:00' && $aRow['form_initiation_datetime']!=NULL){
-                            $formInitiationAry = explode(" ",$aRow['form_initiation_datetime']);
-                            $formInitiationDate = $common->humanDateFormat($formInitiationAry[0])." ".$formInitiationAry[1];
+                              $formInitiationAry = explode(" ",$aRow['form_initiation_datetime']);
+                              $formInitiationDate = $common->humanDateFormat($formInitiationAry[0])." ".$formInitiationAry[1];
                          }
                          $formTransferDate = '';
                          if($aRow['form_transfer_datetime']!='' && $aRow['form_transfer_datetime']!='0000-00-00 00:00:00' && $aRow['form_transfer_datetime']!=NULL){
-                            $formTransferAry = explode(" ",$aRow['form_transfer_datetime']);
-                            $formTransferDate = $common->humanDateFormat($formTransferAry[0])." ".$formTransferAry[1];
+                              $formTransferAry = explode(" ",$aRow['form_transfer_datetime']);
+                              $formTransferDate = $common->humanDateFormat($formTransferAry[0])." ".$formTransferAry[1];
                          }
                          $row[] = $aRow['sample_id'];
                          $row[] = $aRow['patient_id'];
@@ -301,6 +301,7 @@ class RecencyTable extends AbstractTableGateway {
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               'tester_name'=>$params['testerName'],
                          );
+
                          if (strpos($params['outcomeData'], 'Long Term') !== false){
                               $data['final_outcome'] = 'Long Term';
                          }else if (strpos($params['outcomeData'], 'Invalid') !== false){
@@ -407,6 +408,7 @@ class RecencyTable extends AbstractTableGateway {
                               'notes'=>$params['comments'],
                               'kit_lot_no'=>$params['testKitLotNo'],
                               //'kit_name'=>$params['testKitName'],
+                              'form_saved_datetime'=> date("Y-m-d H:i:s"),
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               'tester_name'=>$params['testerName'],
                          );
@@ -429,39 +431,39 @@ class RecencyTable extends AbstractTableGateway {
                     $sql = new Sql($dbAdapter);
                     //check the user is active or not
                     $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
-                                    ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
-                                    ->where(array('auth_token' =>$params['authToken']));
+                    ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
+                    ->where(array('auth_token' =>$params['authToken']));
                     $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
                     $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                     if(isset($uResult['status']) && $uResult['status']=='inactive'){
-                        $response["status"] = "fail";
-                        $response["message"] = "Your status is Inactive!";
+                         $response["status"] = "fail";
+                         $response["message"] = "Your status is Inactive!";
                     }else if(isset($uResult['status']) && $uResult['status']=='active'){
-                        $rececnyQuery = $sql->select()->from(array('r' => 'recency'))
-                                    ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'))
-                                    ->join(array('u' => 'users'), 'u.user_id = r.added_by', array());
-                                    if($uResult['role_code']!='admin'){
-                                        $rececnyQuery = $rececnyQuery->where(array('u.auth_token' =>$params['authToken'],'r.added_by'=>$uResult['user_id']));
-                                    }
+                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))
+                         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name','province'))
+                         ->join(array('u' => 'users'), 'u.user_id = r.added_by', array());
+                         if($uResult['role_code']!='admin'){
+                              $rececnyQuery = $rececnyQuery->where(array('u.auth_token' =>$params['authToken'],'r.added_by'=>$uResult['user_id']));
+                         }
 
-                                    if(isset($params['start']) && isset($params['end'])){
-                                        $rececnyQuery = $rececnyQuery->where(
-                                            array(
-                                                "((r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", 
-                                                "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."') OR 
-                                                (r.hiv_recency_date is null or r.hiv_recency_date = '' or r.hiv_recency_date ='0000-00-00 00:00:00'))"
-                                            )
-                                        );
-                                    }
-                        $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
-                        $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                        if(count($recencyResult) > 0){
-                            $response['status']='success';
-                            $response['recency'] = $recencyResult;
-                        }else{
-                                $response["status"] = "fail";
-                                $response["message"] = "You don't have recency data!";
-                        }
+                         if(isset($params['start']) && isset($params['end'])){
+                              $rececnyQuery = $rececnyQuery->where(
+                                   array(
+                                        "((r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'",
+                                        "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."') OR
+                                        (r.hiv_recency_date is null or r.hiv_recency_date = '' or r.hiv_recency_date ='0000-00-00 00:00:00'))"
+                                   )
+                              );
+                         }
+                         $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+                         $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                         if(count($recencyResult) > 0){
+                              $response['status']='success';
+                              $response['recency'] = $recencyResult;
+                         }else{
+                              $response["status"] = "fail";
+                              $response["message"] = "You don't have recency data!";
+                         }
                     }
                     else {
                          $response["status"] = "fail";
@@ -478,36 +480,36 @@ class RecencyTable extends AbstractTableGateway {
 
                     //check the user is active or not
                     $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
-                                    ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
-                                    ->where(array('auth_token' =>$params['authToken']));
+                    ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
+                    ->where(array('auth_token' =>$params['authToken']));
                     $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
                     $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                     if(isset($uResult['status']) && $uResult['status']=='inactive'){
-                        $response["status"] = "fail";
-                        $response["message"] = "Your status is Inactive!";
+                         $response["status"] = "fail";
+                         $response["message"] = "Your status is Inactive!";
                     }else if(isset($uResult['status']) && $uResult['status']=='active'){
-                        $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
-                                        ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-                                        ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
-                                        ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
-                                        if($uResult['role_code']!='admin'){
-                                            $rececnyQuery = $rececnyQuery->where(array('u.auth_token' =>$params['authToken']));
-                                        }
-                                        if(isset($params['start']) && isset($params['end'])){
-                                            $rececnyQuery = $rececnyQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
-                                        }
-                        $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
-                        $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                        if(count($recencyResult) > 0){
-                            $response['status']='success';
-                            $response['recency'] = $recencyResult;
-                       }else{
-                            $response["status"] = "fail";
-                            $response["message"] = "You don't have recency data!";
-                       }
+                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
+                         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+                         ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
+                         ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
+                         if($uResult['role_code']!='admin'){
+                              $rececnyQuery = $rececnyQuery->where(array('u.auth_token' =>$params['authToken']));
+                         }
+                         if(isset($params['start']) && isset($params['end'])){
+                              $rececnyQuery = $rececnyQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
+                         }
+                         $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+                         $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                         if(count($recencyResult) > 0){
+                              $response['status']='success';
+                              $response['recency'] = $recencyResult;
+                         }else{
+                              $response["status"] = "fail";
+                              $response["message"] = "You don't have recency data!";
+                         }
                     }else {
-                        $response["status"] = "fail";
-                        $response["message"] = "Please check your token credentials!";
+                         $response["status"] = "fail";
+                         $response["message"] = "Please check your token credentials!";
                     }
                     return $response;
                }
@@ -519,35 +521,35 @@ class RecencyTable extends AbstractTableGateway {
                     $dbAdapter = $this->adapter;
                     $sql = new Sql($dbAdapter);
 
-                     //check the user is active or not
+                    //check the user is active or not
                     $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
-                                    ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
-                                    ->where(array('auth_token' =>$params['authToken']));
+                    ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
+                    ->where(array('auth_token' =>$params['authToken']));
                     $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
                     $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                     if(isset($uResult['status']) && $uResult['status']=='inactive'){
-                        $response["status"] = "fail";
-                        $response["message"] = "Your status is Inactive!";
+                         $response["status"] = "fail";
+                         $response["message"] = "Your status is Inactive!";
                     }else if(isset($uResult['status']) && $uResult['status']=='active'){
-                        $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date', 'sample_id', 'term_outcome','final_outcome','vl_result'))
-                                             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-                                             ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
-                                             ->where( "((r.vl_result IS NULL OR r.vl_result = '') AND  r.term_outcome='Assay Recent')");
-                                             if($uResult['role_code']!='admin'){
-                                                $rececnyQuery = $rececnyQuery->where(array('u.auth_token' =>$params['authToken']));
-                                            }
+                         $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date', 'sample_id', 'term_outcome','final_outcome','vl_result'))
+                         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+                         ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
+                         ->where( "((r.vl_result IS NULL OR r.vl_result = '') AND  r.term_outcome='Assay Recent')");
+                         if($uResult['role_code']!='admin'){
+                              $rececnyQuery = $rececnyQuery->where(array('u.auth_token' =>$params['authToken']));
+                         }
                          $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
-                        $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                        if(count($recencyResult) > 0){
-                            $response['status']='success';
-                            $response['recency'] = $recencyResult;
-                        }else{
-                            $response["status"] = "fail";
-                            $response["message"] = "You don't have recency data!";
-                        }
+                         $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                         if(count($recencyResult) > 0){
+                              $response['status']='success';
+                              $response['recency'] = $recencyResult;
+                         }else{
+                              $response["status"] = "fail";
+                              $response["message"] = "You don't have recency data!";
+                         }
                     }else {
-                        $response["status"] = "fail";
-                        $response["message"] = "Please check your token credentials!";
+                         $response["status"] = "fail";
+                         $response["message"] = "Please check your token credentials!";
                     }
                     return $response;
                }
@@ -562,18 +564,18 @@ class RecencyTable extends AbstractTableGateway {
                     $globalDb = new GlobalConfigTable($this->adapter);
                     $common = new CommonService();
                     if(isset($params["form"])){
-                        //check user status active or not
-                        $uQuery = $sql->select()->from('users')
-                                        ->where(array('user_id' => $params["form"][0]['syncedBy']));
-                        $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
-                        $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-                        if(isset($uResult['status']) && $uResult['status']=='inactive'){
-                            $adminEmail = $globalDb->getGlobalValue('admin_email');
-                            $adminPhone = $globalDb->getGlobalValue('admin_phone');
-                            $response['message'] = 'Your password has expired or has been locked, please contact your administrator('.$adminEmail.' or '.$adminPhone.')';
-                            $response['status'] = 'failed';
-                            return $response;
-                        }
+                         //check user status active or not
+                         $uQuery = $sql->select()->from('users')
+                         ->where(array('user_id' => $params["form"][0]['syncedBy']));
+                         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
+                         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                         if(isset($uResult['status']) && $uResult['status']=='inactive'){
+                              $adminEmail = $globalDb->getGlobalValue('admin_email');
+                              $adminPhone = $globalDb->getGlobalValue('admin_phone');
+                              $response['message'] = 'Your password has expired or has been locked, please contact your administrator('.$adminEmail.' or '.$adminPhone.')';
+                              $response['status'] = 'failed';
+                              return $response;
+                         }
                          $i = 1;
                          foreach($params["form"] as $key => $recency){
                               try{
@@ -640,7 +642,7 @@ class RecencyTable extends AbstractTableGateway {
                                         'location_one' => $recency['location_one'],
                                         'location_two' => $recency['location_two'],
                                         'location_three' => $recency['location_three'],
-                                        'added_on' => $recency['addedOn'],
+                                        'added_on' => date('Y-m-d H:i:s'),
                                         'added_by' => $recency['addedBy'],
                                         'sync_by' => $recency['syncedBy'],
                                         'exp_violence_last_12_month'=>$recency['violenceLast12Month'],
@@ -650,11 +652,14 @@ class RecencyTable extends AbstractTableGateway {
                                         'notes'=>$recency['notes'],
                                         'form_initiation_datetime'=>$recency['formInitDateTime'],
                                         'app_version'=>$recency['appVersion'],
-                                        'form_transfer_datetime'=>date("Y-m-d H:i:s"),
+                                        'form_transfer_datetime'=>$recency['formTransferDateTime'],
+                                        'form_saved_datetime'=>$recency['formSavedDateTime'],
 
                                         'kit_lot_no' => $recency['testKitLotNo'],
                                         //'kit_name' => $recency['testKitName'],
                                         'tester_name' => $recency['testerName'],
+                                        'unique_id'=>isset($recency['unique_id'])?$recency['unique_id']:NULL,
+
 
                                    );
                                    if(isset($recency['hivDiagnosisDate']) && trim($recency['hivDiagnosisDate'])!=""){
@@ -727,8 +732,8 @@ class RecencyTable extends AbstractTableGateway {
                                    'location_two' => $params['locationTwo'],
                                    'location_three' => $params['locationThree'],
                                    'added_on' => $params['addedOn'],
-                                        'added_by' => $params['addedBy'],
-                                        'sync_by' => $params['syncedBy'],
+                                   'added_by' => $params['addedBy'],
+                                   'sync_by' => $params['syncedBy'],
                                    'exp_violence_last_12_month'=>$params['violenceLast12Month'],
                                    'mac_no'=>$params['macAddress'],
                                    'cell_phone_number'=>$params['phoneNumber'],
@@ -770,9 +775,9 @@ class RecencyTable extends AbstractTableGateway {
                     }
                }
                if($syncedBy!=''){
-                $response['syncCount']['response'] = $this->getTotalSyncCount($syncedBy);
+                    $response['syncCount']['response'] = $this->getTotalSyncCount($syncedBy);
                }else{
-                $response['syncCount']['response'] = 0;
+                    $response['syncCount']['response'] = 0;
                }
                return $response;
           }
@@ -782,11 +787,11 @@ class RecencyTable extends AbstractTableGateway {
                $sql = new Sql($dbAdapter);
 
                $sQuery = $sql->select()->from(array('r' => 'recency'))
-                            ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
-                            ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'),'left')
-                            ->join(array('pr' => 'province_details'), 'pr.province_id = f.province', array('province_name'),'left')
-                            ->join(array('dt' => 'district_details'), 'dt.district_id = f.district', array('district_name'),'left')
-                            ->join(array('cd' => 'city_details'), 'cd.city_id = f.city', array('city_name'),'left')
+               ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+               ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'),'left')
+               ->join(array('pr' => 'province_details'), 'pr.province_id = f.province', array('province_name'),'left')
+               ->join(array('dt' => 'district_details'), 'dt.district_id = f.district', array('district_name'),'left')
+               ->join(array('cd' => 'city_details'), 'cd.city_id = f.city', array('city_name'),'left')
                ->where(array('recency_id' =>$id));
                $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
@@ -816,7 +821,6 @@ class RecencyTable extends AbstractTableGateway {
                $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-               // \Zend\Debug\Debug::dump($result);die;
 
                $echoResult = array();
                foreach ($rResult as $row) {
@@ -846,29 +850,29 @@ class RecencyTable extends AbstractTableGateway {
 
           public function fetchSampleData($params)
           {
-            $dbAdapter = $this->adapter;
-            $sql = new Sql($dbAdapter);
+               $dbAdapter = $this->adapter;
+               $sql = new Sql($dbAdapter);
 
-            $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_date', 'term_outcome', 'vl_result', 'final_outcome'))
-                         ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'));
-                         if(isset($params['province']) && $params['province']!=''){
-                            $sQuery = $sQuery->where(array('f.province'=>$params['province']));
-                         }
-                         if(isset($params['district']) && $params['district']!=''){
-                            $sQuery = $sQuery->where(array('f.district'=>$params['district']));
-                         }
-                         if(isset($params['city']) && $params['city']!=''){
-                            $sQuery = $sQuery->where(array('f.city'=>$params['city']));
-                         }
-                         if(isset($params['facility']) && $params['facility']!=''){
-                            $sQuery = $sQuery->where(array('r.vl_test_date'=>$params['vlTestDate']));
-                         }
-                         if(isset($params['onloadData']) && $params['onloadData']=='yes'){
-                            $sQuery = $sQuery->where(array('r.vl_result is not null'));
-                         }
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-            return $rResult;
+               $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_date', 'term_outcome', 'vl_result', 'final_outcome'))
+               ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'));
+               if(isset($params['province']) && $params['province']!=''){
+                    $sQuery = $sQuery->where(array('f.province'=>$params['province']));
+               }
+               if(isset($params['district']) && $params['district']!=''){
+                    $sQuery = $sQuery->where(array('f.district'=>$params['district']));
+               }
+               if(isset($params['city']) && $params['city']!=''){
+                    $sQuery = $sQuery->where(array('f.city'=>$params['city']));
+               }
+               if(isset($params['facility']) && $params['facility']!=''){
+                    $sQuery = $sQuery->where(array('r.vl_test_date'=>$params['vlTestDate']));
+               }
+               if(isset($params['onloadData']) && $params['onloadData']=='yes'){
+                    $sQuery = $sQuery->where(array('r.vl_result is not null'));
+               }
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               return $rResult;
           }
 
           public function updateVlSampleResult($params)
