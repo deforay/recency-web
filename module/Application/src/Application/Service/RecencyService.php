@@ -158,6 +158,12 @@ class RecencyService {
                             $formTransferAry = explode(" ",$aRow['form_transfer_datetime']);
                             $formTransferDate = $common->humanDateFormat($formTransferAry[0])." ".$formTransferAry[1];
                          }
+                         
+                         $savedDateTime = '';
+                         if($aRow['form_saved_datetime']!='' && $aRow['form_saved_datetime']!='0000-00-00 00:00:00' && $aRow['form_saved_datetime']!=NULL){
+                            $savedDateTimeArray = explode(" ",$aRow['form_saved_datetime']);
+                            $savedDateTime = $common->humanDateFormat($savedDateTimeArray[0])." ".$savedDateTimeArray[1];
+                         }
                          $addedOn = '';
                          if($aRow['added_on']!='' && $aRow['added_on']!='0000-00-00 00:00:00' && $aRow['added_on']!=NULL){
                             $addedOnArray = explode(" ",$aRow['added_on']);
@@ -194,6 +200,7 @@ class RecencyService {
                          $row[] = str_replace("_"," ",ucwords($aRow['exp_violence_last_12_month']));
                          $row[] = $formInitiationDate;
                          $row[] = $formTransferDate;
+                         $row[] = $savedDateTime;
                          $row[] = $aRow['mac_no'];
                          $row[] = $aRow['cell_phone_number'];
                          $row[] = $aRow['added_on'];
@@ -262,6 +269,7 @@ class RecencyService {
             $sheet->mergeCells('AE3:AE4');
             $sheet->mergeCells('AF3:AF4');
             $sheet->mergeCells('AG3:AG4');
+            $sheet->mergeCells('AH3:AH4');
             
             $sheet->setCellValue('A1', html_entity_decode('Recency Data', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
            
@@ -295,10 +303,10 @@ class RecencyService {
             $sheet->setCellValue('AB3', html_entity_decode('Experienced Violence Last 12 Month', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('AC3', html_entity_decode('Form Initiation Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('AD3', html_entity_decode('Form Transfer Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AE3', html_entity_decode('Device ID', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AF3', html_entity_decode('Device Phone Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AG3', html_entity_decode('Data Added On', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            
+            $sheet->setCellValue('AE3', html_entity_decode('Form Saved Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('AF3', html_entity_decode('Device ID', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('AG3', html_entity_decode('Device Phone Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('AH3', html_entity_decode('Data Added On', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);            
             $sheet->getStyle('A1:B1')->getFont()->setBold(TRUE)->setSize(16);
             
             $sheet->getStyle('A3:A4')->applyFromArray($styleArray);
@@ -335,6 +343,7 @@ class RecencyService {
             $sheet->getStyle('AE3:AE4')->applyFromArray($styleArray);
             $sheet->getStyle('AF3:AF4')->applyFromArray($styleArray);
             $sheet->getStyle('AG3:AG4')->applyFromArray($styleArray);
+            $sheet->getStyle('AH3:AH4')->applyFromArray($styleArray);
             
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;
