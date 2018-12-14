@@ -94,60 +94,7 @@ $allFileds2 = json_encode($formFields2);
                     <?php } ?>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[3]['display_name']); ?><span class="mandatory">*</span></label>
-                        <div class="col-sm-4">
-                            <select  id="search" class="form-control" size="8" multiple="multiple" onchange="setReqValue();">
-                                <option value="Sample Id" data-index='0' <?php echo(in_array("Sample Id",$resultArr)?"selected='selected'":""); ?>>Sample ID</option>
-                                <option value="Patient Id"  data-index='1' <?php echo(in_array("Patient Id",$resultArr)?"selected='selected'":""); ?>>Patient ID</option>
-                                <option value="Facility Name" data-index='2' <?php echo(in_array("Facility Name",$resultArr)?"selected='selected'":""); ?>>Facility Name</option>
-                                <option value="Province" data-index='3' <?php echo(in_array("Province",$resultArr)?"selected='selected'":""); ?>>Province</option>
-                                <option value="District" data-index='4' <?php echo(in_array("District",$resultArr)?"selected='selected'":""); ?>>District</option>
-                                <option value="City" data-index='5' <?php echo(in_array("City",$resultArr)?"selected='selected'":""); ?>>City</option>
-                                <option value="Hiv Diagnosis Date" data-index='6' <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"selected='selected'":""); ?>>HIV Diagnosis Date</option>
-                                <option value="Past Hiv Testing" data-index='7' <?php echo(in_array("Past Hiv Testing",$resultArr)?"selected='selected'":""); ?>>Past HIV Testing</option>
-                                <option value="Test Last 12 Month" data-index='8' <?php echo(in_array("Test Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Test Last 12 Month</option>
-                                <option value="Last HIV Status" data-index='9' <?php echo(in_array("Last HIV Status",$resultArr)?"selected='selected'":""); ?>>Last HIV Status</option>
-                                <option value="Patient on ART" data-index='10' <?php echo(in_array("Patient on ART",$resultArr)?"selected='selected'":""); ?>>Patient on ART</option>
-                                <option value="Hiv Recency Date" data-index='11' <?php echo(in_array("Hiv Recency Date",$resultArr)?"selected='selected'":""); ?>>HIV Recency Date</option>
-                                <option value="Control Line" data-index='12' <?php echo(in_array("Control Line",$resultArr)?"selected='selected'":""); ?>>Control Line</option>
-                                <option value="Positive Verification Line" data-index='13' <?php echo(in_array("Positive Verification Line",$resultArr)?"selected='selected'":""); ?>>Positive Verification Line</option>
-                                <option value="Long Term Verification Line" data-index='14' <?php echo(in_array("Long Term Verification Line",$resultArr)?"selected='selected'":""); ?>>Long Term Verification Line</option>
-                                <option value="Test Kit Lot No" data-index='15' <?php echo(in_array("Test Kit Lot No",$resultArr)?"selected='selected'":""); ?>>Test Kit Lot No</option>
-                                <option value="Kit Expiry Date" data-index='16' <?php echo(in_array("Kit Expiry Date",$resultArr)?"selected='selected'":""); ?>>Test Kit Expiry Date</option>
-                                <option value="Tester Name" data-index='17' <?php echo(in_array("Tester Name",$resultArr)?"selected='selected'":""); ?>>Tester Name</option>
-                                <option value="Dob" data-index='18' <?php echo(in_array("Dob",$resultArr)?"selected='selected'":""); ?>>Date Of Birth</option>
-                                <option value="Age" data-index='19' <?php echo(in_array("Age",$resultArr)?"selected='selected'":""); ?>>Age</option>
-                                <option value="Gender" data-index='20' <?php echo(in_array("Gender",$resultArr)?"selected='selected'":""); ?>>Gender</option>
-                                <option value="Pregnancy Status" data-index='21' <?php echo(in_array("Pregnancy Status",$resultArr)?"selected='selected'":""); ?>>Pregnancy Status</option>
-                                <option value="Marital Status" data-index='22' <?php echo(in_array("Marital Status",$resultArr)?"selected='selected'":""); ?>>Marital Status</option>
-                                <option value="Education Level" data-index='23' <?php echo(in_array("Education Level",$resultArr)?"selected='selected'":""); ?>>Education Level</option>
-                                <option value="Risk Population" data-index='24' <?php echo(in_array("Risk Population",$resultArr)?"selected='selected'":""); ?>>Risk Population</option>
-                                <option value="Residence" data-index='25' <?php echo(in_array("Residence",$resultArr)?"selected='selected'":""); ?>>Residence</option>
-                                <option value="Current Sexual Partner" data-index='26' <?php echo(in_array("Current Sexual Partner",$resultArr)?"selected='selected'":""); ?>>Current Sexual Partner</option>
-                                <option value="Experience Violence Last 12 Month" data-index='27' <?php echo(in_array("Experience Violence Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Experience Violence Last 12 Month</option>
-                                <option value="Comments" data-index='28' <?php echo(in_array("Comments",$resultArr)?"selected='selected'":""); ?>>Comments</option>
-                                <option value="Recency Test not performed" data-index='29' <?php echo(in_array("Recency Test not performed",$resultArr)?"selected='selected'":""); ?>>Recency Test not performed</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-2">
-                            <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
-                            <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
-                            <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
-                            <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple" onchange="setReqValue();">
-                                <?php foreach($resultArr as $result){ ?>
-                                    <option data-index='<?php echo array_search($result, $formFields);?>' value="<?php echo $result; ?>"><?php echo ucwords($result); ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="display-fields">
+<div class="display-fields">
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[6]['display_name']); ?><span class="mandatory">*</span></label>
                             <div class="col-sm-4">
@@ -186,19 +133,72 @@ $allFileds2 = json_encode($formFields2);
                             </div>
 
                             <div class="col-md-2">
-                                <button type="button" id="search2_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
-                                <button type="button" id="search2_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
-                                <button type="button" id="search2_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
-                                <button type="button" id="search2_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
+                                <button type="button" id="search2_rightAll" onclick="setReqValue()" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
+                                <button type="button" id="search2_rightSelected" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
+                                <button type="button" id="search2_leftSelected" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
+                                <button type="button" id="search2_leftAll" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
                             </div>
 
                             <div class="col-sm-4">
                                 <select name="to2[]" id="search2_to" class="form-control" size="8" multiple="multiple">
                                     <?php foreach($resultArr2 as $result){ ?>
-                                        <option data-index='<?php echo array_search($result, $formFields2);?>' value="<?php echo $result; ?>"><?php echo ucwords($result); ?></option>
+                                        <option data-index='<?php echo array_search($result, $formFields2);?>' value="<?php echo trim($result); ?>"><?php echo ucwords($result); ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[3]['display_name']); ?><span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select id="search" class="form-control" size="8" multiple="multiple" onchange="setReqValue();">
+                                <option value="Sample Id" data-index='0' <?php echo(in_array("Sample Id",$resultArr)?"selected='selected'":""); ?>>Sample ID</option>
+                                <option value="Patient Id"  data-index='1' <?php echo(in_array("Patient Id",$resultArr)?"selected='selected'":""); ?>>Patient ID</option>
+                                <option value="Facility Name" data-index='2' <?php echo(in_array("Facility Name",$resultArr)?"selected='selected'":""); ?>>Facility Name</option>
+                                <option value="Province" data-index='3' <?php echo(in_array("Province",$resultArr)?"selected='selected'":""); ?>>Province</option>
+                                <option value="District" data-index='4' <?php echo(in_array("District",$resultArr)?"selected='selected'":""); ?>>District</option>
+                                <option value="City" data-index='5' <?php echo(in_array("City",$resultArr)?"selected='selected'":""); ?>>City</option>
+                                <option value="Hiv Diagnosis Date" data-index='6' <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"selected='selected'":""); ?>>HIV Diagnosis Date</option>
+                                <option value="Past Hiv Testing" data-index='7' <?php echo(in_array("Past Hiv Testing",$resultArr)?"selected='selected'":""); ?>>Past HIV Testing</option>
+                                <option value="Test Last 12 Month" data-index='8' <?php echo(in_array("Test Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Test Last 12 Month</option>
+                                <option value="Last HIV Status" data-index='9' <?php echo(in_array("Last HIV Status",$resultArr)?"selected='selected'":""); ?>>Last HIV Status</option>
+                                <option value="Patient on ART" data-index='10' <?php echo(in_array("Patient on ART",$resultArr)?"selected='selected'":""); ?>>Patient on ART</option>
+                                <option value="Hiv Recency Date" data-index='11' <?php echo(in_array("Hiv Recency Date",$resultArr)?"selected='selected'":""); ?>>HIV Recency Date</option>
+                                <option value="Control Line" data-index='12' <?php echo(in_array("Control Line",$resultArr)?"selected='selected'":""); ?>>Control Line</option>
+                                <option value="Positive Verification Line" data-index='13' <?php echo(in_array("Positive Verification Line",$resultArr)?"selected='selected'":""); ?>>Positive Verification Line</option>
+                                <option value="Long Term Verification Line" data-index='14' <?php echo(in_array("Long Term Verification Line",$resultArr)?"selected='selected'":""); ?>>Long Term Verification Line</option>
+                                <option value="Test Kit Lot No" data-index='15' <?php echo(in_array("Test Kit Lot No",$resultArr)?"selected='selected'":""); ?>>Test Kit Lot No</option>
+                                <option value="Kit Expiry Date" data-index='16' <?php echo(in_array("Kit Expiry Date",$resultArr)?"selected='selected'":""); ?>>Test Kit Expiry Date</option>
+                                <option value="Tester Name" data-index='17' <?php echo(in_array("Tester Name",$resultArr)?"selected='selected'":""); ?>>Tester Name</option>
+                                <option value="Dob" data-index='18' <?php echo(in_array("Dob",$resultArr)?"selected='selected'":""); ?>>Date Of Birth</option>
+                                <option value="Age" data-index='19' <?php echo(in_array("Age",$resultArr)?"selected='selected'":""); ?>>Age</option>
+                                <option value="Gender" data-index='20' <?php echo(in_array("Gender",$resultArr)?"selected='selected'":""); ?>>Gender</option>
+                                <option value="Pregnancy Status" data-index='21' <?php echo(in_array("Pregnancy Status",$resultArr)?"selected='selected'":""); ?>>Pregnancy Status</option>
+                                <option value="Marital Status" data-index='22' <?php echo(in_array("Marital Status",$resultArr)?"selected='selected'":""); ?>>Marital Status</option>
+                                <option value="Education Level" data-index='23' <?php echo(in_array("Education Level",$resultArr)?"selected='selected'":""); ?>>Education Level</option>
+                                <option value="Risk Population" data-index='24' <?php echo(in_array("Risk Population",$resultArr)?"selected='selected'":""); ?>>Risk Population</option>
+                                <option value="Residence" data-index='25' <?php echo(in_array("Residence",$resultArr)?"selected='selected'":""); ?>>Residence</option>
+                                <option value="Current Sexual Partner" data-index='26' <?php echo(in_array("Current Sexual Partner",$resultArr)?"selected='selected'":""); ?>>Current Sexual Partner</option>
+                                <option value="Experience Violence Last 12 Month" data-index='27' <?php echo(in_array("Experience Violence Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Experience Violence Last 12 Month</option>
+                                <option value="Comments" data-index='28' <?php echo(in_array("Comments",$resultArr)?"selected='selected'":""); ?>>Comments</option>
+                                <option value="Recency Test not performed" data-index='29' <?php echo(in_array("Recency Test not performed",$resultArr)?"selected='selected'":""); ?>>Recency Test not performed</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="button" id="search_rightAll" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
+                            <button type="button" id="search_rightSelected" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
+                            <button type="button" id="search_leftSelected" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
+                            <button type="button" id="search_leftAll" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple" onchange="setReqValue();">
+                                <?php foreach($resultArr as $result){ ?>
+                                    <option data-index='<?php echo array_search($result, $formFields);?>' value="<?php echo trim($result); ?>"><?php echo $result; ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
                     </div>
                     
@@ -255,7 +255,7 @@ function validateNow() {
 }
 
 $(document).ready(function($){
-    setReqValue();
+    
     $('#search').multiselect({
         search: {
             left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
@@ -266,6 +266,7 @@ $(document).ready(function($){
         },
         sort : false,
     });
+
     $('#search2').multiselect({
         search: {
             left: '<input type="text" name="q2" class="form-control" placeholder="Search..." />',
@@ -276,33 +277,66 @@ $(document).ready(function($){
         },
         sort : false,
     });
+
+    //by default
+    $("#search option").each(function()
+    {
+        $("#search").find('option[value="'+$(this).val()+'"]').prop('disabled', true); 
+    });
+    $("#search2_rightAll").click(function(){setReqValue();});
+    $("#search2_rightSelected").click(function(){setReqValue();});
+    $("#search2_leftSelected").click(function(){setReqValue();});
+    $("#search2_leftAll").click(function(){setReqValue();});
+
+    setReqValue();
 });
-$("#search_rightAll").click(function(){setReqValue();});
-$("#search_rightSelected").click(function(){setReqValue();});
-$("#search_leftSelected").click(function(){setReqValue();});
-$("#search_leftAll").click(function(){setReqValue();});
 
 function setReqValue(){
     var seletedVal = [];
     var seletedVal2 = [];
 
-    $('#search_to option').each(function(i, selected){
-        seletedVal[i] = $(selected).val();
-    });
-    $('#search2_to option').each(function(j, selected){
-        seletedVal2[j] = $(selected).val();
+    $("#search option").each(function()
+    {
+        $("#search").find('option[value="'+$(this).val()+'"]').prop('disabled', true); 
     });
     
-    $.each(seletedVal, function(idx, val){
-        if($.inArray(val, seletedVal)){
-            $("#search2").find('option[value="'+val+'"]').prop('disabled', true); 
-        }
-        
+    $('#search2_to option').each(function(j, selected){
+        seletedVal2[j] = $(selected).val();
+        $("#search").find('option[value="'+$(selected).val()+'"]').prop('disabled', false);
     });
-    $.each(seletedVal2, function(idx, val){
-        if($.inArray(val, seletedVal2)){
-            $("#search").find('option[value="'+val+'"]').prop('disabled', true); 
-        }
+
+    $('#search_to option').each(function(i, selected){
+        //seletedVal[i] = $(selected).val();
+            if($.inArray($(selected).val(), seletedVal2)){
+                $("#search_to").find('option[value="'+$(selected).val()+'"]').prop('disabled', false); 
+                $("#search").find('option[value="'+$(selected).val()+'"]').prop('disabled', false); 
+            }else{
+                //$("#search_to").find('option[value="'+$(selected).val()+'"]').prop('disabled', true); 
+            }
     });
+    
 }
+// function setReqValue1(){
+//     var seletedVal = [];
+//     var seletedVal2 = [];
+
+//     $('#search_to option').each(function(i, selected){
+//         seletedVal[i] = $(selected).val();
+//     });
+//     $('#search2_to option').each(function(j, selected){
+//         seletedVal2[j] = $(selected).val();
+//     });
+    
+//     $.each(seletedVal, function(idx, val){
+//         if($.inArray(val, seletedVal)){
+//             $("#search2").find('option[value="'+val+'"]').prop('disabled', true); 
+//         }
+        
+//     });
+//     $.each(seletedVal2, function(idx, val){
+//         if($.inArray(val, seletedVal2)){
+//             $("#search").find('option[value="'+val+'"]').prop('disabled', true); 
+//         }
+//     });
+// }
 </script>

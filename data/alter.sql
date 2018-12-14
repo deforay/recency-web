@@ -131,7 +131,7 @@ ALTER TABLE `quality_check_test` ADD `form_initiation_datetime` DATETIME NULL DE
 -- Thanaseelan 27 Nov, 2018
 ALTER TABLE `recency` ADD `vl_test_date` DATE NULL DEFAULT NULL AFTER `vl_result`;
 
-ALTER TABLE `recency` ADD `vl_result_entry_date` DATETIME NOT NULL AFTER `vl_test_date`;
+ALTER TABLE `recency` ADD `vl_result_entry_date` DATETIME NULL DEFAULT NULL AFTER `vl_test_date`;
 
 
 -- Thanaseelan 03 Dec, 2018
