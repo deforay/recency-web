@@ -127,7 +127,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                         <?php
                         $inc = 1;
                          foreach($globalConfigResult as $config){ ?>
-                            <?php if($config['global_name'] != 'mandatory_fields' && $config['global_name'] != 'admin_email' && $config['global_name'] != 'admin_phone'){ ?>
+                            <?php if($config['global_name'] != 'mandatory_fields' && $config['global_name'] != 'display_fields' && $config['global_name'] != 'admin_email' && $config['global_name'] != 'admin_phone'){ ?>
                                 <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
