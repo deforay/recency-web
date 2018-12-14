@@ -264,6 +264,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         for ($i = 0; $i < sizeof($rResult); $i++) {
             $arr[$rResult[$i]['global_name']] = $rResult[$i]['global_value'];
         }
+        $explodField = array();
         if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
             $explodField = explode(",",$arr['display_fields']);
         }
@@ -299,7 +300,7 @@ class GlobalConfigTable extends AbstractTableGateway {
 
         // $output = array_filter($row);
         // $response['fields'] = array_values($row);
-        if(isset($explodField) && $explodField !='') {
+        if(isset($explodField)) {
             $response['status']='success';
             $response['fields'] = array($row);
         } else {
