@@ -1,7 +1,7 @@
 # Recency Web App
 
 
-##### How do I get set up?
+#### How do I get set up?
 * Download the Source Code and put it into your server's root folder (www or htdocs).
 * Create a database and import the initial sql file
 * Modify the config files (configs/autoload/global.php and configs/autoload/local.php ) and update the database parameters
@@ -22,12 +22,12 @@
 </VirtualHost>
 ```
 
-##### Next Steps
+#### Next Steps
 * Please add the Province, Districts, Cities manually in the database. In the near future, we will add UI to add these
 * Once you have the application set up, you can visit the recency URL http://recency/ and log in with the credentials recencyadmin@example.com and 12345
 * Now you can start adding Users, facilities and set up global config.
 
-##### Who do I talk to?
+#### Who do I talk to?
 You can reach us at amit (at) deforay (dot) com
 
 
