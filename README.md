@@ -1,6 +1,5 @@
 # Recency Web App
 
-Welcome to the Open Source repository of the e-Proficiency Testing (ePT) software
 
 ##### How do I get set up?
 * Download the Source Code and put it into your server's root folder (www or htdocs).
