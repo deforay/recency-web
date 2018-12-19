@@ -108,7 +108,7 @@ class QualityCheckTable extends AbstractTableGateway {
                     if($parameters['tOutcome']!=''){
                         $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
                     }
-                    
+
                     if (isset($sOrder) && $sOrder != "") {
                          $sQuery->order($sOrder);
                     }
@@ -204,7 +204,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                'term_outcome'=>$params['outcomeData'],
                                'tester_name' => $params['testerName'],
                                'comment' => $params['comment'],
-                               
+
                                'added_on' => date("Y-m-d H:i:s"),
                                'added_by' => $logincontainer->userId,
 
@@ -287,7 +287,7 @@ class QualityCheckTable extends AbstractTableGateway {
                  $facilityDb = new FacilitiesTable($this->adapter);
                  $globalDb = new GlobalConfigTable($this->adapter);
                  $riskPopulationDb = new RiskPopulationsTable($this->adapter);
-                 $globalDb = new GlobalConfigTable($this->adapter);                 
+                 $globalDb = new GlobalConfigTable($this->adapter);
                  $common = new CommonService();
 
                  if(isset($params["qc"])){
@@ -326,11 +326,13 @@ class QualityCheckTable extends AbstractTableGateway {
                                     'term_outcome'=>$params['recencyOutcome'],
                                     'tester_name' => $qcTest['testerName'],
                                     'app_version'=>$qcTest['appVersion'],
-                                    'added_on' => $qcTest['addedOn'],
+                                    'added_on' => date('Y-m-d H:i:s'),
                                     'added_by' => $qcTest['addedBy'],
                                     'sync_by' => $qcTest['syncedBy'],
-                                    'form_initiation_datetime'=>$recency['formInitDateTime'],
-                                    'form_transfer_datetime'=>date("Y-m-d H:i:s"),
+                                    'form_initiation_datetime'=>$qcTest['formInitDateTime'],
+                                    'form_transfer_datetime'=>$qcTest['formTransferDateTime'],
+                                    'form_saved_datetime'=>$qcTest['formSavedDateTime'],
+                                    'unique_id'=>isset($qcTest['unique_id'])?$qcTest['unique_id']:NULL,
                                 );
 
                                 $this->insert($data);
