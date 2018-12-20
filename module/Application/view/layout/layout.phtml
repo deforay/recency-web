@@ -13,13 +13,21 @@ $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $t
 $userMenu.="<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=". $this->url('facilities', array('action' => 'index')) ."><span class='nav-main-link-name'>Facilities</span></a></li>";
 
 $recencyMenu = "";
-$recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Recency Data</span></a></li>";
+$recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
 
 $qcMenu = "";
 $qcMenu="<li id='nav-main-item'><a id='quality-check' class='nav-main-link' href=". $this->url('quality-check', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Quality Check Testing</span></a></li>";
 
 $vlDataMenu = "";
-$vlDataMenu="<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Viral Load Data</span></a></li>";
+$vlDataMenu="<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Pending Results</span></a></li>";
+
+$recentMenu = "";
+$recentMenu="<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'recent-infection')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Recent Infections</span></a></li>";
+
+$longTermMenu = "";
+$longTermMenu="<li id='nav-main-item'><a id='lt-infection' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'lt-infection')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Long Term Infections</span></a></li>";
+
+
 
 ?>
 
@@ -146,7 +154,13 @@ $vlDataMenu="<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href="
                          <?php echo $qcMenu;?>
                          <?php } if($roleCode=='VLTS' || $roleCode == 'admin'){ ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
-                         <?php echo $vlDataMenu; } ?>
+                         <?php echo $vlDataMenu; ?>
+                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <?php echo $recentMenu; ?>
+                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <?php echo $longTermMenu; ?>
+                        <?php } ?>
+                         
 
                     </ul>
                </div>

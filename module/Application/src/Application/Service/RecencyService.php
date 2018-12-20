@@ -346,4 +346,16 @@ class RecencyService
             error_log($exc->getTraceAsString());
         }
     }
+
+    public function getAllRecencyResultWithVlList($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchAllRecencyResultWithVlList($params);
+    }
+
+    public function getAllLtResult($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchAllLtResult($params);
+    }
 }

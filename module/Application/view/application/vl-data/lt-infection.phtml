@@ -1,0 +1,154 @@
+<?php
+
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+?>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Long Term Infection</h1>
+               </div>
+          </div>
+     </div>
+     <div class="content">
+          <div class="block block-rounded block-bordered">
+               <div class="block-header block-header-default">
+               </div>
+               <div class="block-content block-content-full">
+               <div class="form-group row">
+                        <?php
+                         foreach($globalConfigResult as $config){ ?>
+                            <?php if($config['global_name'] != 'mandatory_fields' && $config['global_name'] != 'display_fields' && $config['global_name'] != 'admin_email' && $config['global_name'] != 'admin_phone'){ ?>
+                                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
+                                        <option value="">-- Select --</option>
+                                    </select>
+                                </div>
+                            <?php }
+                        }?>
+                        <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+                                <option value="">-- Select --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table id="ltInfectionTable" class="table table-bordered table-striped table-vcenter">
+                         <thead>
+                              <tr>
+                                    <th>Date Of Testing</th>
+                                    <th>Sample Id</th>
+                                    <th>Assay Test Result</th>
+                                    <th>Final Result</th>
+                                    <th>Facility Name</th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              <tr>
+                                    <td colspan='5' class='dataTables_empty'>Loading data from server</td>
+                              </tr>
+                              <tr>
+                              </tbody>
+                         </table>
+                    </div>
+               </div>
+          </div>
+
+          <script type="text/javascript">
+          /* Table initialisation */
+          oTable = null;
+          $(document).ready(function() {
+            oTable = $('#ltInfectionTable').dataTable({
+                "bAutoWidth": false,
+                "bProcessing": true,
+                "bServerSide": true,
+                "aoColumns": [
+                        <?php echo $editAction;?>
+                ],
+                "sAjaxSource": "<?php echo $this->url('vl-data',array('action' => 'lt-infection')); ?>",
+                "fnServerData": function ( sSource, aoData, fnCallback ) {
+                    aoData.push({"name": "fName", "value": $("#facilityName").val()});
+                    aoData.push({"name": "locationOne", "value": $("#location_one").val()});
+                    aoData.push({"name": "locationTwo", "value": $("#location_two").val()});
+                    aoData.push({"name": "locationThree", "value": $("#location_three").val()});
+
+                    $.ajax({
+                        "dataType": 'json',
+                        "type": "POST",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": fnCallback
+                    });
+                }
+            } );
+
+            <?php foreach($globalConfigResult as $config){
+             ?>
+             getLocationDeatils('<?php echo $config["global_name"];?>');
+             <?php
+             break;
+         } ?>
+
+            } );
+            
+          function searchVlRequestData(){
+            $.blockUI();
+            oTable.fnDraw();
+            $.unblockUI();
+        }
+        
+        function exportRecencyData()
+        {
+            $.blockUI();
+            $.post("<?php echo $this->url('recency',array('action'=>'export-recency')); ?>",
+                function(data){
+                if(data == "" || data == null || data == undefined){
+                $.unblockUI();
+                alert('Unable to generate download');
+                }else{
+                $.unblockUI();
+                document.location.href = '/temporary/'+data;
+                }
+            });
+        }
+    function getLocationDeatils(globalName,nxtGlobalName)
+     {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
+            if(globalName=='location_one' && selectValue==''){
+                path = 'get-province';
+                innerId = 'location_one';
+            }else if(globalName=='location_one' && selectValue!=''){
+                path = 'get-district';
+                innerId = 'location_two';
+                $("#location_three").html("<option value=''>-- Select --</option>");
+            }else if(globalName=='location_two' && selectValue!=''){
+                path = 'get-city';
+                innerId = 'location_three';
+            }else if(globalName=='location_three' || globalName=='location_two'){
+                getFacilityListByLocation(globalName);
+            }
+            if(path!=''){
+                $.blockUI();
+                $.post("/common/"+path, {selectValue:selectValue},
+                function(data) {
+                    $("#"+innerId).html(data);
+                    getFacilityListByLocation(globalName);
+                    $.unblockUI();
+                });
+            }
+     }
+     function getFacilityListByLocation(globalName)
+     {
+        $.blockUI();
+        $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),globalName:globalName},
+        function(data) {
+            $("#facilityId").html('<option value="">-- Select --</option>'+data);
+            $.unblockUI();
+        });
+     }
+     </script>

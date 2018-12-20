@@ -323,7 +323,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                     'control_line' => (isset($qcTest['ctrlLine']) && $qcTest['ctrlLine']!='')?$qcTest['ctrlLine']:NULL,
                                     'positive_verification_line' => (isset($qcTest['positiveLine']) && $qcTest['positiveLine']!='')?$qcTest['positiveLine']:NULL,
                                     'long_term_verification_line' => (isset($qcTest['longTermLine']) && $qcTest['longTermLine']!='')?$qcTest['longTermLine']:NULL,
-                                    'term_outcome'=>$params['recencyOutcome'],
+                                    'term_outcome'=>$qcTest['recencyOutcome'],
                                     'tester_name' => $qcTest['testerName'],
                                     'app_version'=>$qcTest['appVersion'],
                                     'added_on' => $qcTest['addedOn'],

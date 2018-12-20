@@ -45,4 +45,38 @@ class VlDataController extends AbstractActionController
                 ->setTerminal(true);
         return $viewModel;
     }
+
+    public function recentInfectionAction()
+    {
+        $request = $this->getRequest();
+          if ($request->isPost()) {
+               $params = $request->getPost();
+               $recencyService = $this->getServiceLocator()->get('RecencyService');
+               $result = $recencyService->getAllRecencyResultWithVlList($params);
+               return $this->getResponse()->setContent(Json::encode($result));
+          }else{
+            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+            $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+            return new ViewModel(array(
+                'globalConfigResult' => $globalConfigResult,
+            ));
+          }
+    }
+
+    public function ltInfectionAction()
+    {
+        $request = $this->getRequest();
+          if ($request->isPost()) {
+               $params = $request->getPost();
+               $recencyService = $this->getServiceLocator()->get('RecencyService');
+               $result = $recencyService->getAllLtResult($params);
+               return $this->getResponse()->setContent(Json::encode($result));
+          }else{
+            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+            $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+            return new ViewModel(array(
+                'globalConfigResult' => $globalConfigResult,
+            ));
+          }
+    }
 }
