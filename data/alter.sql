@@ -143,3 +143,10 @@ ALTER TABLE `recency` ADD `form_saved_datetime` DATETIME NULL DEFAULT NULL AFTER
 
 -- saravanan 14-dec-2018
 UPDATE `global_config` SET `display_name` = 'Hide Fields' WHERE `global_config`.`config_id` = 7;
+
+
+-- Amit 20 Dec 2018
+
+ALTER TABLE `recency` ADD `unique_id` VARCHAR(255) NOT NULL FIRST;
+ALTER TABLE `quality_check_test` ADD `unique_id` VARCHAR(255) NOT NULL FIRST;
+ALTER TABLE `quality_check_test` ADD `form_saved_datetime` DATETIME NULL DEFAULT NULL AFTER `form_transfer_datetime`;
