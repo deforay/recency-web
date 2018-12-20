@@ -633,8 +633,8 @@ $data['final_outcome'] = 'Assay Negative';
                                         //'other_risk_population' => $recency['otherriskPopulation'],
                                         'term_outcome'=>$recency['recencyOutcome'],
                                         'recency_test_performed'=>$recency['testNotPerformed'],
-                                        'recency_test_not_performed' => ($params['testNotPerformed']=='true')?$params['recencyreason']:NULL,
-                                        'other_recency_test_not_performed' => (isset($params['recencyreason']) && $params['recencyreason']='other')?$params['otherreason']: NULL,
+                                        'recency_test_not_performed' => ($recency['testNotPerformed']=='true')?$recency['recencyreason']:NULL,
+                                        'other_recency_test_not_performed' => (isset($recency['recencyreason']) && $recency['recencyreason']='other')?$recency['otherreason']: NULL,
                                         'pregnancy_status' => $recency['pregnancyStatus'],
                                         'current_sexual_partner' => $recency['currentSexualPartner'],
                                         'past_hiv_testing' => $recency['pastHivTesting'],
@@ -986,6 +986,15 @@ $data['final_outcome'] = 'Assay Negative';
                     if($parameters['fName']!=''){
                         $sQuery->where(array('r.facility_id'=>$parameters['fName']));
                     }
+                    if($parameters['locationOne']!=''){
+                        $sQuery = $sQuery->where(array('province'=>$parameters['locationOne']));
+                        if($parameters['locationTwo']!=''){
+                              $sQuery = $sQuery->where(array('district'=>$parameters['locationTwo']));
+                        }
+                        if($parameters['locationThree']!=''){
+                              $sQuery = $sQuery->where(array('city'=>$parameters['locationThree']));
+                        }
+                  }
 
                     if (isset($sOrder) && $sOrder != "") {
                          $sQuery->order($sOrder);
@@ -995,7 +1004,7 @@ $data['final_outcome'] = 'Assay Negative';
                          $sQuery->limit($sLimit);
                          $sQuery->offset($sOffset);
                     }
-                    $queryContainer->exportRecencyDataQuery = $sQuery;
+                    $queryContainer->exportRecentResultDataQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                     //echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
@@ -1129,8 +1138,14 @@ $data['final_outcome'] = 'Assay Negative';
                         $sQuery->where(array('r.facility_id'=>$parameters['fName']));
                     }
                     if($parameters['locationOne']!=''){
-                        
-                    }
+                        $sQuery = $sQuery->where(array('province'=>$parameters['locationOne']));
+                        if($parameters['locationTwo']!=''){
+                              $sQuery = $sQuery->where(array('district'=>$parameters['locationTwo']));
+                        }
+                        if($parameters['locationThree']!=''){
+                              $sQuery = $sQuery->where(array('city'=>$parameters['locationThree']));
+                        }
+                  }
 
                     if (isset($sOrder) && $sOrder != "") {
                          $sQuery->order($sOrder);
@@ -1140,7 +1155,7 @@ $data['final_outcome'] = 'Assay Negative';
                          $sQuery->limit($sLimit);
                          $sQuery->offset($sOffset);
                     }
-                    $queryContainer->exportRecencyDataQuery = $sQuery;
+                    $queryContainer->exportLongtermDataQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                     //echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);

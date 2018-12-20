@@ -36,6 +36,11 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                             </select>
                         </div>
                     </div>
+                    <div class="row items-push">
+                        <div class="col-lg-7 ">
+                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
+                        </div>
+                    </div>
                     <table id="ltInfectionTable" class="table table-bordered table-striped table-vcenter">
                          <thead>
                               <tr>
@@ -70,7 +75,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 ],
                 "sAjaxSource": "<?php echo $this->url('vl-data',array('action' => 'lt-infection')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    aoData.push({"name": "fName", "value": $("#facilityName").val()});
+                    aoData.push({"name": "fName", "value": $("#facilityId").val()});
                     aoData.push({"name": "locationOne", "value": $("#location_one").val()});
                     aoData.push({"name": "locationTwo", "value": $("#location_two").val()});
                     aoData.push({"name": "locationThree", "value": $("#location_three").val()});
@@ -94,7 +99,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
 
             } );
             
-          function searchVlRequestData(){
+          function searchData(){
             $.blockUI();
             oTable.fnDraw();
             $.unblockUI();
