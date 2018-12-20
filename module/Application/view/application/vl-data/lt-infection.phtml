@@ -14,8 +14,8 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
      </div>
      <div class="content">
           <div class="block block-rounded block-bordered">
-               <div class="block-header block-header-default">
-               </div>
+               <div class="block-header block-header-default"></div>
+
                <div class="block-content block-content-full">
                <div class="form-group row">
                         <?php
@@ -39,6 +39,9 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     <div class="row items-push">
                         <div class="col-lg-7 ">
                             <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
+                            <?php if($roleCode=='admin'){ ?>
+                              <a href="javascript:void(0);" class="btn btn-success"  onclick="exportRecentLTermInfection();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                            <?php } ?>
                         </div>
                     </div>
                     <table id="ltInfectionTable" class="table table-bordered table-striped table-vcenter">
@@ -98,13 +101,13 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
          } ?>
 
             } );
-            
+
           function searchData(){
             $.blockUI();
             oTable.fnDraw();
             $.unblockUI();
         }
-        
+
         function exportRecencyData()
         {
             $.blockUI();
@@ -156,4 +159,20 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             $.unblockUI();
         });
      }
+
+     function exportRecentLTermInfection()
+     {
+         $.blockUI();
+         $.post("<?php echo $this->url('vl-data',array('action'=>'export-long-term-infected-data')); ?>",
+             function(data){
+             if(data == "" || data == null || data == undefined){
+             $.unblockUI();
+             alert('Unable to generate download');
+             }else{
+             $.unblockUI();
+             document.location.href = '/temporary/'+data;
+             }
+         });
+     }
+
      </script>

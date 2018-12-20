@@ -9,6 +9,7 @@ class VlDataController extends AbstractActionController
 {
     public function indexAction()
     {
+
         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
         $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
         return new ViewModel(array(
@@ -48,12 +49,15 @@ class VlDataController extends AbstractActionController
 
     public function recentInfectionAction()
     {
+
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
                $recencyService = $this->getServiceLocator()->get('RecencyService');
                $result = $recencyService->getAllRecencyResultWithVlList($params);
+
                return $this->getResponse()->setContent(Json::encode($result));
+
           }else{
             $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
             $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
@@ -78,5 +82,35 @@ class VlDataController extends AbstractActionController
                 'globalConfigResult' => $globalConfigResult,
             ));
           }
+    }
+
+    public function exportRInfectedDataAction()
+    {
+       $request = $this->getRequest();
+       if($request->isPost())
+       {
+           $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->exportRInfectedData($params);
+           $viewModel = new ViewModel();
+           $viewModel->setVariables(array('result' =>$result));
+           $viewModel->setTerminal(true);
+           return $viewModel;
+       }
+    }
+
+    public function exportLongTermInfectedDataAction()
+    {
+       $request = $this->getRequest();
+       if($request->isPost())
+       {
+           $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->exportLongTermInfected($params);
+           $viewModel = new ViewModel();
+           $viewModel->setVariables(array('result' =>$result));
+           $viewModel->setTerminal(true);
+           return $viewModel;
+       }
     }
 }

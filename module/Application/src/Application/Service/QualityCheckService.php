@@ -77,7 +77,7 @@ class QualityCheckService {
          $qcTestDb = $this->sm->get('QualityCheckTable');
          return $qcTestDb->fetchQcDetails($id);
     }
-    
+
     public function addQualityCheckDataApi($params)
     {
         $qcTestDb = $this->sm->get('QualityCheckTable');
@@ -97,9 +97,10 @@ class QualityCheckService {
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-            
+
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportQcDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
             if(count($sResult) > 0) {
                 foreach($sResult as $aRow) {
                     $row = array();
@@ -117,7 +118,7 @@ class QualityCheckService {
                     $output[] = $row;
                }
             }
-            
+
             $styleArray = array(
                 'font' => array(
                     'bold' => true,
@@ -133,7 +134,7 @@ class QualityCheckService {
                     ),
                 )
             );
-            
+
            $borderStyle = array(
                 'alignment' => array(
                     'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -144,7 +145,7 @@ class QualityCheckService {
                     ),
                 )
             );
-           
+
             $sheet->mergeCells('A1:B1');
             $sheet->mergeCells('A3:A4');
             $sheet->mergeCells('B3:B4');
@@ -157,9 +158,9 @@ class QualityCheckService {
             $sheet->mergeCells('I3:I4');
             $sheet->mergeCells('J3:J4');
             $sheet->mergeCells('K3:K4');
-            
+
             $sheet->setCellValue('A1', html_entity_decode('Quality Check Data', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-           
+
             $sheet->setCellValue('A3', html_entity_decode('Sample ID', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('B3', html_entity_decode('QC Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('C3', html_entity_decode('Reference Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -171,9 +172,9 @@ class QualityCheckService {
             $sheet->setCellValue('I3', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('J3', html_entity_decode('Term Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('K3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                        
+
             $sheet->getStyle('A1:B1')->getFont()->setBold(TRUE)->setSize(16);
-            
+
             $sheet->getStyle('A3:A4')->applyFromArray($styleArray);
             $sheet->getStyle('B3:B4')->applyFromArray($styleArray);
             $sheet->getStyle('C3:C4')->applyFromArray($styleArray);
@@ -185,7 +186,7 @@ class QualityCheckService {
             $sheet->getStyle('I3:I4')->applyFromArray($styleArray);
             $sheet->getStyle('J3:J4')->applyFromArray($styleArray);
             $sheet->getStyle('K3:K4')->applyFromArray($styleArray);
-            
+
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;
                 foreach ($rowData as $field => $value) {
@@ -206,7 +207,7 @@ class QualityCheckService {
                     $colNo++;
                 }
             }
-	    
+
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $filename = 'Quality-check-data' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);

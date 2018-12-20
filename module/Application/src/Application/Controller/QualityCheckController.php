@@ -57,8 +57,6 @@ class QualityCheckController extends AbstractActionController
           $qualityCheckId=base64_decode($this->params()->fromRoute('id'));
 
           $result=$qcService->getQcDetails($qualityCheckId);
-          // \Zend\Debug\Debug::dump($result);die;
-
 
           if ($result) {
                return new ViewModel(array(
@@ -85,4 +83,6 @@ class QualityCheckController extends AbstractActionController
             return $viewModel;
         }
      }
+
+
 }
