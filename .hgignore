@@ -10,6 +10,7 @@ Thumbs.db.orig
 .DS_Store
 .DS_Store.orig
 .git
+.vscode
 .gitattributes
 .gitignore
 ~

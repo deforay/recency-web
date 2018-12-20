@@ -8,7 +8,7 @@ use Zend\Json\Json;
 
 class DistrictController extends AbstractRestfulController
 {
-    public function getList($params)
+    public function getList()
     {
         $params=$this->getRequest()->getQuery();
         $DistrictCommonService = $this->getServiceLocator()->get('CommonService');

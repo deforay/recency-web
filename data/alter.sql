@@ -142,4 +142,4 @@ INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global
 ALTER TABLE `recency` ADD `form_saved_datetime` DATETIME NULL DEFAULT NULL AFTER `form_transfer_datetime`;
 
 -- saravanan 14-dec-2018
-UPDATE `global_config` SET `display_name` = 'Recency Hide Fields' WHERE `global_config`.`config_id` = 7;
+UPDATE `global_config` SET `display_name` = 'Hide Fields' WHERE `global_config`.`config_id` = 7;
