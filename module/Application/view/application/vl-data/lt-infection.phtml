@@ -3,7 +3,8 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -52,11 +53,13 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                                     <th>Assay Test Result</th>
                                     <th>Final Result</th>
                                     <th>Facility Name</th>
+                                    <th>VL Result</th>
+                                    <th>VL Test Date</th>
                               </tr>
                          </thead>
                          <tbody>
                               <tr>
-                                    <td colspan='5' class='dataTables_empty'>Loading data from server</td>
+                                    <td colspan='7' class='dataTables_empty'>Loading data from server</td>
                               </tr>
                               <tr>
                               </tbody>

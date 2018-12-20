@@ -451,8 +451,8 @@ $data['final_outcome'] = 'Assay Negative';
                                     if(isset($params['start']) && isset($params['end'])){
                                         $rececnyQuery = $rececnyQuery->where(
                                             array(
-                                                "((r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", 
-                                                "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."') OR 
+                                                "((r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'",
+                                                "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."') OR
                                                 (r.hiv_recency_date is null or r.hiv_recency_date = '' or r.hiv_recency_date ='0000-00-00 00:00:00'))"
                                             )
                                         );
@@ -906,7 +906,7 @@ $data['final_outcome'] = 'Assay Negative';
             $queryContainer = new Container('query');
             $common = new CommonService();
 
-            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','f.facility_name','r.vl_result','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
+            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','f.facility_name','r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
             $orderColumns = array('r.hiv_recency_date','r.sample_id','r.term_outcome','f.facility_name','r.vl_result','r.vl_test_date');
 
             /* Paging */
@@ -1006,7 +1006,7 @@ $data['final_outcome'] = 'Assay Negative';
                     }
                     $queryContainer->exportRecentResultDataQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-                    //echo $sQueryStr;die;
+                    // echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
                     /* Data set length after filtering */
@@ -1034,7 +1034,7 @@ $data['final_outcome'] = 'Assay Negative';
                     foreach ($rResult as $aRow) {
 
                          $row = array();
-                         
+
                          $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
                          $row[] = $aRow['sample_id'];
                          $row[] = $aRow['term_outcome'];
@@ -1057,8 +1057,8 @@ $data['final_outcome'] = 'Assay Negative';
             $queryContainer = new Container('query');
             $common = new CommonService();
 
-            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name');
-            $orderColumns = array('r.hiv_recency_date','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name');
+            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
+            $orderColumns = array('r.hiv_recency_date','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','r.vl_result','r.vl_test_date');
 
             /* Paging */
             $sLimit = "";
@@ -1157,7 +1157,8 @@ $data['final_outcome'] = 'Assay Negative';
                     }
                     $queryContainer->exportLongtermDataQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-                    //echo $sQueryStr;die;
+
+                    // echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
                     /* Data set length after filtering */
@@ -1185,12 +1186,14 @@ $data['final_outcome'] = 'Assay Negative';
                     foreach ($rResult as $aRow) {
 
                          $row = array();
-                         
+
                          $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
                          $row[] = $aRow['sample_id'];
                          $row[] = $aRow['term_outcome'];
                          $row[] = $aRow['final_outcome'];
                          $row[] = $aRow['facility_name'];
+                         $row[] = $aRow['vl_result'];
+                         $row[] = $common->humanDateFormat($aRow['vl_test_date']);
 
                          $output['aaData'][] = $row;
                     }
