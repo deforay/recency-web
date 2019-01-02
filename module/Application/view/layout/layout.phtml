@@ -302,7 +302,6 @@ $tatMenu="<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href="
           if(splitsUrl[1]=='facilities' || splitsUrl[1]=='user' || splitsUrl[1]=='recency' || splitsUrl[1]=='global-config' )
           {
                if(splitsUrl[1] != 'recency'){
-                    $('#recency-menu').removeClass('open');
                     $('#manage').addClass('open');
                     $('#'+splitsUrl[1]).addClass('active');
                }else if(splitsUrl[1] == 'recency'){
@@ -310,6 +309,29 @@ $tatMenu="<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href="
                     $('#recency-menu').addClass('open');
                     $('#'+splitsUrl[1]).addClass('active');
                }
+          }else if(splitsUrl[1]=='quality-check')
+          {
+            $('#manage').removeClass('open');
+            $('#'+splitsUrl[1]).addClass('active');
+          }
+          else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='recent-infection')
+          {
+            $('#manage').removeClass('open');
+            $('#'+splitsUrl[2]).addClass('active');
+          }
+          else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='lt-infection')
+          {
+            $('#manage').removeClass('open');
+            $('#'+splitsUrl[2]).addClass('active');
+          }else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='tat-report')
+          {
+            $('#manage').removeClass('open');
+            $('#'+splitsUrl[2]).addClass('active');
+          }
+          else if(splitsUrl[1]=='vl-data')
+          {
+            $('#manage').removeClass('open');
+            $('#'+splitsUrl[1]).addClass('active');
           }
      });
      </script>

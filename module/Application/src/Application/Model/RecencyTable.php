@@ -1217,7 +1217,7 @@ $data['final_outcome'] = 'Assay Negative';
                 $sQuery = $sql->select()->from(array('r' => 'recency'))
                             ->columns(array(
                                 'sample_id','final_outcome',"hiv_recency_date" => new Expression("DATE_FORMAT(DATE(hiv_recency_date), '%d-%b-%Y')"),'vl_test_date'=> new Expression("DATE_FORMAT(DATE(vl_test_date), '%d-%b-%Y')"),'vl_result_entry_date'=> new Expression("DATE_FORMAT(DATE(vl_result_entry_date), '%d-%b-%Y')"),
-                                "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10,2))")
+                                "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10))")
                             ))
                             ->where(array('vl_result_entry_date!="" AND hiv_recency_date!="" AND vl_test_date!=""'))
                             ->group('recency_id');
@@ -1251,8 +1251,8 @@ $data['final_outcome'] = 'Assay Negative';
             $queryContainer = new Container('query');
             $common = new CommonService();
 
-            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
-            $orderColumns = array('r.hiv_recency_date','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','r.vl_result','r.vl_test_date');
+            $aColumns = array('r.sample_id','r.final_outcome','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")','DATE_FORMAT(r.vl_result_entry_date,"%d-%b-%Y")');
+            $orderColumns = array('r.sample_id','r.final_outcome','r.hiv_recency_date','r.vl_test_date','r.vl_result_entry_date');
 
             /* Paging */
             $sLimit = "";
@@ -1324,7 +1324,7 @@ $data['final_outcome'] = 'Assay Negative';
                     $sQuery =   $sql->select()->from(array('r' => 'recency'))
                     ->columns(array(
                         'sample_id','final_outcome',"hiv_recency_date",'vl_test_date','vl_result_entry_date',
-                        "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10,2))")
+                        "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10))")
                     ))
                     ->where(array('vl_result_entry_date!="" AND hiv_recency_date!="" AND vl_test_date!=""'))
                     ->group('recency_id');
@@ -1361,7 +1361,7 @@ $data['final_outcome'] = 'Assay Negative';
                     $iQuery =   $sql->select()->from(array('r' => 'recency'))
                     ->columns(array(
                         'sample_id','final_outcome',"hiv_recency_date",'vl_test_date','vl_result_entry_date',
-                        "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10,2))")
+                        "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10))")
                     ))
                     ->where(array('vl_result_entry_date!="" AND hiv_recency_date!="" AND vl_test_date!=""'))
                     ->group('recency_id');
@@ -1377,19 +1377,15 @@ $data['final_outcome'] = 'Assay Negative';
                     );
 
                     foreach ($rResult as $aRow) {
-
-                         $row = array();
-
-                         
-                         $row[] = $aRow['sample_id'];
-                         $row[] = $aRow['final_outcome'];
-                         $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
-                         $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-                         $row[] = $aRow['vl_result_entry_date'];
-                         $row[] = $aRow['diffInDays'];
-                         
-
-                         $output['aaData'][] = $row;
+                        $row = array();
+                        
+                        $row[] = $aRow['sample_id'];
+                        $row[] = $aRow['final_outcome'];
+                        $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                        $row[] = $common->humanDateFormat($aRow['vl_test_date']);
+                        $row[] = date('d-M-Y',strtotime($aRow['vl_result_entry_date']));
+                        $row[] = $aRow['diffInDays'];
+                        $output['aaData'][] = $row;
                     }
                     return $output;
         }

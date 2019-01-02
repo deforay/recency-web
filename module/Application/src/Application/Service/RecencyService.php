@@ -598,4 +598,113 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchTatReport($params);
     }
+
+    //tat report
+    public function exportTatReport($params)
+    {
+
+        try {
+            $common = new \Application\Service\CommonService();
+            $queryContainer = new Container('query');
+            $excel = new PHPExcel();
+            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
+            $cacheSettings = array('memoryCacheSize' => '80MB');
+            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $output = array();
+            $sheet = $excel->getActiveSheet();
+            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $sql = new Sql($dbAdapter);
+
+            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportTatQuery);
+            $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+            if (count($sResult) > 0) {
+                foreach ($sResult as $aRow) {
+                    $row = array();
+                    $row[] = $aRow['sample_id'];
+                    $row[] = $aRow['final_outcome'];
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                    $row[] = $common->humanDateFormat($aRow['vl_test_date']);
+                    $row[] = date('d-M-Y',strtotime($aRow['vl_result_entry_date']));
+                    $row[] = $aRow['diffInDays'];
+                    $output[] = $row;
+                }
+            }
+
+            $styleArray = array(
+                'font' => array(
+                    'bold' => true,
+                    'size' => 12,
+                ),
+                'alignment' => array(
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+
+            $borderStyle = array(
+                'alignment' => array(
+                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+
+
+            $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Recency Testing Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('VL Tested Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('VL Entered Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('Difference(TAT)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+
+
+            //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
+
+            $sheet->getStyle('A1')->applyFromArray($styleArray);
+            $sheet->getStyle('B1')->applyFromArray($styleArray);
+            $sheet->getStyle('C1')->applyFromArray($styleArray);
+            $sheet->getStyle('D1')->applyFromArray($styleArray);
+            $sheet->getStyle('E1')->applyFromArray($styleArray);
+            $sheet->getStyle('F1')->applyFromArray($styleArray);
+
+            foreach ($output as $rowNo => $rowData) {
+                $colNo = 0;
+                foreach ($rowData as $field => $value) {
+                    if (!isset($value)) {
+                        $value = "";
+                    }
+                    if (is_numeric($value)) {
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    } else {
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    }
+                    $rRowCount = $rowNo + 2;
+                    $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->getColumn();
+                    $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+                    $sheet->getDefaultRowDimension()->setRowHeight(18);
+                    $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
+                    $sheet->getStyleByColumnAndRow($colNo, $rowNo + 5)->getAlignment()->setWrapText(true);
+                    $colNo++;
+                }
+            }
+
+            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+            $filename = 'TAT-Report-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            return $filename;
+        } catch (Exception $exc) {
+            return "";
+            error_log("GENERATE-PAYMENT-REPORT-EXCEL--" . $exc->getMessage());
+            error_log($exc->getTraceAsString());
+        }
+    }
 }
