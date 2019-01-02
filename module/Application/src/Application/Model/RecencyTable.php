@@ -1219,7 +1219,7 @@ $data['final_outcome'] = 'Assay Negative';
                                 'sample_id','final_outcome',"hiv_recency_date" => new Expression("DATE_FORMAT(DATE(hiv_recency_date), '%d-%b-%Y')"),'vl_test_date'=> new Expression("DATE_FORMAT(DATE(vl_test_date), '%d-%b-%Y')"),'vl_result_entry_date'=> new Expression("DATE_FORMAT(DATE(vl_result_entry_date), '%d-%b-%Y')"),
                                 "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10))")
                             ))
-                            ->where(array('vl_result_entry_date!="" AND hiv_recency_date!="" AND vl_test_date!=""'))
+                            ->where(array('vl_result_entry_date!="" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_date!="" AND vl_test_date!=""'))
                             ->group('recency_id');
                             if(isset($params['start']) && isset($params['end'])){
                                 $sQuery = $sQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
@@ -1326,7 +1326,7 @@ $data['final_outcome'] = 'Assay Negative';
                         'sample_id','final_outcome',"hiv_recency_date",'vl_test_date','vl_result_entry_date',
                         "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10))")
                     ))
-                    ->where(array('vl_result_entry_date!="" AND hiv_recency_date!="" AND vl_test_date!=""'))
+                    ->where(array('vl_result_entry_date!="" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_date!="" AND vl_test_date!=""'))
                     ->group('recency_id');
                     // if(isset($params['start']) && isset($params['end'])){
                     //     $sQuery = $sQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
@@ -1363,7 +1363,7 @@ $data['final_outcome'] = 'Assay Negative';
                         'sample_id','final_outcome',"hiv_recency_date",'vl_test_date','vl_result_entry_date',
                         "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10))")
                     ))
-                    ->where(array('vl_result_entry_date!="" AND hiv_recency_date!="" AND vl_test_date!=""'))
+                    ->where(array('vl_result_entry_date!="" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_date!="" AND vl_test_date!=""'))
                     ->group('recency_id');
 
                     $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
