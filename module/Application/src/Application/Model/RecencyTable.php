@@ -1204,7 +1204,17 @@ $data['final_outcome'] = 'Assay Negative';
           {
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
-            $sQuery = $sql->select()->from(array('r' => 'recency'))
+            //check the user is active or not
+            $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id','status'))
+                        ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
+                        ->where(array('auth_token' =>$params['authToken']));
+            $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
+            $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+            if(isset($uResult['status']) && $uResult['status']=='inactive'){
+                $response["status"] = "fail";
+                $response["message"] = "Your status is Inactive!";
+            }else if(isset($uResult['status']) && $uResult['status']=='active'){
+                $sQuery = $sql->select()->from(array('r' => 'recency'))
                             ->columns(array(
                                 'sample_id','final_outcome','hiv_recency_date','vl_test_date','vl_result_entry_date',
                                 "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10,2))")
@@ -1214,11 +1224,24 @@ $data['final_outcome'] = 'Assay Negative';
                             if(isset($params['start']) && isset($params['end'])){
                                 $sQuery = $sQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
                             }
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-            return $rResult;
+                            if($uResult['role_code']!='admin'){
+                                $sQuery = $sQuery->where(array('u.auth_token' =>$params['authToken']));
+                            }
+                $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                if(count($rResult) > 0){
+                    $response['status']='success';
+                    $response['tat'] = $rResult;
+               }else{
+                    $response["status"] = "fail";
+                    $response["message"] = "You don't have TAT data!";
+               }
+            }else {
+                $response["status"] = "fail";
+                $response["message"] = "Please check your token credentials!";
+            }
+            return $response;
           }
      }
-
 
      ?>
