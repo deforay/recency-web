@@ -168,7 +168,19 @@ return array(
                               'controller' => 'Api\Controller\QualityCheck',
                          ),
                     ),
+                ),
+                'api-tat-report' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/tat-report[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\TatReport',
+                         ),
                     ),
+                ),
 
           ),
      ),
@@ -188,8 +200,7 @@ return array(
                'Api\Controller\RecencyMandatory' => 'Api\Controller\RecencyMandatoryController',
                'Api\Controller\RecencyHide' => 'Api\Controller\RecencyHideController',
                'Api\Controller\QualityCheck' => 'Api\Controller\QualityCheckController',
-
-
+               'Api\Controller\TatReport' => 'Api\Controller\TatReportController',
           ),
      ),
      'view_manager' => array(

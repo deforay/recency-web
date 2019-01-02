@@ -1199,6 +1199,26 @@ $data['final_outcome'] = 'Assay Negative';
                     }
                     return $output;
           }
+
+          public function fetchTatReportAPI($params)
+          {
+            $dbAdapter = $this->adapter;
+            $sql = new Sql($dbAdapter);
+            $sQuery = $sql->select()->from(array('r' => 'recency'))
+                            ->columns(array(
+                                'sample_id','final_outcome','hiv_recency_date','vl_test_date','vl_result_entry_date',
+                                "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10,2))")
+                            ))
+                            ->where(array('vl_result_entry_date!=""'))
+                            ->group('recency_id');
+                            if(isset($params['start']) && isset($params['end'])){
+                                $sQuery = $sQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
+                            }
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            return $rResult;
+          }
      }
+
 
      ?>

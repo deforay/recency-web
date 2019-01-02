@@ -338,9 +338,9 @@ class QualityCheckTable extends AbstractTableGateway {
                                 $this->insert($data);
                                 $lastInsertedId = $this->lastInsertValue;
                                 if($lastInsertedId > 0){
-                                     $response['syncData']['response'][$key] = 'success';
+                                    $response['syncData']['response'][$key] = 'success';
                                 }else{
-                                     $response['syncData']['response'][$key] = 'failed';
+                                    $response['syncData']['response'][$key] = 'failed';
                                 }
                       }
                       catch (Exception $exc) {
