@@ -113,4 +113,15 @@ class VlDataController extends AbstractActionController
            return $viewModel;
        }
     }
+
+    public function TatReportAction()
+    {
+        $request = $this->getRequest();
+          if ($request->isPost()) {
+               $params = $request->getPost();
+               $recencyService = $this->getServiceLocator()->get('RecencyService');
+               $result = $recencyService->getTatReport($params);
+               return $this->getResponse()->setContent(Json::encode($result));
+          }
+    }
 }

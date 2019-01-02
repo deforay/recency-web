@@ -1216,10 +1216,10 @@ $data['final_outcome'] = 'Assay Negative';
             }else if(isset($uResult['status']) && $uResult['status']=='active'){
                 $sQuery = $sql->select()->from(array('r' => 'recency'))
                             ->columns(array(
-                                'sample_id','final_outcome','hiv_recency_date','vl_test_date','vl_result_entry_date',
+                                'sample_id','final_outcome',"hiv_recency_date" => new Expression("DATE_FORMAT(DATE(hiv_recency_date), '%d-%b-%Y')"),'vl_test_date'=> new Expression("DATE_FORMAT(DATE(vl_test_date), '%d-%b-%Y')"),'vl_result_entry_date'=> new Expression("DATE_FORMAT(DATE(vl_result_entry_date), '%d-%b-%Y')"),
                                 "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10,2))")
                             ))
-                            ->where(array('vl_result_entry_date!=""'))
+                            ->where(array('vl_result_entry_date!="" AND hiv_recency_date!="" AND vl_test_date!=""'))
                             ->group('recency_id');
                             if(isset($params['start']) && isset($params['end'])){
                                 $sQuery = $sQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
@@ -1242,6 +1242,157 @@ $data['final_outcome'] = 'Assay Negative';
             }
             return $response;
           }
+
+        public function fetchTatReport($parameters)
+        {
+ /* Array of database columns which should be read and sent back to DataTables. Use a space where
+            * you want to insert a non-database field (for example a counter or static image)
+            */
+            $queryContainer = new Container('query');
+            $common = new CommonService();
+
+            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
+            $orderColumns = array('r.hiv_recency_date','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','r.vl_result','r.vl_test_date');
+
+            /* Paging */
+            $sLimit = "";
+            if (isset($parameters['iDisplayStart']) && $parameters['iDisplayLength'] != '-1') {
+                $sOffset = $parameters['iDisplayStart'];
+                $sLimit = $parameters['iDisplayLength'];
+            }
+
+            /* Ordering */
+            $sOrder = "";
+            if (isset($parameters['iSortCol_0'])) {
+                for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
+                        if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
+                            $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
+                        }
+                }
+                $sOrder = substr_replace($sOrder, "", -1);
+            }
+
+          /*
+          * Filtering
+          * NOTE this does not match the built-in DataTables filtering which does it
+          * word by word on any field. It's possible to do here, but concerned about efficiency
+          * on very large tables, and MySQL's regex functionality is very limited
+          */
+
+            $sWhere = "";
+            if (isset($parameters['sSearch']) && $parameters['sSearch'] != "") {
+               $searchArray = explode(" ", $parameters['sSearch']);
+               $sWhereSub = "";
+               foreach ($searchArray as $search) {
+                    if ($sWhereSub == "") {
+                         $sWhereSub .= "(";
+                    } else {
+                         $sWhereSub .= " AND (";
+                              }
+                              $colSize = count($aColumns);
+
+                              for ($i = 0; $i < $colSize; $i++) {
+                              if ($i < $colSize - 1) {
+                              $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
+                              } else {
+                              $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' ";
+                              }
+                              }
+                              $sWhereSub .= ")";
+                         }
+                         $sWhere .= $sWhereSub;
+                    }
+
+                    /* Individual column filtering */
+                    for ($i = 0; $i < count($aColumns); $i++) {
+                         if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
+                              if ($sWhere == "") {
+                                   $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                              } else {
+                                   $sWhere .= " AND " . $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                              }
+                         }
+                    }
+
+                    /*
+                    * SQL queries
+                    * Get data to display
+                    */
+                    $dbAdapter = $this->adapter;
+                    $sql = new Sql($dbAdapter);
+
+                    $sQuery =   $sql->select()->from(array('r' => 'recency'))
+                    ->columns(array(
+                        'sample_id','final_outcome',"hiv_recency_date",'vl_test_date','vl_result_entry_date',
+                        "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10,2))")
+                    ))
+                    ->where(array('vl_result_entry_date!="" AND hiv_recency_date!="" AND vl_test_date!=""'))
+                    ->group('recency_id');
+                    // if(isset($params['start']) && isset($params['end'])){
+                    //     $sQuery = $sQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
+                    // }
+
+                    if (isset($sWhere) && $sWhere != "") {
+                         $sQuery->where($sWhere);
+                    }
+
+                    if (isset($sOrder) && $sOrder != "") {
+                         $sQuery->order($sOrder);
+                    }
+
+                    if (isset($sLimit) && isset($sOffset)) {
+                         $sQuery->limit($sLimit);
+                         $sQuery->offset($sOffset);
+                    }
+                    $queryContainer->exportTatQuery = $sQuery;
+                    $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+
+                    // echo $sQueryStr;die;
+                    $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+
+                    /* Data set length after filtering */
+                    $sQuery->reset('limit');
+                    $sQuery->reset('offset');
+                    $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+                    $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+                    $iFilteredTotal = count($aResultFilterTotal);
+
+                    /* Total data set length */
+                    $iQuery =   $sql->select()->from(array('r' => 'recency'))
+                    ->columns(array(
+                        'sample_id','final_outcome',"hiv_recency_date",'vl_test_date','vl_result_entry_date',
+                        "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10,2))")
+                    ))
+                    ->where(array('vl_result_entry_date!="" AND hiv_recency_date!="" AND vl_test_date!=""'))
+                    ->group('recency_id');
+
+                    $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+                    $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+                    $output = array(
+                         "sEcho" => intval($parameters['sEcho']),
+                         "iTotalRecords" => count($iResult),
+                         "iTotalDisplayRecords" => $iFilteredTotal,
+                         "aaData" => array()
+                    );
+
+                    foreach ($rResult as $aRow) {
+
+                         $row = array();
+
+                         
+                         $row[] = $aRow['sample_id'];
+                         $row[] = $aRow['final_outcome'];
+                         $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                         $row[] = $common->humanDateFormat($aRow['vl_test_date']);
+                         $row[] = $aRow['vl_result_entry_date'];
+                         $row[] = $aRow['diffInDays'];
+                         
+
+                         $output['aaData'][] = $row;
+                    }
+                    return $output;
+        }
      }
 
      ?>

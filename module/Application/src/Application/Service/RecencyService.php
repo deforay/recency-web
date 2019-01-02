@@ -592,4 +592,10 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchTatReportAPI($params);
     }
+
+    public function getTatReport($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchTatReport($params);
+    }
 }
