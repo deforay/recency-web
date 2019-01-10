@@ -153,7 +153,7 @@ class GlobalConfigTable extends AbstractTableGateway {
 
     public function updateGlobalConfigDetails($params)
     {
-        // \Zend\Debug\Debug::dump($params);die;
+         //\Zend\Debug\Debug::dump($params);die;
         $result = 1;
         foreach ($params as $fieldName => $fieldValue) {
             $this->update(array('global_value' => $fieldValue), array('global_name' => $fieldName));
@@ -268,35 +268,35 @@ class GlobalConfigTable extends AbstractTableGateway {
         if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
             $explodField = explode(",",$arr['display_fields']);
         }
-        $row['sampleId'] = in_array("Sample Id",$explodField)?false:true;
-        $row['patientId'] = in_array("Patient Id",$explodField)?false:true;
-        $row['facilityId'] = in_array("Facility Name",$explodField)?false:true;
-        $row['location_one'] = in_array("Province",$explodField)?false:true;
-        $row['location_two'] = in_array("District",$explodField)?false:true;
-        $row['location_three'] = in_array("City",$explodField)?false:true;
-        $row['hivDiagnosisDate'] = in_array("Hiv Diagnosis Date",$explodField)?false:true;
-        $row['pastHivTesting'] = in_array("Past Hiv Testing",$explodField)?false:true;
-        $row['testLast12Month'] = in_array("Test Last 12 Month",$explodField)?false:true;
-        $row['lastHivStatus'] = in_array("Last HIV Status",$explodField)?false:true;
-        $row['patientOnArt'] = in_array("Patient on ART",$explodField)?false:true;
-        $row['hivRecencyDate'] = in_array("Hiv Recency Date",$explodField)?false:true;
-        $row['ctrlLine'] = in_array("Control Line",$explodField)?false:true;
-        $row['positiveLine'] = in_array("Positive Verification Line",$explodField)?false:true;
-        $row['longTermLine'] = in_array("Long Term Verification Line",$explodField)?false:true;
-        $row['testKitLotNo'] = in_array("Test Kit Lot No",$explodField)?false:true;
-        $row['testKitExpDate'] = in_array("Kit Expiry Date",$explodField)?false:true;
-        $row['testerName'] = in_array("Tester Name",$explodField)?false:true;
-        $row['dob'] = in_array("Dob",$explodField)?false:true;
-        $row['age'] = in_array("Age",$explodField)?false:true;
-        $row['gender'] = in_array("Gender",$explodField)?false:true;
-        $row['pregnancyStatus'] = in_array("Pregnancy Status",$explodField)?false:true;
-        $row['maritalStatus'] = in_array("Marital Status",$explodField)?false:true;
-        $row['educationLevel'] = in_array("Education Level",$explodField)?false:true;
-        $row['riskPopulation'] = in_array("Risk Population",$explodField)?false:true;
-        $row['residence'] = in_array("Residence",$explodField)?false:true;
-        $row['currentSexualPartner'] = in_array("Current Sexual Partner",$explodField)?false:true;
-        $row['violenceLast12Month'] = in_array("Experience Violence Last 12 Month",$explodField)?false:true;
-        $row['notes'] = in_array("Comments",$explodField)?false:true;
+        $row['sampleId'] = in_array("Sample Id",$explodField)?true:false;
+        $row['patientId'] = in_array("Patient Id",$explodField)?true:false;
+        $row['facilityId'] = in_array("Facility Name",$explodField)?true:false;
+        $row['location_one'] = in_array("Province",$explodField)?true:false;
+        $row['location_two'] = in_array("District",$explodField)?true:false;
+        $row['location_three'] = in_array("City",$explodField)?true:false;
+        $row['hivDiagnosisDate'] = in_array("Hiv Diagnosis Date",$explodField)?true:false;
+        $row['pastHivTesting'] = in_array("Past Hiv Testing",$explodField)?true:false;
+        $row['testLast12Month'] = in_array("Test Last 12 Month",$explodField)?true:false;
+        $row['lastHivStatus'] = in_array("Last HIV Status",$explodField)?true:false;
+        $row['patientOnArt'] = in_array("Patient on ART",$explodField)?true:false;
+        $row['hivRecencyDate'] = in_array("Hiv Recency Date",$explodField)?true:false;
+        $row['ctrlLine'] = in_array("Control Line",$explodField)?true:false;
+        $row['positiveLine'] = in_array("Positive Verification Line",$explodField)?true:false;
+        $row['longTermLine'] = in_array("Long Term Verification Line",$explodField)?true:false;
+        $row['testKitLotNo'] = in_array("Test Kit Lot No",$explodField)?true:false;
+        $row['testKitExpDate'] = in_array("Kit Expiry Date",$explodField)?true:false;
+        $row['testerName'] = in_array("Tester Name",$explodField)?true:false;
+        $row['dob'] = in_array("Dob",$explodField)?true:false;
+        $row['age'] = in_array("Age",$explodField)?true:false;
+        $row['gender'] = in_array("Gender",$explodField)?true:false;
+        $row['pregnancyStatus'] = in_array("Pregnancy Status",$explodField)?true:false;
+        $row['maritalStatus'] = in_array("Marital Status",$explodField)?true:false;
+        $row['educationLevel'] = in_array("Education Level",$explodField)?true:false;
+        $row['riskPopulation'] = in_array("Risk Population",$explodField)?true:false;
+        $row['residence'] = in_array("Residence",$explodField)?true:false;
+        $row['currentSexualPartner'] = in_array("Current Sexual Partner",$explodField)?true:false;
+        $row['violenceLast12Month'] = in_array("Experience Violence Last 12 Month",$explodField)?true:false;
+        $row['notes'] = in_array("Comments",$explodField)?true:false;
 
         // $output = array_filter($row);
         // $response['fields'] = array_values($row);

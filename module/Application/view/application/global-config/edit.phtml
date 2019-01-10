@@ -56,6 +56,10 @@ $allFileds2 = json_encode($formFields2);
         color: black;
         font-weight : 700;
     }
+
+    #search option {
+    display: none;
+}
 </style>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -135,8 +139,8 @@ $allFileds2 = json_encode($formFields2);
                             <div class="col-md-2">
                                 <button type="button" id="search2_rightAll" onclick="setReqValue()" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
                                 <button type="button" id="search2_rightSelected" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
-                                <button type="button" id="search2_leftSelected" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
-                                <button type="button" id="search2_leftAll" onclick="setReqValue()"  class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
+                                <button type="button" id="search2_leftSelected" onclick="setDisplayValue()"  class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
+                                <button type="button" id="search2_leftAll" onclick="setDisplayValue()"  class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
                             </div>
 
                             <div class="col-sm-4">
@@ -229,7 +233,7 @@ var selDataValue = [];
 var selVal2 = [];
 var selDataValue2 = [];
 function validateNow() {
-    
+    setDisplayValue();
     $('#search_to option').each(function(i, selected){
         selVal[i] = $(selected).val();
         selDataValue[i] = selected.attributes['data-index'].nodeValue;
@@ -278,43 +282,50 @@ $(document).ready(function($){
         sort : false,
     });
 
-    //by default
-    $("#search option").each(function()
-    {
-       // $("#search").find('option[value="'+$(this).val()+'"]').prop('disabled', true); 
-    });
     $("#search2_rightAll").click(function(){setReqValue();});
     $("#search2_rightSelected").click(function(){setReqValue();});
     $("#search2_leftSelected").click(function(){setReqValue();});
     $("#search2_leftAll").click(function(){setReqValue();});
+    $("#search_rightAll").click(function(){setReqValue();});
+    $("#search_rightSelected").click(function(){setReqValue();});
+    $("#search_leftSelected").click(function(){setDisplayValue();});
+    $("#search_leftAll").click(function(){setDisplayValue();});
 
     setReqValue();
+    setDisplayValue();
 });
 
-function setReqValue(){
+function setDisplayValue()
+{
     var seletedVal = [];
-    var seletedVal2 = [];
 
-    $("#search option").each(function()
-    {
-        //$("#search").find('option[value="'+$(this).val()+'"]').prop('disabled', true); 
+    $('#search option').each(function(i, selected){
+        seletedVal[i] = $(selected).val();
     });
     
+    
+    $('#search2 option').each(function(j, selected){
+        var atrIndex = $("#search_to option[value='" + $(selected).val() + "']").attr('data-index');
+        if(seletedVal.indexOf($(selected).val())=="-1"){
+        $("#search").append("<option data-index='"+atrIndex+"' value='" + $(selected).val() + "'>"+$(selected).val()+"</option>");
+        }
+        $("#search_to option[value='" + $(selected).val() + "']").remove();
+    });
+    setReqValue();
+}
+
+function setReqValue(){
+    //first get all search_to options
+    $('#search2 option').each(function(j, selected){
+        $("#search option[value='" + $(selected).val() + "']").hide();
+        $("#search_to option[value='" + $(selected).val() + "']").hide();
+    });
     $('#search2_to option').each(function(j, selected){
-        seletedVal2[j] = $(selected).val();
-        //$("#search").find('option[value="'+$(selected).val()+'"]').prop('disabled', false);
+        $("#search option[value='" + $(selected).val() + "']").show();
+        $("#search_to option[value='" + $(selected).val() + "']").show();
+        //$("#search").find('option[value="'+$(selected).val()+'"]').show();
     });
 
-    $('#search_to option').each(function(i, selected){
-        //seletedVal[i] = $(selected).val();
-            if($.inArray($(selected).val(), seletedVal2)){
-               // $("#search_to").find('option[value="'+$(selected).val()+'"]').prop('disabled', false); 
-               // $("#search").find('option[value="'+$(selected).val()+'"]').prop('disabled', false); 
-            }else{
-                //$("#search_to").find('option[value="'+$(selected).val()+'"]').prop('disabled', true); 
-            }
-    });
-    
 }
 // function setReqValue1(){
 //     var seletedVal = [];
