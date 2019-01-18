@@ -139,4 +139,43 @@ class VlDataController extends AbstractActionController
            return $viewModel;
        }
     }
+
+    public function emailResultAction()
+    {
+        $request = $this->getRequest();
+        $recencyService = $this->getServiceLocator()->get('RecencyService');
+
+        $sampleResult = $recencyService->getSampleResult();
+        return new ViewModel(array(
+            'sampleResult' => $sampleResult,
+        ));
+    
+    }
+    public function emailResultPdfAction()
+    {
+        $request = $this->getRequest();
+        $recencyService = $this->getServiceLocator()->get('RecencyService');
+
+        if ($request->isPost()) {
+               $params = $request->getPost();
+               if(isset($params['pdfFile']))
+               {
+                $result = $recencyService->updateEmailSendResult($params);
+                return $this->_redirect()->toUrl('/vl-data/email-result');
+               }else{
+               $result = $recencyService->getEmailSendResult($params);
+               return new ViewModel(array(
+                'result' => $result,
+                'formFields'=>json_encode($params)
+                ));
+            }
+        }
+    }
+    public function downloadResultPdfAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        return new ViewModel(array(
+                    'fileName'=>$id
+                ));
+    }
 }

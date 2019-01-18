@@ -5,6 +5,7 @@ use Exception;
 use PHPExcel;
 use Zend\Db\Sql\Sql;
 use Zend\Session\Container;
+use TCPDF;
 
 class RecencyService
 {
@@ -704,6 +705,37 @@ class RecencyService
         } catch (Exception $exc) {
             return "";
             error_log("GENERATE-PAYMENT-REPORT-EXCEL--" . $exc->getMessage());
+            error_log($exc->getTraceAsString());
+        }
+    }
+
+    public function getSampleResult()
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchSampleResult();
+    }
+
+    public function getEmailSendResult($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchEmailSendResult($params);
+    }
+
+    public function updateEmailSendResult($params)
+    {
+        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter->beginTransaction();
+        try {
+            $recencyDb = $this->sm->get('RecencyTable');
+            $result = $recencyDb->updateEmailSendResult($params);
+            if ($result > 0) {
+                $adapter->commit();
+                $alertContainer = new Container('alert');
+                $alertContainer->alertMsg = 'Mail sent successfully';
+            }
+        } catch (Exception $exc) {
+            $adapter->rollBack();
+            error_log($exc->getMessage());
             error_log($exc->getTraceAsString());
         }
     }

@@ -15,6 +15,7 @@ use Application\Model\RecencyTable;
 use Application\Model\RiskPopulationsTable;
 use Application\Model\GlobalConfigTable;
 use Application\Model\UserFacilityMapTable;
+use Application\Model\TempMailTable;
 
 use Application\Model\ProvinceTable;
 use Application\Model\DistrictTable;
@@ -140,10 +141,15 @@ class Module{
                     },
 
                     'QualityCheckTable' => function($sm) {
-                         $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                         $table = new QualityCheckTable($dbAdapter);
-                         return $table;
-                         },
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new QualityCheckTable($dbAdapter);
+                        return $table;
+                    },
+                    'TempMailTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new TempMailTable($dbAdapter);
+                        return $table;
+                    },
 
 
                     //service

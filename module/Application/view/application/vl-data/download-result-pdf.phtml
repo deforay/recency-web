@@ -1,0 +1,10 @@
+<?php
+$file = TEMP_UPLOAD_PATH. DIRECTORY_SEPARATOR . $fileName;
+//$fp = fopen($file, "r") ;
+$myFileName = $fileName;
+header('Content-Transfer-Encoding: binary');  // For Gecko browsers mainly
+header('Accept-Ranges: bytes');  // For download resume
+header('Content-Encoding: none');
+header('Content-type: application/pdf');
+header('Content-Disposition: attachment; filename=' . $myFileName);  // Make the browser display the Save As dialog
+readfile($file);  //this is necessary in order to get it to actually download the file, otherwise it will be 0Kb

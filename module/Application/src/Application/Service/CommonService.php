@@ -9,6 +9,7 @@ use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mail;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Part as MimePart;
+use Zend\Mime\Mime as Mime;
 
 class CommonService {
 
@@ -170,6 +171,7 @@ class CommonService {
      public function sendTempMail() {
           try {
                $tempDb = $this->sm->get('TempMailTable');
+               $globalDb = $this->sm->get('GlobalConfigTable');
                $config = new \Zend\Config\Reader\Ini();
                $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
                $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
@@ -201,6 +203,19 @@ class CommonService {
                          $tempDb->updateTempMailStatus($id);
 
                          $fromEmail = $result['from_mail'];
+                         if(trim($result['attachment'])!=''){
+                            $options = new SmtpOptions(array(
+                            'host' => $configResult["email"]["host"],
+                            'port' => $configResult["email"]["config"]["port"],
+                            'connection_class' => $configResult["email"]["config"]["auth"],
+                            'connection_config' => array(
+                                'username' => $globalDb->getGlobalValue('email_id'),
+                                'password' => $globalDb->getGlobalValue('email_password'),
+                                'ssl' => $configResult["email"]["config"]["ssl"],
+                            ),
+                        ));
+                        $transport->setOptions($options);
+                        }
                          $fromFullName = $result['from_full_name'];
                          $subject = $result['subject'];
 
@@ -208,7 +223,20 @@ class CommonService {
                          $html->type = "text/html";
 
                          $body = new MimeMessage();
-                         $body->setParts(array($html));
+                         if(trim($result['attachment'])!=''){
+                            $extension = strtolower(pathinfo($result['attachment'], PATHINFO_EXTENSION));
+                            $attachment = new MimePart(fopen($result['attachment'],'r'));
+                            if($extension=='pdf'){
+                                $attachment->type = 'application/pdf';
+                                $attachment->filename = 'vl-result.pdf';
+                            }
+                            $attachment->encoding    = Mime::ENCODING_BASE64;
+                            $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+                            
+                            $body->setParts(array($html,$attachment));
+                        }else{
+                            $body->setParts(array($html));
+                        }
 
                          $alertMail->setBody($body);
                          $alertMail->addFrom($fromEmail, $fromFullName);

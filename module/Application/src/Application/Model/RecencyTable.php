@@ -1389,6 +1389,56 @@ $data['final_outcome'] = 'Assay Negative';
                     }
                     return $output;
         }
+
+        public function fetchSampleResult()
+        {
+            $dbAdapter = $this->adapter;
+            $sql = new Sql($dbAdapter);
+
+            $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_date', 'term_outcome', 'vl_result', 'final_outcome'))
+                         ->where(array('vl_result!="" AND vl_result is not null AND mail_sent_status is null'));
+                         
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            return $rResult;
+        }
+
+        public function fetchEmailSendResult($params)
+        {
+            $dbAdapter = $this->adapter;
+            $sql = new Sql($dbAdapter);
+
+            $sQuery = $sql->select()->from(array('r' => 'recency'))
+                            ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+                         ->where("recency_id IN('".$params['selectedSampleId']."')");
+                         
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            return $rResult;
+        }
+
+        public function updateEmailSendResult($params)
+        {
+            $tempDb = new \Application\Model\TempMailTable($this->adapter);
+
+            $emailFormField = json_decode($params['emailResultFields'],true);
+            $to = $emailFormField['toEmail'];
+            $subject = $emailFormField['subject'];
+            $message = $emailFormField['message'];
+            $fromName = 'Admin';
+            $attachment = $params['pdfFile'];
+            $fromMail  = 'zfmailexample@gmail.com';
+            $mailResult = '';
+            $mailResult = $tempDb->insertTempMailDetails($to, $subject, $message, $fromMail, $fromName,$cc=null,$bcc=null,$attachment);
+            if($mailResult>0)
+            {
+                foreach($emailFormField['to'] as $recencyId)
+                {
+                    $this->update(array('mail_sent_status'=>'yes'),array('recency_id'=>$recencyId));
+                }
+            }
+            return $mailResult;
+        }
      }
 
      ?>

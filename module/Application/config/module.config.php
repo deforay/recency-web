@@ -202,6 +202,7 @@ return array(
                'Application\Controller\QualityCheck' => 'Application\Controller\QualityCheckController',
                'Application\Controller\Captcha' => 'Application\Controller\CaptchaController',
                'Application\Controller\VlData' => 'Application\Controller\VlDataController',
+               'Application\Controller\Cron' => 'Application\Controller\CronController',
           ),
      ),
      'controller_plugins' => array(
@@ -232,10 +233,19 @@ return array(
      ),
      // Placeholder for console routes
      'console' => array(
-          'router' => array(
-               'routes' => array(
-
-               ),
-          ),
-     ),
+      'router' => array(
+          'routes' => array(
+              'mail-console-route' => array(
+                  'type'    => 'simple',
+                  'options' => array(
+                      'route'    => 'send-mail',
+                      'defaults' => array(
+                          'controller' => 'Application\Controller\Cron',
+                          'action' => 'send-mail'
+                      ),
+                  ),
+              ),
+            ),
+      ),
+),
 );

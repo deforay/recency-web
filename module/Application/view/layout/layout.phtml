@@ -30,7 +30,8 @@ $longTermMenu="<li id='nav-main-item'><a id='lt-infection' class='nav-main-link'
 $tatMenu = "";
 $tatMenu="<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'tat-report')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> TAT Report</span></a></li>";
 
-
+$emailMenu = "";
+$emailMenu="<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'email-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Email Results</span></a></li>";
 
 ?>
 
@@ -163,7 +164,9 @@ $tatMenu="<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href="
                          <li class="nav-main-heading" style="padding:5px;"></li>
                          <?php echo $longTermMenu; ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
-                         <?php echo $tatMenu; 
+                         <?php echo $tatMenu; ?>
+                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <?php echo $emailMenu; 
                          } ?>
                          
 
