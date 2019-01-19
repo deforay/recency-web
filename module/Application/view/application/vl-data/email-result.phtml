@@ -37,6 +37,33 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
           </div>
           <div class="block-content">
                <div class="col-md-12 table-responsive">
+               <h3 class="block-title" style=" margin-bottom: 2%; ">Use Province, District, City filters for sample ID</h3>
+                    <div class="form-group row">
+                        <?php
+                         foreach($globalConfigResult as $config){ ?>
+                            <?php if($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three'){ ?>
+                                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
+                                        <option value="">-- Select --</option>
+                                    </select>
+                                </div>
+                            <?php }
+                        }?>
+                        <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+                                <option value="">-- Select --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row items-push">
+                        <div class="col-lg-7 offset-lg-4">
+                            <a href="javascript:void(0);" class="btn btn-danger">Reset</a>&nbsp;
+                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
+                        </div>
+                    </div>
                     <form name="emailInformation" id="emailInformation"  class="mb-5" action="<?php echo $this->url('vl-data', array('action' => 'email-result-pdf')); ?>" method="post">
 
 <div class="form-group row">
@@ -58,22 +85,12 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                               </div>
                          </div>
 
-
-
-                         <div class="form-group row">
+<div id="sampleList">
+<div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Sample ID</label>
                               <div class="col-sm-4">
                                    <select  id="search" class="form-control" size="8" multiple="multiple">
-                                       <?php
-                                       if(count($sampleResult)>0){
-                                           foreach($sampleResult as $result)
-                                           {
-                                               ?>
-                                                <option value="<?php echo $result['recency_id'];?>"><?php echo $result['sample_id'];?></option>
-                                               <?php
-                                           }
-                                       }
-                                       ?>
+                                       
                                    </select>
                               </div>
 
@@ -88,12 +105,13 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                                    <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
                               </div>
                          </div>
+</div>
 
                          <div class="row items-push">
                               <div class="col-lg-7 offset-lg-4">
                                    <input type="hidden" name="selectedSampleId" id="selectedSampleId"/>
 
-                                   <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                                   <button type="submit"  class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
                               </div>
                          </div>
                     </form>
@@ -102,7 +120,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
      </div>
 </div>
 
-<script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/multiselect.min.js'; ?>"></script>
 <script type="text/javascript">
 
      jQuery(document).ready(function($) {
@@ -115,6 +133,12 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                     return value.length > 3;
                }
           });
+          <?php foreach($globalConfigResult as $config){
+             ?>
+             getLocationDeatils('<?php echo $config["global_name"];?>');
+             <?php
+             break;
+         } ?>
      });
 
      duplicateName = true;
@@ -136,5 +160,56 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                }
           }
      }
+     function getLocationDeatils(globalName,nxtGlobalName)
+     {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
+            if(globalName=='location_one' && selectValue==''){
+                path = 'get-province';
+                innerId = 'location_one';
+            }else if(globalName=='location_one' && selectValue!=''){
+                path = 'get-district';
+                innerId = 'location_two';
+                $("#location_three").html("<option value=''>-- Select --</option>");
+            }else if(globalName=='location_two' && selectValue!=''){
+                path = 'get-city';
+                innerId = 'location_three';
+            }else if(globalName=='location_three' || globalName=='location_two'){
+                getFacilityListByLocation(globalName);
+            }
+            if(path!=''){
+                $.blockUI();
+                $.post("/common/"+path, {selectValue:selectValue},
+                function(data) {
+                    $("#"+innerId).html(data);
+                    getFacilityListByLocation(globalName);
+                    $.unblockUI();
+                });
+            }
+     }
+
+     function getFacilityListByLocation(globalName)
+     {
+        $.blockUI();
+        $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),globalName:globalName},
+        function(data) {
+            $("#facilityId").html('<option value="">-- Select --</option>'+data);
+            $.unblockUI();
+        });
+     }
+
+     function searchData()
+     {
+        $.blockUI();
+        $.post("<?php echo $this->url('vl-data', array('action' => 'email-result-samples')); ?>", {locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),facilityId:$("#facilityId").val()},
+        function(data) {
+            $("#search").html(data);
+            $("#search_to").html('');
+            
+            $.unblockUI();
+        });
+     }
+
      
 </script>

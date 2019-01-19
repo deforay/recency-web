@@ -709,10 +709,10 @@ class RecencyService
         }
     }
 
-    public function getSampleResult()
+    public function getSampleResult($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        return $recencyDb->fetchSampleResult();
+        return $recencyDb->fetchSampleResult($params);
     }
 
     public function getEmailSendResult($params)

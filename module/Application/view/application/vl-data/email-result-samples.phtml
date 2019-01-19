@@ -1,0 +1,11 @@
+ <?php
+                                       if(count($sampleResult)>0){
+                                           foreach($sampleResult as $result)
+                                           {
+                                               ?>
+                                                <option value="<?php echo $result['recency_id'];?>"><?php echo $result['sample_id'];?></option>
+                                               <?php
+                                           }
+                                       }
+                                       ?>
+                            

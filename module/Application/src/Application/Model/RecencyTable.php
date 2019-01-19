@@ -1347,7 +1347,7 @@ $data['final_outcome'] = 'Assay Negative';
                     $queryContainer->exportTatQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
 
-                    // echo $sQueryStr;die;
+                    // echo $sQueryStr;die;data
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
                     /* Data set length after filtering */
@@ -1390,13 +1390,27 @@ $data['final_outcome'] = 'Assay Negative';
                     return $output;
         }
 
-        public function fetchSampleResult()
+        public function fetchSampleResult($params)
         {
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
 
             $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_date', 'term_outcome', 'vl_result', 'final_outcome'))
-                         ->where(array('vl_result!="" AND vl_result is not null AND mail_sent_status is null'));
+                        ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+                        ->where(array('vl_result!="" AND vl_result is not null AND mail_sent_status is null'));
+                        if($params['locationOne']!=''){
+                            $sQuery = $sQuery->where(array('province'=>$params['locationOne']));
+                            if($params['locationTwo']!=''){
+                                  $sQuery = $sQuery->where(array('district'=>$params['locationTwo']));
+                            }
+                            if($params['locationThree']!=''){
+                                  $sQuery = $sQuery->where(array('city'=>$params['locationThree']));
+                            }
+                        }
+                        if($params['facilityId']!=''){
+                            $sQuery = $sQuery->where(array('r.facility_id'=>$params['facilityId']));
+                        }
+                         
                          
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();

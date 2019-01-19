@@ -142,14 +142,12 @@ class VlDataController extends AbstractActionController
 
     public function emailResultAction()
     {
-        $request = $this->getRequest();
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
-
-        $sampleResult = $recencyService->getSampleResult();
+        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+        $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
         return new ViewModel(array(
-            'sampleResult' => $sampleResult,
+            'globalConfigResult' => $globalConfigResult,
+            
         ));
-    
     }
     public function emailResultPdfAction()
     {
@@ -177,5 +175,19 @@ class VlDataController extends AbstractActionController
         return new ViewModel(array(
                     'fileName'=>$id
                 ));
+    }
+    public function emailResultSamplesAction()
+    {
+        $request = $this->getRequest();
+       if($request->isPost())
+       {
+           $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $sampleResult = $recencyService->getSampleResult($params);
+           $viewModel = new ViewModel();
+           $viewModel->setVariables(array('sampleResult' => $sampleResult,));
+           $viewModel->setTerminal(true);
+           return $viewModel;
+       }
     }
 }
