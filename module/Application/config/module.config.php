@@ -245,6 +245,16 @@ return array(
                       ),
                   ),
               ),
+              'update-outcome' => array(
+                  'type'    => 'simple',
+                  'options' => array(
+                      'route'    => 'update-outcome',
+                      'defaults' => array(
+                          'controller' => 'Application\Controller\Cron',
+                          'action' => 'update-outcome'
+                      ),
+                  ),
+              ),
             ),
       ),
 ),

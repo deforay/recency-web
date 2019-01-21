@@ -739,4 +739,11 @@ class RecencyService
             error_log($exc->getTraceAsString());
         }
     }
+
+    public function updateOutcome()
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->updateOutcome();
+    }
 }
+

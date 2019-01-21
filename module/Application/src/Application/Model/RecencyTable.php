@@ -1453,6 +1453,82 @@ $data['final_outcome'] = 'Assay Negative';
             }
             return $mailResult;
         }
+
+        public function updateOutcome()
+        {
+            //first check termoutcome avialable or not
+            $dbAdapter = $this->adapter;
+            $sql = new Sql($dbAdapter);
+
+            $sQuery = $sql->select()->from(array('r' => 'recency'))
+                            ->columns(array('recency_id','control_line','positive_verification_line','long_term_verification_line'))
+                            ->where(array('control_line!="" AND positive_verification_line!="" AND long_term_verification_line!="" AND (term_outcome="" OR term_outcome IS NULL)'));
+                         
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            //update term outcome
+            if(count($rResult)>0)
+            {
+                foreach($rResult as $outcome)
+                {
+                    $this->updateTermOutcome($outcome);
+                }
+            }
+
+            //second check final outcome
+            $fQuery = $sql->select()->from(array('r' => 'recency'))
+                            ->columns(array('recency_id','term_outcome','vl_result'))
+                            ->where(array('vl_result!="" AND term_outcome="Assay Recent" AND (final_outcome="" OR final_outcome IS NULL)'));
+                         
+            $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+            $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+            if(count($fResult)>0)
+            {
+                foreach($fResult as $fOutCome)
+                {
+                    $this->updateFinalOutcome($fOutCome);
+                }
+            }
+        }
+    
+        //refer updateOutcome Function
+        public function updateFinalOutcome($fOutCome)
+        {
+            $recencyId = $fOutCome['recency_id'];
+            if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] >= 1000) {
+                $data['final_outcome'] = 'RITA Recent';
+           }else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
+                $data['final_outcome'] = 'Long Term';
+           }
+           $this->update($data,array('recency_id'=>$recencyId));
+        }
+
+        //refer updateOutcome Function
+        public function updateTermOutcome($outcome)
+        {
+            $controlLine = $outcome['control_line'];
+            $positiveControlLine = $outcome['positive_verification_line'];
+            $longControlLine = $outcome['long_term_verification_line'];
+            $recencyId = $outcome['recency_id'];
+            if(
+                ($controlLine=='absent' && $positiveControlLine=='absent' && $longControlLine=='absent')
+                || ($controlLine=='absent' && $positiveControlLine=='absent' && $longControlLine=='present')
+                || ($controlLine=='absent' && $positiveControlLine=='present' && $longControlLine=='absent')
+                || ($controlLine=='absent' && $positiveControlLine=='present' && $longControlLine=='present')
+                || ($controlLine=='present' && $positiveControlLine=='absent' && $longControlLine=='present')
+            )
+            {
+                $this->update(array('term_outcome'=>'Invalid – Please Verify'),array('recency_id'=>$recencyId));
+            }else if($controlLine=='present' && $positiveControlLine=='absent' && $longControlLine=='absent'){
+                $this->update(array('term_outcome'=>'Assay HIV Negative'),array('recency_id'=>$recencyId));
+            }else if($controlLine=='present' && $positiveControlLine=='present' && $longControlLine=='absent'){
+                $this->update(array('term_outcome'=>'Assay Recent'),array('recency_id'=>$recencyId));
+            }else if($controlLine=='present' && $positiveControlLine=='present' && $longControlLine=='present'){
+                $this->update(array('term_outcome'=>'Long Term'),array('recency_id'=>$recencyId));
+            }
+        }
+
      }
 
      ?>

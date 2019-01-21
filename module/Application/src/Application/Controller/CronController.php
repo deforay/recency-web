@@ -13,4 +13,10 @@ class CronController extends AbstractActionController{
       $temp = $this->getServiceLocator()->get('CommonService');
       $temp->sendTempMail();
     }
+//update term and final outcome
+    public function updateOutcomeAction()
+    {
+      $service = $this->getServiceLocator()->get('RecencyService');
+      $service->updateOutcome();
+    }
 }
