@@ -190,4 +190,15 @@ class VlDataController extends AbstractActionController
            return $viewModel;
        }
     }
+
+    public function uploadResultAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $recencyService->uploadResult($params);
+            return $this->_redirect()->toUrl('/vl-data/upload-result');
+        }
+    }
 }

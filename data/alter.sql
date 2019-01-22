@@ -157,4 +157,27 @@ INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Send Results(Email password)', 'email_password', 'zaq12345');
 
 -- saravanan 18-jan-2019
+CREATE TABLE `temp_mail` (
+  `temp_id` int(11) NOT NULL,
+  `message` mediumtext,
+  `from_mail` varchar(255) DEFAULT NULL,
+  `to_email` varchar(255) DEFAULT NULL,
+  `cc` varchar(500) DEFAULT NULL,
+  `bcc` varchar(500) DEFAULT NULL,
+  `subject` mediumtext,
+  `from_full_name` varchar(255) DEFAULT NULL,
+  `attachment` text,
+  `status` varchar(255) NOT NULL DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `temp_mail`
+  ADD PRIMARY KEY (`temp_id`),
+  ADD UNIQUE KEY `temp_id` (`temp_id`);
+
+
+ALTER TABLE `temp_mail`
+  MODIFY `temp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
 ALTER TABLE `recency` ADD `mail_sent_status` VARCHAR(255) NULL DEFAULT NULL AFTER `unique_id`;
+-- saravanan 22-jan-2019
+ALTER TABLE `recency` ADD `upload_result_datetime` DATETIME NULL DEFAULT NULL AFTER `vl_test_date`;

@@ -1,0 +1,59 @@
+<?php
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+?>
+<style>
+
+</style>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Upload Viral Load Data</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page"> Upload Result </li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+<div class="content">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Upload VL Result</h3>
+        </div>
+        <div class="block-content">
+            <div class="col-md-12 table-responsive" id="hide">
+                <form name="uploadResult" id="uploadResult" class="mb-5" action="<?php echo $this->url('vl-data', array('action' => 'upload-result')); ?>" method="post" enctype="multipart/form-data">
+                    <div class="form-group row">
+                        
+                        <label style=" margin-bottom: 2.5%; " class="col-sm-3 col-form-label" for="">Upload VL Result File</label>
+                        <div class="col-sm-4">
+                            <input type="file" class="form-control isRequired" id="fileName" name="fileName" title="Please upload file">
+                            <code>Note: file format xl,xls</code>
+                        </div>
+                    </div>
+
+                    <div class="row items-push">
+                        <div class="col-lg-7 offset-lg-4">
+                            <a href="/vl-data/upload-result" class="btn btn-danger">Cancel</a>&nbsp;
+                            <a href="javascript:void(0);" class="btn btn-primary" onclick="validateNow();"><i class="fa fa-fw fa-check"></i> Submit</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function validateNow() {
+        flag = deforayValidator.init({
+            formId: 'uploadResult'
+        });
+        if (flag) {
+                $.blockUI();
+                document.getElementById('uploadResult').submit();
+        }
+    }
+</script>

@@ -745,5 +745,54 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->updateOutcome();
     }
+
+    public function uploadResult()
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+        $sql = new Sql($dbAdapter);
+        $allowedExtensions = array('xls', 'xlsx', 'csv');
+            $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['fileName']['name']);
+            $fileName = str_replace(" ", "-", $fileName);
+            $ranNumber = str_pad(rand(0, pow(10, 6)-1), 6, '0', STR_PAD_LEFT);
+            $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $fileName =$ranNumber.".".$extension;
+            if (in_array($extension, $allowedExtensions)) {
+            if (!file_exists(UPLOAD_PATH) && !is_dir(UPLOAD_PATH)) {
+                mkdir(APPLICATION_PATH . DIRECTORY_SEPARATOR . "uploads");
+            }
+            
+            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName)) {
+               
+                if (move_uploaded_file($_FILES['fileName']['tmp_name'], UPLOAD_PATH .  DIRECTORY_SEPARATOR . $fileName)) {
+                    $objPHPExcel = \PHPExcel_IOFactory::load(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
+                    $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+                    $count = count($sheetData);
+                    $common = new \Application\Service\CommonService();
+                    for ($i = 2; $i <= $count; ++$i) {
+                        $sampleId = $sheetData[$i]['A'];
+                        if(isset($sheetData[$i]['A']) && trim($sheetData[$i]['A']) != '') {
+                            $cQuery = $sql->select()->from('recency')->columns(array('recency_id'))
+                                        ->where(array('sample_id'=>$sampleId));
+                            $fQuery = $sql->getSqlStringForSqlObject($cQuery);
+                            $fResult = $dbAdapter->query($fQuery, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                            if(isset($fResult['recency_id']))
+                            {
+                                $data = array(
+                                    'vl_test_date' => date('Y-m-d',strtotime($sheetData[$i]['C'])),
+                                    'vl_result' => $sheetData[$i]['B'],
+                                    'upload_result_datetime' => date('Y-m-d h:i:s')
+                                );
+                                $recencyDb->update($data,array('recency_id'=>$fResult['recency_id']));
+                            }
+                        }
+                    }
+                    unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
+                    $container = new Container('alert');
+                    $container->alertMsg = 'Result details uploaded successfully';
+                }
+            }
+    }
+    }
 }
 
