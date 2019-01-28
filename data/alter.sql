@@ -194,3 +194,5 @@ ALTER TABLE `facilities` CHANGE `facility_type_id` `facility_type_id` INT(11) NU
 
 -- saravanan 28-jan-2019
 ALTER TABLE `recency` ADD `testing_facility_id` INT NULL DEFAULT NULL AFTER `facility_id`;
+
+INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Announcement', 'admin_message', 'test');

@@ -249,7 +249,7 @@ class FacilitiesTable extends AbstractTableGateway {
                   if($logincontainer->roleCode=='user'){
                         $sQuery = $sql->select()->from(array( 'ufm' => 'user_facility_map' ))
                                     ->join(array('f' => 'facilities'), 'f.facility_id = ufm.facility_id', array('facility_name','facility_id'))
-                                    ->where(array('f.status'=>'active','ufm.user_id'=>$logincontainer->userId));
+                                    ->where(array('f.status'=>'active','f.facility_type_id IS NULL OR f.facility_type_id="1" OR f.facility_type_id=""','ufm.user_id'=>$logincontainer->userId));
                          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                          $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray(); 
                   }
@@ -271,25 +271,27 @@ class FacilitiesTable extends AbstractTableGateway {
 
                public function fetchFacilitiesDetailsApi($params)
                {
-                    $dbAdapter = $this->adapter;
-                    $sql = new Sql($dbAdapter);
-                    if($params['userId']!=''){
-                         $sQuery = $sql->select()->from(array( 'f' => 'facilities' ))
-                         ->join(array('r' => 'recency'), 'f.facility_id = r.facility_id', array('sample_id'))
-                         ->where(array('f.status'=>'active','r.added_by'=>$params['userId']));
-                         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-                         $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                  $dbAdapter = $this->adapter;
+                  $sql = new Sql($dbAdapter);
+                  if($params['userId']!=''){
+                        $sQuery = $sql->select()->from(array( 'f' => 'facilities' ))
+                        ->join(array('r' => 'recency'), 'f.facility_id = r.facility_id', array('sample_id'))
+                        ->where(array('f.status'=>'active','f.facility_type_id IS NULL OR f.facility_type_id="1" OR f.facility_type_id=""','r.added_by'=>$params['userId']));
+                        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+                        $fResult['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-                         if(count($fResult)>0){
-                              return $fResult;
-                         }
-                    }else{
-                         $sQuery = $sql->select()->from(array('f'=>'facilities'))
-                         ->where(array('status'=>'active'));
-                         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-                         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                         return $rResult;
-                    }
+                  }else{
+                        $sQuery = $sql->select()->from(array('f'=>'facilities'))
+                        ->where(array('status'=>'active','f.facility_type_id IS NULL OR f.facility_type_id="1" OR f.facility_type_id=""'));
+                        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+                        $rResult['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+                  }
+                  $sQueryTest = $sql->select()->from(array( 'f' => 'facilities') ,array('facility_name') )
+                                          ->where(array('f.status'=>'active','f.facility_name IS NOT NULL','facility_type_id="2"' ));
+                  $sQueryStrTest = $sql->getSqlStringForSqlObject($sQueryTest);
+                  $rResult['facilityTest'] = $dbAdapter->query($sQueryStrTest, $dbAdapter::QUERY_MODE_EXECUTE)->toArray(); 
+
+                  return $rResult;
                }
                public function fetchFacilityByLocation($params)
                {
@@ -316,14 +318,20 @@ class FacilitiesTable extends AbstractTableGateway {
                   return $fResult;
                }
 
-               public function checkFacilityName($fName)
+               public function checkFacilityName($fName,$facilityType)
                {
                   $dbAdapter = $this->adapter;
                   $sql = new Sql($dbAdapter);
-                  $fQuery = $sql->select()->from('facilities')->columns(array('facility_id','facility_name',))
+                  $fQuery = $sql->select()->from('facilities')->columns(array('facility_id','facility_name','facility_type_id'))
                                     ->where(array('facility_name' => trim($fName)));
+                  if($facilityType==1){
+                        $fQuery = $fQuery->where('facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0"');
+                  }else if($facilityType==2){
+                        $fQuery = $fQuery->where(array('facility_type_id'=>$facilityType));
+                  }
                   $fQueryStr = $sql->getSqlStringForSqlObject($fQuery); // Get the string of the Sql, instead of the Select-instance
                   $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                  
                   return $fResult;
                }
           }
