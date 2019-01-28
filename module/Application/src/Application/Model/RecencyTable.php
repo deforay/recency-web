@@ -732,7 +732,7 @@ class RecencyTable extends AbstractTableGateway {
                                         'sample_id' => $recency['sampleId'],
                                         'patient_id' => $recency['patientId'],
                                         'facility_id' => $recency['facilityId'],
-                                        'testint_facility_id'=>$recency['testingFacility'],
+                                        'testing_facility_id'=>$recency['testingFacility'],
                                         'control_line' => $recency['ctrlLine'],
                                         'positive_verification_line' => $recency['positiveLine'],
                                         'long_term_verification_line' => $recency['longTermLine'],

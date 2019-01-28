@@ -156,6 +156,13 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 							  <div class="block-content block-content-sm">
 						 </div>
 						 <div class="block-content block-content-full tab-content" style="min-height: 300px;">
+						 <?php
+if(isset($arr['admin_message']) && $arr['admin_message']!=''){
+    ?>
+    <h4>Admin Message:-&nbsp;<?php echo ucwords($arr['admin_message']);?></h4>
+    <?php
+}
+?>
 							<div class="tab-pane active" id="wizard-progress-step1" role="tabpanel">
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label <?php echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Id<?php echo(in_array("Sample Id",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>

@@ -114,7 +114,13 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                          <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
                               <div class="block-content block-content-sm"> </div>
                               <div class="block-content block-content-full tab-content" style="min-height: 300px;">
-
+<?php
+if(isset($arr['admin_message']) && $arr['admin_message']!=''){
+    ?>
+    <h4>Admin Message:-&nbsp;<?php echo ucwords($arr['admin_message']);?></h4>
+    <?php
+}
+?>
                                 <div class="tab-pane active" id="wizard-progress-step1" role="tabpanel">
 
                                     <div class="form-group row form-horizontal">
