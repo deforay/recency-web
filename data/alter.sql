@@ -181,3 +181,15 @@ ALTER TABLE `temp_mail`
 ALTER TABLE `recency` ADD `mail_sent_status` VARCHAR(255) NULL DEFAULT NULL AFTER `unique_id`;
 -- saravanan 22-jan-2019
 ALTER TABLE `recency` ADD `upload_result_datetime` DATETIME NULL DEFAULT NULL AFTER `vl_test_date`;
+
+-- vivek 24-jan-2019
+CREATE TABLE `recency_app`.`facility_type` ( `facility_type_id` INT(11) NOT NULL AUTO_INCREMENT , `facility_type_name` VARCHAR(255) NULL DEFAULT NULL , `facility_type_status` VARCHAR(255) NULL DEFAULT NULL , PRIMARY KEY (`facility_type_id`)) ENGINE = InnoDB;
+
+-- vivek 24-jan-2019
+INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`, `facility_type_status`) VALUES (NULL, 'Normal', 'active'), (NULL, 'Testing', 'active');
+
+-- vivek 24-jan-2019
+ALTER TABLE `facilities` ADD `facility_type_id` INT(11) NOT NULL AFTER `facility_id`;
+ALTER TABLE `facilities` CHANGE `facility_type_id` `facility_type_id` INT(11) NULL DEFAULT NULL;
+-- vivek 24-jan-2019
+ALTER TABLE `facilities` ADD `testing_facility_name` VARCHAR(255) NULL DEFAULT NULL AFTER `facility_name`;

@@ -47,6 +47,9 @@ $kitLotNo = in_array("Test Kit Lot No",$resultArr)?"isRequired":"";
 $KitExpiryDate = in_array("Kit Expiry Date",$resultArr)?"isRequired":"";
 $testerName = in_array("Tester Name",$resultArr)?"isRequired":"";
 
+$vlTestDate = in_array("Viral Load Test Date",$resultArr)?"isRequired":"";
+$vlLoadResult = in_array("Viral Load Result",$resultArr)?"isRequired":"";
+$testingFacility = in_array("Testing Facility",$resultArr)?"isRequired":"";
 
 $lineOutComeColor = "#de1d2b";
 $lineOutComeColor2 = "#000000";
@@ -54,6 +57,7 @@ $lineOutComeColor2 = "#000000";
 
 <style>
 .btnHide,.hivResultStatusShow,.outcome.hideFields{display:none;}
+.btnHide,.hivResultStatusShow,.vlResultoutcome.hideFields{display:none;}
 .showFields{display:block;}
 .colour{color:red;}
 
@@ -126,7 +130,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                         </div>
                                         <br>
                                         <div class="form-group row">
-                                             <label class="col-sm-2 col-form-label <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>" for="">Facility Name <?php echo(in_array("Facility Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                             <label class="col-sm-2 col-form-label <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>" for="">Normal Facility <?php echo(in_array("Facility Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                              <div class="col-sm-4 <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>">
                                                   <select class="form-control <?php echo $facility; ?>" id="facilityId" name="facilityId" title="Please select the facility name">
                                                        <option value="">--Select--</option>
@@ -140,6 +144,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                   &nbsp;
                                              </div>
 
+                                              
                                              <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label <?php echo in_array("Province",$resultArr2)?"showFields":"hideFields";?>" for=""><?php echo ucfirst($globalConfigResult[0]['global_value']); ?><?php echo(in_array("Province",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                              <div class="col-sm-4 <?php echo in_array("Province",$resultArr2)?"showFields":"hideFields";?>">
                                                   <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name'];?>');">
@@ -266,7 +271,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                        </select>
                                                   </div>
 
-                                                  <label class="col-sm-2 col-form-label outcome" for="">Outcome</label>
+                                                  <label class="col-sm-2 col-form-label outcome" for="">Term Outcome</label>
                                                   <div class="col-sm-4 outcome">
                                                        <span class="outcome form-control" style="border:none;" id="outcome"></span>
                                                        <input type="hidden" name="outcomeData" id="outcomeData"/>
@@ -274,7 +279,24 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                   <br>
                                                   <br>
                                                   <br>
-                                                  <!-- tEST Kitter  -->
+                                                          
+
+                                                          <!-- tEST Kitter  -->
+
+                                                  <label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>" for="">Testing Facility <?php echo(in_array("Testing Facility",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                                    <div class="col-sm-4 <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>">
+                                                        <select class="form-control <?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+                                                            <option value="">--Select--</option>
+                                                            <?php foreach($facilityResult['facilityTest'] as $testingFacility){ ?>
+                                                                    <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['testing_facility_name']; ?></option>
+                                                            <?php } ?>
+                                                            <option value="other">Other</option>
+                                                        </select>
+                                                        &nbsp;
+                                                        <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter testing facility name" value="" placeholder="Enter testing facility name" >
+                                                        &nbsp;
+                                                    </div>
+
                                                   <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>" for="">Test Kit Lot No. <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                                   <div class="col-sm-4 <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>">
                                                        <input type="text" class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" placeholder="Enter kit lot no." title="Please enter the kit lot no.">
@@ -285,6 +307,25 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                   </div>
                                                   <br>
                                                   <br>
+                                                
+                                                  <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Test Date<?php echo(in_array("Viral Load Test Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                                  <div class="col-sm-4 <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>">
+                                                       <input type="text" name="vlTestDate" id="vlTestDate" class="js-datepicker  form-control <?php echo $vlTestDate; ?>"  data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value=""  placeholder="Enter the Viral Load Test Date" title="Please enter the Viral Load Test Date" readonly="readonly"  />
+                                                  </div>
+
+                                                  <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                                  <div class="col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
+                                                       <input type="text" name="vlLoadResult" id="vlLoadResult" class=" form-control <?php echo $vlLoadResult; ?>" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)" onblur="changeTermLine()"/>
+                                                       
+                                                  </div>
+                                                  <br>
+                                                  <br>
+                                                  <br>
+                                                  <label class="col-sm-2 col-form-label vlResultoutcome" for="">Final Outcome</label>
+                                                  <div class="col-sm-4 vlResultoutcome">
+                                                       <span class="vlResultoutcome form-control" style="border:none;" id="vlResultoutcome"></span>
+                                                       <input type="hidden" name="vlfinaloutcomeResult" id="vlfinaloutcomeResult"/>
+                                                  </div>
                                                   <label class="col-sm-2 col-form-label <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>" for="">Tester Name <?php echo(in_array("Tester Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                                   <div class="col-sm-4 <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>">
                                                        <input type="text" name="testerName" id="testerName" class="typeahead form-control <?php echo $testerName; ?>" placeholder="Enter the tester name" title="Please enter the tester name"/>
@@ -436,35 +477,80 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
           var ctrlLine = $("#controlLine").val();
           var postiveLine = $("#positiveVerificationLine").val();
           var longTermLine = $("#longTermVerificationLine").val();
-          if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
+          var vlDataResult = $("#vlLoadResult").val();
+
+          if(ctrlLine!='' && postiveLine!='' && longTermLine!='' ){
                if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+                
+                    $("#vlResultoutcome").html('Invalid ').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
                }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+                   
+                    $("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+                    
                }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+                 
+                    $("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+                    
                }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+
+                    $("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+                    
                }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
                     $("#outcome").html('Assay HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+                 
+                    $("#vlResultoutcome").html('Assay Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+                    
                }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
-               }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
+
+                    $("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+               }
+               
+               else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent') {
+                   
                     $("#outcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
                     $(".outcome").css({"display":"block"});
-               }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
+                  
+                    $("#vlResultoutcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+                    
+                    if(vlDataResult >1000 && vlDataResult!='' ){
+                        $("#vlResultoutcome").html('RITA Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                        $(".vlResultoutcome").css({"display":"block"});
+                    }else if(vlDataResult <=1000  && vlDataResult!='' ){
+                        $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                        $(".vlResultoutcome").css({"display":"block"});
+                    }
+               }
+               else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
                     $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
                     $(".outcome").css({"display":"block"});
+
+                    $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
                }
           }else{
                $("#outcome").html('').hide();
                $(".outcome").css({"display":"none"});
+
+                $("#vlResultoutcome").html('').hide();
+                $(".vlResultoutcome").css({"display":"none"});
           }
      }
 
@@ -528,6 +614,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                if(this.checked == true){
                     $("#outcome").html('').hide();
                     $(".outcome").hide();
+                    
+                    $("#vlResultoutcome").html('').hide();
+                    $(".vlResultoutcome").hide();
                     $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
 
                     $(".hideDiv").css('display','block');
@@ -552,6 +641,15 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                     $("#otherFacilityName").addClass("isRequired").show();
                }else{
                     $("#otherFacilityName").removeClass("isRequired").hide();
+               }
+          });
+
+          
+          $("#testingFacilityId").change(function(){
+               if($(this).val() == 'other'){
+                    $("#otherTestingFacility").addClass("isRequired").show();
+               }else{
+                    $("#otherTestingFacility").removeClass("isRequired").hide();
                }
           });
 
@@ -605,6 +703,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                          formId: 'recencyInformation'
                     });
                     document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+                    document.getElementById("vlfinaloutcomeResult").value=document.getElementById("vlResultoutcome").innerHTML;
                     if (flag) {
                          $.blockUI();
                          document.getElementById('recencyInformation').submit();

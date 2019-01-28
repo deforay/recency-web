@@ -27,12 +27,17 @@ $dob = '';
 if($result['dob']!= '' && $result['dob']!= null && $result['dob']!= '0000-00-00'){
      $dob = $common->humanDateFormat($result['dob']);
 }
-
+ 
 $testKitExpiryDate = '';
 if($result['kit_expiry_date']!= '' && $result['kit_expiry_date']!= null && $result['kit_expiry_date']!= '0000-00-00'){
      $testKitExpiryDate = $common->humanDateFormat($result['kit_expiry_date']);
 }
-// \Zend\Debug\Debug::dump($testKitExpiryDate);die;
+
+$vlTestDateRes = '';
+if($result['vl_test_date']!= '' && $result['vl_test_date']!= null && $result['vl_test_date']!= '0000-00-00'){
+     $vlTestDateRes = $common->humanDateFormat($result['vl_test_date']);
+}
+ 
 $arr = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
@@ -75,11 +80,14 @@ $patientArt = in_array("Patient on ART",$resultArr)?"isRequired":"";
 $last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
 $expViolence = in_array("Experience Violence Last 12 Month",$resultArr)?"isRequired":"";
 $comment = in_array("Comments",$resultArr)?"isRequired":"";
-
 $kitName = in_array("Test Kit Name",$resultArr)?"isRequired":"";
 $kitLotNo = in_array("Test Kit Lot No",$resultArr)?"isRequired":"";
 $KitExpiryDate = in_array("Kit Expiry Date",$resultArr)?"isRequired":"";
 $testerName = in_array("Tester Name",$resultArr)?"isRequired":"";
+
+$vlTestDate = in_array("Viral Load Test Date",$resultArr)?"isRequired":"";
+$vlLoadResult = in_array("Viral Load Result",$resultArr)?"isRequired":"";
+$testingFacility = in_array("Testing Facility",$resultArr)?"isRequired":"";
 
 $lineOutComeColor = "#de1d2b";
 $lineOutComeColor2 = "#000000";
@@ -93,6 +101,8 @@ if($result['term_outcome']==''){
 }
 ?>
 .btnHide,.hivResultStatusShow,.hideFields{display:none;}
+.btnHide,.hivResultStatusShow,.vlResultoutcome.hideFields{display:none;}
+
 showFields{display:block;}
 .colour{color:red;}
 
@@ -220,9 +230,6 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                   <option value="not_known" <?php echo($result['test_last_12_month'] == 'not_known' )?'selected="selected"':''; ?>>Not Known</option>
                                              </select>
                                         </div>
-                                        <br>
-                                        <br>
-                                        <br>
                                         <label class="col-sm-2 col-form-label hivResultStatusShow <?php echo in_array("Last HIV Status",$resultArr2)?"showFields":"hideFields";?>" for="">Last HIV Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
                                         <div class="col-sm-4 hivResultStatusShow <?php echo in_array("Last HIV Status",$resultArr2)?"showFields":"hideFields";?>">
                                              <select class="form-control <?php echo $hivStatus; ?>" id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status"  onchange="checkHivStatus(this);">
@@ -307,13 +314,32 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                        </select>
                                                   </div>
                                                   <br>
-                                                  <label class="col-sm-2 col-form-label outcome" for="">Outcome</label>
+                                                  <label class="col-sm-2 col-form-label outcome" for="">Term Outcome</label>
                                                   <div class="col-sm-4 outcome">
                                                        <span class="outcome form-control" style="border:none;" id="outcome"><?php echo $result['term_outcome'];?></span>
                                                        <input type="hidden" name="outcomeData" id="outcomeData" value="<?php echo $result['term_outcome'];?>"/>
                                                   </div>
                                                   <br>
                                                   <br>
+
+                       
+                                                    <!-- test kit -->
+                                                   
+                                                   <label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>" for="">Testing Facility<?php echo(in_array("Testing Facility",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+                                                      <div class="col-sm-4 <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>">
+                                                          <select class="form-control<?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+                                                                <option value="">--Select--</option>
+                                                                <?php foreach($facilityResult['facilityTest'] as $testingFacility){?>
+                                                                    <option value="<?php echo ($testingFacility['facility_id']); ?>" <?php echo($testingFacility['facility_type_id'] == $result['facility_type_id'] )?'selected="selected"':''; ?>><?php echo $testingFacility['testing_facility_name']; ?></option>
+                                                                <?php } ?>
+                                                                <option value="other">Other</option>
+                                                          </select>
+                                                          &nbsp;
+                                                          <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter facility name" value="" placeholder="Enter facility name"  >
+                                                          &nbsp;
+                                                      </div>
+                                                      
+
                                                   <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>" for="">Test Kit Lot Number <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
                                                   <div class="col-sm-4 <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>">
                                                        <input type="text" value="<?php echo $result['kit_lot_no'];?>" class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" value="" placeholder="Enter kit lot no." title="Please enter the kit lot no.">
@@ -325,9 +351,26 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                   <div class="col-sm-4 <?php echo in_array("Kit Expiry Date",$resultArr2)?"showFields":"hideFields";?>">
                                                        <input type="text" value="<?php echo $testKitExpiryDate; ?>" class="js-datepicker form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                                                   </div>
+                                                    <br>
+                                                    <br>
+                                                  <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Test Date <?php echo(in_array("Viral Load Test Date",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+                                                  <div class="col-sm-4 <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>">
+                                                       <input type="text" value="<?php echo $vlTestDateRes;?>" class=" js-datepicker form-control <?php echo $vlTestDate; ?>"  id="vlTestDate" name="vlTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the Viral Load Test Date" title="Please enter Viral Load Test Date" readonly="readonly">
+                                                  </div>
+                                                  
+                                                  <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+                                                  <div class="col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
+                                                       <input type="text" value="<?php echo $result['vl_result'];?>" class=" form-control <?php echo $vlLoadResult; ?>"  id="vlLoadResult" name="vlLoadResult" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)" onblur="changeTermLine()"/>
+                                                  </div>
                                                   <br>
                                                   <br>
                                                   <br>
+                                                  <label class="col-sm-2 col-form-label vlResultoutcome" for="">Final Outcome</label>
+                                                    <div class="col-sm-4 vlResultoutcome">
+                                                        <span class="vlResultoutcome form-control" style="border:none;" id="vlResultoutcome"></span>
+                                                        <input type="hidden" name="vlfinaloutcomeResult" id="vlfinaloutcomeResult"/>
+                                                    </div>
+
                                                   <label class="col-sm-2 col-form-label <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>" for="">Tester Name <?php echo(in_array("Tester Name",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
                                                   <div class="col-sm-4 <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>">
                                                        <input type="text" value="<?php echo $result['tester_name'];?>" class="typeahead form-control <?php echo $testerName; ?>"  id="testerName" name="testerName" placeholder="Enter the tester name" title="Please enter the tester name">
@@ -485,35 +528,80 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
           var ctrlLine = $("#controlLine").val();
           var postiveLine = $("#positiveVerificationLine").val();
           var longTermLine = $("#longTermVerificationLine").val();
+          var vlDataResult = $("#vlLoadResult").val();
+
+
           if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
                if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+                    
+                    $("#vlResultoutcome").html('Invalid ').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+
                }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+                    
+                    $("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+
                }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+                    
+                    $("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+
                }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+                    
+                    $("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+
                }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
                     $("#outcome").html('Assay HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+
+                    $("#vlResultoutcome").html('Assay Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+
                }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
                     $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                     $(".outcome").css({"display":"block"});
+
+                    $("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+
                }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
                     $("#outcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
                     $(".outcome").css({"display":"block"});
+                 
+                    $("#vlResultoutcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+                    
+                    if(vlDataResult >1000 && vlDataResult!='' ){
+                        $("#vlResultoutcome").html('RITA Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                        $(".vlResultoutcome").css({"display":"block"});
+                    }else if(vlDataResult <=1000  && vlDataResult!='' ){
+                        $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                        $(".vlResultoutcome").css({"display":"block"});
+                    }
+
                }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
                     $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
                     $(".outcome").css({"display":"block"});
+
+                    $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
                }
           }else{
                $("#outcome").html('').hide();
                $(".outcome").css({"display":"none"});
+
+               $("#vlResultoutcome").html('').hide();
+               $(".vlResultoutcome").css({"display":"none"});
           }
      }
 
@@ -585,6 +673,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                if(this.checked == true){
                     $("#outcome").html('').hide();
                     $(".outcome").hide();
+
+                     $("#vlResultoutcome").html('').hide();
+                    $(".vlResultoutcome").hide();
+                    
                     $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
                     $(".hideDiv").css('display','block');
                     $("#recencyTestNotPerformed").addClass("isRequired");
@@ -625,6 +717,15 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                     $("#otherFacilityName").addClass("isRequired").show();
                }else{
                     $("#otherFacilityName").removeClass("isRequired").hide();
+               }
+          });
+
+             
+             $("#testingFacilityId").change(function(){
+               if($(this).val() == 'other'){
+                    $("#otherTestingFacility").addClass("isRequired").show();
+               }else{
+                    $("#otherTestingFacility").removeClass("isRequired").hide();
                }
           });
 
@@ -679,7 +780,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
      function riskPopulationCheck(obj){
           if( obj.value == 'Other' ){
                $("#otherRiskPopulation").css('display','block').addClass('isRequired');
-          }else{
+          }else{vlfinaloutcomeResult
                $("#otherRiskPopulation").css('display','none').removeClass('isRequired');
           }
      }
@@ -701,6 +802,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                          formId: 'recencyInformation'
                     });
                     document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+                    document.getElementById("vlfinaloutcomeResult").value=document.getElementById("vlResultoutcome").innerHTML;
+                    
                     if (flag) {
                          $.blockUI();
                          document.getElementById('recencyInformation').submit();

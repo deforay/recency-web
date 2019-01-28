@@ -27,8 +27,8 @@ class RecencyTable extends AbstractTableGateway {
           $roleCode = $sessionLogin->roleCode;
           $common = new CommonService();
 
-          $aColumns = array('r.sample_id','r.patient_id','f.facility_name','DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','DATE_FORMAT(r.kit_expiry_date,"%d-%b-%Y")','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','DATE_FORMAT(r.dob,"%d-%b-%Y")','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','DATE_FORMAT(r.form_initiation_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.form_transfer_datetime ,"%d-%b-%Y %H:%i:%s")');
-          $orderColumns = array('r.sample_id','r.patient_id','f.facility_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','r.kit_expiry_date','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','r.dob','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','r.form_initiation_datetime','r.form_transfer_datetime');
+          $aColumns = array('r.sample_id','r.patient_id','f.facility_name' ,'DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','DATE_FORMAT(r.kit_expiry_date,"%d-%b-%Y")','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','DATE_FORMAT(r.dob,"%d-%b-%Y")','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','DATE_FORMAT(r.form_initiation_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.form_transfer_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
+          $orderColumns = array('r.sample_id','r.patient_id','f.facility_name', 'r.hiv_diagnosis_date','r.hiv_recency_date','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','r.kit_expiry_date','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','r.dob','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','r.form_initiation_datetime','r.form_transfer_datetime','r.vl_test_date');
 
           /* Paging */
           $sLimit = "";
@@ -176,6 +176,7 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = $aRow['sample_id'];
                          $row[] = $aRow['patient_id'];
                          $row[] = ucwords($aRow['facility_name']);
+                        //  $row[] = ucwords($aRow['facility_type_name']);
                          $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
                          $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
 
@@ -186,7 +187,7 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
                          $row[] = $aRow['term_outcome'];
                          $row[] = $aRow['final_outcome'];
-                         $row[] = $aRow['vl_result'];
+                         $row[] = ucwords($aRow['vl_result']);
                          $row[] = ucwords($aRow['tester_name']);
                          $row[] = $common->humanDateFormat($aRow['dob']);
                          $row[] = $aRow['age'];
@@ -202,8 +203,10 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = ucwords($aRow['patient_on_art']);
                          $row[] =  str_replace("_"," ",ucwords($aRow['test_last_12_month']));
                          $row[] =  str_replace("_"," ",ucwords($aRow['exp_violence_last_12_month']));
+                         
                          $row[] = $formInitiationDate;
                          $row[] = $formTransferDate;
+                         $row[] = $common->humanDateFormat($aRow['vl_test_date']);
 
                          $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                          <a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>
@@ -223,6 +226,7 @@ class RecencyTable extends AbstractTableGateway {
                     $sql = new Sql($dbAdapter);
                     $logincontainer = new Container('credo');
                     $facilityDb = new FacilitiesTable($this->adapter);
+                    // $facilityTypeDb = new FacilitiesTypeTable($this->adapter);
                     $riskPopulationDb = new RiskPopulationsTable($this->adapter);
                     $common = new CommonService();
                     if( (isset($params['sampleId']) && trim($params['sampleId'])!="") || (isset($params['patientId']) && trim($params['patientId'])!="") )
@@ -245,7 +249,37 @@ class RecencyTable extends AbstractTableGateway {
                                    }
                               }
                          }
-                         //check oher pouplation
+                        
+                         if($params['testingFacilityId']=='other'){
+                            
+                                $ftResult = $facilityDb->checkTestingFacilityName($params['otherTestingFacility']);
+                            if(isset($ftResult['testing_facility_name']) && $ftResult['testing_facility_name']!=''){
+                                 $params['facilityId'] = base64_encode($ftResult['facility_id']);
+                                }
+                                else{
+                                    if($facilityDb->lastInsertValue > 0){
+                                        $facilityData = array('testing_facility_name'=>trim($params['otherTestingFacility']),
+                                                  );
+                                        $facilityDb->update($facilityData,array('facility_id'=>$facilityDb->lastInsertValue));
+                                        $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
+                                    }else{
+                                        // echo "else2";die;
+                                        $facilityData = array('testing_facility_name'=>trim($params['otherTestingFacility']),
+                                        'province'=>$params['location_one'],
+                                        'district'=>$params['location_two'],
+                                        'city'=>$params['location_three'],
+                                        'status'=>'active');
+                                        $facilityDb->insert($facilityData);
+                                        if($facilityDb->lastInsertValue>0){
+                                            $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
+                                        }else{
+                                            return false;
+                                        }
+                                    }
+                                 
+                            }
+                       }
+                        //  check oher pouplation
                          if($params['riskPopulation']=='Other'){
                               $rpResult = $riskPopulationDb->checkExistRiskPopulation($params['otherRiskPopulation']);
                               if(isset($rpResult['name']) && $rpResult['name']!=''){
@@ -275,6 +309,8 @@ class RecencyTable extends AbstractTableGateway {
                               'positive_verification_line' => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine']!='')?$params['positiveVerificationLine']:NULL,
                               'long_term_verification_line' => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine']!='')?$params['longTermVerificationLine']:NULL,
                               'term_outcome'=>$params['outcomeData'],
+                              'final_outcome'=>$params['vlfinaloutcomeResult'],
+                              
                               'gender' => $params['gender'],
                               'age' => $params['age'],
                               'marital_status' => $params['maritalStatus'],
@@ -300,15 +336,20 @@ class RecencyTable extends AbstractTableGateway {
                               'kit_lot_no'=>$params['testKitLotNo'],
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               'tester_name'=>$params['testerName'],
-                         );
-                         if (strpos($params['outcomeData'], 'Long Term') !== false){
-                              $data['final_outcome'] = 'Long Term';
-                         }else if (strpos($params['outcomeData'], 'Invalid') !== false){
-                              $data['final_outcome'] = 'Invalid';
-                         }else if (strpos($params['outcomeData'], 'Negative') !== false){
-                              $data['final_outcome'] = 'Assay Negative';
-                         }
 
+                              'vl_test_date'=>($params['vlTestDate']!='')?$common->dbDateFormat($params['vlTestDate']):NULL,
+                              'vl_result'=>$params['vlLoadResult'],
+                               
+                         );
+                      
+                         //  if (strpos($params['outcomeData'], 'Long Term') !== false){
+                        //       $data['final_outcome'] = 'Long Term';
+                        //  }else if (strpos($params['outcomeData'], 'Invalid') !== false){
+                        //       $data['final_outcome'] = 'Invalid';
+                        //  }else if (strpos($params['outcomeData'], 'Negative') !== false){
+                        //       $data['final_outcome'] = 'Assay Negative';
+                        //  }
+                        
                          $this->insert($data);
 
                          $lastInsertedId = $this->lastInsertValue;
@@ -358,6 +399,58 @@ class RecencyTable extends AbstractTableGateway {
                                    }
                               }
                          }
+
+
+                         if($params['testingFacilityId']=='other'){
+                            
+                            $ftResult = $facilityDb->checkTestingFacilityName($params['otherTestingFacility']);
+                        if(isset($ftResult['testing_facility_name']) && $ftResult['testing_facility_name']!=''){
+                             $params['facilityId'] = base64_encode($ftResult['facility_id']);
+                            }
+                            else{
+                                if($facilityDb->lastInsertValue > 0){
+                                    $facilityData = array('testing_facility_name'=>trim($params['otherTestingFacility']),
+                                              );
+                                    $facilityDb->update($facilityData,array('facility_id'=>$facilityDb->lastInsertValue));
+                                    $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
+                                }else{
+                                    $facilityData = array('testing_facility_name'=>trim($params['otherTestingFacility']),
+                                    'province'=>$params['location_one'],
+                                    'district'=>$params['location_two'],
+                                    'city'=>$params['location_three'],
+                                    'status'=>'active');
+                                    $facilityDb->insert($facilityData);
+                                    if($facilityDb->lastInsertValue>0){
+                                        $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
+                                    }else{
+                                        return false;
+                                    }
+                                }
+                             
+                        }
+                   }
+
+                    //      //testing facility
+                    //      if($params['testingFacilityId']=='other'){
+                    //         $ftResult = $facilityDb->checkFacilityName($params['otherTestingFacility']);
+                    //         if(isset($fResult['testing_facility_name']) && $fResult['testing_facility_name']!=''){
+                    //              $params['testingFacilityId'] = base64_encode($fResult['facility_id']);
+                    //         }else{
+                    //              $facilityData = array('testing_facility_name'=>trim($params['otherTestingFacility']),
+                    //              'province'=>$params['location_one'],
+                    //              'district'=>$params['location_two'],
+                    //              'city'=>$params['location_three'],
+                    //              'status'=>'active');
+                    //              $facilityDb->insert($facilityData);
+                    //              if($facilityDb->lastInsertValue>0){
+                    //                   $params['testingFacilityId'] = base64_encode($facilityDb->lastInsertValue);
+                    //              }else{
+                    //                   return false;
+                    //              }
+                    //         }
+                    //    }
+
+
                          //check oher pouplation
                          if($params['riskPopulation']=='Other'){
                               $rpResult = $riskPopulationDb->checkExistRiskPopulation($params['otherRiskPopulation']);
@@ -388,6 +481,7 @@ class RecencyTable extends AbstractTableGateway {
                               'positive_verification_line' => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine']!='')?$params['positiveVerificationLine']:NULL,
                               'long_term_verification_line' => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine']!='')?$params['longTermVerificationLine']:NULL,
                               'term_outcome'=>$params['outcomeData'],
+                              'final_outcome'=>$params['vlfinaloutcomeResult'],
                               'gender' => $params['gender'],
                               'age' => $params['age'],
                               'marital_status' => $params['maritalStatus'],
@@ -410,17 +504,20 @@ class RecencyTable extends AbstractTableGateway {
                               'kit_expiry_date' => ($params['testKitExpDate']!='')?$common->dbDateFormat($params['testKitExpDate']):NULL,
                               'tester_name'=>$params['testerName'],
                               'form_saved_datetime'=>date('Y-m-d H:i:s'),
+                              'vl_test_date'=>($params['vlTestDate']!='')?$common->dbDateFormat($params['vlTestDate']):NULL,
+                              'vl_result'=>$params['vlLoadResult'],
                          );
-                         if (strpos($params['outcomeData'], 'Long Term') !== false)
-                                   {
-$data['final_outcome'] = 'Long Term';
-                                   }else if (strpos($params['outcomeData'], 'Invalid') !== false)
-                                   {
-$data['final_outcome'] = 'Invalid';
-                                   }else if (strpos($params['outcomeData'], 'Negative') !== false)
-                                   {
-$data['final_outcome'] = 'Assay Negative';
-                                   }
+                        //  if (strpos($params['outcomeData'], 'Long Term') !== false)
+                        //            {
+                        //             $data['final_outcome'] = 'Long Term';
+                        //            }
+                        //            else if (strpos($params['outcomeData'], 'Invalid') !== false)
+                        //            {
+                        //             $data['final_outcome'] = 'Invalid';
+                        //            }else if (strpos($params['outcomeData'], 'Negative') !== false)
+                        //            {
+                        //             $data['final_outcome'] = 'Assay Negative';
+                        //            }
                          $updateResult = $this->update($data,array('recency_id'=>$params['recencyId']));
                     }
                     return $updateResult;
@@ -662,7 +759,16 @@ $data['final_outcome'] = 'Assay Negative';
                                         'tester_name' => $recency['testerName'],
                                         'unique_id'=>isset($recency['unique_id'])?$recency['unique_id']:NULL,
 
+                                        'vl_test_date'=>$recency['vlTestDate'],
+
+                                        'vl_result'=>$recency['vlLoadResult'],
+
                                    );
+
+                                   if(isset($recency['vlTestDate']) && trim($recency['vlTestDate'])!=""){
+                                    $data['vl_test_date']=$common->dbDateFormat($recency['vlTestDate']);
+                                  }
+
                                    if(isset($recency['hivDiagnosisDate']) && trim($recency['hivDiagnosisDate'])!=""){
                                         $data['hiv_diagnosis_date']=$common->dbDateFormat($recency['hivDiagnosisDate']);
                                    }
@@ -733,8 +839,8 @@ $data['final_outcome'] = 'Assay Negative';
                                    'location_two' => $params['locationTwo'],
                                    'location_three' => $params['locationThree'],
                                    'added_on' => $params['addedOn'],
-                                        'added_by' => $params['addedBy'],
-                                        'sync_by' => $params['syncedBy'],
+                                    'added_by' => $params['addedBy'],
+                                    'sync_by' => $params['syncedBy'],
                                    'exp_violence_last_12_month'=>$params['violenceLast12Month'],
                                    'mac_no'=>$params['macAddress'],
                                    'cell_phone_number'=>$params['phoneNumber'],
@@ -747,7 +853,14 @@ $data['final_outcome'] = 'Assay Negative';
                                    'kit_lot_no' => $params['testKitLotNo'],
                                    'tester_name' => $params['testerName'],
 
+                                   'vl_result'=>$params['vlLoadResult'],
+
                               );
+
+                              if(isset($params['vlTestDate']) && trim($params['vlTestDate'])!=""){
+                                $data['vl_test_date']=$common->dbDateFormat($params['vlTestDate']);
+                              }
+
                               if(isset($params['hivRecencyDate']) && trim($params['hivDiagnosisDate'])!=""){
                                    $data['hiv_diagnosis_date']=$common->dbDateFormat($params['hivDiagnosisDate']);
                               }

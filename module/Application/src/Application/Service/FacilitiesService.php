@@ -81,6 +81,7 @@ class FacilitiesService {
         return $facilityDb->fetchFacilitiesAllDetails();
     }
     
+   
     public function getAllFacilityListApi($params)
     {
         $facilityDb = $this->sm->get('FacilitiesTable');

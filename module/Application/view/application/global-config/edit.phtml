@@ -17,7 +17,7 @@ $formFields = array('Sample Id','Patient Id','Facility Name','Province','Distric
 ,'Past Hiv Testing','Test Last 12 Month','Last HIV Status','Patient on ART','Hiv Recency Date','Control Line',
 'Positive Verification Line','Long Term Verification Line','Test Kit Lot No','Kit Expiry Date','Tester Name'
 ,'Dob','Age','Gender','Pregnancy Status','Marital Status','Education Level',
-'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments','Recency Test not performed');
+'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments','Recency Test not performed', 'Viral Load Test Date', 'Viral Load Result', 'Testing Facility');
 $allFileds = json_encode($formFields);
 
 $resultArr2 = array();
@@ -30,7 +30,7 @@ $formFields2 = array('Sample Id','Patient Id','Facility Name','Province','Distri
 ,'Past Hiv Testing','Test Last 12 Month','Last HIV Status','Patient on ART','Hiv Recency Date','Control Line',
 'Positive Verification Line','Long Term Verification Line','Test Kit Lot No','Kit Expiry Date','Tester Name'
 ,'Dob','Age','Gender','Pregnancy Status','Marital Status','Education Level',
-'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments','Recency Test not performed');
+'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments','Recency Test not performed', 'Viral Load Test Date', 'Viral Load Result', 'Testing Facility');
 $allFileds2 = json_encode($formFields2);
 ?>
 <style>
@@ -133,6 +133,11 @@ $allFileds2 = json_encode($formFields2);
                                     <option value="Experience Violence Last 12 Month" data-index='27' <?php echo(in_array("Experience Violence Last 12 Month",$resultArr2)?"selected='selected'":""); ?>>Experience Violence Last 12 Month</option>
                                     <option value="Comments" data-index='28' <?php echo(in_array("Comments",$resultArr2)?"selected='selected'":""); ?>>Comments</option>
                                     <option value="Recency Test not performed" data-index='29' <?php echo(in_array("Recency Test not performed",$resultArr2)?"selected='selected'":""); ?>>Recency Test not performed</option>
+
+                                    <option value="Viral Load Test Date" data-index='30' <?php echo(in_array("Viral Load Test Date",$resultArr2)?"selected='selected'":""); ?>>Viral Load Test Date</option>
+                                    <option value="Viral Load Result" data-index='31' <?php echo(in_array("Viral Load Result",$resultArr2)?"selected='selected'":""); ?>>Viral Load Result (cp/ml)</option>
+                                    <option value="Testing Facility" data-index='32' <?php echo(in_array("Testing Facility",$resultArr2)?"selected='selected'":""); ?>>Testing Facility</option>
+                                    
                                 </select>
                             </div>
 
@@ -187,6 +192,11 @@ $allFileds2 = json_encode($formFields2);
                                 <option value="Experience Violence Last 12 Month" data-index='27' <?php echo(in_array("Experience Violence Last 12 Month",$resultArr)?"selected='selected'":""); ?>>Experience Violence Last 12 Month</option>
                                 <option value="Comments" data-index='28' <?php echo(in_array("Comments",$resultArr)?"selected='selected'":""); ?>>Comments</option>
                                 <option value="Recency Test not performed" data-index='29' <?php echo(in_array("Recency Test not performed",$resultArr)?"selected='selected'":""); ?>>Recency Test not performed</option>
+                          
+                                <option value="Viral Load Test Date" data-index='30' <?php echo(in_array("Viral Load Test Date",$resultArr)?"selected='selected'":""); ?>>Viral Load Test Date</option>
+                                <option value="Viral Load Result" data-index='31' <?php echo(in_array("Viral Load Result",$resultArr)?"selected='selected'":""); ?>>Viral Load Result (cp/ml)</option>
+                                <option value="Testing Facility" data-index='32' <?php echo(in_array("Testing Facility",$resultArr)?"selected='selected'":""); ?>>Testing Facility</option>
+                                
                             </select>
                         </div>
 

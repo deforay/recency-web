@@ -231,7 +231,12 @@ class GlobalConfigTable extends AbstractTableGateway {
         $row[] = in_array("Long Term Verification Line",$explodField)?"longTermLine":"";
         $row[] = in_array("Test Kit Lot No",$explodField)?"testKitLotNo":"";
         $row[] = in_array("Kit Expiry Date",$explodField)?"testKitExpDate":"";
+       
         $row[] = in_array("Tester Name",$explodField)?"testerName":"";
+        $row[] = in_array("Testing Facility",$explodField)?"testingFacility":"";
+        $row[] = in_array("Viral Load Test Date",$explodField)?"vlTestDate":"";
+        $row[] = in_array("Viral Load Result",$explodField)?"vlLoadResult":"";
+
         $row[] = in_array("Dob",$explodField)?"dob":"";
         $row[] = in_array("Age",$explodField)?"age":"";
         $row[] = in_array("Gender",$explodField)?"gender":"";
@@ -286,6 +291,9 @@ class GlobalConfigTable extends AbstractTableGateway {
         $row['testKitLotNo'] = in_array("Test Kit Lot No",$explodField)?true:false;
         $row['testKitExpDate'] = in_array("Kit Expiry Date",$explodField)?true:false;
         $row['testerName'] = in_array("Tester Name",$explodField)?true:false;
+        $row['testingFacility'] = in_array("Testing Facility",$explodField)?true:false;
+        $row['vlTestDate'] = in_array("Viral Load Test Date",$explodField)?true:false;
+        $row['vlLoadResult'] = in_array("Viral Load Result",$explodField)?true:false;
         $row['dob'] = in_array("Dob",$explodField)?true:false;
         $row['age'] = in_array("Age",$explodField)?true:false;
         $row['gender'] = in_array("Gender",$explodField)?true:false;
@@ -298,6 +306,8 @@ class GlobalConfigTable extends AbstractTableGateway {
         $row['violenceLast12Month'] = in_array("Experience Violence Last 12 Month",$explodField)?true:false;
         $row['notes'] = in_array("Comments",$explodField)?true:false;
 
+       
+        
         // $output = array_filter($row);
         // $response['fields'] = array_values($row);
         if(isset($explodField)) {
