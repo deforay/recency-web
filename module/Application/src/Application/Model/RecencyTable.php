@@ -232,7 +232,7 @@ class RecencyTable extends AbstractTableGateway {
                     if( (isset($params['sampleId']) && trim($params['sampleId'])!="") || (isset($params['patientId']) && trim($params['patientId'])!="") )
                     {
                          if($params['facilityId']=='other'){
-                              $fResult = $facilityDb->checkFacilityName($params['otherFacilityName']);
+                              $fResult = $facilityDb->checkFacilityName($params['otherFacilityName'],1);
                               if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
                                    $params['facilityId'] = base64_encode($fResult['facility_id']);
                               }else{
@@ -253,7 +253,7 @@ class RecencyTable extends AbstractTableGateway {
                         
                          if($params['testingFacilityId']=='other'){
                             
-                                $ftResult = $facilityDb->checkFacilityName($params['otherTestingFacility']);
+                                $ftResult = $facilityDb->checkFacilityName($params['otherTestingFacility'],2);
                                 if(isset($ftResult['facility_name']) && $ftResult['facility_name']!=''){
                                  $params['testingFacilityId'] = base64_encode($ftResult['facility_id']);
                                 }
@@ -376,7 +376,7 @@ class RecencyTable extends AbstractTableGateway {
                     if(isset($params['recencyId']) && trim($params['recencyId'])!="")
                     {
                          if($params['facilityId']=='other'){
-                              $fResult = $facilityDb->checkFacilityName($params['otherFacilityName']);
+                              $fResult = $facilityDb->checkFacilityName($params['otherFacilityName'],1);
                               if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
                                    $params['facilityId'] = base64_encode($fResult['facility_id']);
                               }else{
@@ -398,7 +398,7 @@ class RecencyTable extends AbstractTableGateway {
 
                          if($params['testingFacilityId']=='other'){
                             
-                            $ftResult = $facilityDb->checkFacilityName($params['otherTestingFacility']);
+                            $ftResult = $facilityDb->checkFacilityName($params['otherTestingFacility'],2);
                         if(isset($ftResult['facility_name']) && $ftResult['facility_name']!=''){
                              $params['testingFacilityId'] = base64_encode($ftResult['facility_id']);
                             }
@@ -671,7 +671,7 @@ class RecencyTable extends AbstractTableGateway {
                                    if(isset($recency['sampleId']) && trim($recency['sampleId'])!="" || isset($recency['patientId']) && trim($recency['patientId'])!="")
                                    {
                                         if($recency['otherfacility']!=''){
-                                             $fResult = $facilityDb->checkFacilityName($recency['otherfacility']);
+                                             $fResult = $facilityDb->checkFacilityName($recency['otherfacility'],1);
                                              if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
                                                   $recency['facilityId'] = $fResult['facility_id'];
                                              }else{
@@ -679,6 +679,7 @@ class RecencyTable extends AbstractTableGateway {
                                                   'province'=>$recency['location_one'],
                                                   'district'=>$recency['location_two'],
                                                   'city'=>$recency['location_three'],
+                                                  'facility_type_id'=>'1',
                                                   'status'=>'active'
                                              );
                                              $facilityDb->insert($facilityData);
@@ -687,6 +688,26 @@ class RecencyTable extends AbstractTableGateway {
                                              }
                                         }
                                    }
+
+                                   if($recency['othertestingfacility']!=''){
+                                        $fResult = $facilityDb->checkFacilityName($recency['othertestingfacility'],2);
+                                        if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
+                                            $recency['testingFacility'] = $fResult['facility_id'];
+                                        }else{
+                                            $facilityData = array('facility_name'=>trim($recency['othertestingfacility']),
+                                            'province'=>$recency['location_one'],
+                                            'district'=>$recency['location_two'],
+                                            'city'=>$recency['location_three'],
+                                            'facility_type_id'=>'2',
+                                            'status'=>'active'
+                                        );
+                                        $facilityDb->insert($facilityData);
+                                        if($facilityDb->lastInsertValue>0){
+                                            $recency['testingFacility'] = $facilityDb->lastInsertValue;
+                                        }
+                                        }
+                                    }
+
                                    //check oher pouplation
                                    if($recency['otherriskPopulation']!=''){
                                         $rpResult = $riskPopulationDb->checkExistRiskPopulation($recency['otherriskPopulation']);
@@ -706,6 +727,7 @@ class RecencyTable extends AbstractTableGateway {
                                         'sample_id' => $recency['sampleId'],
                                         'patient_id' => $recency['patientId'],
                                         'facility_id' => $recency['facilityId'],
+                                        'testint_facility_id'=>$recency['testingFacility'],
                                         'control_line' => $recency['ctrlLine'],
                                         'positive_verification_line' => $recency['positiveLine'],
                                         'long_term_verification_line' => $recency['longTermLine'],
