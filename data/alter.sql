@@ -152,7 +152,7 @@ ALTER TABLE `quality_check_test` ADD `unique_id` VARCHAR(255) NOT NULL FIRST;
 ALTER TABLE `quality_check_test` ADD `form_saved_datetime` DATETIME NULL DEFAULT NULL AFTER `form_transfer_datetime`;
 
 
--- saravanan 11-jan-2019
+-- saravanan 11-jan-2019/
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Send Results(Email configuration)', 'email_id', 'zfexample@gmail.com');
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Send Results(Email password)', 'email_password', 'zaq12345');
 
