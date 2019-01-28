@@ -240,6 +240,7 @@ class RecencyTable extends AbstractTableGateway {
                                    'province'=>$params['location_one'],
                                    'district'=>$params['location_two'],
                                    'city'=>$params['location_three'],
+                                   'facility_type_id'=>'1',
                                    'status'=>'active');
                                    $facilityDb->insert($facilityData);
                                    if($facilityDb->lastInsertValue>0){
@@ -252,31 +253,24 @@ class RecencyTable extends AbstractTableGateway {
                         
                          if($params['testingFacilityId']=='other'){
                             
-                                $ftResult = $facilityDb->checkTestingFacilityName($params['otherTestingFacility']);
-                            if(isset($ftResult['testing_facility_name']) && $ftResult['testing_facility_name']!=''){
-                                 $params['facilityId'] = base64_encode($ftResult['facility_id']);
+                                $ftResult = $facilityDb->checkFacilityName($params['otherTestingFacility']);
+                                if(isset($ftResult['facility_name']) && $ftResult['facility_name']!=''){
+                                 $params['testingFacilityId'] = base64_encode($ftResult['facility_id']);
                                 }
                                 else{
-                                    if($facilityDb->lastInsertValue > 0){
-                                        $facilityData = array('testing_facility_name'=>trim($params['otherTestingFacility']),
-                                                  );
-                                        $facilityDb->update($facilityData,array('facility_id'=>$facilityDb->lastInsertValue));
-                                        $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
-                                    }else{
                                         // echo "else2";die;
-                                        $facilityData = array('testing_facility_name'=>trim($params['otherTestingFacility']),
+                                        $facilityData = array('facility_name'=>trim($params['otherTestingFacility']),
                                         'province'=>$params['location_one'],
                                         'district'=>$params['location_two'],
                                         'city'=>$params['location_three'],
+                                        'facility_type_id'=>'2',
                                         'status'=>'active');
                                         $facilityDb->insert($facilityData);
                                         if($facilityDb->lastInsertValue>0){
-                                            $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
+                                            $params['testingFacilityId'] = base64_encode($facilityDb->lastInsertValue);
                                         }else{
                                             return false;
                                         }
-                                    }
-                                 
                             }
                        }
                         //  check oher pouplation
@@ -299,6 +293,7 @@ class RecencyTable extends AbstractTableGateway {
                               'sample_id' => $params['sampleId'],
                               'patient_id' => $params['patientId'],
                               'facility_id' => base64_decode($params['facilityId']),
+                              'testing_facility_id'=>base64_decode($params['testingFacilityId']),
                               'dob'=>($params['dob']!='')?$common->dbDateFormat($params['dob']):NULL,
                               'hiv_diagnosis_date' => ($params['hivDiagnosisDate']!='')?$common->dbDateFormat($params['hivDiagnosisDate']):NULL,
                               'hiv_recency_date' => (isset($params['hivRecencyDate']) && $params['hivRecencyDate']!='')?$common->dbDateFormat($params['hivRecencyDate']):NULL,
@@ -341,6 +336,7 @@ class RecencyTable extends AbstractTableGateway {
                               'vl_result'=>$params['vlLoadResult'],
                                
                          );
+                         //print_r($data);die;
                       
                          //  if (strpos($params['outcomeData'], 'Long Term') !== false){
                         //       $data['final_outcome'] = 'Long Term';
@@ -377,10 +373,8 @@ class RecencyTable extends AbstractTableGateway {
                     $logincontainer = new Container('credo');
                     $common = new CommonService();
 
-
                     if(isset($params['recencyId']) && trim($params['recencyId'])!="")
                     {
-
                          if($params['facilityId']=='other'){
                               $fResult = $facilityDb->checkFacilityName($params['otherFacilityName']);
                               if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
@@ -390,6 +384,7 @@ class RecencyTable extends AbstractTableGateway {
                                    'province'=>$params['location_one'],
                                    'district'=>$params['location_two'],
                                    'city'=>$params['location_three'],
+                                   'facility_type_id'=>'1',
                                    'status'=>'active');
                                    $facilityDb->insert($facilityData);
                                    if($facilityDb->lastInsertValue>0){
@@ -403,29 +398,23 @@ class RecencyTable extends AbstractTableGateway {
 
                          if($params['testingFacilityId']=='other'){
                             
-                            $ftResult = $facilityDb->checkTestingFacilityName($params['otherTestingFacility']);
-                        if(isset($ftResult['testing_facility_name']) && $ftResult['testing_facility_name']!=''){
-                             $params['facilityId'] = base64_encode($ftResult['facility_id']);
+                            $ftResult = $facilityDb->checkFacilityName($params['otherTestingFacility']);
+                        if(isset($ftResult['facility_name']) && $ftResult['facility_name']!=''){
+                             $params['testingFacilityId'] = base64_encode($ftResult['facility_id']);
                             }
                             else{
-                                if($facilityDb->lastInsertValue > 0){
-                                    $facilityData = array('testing_facility_name'=>trim($params['otherTestingFacility']),
-                                              );
-                                    $facilityDb->update($facilityData,array('facility_id'=>$facilityDb->lastInsertValue));
-                                    $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
-                                }else{
-                                    $facilityData = array('testing_facility_name'=>trim($params['otherTestingFacility']),
+                                    $facilityData = array('facility_name'=>trim($params['otherTestingFacility']),
                                     'province'=>$params['location_one'],
                                     'district'=>$params['location_two'],
                                     'city'=>$params['location_three'],
+                                    'facility_type_id'=>'2',
                                     'status'=>'active');
                                     $facilityDb->insert($facilityData);
                                     if($facilityDb->lastInsertValue>0){
-                                        $params['facilityId'] = base64_encode($facilityDb->lastInsertValue);
+                                        $params['testingFacilityId'] = base64_encode($facilityDb->lastInsertValue);
                                     }else{
                                         return false;
                                     }
-                                }
                              
                         }
                    }
@@ -471,6 +460,7 @@ class RecencyTable extends AbstractTableGateway {
                               'sample_id' => $params['sampleId'],
                               'patient_id' => $params['patientId'],
                               'facility_id' => base64_decode($params['facilityId']),
+                              'testing_facility_id'=>base64_decode($params['testingFacilityId']),
                               'dob' => ($params['dob']!='')?$common->dbDateFormat($params['dob']):NULL,
                               'hiv_diagnosis_date' => ($params['hivDiagnosisDate']!='')?$common->dbDateFormat($params['hivDiagnosisDate']):NULL,
                               'hiv_recency_date' => (isset($params['hivRecencyDate']) && $params['hivRecencyDate']!='')?$common->dbDateFormat($params['hivRecencyDate']):NULL,

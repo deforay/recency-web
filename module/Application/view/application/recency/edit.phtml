@@ -180,7 +180,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 												<select class="form-control  <?php echo $facility; ?>" id="facilityId" name="facilityId" title="Please select the facility name">
 													<option value="">--Select--</option>
 													<?php foreach($facilityResult['facility'] as $facility){?>
-														<option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo $facility['facility_name']; ?></option>
+														<option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo ucwords($facility['facility_name']); ?></option>
 													<?php } ?>
 													<option value="other">Other</option>
 												</select>
@@ -362,7 +362,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 													<select class="form-control<?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
 														<option value="">--Select--</option>
 														<?php foreach($facilityResult['facilityTest'] as $testingFacility){?>
-															<option value="<?php echo ($testingFacility['facility_id']); ?>" <?php echo($testingFacility['facility_type_id'] == $result['facility_type_id'] )?'selected="selected"':''; ?>><?php echo $testingFacility['testing_facility_name']; ?></option>
+															<option value="<?php echo ($testingFacility['facility_id']); ?>" <?php echo($testingFacility['facility_id'] == $result['testing_facility_id'] )?'selected="selected"':''; ?>><?php echo ucwords($testingFacility['facility_name']); ?></option>
 														<?php } ?>
 														<option value="other">Other</option>
 													</select>

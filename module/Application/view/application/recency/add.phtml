@@ -3,6 +3,7 @@ use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $arr = array();
 
+//\Zend\Debug\Debug::dump($facilityResult);die;
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
      $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
 }
@@ -322,7 +323,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                             <select class="form-control <?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
                                                 <option value="">--Select--</option>
                                                 <?php foreach($facilityResult['facilityTest'] as $testingFacility){ ?>
-                                                        <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['testing_facility_name']; ?></option>
+                                                        <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
                                                 <?php } ?>
                                                 <option value="other">Other</option>
                                             </select>

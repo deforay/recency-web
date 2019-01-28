@@ -191,5 +191,6 @@ INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`, `facility
 -- vivek 24-jan-2019
 ALTER TABLE `facilities` ADD `facility_type_id` INT(11) NOT NULL AFTER `facility_id`;
 ALTER TABLE `facilities` CHANGE `facility_type_id` `facility_type_id` INT(11) NULL DEFAULT NULL;
--- vivek 24-jan-2019
-ALTER TABLE `facilities` ADD `testing_facility_name` VARCHAR(255) NULL DEFAULT NULL AFTER `facility_name`;
+
+-- saravanan 28-jan-2019
+ALTER TABLE `recency` ADD `testing_facility_id` INT NULL DEFAULT NULL AFTER `facility_id`;
