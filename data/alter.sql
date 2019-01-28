@@ -189,8 +189,8 @@ CREATE TABLE `recency_app`.`facility_type` ( `facility_type_id` INT(11) NOT NULL
 INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`, `facility_type_status`) VALUES (NULL, 'Normal', 'active'), (NULL, 'Testing', 'active');
 
 -- vivek 24-jan-2019
-ALTER TABLE `facilities` ADD `facility_type_id` INT(11) NOT NULL AFTER `facility_id`;
-ALTER TABLE `facilities` CHANGE `facility_type_id` `facility_type_id` INT(11) NULL DEFAULT NULL;
+-- ALTER TABLE `facilities` ADD `facility_type_id` INT(11) NOT NULL AFTER `facility_id`;
+-- ALTER TABLE `facilities` CHANGE `facility_type_id` `facility_type_id` INT(11) NULL DEFAULT NULL;
 
 -- saravanan 28-jan-2019
 ALTER TABLE `recency` ADD `testing_facility_id` INT NULL DEFAULT NULL AFTER `facility_id`;
