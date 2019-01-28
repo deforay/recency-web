@@ -3,7 +3,7 @@ use Zend\Session\Container;
 use Application\Service\CommonService;
 $sessionLogin = new Container('credo');
 $common = new CommonService();
-//\Zend\Debug\Debug::dump($result);die;
+// \Zend\Debug\Debug::dump($result);die;
 ?>
 <style>
 <?php
@@ -317,7 +317,7 @@ $lineOutComeColor2 = "#000000";
                                             } ?>
                                             <div class="col-md-6 outcome">
                                                 <div class="form-group">
-                                                    <label for="otherRef" class="col-lg-4 control-label">Outcome</label>
+                                                    <label for="otherRef" class="col-lg-4 control-label">Term Outcome</label>
                                                     <label for="company" class="col-lg-1 control-label">: </label>
                                                     <span style="text-align: left;" id="outcome" for="company" class="col-lg-4 control-label">
                                                     <?php echo $result['term_outcome'];?>
@@ -336,6 +336,16 @@ $lineOutComeColor2 = "#000000";
                                         <br>
                                         <div class="form-group row form-horizontal">
                                          
+                                        <div class="col-md-6 ">
+                                                <div class="form-group">
+                                                    <label for="otherRef" class="col-lg-4 control-label">Testing Facility</label>
+                                                    <label for="company" class="col-lg-1 control-label">: </label>
+                                                    <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                    <?php echo $result['testFacilityName'];?>
+                                                    </span>
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-6 ">
                                                 <div class="form-group">
                                                     <label for="otherRef" class="col-lg-4 control-label">Test Kit No</label>
@@ -351,6 +361,33 @@ $lineOutComeColor2 = "#000000";
                                                     <label for="company" class="col-lg-1 control-label">: </label>
                                                     <span style="text-align: left;" for="company" class="col-lg-4 control-label">
                                                         <?php echo ($result->kit_expiry_date!='' && $result->kit_expiry_date!='0000:00:00')?$common->humanDateFormat($result->kit_expiry_date):''; ?>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="otherRef" class="col-lg-4 control-label">Viral Load Test Date</label>
+                                                    <label for="company" class="col-lg-1 control-label">: </label>
+                                                    <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                        <?php echo ($result->vl_test_date!='' && $result->vl_test_date!='0000:00:00')?$common->humanDateFormat($result->vl_test_date):''; ?>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="otherRef" class="col-lg-4 control-label">Viral Load Result(cp/ml)</label>
+                                                    <label for="company" class="col-lg-1 control-label">: </label>
+                                                    <span style="text-align: left;" for="company" class="col-lg-4 control-label">
+                                                        <?php echo $result['vl_result'];?>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 outcome">
+                                                <div class="form-group">
+                                                    <label for="otherRef" class="col-lg-4 control-label">Final Outcome</label>
+                                                    <label for="company" class="col-lg-1 control-label">: </label>
+                                                    <span style="text-align: left;" id="outcome" for="company" class="col-lg-4 control-label">
+                                                    <?php echo $result['final_outcome'];?>
                                                     </span>
                                                 </div>
                                             </div>

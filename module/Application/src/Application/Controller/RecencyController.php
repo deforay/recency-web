@@ -15,11 +15,12 @@ class RecencyController extends AbstractActionController
                $params = $request->getPost();
                $recencyService = $this->getServiceLocator()->get('RecencyService');
                $result = $recencyService->getRecencyDetails($params);
+               
+
                return $this->getResponse()->setContent(Json::encode($result));
           }else{
             $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult=$facilityService->getFacilitiesAllDetails(1);
-            $testFacilityResult=$facilityService->getFacilitiesAllDetails(2);
+            $facilityResult=$facilityService->getFacilitiesAllDetails();
             
             return new ViewModel(array(
                 'facilityResult' => $facilityResult
@@ -34,17 +35,16 @@ class RecencyController extends AbstractActionController
                $params = $request->getPost();
                $recencyService = $this->getServiceLocator()->get('RecencyService');
                $result = $recencyService->addRecencyDetails($params);
+               
                return $this->_redirect()->toRoute('recency');
           }else{
                $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-               $facilityResult=$facilityService->getFacilitiesAllDetails(1);
-               $testFacilityResult=$facilityService->getFacilitiesAllDetails(2);
+               $facilityResult=$facilityService->getFacilitiesAllDetails();
                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                return new ViewModel(array(
                     'globalConfigResult' => $globalConfigResult,
                     'facilityResult' => $facilityResult,
-                    'testFacilityResult' => $testFacilityResult,
                ));
           }
      }
@@ -64,7 +64,6 @@ class RecencyController extends AbstractActionController
                $facilityService = $this->getServiceLocator()->get('FacilitiesService');
            
                $facilityResult=$facilityService->getFacilitiesAllDetails();
-            //    $testFacilityResult=$facilityService->getFacilitiesAllDetails();
              
                $result=$recencyService->getRecencyDetailsById($recencyId);
                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
@@ -73,7 +72,6 @@ class RecencyController extends AbstractActionController
                return new ViewModel(array(
                     'globalConfigResult' => $globalConfigResult,
                     'facilityResult' => $facilityResult,
-                    // 'testFacilityResult' => $testFacilityResult,
                     'result' => $result
                ));
           }
@@ -90,8 +88,7 @@ class RecencyController extends AbstractActionController
           // \Zend\Debug\Debug::dump($result);die;
 
           $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-          $facilityResult=$facilityService->getFacilitiesAllDetails(1);
-          $testFacilityResult=$facilityService->getFacilitiesAllDetails(2);
+          $facilityResult=$facilityService->getFacilitiesAllDetails();
           
           $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
           $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
