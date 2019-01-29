@@ -225,15 +225,20 @@ class GlobalConfigTable extends AbstractTableGateway {
         $row[] = in_array("Test Last 12 Month",$explodField)?"testLast12Month":"";
         $row[] = in_array("Last HIV Status",$explodField)?"lastHivStatus":"";
         $row[] = in_array("Patient on ART",$explodField)?"patientOnArt":"";
+
+        $row[] = in_array("Test Kit Lot No",$explodField)?"testKitLotNo":"";
+        $row[] = in_array("Kit Expiry Date",$explodField)?"testKitExpDate":"";
+        $row[] = in_array("Tester Name",$explodField)?"testerName":"";
+        $row[] = in_array("Testing Facility",$explodField)?"testingFacility":"";
+
+
+
         $row[] = in_array("Hiv Recency Date",$explodField)?"hivRecencyDate":"";
         $row[] = in_array("Control Line",$explodField)?"ctrlLine":"";
         $row[] = in_array("Positive Verification Line",$explodField)?"positiveLine":"";
         $row[] = in_array("Long Term Verification Line",$explodField)?"longTermLine":"";
-        $row[] = in_array("Test Kit Lot No",$explodField)?"testKitLotNo":"";
-        $row[] = in_array("Kit Expiry Date",$explodField)?"testKitExpDate":"";
+              
        
-        $row[] = in_array("Tester Name",$explodField)?"testerName":"";
-        $row[] = in_array("Testing Facility",$explodField)?"testingFacility":"";
         $row[] = in_array("Viral Load Test Date",$explodField)?"vlTestDate":"";
         $row[] = in_array("Viral Load Result",$explodField)?"vlLoadResult":"";
 

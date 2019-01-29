@@ -336,7 +336,7 @@ class RecencyTable extends AbstractTableGateway {
                               'tester_name'=>$params['testerName'],
 
                               'vl_test_date'=>($params['vlTestDate']!='')?$common->dbDateFormat($params['vlTestDate']):NULL,
-                              'vl_result'=>$params['vlLoadResult'],
+                              'vl_result'=>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
                                
                          );
                          //print_r($data);die;
@@ -500,7 +500,7 @@ class RecencyTable extends AbstractTableGateway {
                               'tester_name'=>$params['testerName'],
                               'form_saved_datetime'=>date('Y-m-d H:i:s'),
                               'vl_test_date'=>($params['vlTestDate']!='')?$common->dbDateFormat($params['vlTestDate']):NULL,
-                              'vl_result'=>$params['vlLoadResult'],
+                              'vl_result'=>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
                          );
                         //  if (strpos($params['outcomeData'], 'Long Term') !== false)
                         //            {

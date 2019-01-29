@@ -159,7 +159,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 						 <?php
 if(isset($arr['admin_message']) && $arr['admin_message']!=''){
     ?>
-    <h4>Admin Message:-&nbsp;<?php echo ucwords($arr['admin_message']);?></h4>
+    <h4><?php echo ucwords($arr['admin_message']);?></h4>
     <?php
 }
 ?>
@@ -576,65 +576,49 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 					$("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
 					$(".outcome").css({"display":"block"});
 					
-					$("#vlResultoutcome").html('Invalid ').css({"color":"<?php echo $lineOutComeColor;?>"});
-					$(".vlResultoutcome").css({"display":"block"});
+					updateVlResultFields();
 
 			   }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
 					$("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
 					$(".outcome").css({"display":"block"});
 					
-					$("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
-					$(".vlResultoutcome").css({"display":"block"});
+					updateVlResultFields();
 
 			   }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
 					$("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
 					$(".outcome").css({"display":"block"});
 					
-					$("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
-					$(".vlResultoutcome").css({"display":"block"});
+					updateVlResultFields();
 
 			   }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
 					$("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
 					$(".outcome").css({"display":"block"});
 					
-					$("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
-					$(".vlResultoutcome").css({"display":"block"});
+					updateVlResultFields();
 
 			   }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
 					$("#outcome").html('Assay HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
 					$(".outcome").css({"display":"block"});
 
-					$("#vlResultoutcome").html('Assay Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
-					$(".vlResultoutcome").css({"display":"block"});
+					updateVlResultFields('Assay Negative');
 
 			   }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
 					$("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
 					$(".outcome").css({"display":"block"});
 
-					$("#vlResultoutcome").html('Invalid').css({"color":"<?php echo $lineOutComeColor;?>"});
-					$(".vlResultoutcome").css({"display":"block"});
+					updateVlResultFields();
 
 			   }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
 					$("#outcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
 					$(".outcome").css({"display":"block"});
 				 
-					$("#vlResultoutcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
-					$(".vlResultoutcome").css({"display":"block"});
-					
-					if(vlDataResult >1000 && vlDataResult!='' ){
-						$("#vlResultoutcome").html('RITA Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
-						$(".vlResultoutcome").css({"display":"block"});
-					}else if(vlDataResult <=1000  && vlDataResult!='' ){
-						$("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-						$(".vlResultoutcome").css({"display":"block"});
-					}
+					updateVlResultFields('Assay Recent');
 
 			   }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
 					$("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
 					$(".outcome").css({"display":"block"});
 
-					$("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-					$(".vlResultoutcome").css({"display":"block"});
+					updateVlResultFields('Assay Long Term');
 			   }
 		  }else{
 			   $("#outcome").html('').hide();
@@ -644,6 +628,60 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 			   $(".vlResultoutcome").css({"display":"none"});
 		  }
 	 }
+
+	 function updateVlResultFields(fieldValue=null)
+     {
+        var vlDataResult = $("#vlLoadResult").val();
+        
+        $("#vlResultoutcome").html('').hide();
+        $(".vlResultoutcome").css({"display":"none"});
+
+        if(fieldValue=='vlField'){
+            var fieldValue = $("#outcome").text();
+        }
+
+        if(fieldValue=='Assay Long Term' || fieldValue=='Assay Recent' || fieldValue=='Assay Negative'){
+            
+            if(fieldValue=='Assay Negative'){
+                $("#vlResultoutcome").html('Inconclusive').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                $(".vlResultoutcome").css({"display":"block"});
+                $(".vlResultFields").prop('disabled',true);
+                $("#vlTestDate").val('');
+                $("#vlLoadResult").val('');
+            }
+            if(fieldValue=='Assay Long Term'){
+                $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                $(".vlResultoutcome").css({"display":"block"});
+                $(".vlResultFields").prop('disabled',true);
+                $("#vlTestDate").val('');
+                $("#vlLoadResult").val('');
+            }
+            if(fieldValue=='Assay Recent')
+            {
+                $(".vlResultFields").prop('disabled',false);
+                <?php if(in_array("Viral Load Test Date",$resultArr2)){ ?>
+                    $("#vlTestDate").addClass('<?php echo $vlTestDate;?>');
+                <?php  }
+                if(in_array("Viral Load Result",$resultArr2)){ ?>
+                    $("#vlLoadResult").addClass('<?php echo $vlLoadResult;?>');
+                <?php } ?>
+                if(vlDataResult >1000 && vlDataResult!='' ){
+                $("#vlResultoutcome").html('RITA Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                $(".vlResultoutcome").css({"display":"block"});
+                }else if(vlDataResult <=1000  && vlDataResult!='' ){
+                    $("#vlResultoutcome").html('RITA Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $(".vlResultoutcome").css({"display":"block"});
+                }
+            }
+
+        }else{
+            $(".vlResultFields").prop('disabled',true);
+            $("#vlTestDate").removeClass('<?php echo $vlTestDate;?>');
+            $("#vlLoadResult").removeClass('<?php echo $vlLoadResult;?>');
+            $("#vlResultoutcome").html('').hide();
+            $(".vlResultoutcome").css({"display":"none"});
+        }
+     }
 
 	 function checkHivTesting(obj){
 		  if( obj.value == 'yes' ){
