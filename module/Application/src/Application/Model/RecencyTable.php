@@ -291,6 +291,7 @@ class RecencyTable extends AbstractTableGateway {
                                    }
                               }
                          }
+                         
 
                          $data = array(
                               'sample_id' => $params['sampleId'],
@@ -336,9 +337,14 @@ class RecencyTable extends AbstractTableGateway {
                               'tester_name'=>$params['testerName'],
 
                               'vl_test_date'=>($params['vlTestDate']!='')?$common->dbDateFormat($params['vlTestDate']):NULL,
-                              'vl_result'=>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
+                              //'vl_result'=>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
                                
                          );
+                            if($params['vlLoadResult']!=''){
+                                $data['vl_result'] = $params['vlLoadResult'];
+                            }else if($params['vlResultOption']){
+                                $data['vl_result'] = htmlentities($params['vlResultOption']);
+                            }
                          //print_r($data);die;
                       
                          //  if (strpos($params['outcomeData'], 'Long Term') !== false){
@@ -500,8 +506,13 @@ class RecencyTable extends AbstractTableGateway {
                               'tester_name'=>$params['testerName'],
                               'form_saved_datetime'=>date('Y-m-d H:i:s'),
                               'vl_test_date'=>($params['vlTestDate']!='')?$common->dbDateFormat($params['vlTestDate']):NULL,
-                              'vl_result'=>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
+                              //'vl_result'=>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
                          );
+                         if($params['vlLoadResult']!=''){
+                            $data['vl_result'] = $params['vlLoadResult'];
+                        }else if($params['vlResultOption']){
+                            $data['vl_result'] = htmlentities($params['vlResultOption']);
+                        }
                         //  if (strpos($params['outcomeData'], 'Long Term') !== false)
                         //            {
                         //             $data['final_outcome'] = 'Long Term';
@@ -776,15 +787,23 @@ class RecencyTable extends AbstractTableGateway {
                                         'tester_name' => $recency['testerName'],
                                         'unique_id'=>isset($recency['unique_id'])?$recency['unique_id']:NULL,
 
-                                        'vl_test_date'=>$recency['vlTestDate'],
+                                        //'vl_test_date'=>$recency['vlTestDate'],
 
-                                        'vl_result'=>$recency['vlLoadResult'],
+                                       // 'vl_result'=>$recency['vlLoadResult'],
 
                                    );
 
-                                   if(isset($recency['vlTestDate']) && trim($recency['vlTestDate'])!=""){
-                                    $data['vl_test_date']=$common->dbDateFormat($recency['vlTestDate']);
-                                  }
+                                    if($params['vlLoadResult']!=''){
+                                        $data['vl_result'] = htmlentities($params['vlLoadResult']);
+                                    }
+                                    if($params['finalOutCome']!='')
+                                    {
+                                        $data['final_outcome'] = $params['finalOutCome'];
+                                    }
+                                
+                                    if(isset($recency['vlTestDate']) && trim($recency['vlTestDate'])!=""){
+                                        $data['vl_test_date']=$common->dbDateFormat($recency['vlTestDate']);
+                                    }
 
                                    if(isset($recency['hivDiagnosisDate']) && trim($recency['hivDiagnosisDate'])!=""){
                                         $data['hiv_diagnosis_date']=$common->dbDateFormat($recency['hivDiagnosisDate']);
@@ -798,16 +817,16 @@ class RecencyTable extends AbstractTableGateway {
                                    if(isset($recency['testKitExpDate']) && trim($recency['testKitExpDate'])!=""){
                                         $data['kit_expiry_date']=$common->dbDateFormat($recency['testKitExpDate']);
                                    }
-                                   if (strpos($recency['recencyOutcome'], 'Long Term') !== false)
-                                   {
-                                        $data['final_outcome'] = 'Long Term';
-                                   }else if (strpos($recency['recencyOutcome'], 'Invalid') !== false)
-                                   {
-                                        $data['final_outcome'] = 'Invalid';
-                                   }else if (strpos($recency['recencyOutcome'], 'Negative') !== false)
-                                   {
-                                        $data['final_outcome'] = 'Assay Negative';
-                                   }
+                                //    if (strpos($recency['recencyOutcome'], 'Long Term') !== false)
+                                //    {
+                                //         $data['final_outcome'] = 'Long Term';
+                                //    }else if (strpos($recency['recencyOutcome'], 'Invalid') !== false)
+                                //    {
+                                //         $data['final_outcome'] = 'Invalid';
+                                //    }else if (strpos($recency['recencyOutcome'], 'Negative') !== false)
+                                //    {
+                                //         $data['final_outcome'] = 'Assay Negative';
+                                //    }
 
                                    $this->insert($data);
                                    $lastInsertedId = $this->lastInsertValue;

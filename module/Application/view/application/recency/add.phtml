@@ -365,7 +365,15 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                        <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                        <div class="col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
                                            <input type="text" name="vlLoadResult" id="vlLoadResult" class=" form-control vlResultFields <?php echo $vlLoadResult; ?>" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)" onblur="updateVlResultFields('vlField')" disabled/>
-                                           
+                                           <br/>
+                                           <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption" disabled onchange="updateVlResultFields('vlField')">
+                                                    <option value="">-- Select -- </option>
+                                                    <option value="TND">TND</option>
+                                                    <option value="BDL">BDL</option>
+                                                    <option value="failed">Failed</option>
+                                                    <option value="&lt;20"> &lt; 20</option>
+                                                    <option value="&lt;40"> &lt; 40</option>
+                                           </select>
                                        </div>
                                        
                                        
@@ -601,6 +609,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
      function updateVlResultFields(fieldValue=null)
      {
         var vlDataResult = $("#vlLoadResult").val();
+        var vlResultOption  = $("#vlResultOption").val();
         
         $("#vlResultoutcome").html('');
         $(".vlResultoutcome").css({"visibility":"hidden"});
@@ -617,6 +626,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                 $(".vlResultFields").prop('disabled',true);
                 $("#vlTestDate").val('');
                 $("#vlLoadResult").val('');
+                $("#vlResultOption").val('');
             }
             if(fieldValue=='Assay Long Term'){
                 $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
@@ -624,6 +634,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                 $(".vlResultFields").prop('disabled',true);
                 $("#vlTestDate").val('');
                 $("#vlLoadResult").val('');
+                $("#vlResultOption").val('');
             }
             if(fieldValue=='Assay Recent')
             {
@@ -634,12 +645,22 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                 if(in_array("Viral Load Result",$resultArr2)){ ?>
                     $("#vlLoadResult").addClass('<?php echo $vlLoadResult;?>');
                 <?php } ?>
-                if(vlDataResult >1000 && vlDataResult!='' ){
+                if((vlDataResult > 1000 && vlDataResult!='')){
                 $("#vlResultoutcome").html('RITA Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
                 $(".vlResultoutcome").css({"visibility":"visible"});
+                $("#vlResultOption").prop('disabled',true);
                 }else if(vlDataResult <=1000  && vlDataResult!='' ){
                     $("#vlResultoutcome").html('RITA Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
                     $(".vlResultoutcome").css({"visibility":"visible"});
+                    $("#vlResultOption").prop('disabled',true);
+                }else if(vlResultOption!='' && vlResultOption=='failed'){
+                    $("#vlResultoutcome").html('inconclusive').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $(".vlResultoutcome").css({"visibility":"visible"});
+                    $("#vlLoadResult").prop('disabled',true);
+                }else if(vlResultOption!=''){
+                    $("#vlResultoutcome").html('RITA Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $(".vlResultoutcome").css({"visibility":"visible"});
+                    $("#vlLoadResult").prop('disabled',true);
                 }
             }
 
@@ -648,6 +669,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
             $("#vlTestDate").removeClass('<?php echo $vlTestDate;?>');
             $("#vlLoadResult").removeClass('<?php echo $vlLoadResult;?>');
             $("#vlResultoutcome").html('');
+            $("#vlResultOption").val('');
             $(".vlResultoutcome").css({"visibility":"hidden"});
         }
      }
