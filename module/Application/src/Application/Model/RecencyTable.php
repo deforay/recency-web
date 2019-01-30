@@ -793,12 +793,12 @@ class RecencyTable extends AbstractTableGateway {
 
                                    );
 
-                                    if($params['vlLoadResult']!=''){
-                                        $data['vl_result'] = htmlentities($params['vlLoadResult']);
+                                    if($recency['vlLoadResult']!=''){
+                                        $data['vl_result'] = htmlentities($recency['vlLoadResult']);
                                     }
-                                    if($params['finalOutCome']!='')
+                                    if($recency['finalOutcome']!='')
                                     {
-                                        $data['final_outcome'] = $params['finalOutCome'];
+                                        $data['final_outcome'] = $recency['finalOutcome'];
                                     }
                                 
                                     if(isset($recency['vlTestDate']) && trim($recency['vlTestDate'])!=""){
