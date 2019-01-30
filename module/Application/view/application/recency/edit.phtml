@@ -96,7 +96,7 @@ $lineOutComeColor2 = "#000000";
 <?php
 if($result['term_outcome']==''){
 	 ?>
-	 .outcome{display:none;}
+	 .outcome{visibility:hidden;}
 	 <?php
 }
 ?>
@@ -319,10 +319,10 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 												</div>
 
 											<!-- Other Non Performed test -->
-											<label style="display:none;" class="col-sm-2 col-form-label hideDiv" for="">Reason of Recency Test Not Performed
+											<label style="visibility:hidden;" class="col-sm-2 col-form-label hideDiv" for="">Reason of Recency Test Not Performed
 												<?php echo(in_array("Recency Test Not Performed",$resultArr)?"<span class='mandatory'> *</span>":""); ?>
 											</label>
-												<div style="display:none;" class="col-sm-4 hideDiv">
+												<div style="visibility:hidden;" class="col-sm-4 hideDiv">
 													<select class="form-control" id="recencyTestNotPerformed" name="recencyTestNotPerformed" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
 														<option value="">--Select--</option>
 														<option value="no_consent_from_the_client" <?php echo($result['recency_test_not_performed'] == 'no_consent_from_the_client' )?'selected="selected"':''; ?>>No Consent</option>
@@ -376,11 +376,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 													</select>
 												</div>
 												<br>
-												<label class="col-sm-2 col-form-label outcome " style="visibility:hidden" for="">Term Outcome</label>
-                                        <div class="col-sm-4" >
-                                            <span class="form-control" style="border:none;" id="outcome"></span>
-                                            <input type="hidden" name="outcomeData" id="outcomeData"/>
-                                        </div>
+
 
 												<label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Test Date <?php echo(in_array("Viral Load Test Date",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 												<div class="col-sm-4 <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>">
@@ -388,12 +384,13 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 												</div>
 
 
-												<label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
-												<div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
-													<span class=" form-control " style="border:none;" id="vlResultoutcome"></span>
-													<input type="hidden" name="vlfinaloutcomeResult" id="vlfinaloutcomeResult"/>
-												</div>
+												<label class="col-sm-2 col-form-label outcome " style="visibility:hidden" for="">Term Outcome</label>
+                                        <div class="col-sm-4" >
+                                            <span class="form-control" style="border:none;" id="outcome"></span>
+                                            <input type="hidden" name="outcomeData" id="outcomeData"/>
+                                        </div>
 
+										
 											<label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 												<div class="col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
 												<?php
@@ -412,6 +409,16 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 																<option value="&lt;40" <?php echo($result['vl_result'] == '&lt;40' )?'selected="selected"':''; ?>> &lt; 40</option>
 													</select>
 												</div>
+
+												<label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
+												<div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
+													<span class=" form-control " style="border:none;" id="vlResultoutcome"></span>
+													<input type="hidden" name="vlfinaloutcomeResult" id="vlfinaloutcomeResult"/>
+												</div>
+
+
+
+												
 												<br>
 												<br>
 												<br>
@@ -772,26 +779,26 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
 		  if($('input[id=recencyTestPerformedYes]').prop('checked')==true){
 			   $(".disbaledResult").attr("disabled",true).removeClass("isRequired");
-			   $(".hideDiv").css('display','block');
+			   $(".hideDiv").css('visibility','visible');
 		  }else{
 			   $(".disbaledResult").attr("disabled",false).addClass("isRequired");
-			   $(".hideDiv").css('display','none');
+			   $(".hideDiv").css('visibility','hidden');
 		  }
 
 		  $('#recencyTestPerformedYes').change(function() {
 			   if(this.checked == true){
-					$("#outcome").html('').hide();
-					$(".outcome").hide();
+					$("#outcome").html('');
+					$(".outcome","#outcome").css({"visibility":"hidden"});
 
-					 $("#vlResultoutcome").html('').hide();
-					$(".vlResultoutcome").hide();
+					$("#vlResultoutcome").html('');
+					$(".vlResultoutcome").css({"visibility":"hidden"});
 					
 					$(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
-					$(".hideDiv").css('display','block');
+					$(".hideDiv").css('visibility','visible');
 					$("#recencyTestNotPerformed").addClass("isRequired");
 			   }else{
 					$(".disbaledResult").attr("disabled",false);
-					$(".hideDiv").css('display','none');
+					$(".hideDiv").css('visibility','hidden');
 					$("#recencyTestNotPerformed").val("").removeClass("isRequired");
 					$("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
 					$("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");

@@ -282,11 +282,11 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                         </div>
 
 
-                                        <label style="display:none;" class="col-sm-2 col-form-label hideDiv" for="">Reason Recency Test Not Performed
+                                        <label style="visibility:hidden;" class="col-sm-2 col-form-label hideDiv" for="">Reason Recency Test Not Performed
                                             <?php echo(in_array("Recency Test Not Performed",$resultArr)?"<span class='mandatory'>*</span>":""); ?>
                                         </label>
 
-                                        <div style="display:none;" class="col-sm-4 hideDiv">
+                                        <div style="visibility:hidden;" class="col-sm-4 hideDiv">
                                             <select class="form-control" id="recencyTestNotPerformed" name="recencyTestNotPerformed" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
                                                 <option value="">--Select--</option>
                                                 <option value="no_consent_from_the_client">No Consent</option>
@@ -340,6 +340,11 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                             </select>
                                         </div>
 
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Test Date<?php echo(in_array("Viral Load Test Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                       <div class="col-sm-4 <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>">
+                                           <input type="text" name="vlTestDate" id="vlTestDate" class="js-datepicker vlResultFields form-control <?php echo $vlTestDate; ?>"  data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the Viral Load Test Date" title="Please enter the Viral Load Test Date" readonly="readonly" disabled  onblur="updateVlResultFields('vlField')"/>
+                                       </div>
+
                                         <label class="col-sm-2 col-form-label outcome " style="visibility:hidden" for="">Term Outcome</label>
                                         <div class="col-sm-4 " >
                                             <span class="form-control" style="border:none;" id="outcome"></span>
@@ -348,19 +353,6 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                         <br>
                                         <br>
                                         <br>
-
-                                        
-                                       
-                                       <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Test Date<?php echo(in_array("Viral Load Test Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                       <div class="col-sm-4 <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>">
-                                           <input type="text" name="vlTestDate" id="vlTestDate" class="js-datepicker vlResultFields form-control <?php echo $vlTestDate; ?>"  data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the Viral Load Test Date" title="Please enter the Viral Load Test Date" readonly="readonly" disabled  onblur="updateVlResultFields('vlField')"/>
-                                       </div>
-
-                                        <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
-                                       <div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
-                                           <span class=" form-control " style="border:none;" id="vlResultoutcome"></span>
-                                           <input type="hidden" name="vlfinaloutcomeResult" id="vlfinaloutcomeResult"/>
-                                       </div>
 
                                        <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                        <div class="col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
@@ -376,6 +368,12 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                            </select>
                                        </div>
                                        
+                                       <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
+                                       <div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
+                                           <span class=" form-control " style="border:none;" id="vlResultoutcome"></span>
+                                           <input type="hidden" name="vlfinaloutcomeResult" id="vlfinaloutcomeResult"/>
+                                       </div>
+
                                        
                                    
                                        
@@ -732,20 +730,28 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
           $('#recencyTestPerformedYes').change(function() {
                if(this.checked == true){
-                    $("#outcome").html('').hide();
-                    $(".outcome").hide();
-                    
-                    $("#vlResultoutcome").html('').hide();
-                    $(".vlResultoutcome").hide();
+
+                    $("#outcome").html('');
+                    $(".outcome","#outcome").css({"visibility":"hidden"});
+
+                    $("#vlResultoutcome").html('');
+                    $(".vlResultoutcome").css({"visibility":"hidden"});
+
+                    $(".vlResultFields").prop('disabled',true);
+
+                    $("#vlTestDate").val('');
+                    $("#vlLoadResult").val('');
+                    $("#vlResultOption").val('');
+
                     $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
 
-                    $(".hideDiv").css('display','block');
+                    $(".hideDiv").css({"visibility":"visible"});
                     $("#recencyTestNotPerformed").addClass("isRequired");
                }else{
                     $(".disbaledResult").addClass("isRequired");
                     $(".disbaledResult").attr("disabled",false);
 
-                    $(".hideDiv").css('display','none');
+                    $(".hideDiv").css({"visibility":"hidden"});
                     $("#recencyTestNotPerformed").val("").removeClass("isRequired");
                     $("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
 
