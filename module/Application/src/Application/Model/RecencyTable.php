@@ -1659,7 +1659,7 @@ class RecencyTable extends AbstractTableGateway {
             if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] >= 1000) {
                 $data['final_outcome'] = 'RITA Recent';
            }else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
-                $data['final_outcome'] = 'Long Term';
+                $data['final_outcome'] = 'RITA Long Term';
            }
            $this->update($data,array('recency_id'=>$recencyId));
         }
@@ -1681,11 +1681,11 @@ class RecencyTable extends AbstractTableGateway {
             {
                 $this->update(array('term_outcome'=>'Invalid – Please Verify'),array('recency_id'=>$recencyId));
             }else if($controlLine=='present' && $positiveControlLine=='absent' && $longControlLine=='absent'){
-                $this->update(array('term_outcome'=>'Assay HIV Negative'),array('recency_id'=>$recencyId));
+                $this->update(array('term_outcome'=>'Assay Negative'),array('recency_id'=>$recencyId));
             }else if($controlLine=='present' && $positiveControlLine=='present' && $longControlLine=='absent'){
                 $this->update(array('term_outcome'=>'Assay Recent'),array('recency_id'=>$recencyId));
             }else if($controlLine=='present' && $positiveControlLine=='present' && $longControlLine=='present'){
-                $this->update(array('term_outcome'=>'Long Term'),array('recency_id'=>$recencyId));
+                $this->update(array('term_outcome'=>'Assay Long Term'),array('recency_id'=>$recencyId));
             }
         }
 
