@@ -1029,21 +1029,31 @@ class RecencyTable extends AbstractTableGateway {
 
           public function updateVlSampleResult($params)
           {
+              //\Zend\Debug\Debug::dump($params);die;
                $common = new CommonService();
                $sampleVlResult = explode(",",$params['vlResult']);
                $sampleVlResultId = explode(",",$params['vlResultRowId']);
                $dataOutcome = explode(",",$params['vlDataOutCome']);
                foreach($sampleVlResult as $key=>$result){
+                $vlResultOptionAry = array('TND','BDL','failed','&lt; 20','&lt; 40');
                     $data = array(
                          'vl_result'=>$result,
-                         'vl_test_date'=>$common->dbDateFormat($params['vlTestDate'][$key])
+                         'vl_test_date'=>$common->dbDateFormat($params['vlTestDate'][$key]),
+                         'vl_result_entry_date'=>date('Y-m-d H:i:s')
                     );
-                    if (strpos($dataOutcome[$key], 'Recent') !== false && $result >= 1000) {
+                    if((in_array($result,$vlResultOptionAry)))
+                    {
+                        if($result=='failed'){
+                            $data['final_outcome'] = 'inconclusive';
+                        }else{
+                            $data['final_outcome'] = 'RITA Long Term';
+                        }
+                    }else if ($result >= 1000) {
                          $data['final_outcome'] = 'RITA Recent';
-                    }else if (strpos($dataOutcome[$key], 'Recent') !== false && $result <= 1000) {
-                         $data['final_outcome'] = 'Long Term';
+                    }else if ($result <= 1000) {
+                         $data['final_outcome'] = 'RITA Long Term';
                     }
-                    $this->update($data,array('recency_id'=>$sampleVlResultId[$key]));
+                    $this->update($data,array('recency_id'=>str_replace('vlResultOption','',$sampleVlResultId[$key])));
                }
           }
 

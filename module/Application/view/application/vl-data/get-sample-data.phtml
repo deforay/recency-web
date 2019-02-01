@@ -12,7 +12,10 @@ $common = new \Application\Service\CommonService();
 </thead>
 <?php
 if(count($result)>0){
+    $vlResultOptionAry = array('TND','BDL','failed','&lt; 20','&lt; 40');
+    
     foreach($result as $key=>$sample){
+        $vlResultTextValue = '';
     ?>
     <tr>
         <td><?php echo $sample['sample_id'];?></td>
@@ -37,14 +40,47 @@ if(count($result)>0){
         <?php if($sample['final_outcome'] ==''){
             if($sample['vl_result']==''){ ?>
                 <input type="number" class="form-control checkNum vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
-            <?php }else{ ?>
-                <span id="span<?php echo $sample['recency_id'];?>"><?php echo $sample['vl_result'];?></span>
-                <input style="display:none;" type="number" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
+                <br/>
+                
+                <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sample['recency_id'];?>')">
+                    <option value="">-- Select -- </option>
+                    <option value="TND">TND</option>
+                    <option value="BDL">BDL</option>
+                    <option value="failed">Failed</option>
+                    <option value="&lt; 20"> &lt; 20</option>
+                    <option value="&lt; 40"> &lt; 40</option>
+                </select>
+            <?php }else{
+                $vlResultTextValue = (in_array($sample['vl_result'],$vlResultOptionAry))?'':$sample['vl_result'];
+                ?>
+                <span id="span<?php echo $sample['recency_id'];?>"><?php echo $vlResultTextValue;?></span>
+                <input style="display:none;" type="number" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $vlResultTextValue;?>" onchange="getVlResult();"/>
+                <br/>
+                
+                <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sample['recency_id'];?>')">
+                    <option value="">-- Select -- </option>
+                    <option value="TND" <?php echo($sample['vl_result'] == 'TND' )?'selected="selected"':''; ?>>TND</option>
+                    <option value="BDL" <?php echo($sample['vl_result'] == 'BDL' )?'selected="selected"':''; ?>>BDL</option>
+                    <option value="failed" <?php echo($sample['vl_result'] == 'failed' )?'selected="selected"':''; ?>>Failed</option>
+                    <option value="&lt; 20" <?php echo($sample['vl_result'] == '&lt; 20' )?'selected="selected"':''; ?>> &lt; 20</option>
+                    <option value="&lt; 40" <?php echo($sample['vl_result'] == '&lt; 40' )?'selected="selected"':''; ?>> &lt; 40</option>
+                </select>
             <?php }
          }else{
-            if($sample['vl_result']!=''){ ?>
+            if($sample['vl_result']!=''){
+                $vlResultTextValue = (in_array($sample['vl_result'],$vlResultOptionAry))?'':$sample['vl_result'];
+                ?>
                 <span id="span<?php echo $sample['recency_id'];?>"><?php echo $sample['vl_result'];?></span>
-                <input style="display:none;" type="number" class="form-control checkNum vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
+                <input style="display:none;" type="number" class="form-control checkNum vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $vlResultTextValue;?>" onchange="getVlResult();"/>
+                <br/>
+                <select style="display:none;" class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sample['recency_id'];?>')">
+                    <option value="">-- Select -- </option>
+                    <option value="TND" <?php echo($sample['vl_result'] == 'TND' )?'selected="selected"':''; ?>>TND</option>
+                    <option value="BDL" <?php echo($sample['vl_result'] == 'BDL' )?'selected="selected"':''; ?>>BDL</option>
+                    <option value="failed" <?php echo($sample['vl_result'] == 'failed' )?'selected="selected"':''; ?>>Failed</option>
+                    <option value="&lt; 20" <?php echo($sample['vl_result'] == '&lt; 20' )?'selected="selected"':''; ?>> &lt; 20</option>
+                    <option value="&lt; 40" <?php echo($sample['vl_result'] == '&lt; 40' )?'selected="selected"':''; ?>> &lt; 40</option>
+                </select>
             <?php }
          } ?>
         <!-- < ?php
@@ -59,7 +95,7 @@ if(count($result)>0){
         <td><?php echo $sample['final_outcome'];?></td>
         <td>
         <?php
-        if($sample['vl_result']!=''){
+        if($sample['vl_result']!='' && $sample['term_outcome']=='Assay Recent'){
             ?>
                 <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="editVlResult('<?php echo $sample['recency_id'];?>');"> <i class="fa fa-edit"></i> Edit</a>
             <?php

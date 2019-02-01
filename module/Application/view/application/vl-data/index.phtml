@@ -149,14 +149,21 @@ input[type=number]::-webkit-outer-spin-button {
         var vlDataOutcome = [];
         $(".vlResultData").each(function(){
             if(this.value!=''){
-                vlDataOutcome.push($(this).attr('data-term-outcome'));
+                //vlDataOutcome.push($(this).attr('data-term-outcome'));
+                vlResultAry.push(this.value);
+                vlResultIdAry.push(this.id);
+                $("#vlResultOption"+this.id).val('');
+            }
+        });
+        $(".vlResultOption").each(function(){
+            if(this.value!=''){
                 vlResultAry.push(this.value);
                 vlResultIdAry.push(this.id);
             }
         });
         $("#vlEnteredDataResult").val(vlResultAry.join());
         $("#vlEnteredDataId").val(vlResultIdAry.join());
-        $("#vlDataOutCome").val(vlDataOutcome.join());
+        //$("#vlDataOutCome").val(vlDataOutcome.join());
         if($("#vlEnteredDataId").val()!=''){
             $(".saveResult").css("pointer-events","auto");
         }else{
@@ -182,11 +189,17 @@ input[type=number]::-webkit-outer-spin-button {
             });
         }
      }
-     function editVlResult(id)
-     {
-         $("#span"+id).hide();
-         $("#vlDateSpan"+id).hide();
-         $("#"+id).show();
-         $("#vlTestDate"+id).show();
-     }
+    function editVlResult(id)
+    {
+        $("#span"+id).hide();
+        $("#vlDateSpan"+id).hide();
+        $("#"+id).show();
+        $("#vlResultOption"+id).show();
+        $("#vlTestDate"+id).show();
+    }
+    function updateVlResultFields(id)
+    {
+        $("#"+id).val('');
+        getVlResult();
+    }
 </script>
