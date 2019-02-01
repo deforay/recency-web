@@ -1656,11 +1656,20 @@ class RecencyTable extends AbstractTableGateway {
         public function updateFinalOutcome($fOutCome)
         {
             $recencyId = $fOutCome['recency_id'];
-            if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] >= 1000) {
+
+            $vlResultOptionAry = array('TND','BDL','failed','&lt; 20','&lt; 40','< 20','< 40');
+            
+            if((in_array($fOutCome['vl_result'],$vlResultOptionAry))){
+                if($fOutCome['vl_result']=='failed'){
+                    $data['final_outcome'] = 'inconclusive';
+                }else{
+                    $data['final_outcome'] = 'RITA Long Term';
+                }
+            }else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] >= 1000) {
                 $data['final_outcome'] = 'RITA Recent';
-           }else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
+            }else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
                 $data['final_outcome'] = 'RITA Long Term';
-           }
+            }
            $this->update($data,array('recency_id'=>$recencyId));
         }
 
