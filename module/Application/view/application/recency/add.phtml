@@ -652,7 +652,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                     $(".vlResultoutcome").css({"visibility":"visible"});
                     $("#vlResultOption").prop('disabled',true);
                 }else if(vlResultOption!='' && vlResultOption=='failed'){
-                    $("#vlResultoutcome").html('inconclusive').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $("#vlResultoutcome").html('Inconclusive').css({"color":"<?php echo $lineOutComeColor2;?>"});
                     $(".vlResultoutcome").css({"visibility":"visible"});
                     $("#vlLoadResult").prop('disabled',true);
                 }else if(vlResultOption!=''){

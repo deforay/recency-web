@@ -151,8 +151,12 @@ ALTER TABLE `recency` ADD `unique_id` VARCHAR(255) NOT NULL FIRST;
 ALTER TABLE `quality_check_test` ADD `unique_id` VARCHAR(255) NOT NULL FIRST;
 ALTER TABLE `quality_check_test` ADD `form_saved_datetime` DATETIME NULL DEFAULT NULL AFTER `form_transfer_datetime`;
 
+-- Amit 14 Jan 2019
 
--- saravanan 11-jan-2019/
+ALTER TABLE `recency` CHANGE `vl_result_entry_date` `vl_result_entry_date` DATETIME NULL DEFAULT NULL;
+
+
+-- saravanan 11-jan-2019
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Send Results(Email configuration)', 'email_id', 'zfexample@gmail.com');
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Send Results(Email password)', 'email_password', 'zaq12345');
 
@@ -189,10 +193,15 @@ CREATE TABLE `recency_app`.`facility_type` ( `facility_type_id` INT(11) NOT NULL
 INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`, `facility_type_status`) VALUES (NULL, 'Normal', 'active'), (NULL, 'Testing', 'active');
 
 -- vivek 24-jan-2019
--- ALTER TABLE `facilities` ADD `facility_type_id` INT(11) NOT NULL AFTER `facility_id`;
--- ALTER TABLE `facilities` CHANGE `facility_type_id` `facility_type_id` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `facilities` ADD `facility_type_id` INT(11) NOT NULL AFTER `facility_id`;
+ALTER TABLE `facilities` CHANGE `facility_type_id` `facility_type_id` INT(11) NULL DEFAULT NULL;
 
 -- saravanan 28-jan-2019
 ALTER TABLE `recency` ADD `testing_facility_id` INT NULL DEFAULT NULL AFTER `facility_id`;
 
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Announcement', 'admin_message', 'test');
+
+ALTER TABLE `recency` ADD `mail_sent_status` VARCHAR(255) NULL DEFAULT NULL AFTER `unique_id`;
+
+-- Amit 18 Jan 2019
+UPDATE `global_config` SET `display_name` = 'Display Fields' WHERE `global_config`.`config_id` = 7;
