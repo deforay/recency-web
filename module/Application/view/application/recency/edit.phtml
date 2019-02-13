@@ -208,6 +208,9 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 												<select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name'];?>',null,null,null);">
 													<option value="">-- Select --</option>
 												</select>
+												&nbsp;
+                                                    <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherDistrictName" name="otherDistrictName" title="Please Enter district name" value="" placeholder="Enter district name"  >
+                                                    &nbsp;
 											</div>
 
 											<label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label <?php echo in_array("City",$resultArr2)?"showFields":"hideFields";?>" for=""><?php echo ucfirst($globalConfigResult[2]['global_value']); ?><?php echo(in_array("City",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
@@ -215,6 +218,9 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 												<select class="form-control <?php echo $locationThree; ?>" id="<?php echo $globalConfigResult[2]['global_name']; ?>" name="<?php echo $globalConfigResult[2]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[2]['global_name'];?>',null,null,null);">
 													<option value="">-- Select --</option>
 												</select>
+												&nbsp;
+                                                    <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherCityName" name="otherCityName" title="Please Enter city name" value="" placeholder="Enter city name"  >
+                                                    &nbsp;
 											</div>
 										</div>
 									</div>
@@ -1016,7 +1022,24 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 			   }else if(globalName=='location_two' && selectValue!=''){
 					path = 'get-city';
 					innerId = 'location_three';
-			   }
+					if(selectValue=='other')
+					{
+						$("#otherDistrictName").show();
+						$("#otherDistrictName").addClass('isRequired');
+					}else{
+						$("#otherDistrictName").hide();
+						$("#otherDistrictName").removeClass('isRequired');
+					}
+			   }else if(globalName=='location_three' && selectValue!=''){
+					if(selectValue=='other')
+					{
+						$("#otherCityName").show();
+						$("#otherCityName").addClass('isRequired');
+					}else{
+						$("#otherCityName").hide();
+						$("#otherCityName").removeClass('isRequired');
+					}
+          		}
 		  }
 		  if(path!=''){
 			   $.blockUI();

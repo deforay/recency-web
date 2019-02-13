@@ -334,5 +334,29 @@ class FacilitiesTable extends AbstractTableGateway {
                   
                   return $fResult;
                }
+
+               public function checkDistrictName($districtName,$provinceId)
+               {
+                  $dbAdapter = $this->adapter;
+                  $sql = new Sql($dbAdapter);
+                  $dQuery = $sql->select()->from('district_details')
+                                    ->where(array('district_name' => trim($districtName),'province_id'=>$provinceId));
+                  $dQueryStr = $sql->getSqlStringForSqlObject($dQuery); // Get the string of the Sql, instead of the Select-instance
+                  $dResult = $dbAdapter->query($dQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                  
+                  return $dResult;
+               }
+
+               public function checkCityName($cityName,$districtId)
+               {
+                  $dbAdapter = $this->adapter;
+                  $sql = new Sql($dbAdapter);
+                  $cQuery = $sql->select()->from('city_details')
+                                    ->where(array('city_name' => trim($cityName),'district_id'=>$districtId));
+                  $cQueryStr = $sql->getSqlStringForSqlObject($cQuery); // Get the string of the Sql, instead of the Select-instance
+                  $cResult = $dbAdapter->query($cQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                  
+                  return $cResult;
+               }
           }
           ?>

@@ -170,6 +170,9 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                                     <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name'];?>');">
                                                         <option value="">-- Select --</option>
                                                     </select>
+                                                    &nbsp;
+                                                    <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherDistrictName" name="otherDistrictName" title="Please Enter district name" value="" placeholder="Enter district name"  >
+                                                    &nbsp;
                                                 </div>
 
                                                 <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label <?php echo in_array("City",$resultArr2)?"showFields":"hideFields";?>" for=""><?php echo ucfirst($globalConfigResult[2]['global_value']); ?><?php echo(in_array("City",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
@@ -177,6 +180,9 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                                     <select class="form-control <?php echo $locationThree; ?>" id="<?php echo $globalConfigResult[2]['global_name']; ?>" name="<?php echo $globalConfigResult[2]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[2]['global_name'];?>');">
                                                         <option value="">-- Select --</option>
                                                     </select>
+                                                    &nbsp;
+                                                    <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherCityName" name="otherCityName" title="Please Enter city name" value="" placeholder="Enter city name"  >
+                                                    &nbsp;
                                                 </div>
                                             </div>
                                     </div>
@@ -357,7 +363,8 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                        <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                        <div class="col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
                                            <input type="text" name="vlLoadResult" id="vlLoadResult" class=" form-control vlResultFields <?php echo $vlLoadResult; ?>" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)" onblur="updateVlResultFields('vlField')" disabled/>
-                                           <br/>
+
+<div class="text-center" style="padding:2px 0px 2px 0px">OR</div>
                                            <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption" disabled onchange="updateVlResultFields('vlField')">
                                                     <option value="">-- Select -- </option>
                                                     <option value="TND">TND</option>
@@ -872,6 +879,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
           var selectValue = document.getElementById(globalName).value;
           var innerId = '';
           var path = '';
+
           if(globalName=='location_one' && selectValue==''){
                path = 'get-province';
                innerId = 'location_one';
@@ -879,9 +887,27 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                path = 'get-district';
                innerId = 'location_two';
                $("#location_three").html("<option value=''>-- Select --</option>");
+               
           }else if(globalName=='location_two' && selectValue!=''){
                path = 'get-city';
                innerId = 'location_three';
+               if(selectValue=='other')
+               {
+                   $("#otherDistrictName").show();
+                   $("#otherDistrictName").addClass('isRequired');
+               }else{
+                $("#otherDistrictName").hide();
+                $("#otherDistrictName").removeClass('isRequired');
+               }
+          }else if(globalName=='location_three' && selectValue!=''){
+               if(selectValue=='other')
+               {
+                   $("#otherCityName").show();
+                   $("#otherCityName").addClass('isRequired');
+               }else{
+                $("#otherCityName").hide();
+                $("#otherCityName").removeClass('isRequired');
+               }
           }
           if(path!=''){
                $.blockUI();
