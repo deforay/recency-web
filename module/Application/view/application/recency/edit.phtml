@@ -787,11 +787,25 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
 		  $('#recencyTestPerformedYes').change(function() {
 			   if(this.checked == true){
-					$("#outcome").html('');
-					$(".outcome","#outcome").css({"visibility":"hidden"});
+				$("#outcome").html('');
+                    $(".outcome","#outcome").css({"visibility":"hidden"});
 
-					$("#vlResultoutcome").html('');
-					$(".vlResultoutcome").css({"visibility":"hidden"});
+                    $("#vlResultoutcome").html('');
+                    $(".vlResultoutcome").css({"visibility":"hidden"});
+
+                    $(".vlResultFields").prop('disabled',true);
+
+					$("#vlTestDate").removeClass('isRequired');
+					$("#vlLoadResult").removeClass('isRequired');
+
+                    $("#vlTestDate").val('');
+                    $("#vlLoadResult").val('');
+                    $("#vlResultOption").val('');
+
+                    $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+
+                    $(".hideDiv").css({"visibility":"visible"});
+                    $("#recencyTestNotPerformed").addClass("isRequired");
 					
 					$(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
 					$(".hideDiv").css('visibility','visible');
