@@ -947,11 +947,15 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
             }
             if(typeof jsonData.district != "undefined" && jsonData.district!='')
             {
-                $("#location_two").html("<option value=''>-- Select --</option><option value='"+jsonData.district+"' selected>"+jsonData.district_name+"</option>");
+                $("#location_two").html("<option value=''>-- Select --</option><option value='"+jsonData.district+"' selected>"+jsonData.district_name+"</option><option value='other'>Other</option>");
+            }else{
+                $("#location_two").html("<option value=''>-- Select --</option><option value='other'>Other</option>");
             }
             if(typeof jsonData.city != "undefined" && jsonData.city!='')
             {
-                $("#location_three").html("<option value=''>-- Select --</option><option value='"+jsonData.city+"' selected>"+jsonData.city_name+"</option>");
+                $("#location_three").html("<option value=''>-- Select --</option><option value='"+jsonData.city+"' selected>"+jsonData.city_name+"</option><option value='other'>Other</option>");
+            }else{
+                $("#location_three").html("<option value=''>-- Select --</option><option value='other'>Other</option>");
             }
         });
         }

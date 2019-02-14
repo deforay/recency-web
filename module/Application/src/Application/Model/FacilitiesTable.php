@@ -366,8 +366,8 @@ class FacilitiesTable extends AbstractTableGateway {
                   if(isset($params['facilityId']) && $params['facilityId']!=NULL){
                         $sQuery = $sql->select()->from(array( 'f' => 'facilities'))->columns(array('facility_id','facility_name','province','district','city'))
                                                 ->join(array('p'=>'province_details'),'p.province_id=f.province',array('province_name'),'left')
-                                                ->join(array('d'=>'district_details'),'d.province_id=p.province_id',array('district_name'),'left')
-                                                ->join(array('c'=>'city_details'),'c.district_id=d.district_id',array('city_name'),'left');
+                                                ->join(array('d'=>'district_details'),'d.district_id=f.district',array('district_name'),'left')
+                                                ->join(array('c'=>'city_details'),'c.city_id=f.city',array('city_name'),'left');
                         $fDeocde = base64_decode($params['facilityId']);
                         $sQuery = $sQuery->where(array('facility_id'=>$fDeocde));
                         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance

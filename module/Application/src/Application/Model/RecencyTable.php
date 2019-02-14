@@ -242,7 +242,7 @@ class RecencyTable extends AbstractTableGateway {
                     if(isset($dResult['district_name']) && $dResult['district_name']!=''){
                         $locationTwo = $dResult['district_id'];
                     }else{
-                        $districtData = array( 
+                        $districtData = array(
                                 'province_id'=>$params['location_one'],
                                 'district_name'=>strtolower($params['otherDistrictName']),
                             );
@@ -250,6 +250,11 @@ class RecencyTable extends AbstractTableGateway {
                             if($districtDb->lastInsertValue > 0){
                                 $locationTwo = $districtDb->lastInsertValue;
                             }
+                    }
+
+                    if(isset($params['facilityId']) && $params['facilityId']!='' && $locationTwo!='')
+                    {
+                        $facilityDb->update(array('district'=>$locationTwo),array('facility_id'=>base64_decode($params['facilityId'])));
                     }
                     return $locationTwo;
                 }
@@ -277,6 +282,10 @@ class RecencyTable extends AbstractTableGateway {
                             if($cityDb->lastInsertValue > 0){
                                 $locationThree = $cityDb->lastInsertValue;
                             }
+                    }
+                    if(isset($params['facilityId']) && $params['facilityId']!='' && $locationThree!='')
+                    {
+                        $facilityDb->update(array('city'=>$locationThree),array('facility_id'=>base64_decode($params['facilityId'])));
                     }
                     return $locationThree;
                }
@@ -736,6 +745,8 @@ class RecencyTable extends AbstractTableGateway {
                     $facilityDb = new FacilitiesTable($this->adapter);
                     $riskPopulationDb = new RiskPopulationsTable($this->adapter);
                     $globalDb = new GlobalConfigTable($this->adapter);
+                    $districtDb = new DistrictTable($this->adapter);
+                    $cityDb = new CityTable($this->adapter);
                     $common = new CommonService();
                     if(isset($params["form"])){
                         //check user status active or not
@@ -758,7 +769,7 @@ class RecencyTable extends AbstractTableGateway {
                                         if($recency['otherfacility']!=''){
                                              $fResult = $facilityDb->checkFacilityName(strtolower($recency['otherfacility']),1);
                                              if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
-                                                  $recency['facilityId'] = $fResult['facility_id'];
+                                                  $recency['facilityId'] = base64_encode($fResult['facility_id']);
                                              }else{
 
                                                 if($recency['otherDistrict']!=''){
@@ -777,9 +788,11 @@ class RecencyTable extends AbstractTableGateway {
                                              );
                                              $facilityDb->insert($facilityData);
                                              if($facilityDb->lastInsertValue>0){
-                                                  $recency['facilityId'] = $facilityDb->lastInsertValue;
+                                                  $recency['facilityId'] = base64_encode($facilityDb->lastInsertValue);
                                              }
                                         }
+                                   }else{
+                                    $recency['facilityId'] = base64_encode($recency['facilityId']);
                                    }
 
                                     if($recency['otherDistrict']!=''){
@@ -827,7 +840,7 @@ class RecencyTable extends AbstractTableGateway {
                                    $data = array(
                                         'sample_id' => $recency['sampleId'],
                                         'patient_id' => $recency['patientId'],
-                                        'facility_id' => $recency['facilityId'],
+                                        'facility_id' => base64_decode($recency['facilityId']),
                                         'testing_facility_id'=>$recency['testingFacility'],
                                         'control_line' => $recency['ctrlLine'],
                                         'positive_verification_line' => $recency['positiveLine'],
