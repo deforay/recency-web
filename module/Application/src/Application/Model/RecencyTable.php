@@ -227,6 +227,60 @@ class RecencyTable extends AbstractTableGateway {
                     return $output;
                }
 
+                public function checkDistrictData($params)
+                {
+                    $dbAdapter = $this->adapter;
+                    $sql = new Sql($dbAdapter);
+                    $facilityDb = new FacilitiesTable($this->adapter);
+                    $districtDb = new DistrictTable($this->adapter);
+                    
+                    $locationTwo = '';
+                    if(!isset($params['otherDistrictName'])){
+                        $params['otherDistrictName'] = $params['otherDistrict'];
+                    }
+                    $dResult = $facilityDb->checkDistrictName(strtolower($params['otherDistrictName']),$params['location_one']);
+                    if(isset($dResult['district_name']) && $dResult['district_name']!=''){
+                        $locationTwo = $dResult['district_id'];
+                    }else{
+                        $districtData = array( 
+                                'province_id'=>$params['location_one'],
+                                'district_name'=>strtolower($params['otherDistrictName']),
+                            );
+                            $districtDb->insert($districtData);
+                            if($districtDb->lastInsertValue > 0){
+                                $locationTwo = $districtDb->lastInsertValue;
+                            }
+                    }
+                    return $locationTwo;
+                }
+
+               public function checkCityData($params)
+               {
+                    $dbAdapter = $this->adapter;
+                    $sql = new Sql($dbAdapter);
+                    $facilityDb = new FacilitiesTable($this->adapter);
+                    $cityDb = new CityTable($this->adapter);
+                    
+                    $locationThree = '';
+                    if(!isset($params['otherCityName'])){
+                        $params['otherCityName'] = $params['otherCity'];
+                    }
+                    $cResult = $facilityDb->checkCityName(strtolower($params['otherCityName']),$params['location_two']);
+                    if(isset($cResult['city_name']) && $cResult['city_name']!=''){
+                        $locationThree = $cResult['city_id'];
+                    }else{
+                        $cityData = array(
+                                'district_id'=>$params['location_two'],
+                                'city_name'=>strtolower($params['otherCityName']),
+                            );
+                            $cityDb->insert($cityData);
+                            if($cityDb->lastInsertValue > 0){
+                                $locationThree = $cityDb->lastInsertValue;
+                            }
+                    }
+                    return $locationThree;
+               }
+
                public function addRecencyDetails($params)
                {
                     $dbAdapter = $this->adapter;
@@ -245,7 +299,13 @@ class RecencyTable extends AbstractTableGateway {
                               if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
                                    $params['facilityId'] = base64_encode($fResult['facility_id']);
                               }else{
-                                   $facilityData = array('facility_name'=>trim($params['otherFacilityName']),
+                                    if($params['location_two']=='other'){
+                                        $params['location_two'] = $this->checkDistrictData($params);
+                                    }
+                                    if($params['location_three']=='other'){
+                                        $params['location_three'] = $this->checkCityData($params);
+                                    }
+                                    $facilityData = array('facility_name'=>trim($params['otherFacilityName']),
                                    'province'=>$params['location_one'],
                                    'district'=>$params['location_two'],
                                    'city'=>$params['location_three'],
@@ -260,41 +320,13 @@ class RecencyTable extends AbstractTableGateway {
                               }
                          }
 
-                         if($params['location_two']=='other'){
-                            $dResult = $facilityDb->checkDistrictName(strtolower($params['otherDistrictName']),$params['location_one']);
-                            if(isset($dResult['district_name']) && $dResult['district_name']!=''){
-                                $params['location_two'] = $dResult['district_id'];
-                            }else{
-                                $districtData = array( 
-                                        'province_id'=>$params['location_one'],
-                                        'district_name'=>strtolower($params['otherDistrictName']),
-                                    );
-                                    $districtDb->insert($districtData);
-                                    if($districtDb->lastInsertValue > 0){
-                                        $params['location_two'] = $districtDb->lastInsertValue;
-                                    }else{
-                                        return false;
-                                    }
+                            if($params['location_two']=='other'){
+                                $params['location_two'] = $this->checkDistrictData($params);
                             }
-                         }
-
-                         if($params['location_three']=='other'){
-                            $cResult = $facilityDb->checkCityName(strtolower($params['otherCityName']),$params['location_two']);
-                            if(isset($cResult['city_name']) && $cResult['city_name']!=''){
-                                $params['location_three'] = $cResult['city_id'];
-                            }else{
-                                $cityData = array(
-                                        'district_id'=>$params['location_two'],
-                                        'city_name'=>strtolower($params['otherCityName']),
-                                    );
-                                    $cityDb->insert($cityData);
-                                    if($cityDb->lastInsertValue > 0){
-                                        $params['location_three'] = $cityDb->lastInsertValue;
-                                    }else{
-                                        return false;
-                                    }
+                            if($params['location_three']=='other'){
+                                $params['location_three'] = $this->checkCityData($params);
                             }
-                         }
+                         
                         
                          if($params['testingFacilityId']=='other'){
                             
@@ -435,6 +467,14 @@ class RecencyTable extends AbstractTableGateway {
                               if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
                                    $params['facilityId'] = base64_encode($fResult['facility_id']);
                               }else{
+                                
+                                if($params['location_two']=='other'){
+                                    $params['location_two'] = $this->checkDistrictData($params);
+                                }
+                                if($params['location_three']=='other'){
+                                    $params['location_three'] = $this->checkCityData($params);
+                                }
+
                                    $facilityData = array('facility_name'=>trim($params['otherFacilityName']),
                                    'province'=>$params['location_one'],
                                    'district'=>$params['location_two'],
@@ -451,40 +491,11 @@ class RecencyTable extends AbstractTableGateway {
                          }
 
                          if($params['location_two']=='other'){
-                            $dResult = $facilityDb->checkDistrictName(strtolower($params['otherDistrictName']),$params['location_one']);
-                            if(isset($dResult['district_name']) && $dResult['district_name']!=''){
-                                $params['location_two'] = $dResult['district_id'];
-                            }else{
-                                $districtData = array( 
-                                        'province_id'=>$params['location_one'],
-                                        'district_name'=>strtolower($params['otherDistrictName']),
-                                    );
-                                    $districtDb->insert($districtData);
-                                    if($districtDb->lastInsertValue > 0){
-                                        $params['location_two'] = $districtDb->lastInsertValue;
-                                    }else{
-                                        return false;
-                                    }
-                            }
-                         }
-
-                         if($params['location_three']=='other'){
-                            $cResult = $facilityDb->checkCityName(strtolower($params['otherCityName']),$params['location_two']);
-                            if(isset($cResult['city_name']) && $cResult['city_name']!=''){
-                                $params['location_three'] = $cResult['city_id'];
-                            }else{
-                                $cityData = array(
-                                        'district_id'=>$params['location_two'],
-                                        'city_name'=>strtolower($params['otherCityName']),
-                                    );
-                                    $cityDb->insert($cityData);
-                                    if($cityDb->lastInsertValue > 0){
-                                        $params['location_three'] = $cityDb->lastInsertValue;
-                                    }else{
-                                        return false;
-                                    }
-                            }
-                         }
+                            $params['location_two'] = $this->checkDistrictData($params);
+                        }
+                        if($params['location_three']=='other'){
+                            $params['location_three'] = $this->checkCityData($params);
+                        }
 
 
                          if($params['testingFacilityId']=='other'){
@@ -749,6 +760,14 @@ class RecencyTable extends AbstractTableGateway {
                                              if(isset($fResult['facility_name']) && $fResult['facility_name']!=''){
                                                   $recency['facilityId'] = $fResult['facility_id'];
                                              }else{
+
+                                                if($recency['otherDistrict']!=''){
+                                                    $recency['location_two'] = $this->checkDistrictData($recency);
+                                                }
+                                                if($recency['otherCity']!=''){
+                                                    $recency['location_three'] = $this->checkCityData($recency);
+                                                }
+
                                                   $facilityData = array('facility_name'=>trim($recency['otherfacility']),
                                                   'province'=>$recency['location_one'],
                                                   'district'=>$recency['location_two'],
@@ -763,39 +782,12 @@ class RecencyTable extends AbstractTableGateway {
                                         }
                                    }
 
-                                   if($recency['otherDistrict']!=''){
-                                    $dResult = $facilityDb->checkDistrictName(strtolower($recency['otherDistrict']),$recency['location_one']);
-                                    if(isset($dResult['district_name']) && $dResult['district_name']!=''){
-                                        $recency['location_two'] = $dResult['district_id'];
-                                    }else{
-                                        $districtData = array( 
-                                                'province_id'=>$recency['location_one'],
-                                                'district_name'=>strtolower($recency['otherDistrict']),
-                                            );
-                                            $districtDb->insert($districtData);
-                                            if($districtDb->lastInsertValue > 0){
-                                                $recency['location_two'] = $districtDb->lastInsertValue;
-                                            }
+                                    if($recency['otherDistrict']!=''){
+                                    $recency['location_two'] = $this->checkDistrictData($recency);
                                     }
-                                 }
-        
-                                 if($recency['otherCity']!=''){
-                                    $cResult = $facilityDb->checkCityName(strtolower($recency['otherCity']),$recency['location_two']);
-                                    if(isset($cResult['city_name']) && $cResult['city_name']!=''){
-                                        $recency['location_three'] = $cResult['city_id'];
-                                    }else{
-                                        $cityData = array(
-                                                'district_id'=>$recency['location_two'],
-                                                'city_name'=>strtolower($recency['otherCityName']),
-                                            );
-                                            $cityDb->insert($cityData);
-                                            if($cityDb->lastInsertValue > 0){
-                                                $recency['location_three'] = $cityDb->lastInsertValue;
-                                            }else{
-                                                return false;
-                                            }
+                                    if($recency['otherCity']!=''){
+                                        $recency['location_three'] = $this->checkCityData($recency);
                                     }
-                                 }
 
 
                                    if($recency['othertestingfacility']!=''){

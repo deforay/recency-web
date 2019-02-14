@@ -240,7 +240,6 @@ class FacilitiesTable extends AbstractTableGateway {
 
                public function fetchFacilitiesAllDetails()
                {
-
                   $dbAdapter = $this->adapter;
                   $sql = new Sql($dbAdapter);
                   $logincontainer = new Container('credo');
@@ -357,6 +356,24 @@ class FacilitiesTable extends AbstractTableGateway {
                   $cResult = $dbAdapter->query($cQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                   
                   return $cResult;
+               }
+
+               public function fetchLocationBasedFacility($params)
+               {
+                  $dbAdapter = $this->adapter;
+                  $sql = new Sql($dbAdapter);
+                  $fResult = '';
+                  if(isset($params['facilityId']) && $params['facilityId']!=NULL){
+                        $sQuery = $sql->select()->from(array( 'f' => 'facilities'))->columns(array('facility_id','facility_name','province','district','city'))
+                                                ->join(array('p'=>'province_details'),'p.province_id=f.province',array('province_name'),'left')
+                                                ->join(array('d'=>'district_details'),'d.province_id=p.province_id',array('district_name'),'left')
+                                                ->join(array('c'=>'city_details'),'c.district_id=d.district_id',array('city_name'),'left');
+                        $fDeocde = base64_decode($params['facilityId']);
+                        $sQuery = $sQuery->where(array('facility_id'=>$fDeocde));
+                        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+                        $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                  }
+                  return json_encode($fResult);
                }
           }
           ?>

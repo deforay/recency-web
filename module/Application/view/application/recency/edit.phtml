@@ -184,7 +184,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 										<div class="form-group row form-horizontal col-sm-12">
 											<label class="col-sm-2 col-form-label <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>" for="">Facility Name<?php echo(in_array("Facility Name",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>">
-												<select class="form-control  <?php echo $facility; ?>" id="facilityId" name="facilityId" title="Please select the facility name">
+												<select class="form-control  <?php echo $facility; ?>" id="facilityId" name="facilityId" title="Please select the facility name" onchange="getLocationDataByFacility()">
 													<option value="">--Select--</option>
 													<?php foreach($facilityResult['facility'] as $facility){?>
 														<option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo ucwords($facility['facility_name']); ?></option>
@@ -405,7 +405,8 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 												?>
 													<input type="text" value="<?php echo $vlResultTextValue;?>" class=" form-control vlResultFields <?php echo $vlLoadResult; ?>"  id="vlLoadResult" name="vlLoadResult" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)"  onblur="updateVlResultFields('vlField')" disabled/>
 
-													<br/>
+
+<div class="text-center" style="padding:2px 0px 2px 0px">OR</div>
 													<select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption" disabled onchange="updateVlResultFields('vlField')">
 																<option value="">-- Select -- </option>
 																<option value="TND" <?php echo($result['vl_result'] == 'TND' )?'selected="selected"':''; ?>>TND</option>
@@ -1053,4 +1054,28 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 			   });
 		  }
 	 }
+
+	 function getLocationDataByFacility()
+     {
+        var facilityId = $("#facilityId").val();
+        if(facilityId!='' && facilityId!='other'){
+        //$.blockUI();
+        $.post("/recency/get-location-based-facility", {facilityId:facilityId},
+        function(data) {
+            jsonData = JSON.parse(data);
+            if(typeof jsonData.province != "undefined" && jsonData.province!='')
+            {
+                $("#location_one").html("<option value=''>-- Select --</option><option value='"+jsonData.province+"' selected>"+jsonData.province_name+"</option>");
+            }
+            if(typeof jsonData.district != "undefined" && jsonData.district!='')
+            {
+                $("#location_two").html("<option value=''>-- Select --</option><option value='"+jsonData.district+"' selected>"+jsonData.district_name+"</option>");
+            }
+            if(typeof jsonData.city != "undefined" && jsonData.city!='')
+            {
+                $("#location_three").html("<option value=''>-- Select --</option><option value='"+jsonData.city+"' selected>"+jsonData.city_name+"</option>");
+            }
+        });
+        }
+     }
 </script>

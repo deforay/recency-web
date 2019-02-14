@@ -794,5 +794,11 @@ class RecencyService
             }
     }
     }
+
+    public function getLocationBasedFacility($params)
+    {
+        $facilityDb = $this->sm->get('FacilitiesTable');
+        return $facilityDb->fetchLocationBasedFacility($params);
+    }
 }
 

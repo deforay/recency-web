@@ -146,7 +146,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                         
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>" for=""> Facility <?php echo(in_array("Facility Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                                 <div class="col-sm-4 <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>">
-                                                    <select class="form-control <?php echo $facility; ?>" id="facilityId" name="facilityId" title="Please select the facility name">
+                                                    <select class="form-control <?php echo $facility; ?>" id="facilityId" name="facilityId" title="Please select the facility name" onchange="getLocationDataByFacility()">
                                                         <option value="">--Select--</option>
                                                         <?php foreach($facilityResult['facility'] as $facility){ ?>
                                                             <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
@@ -931,5 +931,29 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
           $("#currentSexualPartner").addClass("<?php echo $partner;?>");
           $("#expViolence").addClass("<?php echo $expViolence;?>");
           $("#comments").addClass("<?php echo $comment;?>");
+     }
+
+     function getLocationDataByFacility()
+     {
+        var facilityId = $("#facilityId").val();
+        if(facilityId!='' && facilityId!='other'){
+        //$.blockUI();
+        $.post("/recency/get-location-based-facility", {facilityId:facilityId},
+        function(data) {
+            jsonData = JSON.parse(data);
+            if(typeof jsonData.province != "undefined" && jsonData.province!='')
+            {
+                $("#location_one").html("<option value=''>-- Select --</option><option value='"+jsonData.province+"' selected>"+jsonData.province_name+"</option>");
+            }
+            if(typeof jsonData.district != "undefined" && jsonData.district!='')
+            {
+                $("#location_two").html("<option value=''>-- Select --</option><option value='"+jsonData.district+"' selected>"+jsonData.district_name+"</option>");
+            }
+            if(typeof jsonData.city != "undefined" && jsonData.city!='')
+            {
+                $("#location_three").html("<option value=''>-- Select --</option><option value='"+jsonData.city+"' selected>"+jsonData.city_name+"</option>");
+            }
+        });
+        }
      }
 </script>
