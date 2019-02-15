@@ -11,10 +11,10 @@
  * credentials from accidentally being committed into version control.
  */
 
-
+$config = new \Zend\Config\Reader\Ini();
+$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 
 $env = getenv('APP_ENV') ?: 'production';
-
 
 
 if($env == 'development'){
@@ -22,6 +22,11 @@ if($env == 'development'){
                     'username' => 'root',
                     'password' => 'zaq12345',
                 );
+    $local['db']['adapters']['db1'] = array(
+        'username' => 'root',
+        'password' => 'zaq12345',
+    );
+
 }
 
 
@@ -31,6 +36,11 @@ if($env == 'testing'){
                     'username' => 'root',
                     'password' => 'zaq12345',
                 );
+
+                $local['db']['adapters']['db1'] = array(
+        'username' => 'root',
+                    'password' => 'zaq12345',
+    );
 }
 
 
@@ -40,6 +50,11 @@ if($env == 'production'){
                     'username' => 'root',
                     'password' => 'zaq12345',
                 );
+
+                $local['db']['adapters']['db1'] = array(
+        'username' => 'root',
+        'password' => 'zaq12345',
+    );
 }
 
 

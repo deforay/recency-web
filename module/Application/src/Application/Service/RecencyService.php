@@ -12,13 +12,11 @@ class RecencyService
 
     public $sm = null;
 
-    public function __construct($sm = null)
-    {
+    public function __construct($sm) {
         $this->sm = $sm;
     }
 
-    public function getServiceManager()
-    {
+    public function getServiceManager() {
         return $this->sm;
     }
 
@@ -799,6 +797,12 @@ class RecencyService
     {
         $facilityDb = $this->sm->get('FacilitiesTable');
         return $facilityDb->fetchLocationBasedFacility($params);
+    }
+
+    public function vlsmSync()
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->vlsmSync($this->sm);
     }
 }
 

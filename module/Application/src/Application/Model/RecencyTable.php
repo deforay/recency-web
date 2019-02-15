@@ -1756,7 +1756,6 @@ class RecencyTable extends AbstractTableGateway {
         {
             $recencyId = $fOutCome['recency_id'];
 
-
             if((in_array(strtolower($fOutCome['vl_result']),$this->vlFailOptionArray))){
                 $data['final_outcome'] = 'Inconclusive';
             } else if((in_array(strtolower($fOutCome['vl_result']),$this->vlResultOptionArray))){
@@ -1794,6 +1793,42 @@ class RecencyTable extends AbstractTableGateway {
             }
         }
 
+        public function vlsmSync($sm)
+        {
+            $dbTwoAdapter = $sm->get('db1');
+            $sql1 = new Sql($dbTwoAdapter);
+
+            $dbAdapter = $this->adapter;
+            $sql = new Sql($dbAdapter);
+
+            $fQuery = $sql->select()->from(array('r' => 'recency'))
+                            ->columns(array('recency_id','term_outcome','vl_result','sample_id'))
+                            ->where(array('(vl_result="" OR vl_result IS NULL)  AND term_outcome="Assay Recent"'));
+                         
+            $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+            $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+            if(count($fResult)>0)
+            {
+                foreach($fResult as $data)
+                {
+                    $fQuery = $sql1->select()->from(array('vl' => 'vl_request_form'))
+                            ->columns(array('result','sample_code'))
+                            ->where(array('sample_code'=>$data['sample_id']));
+                         
+                    $fQueryStr = $sql1->getSqlStringForSqlObject($fQuery);
+                    $fResult = $dbTwoAdapter->query($fQueryStr, $dbTwoAdapter::QUERY_MODE_EXECUTE)->current();
+                    
+                    if(isset($fResult['result']) && $fResult['result']!='')
+                    {
+                        $this->update(array('vl_result'=>$fResult['result']),array('recency_id'=>$data['recency_id']));
+                        
+                        $this->updateFinalOutcome($data);
+                    }
+                }
+            }
+        }
      }
+
 
      ?>

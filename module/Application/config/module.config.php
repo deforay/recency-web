@@ -255,6 +255,16 @@ return array(
                       ),
                   ),
               ),
+              'vlsm-sync' => array(
+                  'type'    => 'simple',
+                  'options' => array(
+                      'route'    => 'vlsm-sync',
+                      'defaults' => array(
+                          'controller' => 'Application\Controller\Cron',
+                          'action' => 'vlsm-sync'
+                      ),
+                  ),
+              ),
             ),
       ),
 ),

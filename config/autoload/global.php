@@ -10,6 +10,8 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
+$config = new \Zend\Config\Reader\Ini();
+$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 
 return array(
     'db' => array(
@@ -18,6 +20,15 @@ return array(
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),
+        'adapters'=>array(
+            'db1' => array(
+                'driver'  => 'Pdo',
+                'dsn'     => 'mysql:dbname=vlrbc;host=localhost',      
+                'driver_options'  => array(
+                        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+                ),
+            ),
+        )
     ),
     'module_layouts' => array(
         'Application' => 'layout/layout',
@@ -26,6 +37,11 @@ return array(
         'factories' => array(
             'Zend\Db\Adapter\Adapter'
                     => 'Zend\Db\Adapter\AdapterServiceFactory',
+        ),
+        // to allow other adapter to be called by
+        // $sm->get('db1') or $sm->get('db2') based on the adapters config.
+        'abstract_factories' => array(
+            'Zend\Db\Adapter\AdapterAbstractServiceFactory',
         ),
     ),
 );

@@ -19,4 +19,10 @@ class CronController extends AbstractActionController{
       $service = $this->getServiceLocator()->get('RecencyService');
       $service->updateOutcome();
     }
+
+    public function vlsmSyncAction()
+    {
+      $service = $this->getServiceLocator()->get('RecencyService');
+      $service->vlsmSync();
+    }
 }
