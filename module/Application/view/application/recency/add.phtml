@@ -367,8 +367,8 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 <div class="text-center" style="padding:2px 0px 2px 0px">OR</div>
                                            <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption" disabled onchange="updateVlResultFields('vlField')">
                                                     <option value="">-- Select -- </option>
-                                                    <option value="TND">TND</option>
-                                                    <option value="BDL">BDL</option>
+                                                    <option value="TND">TND - Target not detected</option>
+                                                    <option value="BDL">BDL - Below Detection Line</option>
                                                     <option value="failed">Failed</option>
                                                     <option value="&lt; 20"> &lt; 20</option>
                                                     <option value="&lt; 40"> &lt; 40</option>
@@ -591,7 +591,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                
                else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent') {
                    
-                    $("#outcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $("#outcome").html('Assay Recent - Please ensure you add Viral Load Result').css({"color":"<?php echo $lineOutComeColor2;?>"});
                     $(".outcome").css({"visibility":"visible"});
                   
                     updateVlResultFields('Assay Recent');
@@ -621,6 +621,10 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
         if(fieldValue=='vlField'){
             var fieldValue = $("#outcome").text();
+            if(fieldValue == 'Assay Recent - Please ensure you add Viral Load Result')
+            {
+                fieldValue = 'Assay Recent';
+            }
         }
 
         if(fieldValue=='Assay Long Term' || fieldValue=='Assay Recent' || fieldValue=='Assay Negative'){
@@ -835,7 +839,12 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                     flag = deforayValidator.init({
                          formId: 'recencyInformation'
                     });
+                    
                     document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+                    if(document.getElementById("outcome").innerHTML=='Assay Recent - Please ensure you add Viral Load Result')
+                    {
+                        document.getElementById("outcomeData").value = 'Assay Recent';
+                    }
                     document.getElementById("vlfinaloutcomeResult").value=document.getElementById("vlResultoutcome").innerHTML;
                     if (flag) {
                          $.blockUI();
