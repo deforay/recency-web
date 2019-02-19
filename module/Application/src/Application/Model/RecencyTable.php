@@ -1124,7 +1124,7 @@ class RecencyTable extends AbstractTableGateway {
                             $sQuery = $sQuery->where(array('r.vl_test_date'=>$params['vlTestDate']));
                          }
                          if(isset($params['onloadData']) && $params['onloadData']=='yes'){
-                            $sQuery = $sQuery->where(array('r.vl_result is not null'));
+                            $sQuery = $sQuery->where(array('r.vl_result is null'));
                          }
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
