@@ -88,10 +88,14 @@ $allFileds2 = json_encode($formFields2);
                         <?php foreach($globalConfigResult as $config){ ?>
                             <?php if($config['global_name'] != 'mandatory_fields' && $config['global_name'] != 'display_fields'){ ?>
                                 <div class="col-md-6">
-                                    <label class="col-form-label" for=""><?php echo ucfirst($config['display_name']); ?><span class="mandatory">*</span></label>
+                                    <label class="col-form-label" for=""><?php echo ucfirst($config['display_name']);
+                                    if($config['global_name'] != 'admin_message'){ ?>
+                                    <span class="mandatory">*</span>
+                                    <?php } ?>
+                                    </label>
                                     <div class="">
                                         <?php if($config['global_name'] == 'admin_message'){  ?>
-                                            <textarea class="form-control isRequired" id="configValue" name="<?php echo $config['global_name']; ?>" placeholder="Enter the config value" title="Please enter the config value"><?php echo $config['global_value']; ?></textarea>
+                                            <textarea class="form-control " id="configValue" name="<?php echo $config['global_name']; ?>" placeholder="Enter the config value" title="Please enter the config value"><?php echo $config['global_value']; ?></textarea>
                                         <?php } else { ?> 
                                             <input type="text" value="<?php echo $config['global_value']; ?>" class="form-control isRequired" id="configValue" name="<?php echo $config['global_name']; ?>" placeholder="Enter the config value" title="Please enter the config value">
                                             <input type="hidden" name="gobalConfigId[]" value="<?php echo base64_encode($config['config_id']);?>" />
