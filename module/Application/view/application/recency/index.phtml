@@ -79,6 +79,17 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                             </td>
                         </tr>
                         <tr>
+                            <td><b>Testing Site :</b></td>
+                            <td>
+                                <select class="form-control" id="fType" name="fType"  title="Please select facility type" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="1">Lab/Clinic</option>
+                                    <option value="2">Testing</option>
+                                </select>
+                            </td>
+                            
+                        </tr>
+                        <tr>
                             <td colspan="4"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
                                 &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
                                 &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
@@ -99,9 +110,9 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
 				    <div class="col-sm-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Facility Name</label>
                     </div>
-                    <!-- <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="< ?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Testing Facility</label>
-				    </div> -->
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_type_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Testing Facility</label>
+				    </div>
 				    <div class="col-sm-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="hiv_diagnosis_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">HIV Diagnosis Date</label> <br>
 				    </div>
@@ -191,10 +202,10 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                     <table id="facilityDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
                          <thead>
                               <tr>
-                                    <th>Sample Id</th>
-                                    <th>Patient Id</th>
+                                    <th>Sample ID</th>
+                                    <th>Patient ID</th>
                                     <th>Facility Name</th>
-                                    <!-- <th>Testing Facility</th> -->
+                                    <th>Testing Site</th>
                                     <th>HIV Diagnosis Date</th>
                                     <th>HIV Recency Date</th>
                                     <th>Control Line</th>
@@ -258,6 +269,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                     aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
                     aoData.push({"name": "gender", "value": $("#gender").val()});
                     aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
+                    aoData.push({"name": "fType", "value": $("#fType").val()});
 
                     $.ajax({
                         "dataType": 'json',

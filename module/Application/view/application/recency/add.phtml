@@ -124,12 +124,12 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                 <div class="tab-pane active" id="wizard-progress-step1" role="tabpanel">
 
                                     <div class="form-group row form-horizontal">
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Id<?php echo(in_array("Sample Id",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>" for="">Sample ID<?php echo(in_array("Sample Id",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4 <?php echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>">
                                             <input type="text" class="form-control <?php echo $sample; echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>" for="">Patient Id <?php echo(in_array("Patient Id",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>" for="">Patient ID <?php echo(in_array("Patient Id",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4 <?php echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>">
                                             <input type="text" class="form-control <?php echo $patient; echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
                                         </div>
@@ -598,10 +598,10 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
                }
                else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
-                    $("#outcome").html('Assay Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                    $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
                     $(".outcome").css({"visibility":"visible"});
 
-                    updateVlResultFields('Assay Long Term');
+                    updateVlResultFields('Long Term');
                     
                }
           }else{
@@ -627,7 +627,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
             }
         }
 
-        if(fieldValue=='Assay Long Term' || fieldValue=='Assay Recent' || fieldValue=='Assay Negative'){
+        if(fieldValue=='Long Term' || fieldValue=='Assay Recent' || fieldValue=='Assay Negative'){
             
             if(fieldValue=='Assay Negative'){
                 $("#vlResultoutcome").html('Inconclusive').css({"color":"<?php echo $lineOutComeColor2;?>"});
@@ -637,7 +637,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                 $("#vlLoadResult").val('');
                 $("#vlResultOption").val('');
             }
-            if(fieldValue=='Assay Long Term'){
+            if(fieldValue=='Long Term'){
                 $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
                 $(".vlResultoutcome").css({"visibility":"visible"});
                 $(".vlResultFields").prop('disabled',true);

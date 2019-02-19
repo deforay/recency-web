@@ -386,6 +386,7 @@ class RecencyService
                     $row[] = $aRow['term_outcome'];
                     $row[] = $aRow['final_outcome'];
                     $row[] = $aRow['facility_name'];
+                    $row[] = $aRow['facility_type_name'];
                     $row[] = $aRow['vl_result'];
                     $row[] = $common->humanDateFormat($aRow['vl_test_date']);
                     $output[] = $row;
@@ -424,8 +425,9 @@ class RecencyService
             $sheet->setCellValue('C1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('D1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('E1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -436,6 +438,7 @@ class RecencyService
             $sheet->getStyle('E1')->applyFromArray($styleArray);
             $sheet->getStyle('F1')->applyFromArray($styleArray);
             $sheet->getStyle('G1')->applyFromArray($styleArray);
+            $sheet->getStyle('H1')->applyFromArray($styleArray);
 
 
             foreach ($output as $rowNo => $rowData) {
@@ -498,6 +501,7 @@ class RecencyService
                     $row[] = $aRow['term_outcome'];
                     $row[] = $aRow['final_outcome'];
                     $row[] = $aRow['facility_name'];
+                    $row[] = $aRow['facility_type_name'];
                     $row[] = $aRow['vl_result'];
                     $row[] = $common->humanDateFormat($aRow['vl_test_date']);
                     $output[] = $row;
@@ -537,8 +541,9 @@ class RecencyService
             $sheet->setCellValue('C1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('D1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('E1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-           $sheet->setCellValue('G1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
@@ -550,6 +555,7 @@ class RecencyService
             $sheet->getStyle('E1')->applyFromArray($styleArray);
             $sheet->getStyle('F1')->applyFromArray($styleArray);
            $sheet->getStyle('G1')->applyFromArray($styleArray);
+           $sheet->getStyle('H1')->applyFromArray($styleArray);
 
 
 
@@ -621,6 +627,7 @@ class RecencyService
                 foreach ($sResult as $aRow) {
                     $row = array();
                     $row[] = $aRow['sample_id'];
+                    $row[] = $aRow['facility_type_name'];
                     $row[] = $aRow['final_outcome'];
                     $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
                     $row[] = $common->humanDateFormat($aRow['vl_test_date']);
@@ -659,11 +666,12 @@ class RecencyService
 
 
             $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('Recency Testing Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('VL Tested Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('VL Entered Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('Difference(TAT)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('Recency Testing Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('VL Tested Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('VL Entered Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('Difference(TAT)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
@@ -674,6 +682,7 @@ class RecencyService
             $sheet->getStyle('D1')->applyFromArray($styleArray);
             $sheet->getStyle('E1')->applyFromArray($styleArray);
             $sheet->getStyle('F1')->applyFromArray($styleArray);
+            $sheet->getStyle('G1')->applyFromArray($styleArray);
 
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;

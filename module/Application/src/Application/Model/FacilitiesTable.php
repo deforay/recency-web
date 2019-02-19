@@ -162,7 +162,8 @@ class FacilitiesTable extends AbstractTableGateway {
                               'longitude' => $params['longitude'],
                               'email' => $params['email'],
                               'alt_email' => $params['altEmail'],
-                              'status' => $params['facilityStatus']
+                              'status' => $params['facilityStatus'],
+                              'facility_type_id'=>$params['facilityType']
 
                          );
                          $this->insert($data);
@@ -216,7 +217,8 @@ class FacilitiesTable extends AbstractTableGateway {
                               'longitude' => $params['longitude'],
                               'email' => $params['email'],
                               'alt_email' => $params['altEmail'],
-                              'status' => $params['facilityStatus']
+                              'status' => $params['facilityStatus'],
+                              'facility_type_id'=>$params['facilityType']
                          );
                          $updateResult = $this->update($data,array('facility_id'=>base64_decode($params['facilityId'])));
                          $lastId = base64_decode($params['facilityId']);

@@ -156,18 +156,23 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
                          <?php } ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
                          <?php echo $recencyMenu;?>
-                         <?php if($roleCode == 'admin' || $roleCode == 'RTS'){ ?>
+                         <?php if($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user'){ ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
                          <?php echo $qcMenu;?>
                          <?php } if($roleCode=='VLTS' || $roleCode == 'admin'){ ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
-                         <?php echo $vlDataMenu; ?>
+                         <?php echo $vlDataMenu; 
+                         }
+                         if($roleCode=='VLTS' || $roleCode == 'admin' || $roleCode == 'user'){
+                         ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
                          <?php echo $recentMenu; ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
                          <?php echo $longTermMenu; ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
-                         <?php echo $tatMenu; ?>
+                         <?php echo $tatMenu; } 
+                         if($roleCode=='VLTS' || $roleCode == 'admin'){
+                         ?>
                          <li class="nav-main-heading" style="padding:5px;"></li>
                          <?php echo $emailMenu; ?>
                           <li class="nav-main-heading" style="padding:5px;"></li>

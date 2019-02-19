@@ -96,6 +96,14 @@ foreach($result['facilityMap'] as $data){
                                 <option value="inactive" <?php echo($result['status'] == 'inactive' )?'selected="selected"':''; ?>>Inactive</option>
                             </select>
                         </div>
+                        <label class="col-sm-2 col-form-label" for="">Faclity Type<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select the facility type">
+                                   <option value="">-- Select --</option>
+                                        <option value="1" <?php echo($result['facility_type_id'] == '1' )?'selected="selected"':''; ?>>Clinic/Lab</option>
+                                        <option value="2" <?php echo($result['facility_type_id'] == '2' )?'selected="selected"':''; ?>>Testing</option>
+                                   </select>
+                              </div>
                     </div>
 
                     <div class="form-group row">

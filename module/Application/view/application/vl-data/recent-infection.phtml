@@ -3,7 +3,7 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -35,6 +35,16 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                                 <option value="">-- Select --</option>
                             </select>
                         </div>
+
+                        <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+                        <div class="col-sm-4">
+                                <select class="form-control" id="fType" name="fType"  title="Please select facility type" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="1">Lab/Clinic</option>
+                                    <option value="2">Testing</option>
+                                </select>
+                            </div>
+                            
                     </div>
                     <div class="row items-push">
                         <div class="col-lg-7 ">
@@ -48,17 +58,18 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                          <thead>
                               <tr>
                                     <th>Date Of Testing</th>
-                                    <th>Sample Id</th>
+                                    <th>Sample ID</th>
                                     <th>Assay Test Result</th>
                                     <th>Final Result</th>
                                     <th>Facility Name</th>
+                                    <th>Testing Site</th>
                                     <th>VL Result</th>
                                     <th>VL Test Date</th>
                               </tr>
                          </thead>
                          <tbody>
                               <tr>
-                                    <td colspan='7' class='dataTables_empty'>Loading data from server</td>
+                                    <td colspan='8' class='dataTables_empty'>Loading data from server</td>
                               </tr>
                               <tr>
                               </tbody>
@@ -84,6 +95,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     aoData.push({"name": "locationOne", "value": $("#location_one").val()});
                     aoData.push({"name": "locationTwo", "value": $("#location_two").val()});
                     aoData.push({"name": "locationThree", "value": $("#location_three").val()});
+                    aoData.push({"name": "fType", "value": $("#fType").val()});
 
                     $.ajax({
                         "dataType": 'json',
