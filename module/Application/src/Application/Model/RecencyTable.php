@@ -428,8 +428,10 @@ class RecencyTable extends AbstractTableGateway {
                          );
                             if($params['vlLoadResult']!=''){
                                 $data['vl_result'] = $params['vlLoadResult'];
+                                $date['vl_result_entry_date'] = date('Y-m-d H:i:s');
                             }else if($params['vlResultOption']){
                                 $data['vl_result'] = htmlentities($params['vlResultOption']);
+                                $date['vl_result_entry_date'] = date('Y-m-d H:i:s');
                             }
                          //print_r($data);die;
                       
@@ -896,6 +898,7 @@ class RecencyTable extends AbstractTableGateway {
 
                                     if($recency['vlLoadResult']!=''){
                                         $data['vl_result'] = htmlentities($recency['vlLoadResult']);
+                                        $date['vl_result_entry_date'] = date('Y-m-d H:i:s');
                                     }
                                     if($recency['finalOutcome']!='')
                                     {
@@ -1608,6 +1611,9 @@ class RecencyTable extends AbstractTableGateway {
                     //     $sQuery = $sQuery->where(array("r.hiv_recency_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
                     // }
 
+                    if($parameters['fType']!=''){
+                        $sQuery->where(array('r.testing_facility_id'=>$parameters['fType']));
+                    }
                     if (isset($sWhere) && $sWhere != "") {
                          $sQuery->where($sWhere);
                     }

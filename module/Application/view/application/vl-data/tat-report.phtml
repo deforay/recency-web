@@ -18,8 +18,20 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                <div class="block-header block-header-default"></div>
 
                <div class="block-content block-content-full">
+               <div class="form-group row">
+                        
+                        <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+                        <div class="col-sm-4">
+                                <select class="form-control" id="fType" name="fType"  title="Please select facility type" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="1">Lab/Clinic</option>
+                                    <option value="2">Testing</option>
+                                </select>
+                            </div>
+                    </div>
                     <div class="row items-push">
                         <div class="col-lg-7 ">
+                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
                             <?php if($roleCode=='admin'){ ?>
                               <a href="javascript:void(0);" class="btn btn-success"  onclick="exportTatData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                             <?php } ?>
@@ -62,7 +74,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 ],
                 "sAjaxSource": "<?php echo $this->url('vl-data',array('action' => 'tat-report')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    aoData.push({"name": "fName", "value": $("#facilityId").val()});
+                    aoData.push({"name": "fType", "value": $("#fType").val()});
 
                     $.ajax({
                         "dataType": 'json',
