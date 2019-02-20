@@ -38,7 +38,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                         </div>
                         <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
                         <div class="col-sm-4">
-                                <select class="form-control" id="fType" name="fType"  title="Please select facility type" style="width:100%;">
+                                <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
                                     <option value=""> -- Select -- </option>
                                     <option value="1">Lab/Clinic</option>
                                     <option value="2">Testing</option>
@@ -105,7 +105,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     aoData.push({"name": "locationOne", "value": $("#location_one").val()});
                     aoData.push({"name": "locationTwo", "value": $("#location_two").val()});
                     aoData.push({"name": "locationThree", "value": $("#location_three").val()});
-                    aoData.push({"name": "fType", "value": $("#fType").val()});
+                    aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
 
                     $.ajax({
                         "dataType": 'json',

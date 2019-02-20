@@ -31,9 +31,9 @@ $roleCode = $sessionLogin->roleCode;
 
                     <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
                         <tr>
-                            <td><b>Term Outcome :</b></td>
+                            <td><b>Assay Outcome :</b></td>
                             <td>
-                                <select class="form-control" id="termOut" name="termOut" title="Please select term outcome" style="width:100%;">
+                                <select class="form-control" id="termOut" name="termOut" title="Please select assay outcome" style="width:100%;">
                                     <option value=""> -- Select -- </option>
                                     <option value="Assay Negative">Assay Negative</option>
                                     <option value="Assay Recent">Assay Recent</option>
@@ -88,7 +88,7 @@ $roleCode = $sessionLogin->roleCode;
                                     <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="long_term_verification_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Long Term Verification</label>
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="term_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Term Outcome</label>
+                                    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="term_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Assay Outcome</label>
                                 </div>
                                 <div class="col-sm-3">
                                     <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="tester_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Tester Name</label>
@@ -110,7 +110,7 @@ $roleCode = $sessionLogin->roleCode;
                                     <th>Control Line</th>
                                     <th>Positive Verification</th>
                                     <th>Long Term Verification</th>
-                                    <th>Term Outcome</th>
+                                    <th>Assay Outcome</th>
                                     <th>Tester Name</th>
                                     <th>Action</th>
                               </tr>
@@ -135,7 +135,7 @@ $roleCode = $sessionLogin->roleCode;
                                     <th>Control Line</th>
                                     <th>Positive Verification</th>
                                     <th>Long Term Verification</th>
-                                    <th>Term Outcome</th>
+                                    <th>Assay Outcome</th>
                                     <th>Tester Name</th>
                                     <th>Action</th>
                               </tr>

@@ -3,6 +3,10 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
+
+//\Zend\Debug\Debug::dump($facilityResult['facility']);die;
+
+
 $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
@@ -39,9 +43,10 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                                 <select class="form-control" id="facilityName" name="facilityName"  title="Please select facility name" style="width:100%;">
                                     <option value=""> -- Select -- </option>
                                     <?php
-                                    foreach($facilityResult['facility'] as $name){
+                                    foreach($facilityResult['facility'] as $facilityRow){
+                                        if(2 == (int)$facilityRow['facility_type_id']) continue;
                                     ?>
-                                    <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']);?></option>
+                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ($facilityRow['facility_name']);?></option>
                                     <?php
                                     }
                                     ?>
@@ -50,7 +55,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                             
                             <td><b>Assay Outcome :</b></td>
                             <td>
-                                <select class="form-control" id="termOut" name="termOut" title="Please select term outcome" style="width:100%;">
+                                <select class="form-control" id="termOut" name="termOut" title="Please select assay outcome" style="width:100%;">
                                     <option value=""> -- Select -- </option>
                                     <option value="Assay Negative">Assay Negative</option>
                                     <option value="Assay Recent">Assay Recent</option>
@@ -83,11 +88,17 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                         <tr>
                             <td><b>Testing Site :</b></td>
                             <td>
-                                <select class="form-control" id="fType" name="fType"  title="Please select facility type" style="width:100%;">
+                                <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
                                     <option value=""> -- Select -- </option>
-                                    <option value="1">Lab/Clinic</option>
-                                    <option value="2">Testing</option>
-                                </select>
+                                    <?php
+                                    foreach($facilityResult['facility'] as $facilityRow){
+                                        if(2 != (int)$facilityRow['facility_type_id']) continue;
+                                    ?>
+                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ($facilityRow['facility_name']);?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>                                
                             </td>
                             
                         </tr>
@@ -137,7 +148,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="kit_expiry_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">KIT Expiry Date</label>
 				    </div>
 						<div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="term_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Term Outcome</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="term_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Assay Outcome</label>
 				    </div>
 						<div class="col-sm-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="final_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Final Outcome</label>
@@ -215,7 +226,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                                     <th>Long Term Verification</th>
                                     <th>Kit Lot Number</th>
                                     <th>Kit Expiry Date</th>
-                                    <th>Term Outcome</th>
+                                    <th>Assay Outcome</th>
                                     <th>Final Outcome</th>
                                     <th>VL Result</th>
                                     <th>Tester Name</th>
@@ -266,7 +277,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                                     <th>Long Term Verification</th>
                                     <th>Kit Lot Number</th>
                                     <th>Kit Expiry Date</th>
-                                    <th>Term Outcome</th>
+                                    <th>Assay Outcome</th>
                                     <th>Final Outcome</th>
                                     <th>VL Result</th>
                                     <th>Tester Name</th>
@@ -313,7 +324,7 @@ oTable = $('#facilityDataTable').dataTable( {
                     aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
                     aoData.push({"name": "gender", "value": $("#gender").val()});
                     aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
-                    aoData.push({"name": "fType", "value": $("#fType").val()});
+                    aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
 
                     $.ajax({
                         "dataType": 'json',
