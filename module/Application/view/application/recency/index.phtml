@@ -3,7 +3,9 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
+{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
+{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -217,11 +219,16 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                                     <th>Final Outcome</th>
                                     <th>VL Result</th>
                                     <th>Tester Name</th>
+
+
+
+
+
                                     <th>DOB</th>
                                     <th>Age</th>
                                     <th>Gender</th>
                                     <th>Martial Status</th>
-                                    <th>Residence</th>
+                                     <th>Residence</th>
                                     <th>Edication Level</th>
                                     <th>Risk Population</th>
                                     <th>Pregnancy Status</th>
@@ -240,13 +247,49 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                          <tbody>
                               <tr>
                                 <?php if($roleCode == "user"){
-                                   echo "<td colspan='9' class='dataTables_empty'>Loading data from server</td>";
+                                   echo "<td colspan='32' class='dataTables_empty'>Loading data from server</td>";
                                 }else{
-                                    echo "<td colspan='8' class='dataTables_empty'>Loading data from server</td>";
+                                    echo "<td colspan='33' class='dataTables_empty'>Loading data from server</td>";
                                 }?>
                               </tr>
-                              <tr>
                               </tbody>
+                              <tfoot>
+                              <tr>
+                                    <th>Sample ID</th>
+                                    <th>Patient ID</th>
+                                    <th>Facility Name</th>
+                                    <th>Testing Site</th>
+                                    <th>HIV Diagnosis Date</th>
+                                    <th>HIV Recency Date</th>
+                                    <th>Control Line</th>
+                                    <th>Positive Verification</th>
+                                    <th>Long Term Verification</th>
+                                    <th>Kit Lot Number</th>
+                                    <th>Kit Expiry Date</th>
+                                    <th>Term Outcome</th>
+                                    <th>Final Outcome</th>
+                                    <th>VL Result</th>
+                                    <th>Tester Name</th>
+                                    <th>DOB</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Martial Status</th>
+                                    <th>Residence</th>
+                                    <th>Edication Level</th>
+                                    <th>Risk Population</th>
+                                    <th>Pregnancy Status</th>
+                                    <th>Current Sexual Partner</th>
+                                    <th>Past HIV Testing</th>
+                                    <th>Last HIV Status</th>
+                                    <th>Patient On Art</th>
+                                    <th>Last 12 Month</th>
+                                     <th>Experienced Violence Last 12 Month</th>
+                                    <th>Form Initiation Datetime</th>
+                                    <th>Form Transfer Datetime</th>
+                                    <th>Viral Test Date</th>
+                                    <th>Action</th>
+                              </tr>
+                         </tfoot>
                          </table>
                     </div>
                </div>
@@ -256,7 +299,8 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
           /* Table initialisation */
           oTable = null;
           $(document).ready(function() {
-            oTable = $('#facilityDataTable').dataTable({
+
+oTable = $('#facilityDataTable').dataTable( {
                 "bAutoWidth": false,
                 "bProcessing": true,
                 "bServerSide": true,
@@ -281,35 +325,41 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                 }
             } );
 
-            $(".showhideCheckBox").change(function(){
-            if($(this).attr('checked')){
-                idpart = $(this).attr('data-showhide');
-                $("#"+idpart+"-sort").show();
-            }else{
-                idpart = $(this).attr('data-showhide');
-                $("#"+idpart+"-sort").hide();
-            }
+
+$(".showhideCheckBox").change(function(){
+                if($(this).attr('checked')){
+                    idpart = $(this).attr('data-showhide');
+                    $("#"+idpart+"-sort").show();
+                }else{
+                    idpart = $(this).attr('data-showhide');
+                    $("#"+idpart+"-sort").hide();
+                }
             });
-        
-				var i = '<?php echo $i;?>';
-        for(colNo=0;colNo <=i;colNo++){
-            $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
-            if(oTable.fnSettings().aoColumns[colNo].bVisible){
-                $("#iCol"+colNo+"-sort").show();    
-            }else{
-                $("#iCol"+colNo+"-sort").hide();    
+         
+            var i = '<?php echo $i;?>';
+            for(colNo=0;colNo <=i;colNo++){
+                $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
+                
+                if(oTable.fnSettings().aoColumns[colNo].bVisible){
+                     $("#iCol"+colNo+"-sort").show();    
+                }else{
+                     $("#iCol"+colNo+"-sort").hide();    
+                }
             }
-        }
+
             } );
             
-        function closeDiv()
+            function closeDiv()
         {
-            $("#showhide").fadeOut('slow');
+             $("#showhide").fadeOut('slow');
         }
-          function fnShowHide(iCol){
-                var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+
+        function fnShowHide(iCol)
+        {
+            var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
                 oTable.fnSetColumnVis( iCol, bVis ? false : true );
-            }
+        }
+        
           function searchVlRequestData(){
             $.blockUI();
             oTable.fnDraw();

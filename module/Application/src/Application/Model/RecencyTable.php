@@ -1124,7 +1124,7 @@ class RecencyTable extends AbstractTableGateway {
                             $sQuery = $sQuery->where(array('r.vl_test_date'=>$params['vlTestDate']));
                          }
                          if(isset($params['onloadData']) && $params['onloadData']=='yes'){
-                            $sQuery = $sQuery->where(array('r.vl_result is null'));
+                            $sQuery = $sQuery->where(array('r.vl_result is null OR r.vl_result=""'));
                          }
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -1853,6 +1853,76 @@ class RecencyTable extends AbstractTableGateway {
                 }
             }
         }
+
+        public function getWeeklyReport($params)
+        {
+            $dbAdapter = $this->adapter;
+            $sql = new Sql($dbAdapter);
+            $queryContainer = new Container('query');
+            $general = new CommonService();
+            $rQuery = $sql->select()->from(array('r'=>'recency'))
+                                ->columns(
+                                          array(
+                                            "Samples Tested" => new Expression("SUM(CASE 
+                                                                                WHEN (((r.hiv_recency_date is NOT NULL AND r.hiv_recency_date !=''))) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
+                                            "Assay Recent" => new Expression("SUM(CASE 
+                                                                                    WHEN ((term_outcome ='Assay Recent' OR term_outcome ='assay recent')) THEN 1
+                                                                                    ELSE 0
+                                                                                    END)"),
+                                            "Long Term" => new Expression("SUM(CASE 
+                                                                                WHEN ((term_outcome='Long Term' OR term_outcome='long term')) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
+                                            "Assay Negative" => new Expression("SUM(CASE 
+                                                                                WHEN ((term_outcome='Assay Negative' OR term_outcome='assay negative')) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
+                                            "Done" => new Expression("SUM(CASE 
+                                                                                WHEN ((vl_result!='' AND vl_result is NOT NULL)) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
+                                            "Pending" => new Expression("SUM(CASE 
+                                                                                WHEN ((vl_result='' OR vl_result is NULL)) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
+                                            "RITA Recent" => new Expression("SUM(CASE 
+                                                                                WHEN ((final_outcome='RITA Recent' OR final_outcome='RITA recent')) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
+                                            "Long Term" => new Expression("SUM(CASE 
+                                                                                WHEN ((final_outcome='Long Term' OR final_outcome='long term')) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
+                                            "Inconclusive" => new Expression("SUM(CASE 
+                                                                                WHEN ((final_outcome='Inconclusive' OR final_outcome='inconclusive')) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
+                                          )
+                                        );
+                                        if(isset($_POST['testDate']) && trim($_POST['testDate'])!= ''){
+                                            $s_c_date = explode("to", $_POST['testDate']);
+                                            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                                                 $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                                            }
+                                            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                                                 $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                                            }
+                                       }
+                                        if($params['testDate']!=''){
+                                            $rQuery = $rQuery->where(array("r.hiv_recency_date >='" . $start_date ."'", "r.hiv_recency_date <='" . $end_date."'"));
+                                        }
+                                        if($params['fType']!='')
+                                        {
+                                            $rQuery = $rQuery->where(array('r.testing_facility_id'=>$params['fType']));
+                                        }
+            $queryContainer->exportWeeklyDataQuery = $rQuery;
+           $rQueryStr = $sql->getSqlStringForSqlObject($rQuery);
+           $fResult = $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+           return $fResult;
+        }
+
      }
 
 

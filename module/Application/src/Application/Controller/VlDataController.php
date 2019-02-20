@@ -201,4 +201,38 @@ class VlDataController extends AbstractActionController
             return $this->_redirect()->toUrl('/vl-data/upload-result');
         }
     }
+
+    public function WeeklyReportAction()
+    {
+        
+    }
+
+    public function getWeeklyReportAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result = $recencyService->getWeeklyReport($params);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' => $result));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
+    }
+
+    public function exportWeeklyReportAction()
+    {
+       $request = $this->getRequest();
+       if($request->isPost())
+       {
+           $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->exportWeeklyReport($params);
+           $viewModel = new ViewModel();
+           $viewModel->setVariables(array('result' =>$result));
+           $viewModel->setTerminal(true);
+           return $viewModel;
+       }
+    }
 }

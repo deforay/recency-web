@@ -30,6 +30,9 @@ $longTermMenu="<li id='nav-main-item'><a id='lt-infection' class='nav-main-link'
 $tatMenu = "";
 $tatMenu="<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'tat-report')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> TAT Report</span></a></li>";
 
+$weeklyReportMenu = "";
+$weeklyReportMenu="<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'weekly-report')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
+
 $emailMenu = "";
 $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'email-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Email Results</span></a></li>";
 
@@ -154,30 +157,34 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
                                    </ul>
                               </li>
                          <?php } ?>
-                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $recencyMenu;?>
                          <?php if($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user'){ ?>
-                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $qcMenu;?>
                          <?php } if($roleCode=='VLTS' || $roleCode == 'admin'){ ?>
-                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $vlDataMenu; 
                          }
                          if($roleCode=='VLTS' || $roleCode == 'admin' || $roleCode == 'user'){
                          ?>
-                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $recentMenu; ?>
-                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $longTermMenu; ?>
-                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $tatMenu; } 
                          if($roleCode=='VLTS' || $roleCode == 'admin'){
                          ?>
-                         <li class="nav-main-heading" style="padding:5px;"></li>
+                         <li class="nav-main-heading" style="padding:3px;"></li>
+                         <?php echo $weeklyReportMenu; ?>
+                         
+                         <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $emailMenu; ?>
-                          <li class="nav-main-heading" style="padding:5px;"></li>
+                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $uploadResultMenu;
                          } ?>
+
                          
 
                     </ul>
@@ -282,6 +289,10 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
      <script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/buttons.colVis.min.js'; ?>"></script>
      <script src="<?php echo $this->basePath() . '/assets/js/pages/be_tables_datatables.min.js'; ?>"></script>
      <!-- <script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script> -->
+
+          <script src="<?php echo $this->basePath() . '/assets/plugins/datepicker/moment.min.js'; ?>"></script>
+          <script src="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.js'; ?>"></script>
+
 
      <!-- vivek -->
      <script src="<?php echo $this->basePath() . '/assets/js/select2.full.js'; ?>"></script>

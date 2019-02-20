@@ -1,0 +1,131 @@
+<?php
+
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
+//$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center","bSortable":false}';
+?>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css'?>" rel="stylesheet">
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Weekly Report</h1>
+               </div>
+          </div>
+     </div>
+     <div class="content">
+          <div class="block block-rounded block-bordered">
+               <div class="block-header block-header-default"></div>
+
+               <div class="block-content block-content-full">
+               <div class="form-group row">
+               <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Tested Date</label>
+                        <div class="col-sm-4">
+                        <input type="text" id="hivRecencyDate" name="hivRecencyDate" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;"/>
+                            </div>
+
+                        <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+                        <div class="col-sm-4">
+                                <select class="form-control" id="fType" name="fType"  title="Please select facility type" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="1">Lab/Clinic</option>
+                                    <option value="2">Testing</option>
+                                </select>
+                            </div>
+                    </div>
+                    <div class="row items-push">
+                        <div class="col-lg-7 ">
+                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
+                            <?php if($roleCode=='admin'){ ?>
+                              <a href="javascript:void(0);" class="btn btn-success"  onclick="exportWeeklyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <table id="tatTable" class="table table-bordered table-striped table-vcenter">
+                            <thead>
+                              <tr>
+                                    <th rowspan="2">Samples Tested</th>
+                                    <th colspan="3">Recency Testing Results(Asante)</th>
+                                    <th colspan="2">Assay Recent VL Results </th>
+                                    <th colspan="3">Final Results</th>
+                              </tr>
+                              <tr>
+                                    <th>Assay Recent</th>
+                                    <th>Long Term</th>
+                                    <th>Assay Negative</th>
+                                    <th>Done</th>
+                                    <th>Pending</th>
+                                    <th>RITA Recent</th>
+                                    <th>Long Term</th>
+                                    <th>Inconclusive</th>
+                              </tr>
+                            </thead>
+                            <tbody id="weeklyData">
+                                <tr>
+                                    <td colspan='6' class='dataTables_empty'>Loading data from server</td>
+                                </tr>
+                            </tbody>
+                         </table>
+                    </div>
+               </div>
+          </div>
+
+          <script type="text/javascript">
+          /* Table initialisation */
+          oTable = null;
+          $(document).ready(function() {
+            
+
+            $('#hivRecencyDate').daterangepicker({
+            format: 'DD-MMM-YYYY',
+						separator: ' to ',
+            startDate: moment().subtract('days', 6),
+            endDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+            });
+
+      getWeeklyData();
+            } );
+
+          function searchData(){
+            getWeeklyData();
+        }
+
+        function getWeeklyData()
+        {
+            var testDate = $("#hivRecencyDate").val();
+            $.blockUI();
+            $.post("<?php echo $this->url('vl-data',array('action'=>'get-weekly-report')); ?>",{testDate:testDate,fType:$("#fType").val()},
+                function(data){
+                    $("#weeklyData").html(data);
+                    $.unblockUI();
+                });
+        }
+    
+        function exportWeeklyData()
+        {
+            $.blockUI();
+            $.post("<?php echo $this->url('vl-data',array('action'=>'export-weekly-report')); ?>",
+                function(data){
+                if(data == "" || data == null || data == undefined){
+                $.unblockUI();
+                alert('Unable to generate download');
+                }else{
+                $.unblockUI();
+                document.location.href = '/temporary/'+data;
+                }
+            });
+        }
+     </script>
