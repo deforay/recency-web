@@ -218,7 +218,12 @@ class VlDataController extends AbstractActionController
 
     public function WeeklyReportAction()
     {
-        
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult=$facilityService->getFacilitiesAllDetails();
+            
+            return new ViewModel(array(
+                'facilityResult' => $facilityResult
+           ));
     }
 
     public function getWeeklyReportAction()
