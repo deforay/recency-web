@@ -166,25 +166,33 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $vlDataMenu; 
                          }
-                         if($roleCode=='VLTS' || $roleCode == 'admin' || $roleCode == 'user'){
-                         ?>
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $recentMenu; ?>
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $longTermMenu; ?>
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $tatMenu; } 
                          if($roleCode=='VLTS' || $roleCode == 'admin'){
-                         ?>
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $weeklyReportMenu; ?>
-                         
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $emailMenu; ?>
+                          ?>
                           <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $uploadResultMenu;
-                         } ?>
-
+                          <?php echo $emailMenu; ?>
+                           <li class="nav-main-heading" style="padding:3px;"></li>
+                          <?php echo $uploadResultMenu;
+                          }
+                        if($roleCode=='VLTS' || $roleCode == 'admin' || $roleCode == 'user'){ ?>
+                              <li class="nav-main-heading"></li>
+                              <li class="nav-main-item " id="reports">
+                                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                                        <i class="nav-main-link-icon si si-grid"></i>
+                                        <span class="nav-main-link-name ">Reports</span>
+                                   </a>
+                                   <ul class="nav-main-submenu">
+                                    <li class="nav-main-heading" style="padding:3px;"></li>
+                                    <?php echo $recentMenu; ?>
+                                    <li class="nav-main-heading" style="padding:3px;"></li>
+                                    <?php echo $longTermMenu; ?>
+                                    <li class="nav-main-heading" style="padding:3px;"></li>
+                                    <?php echo $tatMenu;?>
+                                    <li class="nav-main-heading" style="padding:3px;"></li>
+                                    <?php echo $weeklyReportMenu; ?>
+                                   </ul>
+                              </li>
+                         <?php }
+                          ?>
                          
 
                     </ul>
@@ -341,19 +349,23 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
           else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='recent-infection')
           {
             $('#manage').removeClass('open');
+            $('#reports').addClass('open');
             $('#'+splitsUrl[2]).addClass('active');
           }
           else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='lt-infection')
           {
             $('#manage').removeClass('open');
+            $('#reports').addClass('open');
             $('#'+splitsUrl[2]).addClass('active');
           }else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='tat-report')
           {
             $('#manage').removeClass('open');
+            $('#reports').addClass('open');
             $('#'+splitsUrl[2]).addClass('active');
           }else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='weekly-report')
           {
             $('#manage').removeClass('open');
+            $('#reports').addClass('open');
             $('#'+splitsUrl[2]).addClass('active');
           }
           else if(splitsUrl[1]=='vl-data')
