@@ -94,7 +94,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                                     foreach($facilityResult['facility'] as $facilityRow){
                                         if(2 != (int)$facilityRow['facility_type_id']) continue;
                                     ?>
-                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ($facilityRow['facility_name']);?></option>
+                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
                                     <?php
                                     }
                                     ?>

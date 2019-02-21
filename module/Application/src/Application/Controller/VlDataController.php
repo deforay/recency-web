@@ -61,8 +61,12 @@ class VlDataController extends AbstractActionController
           }else{
             $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
             $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult=$facilityService->getFacilitiesAllDetails();
+
             return new ViewModel(array(
                 'globalConfigResult' => $globalConfigResult,
+                'facilityResult' => $facilityResult
             ));
           }
     }
@@ -78,8 +82,11 @@ class VlDataController extends AbstractActionController
           }else{
             $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
             $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult=$facilityService->getFacilitiesAllDetails();
             return new ViewModel(array(
                 'globalConfigResult' => $globalConfigResult,
+                'facilityResult' => $facilityResult
             ));
           }
     }
@@ -122,7 +129,14 @@ class VlDataController extends AbstractActionController
             $recencyService = $this->getServiceLocator()->get('RecencyService');
             $result = $recencyService->getTatReport($params);
             return $this->getResponse()->setContent(Json::encode($result));
-        }
+        }else{
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult=$facilityService->getFacilitiesAllDetails();
+            
+            return new ViewModel(array(
+                'facilityResult' => $facilityResult
+           ));
+          }
     }
 
     public function exportTatReportAction()

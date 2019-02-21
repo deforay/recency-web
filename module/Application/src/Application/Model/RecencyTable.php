@@ -1172,8 +1172,8 @@ class RecencyTable extends AbstractTableGateway {
             $queryContainer = new Container('query');
             $common = new CommonService();
 
-            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','ft.facility_type_name','r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
-            $orderColumns = array('r.hiv_recency_date','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','ft.facility_type_name','r.vl_result','r.vl_test_date');
+            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','ft.facility_name','r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
+            $orderColumns = array('r.hiv_recency_date','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','ft.facility_name','r.vl_result','r.vl_test_date');
 
             /* Paging */
             $sLimit = "";
@@ -1244,7 +1244,7 @@ class RecencyTable extends AbstractTableGateway {
 
                     $sQuery =   $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
                                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-                                ->join(array('ft' => 'facility_type'), 'f.facility_type_id = r.testing_facility_id', array('facility_type_name'),'left')
+                                ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                                 ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
 
                     if (isset($sWhere) && $sWhere != "") {
@@ -1289,7 +1289,7 @@ class RecencyTable extends AbstractTableGateway {
                     /* Total data set length */
                     $iQuery =   $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
                                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-                                ->join(array('ft' => 'facility_type'), 'f.facility_type_id = r.testing_facility_id', array('facility_type_name'),'left')
+                                ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                                 ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
 
                     $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
@@ -1311,7 +1311,7 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = $aRow['term_outcome'];
                          $row[] = $aRow['final_outcome'];
                          $row[] = $aRow['facility_name'];
-                         $row[] = $aRow['facility_type_name'];
+                         $row[] = $aRow['testing_facility_name'];
                          $row[] = $aRow['vl_result'];
                          $row[] = $common->humanDateFormat($aRow['vl_test_date']);
 
@@ -1329,8 +1329,8 @@ class RecencyTable extends AbstractTableGateway {
             $queryContainer = new Container('query');
             $common = new CommonService();
 
-            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','ft.facility_type_name','r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
-            $orderColumns = array('r.hiv_recency_date','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','ft.facility_type_name','r.vl_result','r.vl_test_date');
+            $aColumns = array('DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','ft.facility_name','r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
+            $orderColumns = array('r.hiv_recency_date','r.sample_id','r.term_outcome','r.final_outcome','f.facility_name','ft.facility_name','r.vl_result','r.vl_test_date');
 
             /* Paging */
             $sLimit = "";
@@ -1401,7 +1401,7 @@ class RecencyTable extends AbstractTableGateway {
 
                     $sQuery =   $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
                                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-                                ->join(array('ft' => 'facility_type'), 'ft.facility_type_id = r.testing_facility_id', array('facility_type_name'),'left')
+                                ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                                 ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
 
                     if (isset($sWhere) && $sWhere != "") {
@@ -1447,7 +1447,7 @@ class RecencyTable extends AbstractTableGateway {
                     /* Total data set length */
                     $iQuery =   $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
                                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-                                ->join(array('ft' => 'facility_type'), 'ft.facility_type_id = r.testing_facility_id', array('facility_type_name'),'left')
+                                ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                                 ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
 
                     $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
@@ -1469,7 +1469,7 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = $aRow['term_outcome'];
                          $row[] = $aRow['final_outcome'];
                          $row[] = $aRow['facility_name'];
-                         $row[] = $aRow['facility_type_name'];
+                         $row[] = $aRow['testing_facility_name'];
                          $row[] = $aRow['vl_result'];
                          $row[] = $common->humanDateFormat($aRow['vl_test_date']);
 
@@ -1529,8 +1529,8 @@ class RecencyTable extends AbstractTableGateway {
             $queryContainer = new Container('query');
             $common = new CommonService();
 
-            $aColumns = array('r.sample_id','ft.facility_type_name','r.final_outcome','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")','DATE_FORMAT(r.vl_result_entry_date,"%d-%b-%Y")');
-            $orderColumns = array('r.sample_id','ft.facility_type_name','r.final_outcome','r.hiv_recency_date','r.vl_test_date','r.vl_result_entry_date');
+            $aColumns = array('r.sample_id','ft.facility_name','r.final_outcome','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")','DATE_FORMAT(r.vl_result_entry_date,"%d-%b-%Y")');
+            $orderColumns = array('r.sample_id','ft.facility_name','r.final_outcome','r.hiv_recency_date','r.vl_test_date','r.vl_result_entry_date');
 
             /* Paging */
             $sLimit = "";
@@ -1605,7 +1605,7 @@ class RecencyTable extends AbstractTableGateway {
                         "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10))")
                     ))
                     
-                    ->join(array('ft' => 'facility_type'), 'ft.facility_type_id = r.testing_facility_id', array('facility_type_name'),'left')
+                    ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                     ->where(array('vl_result_entry_date!="" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_date!="" AND vl_test_date!=""'))
                     ->group('recency_id');
                     // if(isset($params['start']) && isset($params['end'])){
@@ -1646,7 +1646,7 @@ class RecencyTable extends AbstractTableGateway {
                         'sample_id','final_outcome',"hiv_recency_date",'vl_test_date','vl_result_entry_date',
                         "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10))")
                     ))
-                    ->join(array('ft' => 'facility_type'), 'ft.facility_type_id = r.testing_facility_id', array('facility_type_name'),'left')
+                    ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                     ->where(array('vl_result_entry_date!="" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_date!="" AND vl_test_date!=""'))
                     ->group('recency_id');
 
@@ -1664,7 +1664,7 @@ class RecencyTable extends AbstractTableGateway {
                         $row = array();
                         
                         $row[] = $aRow['sample_id'];
-                        $row[] = $aRow['facility_type_name'];
+                        $row[] = $aRow['testing_facility_name'];
                         $row[] = $aRow['final_outcome'];
                         $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
                         $row[] = $common->humanDateFormat($aRow['vl_test_date']);

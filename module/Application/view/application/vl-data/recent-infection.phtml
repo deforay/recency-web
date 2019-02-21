@@ -39,9 +39,15 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                         <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
                         <div class="col-sm-4">
                                 <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <option value="1">Lab/Clinic</option>
-                                    <option value="2">Testing</option>
+                                <option value=""> -- Select -- </option>
+                                    <?php
+                                    foreach($facilityResult['facility'] as $facilityRow){
+                                        if(2 != (int)$facilityRow['facility_type_id']) continue;
+                                    ?>
+                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
+                                    <?php
+                                    }
+                                    ?>
                                 </select>
                             </div>
                             
