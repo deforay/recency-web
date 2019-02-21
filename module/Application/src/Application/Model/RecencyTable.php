@@ -1111,7 +1111,8 @@ class RecencyTable extends AbstractTableGateway {
             $sql = new Sql($dbAdapter);
 
             $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_date', 'term_outcome', 'vl_result', 'final_outcome'))
-                         ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'));
+                         ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+                         ->where(array('r.term_outcome'=>'Assay Recent'));
                          if(isset($params['province']) && $params['province']!=''){
                             $sQuery = $sQuery->where(array('f.province'=>$params['province']));
                          }

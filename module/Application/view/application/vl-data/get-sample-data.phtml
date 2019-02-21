@@ -7,7 +7,7 @@ $common = new \Application\Service\CommonService();
 <table class="table table-bordered table-striped table-vcenter" id="sampleData">
 <thead>
                         <tr>
-    <th>Sample ID</th><th>Patient ID</th><th>Recency Date</th><th>VL Result Date</th><th>VL Result</th><th>Recency Outcome</th><th>Final outcome</th><th>Action</th>
+    <th>Sample ID</th><th>Patient ID</th><th>Recency Date</th><th style="width:25%;">VL Result Date</th><th style="width:25%;">VL Result</th><th>Recency Outcome</th><th>Final outcome</th><th>Action</th>
 </tr>
 </thead>
 <?php
@@ -40,8 +40,7 @@ if(count($result)>0){
         <?php if($sample['final_outcome'] ==''){
             if($sample['vl_result']==''){ ?>
                 <input type="number" class="form-control checkNum vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
-                <br/>
-                
+                <div>----- OR -----</div>
                 <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sample['recency_id'];?>')">
                     <option value="">-- Select -- </option>
                     <option value="TND">TND</option>
@@ -55,8 +54,7 @@ if(count($result)>0){
                 ?>
                 <span id="span<?php echo $sample['recency_id'];?>"><?php echo $vlResultTextValue;?></span>
                 <input style="display:none;" type="number" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $vlResultTextValue;?>" onchange="getVlResult();"/>
-                <br/>
-                
+                <div style="display:none;" class="vlResultFields vlResultOption">----- OR -----</div>
                 <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sample['recency_id'];?>')">
                     <option value="">-- Select -- </option>
                     <option value="TND" <?php echo($sample['vl_result'] == 'TND' )?'selected="selected"':''; ?>>TND</option>
@@ -72,7 +70,7 @@ if(count($result)>0){
                 ?>
                 <span id="span<?php echo $sample['recency_id'];?>"><?php echo $sample['vl_result'];?></span>
                 <input style="display:none;" type="number" class="form-control checkNum vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $vlResultTextValue;?>" onchange="getVlResult();"/>
-                <br/>
+                <div style="display:none;">----- OR -----</div>
                 <select style="display:none;" class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sample['recency_id'];?>')">
                     <option value="">-- Select -- </option>
                     <option value="TND" <?php echo($sample['vl_result'] == 'TND' )?'selected="selected"':''; ?>>TND</option>
