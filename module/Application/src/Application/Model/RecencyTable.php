@@ -1153,11 +1153,11 @@ class RecencyTable extends AbstractTableGateway {
                     if((in_array(strtolower($result),$this->vlFailOptionArray))){
                         $data['final_outcome'] = 'Inconclusive';
                     } else if((in_array(strtolower($result),$this->vlResultOptionArray))){
-                        $data['final_outcome'] = 'RITA Long Term';
+                        $data['final_outcome'] = 'Long Term';
                     } else if ($result > 1000) {
                         $data['final_outcome'] = 'RITA Recent';
                     } else if ($result <= 1000) {
-                        $data['final_outcome'] = 'RITA Long Term';
+                        $data['final_outcome'] = 'Long Term';
                     }
                     
                     $this->update($data,array('recency_id'=>str_replace('vlResultOption','',$sampleVlResultId[$key])));
@@ -1786,11 +1786,11 @@ class RecencyTable extends AbstractTableGateway {
             if((in_array(strtolower($fOutCome['vl_result']),$this->vlFailOptionArray))){
                 $data['final_outcome'] = 'Inconclusive';
             } else if((in_array(strtolower($fOutCome['vl_result']),$this->vlResultOptionArray))){
-                $data['final_outcome'] = 'RITA Long Term';
+                $data['final_outcome'] = 'Long Term';
             } else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] > 1000) {
                 $data['final_outcome'] = 'RITA Recent';
             } else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
-                $data['final_outcome'] = 'RITA Long Term';
+                $data['final_outcome'] = 'Long Term';
             }
            $this->update($data,array('recency_id'=>$recencyId));
         }
