@@ -849,7 +849,7 @@ class RecencyService
                 
                     $termOutcome = $result[0]['Assay Recent'] + $result[0]['Long Term'] + $result[0]['Assay Negative'];
                     $vlResult = $result[0]['Done'] + $result[0]['Pending'];
-                    $finalResult = $result[0]['RITA Recent'] + $result[0]['Long Term'] + $result[0]['Inconclusive'];
+                    $finalResult = $result[0]['RITA Recent'] + $result[0]['Long Term Final'] + $result[0]['Inconclusive'];
                     $row = array();
                     $row[] = $result[0]['Samples Tested'];
                     $row[] = $result[0]['Assay Recent'];
@@ -858,7 +858,7 @@ class RecencyService
                     $row[] = $result[0]['Done'];
                     $row[] = $result[0]['Pending'];
                     $row[] = $result[0]['RITA Recent'];
-                    $row[] = $result[0]['Long Term'];
+                    $row[] = $result[0]['Long Term Final'];
                     $row[] = $result[0]['Inconclusive'];
                     $output[] = $row;
                 
@@ -971,7 +971,7 @@ class RecencyService
                 $sheet->setCellValue('E4', html_entity_decode(($result[0]['Done']!='' && $result[0]['Done']!=0) ? round(($result[0]['Done'] / $vlResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue('F4', html_entity_decode(($result[0]['Pending']!='' && $result[0]['Pending']!=0) ? round(($result[0]['Pending'] / $vlResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue('G4', html_entity_decode(($result[0]['RITA Recent']!='' && $result[0]['RITA Recent']!=0)?round(($result[0]['RITA Recent'] / $finalResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('H4', html_entity_decode(($result[0]['Long Term']!='' && $result[0]['Long Term']!=0) ? round(($result[0]['Long Term'] / $finalResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('H4', html_entity_decode(($result[0]['Long Term Final']!='' && $result[0]['Long Term Final']!=0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue('I4', html_entity_decode(($result[0]['Inconclusive']!='' && $result[0]['Inconclusive']!=0)? round(($result[0]['Inconclusive'] / $finalResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             }
 

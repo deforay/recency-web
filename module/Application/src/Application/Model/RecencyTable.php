@@ -1862,6 +1862,17 @@ class RecencyTable extends AbstractTableGateway {
             $sql = new Sql($dbAdapter);
             $queryContainer = new Container('query');
             $general = new CommonService();
+
+            if(isset($params['testDate']) && trim($params['testDate'])!= ''){
+                $s_c_date = explode("to", $_POST['testDate']);
+                if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                     $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                }
+                if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                     $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                }
+            }
+
             $rQuery = $sql->select()->from(array('r'=>'recency'))
                                 ->columns(
                                           array(
@@ -1893,7 +1904,7 @@ class RecencyTable extends AbstractTableGateway {
                                                                                 WHEN ((final_outcome='RITA Recent' OR final_outcome='RITA recent')) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
-                                            "Long Term" => new Expression("SUM(CASE 
+                                            "Long Term Final" => new Expression("SUM(CASE 
                                                                                 WHEN ((final_outcome='Long Term' OR final_outcome='long term')) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
@@ -1903,15 +1914,7 @@ class RecencyTable extends AbstractTableGateway {
                                                                                 END)"),
                                           )
                                         );
-                                        if(isset($_POST['testDate']) && trim($_POST['testDate'])!= ''){
-                                            $s_c_date = explode("to", $_POST['testDate']);
-                                            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-                                                 $start_date = $general->dbDateFormat(trim($s_c_date[0]));
-                                            }
-                                            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-                                                 $end_date = $general->dbDateFormat(trim($s_c_date[1]));
-                                            }
-                                       }
+                                        
                                         if($params['testDate']!=''){
                                             $rQuery = $rQuery->where(array("r.hiv_recency_date >='" . $start_date ."'", "r.hiv_recency_date <='" . $end_date."'"));
                                         }
