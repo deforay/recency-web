@@ -323,7 +323,7 @@ class FacilitiesTable extends AbstractTableGateway
         $fQuery = $sql->select()->from('facilities')->columns(array('facility_id', 'facility_name', 'facility_type_id'))
             ->where(array('facility_name' => trim($fName)));
         if ($facilityType == 1) {
-            $fQuery = $fQuery->where('facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0"');
+            $fQuery = $fQuery->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
         } else if ($facilityType == 2) {
             $fQuery = $fQuery->where(array('facility_type_id' => $facilityType));
         }
