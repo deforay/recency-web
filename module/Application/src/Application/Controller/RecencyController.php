@@ -145,4 +145,18 @@ class RecencyController extends AbstractActionController
             return $viewModel;
         }
      }
+
+    public function generatePdfAction() {
+        $request = $this->getRequest();
+        if($request->isPost())
+        {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result=$recencyService->getRecencyDetailsForPDF($params['recencyId']);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' =>$result));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
+    }
 }

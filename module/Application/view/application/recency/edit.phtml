@@ -119,6 +119,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 /* Search End */
 
 </style>
+<link rel="stylesheet" href="<?php  echo $this->basePath() . '/assets/css/select2-new.min.css' ?>">
 <div class="bg-body-light">
 	 <div class="content content-full">
 		  <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -595,6 +596,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 <!-- End -->
 <!-- <script src="< ?php// echo $this->basePath() . '/assets/js/plugins/namesearch/typeahead.js'; ?>"></script> -->
 <script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
 <script type="text/javascript">
 	 $(".hideFields").remove();
 	 function changeTermLine()
@@ -780,6 +782,11 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 	 jQuery(document).ready(function($) {
 
 		  changeTermLine();
+		  $("#facilityId").select2({
+               placeholder: "Choose Facility",
+               width:"250px",
+               allowClear: true,
+          });
 		  updateVlResultFields('vlField');
 		  $("#wizard-progress-step1 .isRequired").each(function() {
 			   ($(this).val() == '') ? $('.stepOne').css('visibility', 'hidden') : $('.stepOne').css('visibility', 'visible')
@@ -837,17 +844,17 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 		  foreach($globalConfigResult as $config){
 			   if($config['global_name']=='location_one'){
 		  ?>
-					getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['location_one'];?>',null,null);
+					getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['location_one'];?>',null,null,'onload');
 					<?php
 			   }else if($config['global_name']=='location_two')
 			   {
 					?>
-					getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['location_one'];?>','<?php echo $result['location_two'];?>',null);
+					getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['location_one'];?>','<?php echo $result['location_two'];?>',null,'onload');
 					<?php
 			   }else if($config['global_name']=='location_three')
 			   {
 					?>
-					getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['location_one'];?>','<?php echo $result['location_two'];?>','<?php echo $result['location_three'];?>');
+					getLocationDeatils('<?php echo $config["global_name"];?>','<?php echo $result['location_one'];?>','<?php echo $result['location_two'];?>','<?php echo $result['location_three'];?>','onload');
 					<?php
 			   }
 		  }
@@ -997,7 +1004,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 		  return splitDate[2]+'-'+fMonth+'-'+splitDate[0];
 	 }
 
-	 function getLocationDeatils(globalName,value1,value2,value3)
+	 function getLocationDeatils(globalName,value1,value2,value3,load=null)
 	 {
 		  var selectValue = document.getElementById(globalName).value;
 		  var innerId = '';
@@ -1041,6 +1048,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 						$("#otherDistrictName").removeClass('isRequired');
 					}
 			   }else if(globalName=='location_three' && selectValue!=''){
+				path = 'get-facility';
 					if(selectValue=='other')
 					{
 						$("#otherCityName").show();
@@ -1055,7 +1063,26 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 			   $.blockUI();
 			   $.post("/common/"+path, {selectValue:selectValue},
 			   function(data) {
-					$("#"+innerId).html(data);
+				   
+					if(globalName=='location_one' && selectValue!=''){
+                        var splitOption = data.split("##");
+                        $("#"+innerId).html(splitOption[0]);
+						if(load==null){
+                        	$("#facilityId").html(splitOption[1]);
+						}
+                    }else if(globalName=='location_two' && selectValue!=''){
+                        var splitOption = data.split("##");
+                        $("#"+innerId).html(splitOption[0]);
+						if(load==null){
+                        	$("#facilityId").html(splitOption[1]);
+						}
+                    }else if(globalName=='location_three' && selectValue!=''){
+						if(load==null){
+                        $("#facilityId").html(data);
+						}
+                    }else{
+						$("#"+innerId).html(data);
+					}
 					if(selectedValue!=''){
 						 $("#"+innerId).val(selectedValue);
 					}

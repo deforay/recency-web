@@ -79,6 +79,20 @@ class CommonController extends AbstractActionController
                 ->setTerminal(true);
         return $viewModel;
     }
+    public function getFacilityAction()
+    {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $common = $this->getServiceLocator()->get('CommonService');
+            $result = $common->getFacilityDetails($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+    }
 
 
 }

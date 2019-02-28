@@ -77,7 +77,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 /* Search End */
 
 </style>
-
+<link rel="stylesheet" href="<?php  echo $this->basePath() . '/assets/css/select2-new.min.css' ?>">
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -146,7 +146,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                         
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>" for=""> Facility <?php echo(in_array("Facility Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                                 <div class="col-sm-4 <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>">
-                                                    <select class="form-control <?php echo $facility; ?>" id="facilityId" name="facilityId" title="Please select the facility name" onchange="getLocationDataByFacility()">
+                                                    <select class="form-control <?php echo $facility; ?> select2" id="facilityId" name="facilityId" title="Please select the facility name" onchange="getLocationDataByFacility()">
                                                         <option value="">--Select--</option>
                                                         <?php foreach($facilityResult['facility'] as $facility){ ?>
                                                             <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
@@ -535,6 +535,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 <!-- vivek -->
 <!-- <script src="< ?php// echo $this->basePath() . '/assets/js/plugins/namesearch/typeahead.js'; ?>"></script> -->
 <script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
 <!-- <script type="text/javascript" src="typeahead.js"></script> -->
 <script type="text/javascript">
      $(".hideFields").remove();
@@ -781,6 +782,11 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                }
           });
 
+          $("#facilityId").select2({
+               placeholder: "Choose Facility",
+               width:"250px",
+               allowClear: true,
+          });
           
           $("#testingFacilityId").change(function(){
                if($(this).val() == 'other'){
@@ -909,6 +915,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                 $("#otherDistrictName").removeClass('isRequired');
                }
           }else if(globalName=='location_three' && selectValue!=''){
+                path = 'get-facility';
                if(selectValue=='other')
                {
                    $("#otherCityName").show();
@@ -922,7 +929,19 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                $.blockUI();
                $.post("/common/"+path, {selectValue:selectValue},
                function(data) {
-                    $("#"+innerId).html(data);
+                    if(globalName=='location_one' && selectValue!=''){
+                        var splitOption = data.split("##");
+                        $("#"+innerId).html(splitOption[0]);
+                        $("#facilityId").html(splitOption[1]);
+                    }else if(globalName=='location_two' && selectValue!=''){
+                        var splitOption = data.split("##");
+                        $("#"+innerId).html(splitOption[0]);
+                        $("#facilityId").html(splitOption[1]);
+                    }else if(globalName=='location_three' && selectValue!=''){
+                        $("#facilityId").html(data);
+                    }else{
+                        $("#"+innerId).html(data);
+                    }
                     $.unblockUI();
                });
           }

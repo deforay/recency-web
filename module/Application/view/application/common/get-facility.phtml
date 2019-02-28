@@ -1,13 +1,4 @@
 <?php
-$city = '<option value="">-- Select --</option>';
-if(count($result['city'])>0){
-    foreach($result['city'] as $name){
-        $city .='<option value="'.$name['city_id'].'">'.$name['city_name'].'</option>';
-    }
-}
-$city .='<option value="other">Other</option>';
-
-
 $facility = '<option value="">-- Select --</option>';
 if(count($result['facility'])>0){
     foreach($result['facility'] as $name){
@@ -15,5 +6,4 @@ if(count($result['facility'])>0){
     }
 }
 $facility .='<option value="other">Other</option>';
-
-echo $city.'##'.$facility;
+echo $facility;

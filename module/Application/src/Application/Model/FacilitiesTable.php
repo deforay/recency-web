@@ -254,7 +254,7 @@ class FacilitiesTable extends AbstractTableGateway
         //admin
         else {
             $sQuery = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
-                ->where(array('f.status' => 'active', 'f.facility_name IS NOT NULL'));
+                        ->where(array('status' => 'active', 'f.facility_type_id IS NULL OR f.facility_type_id="1" OR f.facility_type_id=""'));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         }

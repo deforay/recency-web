@@ -231,10 +231,6 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                                     <th>VL Result</th>
                                     <th>Tester Name</th>
 
-
-
-
-
                                     <th>DOB</th>
                                     <th>Age</th>
                                     <th>Gender</th>
@@ -391,4 +387,21 @@ $(".showhideCheckBox").change(function(){
                 }
             });
         }
+
+        function generatePdf(recencyId)
+        {
+            $.blockUI();
+            $.post("<?php echo $this->url('recency',array('action'=>'generate-pdf')); ?>",{recencyId:recencyId},
+                function(data){
+                if(data == "" || data == null || data == undefined){
+                $.unblockUI();
+                alert('Unable to generate download');
+                }else{
+                $.unblockUI();
+                window.open('/temporary/'+data,'blank');
+                //document.location.href = '/temporary/'+data;
+                }
+            });
+        }
+
      </script>

@@ -378,6 +378,11 @@ class CommonService {
          $provienceDb = $this->sm->get('CityTable');
          return $provienceDb->fetchCityDetails($params);
      }
+     public function getFacilityDetails($params)
+     {
+        $provienceDb = $this->sm->get('CityTable');
+        return $provienceDb->fetchFacilityDetails($params);
+     }
 
      public function getCaptcha($config = array()) {
         if (!function_exists('gd_info')) {

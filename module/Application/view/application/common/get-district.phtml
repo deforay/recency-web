@@ -1,11 +1,20 @@
-<option value="">-- Select --</option>
+
 <?php
-if(count($result)>0){
-    foreach($result as $name){
-        ?>
-        <option value="<?php echo $name['district_id'];?>"><?php echo $name['district_name'];?></option>
-        <?php
+$district = '<option value="">-- Select --</option>';
+if(count($result['district'])>0){
+    foreach($result['district'] as $name){
+        $district .='<option value="'.$name['district_id'].'">'.$name['district_name'].'</option>';
     }
 }
-?>
-<option value="other">Other</option>
+$district .='<option value="other">Other</option>';
+
+$facility = '<option value="">-- Select --</option>';
+if(count($result['facility'])>0){
+    foreach($result['facility'] as $name){
+        $facility .='<option value="'.base64_encode($name['facility_id']).'">'.$name['facility_name'].'</option>';
+    }
+}
+$facility .='<option value="other">Other</option>';
+
+echo $district.'##'.$facility;
+

@@ -222,6 +222,7 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                          <a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>
                          <a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
+                         <a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf('.$aRow['recency_id'].')"><i class="far fa-file-pdf"></i> PDF</a>
                          </div>';
 
                          $output['aaData'][] = $row;
@@ -459,9 +460,24 @@ class RecencyTable extends AbstractTableGateway {
                     ->where(array('recency_id' => $recencyId));
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
-                    
                     return $rResult;
+               }
+
+               public function fetchRecencyDetailsForPDF($recencyId)
+               {
+                $dbAdapter = $this->adapter;
+                $sql = new Sql($dbAdapter);
+                $sQuery = $sql->select()->from(array('r' => 'recency'))
+                                    ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+                                    ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testFacilityName'=>'facility_name'))
+                                    ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
+                                    ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
+                                    ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+                                    ->where(array('recency_id' => $recencyId));
+                
+                $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+return $rResult;
                }
 
                public function updateRecencyDetails($params)
@@ -899,7 +915,7 @@ class RecencyTable extends AbstractTableGateway {
 
                                     if($recency['vlLoadResult']!=''){
                                         $data['vl_result'] = htmlentities($recency['vlLoadResult']);
-                                        $date['vl_result_entry_date'] = date('Y-m-d H:i:s');
+                                        $date['vl_result_entry_date'] = $recency['formSavedDateTime'];
                                     }
                                     if($recency['finalOutcome']!='')
                                     {

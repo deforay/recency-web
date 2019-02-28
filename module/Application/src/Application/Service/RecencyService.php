@@ -994,5 +994,11 @@ class RecencyService
             )
         ));
     }
+
+    public function getRecencyDetailsForPDF($recenyId)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecencyDetailsForPDF($recenyId);
+    }
 }
 
