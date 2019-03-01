@@ -277,7 +277,7 @@ class FacilitiesTable extends AbstractTableGateway
                 ->where(array('f.status' => 'active', '(f.facility_type_id IS NULL OR f.facility_type_id="1" OR f.facility_type_id="")', 'r.added_by' => $params['userId']))
                 ->order('f.facility_id DESC');
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
-            $fResult['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            $rResult['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         } else {
             $sQuery = $sql->select()->from(array('f' => 'facilities'))
