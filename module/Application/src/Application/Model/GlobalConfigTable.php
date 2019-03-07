@@ -216,6 +216,9 @@ class GlobalConfigTable extends AbstractTableGateway {
         }
         $row[] = in_array("Sample Id",$explodField)?"sampleId":"";
         $row[] = in_array("Patient Id",$explodField)?"patientId":"";
+        $row[] = in_array("Sample Collection Date from the Client",$explodField)?"sampleCollectionDate":"";
+        $row[] = in_array("Sample Receipt Date at the Recency Testing Site",$explodField)?"sampleReceiptDate":"";
+        $row[] = in_array("Received Specimen Type",$explodField)?"receivedSpecimenType":"";
         $row[] = in_array("Facility Name",$explodField)?"facilityId":"";
         $row[] = in_array("Province",$explodField)?"location_one":"";
         $row[] = in_array("District",$explodField)?"location_two":"";
@@ -280,6 +283,9 @@ class GlobalConfigTable extends AbstractTableGateway {
         }
         $row['sampleId'] = in_array("Sample Id",$explodField)?true:false;
         $row['patientId'] = in_array("Patient Id",$explodField)?true:false;
+        $row['sampleCollectionDate'] = in_array("Sample Collection Date from the Client",$explodField)?true:false;
+        $row['sampleReceiptDate'] = in_array("Sample Receipt Date at the Recency Testing Site",$explodField)?true:false;
+        $row['receivedSpecimenType'] = in_array("Received Specimen Type",$explodField)?true:false;
         $row['facilityId'] = in_array("Facility Name",$explodField)?true:false;
         $row['location_one'] = in_array("Province",$explodField)?true:false;
         $row['location_two'] = in_array("District",$explodField)?true:false;
