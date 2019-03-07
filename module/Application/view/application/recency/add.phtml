@@ -133,6 +133,30 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                         <div class="col-sm-4 <?php echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>">
                                             <input type="text" class="form-control <?php echo $patient; echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
                                         </div>
+
+                                        
+                                    </div>
+                                    <div class="form-group row form-horizontal">
+                                    <label class="col-sm-2 col-form-label" for="">Sample Collection Date from the Client </label>
+                                        <div class="col-sm-4 ">
+                                            <input type="text" class="js-datepicker form-control" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample collection date">
+                                        </div>
+
+                                         <label class="col-sm-2 col-form-label" for="">Sample Receipt Date at the Recency Testing Site </label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="js-datepicker form-control" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample receipt date">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row form-horizontal">
+                                    <label class="col-sm-2 col-form-label" for="">Received Specimen Type</label>
+                                        <div class="col-sm-4 ">
+
+                                              <select class="form-control" id="receivedSpecimenType" name="receivedSpecimenType" title="Enter the received specimen type" >
+                                                <option value="">--Select--</option>
+                                                <option value="whole_blood">Whole Blood</option>
+                                                <option value="plasma">Plasma</option>
+                                            </select>
+                                        </div>
                                     </div>
                                      <br>
 
@@ -298,6 +322,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                                 <option value="no_consent_from_the_client">No Consent</option>
                                                 <option value="no_sample_collected">No Sample Collected</option>
                                                 <option value="newly_not_diagnosed">No New Diagnosis</option>
+                                                <option value="sample_rejected">Sample Rejected</option>
                                                 <option value="other">Others</option>
                                             </select>
                                             <br>

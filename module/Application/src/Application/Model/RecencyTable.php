@@ -426,7 +426,9 @@ class RecencyTable extends AbstractTableGateway {
 
                               'vl_test_date'=>($params['vlTestDate']!='')?$common->dbDateFormat($params['vlTestDate']):NULL,
                               //'vl_result'=>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
-                               
+                              'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate']!='')?$common->dbDateFormat($params['sampleCollectionDate']):NULL,
+                              'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
+                              'received_specimen_type' => $params['receivedSpecimenType'],
                          );
                             if($params['vlLoadResult']!=''){
                                 $data['vl_result'] = $params['vlLoadResult'];
@@ -607,6 +609,10 @@ return $rResult;
                               'form_saved_datetime'=>date('Y-m-d H:i:s'),
                               'vl_test_date'=>($params['vlTestDate']!='')?$common->dbDateFormat($params['vlTestDate']):NULL,
                               //'vl_result'=>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
+                              'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate']!='')?$common->dbDateFormat($params['sampleCollectionDate']):NULL,
+                              'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
+                              'received_specimen_type' => $params['receivedSpecimenType'],
+                        
                          );
                          if($params['vlLoadResult']!=''){
                             $data['vl_result'] = $params['vlLoadResult'];

@@ -67,6 +67,38 @@ $lineOutComeColor2 = "#000000";
                                         </div>
                                    </div>
 
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="company" class="col-lg-4 control-label">Sample Collection Date from the Client</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                             <?php echo ($result->sample_collection_date!='' && $result->sample_collection_date!='0000:00:00')?$common->humanDateFormat($result->sample_collection_date):''; ?>
+                                             </span>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="company" class="col-lg-4 control-label">Sample Receipt Date at the Recency Testing Site</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                             <?php echo ($result->sample_receipt_date!='' && $result->sample_receipt_date!='0000:00:00')?$common->humanDateFormat($result->sample_receipt_date):''; ?>
+                                             </span>
+                                        </div>
+                                   </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="company" class="col-lg-4 control-label">Received Specimen Type</label>
+                                             <label for="company" class="col-lg-1 control-label">: </label>
+                                             <span style="text-align: left;" for="company" class="col-lg-6 control-label">
+                                             <?php echo ucwords(str_replace('_', ' ', $result->received_specimen_type)); ?>
+                                             </span>
+                                        </div>
+                                   </div>
+
+
+                                   
+
                                 <div class="col-md-12">
                                     <div class="block block-rounded block-bordered">
                                         <div class="block-header block-header-default">
