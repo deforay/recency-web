@@ -98,6 +98,11 @@ $vlTestDate = in_array("Viral Load Test Date",$resultArr)?"isRequired":"";
 $vlLoadResult = in_array("Viral Load Result",$resultArr)?"isRequired":"";
 $testingFacility = in_array("Testing Facility",$resultArr)?"isRequired":"";
 
+
+$sampleCollectionDateMandatory = in_array("Sample Collection Date from the Client",$resultArr)?"isRequired":"";
+$sampleReceiptDateMandatory  = in_array("Sample Receipt Date at the Recency Testing Site",$resultArr)?"isRequired":"";
+$receivedSpecimenTypeMandatory = in_array("Received Specimen Type",$resultArr)?"isRequired":"";
+
 $lineOutComeColor = "#de1d2b";
 $lineOutComeColor2 = "#000000";
 ?>
@@ -185,21 +190,20 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 									</div>
 								</div>
 								<div class="form-group row form-horizontal">
-                                    <label class="col-sm-2 col-form-label" for="">Sample Collection Date from the Client </label>
-                                        <div class="col-sm-4 ">
-                                            <input type="text" class="js-datepicker form-control" value="<?php echo $sampleCollectionDate; ?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample collection date">
+								<label class="col-sm-2 col-form-label <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Collection Date from the Client <?php echo(in_array("Sample Collection Date from the Client",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
+                                        <div class="col-sm-4 <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>">
+                                            <input type="text" class="js-datepicker form-control <?php echo $sampleCollectionDateMandatory; ?> <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>" value="<?php echo $sampleCollectionDate; ?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample collection date">
                                         </div>
 
-                                         <label class="col-sm-2 col-form-label" for="">Sample Receipt Date at the Recency Testing Site </label>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="js-datepicker form-control" value="<?php echo $sampleReceiptDate; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample receipt date">
+                                           <label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Receipt Date at the Recency Testing Site <?php echo(in_array("Sample Receipt Date at the Recency Testing Site",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
+                                        <div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>">
+                                            <input type="text" class="js-datepicker form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>" value="<?php echo $sampleReceiptDate; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample receipt date">
                                         </div>
                                     </div>
                                     <div class="form-group row form-horizontal">
-                                    <label class="col-sm-2 col-form-label" for="">Received Specimen Type</label>
-                                        <div class="col-sm-4 ">
-
-                                              <select class="form-control" id="receivedSpecimenType" name="receivedSpecimenType" title="Enter the received specimen type" >
+									<label class="col-sm-2 col-form-label <?php echo in_array("Received Specimen Type",$resultArr2)?"showFields":"hideFields";?>" for="">Received Specimen Type <?php echo(in_array("Received Specimen Type",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Received Specimen Type",$resultArr2)?"showFields":"hideFields";?>">
+                                              <select class="form-control <?php echo $receivedSpecimenTypeMandatory; ?> <?php echo in_array("Received Specimen Type",$resultArr2)?"showFields":"hideFields";?>" id="receivedSpecimenType" name="receivedSpecimenType" title="Enter the received specimen type" >
                                                 <option value="">--Select--</option>
                                                 <option value="whole_blood"<?php echo($result['received_specimen_type'] == 'whole_blood' )?'selected="selected"':''; ?>>Whole Blood</option>
                                                 <option value="plasma"<?php echo($result['received_specimen_type'] == 'plasma' )?'selected="selected"':''; ?>>Plasma</option>
