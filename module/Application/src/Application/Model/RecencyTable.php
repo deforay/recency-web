@@ -21,6 +21,15 @@ class RecencyTable extends AbstractTableGateway {
           $this->adapter = $adapter;
      }
 
+    public function randomizer($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'){
+        $pieces = [];
+        $max = mb_strlen($keyspace, '8bit') - 1;
+        for ($i = 0; $i < $length; ++$i) {
+            $pieces []= $keyspace[random_int(0, $max)];
+        }
+        return implode('', $pieces);
+    }     
+
      public function fetchRecencyDetails($parameters) {
           /* Array of database columns which should be read and sent back to DataTables. Use a space where
           * you want to insert a non-database field (for example a counter or static image)
@@ -429,6 +438,7 @@ class RecencyTable extends AbstractTableGateway {
                               'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate']!='')?$common->dbDateFormat($params['sampleCollectionDate']):NULL,
                               'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
                               'received_specimen_type' => $params['receivedSpecimenType'],
+                              'unique_id'=>$this->randomizer(10),
                          );
                             if($params['vlLoadResult']!=''){
                                 $data['vl_result'] = $params['vlLoadResult'];
@@ -446,7 +456,7 @@ class RecencyTable extends AbstractTableGateway {
                         //  }else if (strpos($params['outcomeData'], 'Negative') !== false){
                         //       $data['final_outcome'] = 'Assay Negative';
                         //  }
-                        
+
                          $this->insert($data);
 
                          $lastInsertedId = $this->lastInsertValue;
@@ -792,7 +802,7 @@ return $rResult;
                          $i = 1;
                          foreach($params["form"] as $key => $recency){
                               try{
-                                   if(isset($recency['sampleId']) && trim($recency['sampleId'])!="" || isset($recency['patientId']) && trim($recency['patientId'])!="")
+                                   if(isset($recency['sampleId']) && trim($recency['sampleId'])!="")
                                    {
                                         if($recency['otherfacility']!=''){
                                              $fResult = $facilityDb->checkFacilityName(strtolower($recency['otherfacility']),1);
@@ -820,7 +830,7 @@ return $rResult;
                                              }
                                         }
                                    }else{
-                                    $recency['facilityId'] = base64_encode($recency['facilityId']);
+                                     $recency['facilityId'] = (isset($recency['facilityId']) && !empty($recency['facilityId'])) ? base64_encode($recency['facilityId']) : null;
                                    }
 
                                     if($recency['otherDistrict']!=''){
@@ -842,12 +852,14 @@ return $rResult;
                                             'city'=>$recency['location_three'],
                                             'facility_type_id'=>'2',
                                             'status'=>'active'
-                                        );
-                                        $facilityDb->insert($facilityData);
-                                        if($facilityDb->lastInsertValue>0){
-                                            $recency['testingFacility'] = $facilityDb->lastInsertValue;
+                                            );
+                                            $facilityDb->insert($facilityData);
+                                            if($facilityDb->lastInsertValue>0){
+                                                $recency['testingFacility'] = $facilityDb->lastInsertValue;
+                                            }
                                         }
-                                        }
+                                    }else{
+                                        $recency['testingFacility'] = (isset($recency['testingFacility']) && !empty($recency['testingFacility'])) ? ($recency['testingFacility']) : null;
                                     }
 
                                    //check oher pouplation
@@ -868,8 +880,8 @@ return $rResult;
                                    $data = array(
                                         'sample_id' => $recency['sampleId'],
                                         'patient_id' => $recency['patientId'],
-                                        'facility_id' => base64_decode($recency['facilityId']),
-                                        'testing_facility_id'=>$recency['testingFacility'],
+                                        'facility_id' => ($recency['facilityId'] != null) ? base64_decode($recency['facilityId']) : null,
+                                        'testing_facility_id'=> $recency['testingFacility'],
                                         'control_line' => $recency['ctrlLine'],
                                         'positive_verification_line' => $recency['positiveLine'],
                                         'long_term_verification_line' => $recency['longTermLine'],
@@ -883,8 +895,8 @@ return $rResult;
                                         'risk_population' => $recency['riskPopulation'],
                                         //'other_risk_population' => $recency['otherriskPopulation'],
                                         'term_outcome'=>$recency['recencyOutcome'],
-                                        'recency_test_performed'=>$recency['testNotPerformed'],
-                                        'recency_test_not_performed' => ($recency['testNotPerformed']=='true')?$recency['recencyreason']:NULL,
+                                        'recency_test_performed'=>(isset($recency['testNotPerformed']))?$recency['testNotPerformed']:NULL,
+                                        'recency_test_not_performed' => (isset($recency['testNotPerformed']) && $recency['testNotPerformed']=='true')?$recency['recencyreason']:NULL,
                                         'other_recency_test_not_performed' => (isset($recency['recencyreason']) && $recency['recencyreason']='other')?$recency['otherreason']: NULL,
                                         'pregnancy_status' => $recency['pregnancyStatus'],
                                         'current_sexual_partner' => $recency['currentSexualPartner'],
@@ -911,7 +923,7 @@ return $rResult;
                                         'kit_lot_no' => $recency['testKitLotNo'],
                                         //'kit_name' => $recency['testKitName'],
                                         'tester_name' => $recency['testerName'],
-                                        'unique_id'=>isset($recency['unique_id'])?$recency['unique_id']:NULL,
+                                        'unique_id'=>isset($recency['unique_id']) ? $recency['unique_id']: $this->randomizer(10),
 
                                         //'vl_test_date'=>$recency['vlTestDate'],
 
@@ -972,13 +984,14 @@ return $rResult;
                     }
                }else{
                     try{
-                         if(isset($params['samtpleId']) && trim($params['sampleId'])!="")
+                         if(isset($params['sampleId']) && trim($params['sampleId'])!="")
                          {
                               $syncedBy = $recency['syncedBy'];
                               $data = array(
                                    'sample_id' => $params['sampleId'],
                                    'patient_id' => $params['patientId'],
-                                   'facility_id' => $params['facilityId'],
+                                   'facility_id' => (isset($params['facilityId']) && !empty($params['facilityId'])) ? ($params['facilityId']) : null,
+                                   'testing_facility_id' => (isset($params['testingFacility']) && !empty($params['testingFacility'])) ? ($params['testingFacility']) : null,
                                    'control_line' => $params['ctrlLine'],
                                    'positive_verification_line' => $params['positiveLine'],
                                    'long_term_verification_line' => $params['longTermLine'],
@@ -1015,7 +1028,7 @@ return $rResult;
                                    //'kit_name' => $params['testKitName'],
                                    'kit_lot_no' => $params['testKitLotNo'],
                                    'tester_name' => $params['testerName'],
-
+                                   'unique_id'=>$this->randomizer(10),
                                    'vl_result'=>$params['vlLoadResult'],
 
                               );
@@ -1832,7 +1845,7 @@ return $rResult;
                 || ($controlLine=='present' && $positiveControlLine=='absent' && $longControlLine=='present')
             )
             {
-                $this->update(array('term_outcome'=>'Invalid – Please Verify'),array('recency_id'=>$recencyId));
+                $this->update(array('term_outcome'=>'Invalid â€“ Please Verify'),array('recency_id'=>$recencyId));
             }else if($controlLine=='present' && $positiveControlLine=='absent' && $longControlLine=='absent'){
                 $this->update(array('term_outcome'=>'Assay Negative'),array('recency_id'=>$recencyId));
             }else if($controlLine=='present' && $positiveControlLine=='present' && $longControlLine=='absent'){
