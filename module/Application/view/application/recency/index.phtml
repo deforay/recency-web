@@ -7,7 +7,7 @@ $roleCode = $sessionLogin->roleCode;
 //\Zend\Debug\Debug::dump($facilityResult['facility']);die;
 
 
-$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
+$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
@@ -217,6 +217,9 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                               <tr>
                                     <th>Sample ID</th>
                                     <th>Patient ID</th>
+                                    <th>Sample Collection Date	</th>
+                                    <th>Sample Receipt Date</th>
+                                    <th>Received Specimen Type</th>
                                     <th>Facility Name</th>
                                     <th>Testing Site</th>
                                     <th>HIV Diagnosis Date</th>
@@ -254,9 +257,9 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                          <tbody>
                               <tr>
                                 <?php if($roleCode == "user"){
-                                   echo "<td colspan='32' class='dataTables_empty'>Loading data from server</td>";
+                                   echo "<td colspan='35' class='dataTables_empty'>Loading data from server</td>";
                                 }else{
-                                    echo "<td colspan='33' class='dataTables_empty'>Loading data from server</td>";
+                                    echo "<td colspan='36' class='dataTables_empty'>Loading data from server</td>";
                                 }?>
                               </tr>
                               </tbody>
@@ -264,6 +267,9 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                               <tr>
                                     <th>Sample ID</th>
                                     <th>Patient ID</th>
+                                    <th>Sample Collection Date	</th>
+                                    <th>Sample Receipt Date</th>
+                                    <th>Received Specimen Type</th>
                                     <th>Facility Name</th>
                                     <th>Testing Site</th>
                                     <th>HIV Diagnosis Date</th>

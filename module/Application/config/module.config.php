@@ -10,17 +10,16 @@
 return array(
      'router' => array(
             'routes' => array(
-                  'home' => array(
-                        'type' => 'Zend\Mvc\Router\Http\Literal',
-                        'options' => array(
-                              'route'    => '/',
-                              'defaults' => array(
-                              'controller' => 'Application\Controller\Index',
-                              'action'     => 'index',
-                              ),
+               'home' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route'    => '/[:action][/:id]',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Index',
+                            'action'     => 'index',
                         ),
-                  ),
-
+                    ),
+                ),
                   'login' => array(
                         'type' => 'segment',
                         'options' => array(
