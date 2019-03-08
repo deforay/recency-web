@@ -205,6 +205,5 @@ ALTER TABLE `recency` ADD `mail_sent_status` VARCHAR(255) NULL DEFAULT NULL AFTE
 -- Amit 18 Jan 2019
 UPDATE `global_config` SET `display_name` = 'Display Fields' WHERE `global_config`.`config_id` = 7;
 --sathish 07 Mar 2019
- ALTER TABLE `recency` ADD `sample_collection_date` DATE NULL AFTER `kit_name`, ADD `sample_receipt_date` DATE NULL AFTER `sample_collection_date`, ADD `received_specimen_type` VARCHAR(255) NULL AFTER `sample_receipt_date`;
-
+ ALTER TABLE `recency` ADD `sample_collection_date` DATE NULL AFTER `facility_id`, ADD `sample_receipt_date` DATE NULL AFTER `sample_collection_date`, ADD `received_specimen_type` VARCHAR(255) NULL AFTER `sample_receipt_date`;
  ALTER TABLE `recency` ADD `sample_received_date` DATE NULL DEFAULT NULL AFTER `received_specimen_type`;

@@ -32,7 +32,7 @@ $roleCode = $sessionLogin->roleCode;
                                 <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
                                 <option value=""> -- Select -- </option>
                                     <?php
-                                    foreach($facilityResult['facility'] as $facilityRow){
+                                    foreach($facilityResult['facilityTest'] as $facilityRow){
                                         if(2 != (int)$facilityRow['facility_type_id']) continue;
                                     ?>
                                     <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
