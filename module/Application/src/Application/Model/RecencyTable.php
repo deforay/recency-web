@@ -198,6 +198,7 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] =  $common->humanDateFormat($aRow['sample_collection_date']);
                          $row[] =  $common->humanDateFormat($aRow['sample_receipt_date']);
                          $row[] = str_replace("_"," ",ucwords($aRow['received_specimen_type']));
+                         $row[] =  $common->humanDateFormat($aRow['sample_received_date']);
                          $row[] = $aRow['facility_name'];
                          $row[] = $aRow['testing_facility_name'];
                          $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
@@ -441,6 +442,7 @@ class RecencyTable extends AbstractTableGateway {
                               'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate']!='')?$common->dbDateFormat($params['sampleCollectionDate']):NULL,
                               'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
                               'received_specimen_type' => $params['receivedSpecimenType'],
+                              'sample_received_date' => $params['sampleReceivedDate'],
                               'unique_id'=>$this->randomizer(10),
                          );
                             if($params['vlLoadResult']!=''){
@@ -625,7 +627,7 @@ return $rResult;
                               'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate']!='')?$common->dbDateFormat($params['sampleCollectionDate']):NULL,
                               'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
                               'received_specimen_type' => $params['receivedSpecimenType'],
-                        
+                              'sample_received_date' => $params['sampleReceivedDate'],
                          );
                          if($params['vlLoadResult']!=''){
                             $data['vl_result'] = $params['vlLoadResult'];
@@ -883,6 +885,9 @@ return $rResult;
                                    $data = array(
                                         'sample_id' => $recency['sampleId'],
                                         'patient_id' => $recency['patientId'],
+                                        'sample_collection_date' => (isset($recency['sampleCollectionDate']) && $recency['sampleCollectionDate']!='')?$common->dbDateFormat($recency['sampleCollectionDate']):NULL,
+                                        'sample_receipt_date' => (isset($recency['sampleReceiptDate']) && $recency['sampleReceiptDate']!='')?$common->dbDateFormat($recency['sampleReceiptDate']):NULL,
+                                        'received_specimen_type' => $recency['receivedSpecimenType'],
                                         'facility_id' => ($recency['facilityId'] != null) ? base64_decode($recency['facilityId']) : null,
                                         'testing_facility_id'=> $recency['testingFacility'],
                                         'control_line' => $recency['ctrlLine'],
@@ -1441,7 +1446,7 @@ return $rResult;
                     $dbAdapter = $this->adapter;
                     $sql = new Sql($dbAdapter);
 
-                    $sQuery =   $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
+                    $sQuery =   $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_date','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date','sample_collection_date','sample_receipt_date','received_specimen_type'))
                                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
                                 ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                                 ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
@@ -1643,7 +1648,7 @@ return $rResult;
 
                     $sQuery =   $sql->select()->from(array('r' => 'recency'))
                     ->columns(array(
-                        'sample_id','final_outcome',"hiv_recency_date",'vl_test_date','vl_result_entry_date',
+                        'sample_id','final_outcome',"hiv_recency_date",'vl_test_date','vl_result_entry_date','sample_collection_date','sample_receipt_date','received_specimen_type',
                         "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_date))) AS DECIMAL (10))")
                     ))
                     
@@ -2047,7 +2052,7 @@ return $rResult;
                     */
                     $dbAdapter = $this->adapter;
                     $sql = new Sql($dbAdapter);
-      
+                    $totalSamples = array();
                     $sQuery =   $sql->select()->from(array('r' => 'recency'))
                     ->columns(
                          array(
@@ -2137,32 +2142,7 @@ return $rResult;
 
                     /* Total data set length */
                     $iQuery =   $sql->select()->from(array('r' => 'recency'))
-                    ->columns(
-                         array(
-                         "totalSamples" => new Expression('COUNT(*)'),
-                         "samplesReceived" => new Expression("SUM(CASE 
-                                                               WHEN (((r.sample_received_date is NOT NULL) )) THEN 1
-                                                               ELSE 0
-                                                               END)"),
-                         "samplesRejected" => new Expression("SUM(CASE 
-                                                                 WHEN (((r.recency_test_not_performed ='sample_rejected') )) THEN 1
-                                                                 ELSE 0
-                                                                 END)"),
-                         "samplesTestedRecency" => new Expression("SUM(CASE 
-                                                                 WHEN (((r.recency_test_performed is NOT NULL) )) THEN 1
-                                                                 ELSE 0
-                                                                 END)"),
-                         "samplesTestedViralLoad" => new Expression("SUM(CASE 
-                                                                 WHEN (((r.vl_test_date is NOT NULL) )) THEN 1
-                                                                 ELSE 0
-                                                                 END)"),
-                         "samplesFinalOutcome" => new Expression("SUM(CASE 
-                                                                 WHEN (((r.final_outcome is NOT NULL) )) THEN 1
-                                                                 ELSE 0
-                                                                 END)"),
-                                                                                                         
-                         )
-                         )
+                   
                     ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
                     ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                     ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
@@ -2170,34 +2150,7 @@ return $rResult;
                                     ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
                     ->group('r.facility_id');
 
-                    if($parameters['fName']!=''){
-                         $iQuery->where(array('r.facility_id'=>$parameters['fName']));
-                     }
-                     if($parameters['testingFacility']!=''){
-                         $iQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
-                     }
-                     if($parameters['locationOne']!=''){
-                         $iQuery = $iQuery->where(array('p.province_id'=>$parameters['locationOne']));
-                         if($parameters['locationTwo']!=''){
-                               $iQuery = $iQuery->where(array('d.district_id'=>$parameters['locationTwo']));
-                         }
-                         if($parameters['locationThree']!=''){
-                               $iQuery = $iQuery->where(array('c.city_id'=>$parameters['locationThree']));
-                         }
-                   }
-                   if(isset($params['sampleTestedDates']) && trim($params['sampleTestedDates'])!= ''){
-                    $s_c_date = explode("to", $_POST['sampleTestedDates']);
-                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
-                    }
-                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
-                    }
-                }
-
-                if($params['sampleTestedDates']!=''){
-                    $iQuery = $iQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
-                }
+                    
 
                     $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
                     $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();

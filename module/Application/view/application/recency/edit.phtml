@@ -46,6 +46,11 @@ $sampleReceiptDate = '';
 if($result['sample_receipt_date']!= '' && $result['sample_receipt_date']!= null && $result['sample_receipt_date']!= '0000-00-00'){
 	 $sampleReceiptDate = $common->humanDateFormat($result['sample_receipt_date']);
 }
+
+$sampleReceivedDate = '';
+if($result['sample_received_date']!= '' && $result['sample_received_date']!= null && $result['sample_received_date']!= '0000-00-00'){
+	 $sampleReceivedDate = $common->humanDateFormat($result['sample_received_date']);
+}
  
 $arr = array();
 // now we create an associative array so that we can easily create view variables
@@ -102,6 +107,7 @@ $testingFacility = in_array("Testing Facility",$resultArr)?"isRequired":"";
 $sampleCollectionDateMandatory = in_array("Sample Collection Date from the Client",$resultArr)?"isRequired":"";
 $sampleReceiptDateMandatory  = in_array("Sample Receipt Date at the Recency Testing Site",$resultArr)?"isRequired":"";
 $receivedSpecimenTypeMandatory = in_array("Received Specimen Type",$resultArr)?"isRequired":"";
+$sampleReceivedDateMandatory = in_array("Sample Received Date",$resultArr)?"isRequired":"";
 
 $lineOutComeColor = "#de1d2b";
 $lineOutComeColor2 = "#000000";
@@ -210,6 +216,11 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 											
                                             </select>
                                         </div>
+										<label class="col-sm-2 col-form-label <?php echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Received Date<?php echo(in_array("Sample Received Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
+                                        <div class="col-sm-4 <?php echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>">
+                                            <input type="text" class="js-datepicker form-control <?php echo $sampleReceivedDateMandatory; ?> <?php  echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>"  value="<?php echo $sampleReceivedDate; ?>" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Enter the sample received date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample received date">
+                                        </div>
+
                                     </div>
 								<br>
 								<div class="col-md-12">

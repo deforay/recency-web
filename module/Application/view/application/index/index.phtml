@@ -131,6 +131,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
 
      $('#sampleTestedDates').daterangepicker({
         format: 'DD-MMM-YYYY',
+        autoUpdateInput: false,
 						separator: ' to ',
             startDate: moment().subtract('days', 6),
             endDate: moment(),
@@ -147,6 +148,10 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
 function(start, end) {
 	startDate = start.format('YYYY-MM-DD');
 	endDate = end.format('YYYY-MM-DD');
+    $('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+  });
+
 });
 
             });

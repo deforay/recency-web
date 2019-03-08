@@ -55,6 +55,7 @@ $testingFacility = in_array("Testing Facility",$resultArr)?"isRequired":"";
 $sampleCollectionDateMandatory = in_array("Sample Collection Date from the Client",$resultArr)?"isRequired":"";
 $sampleReceiptDateMandatory  = in_array("Sample Receipt Date at the Recency Testing Site",$resultArr)?"isRequired":"";
 $receivedSpecimenTypeMandatory = in_array("Received Specimen Type",$resultArr)?"isRequired":"";
+$sampleReceivedDate = in_array("Sample Received Date",$resultArr)?"isRequired":"";
 
 $lineOutComeColor = "#de1d2b";
 $lineOutComeColor2 = "#000000";
@@ -161,10 +162,10 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                                 <option value="plasma">Plasma</option>
                                             </select>
                                         </div>
-                                        <!-- <label class="col-sm-2 col-form-label <?php echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Received Date<?php echo(in_array("Sample Received Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Received Date<?php echo(in_array("Sample Received Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
                                         <div class="col-sm-4 <?php echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>">
                                             <input type="text" class="js-datepicker form-control <?php echo $sampleReceivedDate; ?> <?php  echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Enter the sample received date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample received date">
-                                        </div> -->
+                                        </div>
 
                                     </div>
                                      <br>
