@@ -838,10 +838,10 @@ return $rResult;
                                      $recency['facilityId'] = (isset($recency['facilityId']) && !empty($recency['facilityId'])) ? base64_encode($recency['facilityId']) : null;
                                    }
 
-                                    if($recency['otherDistrict']!=''){
-                                    $recency['location_two'] = $this->checkDistrictData($recency);
+                                    if(isset($recency['otherDistrict']) && $recency['otherDistrict']!=''){
+                                        $recency['location_two'] = $this->checkDistrictData($recency);
                                     }
-                                    if($recency['otherCity']!=''){
+                                    if(isset($recency['otherCity']) && $recency['otherCity']!=''){
                                         $recency['location_three'] = $this->checkCityData($recency);
                                     }
 
