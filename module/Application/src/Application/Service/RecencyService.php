@@ -1134,5 +1134,11 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyAllDataCount($params);
     }
+    
+    public function getFinalOutcomeChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchFinalOutcomeChart($params);
+    }
 }
 

@@ -2241,6 +2241,41 @@ return $rResult;
               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
               return $rResult;
           }
+
+          
+          public function fetchFinalOutcomeChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+              ->columns(
+               array(
+               "monthyear" => new Expression("DATE_FORMAT(hiv_recency_date, '%b %y')"),
+               "ritaRecent" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'RITA Recent') THEN 1 ELSE 0 END))"),
+               "longTerm" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'Long Term') THEN 1 ELSE 0 END))"),
+               "inconclusive" => new Expression("SUM(CASE WHEN (r.final_outcome = 'Inconclusive') THEN 1 ELSE 0 END)"),
+               )
+                    )
+               ->group(array(new Expression('YEAR(hiv_recency_date)'),new Expression('MONTH(hiv_recency_date)')));
+           
+              $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);
+              $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+              $j=0;
+                foreach($rResult as $sRow){
+                    if($sRow["monthyear"] == null) continue;
+                    $result['finalOutCome']['RITA Recent'][$j] = (isset($sRow['ritaRecent']) && $sRow['ritaRecent'] != NULL) ? $sRow['ritaRecent'] : 0;
+                    $result['finalOutCome']['Long Term'][$j] = (isset($sRow['longTerm']) && $sRow['longTerm'] != NULL) ? $sRow['longTerm'] : 0;
+                    $result['finalOutCome']['Inconclusive'][$j] = (isset($sRow['inconclusive']) && $sRow['inconclusive'] != NULL) ? $sRow['inconclusive'] : 0;
+
+                    $result['date'][$j] = $sRow["monthyear"];
+                    $j++;
+                }
+              
+              return $result;
+
+          }
   
      }
 

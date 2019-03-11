@@ -1,0 +1,62 @@
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Final Outcomes'
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        categories: [
+            <?php  foreach($result['date'] as $res){?>
+                    '<?php echo $res; ?>',
+               <?php } ?>
+        ],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Final Outcomes'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [
+        <?php
+           if(isset($result['finalOutCome']) && count($result['finalOutCome']) >0){
+              foreach($result['finalOutCome'] as $key=>$condition){
+              ?>
+        {
+        name: '<?php echo $key;?>',
+        data: [<?php
+                  foreach($condition as $count){
+                    echo $count.",";
+                  }
+              ?>]
+
+    }, 
+    <?php
+              }
+           }
+            ?>]
+
+
+});
+</script>
