@@ -1015,5 +1015,119 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchAllRecencyResult($params);
     }
+
+    
+    public function fetchExportRecencyData($params)
+    {
+
+        try {
+            $common = new \Application\Service\CommonService();
+            $queryContainer = new Container('query');
+            $excel = new PHPExcel();
+            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
+            $cacheSettings = array('memoryCacheSize' => '80MB');
+            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $output = array();
+            $sheet = $excel->getActiveSheet();
+            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $sql = new Sql($dbAdapter);
+
+            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportRecencyDataResultDataQuery);
+            $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+            if (count($sResult) > 0) {
+                foreach ($sResult as $aRow) {
+                    $row = array();
+                    $row[] = $aRow['facility_name'];
+                         $row[] = $aRow['testing_facility_name'];
+                         $row[] = $aRow['totalSamples'];
+                         $row[] = $aRow['samplesReceived'];
+                         $row[] = $aRow['samplesRejected'];
+                         $row[] = $aRow['samplesTestedRecency'];
+                         $row[] = $aRow['samplesTestedViralLoad'];
+                         $row[] = $aRow['samplesFinalOutcome'];
+                    $output[] = $row;
+                }
+            }
+
+            $styleArray = array(
+                'font' => array(
+                    'bold' => true,
+                    'size' => 12,
+                ),
+                'alignment' => array(
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+
+            $borderStyle = array(
+                'alignment' => array(
+                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+
+            $sheet->setCellValue('A1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Testing Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('No.of Samples Registered', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('No.of Samples Received at Hub', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('No.of Samples Rejected', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('No.of Samples Tested With Recency', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('No.of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('No.of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            
+            //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
+
+            $sheet->getStyle('A1')->applyFromArray($styleArray);
+            $sheet->getStyle('B1')->applyFromArray($styleArray);
+            $sheet->getStyle('C1')->applyFromArray($styleArray);
+            $sheet->getStyle('D1')->applyFromArray($styleArray);
+            $sheet->getStyle('E1')->applyFromArray($styleArray);
+            $sheet->getStyle('F1')->applyFromArray($styleArray);
+            $sheet->getStyle('G1')->applyFromArray($styleArray);
+            $sheet->getStyle('H1')->applyFromArray($styleArray);
+          
+
+            foreach ($output as $rowNo => $rowData) {
+                $colNo = 0;
+                foreach ($rowData as $field => $value) {
+                    if (!isset($value)) {
+                        $value = "";
+                    }
+                    if (is_numeric($value)) {
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    } else {
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    }
+                    $rRowCount = $rowNo + 2;
+                    $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->getColumn();
+                    $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+                    $sheet->getDefaultRowDimension()->setRowHeight(18);
+                    $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
+                    $sheet->getStyleByColumnAndRow($colNo, $rowNo + 5)->getAlignment()->setWrapText(true);
+                    $colNo++;
+                }
+            }
+
+            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+            $filename = 'Recency-Data-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            return $filename;
+        } catch (Exception $exc) {
+            return "";
+            error_log("RECENCY-DATA-REPORT-EXCEL--" . $exc->getMessage());
+            error_log($exc->getTraceAsString());
+        }
+    }
 }
 

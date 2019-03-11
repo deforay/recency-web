@@ -198,7 +198,6 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] =  $common->humanDateFormat($aRow['sample_collection_date']);
                          $row[] =  $common->humanDateFormat($aRow['sample_receipt_date']);
                          $row[] = str_replace("_"," ",ucwords($aRow['received_specimen_type']));
-                         $row[] =  $common->humanDateFormat($aRow['sample_received_date']);
                          $row[] = $aRow['facility_name'];
                          $row[] = $aRow['testing_facility_name'];
                          $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
@@ -442,7 +441,6 @@ class RecencyTable extends AbstractTableGateway {
                               'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate']!='')?$common->dbDateFormat($params['sampleCollectionDate']):NULL,
                               'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
                               'received_specimen_type' => $params['receivedSpecimenType'],
-                              'sample_received_date' => $params['sampleReceivedDate'],
                               'unique_id'=>$this->randomizer(10),
                          );
                             if($params['vlLoadResult']!=''){
@@ -627,7 +625,6 @@ return $rResult;
                               'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate']!='')?$common->dbDateFormat($params['sampleCollectionDate']):NULL,
                               'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
                               'received_specimen_type' => $params['receivedSpecimenType'],
-                              'sample_received_date' => $params['sampleReceivedDate'],
                          );
                          if($params['vlLoadResult']!=''){
                             $data['vl_result'] = $params['vlLoadResult'];
@@ -2058,7 +2055,7 @@ return $rResult;
                          array(
                          "totalSamples" => new Expression('COUNT(*)'),
                          "samplesReceived" => new Expression("SUM(CASE 
-                                                               WHEN (((r.sample_received_date is NOT NULL) )) THEN 1
+                                                               WHEN (((r.sample_receipt_date is NOT NULL) )) THEN 1
                                                                ELSE 0
                                                                END)"),
                          "samplesRejected" => new Expression("SUM(CASE 
@@ -2128,7 +2125,7 @@ return $rResult;
                          $sQuery->limit($sLimit);
                          $sQuery->offset($sOffset);
                     }
-                    $queryContainer->exportRecentResultDataQuery = $sQuery;
+                    $queryContainer->exportRecencyDataResultDataQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                      //echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);

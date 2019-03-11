@@ -19,7 +19,7 @@ $formFields = array('Sample Id','Patient Id','Facility Name','Province','Distric
 ,'Dob','Age','Gender','Pregnancy Status','Marital Status','Education Level',
 'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments',
 'Recency Test not performed', 'Viral Load Test Date', 'Viral Load Result', 'Testing Facility','Sample Collection Date from the Client',
-'Sample Receipt Date at the Recency Testing Site','Received Specimen Type','Sample Received Date');
+'Sample Receipt Date at the Recency Testing Site','Received Specimen Type');
 $allFileds = json_encode($formFields);
 
 $resultArr2 = array();
@@ -34,7 +34,7 @@ $formFields2 = array('Sample Id','Patient Id','Facility Name','Province','Distri
 ,'Dob','Age','Gender','Pregnancy Status','Marital Status','Education Level',
 'Risk Population','Residence','Current Sexual Partner','Experience Violence Last 12 Month','Comments','Recency Test not performed', 
 'Viral Load Test Date', 'Viral Load Result', 'Testing Facility','Sample Collection Date from the Client',
-'Sample Receipt Date at the Recency Testing Site','Received Specimen Type','Sample Received Date');
+'Sample Receipt Date at the Recency Testing Site','Received Specimen Type');
 $allFileds2 = json_encode($formFields2);
 ?>
 <style>
@@ -152,7 +152,6 @@ $allFileds2 = json_encode($formFields2);
                                     <option value="Sample Collection Date from the Client" data-index='33' <?php echo(in_array("Sample Collection Date from the Client",$resultArr2)?"selected='selected'":""); ?>>Sample Collection Date from the Client</option>
                                     <option value="Sample Receipt Date at the Recency Testing Site" data-index='34' <?php echo(in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"selected='selected'":""); ?>>Sample Receipt Date at the Recency Testing Site</option>
                                     <option value="Received Specimen Type" data-index='35' <?php echo(in_array("Received Specimen Type",$resultArr2)?"selected='selected'":""); ?>>Received Specimen Type</option>
-                                    <option value="Sample Received Date" data-index='36' <?php echo(in_array("Sample Received Date",$resultArr2)?"selected='selected'":""); ?>>Sample Received Date</option>
                                 </select>
                             </div>
 
@@ -214,7 +213,6 @@ $allFileds2 = json_encode($formFields2);
                                 <option value="Sample Collection Date from the Client" data-index='33' <?php echo(in_array("Sample Collection Date from the Client",$resultArr2)?"selected='selected'":""); ?>>Sample Collection Date from the Client</option>
                                 <option value="Sample Receipt Date at the Recency Testing Site" data-index='34' <?php echo(in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"selected='selected'":""); ?>>Sample Receipt Date at the Recency Testing Site</option>
                                 <option value="Received Specimen Type" data-index='35' <?php echo(in_array("Received Specimen Type",$resultArr2)?"selected='selected'":""); ?>>Received Specimen Type</option>
-                                <option value="Sample Received Date" data-index='36' <?php echo(in_array("Sample Received Date",$resultArr2)?"selected='selected'":""); ?>>Sample Received Date</option>
                                 
                             </select>
                         </div>
