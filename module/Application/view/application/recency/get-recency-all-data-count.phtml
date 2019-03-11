@@ -1,0 +1,17 @@
+<?php //echo $result;
+
+//{"sampleReg":$result[0]['totalSamples']}
+// foreach ($result as $aRow) {
+
+//     $sample = $aRow['totalSamples'];
+// }
+//echo data :{sampleReg:$result[0]['totalSamples']};
+
+$json_obj['totalSamples'] = $result[0]['totalSamples'];
+$json_obj['samplesTestedRecency'] = (isset($result[0]['samplesTestedRecency']) && $result[0]['samplesTestedRecency']!='')?$result[0]['samplesTestedRecency']:0;
+$json_obj['samplesTestedViralLoad'] = (isset($result[0]['samplesTestedViralLoad']) && $result[0]['samplesTestedViralLoad']!='')?$result[0]['samplesTestedViralLoad']:0;
+$json_obj['samplesFinalOutcome'] = (isset($result[0]['samplesFinalOutcome']) && $result[0]['samplesFinalOutcome']!='')?$result[0]['samplesFinalOutcome']:0;
+
+
+ echo json_encode($json_obj); 
+?>

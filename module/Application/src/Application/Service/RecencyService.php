@@ -1019,7 +1019,6 @@ class RecencyService
     
     public function fetchExportRecencyData($params)
     {
-
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
@@ -1034,7 +1033,6 @@ class RecencyService
 
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportRecencyDataResultDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
                     $row = array();
@@ -1128,6 +1126,13 @@ class RecencyService
             error_log("RECENCY-DATA-REPORT-EXCEL--" . $exc->getMessage());
             error_log($exc->getTraceAsString());
         }
+    }
+
+    
+    public function getRecencyAllDataCount($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecencyAllDataCount($params);
     }
 }
 

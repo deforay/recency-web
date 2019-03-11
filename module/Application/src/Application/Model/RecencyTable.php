@@ -2176,6 +2176,72 @@ return $rResult;
                     }
                     return $output;
           }
+
+          
+          public function fetchRecencyAllDataCount($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+              ->columns(
+                   array(
+                   "totalSamples" => new Expression('COUNT(*)'),
+                   "samplesTestedRecency" => new Expression("SUM(CASE 
+                                                           WHEN (((r.recency_test_performed is NOT NULL) )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
+                   "samplesTestedViralLoad" => new Expression("SUM(CASE 
+                                                           WHEN (((r.vl_test_date is NOT NULL) )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
+                   "samplesFinalOutcome" => new Expression("SUM(CASE 
+                                                           WHEN (((r.final_outcome is NOT NULL) )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
+                                                                                                   
+                   )
+                   )
+              ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
+              ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+              ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
+              ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
+              ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left');
+
+              if($parameters['fName']!=''){
+               $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+           }
+           if($parameters['testingFacility']!=''){
+               $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+           }
+           if($parameters['locationOne']!=''){
+               $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+               if($parameters['locationTwo']!=''){
+                     $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+               }
+               if($parameters['locationThree']!=''){
+                     $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+               }
+         }
+               if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                    $s_c_date = explode("to", $_POST['sampleTestedDates']);
+                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                    }
+                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                    }
+               }
+
+               if($parameters['sampleTestedDates']!=''){
+                    $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+               }
+               
+              $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+              $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+              return $rResult;
+          }
+  
      }
 
 

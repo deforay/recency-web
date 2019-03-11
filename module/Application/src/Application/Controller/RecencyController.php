@@ -159,4 +159,20 @@ class RecencyController extends AbstractActionController
             return $viewModel;
         }
     }
+  
+
+    public function getRecencyAllDataCountAction()
+    {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getRecencyAllDataCount($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+    }
 }
