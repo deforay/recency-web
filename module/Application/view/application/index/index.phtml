@@ -18,14 +18,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
     </div>
 </div>
 <div class="content">
-    <div class="block block-rounded block-bordered">
-        
-        <div class="block-content block-content-full">
-        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-        </div>
-        </div>
         <div class="block block-rounded block-bordered">
-        
         <div class="block-content block-content-full">
         <div class="form-group row">
                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Tested Date</label>
@@ -68,14 +61,19 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                     
                     <div class="row items-push">
                         <div class="col-lg-7 ">
-                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();"><i class="fa fa-fw fa-check"></i> Search</a>
+                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
                             
                          </div>
                     </div>
                     </div>
+                    </div>
+                    </div>
+                   
                     <h2 class="content-heading">
                         <i class="fa fa-angle-right text-muted mr-1"></i> Quick Overview
                     </h2>
+                    <div class="block block-rounded block-bordered">
+                    <div class="block-content block-content-full">
                     <div style="margin-top: 27px;margin-bottom: 10px;" class="row row-deck __web-inspector-hide-shortcut__">
                         <div class="col-sm-6 col-xl-3 js-appear-enabled animated fadeIn" data-toggle="appear">
                             <a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
@@ -126,11 +124,24 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                             </a>
                         </div>
                     </div>
+                    </div>
+                    </div>
+                    <h2 class="content-heading">
+                        <i class="fa fa-angle-right text-muted mr-1"></i> FInal Outcome Chart
+                    </h2>
+                     <div class="block block-rounded block-bordered">
+                    <div class="block-content block-content-full">
+
+                    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                    </div>                
+                         
                 <h2 class="content-heading ">
                         <i class="fa fa-angle-right text-muted mr-1"></i> Recency Results
                         <a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                     </h2>
-                    
+                    <div class="block block-rounded block-bordered">
+                    <div class="block-content block-content-full">     
                      <table id="facilityDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
                          <thead>
                               <tr>
@@ -267,11 +278,9 @@ function(start, end) {
      }
      function getFacilityListByLocation(globalName)
      {
-        $.blockUI();
         $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),globalName:globalName},
         function(data) {
             $("#facilityId").html('<option value="">-- Select --</option>'+data);
-            $.unblockUI();
         });
      }
 
@@ -291,7 +300,6 @@ function(start, end) {
      }
 
   function getRecencyAllDataCount() {
-       $.blockUI();
          $.post("<?php echo $this->url('recency',array('action'=>'get-recency-all-data-count')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
              function(data){
                 var obj = JSON.parse(data);
@@ -300,19 +308,15 @@ function(start, end) {
                 $("#samplesTestedViralLoad").html(obj.samplesTestedViralLoad);
                 $("#samplesFinalOutcome").html(obj.samplesFinalOutcome);
          });
-          $.unblockUI();
   }
 
     function getFinalOutcomeChart() {
-       $.blockUI();
-         $.post("<?php echo $this->url('recency',array('action'=>'get-final-outcome-chart')); ?>",
+     
+         $.post("<?php echo $this->url('recency',array('action'=>'get-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
              function(data){
                 $("#container").html(data);
          });
-          $.unblockUI();
   }
-
-
 
 
 </script>

@@ -1,6 +1,9 @@
-
+<?php if(count($result)>0){ ?>
 <script>
 Highcharts.chart('container', {
+    credits: {
+            enabled: false
+        },
     chart: {
         type: 'column'
     },
@@ -60,3 +63,6 @@ Highcharts.chart('container', {
 
 });
 </script>
+<?php }else{
+    echo "<h2 style='text-align:center;'>No data available</h2>";
+} ?>
