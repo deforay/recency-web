@@ -2065,7 +2065,7 @@ return $rResult;
                                                                  ELSE 0
                                                                  END)"),
                          "samplesTestedRecency" => new Expression("SUM(CASE 
-                                                                 WHEN (((r.recency_test_performed is NOT NULL) )) THEN 1
+                                                                 WHEN (((r.term_outcome='Assay Recent') )) THEN 1
                                                                  ELSE 0
                                                                  END)"),
                          "samplesTestedViralLoad" => new Expression("SUM(CASE 
@@ -2198,7 +2198,7 @@ return $rResult;
                    array(
                    "totalSamples" => new Expression('COUNT(*)'),
                    "samplesTestedRecency" => new Expression("SUM(CASE 
-                                                           WHEN (((r.recency_test_performed is NOT NULL) )) THEN 1
+                                                           WHEN (((r.term_outcome='Assay Recent') )) THEN 1
                                                            ELSE 0
                                                            END)"),
                    "samplesTestedViralLoad" => new Expression("SUM(CASE 
