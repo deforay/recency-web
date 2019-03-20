@@ -35,8 +35,8 @@ class MYPDF extends TCPDF {
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->setHeading('MINISTERE DE LA SANTE','MINISTRY OF HEALTH',$result['testFacilityName'],'RESULTATS TESTE RECENCY');
 // set document information
-$pdf->SetCreator('Recency');
-//$pdf->SetTitle('Recency');
+$pdf->SetCreator('HIV Recency Testing');
+$pdf->SetTitle('HIV Recency Testing');
 //$pdf->SetSubject('TCPDF Tutorial');
 //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
@@ -92,7 +92,7 @@ $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold
 $html .='</tr>';
 $html .='<tr>';
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['sample_id'].'</td>';
-$html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['sample_collection_date']).'</td>';
 $html .='</tr>';
 $html .='<tr>';
 $html .='<td colspan="3" style="line-height:10px;"></td>';
@@ -126,15 +126,15 @@ $html .='<tr>';
 $html .='<td colspan="3" style="line-height:10px;"></td>';
 $html .='</tr>';
 
-$html .='<tr>';
-$html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">CLINICAN NAME</td>';
-$html .='</tr>';
-$html .='<tr>';
-$html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-$html .='</tr>';
-$html .='<tr>';
-$html .='<td colspan="3" style="line-height:10px;"></td>';
-$html .='</tr>';
+// $html .='<tr>';
+// $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">CLINICAN NAME</td>';
+// $html .='</tr>';
+// $html .='<tr>';
+// $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+// $html .='</tr>';
+// $html .='<tr>';
+// $html .='<td colspan="3" style="line-height:10px;"></td>';
+// $html .='</tr>';
      
 $html .='<tr>';
 $html .='<td colspan="3" style="line-height:2px;border-bottom:2px solid #d3d3d3;"></td>';
@@ -148,23 +148,34 @@ $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:
 $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE TEST DATE</td>';
 $html .='</tr>';
 $html .='<tr>';
-$html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['sample_receipt_date']).'</td>';
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['hiv_recency_date']).'</td>';
 $html .='</tr>';
 $html .='<tr>';
 $html .='<td colspan="3" style="line-height:10px;"></td>';
 $html .='</tr>';
 
+
+$sampleTypes = array('whole_blood' => 'Whole Blood', 'plasma' => 'Plasma');
+$receivedSpecimenType = '';
+if(isset($result['received_specimen_type'])){
+    $receivedSpecimenType = $sampleTypes[$result['received_specimen_type']];
+}
+
+
+
 $html .='<tr>';
 $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SPECIMEN TYPE</td>';
 $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ASSAY NAME</td>';
-$html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL PLATFORM(if VL performed)</td>';
+// $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL PLATFORM(if VL performed)</td>';
 $html .='</tr>';
 $html .='<tr>';
-$html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$receivedSpecimenType.'</td>';
 $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;"></td>';
-$html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+// $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
 $html .='</tr>';
+
+
 $html .='<tr>';
 $html .='<td colspan="3" style="line-height:10px;"></td>';
 $html .='</tr>';
@@ -192,9 +203,11 @@ $html .='<tr>';
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
 $html .='</tr>';
 
-$html .='<tr>';
-$html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VIRAL LOAD RESULT(copies/ml)**&nbsp;&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['vl_result'].'</span></td>';
-$html .='</tr>';
+if(isset($result['vl_result']) && !empty($result['vl_result'])){
+    $html .='<tr>';
+    $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VIRAL LOAD RESULT(copies/ml)**&nbsp;&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['vl_result'].'</span></td>';
+    $html .='</tr>';
+}
 
 $html .='<tr>';
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
