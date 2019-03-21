@@ -1911,8 +1911,8 @@ return $rResult;
             $queryContainer = new Container('query');
             $general = new CommonService();
 
-            if(isset($params['testDate']) && trim($params['testDate'])!= ''){
-                $s_c_date = explode("to", $_POST['testDate']);
+            if(isset($params['samplesCollectionDate']) && trim($params['samplesCollectionDate'])!= ''){
+                $s_c_date = explode("to", $_POST['samplesCollectionDate']);
                 if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
                      $start_date = $general->dbDateFormat(trim($s_c_date[0]));
                 }
@@ -1924,6 +1924,15 @@ return $rResult;
             $rQuery = $sql->select()->from(array('r'=>'recency'))
                                 ->columns(
                                           array(
+                                            "Samples Received" => new Expression("COUNT(*)"),
+                                            "Samples Collected" => new Expression("SUM(CASE 
+                                                                                WHEN (((r.sample_collection_date is NOT NULL AND r.sample_collection_date !=''))) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
+                                            "Samples Pending to be Tested" => new Expression("SUM(CASE 
+                                                                                WHEN (((r.hiv_recency_date is NULL OR r.hiv_recency_date =''))) THEN 1
+                                                                                ELSE 0
+                                                                                END)"),
                                             "Samples Tested" => new Expression("SUM(CASE 
                                                                                 WHEN (((r.hiv_recency_date is NOT NULL AND r.hiv_recency_date !=''))) THEN 1
                                                                                 ELSE 0
@@ -1940,11 +1949,11 @@ return $rResult;
                                                                                 WHEN ((term_outcome='Assay Negative' OR term_outcome='assay negative')) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
-                                            "Done" => new Expression("SUM(CASE 
+                                            "VL Done" => new Expression("SUM(CASE 
                                                                                 WHEN ((vl_result!='' AND vl_result is NOT NULL)) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
-                                            "Pending" => new Expression("SUM(CASE 
+                                            "VL Pending" => new Expression("SUM(CASE 
                                                                                 WHEN ((vl_result='' OR vl_result is NULL)) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
@@ -1963,14 +1972,14 @@ return $rResult;
                                           )
                                         );
                                         
-                                        if($params['testDate']!=''){
-                                            $rQuery = $rQuery->where(array("r.hiv_recency_date >='" . $start_date ."'", "r.hiv_recency_date <='" . $end_date."'"));
+                                        if($params['samplesCollectionDate']!=''){
+                                            $rQuery = $rQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
                                         }
                                         if($params['testingFacility']!='')
                                         {
                                             $rQuery = $rQuery->where(array('r.testing_facility_id'=>$params['testingFacility']));
                                         }
-            $queryContainer->exportWeeklyDataQuery = $rQuery;
+           $queryContainer->exportWeeklyDataQuery = $rQuery;
            $rQueryStr = $sql->getSqlStringForSqlObject($rQuery);
            $fResult = $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
            return $fResult;
