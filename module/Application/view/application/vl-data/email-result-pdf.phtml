@@ -28,7 +28,7 @@ public function Header() {
     $this->SetFont('helvetica', 'B', 7);
     $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
     $this->SetFont('helvetica', '', 18);
-    $this->writeHTMLCell(0,0,10,18,'VIRAL LOAD TEST RESULT', 0, 0, 0, true, 'C', true);
+    $this->writeHTMLCell(0,0,10,18,'HIV RECENCY RESULTS', 0, 0, 0, true, 'C', true);
     $this->writeHTMLCell(0,0,15,36,'<hr>', 0, 0, 0, true, 'C', true);
 }
  
@@ -163,7 +163,7 @@ $pdf->Output($filePath, "F");
                             <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Send</button>
                         </div>
                         <div class="col-lg-7 offset-lg-4">
-                            <p style="margin-top:10px;"><a class="send-mail" href="/vl-data/download-result-pdf/<?php echo $filename; ?>" style="text-decoration:none;">Click here to download the result only pdf</a></p>
+                            <p style="margin-top:10px;"><a class="send-mail" href="/vl-data/download-result-pdf/<?php echo $filename; ?>" style="text-decoration:none;">Click here to download the PDF</a></p>
                         </div>
                     </div>
                 </form>

@@ -60,34 +60,34 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
 
                     <div class="row items-push">
                         <div class="col-lg-7 offset-lg-4">
-                            <a href="javascript:void(0);" class="btn btn-danger">Reset</a>&nbsp;
+                            <a href="javascript:document.location.href=document.location" class="btn btn-danger">Reset</a>&nbsp;
                             <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
                         </div>
                     </div>
                     <form name="emailInformation" id="emailInformation"  class="mb-5" action="<?php echo $this->url('vl-data', array('action' => 'email-result-pdf')); ?>" method="post">
 
-<div class="form-group row">
+    <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Subject<span class="mandatory">*</span></label>
                               <div class="col-sm-9">
-                              <input type="text" id="subject" name="subject" class="form-control isRequired" placeholder="Subject" title="Please enter subject" value="Viral Load Test Results"/>
+                              <input type="text" id="subject" name="subject" class="form-control isRequired" placeholder="Subject" title="Please enter subject" value="Recency Test Results"/>
                               </div>
                          </div>
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Message<span class="mandatory">*</span></label>
                               <div class="col-sm-9">
-                              <textarea id="message" name="message" class="form-control isRequired" row="6" placeholder="Message" title="Please enter message"></textarea>
+                              <textarea id="message" name="message" class="form-control isRequired" row="6" placeholder="Message" title="Please enter message">Please find the Recency Test Results attached.</textarea>
                               </div>
                          </div>
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">To(E-mail ids)<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">To Email ID<span class="mandatory">*</span></label>
                               <div class="col-sm-9">
-                              <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="To Email" title="Please enter email-ids" />
+                              <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="person@example.com" title="Please enter the To Email ID" />
                               </div>
                          </div>
 
 <div id="sampleList">
 <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Sample ID</label>
+                              <label class="col-sm-2 col-form-label" for="">Select Sample IDs to Send</label>
                               <div class="col-sm-4">
                                    <select  id="search" class="form-control" size="8" multiple="multiple">
                                        
@@ -141,7 +141,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
          } ?>
      });
 
-     duplicateName = true;
+
      function validateNow() {
           var selVal = [];
           $('#search_to option').each(function(i, selected){
@@ -150,14 +150,14 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
           $("#selectedSampleId").val(selVal);
 
           flag = deforayValidator.init({
-               formId: 'facilityInformation'
+               formId: 'emailInformation'
           });
           if (flag) {
-               if (duplicateName) {
+
                     $.blockUI();
 
                     document.getElementById('facilityInformation').submit();
-               }
+               
           }
      }
      function getLocationDeatils(globalName,nxtGlobalName)

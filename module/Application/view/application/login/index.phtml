@@ -70,9 +70,10 @@ $loginContainer = new Container('credo');
                                                     <img id="capDiv" style="width:120px;height:61px;" src="/captcha/<?php echo rand(); ?>" />
                                                 </div>
                                                 <div class="col-md-7">
-                                                <a id="captcha-reload" href="javascript:getCaptcha('capDiv');">Get a new image</a>
-											&nbsp;
+                                                
 											<input type="text" class="pull-right form-control isRequired" placeholder="Enter text image" id="challengeResponse" title="Please enter the text from the image." maxlength="5" />
+                                            &nbsp;<a id="captcha-reload" href="javascript:getCaptcha('capDiv');">Get a new image</a>
+											
                                                 </div>
                                             </div>
                                             

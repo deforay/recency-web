@@ -139,6 +139,7 @@ class CommonService {
      }
 
      public function humanDateFormat($date) {
+          $date = trim($date);
           if ($date == null || $date == "" || $date == "0000-00-00" || $date == "0000-00-00 00:00:00") {
                return "";
           } else {
@@ -202,14 +203,14 @@ class CommonService {
                          $id = $result['temp_id'];
                          $tempDb->updateTempMailStatus($id);
 
-                         $fromEmail = $result['from_mail'];
+                         $fromEmail = $globalDb->getGlobalValue('email_id');
                          if(trim($result['attachment'])!=''){
                             $options = new SmtpOptions(array(
                             'host' => $configResult["email"]["host"],
                             'port' => $configResult["email"]["config"]["port"],
                             'connection_class' => $configResult["email"]["config"]["auth"],
                             'connection_config' => array(
-                                'username' => $globalDb->getGlobalValue('email_id'),
+                                'username' => $fromEmail,
                                 'password' => $globalDb->getGlobalValue('email_password'),
                                 'ssl' => $configResult["email"]["config"]["ssl"],
                             ),
@@ -228,7 +229,7 @@ class CommonService {
                             $attachment = new MimePart(fopen($result['attachment'],'r'));
                             if($extension=='pdf'){
                                 $attachment->type = 'application/pdf';
-                                $attachment->filename = 'vl-result.pdf';
+                                $attachment->filename = 'hiv-recency-results-'.date('dmYhis').'.pdf';
                             }
                             $attachment->encoding    = Mime::ENCODING_BASE64;
                             $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;

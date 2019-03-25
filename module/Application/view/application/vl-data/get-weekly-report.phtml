@@ -4,17 +4,20 @@ if(isset($result[0]['Samples Tested']) && $result[0]['Samples Tested']!='')
     $termOutcome = 0;
     $vlResult = 0;
     $finalResult = 0;
+        $totalSamples = $result[0]['Samples Received'];
         $termOutcome = $result[0]['Assay Recent'] + $result[0]['Long Term'] + $result[0]['Assay Negative'];
-        $vlResult = $result[0]['Done'] + $result[0]['Pending'];
+        $vlResult = $result[0]['VL Done'] + $result[0]['VL Pending'];
         $finalResult = $result[0]['RITA Recent'] + $result[0]['Long Term Final'] + $result[0]['Inconclusive'];
         ?>
         <tr>
-            <td><?php echo $result[0]['Samples Tested'];?></td>
+            <td><?php echo $result[0]['Samples Received'];?></td>
+            <td><?php echo $result[0]['Samples Pending to be Tested'];?></td>
+            <td><?php echo $result[0]['Samples Tested'];?></td>            
             <td><?php echo $result[0]['Assay Recent'];?></td>
             <td><?php echo $result[0]['Long Term'];?></td>
             <td><?php echo $result[0]['Assay Negative'];?></td>
-            <td><?php echo $result[0]['Done'];?></td>
-            <td><?php echo $result[0]['Pending'];?></td>
+            <td><?php echo $result[0]['VL Done'];?></td>
+            <td><?php echo $result[0]['VL Pending'];?></td>
             <td><?php echo $result[0]['RITA Recent'];?></td>
             <td><?php echo $result[0]['Long Term Final'];?></td>
             <td><?php echo $result[0]['Inconclusive'];?></td>
@@ -22,14 +25,16 @@ if(isset($result[0]['Samples Tested']) && $result[0]['Samples Tested']!='')
         
     <tr>
         <td></td>
-        <td><?php echo ($result[0]['Assay Recent']!='' && $result[0]['Assay Recent']!=0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100):0;?> %</td>
-        <td><?php echo ($result[0]['Long Term']!='' && $result[0]['Long Term']!=0) ? round(($result[0]['Long Term'] / $termOutcome) * 100):0;?> %</td>
-        <td><?php echo ($result[0]['Assay Negative']!='' && $result[0]['Assay Negative']!=0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100):0;?> %</td>
-        <td><?php echo ($result[0]['Done']!='' && $result[0]['Done']!=0) ? round(($result[0]['Done'] / $vlResult) * 100):0;?> %</td>
-        <td><?php echo ($result[0]['Pending']!='' && $result[0]['Pending']!=0) ? round(($result[0]['Pending'] / $vlResult) * 100):0;?> %</td>
-        <td><?php echo ($result[0]['RITA Recent']!='' && $result[0]['RITA Recent']!=0)? round(($result[0]['RITA Recent'] / $finalResult) * 100):0;?> %</td>
-        <td><?php echo ($result[0]['Long Term Final']!='' && $result[0]['Long Term Final']!=0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100):0;?> %</td>
-        <td><?php echo ($result[0]['Inconclusive']!='' && $result[0]['Inconclusive']!=0)? round(($result[0]['Inconclusive'] / $finalResult) * 100):0;?> %</td>
+        <td><?php echo ($result[0]['Samples Pending to be Tested']!='' && $result[0]['Samples Pending to be Tested']!=0) ? round(($result[0]['Samples Pending to be Tested'] / $totalSamples) * 100,2).'%':0;?></td>
+        <td><?php echo ($result[0]['Samples Tested']!='' && $result[0]['Samples Tested']!=0) ? round(($result[0]['Samples Tested'] / $totalSamples) * 100,2).'%':0;?></td>
+        <td><?php echo ($result[0]['Assay Recent']!='' && $result[0]['Assay Recent']!=0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100,2).'%':0;?></td>
+        <td><?php echo ($result[0]['Long Term']!='' && $result[0]['Long Term']!=0) ? round(($result[0]['Long Term'] / $termOutcome) * 100,2).'%':0;?></td>
+        <td><?php echo ($result[0]['Assay Negative']!='' && $result[0]['Assay Negative']!=0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100,2).'%':0;?></td>
+        <td><?php echo ($result[0]['Done']!='' && $result[0]['Done']!=0) ? round(($result[0]['Done'] / $vlResult) * 100,2).'%':0;?></td>
+        <td><?php echo ($result[0]['Pending']!='' && $result[0]['Pending']!=0) ? round(($result[0]['Pending'] / $vlResult) * 100,2).'%':0;?></td>
+        <td><?php echo ($result[0]['RITA Recent']!='' && $result[0]['RITA Recent']!=0)? round(($result[0]['RITA Recent'] / $finalResult) * 100,2).'%':0;?></td>
+        <td><?php echo ($result[0]['Long Term Final']!='' && $result[0]['Long Term Final']!=0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100,2).'%':0;?></td>
+        <td><?php echo ($result[0]['Inconclusive']!='' && $result[0]['Inconclusive']!=0)? round(($result[0]['Inconclusive'] / $finalResult) * 100,2).'%':0;?></td>
     </tr>
     <?php
 }else{

@@ -6,7 +6,10 @@ $roleCode = $sessionLogin->roleCode;
 //$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center","bSortable":false}';
 ?>
 <style>
-
+.thCenter{
+    text-align:center;
+    vertical-align:middle;
+}
 </style>
 <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css'?>" rel="stylesheet">
 <div class="bg-body-light">
@@ -22,9 +25,9 @@ $roleCode = $sessionLogin->roleCode;
 
                <div class="block-content block-content-full">
                <div class="form-group row">
-               <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Tested Date</label>
+               <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Samples Collected Date</label>
                         <div class="col-sm-4">
-                        <input type="text" id="hivRecencyDate" name="hivRecencyDate" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;"/>
+                        <input type="text" id="samplesCollectionDate" name="samplesCollectionDate" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;"/>
                             </div>
 
                         <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
@@ -53,6 +56,8 @@ $roleCode = $sessionLogin->roleCode;
                     <table id="tatTable" class="table table-bordered table-striped table-vcenter">
                             <thead>
                               <tr>
+                                    <th rowspan="2" class="thCenter">Samples Received</th>
+                                    <th rowspan="2" class="thCenter">Samples Pending to be Tested</th>
                                     <th rowspan="2" class="thCenter">Samples Tested</th>
                                     <th colspan="3" class="thCenter" style="background-color:#9cc2e5;">Recency Testing Results(Asante)</th>
                                     <th colspan="2" class="thCenter" style="background-color:#ebed89;">Assay Recent VL Results </th>
@@ -85,10 +90,10 @@ $roleCode = $sessionLogin->roleCode;
           $(document).ready(function() {
             
 
-            $('#hivRecencyDate').daterangepicker({
+            $('#samplesCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 						separator: ' to ',
-            startDate: moment().subtract('days', 6),
+            startDate: moment().subtract('days', 30),
             endDate: moment(),
             maxDate: moment(),
             ranges: {
@@ -96,6 +101,8 @@ $roleCode = $sessionLogin->roleCode;
                 'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
                 'Last 7 Days': [moment().subtract('days', 6), moment()],
                 'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'Last 60 Days': [moment().subtract('days', 59), moment()],
+                'Last 180 Days': [moment().subtract('days', 179), moment()],
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
                 'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
                 }
@@ -114,9 +121,9 @@ $roleCode = $sessionLogin->roleCode;
 
         function getWeeklyData()
         {
-            var testDate = $("#hivRecencyDate").val();
+            var samplesCollectionDate = $("#samplesCollectionDate").val();
             $.blockUI();
-            $.post("<?php echo $this->url('vl-data',array('action'=>'get-weekly-report')); ?>",{testDate:testDate,testingFacility:$("#testingFacility").val()},
+            $.post("<?php echo $this->url('vl-data',array('action'=>'get-weekly-report')); ?>",{samplesCollectionDate:samplesCollectionDate,testingFacility:$("#testingFacility").val()},
                 function(data){
                     $("#weeklyData").html(data);
                     $.unblockUI();

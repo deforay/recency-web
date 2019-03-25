@@ -854,12 +854,15 @@ class RecencyService
             $termOutcome = 0;
             $vlResult = 0;
             $finalResult = 0;
-            if(isset($result[0]['Samples Tested']) && $result[0]['Samples Tested']!=''){
-                
+            //if(isset($result[0]['Samples Tested']) && $result[0]['Samples Tested']!=''){
+
+                    $totalSamples = $result[0]['Samples Pending to be Tested'] + $result[0]['Samples Tested'];
                     $termOutcome = $result[0]['Assay Recent'] + $result[0]['Long Term'] + $result[0]['Assay Negative'];
                     $vlResult = $result[0]['Done'] + $result[0]['Pending'];
                     $finalResult = $result[0]['RITA Recent'] + $result[0]['Long Term Final'] + $result[0]['Inconclusive'];
                     $row = array();
+                    $row[] = $result[0]['Samples Received'];
+                    $row[] = $result[0]['Samples Pending to be Tested'];
                     $row[] = $result[0]['Samples Tested'];
                     $row[] = $result[0]['Assay Recent'];
                     $row[] = $result[0]['Long Term'];
@@ -871,7 +874,7 @@ class RecencyService
                     $row[] = $result[0]['Inconclusive'];
                     $output[] = $row;
                 
-            }
+            //}
 
             $styleArray = array(
                 'font' => array(
@@ -900,19 +903,22 @@ class RecencyService
                 ),
             );
 
-             $sheet->mergeCells('A1:A2');
-             $sheet->mergeCells('B1:D1');
-             $sheet->mergeCells('E1:F1');
-             $sheet->mergeCells('G1:I1');
+            $sheet->mergeCells('A1:A2');
+            $sheet->mergeCells('B1:B2');
+            $sheet->mergeCells('C1:C2');
+            $sheet->mergeCells('D1:F1');
+            $sheet->mergeCells('G1:H1');
+            $sheet->mergeCells('I1:K1');
              
-                $this->cellColor('A1:A2', '367fa9',$excel);
-                $this->cellColor('B2:D2', '9cc2e5',$excel);
-                $this->cellColor('B1:D1', 'ebed89',$excel);
-                $this->cellColor('E1:F1', 'ebed89',$excel);
-                $this->cellColor('G1:I1', '11aa06',$excel);
-                $this->cellColor('G2:I2', '95b78d',$excel);
-                $this->cellColor('E2:F2', 'edda95',$excel);
-                $this->cellColor('B4:I4', 'dce5ed',$excel);
+            $this->cellColor('C1:C2', '367fa9',$excel);
+            
+            $this->cellColor('D1:F1', 'ebed89',$excel);
+            $this->cellColor('D2:F2', '9cc2e5',$excel);
+            $this->cellColor('G1:H1', 'ebed89',$excel);
+            $this->cellColor('G2:H2', '95b78d',$excel);
+            $this->cellColor('I1:K1', '11aa06',$excel);
+            //$this->cellColor('E2:F2', 'edda95',$excel);
+            $this->cellColor('I2:K2', 'dce5ed',$excel);
                 
                 // cellColor('A7:I7', 'F28A8C');
                 // cellColor('A17:I17', 'F28A8C');
@@ -920,18 +926,20 @@ class RecencyService
             
                 
 
-            $sheet->setCellValue('A1', html_entity_decode('Samples Tested', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Recency Testing Results(Asante)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('Assay Recent VL Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('Final Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B2', html_entity_decode('Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C2', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D2', html_entity_decode('Assay Negative', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E2', html_entity_decode('Done', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F2', html_entity_decode('Pending', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G2', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H2', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I2', html_entity_decode('Inconclusive', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Samples Received', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Samples Pending to be Tested', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Samples Tested', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('Recency Testing Results(Asante)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('Assay Recent VL Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('Final Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D2', html_entity_decode('Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('E2', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F2', html_entity_decode('Assay Negative', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G2', html_entity_decode('Done', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('H2', html_entity_decode('Pending', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('I2', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('J2', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('K2', html_entity_decode('Inconclusive', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
@@ -974,18 +982,21 @@ class RecencyService
                 }
             }
             if(isset($result[0]['Samples Tested']) && $result[0]['Samples Tested']!=''){
-                $sheet->setCellValue('B4', html_entity_decode(($result[0]['Assay Recent']!='' && $result[0]['Assay Recent']!=0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('C4', html_entity_decode(($result[0]['Long Term']!='' && $result[0]['Long Term']!=0) ? round(($result[0]['Long Term'] / $termOutcome) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('D4', html_entity_decode(($result[0]['Assay Negative']!='' && $result[0]['Assay Negative']!=0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('E4', html_entity_decode(($result[0]['Done']!='' && $result[0]['Done']!=0) ? round(($result[0]['Done'] / $vlResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('F4', html_entity_decode(($result[0]['Pending']!='' && $result[0]['Pending']!=0) ? round(($result[0]['Pending'] / $vlResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('G4', html_entity_decode(($result[0]['RITA Recent']!='' && $result[0]['RITA Recent']!=0)?round(($result[0]['RITA Recent'] / $finalResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('H4', html_entity_decode(($result[0]['Long Term Final']!='' && $result[0]['Long Term Final']!=0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('I4', html_entity_decode(($result[0]['Inconclusive']!='' && $result[0]['Inconclusive']!=0)? round(($result[0]['Inconclusive'] / $finalResult) * 100)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $totalSamples = $result[0]['Samples Received'];
+                $sheet->setCellValue('B4', html_entity_decode(($result[0]['Samples Pending to be Tested']!='' && $result[0]['Samples Pending to be Tested']!=0) ? round(($result[0]['Samples Pending to be Tested'] / $totalSamples) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('C4', html_entity_decode(($result[0]['Samples Tested']!='' && $result[0]['Samples Tested']!=0) ? round(($result[0]['Samples Tested'] / $totalSamples) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('D4', html_entity_decode(($result[0]['Assay Recent']!='' && $result[0]['Assay Recent']!=0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('E4', html_entity_decode(($result[0]['Long Term']!='' && $result[0]['Long Term']!=0) ? round(($result[0]['Long Term'] / $termOutcome) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('F4', html_entity_decode(($result[0]['Assay Negative']!='' && $result[0]['Assay Negative']!=0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('G4', html_entity_decode(($result[0]['Done']!='' && $result[0]['Done']!=0) ? round(($result[0]['Done'] / $vlResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('H4', html_entity_decode(($result[0]['Pending']!='' && $result[0]['Pending']!=0) ? round(($result[0]['Pending'] / $vlResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('I4', html_entity_decode(($result[0]['RITA Recent']!='' && $result[0]['RITA Recent']!=0)?round(($result[0]['RITA Recent'] / $finalResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('J4', html_entity_decode(($result[0]['Long Term Final']!='' && $result[0]['Long Term Final']!=0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('K4', html_entity_decode(($result[0]['Inconclusive']!='' && $result[0]['Inconclusive']!=0)? round(($result[0]['Inconclusive'] / $finalResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             }
 
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'Weekly-Report' . date('d-M-Y-H-i-s') . '.xls';
+            $filename = 'Weekly-Report-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             return $filename;
         } catch (Exception $exc) {
