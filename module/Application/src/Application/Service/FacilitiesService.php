@@ -92,6 +92,15 @@ class FacilitiesService {
         $facilityDb = $this->sm->get('FacilitiesTable');
         return $facilityDb->fetchFacilityByLocation($params);
     }
+
+    
+    public function getTestingFacilitiesTypeDetails()
+    {
+        $facilityDb = $this->sm->get('TestingFacilityTypeTable');
+        return $facilityDb->fetchTestingFacilitiesTypeDetails();
+    }
+
+    
 }
 
 ?>

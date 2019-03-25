@@ -21,6 +21,7 @@ use Application\Model\ProvinceTable;
 use Application\Model\DistrictTable;
 use Application\Model\CityTable;
 use Application\Model\QualityCheckTable;
+use Application\Model\TestingFacilityTypeTable;
 
 // Service
 
@@ -150,6 +151,12 @@ class Module{
                         $table = new TempMailTable($dbAdapter);
                         return $table;
                     },
+                    'TestingFacilityTypeTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new TestingFacilityTypeTable($dbAdapter);
+                        return $table;
+                    },
+                    
 
 
                     //service

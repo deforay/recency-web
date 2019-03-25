@@ -316,6 +316,7 @@ class RecencyTable extends AbstractTableGateway {
                     $logincontainer = new Container('credo');
                     $facilityDb = new FacilitiesTable($this->adapter);
                     $districtDb = new DistrictTable($this->adapter);
+                    $TestingFacilityTypeDb = new TestingFacilityTypeTable($this->adapter);
                     $cityDb = new CityTable($this->adapter);
                     // $facilityTypeDb = new FacilitiesTypeTable($this->adapter);
                     $riskPopulationDb = new RiskPopulationsTable($this->adapter);
@@ -378,6 +379,27 @@ class RecencyTable extends AbstractTableGateway {
                                         }
                             }
                        }
+
+                       if($params['testingModality']=='other'){
+
+                         $testftResult = $TestingFacilityTypeDb->checkTestingFacilityTypeName(strtolower($params['othertestingmodality']));
+                         if(isset($ftResult['testing_facility_type_name']) && $ftResult['testing_facility_type_name']!=''){
+                          $params['testingModality'] = $ftResult['testing_facility_type_id'];
+                         }
+                         else{
+                         // echo "else2";die;
+                         $testFacilityTypeData = array(
+                         'testing_facility_type_name'=>$params['othertestingmodality'],
+                         'testing_facility_type_status'=>'active');
+                         $TestingFacilityTypeDb->insert($testFacilityTypeData);
+                         if($TestingFacilityTypeDb->lastInsertValue>0){
+                              $params['testingModality'] = $TestingFacilityTypeDb->lastInsertValue;
+                          }else{
+                              return false;
+                          }
+                         }
+             }
+                       
                         //  check oher pouplation
                          if($params['riskPopulation']=='Other'){
                               $rpResult = $riskPopulationDb->checkExistRiskPopulation($params['otherRiskPopulation']);
@@ -444,6 +466,8 @@ class RecencyTable extends AbstractTableGateway {
                               'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
                               'received_specimen_type' => $params['receivedSpecimenType'],
                               'unique_id'=>$this->randomizer(10),
+                              'testing_facility_type' => $params['testingModality'],
+                              
                          );
                             if($params['vlLoadResult']!=''){
                                 $data['vl_result'] = $params['vlLoadResult'];
@@ -866,6 +890,30 @@ return $rResult;
                                         $recency['testingFacility'] = (isset($recency['testingFacility']) && !empty($recency['testingFacility'])) ? ($recency['testingFacility']) : null;
                                     }
 
+                                    if($recency['othertestingmodality']!=''){
+
+                                        $testftResult = $TestingFacilityTypeDb->checkTestingFacilityTypeName(strtolower($params['othertestingmodality']));
+                                        if(isset($ftResult['testing_facility_type_name']) && $ftResult['testing_facility_type_name']!=''){
+                                         $recency['testingModality'] = $ftResult['testing_facility_type_id'];
+                                        }
+                                        else{
+                                        // echo "else2";die;
+                                        $testFacilityTypeData = array(
+                                        'testing_facility_type_name'=>$recency['othertestingmodality'],
+                                        'testing_facility_type_status'=>'active');
+                                        $TestingFacilityTypeDb->insert($testFacilityTypeData);
+                                        if($TestingFacilityTypeDb->lastInsertValue>0){
+                                             $recency['testingModality'] = $TestingFacilityTypeDb->lastInsertValue;
+                                         }else{
+                                             return false;
+                                         }
+                                        }
+                                        }else{
+                                             $recency['testingModality'] = (isset($recency['testingModality']) && !empty($recency['testingModality'])) ? ($recency['testingModality']) : null;
+                                         }
+
+                                    
+
                                    //check oher pouplation
                                    if($recency['otherriskPopulation']!=''){
                                         $rpResult = $riskPopulationDb->checkExistRiskPopulation($recency['otherriskPopulation']);
@@ -931,7 +979,7 @@ return $rResult;
                                         //'kit_name' => $recency['testKitName'],
                                         'tester_name' => $recency['testerName'],
                                         'unique_id'=>isset($recency['unique_id']) ? $recency['unique_id']: $this->randomizer(10),
-
+                                        'testing_facility_type' => $recency['testingModality'],
                                         //'vl_test_date'=>$recency['vlTestDate'],
 
                                        // 'vl_result'=>$recency['vlLoadResult'],
@@ -1037,7 +1085,10 @@ return $rResult;
                                    'tester_name' => $params['testerName'],
                                    'unique_id'=>$this->randomizer(10),
                                    'vl_result'=>$params['vlLoadResult'],
-
+                                   'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate']!='')?$common->dbDateFormat($params['sampleCollectionDate']):NULL,
+                                   'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
+                                   'received_specimen_type' => $params['receivedSpecimenType'],
+                                   'testing_facility_type' => $params['testingModality'],
                               );
 
                               if(isset($params['vlTestDate']) && trim($params['vlTestDate'])!=""){

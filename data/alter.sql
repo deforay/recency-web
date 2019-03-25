@@ -206,3 +206,21 @@ ALTER TABLE `recency` ADD `mail_sent_status` VARCHAR(255) NULL DEFAULT NULL AFTE
 UPDATE `global_config` SET `display_name` = 'Display Fields' WHERE `global_config`.`config_id` = 7;
 --sathish 07 Mar 2019
  ALTER TABLE `recency` ADD `sample_collection_date` DATE NULL AFTER `facility_id`, ADD `sample_receipt_date` DATE NULL AFTER `sample_collection_date`, ADD `received_specimen_type` VARCHAR(255) NULL AFTER `sample_receipt_date`;
+--sathish 25 Mar 2019
+ ALTER TABLE `recency` ADD `testing_facility_type` VARCHAR(255) NULL DEFAULT NULL AFTER `received_specimen_type`;
+ALTER TABLE `recency` CHANGE `testing_facility_type` `testing_facility_type` INT(11) NULL DEFAULT NULL;
+CREATE TABLE `testing_facility_type` (
+  `testing_facility_type_id` int(11) NOT NULL,
+  `testing_facility_type_name` varchar(255) DEFAULT NULL,
+  `testing_facility_type_status` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `testing_facility_type` (`testing_facility_type_id`, `testing_facility_type_name`, `testing_facility_type_status`) VALUES
+(1, 'VCT', 'active'),
+(2, 'OPD', 'active'),
+(3, 'PMTCT/ ANC', 'active'),
+(4, 'STI Clinic', 'active'),
+(5, 'Index', 'active'),
+(6, 'Mobile', 'active'),
+(7, 'PITC', 'active'),
+(8, 'VMMC', 'active');
