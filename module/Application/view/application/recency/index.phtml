@@ -116,7 +116,13 @@ $formFields = array('sample_id','patient_id','facility_name','facility_type_name
                     
 			<div class="row" style="background:#eee;padding: 15px;border-radius:20px;font-size:13px;">
             <div class="col-sm-12 " style=""><a href="javascript:void(0);" style="float:right;font-size:20px;color:red;font-weight:bold" onclick="closeDiv()" title="Close">X</a></div>
-					<?php $i = 0; ?>
+					
+                    
+           <?php foreach($formFields as $roe){ ?>
+                           
+                           <?php } ?>
+                    
+                    <?php $i = 0; ?>
 				    <div class="col-sm-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="sample_id" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Sample Id</label>
 				    </div>
@@ -386,6 +392,7 @@ $(".showhideCheckBox").change(function(){
 
         function fnShowHide(iCol)
         {
+            
             var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
                 oTable.fnSetColumnVis( iCol, bVis ? false : true );
         }

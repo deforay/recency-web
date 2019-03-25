@@ -214,6 +214,11 @@ CREATE TABLE `testing_facility_type` (
   `testing_facility_type_name` varchar(255) DEFAULT NULL,
   `testing_facility_type_status` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE `testing_facility_type`
+  ADD PRIMARY KEY (`testing_facility_type_id`);
+
+  ALTER TABLE `testing_facility_type`
+  MODIFY `testing_facility_type_id` int(11) NOT NULL AUTO_INCREMENT;
 
 INSERT INTO `testing_facility_type` (`testing_facility_type_id`, `testing_facility_type_name`, `testing_facility_type_status`) VALUES
 (1, 'VCT', 'active'),
@@ -231,3 +236,5 @@ UPDATE `global_config` SET `display_name` = 'Location Level Three (City)' WHERE 
 
 UPDATE `global_config` SET `display_name` = 'Technical Support Email' WHERE `global_config`.`config_id` = 5;
 UPDATE `global_config` SET `display_name` = 'Technical Support Phone' WHERE `global_config`.`config_id` = 6;
+
+INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Technical Support Name', 'technical_support_name', 'test');
