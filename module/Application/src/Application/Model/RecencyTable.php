@@ -385,8 +385,8 @@ class RecencyTable extends AbstractTableGateway {
                        if($params['testingModality']=='other'){
 
                          $testftResult = $TestingFacilityTypeDb->checkTestingFacilityTypeName(strtolower($params['othertestingmodality']));
-                         if(isset($ftResult['testing_facility_type_name']) && $ftResult['testing_facility_type_name']!=''){
-                          $params['testingModality'] = $ftResult['testing_facility_type_id'];
+                         if(isset($testftResult['testing_facility_type_name']) && $testftResult['testing_facility_type_name']!=''){
+                              $params['testingModality'] = $testftResult['testing_facility_type_id'];
                          }
                          else{
                          // echo "else2";die;
@@ -520,7 +520,7 @@ class RecencyTable extends AbstractTableGateway {
                 
                 $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                 $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-return $rResult;
+               return $rResult;
                }
 
                public function updateRecencyDetails($params)
@@ -596,9 +596,9 @@ return $rResult;
 
                         if($params['testingModality']=='other'){
 
-                         $testftResult = $TestingFacilityTypeDb->checkTestingFacilityTypeName(strtolower($params['othertestingmodality']));
-                         if(isset($ftResult['testing_facility_type_name']) && $ftResult['testing_facility_type_name']!=''){
-                          $params['testingModality'] = $ftResult['testing_facility_type_id'];
+                          $testftResult = $TestingFacilityTypeDb->checkTestingFacilityTypeName(strtolower($params['othertestingmodality']));
+                         if(isset($testftResult['testing_facility_type_name']) && $testftResult['testing_facility_type_name']!=''){
+                          $params['testingModality'] = $testftResult['testing_facility_type_id'];
                          }
                          else{
                          // echo "else2";die;
@@ -918,8 +918,8 @@ return $rResult;
                                     if($recency['othertestingmodality']!=''){
 
                                         $testftResult = $TestingFacilityTypeDb->checkTestingFacilityTypeName(strtolower($params['othertestingmodality']));
-                                        if(isset($ftResult['testing_facility_type_name']) && $ftResult['testing_facility_type_name']!=''){
-                                         $recency['testingModality'] = $ftResult['testing_facility_type_id'];
+                                        if(isset($testftResult['testing_facility_type_name']) && $testftResult['testing_facility_type_name']!=''){
+                                         $recency['testingModality'] = $testftResult['testing_facility_type_id'];
                                         }
                                         else{
                                         // echo "else2";die;
@@ -936,7 +936,6 @@ return $rResult;
                                         }else{
                                              $recency['testingModality'] = (isset($recency['testingModality']) && !empty($recency['testingModality'])) ? ($recency['testingModality']) : null;
                                          }
-
                                     
 
                                    //check oher pouplation

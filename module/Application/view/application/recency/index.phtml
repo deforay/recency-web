@@ -342,7 +342,6 @@ oTable = $('#facilityDataTable').dataTable( {
                     aoData.push({"name": "gender", "value": $("#gender").val()});
                     aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
                     aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
-
                     $.ajax({
                         "dataType": 'json',
                         "type": "POST",
