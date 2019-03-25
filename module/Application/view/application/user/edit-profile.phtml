@@ -31,7 +31,7 @@ $facilityId = array();
                         <div class="col-sm-4">
                             <input type="text" value="<?php echo $result['user_name']; ?>" class="form-control isRequired" id="userName" name="userName" placeholder="Enter the user name" title="Please enter the user name" >
                         </div>
-                        <label class="col-sm-2 col-form-label" for="">Email<span class="mandatory">*</span></label>
+                        <label class="col-sm-2 col-form-label" for="">Login Email<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
                             <input type="email" style="background-color:#fff;" readonly value="<?php echo $result['email']; ?>" class="form-control isRequired" id="email" name="email" placeholder="Enter the email" title="Please enter the email" onblur="checkNameValidation('users', 'email', this,'<?php echo "user_id##".$result['user_id'];?>', 'The email that you entered already exists . Please try another name..');">
                         </div>

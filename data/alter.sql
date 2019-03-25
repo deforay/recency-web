@@ -224,3 +224,10 @@ INSERT INTO `testing_facility_type` (`testing_facility_type_id`, `testing_facili
 (6, 'Mobile', 'active'),
 (7, 'PITC', 'active'),
 (8, 'VMMC', 'active');
+
+UPDATE `global_config` SET `display_name` = 'Location Level One (Province)' WHERE `global_config`.`config_id` = 1;
+UPDATE `global_config` SET `display_name` = 'Location Level Two (District)' WHERE `global_config`.`config_id` = 2;
+UPDATE `global_config` SET `display_name` = 'Location Level Three (City)' WHERE `global_config`.`config_id` = 3;
+
+UPDATE `global_config` SET `display_name` = 'Technical Support Email' WHERE `global_config`.`config_id` = 5;
+UPDATE `global_config` SET `display_name` = 'Technical Support Phone' WHERE `global_config`.`config_id` = 6;

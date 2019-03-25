@@ -7,7 +7,7 @@ $roleCode = $sessionLogin->roleCode;
 //\Zend\Debug\Debug::dump($facilityResult['facility']);die;
 
 
-$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
+$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
@@ -120,11 +120,24 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
 				    <div class="col-sm-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_id" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Patient Id</label> <br>
 				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_collection_date" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Sample Collection Date</label> <br>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_receipt_date" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Sample Receipt Date</label> <br>
+				    </div>
+                    <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="received_specimen_type" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Received Specimen Type</label> <br>
+				    </div>
+                  
 				    <div class="col-sm-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Facility Name</label>
                     </div>
                     <div class="col-sm-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_type_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Testing Facility</label>
+				    </div>
+                      <div class="col-sm-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="testing_facility_type" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Testing Modality</label> <br>
 				    </div>
 				    <div class="col-sm-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="hiv_diagnosis_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">HIV Diagnosis Date</label> <br>
@@ -222,6 +235,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                                     <th>Received Specimen Type</th>
                                     <th>Facility Name</th>
                                     <th>Testing Site</th>
+                                    <th>Testing Modality</th>
                                     <th>HIV Diagnosis Date</th>
                                     <th>HIV Recency Date</th>
                                     <th>Control Line</th>
@@ -272,6 +286,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                                     <th>Received Specimen Type</th>
                                     <th>Facility Name</th>
                                     <th>Testing Site</th>
+                                    <th>Testing Modality</th>
                                     <th>HIV Diagnosis Date</th>
                                     <th>HIV Recency Date</th>
                                     <th>Control Line</th>
