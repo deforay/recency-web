@@ -10,6 +10,9 @@ $roleCode = $sessionLogin->roleCode;
 $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+  
+$formFields = array('sample_id','patient_id','facility_name','facility_type_name','testing_facility_type');
+
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -130,7 +133,7 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="received_specimen_type" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Received Specimen Type</label> <br>
 				    </div>
                   
-				    <div class="col-sm-3">
+				    <div class="col-sm-3">                                                                                                                                                             
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Facility Name</label>
                     </div>
                     <div class="col-sm-3">
@@ -271,9 +274,9 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
                          <tbody>
                               <tr>
                                 <?php if($roleCode == "user"){
-                                   echo "<td colspan='35' class='dataTables_empty'>Loading data from server</td>";
+                                   echo "<td colspan='36' class='dataTables_empty'>Loading data from server</td>";
                                 }else{
-                                    echo "<td colspan='36' class='dataTables_empty'>Loading data from server</td>";
+                                    echo "<td colspan='37' class='dataTables_empty'>Loading data from server</td>";
                                 }?>
                               </tr>
                               </tbody>
