@@ -15,7 +15,7 @@
 	<div class="bg-body-light">
 		<div class="content content-full">
 			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-				<h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Dashboard</h1>
+				<h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Laboratory Dashboard</h1>
 			</div>
 		</div>
 	</div>
@@ -137,7 +137,7 @@
 										<div style="background-color:#b2e7fb;" class="item item-circle mx-auto my-3">
 											<i class="fa fa-eye "></i>
 										</div>
-										<div class="text-black display-4 font-w700 " id="totalSamplesRejected"></div>
+										<div class="text-black display-4 font-w700 " id="totalSamplesPosVerificationAbsent"></div>
 										<div class="text-muted mt-1">Positive Verification Line Absent</div>
 									</div>
 								</a>
@@ -363,7 +363,11 @@
 					$("#samplesTestedRecency").html(obj.samplesTestedRecency);
 					$("#samplesTestedViralLoad").html(obj.samplesTestedViralLoad);
 					$("#samplesFinalOutcome").html(obj.samplesFinalOutcome);
+					$("#totalSamplesRejected").html(obj.samplesTestRejected);
+					$("#totalSamplesPosVerificationAbsent").html(obj.samplesPosVerificationAbsent);
+					$("#totalSamplesBacklog").html(obj.samplesTestBacklog);
 			});
+
 	}
 
 		function getFinalOutcomeChart() {

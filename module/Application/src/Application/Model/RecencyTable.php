@@ -2272,7 +2272,18 @@ return $rResult;
                                                            WHEN (((r.final_outcome='RITA Recent') )) THEN 1
                                                            ELSE 0
                                                            END)"),
-                                                                                                   
+                    "samplesTestRejected" => new Expression("SUM(CASE 
+                                                           WHEN (((r.recency_test_not_performed='sample_rejected') )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
+                    "samplesPosVerificationAbsent" => new Expression("SUM(CASE 
+                                                           WHEN (((r.positive_verification_line='absent') )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
+                    "samplesTestBacklog" => new Expression("SUM(CASE 
+                                                           WHEN (((r.term_outcome='' AND  recency_test_not_performed='') )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
                    )
                    )
               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
@@ -2281,7 +2292,7 @@ return $rResult;
               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left');
 
-              if($parameters['fName']!=''){
+           if($parameters['fName']!=''){
                $sQuery->where(array('r.facility_id'=>$parameters['fName']));
            }
            if($parameters['testingFacility']!=''){
