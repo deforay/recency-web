@@ -68,7 +68,26 @@ class IndexController extends AbstractActionController
        }
     }
     
+    public function analysisDashboardAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+               $params = $request->getPost();
+               $recencyService = $this->getServiceLocator()->get('RecencyService');
+               $result = $recencyService->getAllRecencyResult($params);
+               return $this->getResponse()->setContent(Json::encode($result));
+          }else{
+            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+            $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult=$facilityService->getFacilitiesAllDetails();
 
+            return new ViewModel(array(
+                'globalConfigResult' => $globalConfigResult,
+                'facilityResult' => $facilityResult
+            ));
+          }
+    }
 
 }
 

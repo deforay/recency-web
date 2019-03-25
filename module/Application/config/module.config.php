@@ -11,7 +11,7 @@ return array(
      'router' => array(
             'routes' => array(
                   'home' => array(
-                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'type' => 'Literal',
                         'options' => array(
                               'route'    => '/',
                               'defaults' => array(
@@ -20,7 +20,17 @@ return array(
                               ),
                         ),
                   ),
-                  'login' => array(
+                  'analysis-dashboard' => array(
+                    'type'    => 'Literal',
+                    'options' => array(
+                        'route'    => '/analysis-dashboard',
+                         'defaults' => array(
+                            'controller' => 'Application\Controller\Index',
+                            'action' => 'analysis-dashboard',
+                         ),
+                    ),
+                    ),
+                    'login' => array(
                         'type' => 'segment',
                         'options' => array(
                               'route'    => '/login[/:action]',
