@@ -57,6 +57,10 @@ $sampleReceiptDateMandatory  = in_array("Sample Receipt Date at the Recency Test
 $receivedSpecimenTypeMandatory = in_array("Received Specimen Type",$resultArr)?"isRequired":"";
 $sampleReceivedDate = in_array("Sample Received Date",$resultArr)?"isRequired":"";
 
+$testingModality = in_array("Testing Modality",$resultArr)?"isRequired":"";
+
+
+
 $lineOutComeColor = "#de1d2b";
 $lineOutComeColor2 = "#000000";
 ?>
@@ -289,21 +293,8 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                            <input type="text" name="testerName" id="testerName" class="typeahead form-control <?php echo $testerName; ?>" placeholder="Enter the tester name" title="Please enter the tester name"/>
                                        </div>
                                        
-
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>" for="">Testing Facility <?php echo(in_array("Testing Facility",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>">
-                                            <select class="form-control <?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
-                                                <option value="">--Select--</option>
-                                                <?php foreach($facilityResult['facilityTest'] as $testingFacility){ ?>
-                                                        <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
-                                                <?php } ?>
-                                                <option value="other">Other</option>
-                                            </select>
-                                            &nbsp;
-                                            <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter testing facility name" value="" placeholder="Enter testing facility name" >
-                                            &nbsp;
-                                        </div>
-
+                                      
+                                       
                                     </div>
                                     
                                   </div>
@@ -339,6 +330,36 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                                             <input style="display:none;" type="text" class="form-control col-sm-12" id="otherRecencyTestNotPerformed" name="otherRecencyTestNotPerformed" title="Please Enter the Other other recency test not performed" value="" placeholder="Enter other recency test not performed">
                                             <br>
                                         </div>
+
+                                         <label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>" for="">Testing Facility <?php echo(in_array("Testing Facility",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>">
+                                            <select class="form-control disbaledResult<?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+                                                <option value="">--Select--</option>
+                                                <?php foreach($facilityResult['facilityTest'] as $testingFacility){ ?>
+                                                        <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
+                                                <?php } ?>
+                                                <option value="other">Other</option>
+                                            </select>
+                                            &nbsp;
+                                            <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter testing facility name" value="" placeholder="Enter testing facility name" >
+                                            &nbsp;
+                                        </div>
+
+                                         <label class="col-sm-2 col-form-label <?php echo in_array("Testing Modality",$resultArr2)?"showFields":"hideFields";?>" for="">Testing Modality <?php echo(in_array("Testing Modality",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Testing Modality",$resultArr2)?"showFields":"hideFields";?>">
+                                            <select class="form-control disbaledResult<?php echo $testingModality; ?>" id="testingModality" name="testingModality" title="Please select the testing modality type">
+                                                <option value="">--Select--</option>
+                                                
+                                                <?php foreach($testFacilityTypeResult as $testingFacilityType){ ?>
+                                                        <option value="<?php echo $testingFacilityType['testing_facility_type_id']; ?>"><?php echo $testingFacilityType['testing_facility_type_name']; ?></option>
+                                                <?php } ?>
+                                                <option value="other">Other</option>
+                                            </select>
+                                            &nbsp;
+                                            <input style="display:none;" type="text"  class="form-control col-sm-12" id="othertestingmodality" name="othertestingmodality" title="Please Enter testing modality type" value="" placeholder="Enter testing modality type" >
+                                            &nbsp;
+                                        </div>
+
 
                                         <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Date",$resultArr2)?"showFields":"hideFields";?>" for="">HIV Recency Date<?php echo(in_array("Hiv Recency Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                         <div class="col-sm-4 <?php echo in_array("Hiv Recency Date",$resultArr2)?"showFields":"hideFields";?>">
@@ -794,6 +815,8 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
                     $(".hideDiv").css({"visibility":"visible"});
                     $("#recencyTestNotPerformed").addClass("isRequired");
+                    
+                    
                }else{
                     $(".disbaledResult").addClass("isRequired");
                     $(".disbaledResult").attr("disabled",false);
@@ -828,6 +851,14 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
                     $("#otherTestingFacility").addClass("isRequired").show();
                }else{
                     $("#otherTestingFacility").removeClass("isRequired").hide();
+               }
+          });
+
+          $("#testingModality").change(function(){
+               if($(this).val() == 'other'){
+                    $("#othertestingmodality").addClass("isRequired").show();
+               }else{
+                    $("#othertestingmodality").removeClass("isRequired").hide();
                }
           });
 

@@ -290,6 +290,11 @@ class FacilitiesTable extends AbstractTableGateway
         $sQueryStrTest = $sql->getSqlStringForSqlObject($sQueryTest);
         $rResult['facilityTest'] = $dbAdapter->query($sQueryStrTest, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
+        $sQueryTestFType = $sql->select()->from(array('f' => 'testing_facility_type'), array('testing_facility_type_name'))
+        ->where(array('f.testing_facility_type_status' => 'active'));
+    $sQueryStrTestFType = $sql->getSqlStringForSqlObject($sQueryTestFType);
+    $rResult['testingFacilityType'] = $dbAdapter->query($sQueryStrTestFType, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
         return $rResult;
     }
     public function fetchFacilityByLocation($params)
