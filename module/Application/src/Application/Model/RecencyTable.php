@@ -2069,8 +2069,8 @@ class RecencyTable extends AbstractTableGateway {
             $queryContainer = new Container('query');
             $common = new CommonService();
             $general = new CommonService();
-            $aColumns = array('f.facility_name','ft.facility_name','totalSamples','samplesReceived','samplesRejected','samplesTestedRecency', 'samplesTestedViralLoad','samplesFinalOutcome');
-            $orderColumns = array('f.facility_name','ft.facility_name','totalSamples','samplesReceived','samplesRejected','samplesTestedRecency', 'samplesTestedViralLoad','samplesFinalOutcome');
+            $aColumns = array('f.facility_name','ft.facility_name','totalSamples','samplesReceived','samplesRejected','samplesTestBacklog','samplesTestedRecency', 'samplesTestedViralLoad','samplesFinalOutcome');
+            $orderColumns = array('f.facility_name','ft.facility_name','totalSamples','samplesReceived','samplesRejected','samplesTestBacklog','samplesTestedRecency', 'samplesTestedViralLoad','samplesFinalOutcome');
 
             /* Paging */
             $sLimit = "";
@@ -2161,6 +2161,10 @@ class RecencyTable extends AbstractTableGateway {
                                                                  END)"),
                          "samplesFinalOutcome" => new Expression("SUM(CASE 
                                                                  WHEN (((r.final_outcome is NOT NULL) )) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                         "samplesTestBacklog" => new Expression("SUM(CASE 
+                                                                 WHEN (((r.term_outcome='' AND  recency_test_not_performed='') )) THEN 1
                                                                  ELSE 0
                                                                  END)"),
                                                                                                          
@@ -2265,6 +2269,7 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = $aRow['totalSamples'];
                          $row[] = $aRow['samplesReceived'];
                          $row[] = $aRow['samplesRejected'];
+                         $row[] = $aRow['samplesTestBacklog'];
                          $row[] = $aRow['samplesTestedRecency'];
                          $row[] = $aRow['samplesTestedViralLoad'];
                          $row[] = $aRow['samplesFinalOutcome'];
@@ -2366,7 +2371,8 @@ class RecencyTable extends AbstractTableGateway {
               $sQuery =   $sql->select()->from(array('r' => 'recency'))
               ->columns(
                array(
-               "monthyear" => new Expression("DATE_FORMAT(hiv_recency_date, '%b %y')"),
+               "week" => new Expression("WEEKOFYEAR(hiv_recency_date)"),
+               "monthyear" => new Expression("DATE_FORMAT(hiv_recency_date, '%Y')"),
                "ritaRecent" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'RITA Recent') THEN 1 ELSE 0 END))"),
                "longTerm" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'Long Term') THEN 1 ELSE 0 END))"),
                "inconclusive" => new Expression("SUM(CASE WHEN (r.final_outcome = 'Inconclusive') THEN 1 ELSE 0 END)"),
@@ -2377,7 +2383,9 @@ class RecencyTable extends AbstractTableGateway {
                ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
                ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
                ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
-               ->group(array(new Expression('YEAR(hiv_recency_date)'),new Expression('MONTH(hiv_recency_date)')));
+               //->group(array(new Expression('YEAR(hiv_recency_date)'),new Expression('MONTH(hiv_recency_date)')))
+               ->group(array(new Expression('WEEKOFYEAR(hiv_recency_date)')))
+               ;
                     
                if($parameters['fName']!=''){
                     $sQuery->where(array('r.facility_id'=>$parameters['fName']));
@@ -2415,21 +2423,32 @@ class RecencyTable extends AbstractTableGateway {
                          $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
                      }
               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-               //\Zend\Debug\Debug::dump($sQueryStr);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
               $j=0;
                 foreach($rResult as $sRow){
-                    if($sRow["monthyear"] == null) continue;
+                    $weekDateOfMonth=$this->getStartAndEndDate($sRow["week"],$sRow['monthyear']);
+                    if($sRow["week"] == null) continue;
                     $result['finalOutCome']['RITA Recent'][$j] = (isset($sRow['ritaRecent']) && $sRow['ritaRecent'] != NULL) ? $sRow['ritaRecent'] : 0;
                     $result['finalOutCome']['Long Term'][$j] = (isset($sRow['longTerm']) && $sRow['longTerm'] != NULL) ? $sRow['longTerm'] : 0;
                     $result['finalOutCome']['Inconclusive'][$j] = (isset($sRow['inconclusive']) && $sRow['inconclusive'] != NULL) ? $sRow['inconclusive'] : 0;
 
-                    $result['date'][$j] = $sRow["monthyear"];
+                    $result['date'][$j] = $weekDateOfMonth[0]." to ".$weekDateOfMonth[1];
+                    
+                    //$weekDateOfMonth=$this->getStartAndEndDate($sRow["week"],$sRow['monthyear']);
+                    
                     $j++;
                 }
               
               return $result;
 
+          }
+
+          public function getStartAndEndDate($week,$year) {
+               
+               $dates[0] = date("d-M-Y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT)));
+               $dates[1] = date("d-M-Y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT).' +6 days'));
+               return $dates;
           }
   
      }

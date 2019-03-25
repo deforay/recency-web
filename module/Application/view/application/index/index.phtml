@@ -5,7 +5,7 @@
 	$roleCode = $sessionLogin->roleCode;
 	//\Zend\Debug\Debug::dump($globalConfigResult);die;
 
-	$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+	$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
 	$startDate=date('d-M-Y', strtotime('today - 29 days'));
 	$currentDate=date('d-M-Y');
 	?>
@@ -195,7 +195,7 @@
 						</div>                
 							
 					<h2 class="content-heading ">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Results
+							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
 							<a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
 						</h2>
 						<div class="block block-rounded block-bordered">
@@ -208,6 +208,7 @@
 										<th>No.of Samples Registered</th>
 										<th>No.of Samples Received at Hub</th>
 										<th>No.of Samples Rejected</th>
+										<th>No.of Samples Backlog</th>
 										<th>No.of Samples Tested With Recency</th>
 										<th>No.of Samples Tested With Viral Load</th>
 										<th>No.of Samples With Final Outcome</th>
