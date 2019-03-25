@@ -42,8 +42,8 @@ class RecencyTable extends AbstractTableGateway {
 
 
                          
-          $aColumns = array('r.sample_id','r.patient_id','DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")','DATE_FORMAT(r.sample_receipt_date,"%d-%b-%Y")','r.received_specimen_type','f.facility_name' ,'ft.facility_name' ,'DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','DATE_FORMAT(r.kit_expiry_date,"%d-%b-%Y")','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','DATE_FORMAT(r.dob,"%d-%b-%Y")','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','DATE_FORMAT(r.form_initiation_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.form_transfer_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
-          $orderColumns = array('r.sample_id','r.patient_id','r.sample_collection_date','r.sample_receipt_date','r.received_specimen_type','f.facility_name','f.facility_name','ft.facility_name', 'r.hiv_diagnosis_date','r.hiv_recency_date','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','r.kit_expiry_date','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','r.dob','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','r.form_initiation_datetime','r.form_transfer_datetime','r.vl_test_date');
+          $aColumns = array('r.sample_id','r.patient_id','DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")','DATE_FORMAT(r.sample_receipt_date,"%d-%b-%Y")','r.received_specimen_type','f.facility_name' ,'ft.facility_name','tf.testing_facility_type_name' ,'DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','DATE_FORMAT(r.kit_expiry_date,"%d-%b-%Y")','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','DATE_FORMAT(r.dob,"%d-%b-%Y")','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','DATE_FORMAT(r.form_initiation_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.form_transfer_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
+          $orderColumns = array('r.sample_id','r.patient_id','r.sample_collection_date','r.sample_receipt_date','r.received_specimen_type','f.facility_name','f.facility_name','ft.facility_name', 'tf.testing_facility_type_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','r.kit_expiry_date','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','r.dob','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','r.form_initiation_datetime','r.form_transfer_datetime','r.vl_test_date');
 
           /* Paging */
           $sLimit = "";
@@ -114,11 +114,11 @@ class RecencyTable extends AbstractTableGateway {
                     $roleId=$sessionLogin->roleId;
 
                     $sQuery =   $sql->select()->from(array( 'r' => 'recency' ))
-                    
                         ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name') , 'left')
-                        ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name') , 'left');
-
+                        ->join(array('tf' => 'testing_facility_type'), 'tf.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name') , 'left')
+                        ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name') , 'left')
+                        ->order("r.recency_id DESC");
                     if (isset($sWhere) && $sWhere != "") {
                          $sQuery->where($sWhere);
                     }
@@ -202,6 +202,8 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = str_replace("_"," ",ucwords($aRow['received_specimen_type']));
                          $row[] = $aRow['facility_name'];
                          $row[] = $aRow['testing_facility_name'];
+                         $row[] = $aRow['testing_facility_type_name'];
+                         
                          $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
                          $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
 
@@ -383,8 +385,8 @@ class RecencyTable extends AbstractTableGateway {
                        if($params['testingModality']=='other'){
 
                          $testftResult = $TestingFacilityTypeDb->checkTestingFacilityTypeName(strtolower($params['othertestingmodality']));
-                         if(isset($ftResult['testing_facility_type_name']) && $ftResult['testing_facility_type_name']!=''){
-                          $params['testingModality'] = $ftResult['testing_facility_type_id'];
+                         if(isset($testftResult['testing_facility_type_name']) && $testftResult['testing_facility_type_name']!=''){
+                              $params['testingModality'] = $testftResult['testing_facility_type_id'];
                          }
                          else{
                          // echo "else2";die;
@@ -518,7 +520,7 @@ class RecencyTable extends AbstractTableGateway {
                 
                 $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                 $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-return $rResult;
+               return $rResult;
                }
 
                public function updateRecencyDetails($params)
@@ -529,6 +531,7 @@ return $rResult;
                     $riskPopulationDb = new RiskPopulationsTable($this->adapter);
                     $districtDb = new DistrictTable($this->adapter);
                     $cityDb = new CityTable($this->adapter);
+                    $TestingFacilityTypeDb = new TestingFacilityTypeTable($this->adapter);
                     $logincontainer = new Container('credo');
                     $common = new CommonService();
 
@@ -591,6 +594,26 @@ return $rResult;
                                 }
                         }
 
+                        if($params['testingModality']=='other'){
+
+                          $testftResult = $TestingFacilityTypeDb->checkTestingFacilityTypeName(strtolower($params['othertestingmodality']));
+                         if(isset($testftResult['testing_facility_type_name']) && $testftResult['testing_facility_type_name']!=''){
+                          $params['testingModality'] = $testftResult['testing_facility_type_id'];
+                         }
+                         else{
+                         // echo "else2";die;
+                         $testFacilityTypeData = array(
+                         'testing_facility_type_name'=>$params['othertestingmodality'],
+                         'testing_facility_type_status'=>'active');
+                         $TestingFacilityTypeDb->insert($testFacilityTypeData);
+                         if($TestingFacilityTypeDb->lastInsertValue>0){
+                              $params['testingModality'] = $TestingFacilityTypeDb->lastInsertValue;
+                          }else{
+                              return false;
+                          }
+                         }
+             }
+
 
                          //check oher pouplation
                          if($params['riskPopulation']=='Other'){
@@ -651,6 +674,7 @@ return $rResult;
                               'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate']!='')?$common->dbDateFormat($params['sampleCollectionDate']):NULL,
                               'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate']!='')?$common->dbDateFormat($params['sampleReceiptDate']):NULL,
                               'received_specimen_type' => $params['receivedSpecimenType'],
+                              'testing_facility_type' => $params['testingModality'],
                          );
                          if($params['vlLoadResult']!=''){
                             $data['vl_result'] = $params['vlLoadResult'];
@@ -813,6 +837,7 @@ return $rResult;
                     $globalDb = new GlobalConfigTable($this->adapter);
                     $districtDb = new DistrictTable($this->adapter);
                     $cityDb = new CityTable($this->adapter);
+                    $TestingFacilityTypeDb = new TestingFacilityTypeTable($this->adapter);
                     $common = new CommonService();
                     if(isset($params["form"])){
                         //check user status active or not
@@ -830,7 +855,7 @@ return $rResult;
                          $i = 1;
                          foreach($params["form"] as $key => $recency){
                               try{
-                                   if(isset($recency['sampleId']) && trim($recency['sampleId'])!="")
+                                   if(isset($recency['sampleId']) && trim($recency['sampleId'])!="" || isset($recency['patientId']) && trim($recency['patientId'])!="")
                                    {
                                         if($recency['otherfacility']!=''){
                                              $fResult = $facilityDb->checkFacilityName(strtolower($recency['otherfacility']),1);
@@ -893,8 +918,8 @@ return $rResult;
                                     if($recency['othertestingmodality']!=''){
 
                                         $testftResult = $TestingFacilityTypeDb->checkTestingFacilityTypeName(strtolower($params['othertestingmodality']));
-                                        if(isset($ftResult['testing_facility_type_name']) && $ftResult['testing_facility_type_name']!=''){
-                                         $recency['testingModality'] = $ftResult['testing_facility_type_id'];
+                                        if(isset($testftResult['testing_facility_type_name']) && $testftResult['testing_facility_type_name']!=''){
+                                         $recency['testingModality'] = $testftResult['testing_facility_type_id'];
                                         }
                                         else{
                                         // echo "else2";die;
@@ -911,7 +936,6 @@ return $rResult;
                                         }else{
                                              $recency['testingModality'] = (isset($recency['testingModality']) && !empty($recency['testingModality'])) ? ($recency['testingModality']) : null;
                                          }
-
                                     
 
                                    //check oher pouplation

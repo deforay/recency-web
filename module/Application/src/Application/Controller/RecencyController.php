@@ -70,10 +70,11 @@ class RecencyController extends AbstractActionController
                $result=$recencyService->getRecencyDetailsById($recencyId);
                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
-          
+               $testFacilityTypeResult=$facilityService->getTestingFacilitiesTypeDetails();
                return new ViewModel(array(
                     'globalConfigResult' => $globalConfigResult,
                     'facilityResult' => $facilityResult,
+                    'testFacilityTypeResult' => $testFacilityTypeResult,
                     'result' => $result
                ));
           }
