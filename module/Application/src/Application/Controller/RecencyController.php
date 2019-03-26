@@ -178,8 +178,9 @@ class RecencyController extends AbstractActionController
                 ->setTerminal(true);
         return $viewModel;
     }
-    public function getFinalOutcomeChartAction()
-    {
+
+     public function getFinalOutcomeChartAction()
+     {
         $result = "";
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -191,6 +192,65 @@ class RecencyController extends AbstractActionController
         $viewModel->setVariables(array('result' => $result))
                 ->setTerminal(true);
         return $viewModel;
-    }
-    
+     }
+     
+     public function getRecencyLabActivityChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getRecencyLabActivityChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+     }
+
+     public function getTesterWiseFinalOutcomeChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getTesterWiseFinalOutcomeChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+     }
+
+     public function getTesterWiseInvalidChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getTesterWiseInvalidChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+     }
+
+     public function getFacilityWiseInvalidChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getFacilityWiseInvalidChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+     }
 }

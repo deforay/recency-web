@@ -50,7 +50,7 @@
 									<select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
 									<option value=""> -- Select -- </option>
 										<?php
-										foreach($facilityResult['facility'] as $facilityRow){
+										foreach($facilityResult['facilityTest'] as $facilityRow){
 											if(2 != (int)$facilityRow['facility_type_id']) continue;
 										?>
 										<option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
@@ -66,7 +66,7 @@
                                     <option value="Assay Negative">Assay Negative</option>
                                     <option value="Assay Recent">Assay Recent</option>
                                     <option value="Long Term">Long Term</option>
-                                    <option value="Invalid – Please Verify">Invalid</option>
+                                    <option value="Invalid">Invalid</option>
 									</select>
 								</div>
 								<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Final Outcome</label>
@@ -81,7 +81,7 @@
 								
 						<div class="row items-push">
 							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getTesterwiseFinalOutcomeChart();getTesterwiseInvalidChart();getFacilityWiseInvalidChart();"><i class="fa fa-fw fa-check"></i> Search</a>
 								
 							</div>
 						</div>
@@ -188,12 +188,46 @@
 							<i class="fa fa-angle-right text-muted mr-1"></i> FInal Outcome Chart
 						</h2>
 						<div class="block block-rounded block-bordered">
-						<div class="block-content block-content-full">
-
-						<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-						</div>
+							<div class="block-content block-content-full">
+								<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
 						</div>                
-							
+						<h2 class="content-heading">
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Lab Activity
+						</h2>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								<div id="recencyLabActivity" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
+						</div>
+						
+						<h2 class="content-heading">
+							<i class="fa fa-angle-right text-muted mr-1"></i>  Tester Wise Final Outcome Chart
+						</h2>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								<div id="finalOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
+						</div>
+						
+						<h2 class="content-heading">
+							<i class="fa fa-angle-right text-muted mr-1"></i> Tester Wise Invalid Result
+						</h2>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								<div id="testerWiseInvalid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
+						</div>
+
+						<h2 class="content-heading">
+							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Wise Invalid Result
+						</h2>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								<div id="facilityWiseInvalid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
+						</div>
+
 					<h2 class="content-heading ">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
 							<a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
@@ -209,6 +243,8 @@
 										<th>No.of Samples Received at Hub</th>
 										<th>No.of Samples Rejected</th>
 										<th>No.of Samples Backlog</th>
+										<th>No.of Samples VL Pending</th>
+										<th>No.of VL Pending</th>
 										<th>No.of Samples Tested With Recency</th>
 										<th>No.of Samples Tested With Viral Load</th>
 										<th>No.of Samples With Final Outcome</th>
@@ -235,7 +271,10 @@
 
 				getRecencyAllDataCount();
 				getFinalOutcomeChart();
-
+				getRecencyLabActivityChart();
+				getTesterwiseFinalOutcomeChart();
+				getTesterwiseInvalidChart();
+				getFacilityWiseInvalidChart();
 				oTable = $('#facilityDataTable').dataTable( {
 					"bAutoWidth": false,
 					"bProcessing": true,
@@ -371,13 +410,39 @@
 
 	}
 
-		function getFinalOutcomeChart() {
-		
-			$.post("<?php echo $this->url('recency',array('action'=>'get-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
-				function(data){
-					$("#container").html(data);
-			});
+	function getFinalOutcomeChart() {
+		$.post("<?php echo $this->url('recency',array('action'=>'get-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+			function(data){
+				$("#container").html(data);
+		});
 	}
 
+	function getRecencyLabActivityChart() {
+		
+		$.post("<?php echo $this->url('recency',array('action'=>'get-recency-lab-activity-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+			function(data){
+				$("#recencyLabActivity").html(data);
+		});
+	}
 
+	function getTesterwiseFinalOutcomeChart() {		
+		$.post("<?php echo $this->url('recency',array('action'=>'get-tester-wise-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+		function(data){
+			$("#finalOutcomeChart").html(data);
+		});
+	}
+
+	function getTesterwiseInvalidChart() {		
+		$.post("<?php echo $this->url('recency',array('action'=>'get-tester-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+		function(data){
+			$("#testerWiseInvalid").html(data);
+		});
+	}
+	
+	function getFacilityWiseInvalidChart() {		
+		$.post("<?php echo $this->url('recency',array('action'=>'get-facility-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+		function(data){
+			$("#facilityWiseInvalid").html(data);
+		});
+	}
 	</script>

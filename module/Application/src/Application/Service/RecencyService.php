@@ -1151,5 +1151,29 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchFinalOutcomeChart($params);
     }
+
+    public function getRecencyLabActivityChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecencyLabActivityChart($params);
+    }
+
+    public function getTesterWiseFinalOutcomeChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchTesterWiseFinalOutcomeChart($params);
+    }
+
+    public function getTesterWiseInvalidChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchTesterWiseInvalidChart($params);
+    }
+
+    public function getFacilityWiseInvalidChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchFacilityWiseInvalidChart($params);
+    }
 }
 
