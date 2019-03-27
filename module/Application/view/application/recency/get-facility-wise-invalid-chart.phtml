@@ -3,7 +3,25 @@
 Highcharts.chart('facilityWiseInvalid', {
     credits: {
             enabled: false
-        },
+    },
+    exporting: {
+    buttons: {
+      contextButton: {
+        menuItems: [
+          'printChart',
+          'separator',
+          'downloadPNG',
+          'downloadJPEG',
+          'downloadPDF',
+          'downloadSVG',
+          'separator',
+          'downloadCSV',
+          'downloadXLS',
+          'viewData'
+        ]
+      }
+    }
+    },
     chart: {
         type: 'column'
     },
@@ -41,6 +59,18 @@ Highcharts.chart('facilityWiseInvalid', {
             borderWidth: 0
         }
     },
+    colors: [
+        '#92A8CD',
+        '#AA4643',
+        '#24CBE5',
+        '#A47D7C',
+        '#fec16f',
+        '#989898',
+        '#f5c3f5',
+        '#215682',
+        '#8dafbc',
+        '#66d3c5'
+	],
     series: [
         <?php
            if(isset($result['fInvalidReport']) && count($result['fInvalidReport']) >0){

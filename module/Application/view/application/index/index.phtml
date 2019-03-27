@@ -81,7 +81,7 @@
 								
 						<div class="row items-push">
 							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getTesterwiseFinalOutcomeChart();getTesterwiseInvalidChart();getFacilityWiseInvalidChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getTesterwiseFinalOutcomeChart();getTesterwiseInvalidChart();getFacilityWiseInvalidChart();getLotChart();"><i class="fa fa-fw fa-check"></i> Search</a>
 								
 							</div>
 						</div>
@@ -227,6 +227,15 @@
 								<div id="facilityWiseInvalid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 							</div>
 						</div>
+						
+						<h2 class="content-heading">
+							<i class="fa fa-angle-right text-muted mr-1"></i> Lot Report
+						</h2>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								<div id="lotReport" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
+						</div>
 
 					<h2 class="content-heading ">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
@@ -261,9 +270,9 @@
 		</div>
 	</div>
 	<script src="<?php echo $this->basePath() . '/assets/js/highcharts.js'; ?>"></script>
-	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js.js'; ?>"></script>
+	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/export-data.js'; ?>"></script>
-
+										
 	<script type="text/javascript">
 			/* Table initialisation */
 			oTable = null;
@@ -275,6 +284,7 @@
 				getTesterwiseFinalOutcomeChart();
 				getTesterwiseInvalidChart();
 				getFacilityWiseInvalidChart();
+				getLotChart();
 				oTable = $('#facilityDataTable').dataTable( {
 					"bAutoWidth": false,
 					"bProcessing": true,
@@ -443,6 +453,13 @@
 		$.post("<?php echo $this->url('recency',array('action'=>'get-facility-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
 		function(data){
 			$("#facilityWiseInvalid").html(data);
+		});
+	}
+
+	function getLotChart() {		
+		$.post("<?php echo $this->url('recency',array('action'=>'get-lot-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+		function(data){
+			$("#lotReport").html(data);
 		});
 	}
 	</script>
