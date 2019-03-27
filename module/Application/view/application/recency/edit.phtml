@@ -239,7 +239,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 													<?php foreach($facilityResult['facility'] as $facility){?>
 														<option value="<?php echo base64_encode($facility['facility_id']); ?>" <?php echo($result['facility_id'] == $facility['facility_id'] )?'selected="selected"':''; ?>><?php echo ucwords($facility['facility_name']); ?></option>
 													<?php } ?>
-													<option value="other">Other</option>
+													<!-- <option value="other">Other</option> -->
 												</select>
 												&nbsp;
 												<input style="display:none;" type="text"  class="form-control col-sm-12" id="otherFacilityName" name="otherFacilityName" title="Please Enter facility name" value="" placeholder="Enter facility name"  >
@@ -342,6 +342,21 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 												<div class="col-sm-4 <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>">
 													<input type="text" value="<?php echo $result['tester_name'];?>" class="typeahead form-control <?php echo $testerName; ?>"  id="testerName" name="testerName" placeholder="Enter the tester name" title="Please enter the tester name">
 												</div>
+
+												 <label class="col-sm-2 col-form-label <?php echo in_array("Testing Modality",$resultArr2)?"showFields":"hideFields";?>" for="">Testing Modality <?php echo(in_array("Testing Modality",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Testing Modality",$resultArr2)?"showFields":"hideFields";?>">
+                                            <select class="form-control <?php echo $testingModality; ?>" id="testingModality" name="testingModality" title="Please select the testing modality type">
+                                                <option value="">--Select--</option>
+                                                
+                                                <?php foreach($testFacilityTypeResult as $testingFacilityType){ ?>
+                                                        <option value="<?php echo $testingFacilityType['testing_facility_type_id']; ?>"<?php echo($testingFacilityType['testing_facility_type_id'] == $result['testing_facility_type'] )?'selected="selected"':''; ?>><?php echo $testingFacilityType['testing_facility_type_name']; ?></option>
+                                                <?php } ?>
+                                                <option value="other">Other</option>
+                                            </select>
+                                            &nbsp;
+                                            <input style="display:none;" type="text"  class="form-control col-sm-12" id="othertestingmodality" name="othertestingmodality" title="Please Enter testing modality type" value="" placeholder="Enter testing modality type" >
+                                            &nbsp;
+                                        </div>
 												
 											<br>
 											<br>
@@ -386,27 +401,14 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 														<?php foreach($facilityResult['facilityTest'] as $testingFacility){?>
 															<option value="<?php echo base64_encode($testingFacility['facility_id']); ?>" <?php echo($testingFacility['facility_id'] == $result['testing_facility_id'] )?'selected="selected"':''; ?>><?php echo ucwords($testingFacility['facility_name']); ?></option>
 														<?php } ?>
-														<option value="other">Other</option>
+														<!-- <option value="other">Other</option> -->
 													</select>
 													&nbsp;
 													<input style="display:none;" type="text"  class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter facility name" value="" placeholder="Enter facility name"  >
 													&nbsp;
 												</div>
 
-												 <label class="col-sm-2 col-form-label <?php echo in_array("Testing Modality",$resultArr2)?"showFields":"hideFields";?>" for="">Testing Modality <?php echo(in_array("Testing Modality",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Testing Modality",$resultArr2)?"showFields":"hideFields";?>">
-                                            <select class="form-control disbaledResult<?php echo $testingModality; ?>" id="testingModality" name="testingModality" title="Please select the testing modality type">
-                                                <option value="">--Select--</option>
-                                                
-                                                <?php foreach($testFacilityTypeResult as $testingFacilityType){ ?>
-                                                        <option value="<?php echo $testingFacilityType['testing_facility_type_id']; ?>"<?php echo($testingFacilityType['testing_facility_type_id'] == $result['testing_facility_type'] )?'selected="selected"':''; ?>><?php echo $testingFacilityType['testing_facility_type_name']; ?></option>
-                                                <?php } ?>
-                                                <option value="other">Other</option>
-                                            </select>
-                                            &nbsp;
-                                            <input style="display:none;" type="text"  class="form-control col-sm-12" id="othertestingmodality" name="othertestingmodality" title="Please Enter testing modality type" value="" placeholder="Enter testing modality type" >
-                                            &nbsp;
-                                        </div>
+												
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Date",$resultArr2)?"showFields":"hideFields";?>" for="">HIV Recency Date<?php echo(in_array("Hiv Recency Date",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 												<div class="col-sm-4 <?php echo in_array("Hiv Recency Date",$resultArr2)?"showFields":"hideFields";?>">

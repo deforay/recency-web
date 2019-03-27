@@ -3,15 +3,18 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
+// $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
+// {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
+// {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 
-//\Zend\Debug\Debug::dump($facilityResult['facility']);die;
-
-
-$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
-{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
-{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
-  
-$formFields = array('sample_id','patient_id','facility_name','facility_type_name','testing_facility_type');
+$formFields = array('sample_id','facility_name','hiv_recency_date','vl_test_date','control_line','positive_verification_line','long_term_verification_line','term_outcome','vl_result','final_outcome','gender','age','patient_id','sample_collection_date','sample_receipt_date','received_specimen_type','testing_facility_type','testing_facility_type_name','hiv_diagnosis_date',
+'kit_lot_no','kit_expiry_date','tester_name','dob','marital_status','residence','education_level','name','pregnancy_status','current_sexual_partner','past_hiv_testing','last_hiv_status','patient_on_art','test_last_12_month','exp_violence_last_12_month',
+'form_initiation_datetime','form_transfer_datetime');
+$arrFields = explode(", ",$manageColumnsResult['manage_columns']);
+$arrnum = array("0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11", "12", "13", "14", "15", "16", "17", "18", "19","20","21","22", "23" ,"24" ,"25", "26", "27", "28", "29", "30", "31" ,"32" ,"33" ,"34" ,"35");
+$acti = $manageColumnsResult['manage_columns'];
+$resultArr =array_diff($arrnum,$arrFields);
+$HideVal = implode(',', $resultArr);
 
 ?>
 <div class="bg-body-light">
@@ -117,149 +120,47 @@ $formFields = array('sample_id','patient_id','facility_name','facility_type_name
 			<div class="row" style="background:#eee;padding: 15px;border-radius:20px;font-size:13px;">
             <div class="col-sm-12 " style=""><a href="javascript:void(0);" style="float:right;font-size:20px;color:red;font-weight:bold" onclick="closeDiv()" title="Close">X</a></div>
 					
-                    
-           <?php foreach($formFields as $roe){ ?>
-                           
-                           <?php } ?>
-                    
-                    <?php $i = 0; ?>
-				    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="sample_id" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Sample Id</label>
-				    </div>
-				    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_id" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Patient Id</label> <br>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_collection_date" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Sample Collection Date</label> <br>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_receipt_date" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Sample Receipt Date</label> <br>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="received_specimen_type" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Received Specimen Type</label> <br>
-				    </div>
-                  
-				    <div class="col-sm-3">                                                                                                                                                             
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Facility Name</label>
-                    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_type_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Testing Facility</label>
-				    </div>
-                      <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="testing_facility_type" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Testing Modality</label> <br>
-				    </div>
-				    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="hiv_diagnosis_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">HIV Diagnosis Date</label> <br>
-				    </div>
-				    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="hiv_recency_date"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">HIV Recency Date</label>
-				    </div>
-				    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="control_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Control Line</label>
-				    </div>
-				    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="positive_verification_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Positive Verification Line</label>
-				    </div>
-				    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="long_term_verification_line"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Long Term Verification Line</label>
-				    </div>
-				    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="kit_lot_no"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">KIT Lot No</label>
-				    </div>
-				    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="kit_expiry_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">KIT Expiry Date</label>
-				    </div>
-						<div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="term_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Assay Outcome</label>
-				    </div>
-						<div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="final_outcome" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Final Outcome</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="vl_result" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Vl Result</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="tester_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Tester Name</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="dob" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">DOB</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="age" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Age</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="gender" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Gender</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="martial_status" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Martial Status</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="residence" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Residence</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="education_level" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Education Level</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Risk Population</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="pregnancy_status" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Pregnancy Status</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="current_sexual_partner" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Current Sexual Partner</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="past_hiv_testing" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Past HIV Testing</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="last_hiv_status" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Last HIV Status</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_on_art" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Patient On ART</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="test_last_12_month" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Last 12 Month</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="exp_violence_last_12_month" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Experienced Violence Last 12 Month</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="form_initiation_datetime" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Form Initiation Datetime</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="form_transfer_datetime" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Form Transfer Datetime</label>
-				    </div>
-                    <div class="col-sm-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="vl_test_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Vl Test Date</label>
-				    </div>
+                                <?php $i=0;
+                    foreach ($formFields as  $chk) 
+                    { 
+                       $v = str_replace("_"," ",$chk);
+                        ?>
+                        <div class="col-sm-3">
+                        <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i;?>);" value="<?php echo $i;?>" <?php if(in_array($i, $arrFields)){ echo " checked=\"checked\""; } ?> name="recencyCheckbox[]" id="iCol<?php echo $i;?>"  class="showhideCheckBox" /><label><?php echo ucwords($v) ; ?></label>
+                        </div>                                          
+                    <?php $i++;} 
+                    ?>
+
+                    <input type="button" onclick="getCheckBoxVal();" value="Submit" class="btn btn-info btn-sm">
+                   
 			    </div>
 			</span>
                     <table id="facilityDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
                          <thead>
                               <tr>
-                                    <th>Sample ID</th>
+                              <th>Sample ID</th>
+                                    <th>Facility Name</th>
+                                    <th>HIV Recency Date</th>
+                                    <th>Viral Test Date</th>
+                                    <th>Control Line</th>
+                                    <th>Positive Verification</th>
+                                    <th>Long Term Verification</th>
+                                    <th>Assay Outcome</th>
+                                    <th>VL Result</th>
+                                    <th>Final Outcome</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
                                     <th>Patient ID</th>
                                     <th>Sample Collection Date	</th>
                                     <th>Sample Receipt Date</th>
                                     <th>Received Specimen Type</th>
-                                    <th>Facility Name</th>
                                     <th>Testing Site</th>
                                     <th>Testing Modality</th>
                                     <th>HIV Diagnosis Date</th>
-                                    <th>HIV Recency Date</th>
-                                    <th>Control Line</th>
-                                    <th>Positive Verification</th>
-                                    <th>Long Term Verification</th>
                                     <th>Kit Lot Number</th>
                                     <th>Kit Expiry Date</th>
-                                    <th>Assay Outcome</th>
-                                    <th>Final Outcome</th>
-                                    <th>VL Result</th>
                                     <th>Tester Name</th>
-
                                     <th>DOB</th>
-                                    <th>Age</th>
-                                    <th>Gender</th>
                                     <th>Martial Status</th>
                                      <th>Residence</th>
                                     <th>Edication Level</th>
@@ -273,7 +174,6 @@ $formFields = array('sample_id','patient_id','facility_name','facility_type_name
                                     <th>Experienced Violence Last 12 Month</th>
                                     <th>Form Initiation Datetime</th>
                                     <th>Form Transfer Datetime</th>
-                                    <th>Viral Test Date</th>
                                     <th>Action</th>
                               </tr>
                          </thead>
@@ -288,30 +188,31 @@ $formFields = array('sample_id','patient_id','facility_name','facility_type_name
                               </tbody>
                               <tfoot>
                               <tr>
-                                    <th>Sample ID</th>
+                              <th>Sample ID</th>
+                                    <th>Facility Name</th>
+                                    <th>HIV Recency Date</th>
+                                    <th>Viral Test Date</th>
+                                    <th>Control Line</th>
+                                    <th>Positive Verification</th>
+                                    <th>Long Term Verification</th>
+                                    <th>Assay Outcome</th>
+                                    <th>VL Result</th>
+                                    <th>Final Outcome</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
                                     <th>Patient ID</th>
                                     <th>Sample Collection Date	</th>
                                     <th>Sample Receipt Date</th>
                                     <th>Received Specimen Type</th>
-                                    <th>Facility Name</th>
                                     <th>Testing Site</th>
                                     <th>Testing Modality</th>
                                     <th>HIV Diagnosis Date</th>
-                                    <th>HIV Recency Date</th>
-                                    <th>Control Line</th>
-                                    <th>Positive Verification</th>
-                                    <th>Long Term Verification</th>
                                     <th>Kit Lot Number</th>
                                     <th>Kit Expiry Date</th>
-                                    <th>Assay Outcome</th>
-                                    <th>Final Outcome</th>
-                                    <th>VL Result</th>
                                     <th>Tester Name</th>
                                     <th>DOB</th>
-                                    <th>Age</th>
-                                    <th>Gender</th>
                                     <th>Martial Status</th>
-                                    <th>Residence</th>
+                                     <th>Residence</th>
                                     <th>Edication Level</th>
                                     <th>Risk Population</th>
                                     <th>Pregnancy Status</th>
@@ -320,10 +221,9 @@ $formFields = array('sample_id','patient_id','facility_name','facility_type_name
                                     <th>Last HIV Status</th>
                                     <th>Patient On Art</th>
                                     <th>Last 12 Month</th>
-                                     <th>Experienced Violence Last 12 Month</th>
+                                    <th>Experienced Violence Last 12 Month</th>
                                     <th>Form Initiation Datetime</th>
                                     <th>Form Transfer Datetime</th>
-                                    <th>Viral Test Date</th>
                                     <th>Action</th>
                               </tr>
                          </tfoot>
@@ -334,6 +234,7 @@ $formFields = array('sample_id','patient_id','facility_name','facility_type_name
 
           <script type="text/javascript">
           /* Table initialisation */
+        
           oTable = null;
           $(document).ready(function() {
 
@@ -341,9 +242,12 @@ oTable = $('#facilityDataTable').dataTable( {
                 "bAutoWidth": false,
                 "bProcessing": true,
                 "bServerSide": true,
-                "aoColumns": [
-                        <?php echo $editAction;?>
-                ],
+                  "columnDefs": [
+                      {
+                        "targets": [ <?php echo $HideVal;?>  ],
+                        "visible": false,
+                      }
+                 ],
                 "sAjaxSource": "<?php echo $this->url('recency',array('action' => 'index')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     aoData.push({"name": "fName", "value": $("#facilityName").val()});
@@ -362,26 +266,30 @@ oTable = $('#facilityDataTable').dataTable( {
             } );
 
 
-$(".showhideCheckBox").change(function(){
+            $(".showhideCheckBox").change(function(){
                 if($(this).attr('checked')){
                     idpart = $(this).attr('data-showhide');
+                  
                     $("#"+idpart+"-sort").show();
                 }else{
                     idpart = $(this).attr('data-showhide');
                     $("#"+idpart+"-sort").hide();
                 }
             });
-         
-            var i = '<?php echo $i;?>';
-            for(colNo=0;colNo <=i;colNo++){
-                $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
-                
-                if(oTable.fnSettings().aoColumns[colNo].bVisible){
-                     $("#iCol"+colNo+"-sort").show();    
-                }else{
-                     $("#iCol"+colNo+"-sort").hide();    
-                }
-            }
+            //count($arrFields)
+            // var i = <?php //echo count($arrFields); ?>;
+            // for(colNo=0;colNo <i;colNo++){
+            //     $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
+            //     console.log("#iCol"+colNo);
+            //     if(oTable.fnSettings().aoColumns[colNo].bVisible){
+            //          $("#iCol"+colNo+"-sort").show();    
+            //     }else{
+            //          $("#iCol"+colNo+"-sort").hide();    
+            //     }
+            // }
+
+                      
+            
 
             } );
             
@@ -392,7 +300,6 @@ $(".showhideCheckBox").change(function(){
 
         function fnShowHide(iCol)
         {
-            
             var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
                 oTable.fnSetColumnVis( iCol, bVis ? false : true );
         }
@@ -433,5 +340,17 @@ $(".showhideCheckBox").change(function(){
                 }
             });
         }
+        
+        function getCheckBoxVal()
+        {
+            var recen = $("input[name='recencyCheckbox[]']:checked") .map(function(){return $(this).val();}).get();
+           
+            $.post("<?php echo $this->url('recency',array('action'=>'map-manage-columns')); ?>",{recencyManageColumns:recen},
+                function(data){
+                    oTable.fnDraw();
+                    alert('Manage Columns Successfully Updated');
+            });
+        }
+
 
      </script>

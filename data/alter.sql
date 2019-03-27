@@ -238,3 +238,16 @@ UPDATE `global_config` SET `display_name` = 'Technical Support Email' WHERE `glo
 UPDATE `global_config` SET `display_name` = 'Technical Support Phone' WHERE `global_config`.`config_id` = 6;
 
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Technical Support Name', 'technical_support_name', 'test');
+--sathish 26 Mar 2019
+ALTER TABLE `testing_facility_type` CHANGE `testing_facility_type` `testing_facility_type_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+CREATE TABLE `manage_columns_map` (
+  `map_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `manage_columns` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE `manage_columns_map`
+  ADD PRIMARY KEY (`map_id`);
+
+  ALTER TABLE `manage_columns_map`
+  MODIFY `map_id` int(11) NOT NULL AUTO_INCREMENT;
