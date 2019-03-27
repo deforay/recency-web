@@ -50,7 +50,7 @@
 									<select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
 									<option value=""> -- Select -- </option>
 										<?php
-										foreach($facilityResult['facility'] as $facilityRow){
+										foreach($facilityResult['facilityTest'] as $facilityRow){
 											if(2 != (int)$facilityRow['facility_type_id']) continue;
 										?>
 										<option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
@@ -59,25 +59,7 @@
 										?>
 									</select>
 								</div>
-								<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Assay Outcome</label>
-							<div class="col-sm-4">
-							<select class="form-control" id="termOut" name="termOut" title="Please select assay outcome" style="width:100%;">
-							<option value=""> -- Select -- </option>
-                                    <option value="Assay Negative">Assay Negative</option>
-                                    <option value="Assay Recent">Assay Recent</option>
-                                    <option value="Long Term">Long Term</option>
-                                    <option value="Invalid – Please Verify">Invalid</option>
-									</select>
-								</div>
-								<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Final Outcome</label>
-							<div class="col-sm-4">
-							<select class="form-control" id="finalOutcome" name="finalOutcome" title="Please select fianl outcome" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <option value="RITA Recent">RITA Recent</option>
-                                    <option value="Long Term">Long Term</option>
-                                    <option value="inconclusive">Inconclusive</option>
-                                </select>
-								</div>
+								
 								
 						<div class="row items-push">
 							<div class="col-lg-7 ">
@@ -89,65 +71,7 @@
 						</div>
 						</div>
 					
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Quick Overview
-						</h2>
-
-						<div class="block block-rounded block-bordered">
-						<div class="block-content block-content-full">
-						<div style="margin-top: 27px;margin-bottom: 10px;" class="row row-deck __web-inspector-hide-shortcut__">
-							<div class="col-sm-6 col-xl-3 js-appear-enabled animated fadeIn" data-toggle="appear">
-								<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-									<div class="block-content block-content-full">
-										<div class="item item-circle bg-xwork-lighter mx-auto my-3">
-											<i class="fa fa-eye"></i>
-										</div>
-										<div class="text-black display-4 font-w700 " id="totalSamples"></div>
-										<div class="text-muted mt-1">Samples Registered</div>
-										
-									</div>
-								</a>
-							</div>
-							
-							<div class="col-sm-6 col-xl-3 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="150">
-								<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-									<div class="block-content block-content-full">
-										<div class="item item-circle bg-xmodern-lighter mx-auto my-3">
-											<i class="fa fa-eye text-xmodern"></i>
-										</div>
-										<div class="text-black display-4 font-w700" id="samplesTestedRecency"></div>
-										<div class="text-muted mt-1">Samples Tested with Recency</div>
-										
-									</div>
-								</a>
-							</div>
-							<div class="col-sm-6 col-xl-3 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="300">
-								<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-									<div class="block-content block-content-full">
-										<div class="item item-circle bg-xsmooth-lighter mx-auto my-3">
-											<i class="fa fa-eye text-xsmooth"></i>
-										</div>
-										<div class="text-black display-4 font-w700" id="samplesTestedViralLoad"></div>
-										<div class="text-muted mt-1">Samples Tested with Viral Load</div>
-									
-									</div>
-								</a>
-							</div>
-							<div class="col-sm-6 col-xl-3 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
-								<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-									<div class="block-content block-content-full">
-									<div class="item item-circle bg-gd-sea-op mx-auto my-3">
-											<i class="fa fa-eye text-xplay"></i>
-										</div>
-										<div class="text-black display-4 font-w700" id="samplesFinalOutcome"></div>
-										<div class="text-muted mt-1">Samples with RITA Recent</div>
-										
-									</div>
-								</a>
-							</div>
-						</div>
-						</div>
-						</div>
+						
 
 
 						
@@ -161,34 +85,8 @@
 						</div>
 						</div>                
 							
-					<h2 class="content-heading ">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Results
-							<a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-						</h2>
-						<div class="block block-rounded block-bordered">
-						<div class="block-content block-content-full">     
-						<table id="facilityDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
-							<thead>
-								<tr>
-										<th>Facility Name</th>
-										<th>Testing Site Name</th>
-										<th>No.of Samples Registered</th>
-										<th>No.of Samples Received at Hub</th>
-										<th>No.of Samples Rejected</th>
-										<th>No.of Samples Tested With Recency</th>
-										<th>No.of Samples Tested With Viral Load</th>
-										<th>No.of Samples With Final Outcome</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td colspan="8" class="dataTables_empty">Loading data from server</td>
-								</tr>
-								<tr>
-								</tbody>
-							</table>
-			</div>
-		</div>
+					
+					
 	</div>
 	<script src="<?php echo $this->basePath() . '/assets/js/highcharts.js'; ?>"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js.js'; ?>"></script>
@@ -202,32 +100,7 @@
 				getRecencyAllDataCount();
 				getFinalOutcomeChart();
 
-				oTable = $('#facilityDataTable').dataTable( {
-					"bAutoWidth": false,
-					"bProcessing": true,
-					"bServerSide": true,
-					"aoColumns": [
-							<?php echo $editAction;?>
-					],
-					"sAjaxSource": "<?php echo $this->url('home',array('action' => 'index')); ?>",
-					"fnServerData": function ( sSource, aoData, fnCallback ) {
-						aoData.push({"name": "fName", "value": $("#facilityId").val()});
-						aoData.push({"name": "locationOne", "value": $("#location_one").val()});
-						aoData.push({"name": "locationTwo", "value": $("#location_two").val()});
-						aoData.push({"name": "locationThree", "value": $("#location_three").val()});
-						aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
-						aoData.push({"name": "sampleTestedDates", "value": $("#sampleTestedDates").val()});
-						aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
-                    	aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
-						$.ajax({
-							"dataType": 'json',
-							"type": "POST",
-							"url": sSource,
-							"data": aoData,
-							"success": fnCallback
-						});
-					}
-				} );
+				
 
 				<?php foreach($globalConfigResult as $config){
 				?>

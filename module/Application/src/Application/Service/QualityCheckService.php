@@ -218,6 +218,12 @@ class QualityCheckService {
             error_log("GENERATE-PAYMENT-REPORT-EXCEL--" . $exc->getMessage());
             error_log($exc->getTraceAsString());
         }
-     }
+    }
+
+    public function getQualityCheckVolumeChart($params)
+    {
+        $qualityCheckDb = $this->sm->get('QualityCheckTable');
+        return $qualityCheckDb->fetchQualityCheckVolumeChart($params);
+    }
 }
 ?>

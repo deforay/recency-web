@@ -368,8 +368,8 @@ class QualityCheckTable extends AbstractTableGateway {
            return $result;
       }
 
-      public function getQCSyncData($syncedBy)
-      {
+     public function getQCSyncData($syncedBy)
+     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $query = $sql->select()->from(array('qc'=>'quality_check_test'))
@@ -379,6 +379,38 @@ class QualityCheckTable extends AbstractTableGateway {
         $queryStr = $sql->getSqlStringForSqlObject($query);
         $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $result;
-      }
+     }
+
+     public function fetchQualityCheckVolumeChart($parameters)
+     {
+          $dbAdapter = $this->adapter;
+          $sql = new Sql($dbAdapter);
+          $general = new CommonService();
+          $sQuery =   $sql->select()->from(array('qc' => 'quality_check_test'))
+               ->columns(array('tester_name',"total" => new Expression('COUNT(*)')))
+               ->group('tester_name');
+          
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if($parameters['sampleTestedDates']!=''){
+               $sQuery = $sQuery->where("(qc.qc_test_date >='".$start_date."' AND qc.qc_test_date<='".$end_date."')");
+          }
+          
+          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          //\Zend\Debug\Debug::dump($sQueryStr);die;
+          $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+          foreach($rResult as $sRow){
+               if($sRow["tester_name"] == null) continue;
+               $result[$sRow['tester_name']] = (isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
+          }
+          return $result;
+     }
 }
 ?>

@@ -7,8 +7,8 @@ $roleCode = $sessionLogin->roleCode;
 $userName = $sessionLogin->userName;
 // \Zend\Debug\Debug::dump($roleCode);die;
 $dashboardMenu="";
-$dashboardMenu.="<li id='nav-main-item'><a id='labDahboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
-$dashboardMenu.="<li id='nav-main-item'><a id='analysis' class='nav-main-link' href=". $this->url('analysis-dashboard')."><span class='nav-main-link-name'>Analysis</span></a></li>";
+$dashboardMenu.="<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
+$dashboardMenu.="<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=". $this->url('analysis-dashboard')."><span class='nav-main-link-name'>Analysis</span></a></li>";
 
 $userMenu = "";
 $userMenu.="<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=". $this->url('global-config', array('action' => 'index')) ."><span class='nav-main-link-name'>Global Config</span></a></li>";
@@ -146,13 +146,6 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
                <!-- Side Navigation -->
                <div class="content-side content-side-full">
                     <ul class="nav-main">
-                         <li class="nav-main-item">
-                              <!--  -->
-                              <a class="btn btn-hero-sm btn-hero-light" href="/" style="background-color: #dbe4ef;">
-                                   <i class="si si-pie-chart mr-1"></i>Dashboard
-                                   <!-- <span class="nav-main-link-badge badge badge-pill badge-success">5</span> -->
-                              </a>
-                         </li>
                          <li class="nav-main-heading"></li>
                               <li class="nav-main-item " id="dashboard">
                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -348,7 +341,6 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
      $(function () {
           str=$(location).attr('pathname');
           splitsUrl=str.split("/",4);
-
           if(splitsUrl[1]=='facilities' || splitsUrl[1]=='user' || splitsUrl[1]=='recency' || splitsUrl[1]=='global-config' )
           {
                if(splitsUrl[1] != 'recency'){
@@ -359,7 +351,17 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
                     $('#recency-menu').addClass('open');
                     $('#'+splitsUrl[1]).addClass('active');
                }
-          }else if(splitsUrl[1]=='quality-check')
+          }
+          else if(splitsUrl[1]=='analysis-dashboard' || splitsUrl[1]=='')
+          {
+            $('#dashboard').addClass('open');
+            if(splitsUrl[1]==''){
+               $('#lab-dashboard').addClass('active');
+            }else{
+               $('#'+splitsUrl[1]).addClass('active');
+            }
+          }
+          else if(splitsUrl[1]=='quality-check')
           {
             $('#manage').removeClass('open');
             $('#'+splitsUrl[1]).addClass('active');

@@ -1,6 +1,6 @@
 <?php if(count($result)>0){ ?>
 <script>
-Highcharts.chart('container', {
+Highcharts.chart('facilityWiseInvalid', {
     credits: {
             enabled: false
     },
@@ -33,7 +33,7 @@ Highcharts.chart('container', {
     },
     xAxis: {
         categories: [
-            <?php  foreach($result['date'] as $res){?>
+            <?php  foreach($result['facilityName'] as $res){?>
                     '<?php echo $res; ?>',
                <?php } ?>
         ],
@@ -42,7 +42,7 @@ Highcharts.chart('container', {
     yAxis: {
         min: 0,
         title: {
-            text: 'Final Outcomes'
+            text: ''
         }
     },
     tooltip: {
@@ -60,8 +60,8 @@ Highcharts.chart('container', {
         }
     },
     colors: [
-        '#0d233a',
-        '#ada4ec',
+        '#92A8CD',
+        '#AA4643',
         '#24CBE5',
         '#A47D7C',
         '#fec16f',
@@ -73,8 +73,8 @@ Highcharts.chart('container', {
 	],
     series: [
         <?php
-           if(isset($result['finalOutCome']) && count($result['finalOutCome']) >0){
-              foreach($result['finalOutCome'] as $key=>$condition){
+           if(isset($result['fInvalidReport']) && count($result['fInvalidReport']) >0){
+              foreach($result['fInvalidReport'] as $key=>$condition){
               ?>
         {
         name: '<?php echo $key;?>',

@@ -84,5 +84,18 @@ class QualityCheckController extends AbstractActionController
         }
      }
 
-
+     public function getQualityCheckVolumeChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+          $qcService = $this->getServiceLocator()->get('QualityCheckService');
+          $result=$qcService->getQualityCheckVolumeChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+     }
 }

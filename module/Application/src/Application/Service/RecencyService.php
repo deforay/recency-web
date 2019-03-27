@@ -1152,8 +1152,7 @@ class RecencyService
         return $recencyDb->fetchFinalOutcomeChart($params);
     }
     
-    
-    public function mapManageColumnsDetails($params)
+ public function mapManageColumnsDetails($params)
     {
         $recencyDb = $this->sm->get('ManageColumnsMapTable');
         return $recencyDb->mapManageColumnsDetails($params);
@@ -1163,6 +1162,18 @@ class RecencyService
     {
         $recencyDb = $this->sm->get('ManageColumnsMapTable');
         return $recencyDb->fetchAllManagaColumnsDetails($userId);
+    }
+    
+    public function getTesterWiseFinalOutcomeChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchTesterWiseFinalOutcomeChart($params);
+    }
+
+    public function getTesterWiseInvalidChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchTesterWiseInvalidChart($params);
     }
 }
 

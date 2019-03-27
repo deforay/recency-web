@@ -1,0 +1,76 @@
+<?php if(count($result)>0){ ?>
+<script>
+// Build the chart
+Highcharts.chart('qualityCheckVolume', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    exporting: {
+    buttons: {
+      contextButton: {
+        menuItems: [
+          'printChart',
+          'separator',
+          'downloadPNG',
+          'downloadJPEG',
+          'downloadPDF',
+          'downloadSVG',
+          'separator',
+          'downloadCSV',
+          'downloadXLS',
+          'viewData'
+        ]
+      }
+    }
+    },
+    title: {
+        text: ''
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.y}</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true,
+			colors: [
+            '#24CBE5',
+            '#fec16f',
+            '#215682',
+            '#989898',
+            '#8dafbc',
+            '#ada4ec',
+            '#f5c3f5',
+            '#66d3c5'
+	        ],
+        }
+    },
+    credits: {
+		enabled: false
+		},
+    series: [{
+        
+        colorByPoint: true,
+        name: 'Total',
+        data: [
+            <?php
+				foreach($result as $key=>$val){
+					?>
+					{name:'<?php echo ucwords($key);?>',y:<?php echo $val;?>},
+					<?php
+				}
+			?>
+        ]
+    }]
+});
+</script>
+<?php }else{
+    echo "<h2 style='text-align:center;'>No data available</h2>";
+} ?>

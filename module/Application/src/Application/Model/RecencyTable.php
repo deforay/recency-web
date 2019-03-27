@@ -2078,8 +2078,8 @@ class RecencyTable extends AbstractTableGateway {
             $queryContainer = new Container('query');
             $common = new CommonService();
             $general = new CommonService();
-            $aColumns = array('f.facility_name','ft.facility_name','totalSamples','samplesReceived','samplesRejected','samplesTestedRecency', 'samplesTestedViralLoad','samplesFinalOutcome');
-            $orderColumns = array('f.facility_name','ft.facility_name','totalSamples','samplesReceived','samplesRejected','samplesTestedRecency', 'samplesTestedViralLoad','samplesFinalOutcome');
+            $aColumns = array('f.facility_name','ft.facility_name','totalSamples','samplesReceived','samplesRejected','samplesTestBacklog','samplesTestVlPending','samplesTestedRecency', 'samplesTestedViralLoad','samplesFinalOutcome');
+            $orderColumns = array('f.facility_name','ft.facility_name','totalSamples','samplesReceived','samplesRejected','samplesTestBacklog','samplesTestVlPending','samplesTestedRecency', 'samplesTestedViralLoad','samplesFinalOutcome');
 
             /* Paging */
             $sLimit = "";
@@ -2172,6 +2172,14 @@ class RecencyTable extends AbstractTableGateway {
                                                                  WHEN (((r.final_outcome is NOT NULL) )) THEN 1
                                                                  ELSE 0
                                                                  END)"),
+                         "samplesTestBacklog" => new Expression("SUM(CASE 
+                                                                 WHEN (((r.term_outcome='' AND  recency_test_not_performed='') )) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                         "samplesTestVlPending" => new Expression("SUM(CASE 
+                                                                 WHEN (((r.term_outcome='Assay Recent' AND vl_result='') )) THEN 1
+                                                                 ELSE 0
+                                                                 END)")                                        
                                                                                                          
                          )
                          )
@@ -2249,8 +2257,8 @@ class RecencyTable extends AbstractTableGateway {
                     ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
                     ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                     ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
-                                    ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
-                                    ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+                    ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
+                    ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
                     ->group('r.facility_id');
 
                     
@@ -2274,6 +2282,8 @@ class RecencyTable extends AbstractTableGateway {
                          $row[] = $aRow['totalSamples'];
                          $row[] = $aRow['samplesReceived'];
                          $row[] = $aRow['samplesRejected'];
+                         $row[] = $aRow['samplesTestBacklog'];
+                         $row[] = $aRow['samplesTestVlPending'];
                          $row[] = $aRow['samplesTestedRecency'];
                          $row[] = $aRow['samplesTestedViralLoad'];
                          $row[] = $aRow['samplesFinalOutcome'];
@@ -2305,7 +2315,18 @@ class RecencyTable extends AbstractTableGateway {
                                                            WHEN (((r.final_outcome='RITA Recent') )) THEN 1
                                                            ELSE 0
                                                            END)"),
-                                                                                                   
+                    "samplesTestRejected" => new Expression("SUM(CASE 
+                                                           WHEN (((r.recency_test_not_performed='sample_rejected') )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
+                    "samplesPosVerificationAbsent" => new Expression("SUM(CASE 
+                                                           WHEN (((r.positive_verification_line='absent') )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
+                    "samplesTestBacklog" => new Expression("SUM(CASE 
+                                                           WHEN (((r.term_outcome='' AND  recency_test_not_performed='') )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
                    )
                    )
               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
@@ -2314,7 +2335,7 @@ class RecencyTable extends AbstractTableGateway {
               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left');
 
-              if($parameters['fName']!=''){
+           if($parameters['fName']!=''){
                $sQuery->where(array('r.facility_id'=>$parameters['fName']));
            }
            if($parameters['testingFacility']!=''){
@@ -2364,7 +2385,8 @@ class RecencyTable extends AbstractTableGateway {
               $sQuery =   $sql->select()->from(array('r' => 'recency'))
               ->columns(
                array(
-               "monthyear" => new Expression("DATE_FORMAT(hiv_recency_date, '%b %y')"),
+               "week" => new Expression("WEEKOFYEAR(sample_collection_date)"),
+               "monthyear" => new Expression("DATE_FORMAT(sample_collection_date, '%Y')"),
                "ritaRecent" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'RITA Recent') THEN 1 ELSE 0 END))"),
                "longTerm" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'Long Term') THEN 1 ELSE 0 END))"),
                "inconclusive" => new Expression("SUM(CASE WHEN (r.final_outcome = 'Inconclusive') THEN 1 ELSE 0 END)"),
@@ -2375,7 +2397,9 @@ class RecencyTable extends AbstractTableGateway {
                ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
                ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
                ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
-               ->group(array(new Expression('YEAR(hiv_recency_date)'),new Expression('MONTH(hiv_recency_date)')));
+               //->group(array(new Expression('YEAR(hiv_recency_date)'),new Expression('MONTH(hiv_recency_date)')))
+               ->group(array(new Expression('WEEKOFYEAR(sample_collection_date)')))
+               ;
                     
                if($parameters['fName']!=''){
                     $sQuery->where(array('r.facility_id'=>$parameters['fName']));
@@ -2403,7 +2427,7 @@ class RecencyTable extends AbstractTableGateway {
                     }
      
                     if($parameters['sampleTestedDates']!=''){
-                         $sQuery = $sQuery->where(array("r.hiv_recency_date >='" . $start_date ."'", "r.hiv_recency_date <='" . $end_date."'"));
+                         $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
                     }
                     if($parameters['tOutcome']!=''){
                          $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
@@ -2413,23 +2437,400 @@ class RecencyTable extends AbstractTableGateway {
                          $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
                      }
               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-               //\Zend\Debug\Debug::dump($sQueryStr);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
               $j=0;
                 foreach($rResult as $sRow){
-                    if($sRow["monthyear"] == null) continue;
+                    $weekDateOfMonth=$this->getStartAndEndDate($sRow["week"],$sRow['monthyear']);
+                    if($sRow["week"] == null) continue;
                     $result['finalOutCome']['RITA Recent'][$j] = (isset($sRow['ritaRecent']) && $sRow['ritaRecent'] != NULL) ? $sRow['ritaRecent'] : 0;
                     $result['finalOutCome']['Long Term'][$j] = (isset($sRow['longTerm']) && $sRow['longTerm'] != NULL) ? $sRow['longTerm'] : 0;
                     $result['finalOutCome']['Inconclusive'][$j] = (isset($sRow['inconclusive']) && $sRow['inconclusive'] != NULL) ? $sRow['inconclusive'] : 0;
 
-                    $result['date'][$j] = $sRow["monthyear"];
+                    $result['date'][$j] = $weekDateOfMonth[0]." to ".$weekDateOfMonth[1];
+                    
+                    //$weekDateOfMonth=$this->getStartAndEndDate($sRow["week"],$sRow['monthyear']);
+                    
                     $j++;
                 }
               
               return $result;
 
           }
-  
+
+          public function getStartAndEndDate($week,$year) {
+               
+               $dates[0] = date("d-M-Y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT)));
+               $dates[1] = date("d-M-Y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT).' +6 days'));
+               return $dates;
+          }
+          
+          public function fetchRecencyLabActivityChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+              ->columns(
+               array( 
+               "samplesCollected" => new Expression("SUM(CASE 
+                                                       WHEN (((r.sample_collection_date is NOT NULL AND r.sample_collection_date !=''))) THEN 1
+                                                       ELSE 0
+                                                  END)"),
+               "samplesTested" => new Expression("SUM(CASE 
+                                                  WHEN (((r.hiv_recency_date is NOT NULL AND r.hiv_recency_date !=''))) THEN 1
+                                                  ELSE 0
+                                                  END)"),
+               "VLDone" => new Expression("SUM(CASE 
+                                                  WHEN ((vl_result!='' AND vl_result is NOT NULL)) THEN 1
+                                                  ELSE 0
+                                                  END)"),
+
+               "VLPending" => new Expression("SUM(CASE 
+                                                  WHEN (((r.term_outcome='Assay Recent' AND vl_result='') )) THEN 1
+                                                  ELSE 0
+                                                  END)")
+               )
+                    )
+               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'))
+               ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
+               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
+               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->group("testing_facility_name");
+                    
+               if($parameters['fName']!=''){
+                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+                }
+                if($parameters['testingFacility']!=''){
+                    $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+                }
+                if($parameters['locationOne']!=''){
+                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                    if($parameters['locationTwo']!=''){
+                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    }
+                    if($parameters['locationThree']!=''){
+                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    }
+               }
+                    if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                         $s_c_date = explode("to", $parameters['sampleTestedDates']);
+                         if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                              $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                         }
+                         if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                              $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                         }
+                    }
+     
+                    if($parameters['sampleTestedDates']!=''){
+                         $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+                    }
+                    if($parameters['tOutcome']!=''){
+                         $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
+                     }
+                  
+                     if($parameters['finalOutcome']!=''){
+                         $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
+                     }
+              $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
+              $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+              $j=0;
+                foreach($rResult as $sRow){
+                    if($sRow["testing_facility_name"] == null) continue;
+                    $result['labActivity']['Samples Collected'][$j] = (isset($sRow['samplesCollected']) && $sRow['samplesCollected'] != NULL) ? $sRow['samplesCollected'] : 0;
+                    $result['labActivity']['Recency Test Done'][$j] = (isset($sRow['samplesTested']) && $sRow['samplesTested'] != NULL) ? $sRow['samplesTested'] : 0;
+                    $result['labActivity']['VL Test Done'][$j] = (isset($sRow['VLDone']) && $sRow['VLDone'] != NULL) ? $sRow['VLDone'] : 0;
+                    $result['labActivity']['VL Test Pending'][$j] = (isset($sRow['VLPending']) && $sRow['VLPending'] != NULL) ? $sRow['VLPending'] : 0;
+                    $result['date'][$j] = $sRow["testing_facility_name"];
+                    
+                    $j++;
+                }
+              
+              return $result;
+
+          }
+
+          public function fetchTesterWiseFinalOutcomeChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+              ->columns(
+               array(
+               'tester_name',
+               "totalSamples" => new Expression('COUNT(*)'),
+               "assayRecent" => new Expression("SUM(CASE 
+                                             WHEN ((term_outcome ='Assay Recent' OR term_outcome ='assay recent')) THEN 1
+                                             ELSE 0
+                                             END)"),
+               "assayLongTerm" => new Expression("SUM(CASE 
+                                             WHEN ((term_outcome ='Long Term' OR term_outcome ='long term')) THEN 1
+                                             ELSE 0
+                                             END)"),
+               "assayInvalid" => new Expression("SUM(CASE 
+                                             WHEN ((term_outcome ='Invalid' OR term_outcome ='invalid')) THEN 1
+                                             ELSE 0
+                                             END)"),
+               )
+                    )
+               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+               ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
+               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
+               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->group('tester_name');
+                    
+               if($parameters['fName']!=''){
+                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+                }
+                if($parameters['testingFacility']!=''){
+                    $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+                }
+                if($parameters['locationOne']!=''){
+                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                    if($parameters['locationTwo']!=''){
+                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    }
+                    if($parameters['locationThree']!=''){
+                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    }
+              }
+                    if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                         $s_c_date = explode("to", $parameters['sampleTestedDates']);
+                         if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                              $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                         }
+                         if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                              $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                         }
+                    }
+     
+                    if($parameters['sampleTestedDates']!=''){
+                         $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+                    }
+                    if($parameters['tOutcome']!=''){
+                         $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
+                     }
+                  
+                     if($parameters['finalOutcome']!=''){
+                         $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
+                     }
+              $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
+              $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+              $j=0;
+                foreach($rResult as $sRow){
+                    if($sRow["tester_name"] == null) continue;
+                    $result['finalOutCome']['Total'][$j] = (isset($sRow['totalSamples']) && $sRow['totalSamples'] != NULL) ? $sRow['totalSamples'] : 0;
+                    $result['finalOutCome']['Assay Long Term'][$j] = (isset($sRow['assayLongTerm']) && $sRow['assayLongTerm'] != NULL) ? $sRow['assayLongTerm'] : 0;
+                    $result['finalOutCome']['Assay Recent'][$j] = (isset($sRow['assayRecent']) && $sRow['assayRecent'] != NULL) ? $sRow['assayRecent'] : 0;
+                    $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
+                    $result['testerName'][$j] = $sRow['tester_name'];
+                    
+                    $j++;
+                }
+              
+              return $result;
+
+          }
+
+          public function fetchTesterWiseInvalidChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+               ->columns(
+                    array(
+                    'tester_name',
+                    "assayInvalid" => new Expression("SUM(CASE 
+                                                  WHEN ((term_outcome ='Invalid' OR term_outcome ='invalid')) THEN 1
+                                                  ELSE 0
+                                                  END)"),
+                    )
+                    )
+               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+               ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
+               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
+               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->group('tester_name');
+                    
+               if($parameters['fName']!=''){
+                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+               }
+               if($parameters['testingFacility']!=''){
+               $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+               }
+               if($parameters['locationOne']!=''){
+                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                    if($parameters['locationTwo']!=''){
+                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    }
+                    if($parameters['locationThree']!=''){
+                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    }
+               }
+               if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                    $s_c_date = explode("to", $parameters['sampleTestedDates']);
+                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                    }
+                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                    }
+               }
+     
+               if($parameters['sampleTestedDates']!=''){
+                    $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+               }
+               if($parameters['tOutcome']!=''){
+                    $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
+               }
+               if($parameters['finalOutcome']!=''){
+                    $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
+               }
+
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               $j=0;
+               foreach($rResult as $sRow){
+                    if($sRow["tester_name"] == null) continue;
+                    $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
+                    $result['testerName'][$j] = $sRow['tester_name'];
+                    $j++;
+               }
+               return $result;
+          }
+
+          public function fetchFacilityWiseInvalidChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+               ->columns(
+                    array(
+                    "assayInvalid" => new Expression("SUM(CASE 
+                                                  WHEN ((term_outcome ='Invalid' OR term_outcome ='invalid')) THEN 1
+                                                  ELSE 0
+                                                  END)"),
+                    )
+                    )
+               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+               ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
+               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
+               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->group('facility_name');
+                    
+               if($parameters['fName']!=''){
+                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+               }
+               if($parameters['testingFacility']!=''){
+               $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+               }
+               if($parameters['locationOne']!=''){
+                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                    if($parameters['locationTwo']!=''){
+                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    }
+                    if($parameters['locationThree']!=''){
+                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    }
+               }
+               if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                    $s_c_date = explode("to", $parameters['sampleTestedDates']);
+                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                    }
+                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                    }
+               }
+               if($parameters['sampleTestedDates']!=''){
+                    $sQuery = $sQuery->where("(r.sample_collection_date >='".$start_date."' AND r.sample_collection_date<='".$end_date."')");
+               }
+               if($parameters['tOutcome']!=''){
+                    $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
+               }
+               if($parameters['finalOutcome']!=''){
+                    $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
+               }
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               $j=0;
+               foreach($rResult as $sRow){
+                    if($sRow["facility_name"] == null) continue;
+                    $result['fInvalidReport']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
+                    $result['facilityName'][$j] = $sRow['facility_name'];
+                    $j++;
+               }
+               return $result;
+          }
+
+          public function fetchLotChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+               ->columns(array('kit_lot_no',"total" => new Expression('COUNT(*)')))
+               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+               ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
+               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
+               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->group('kit_lot_no');
+                    
+               if($parameters['fName']!=''){
+                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+               }
+               if($parameters['testingFacility']!=''){
+               $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+               }
+               if($parameters['locationOne']!=''){
+                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                    if($parameters['locationTwo']!=''){
+                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    }
+                    if($parameters['locationThree']!=''){
+                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    }
+               }
+               if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                    $s_c_date = explode("to", $parameters['sampleTestedDates']);
+                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                    }
+                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                    }
+               }
+               if($parameters['sampleTestedDates']!=''){
+                    $sQuery = $sQuery->where("(r.sample_collection_date >='".$start_date."' AND r.sample_collection_date<='".$end_date."')");
+               }
+               if($parameters['tOutcome']!=''){
+                    $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
+               }
+               if($parameters['finalOutcome']!=''){
+                    $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
+               }
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               foreach($rResult as $sRow){
+                    if($sRow["kit_lot_no"] == null) continue;
+                    $result[$sRow['kit_lot_no']] = (isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
+               }
+               return $result;
+          }
      }
 
 
