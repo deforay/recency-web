@@ -268,19 +268,5 @@ class RecencyController extends AbstractActionController
                 ->setTerminal(true);
         return $viewModel;
      }
-
-     public function getQualityCheckVolumeAction()
-     {
-        $result = "";
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-          $params = $request->getPost();
-           $recencyService = $this->getServiceLocator()->get('RecencyService');
-           $result=$recencyService->getLotChart($params);
-        }
-        $viewModel = new ViewModel();
-        $viewModel->setVariables(array('result' => $result))
-                ->setTerminal(true);
-        return $viewModel;
-     }
+     
 }

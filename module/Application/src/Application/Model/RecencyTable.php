@@ -2745,7 +2745,7 @@ class RecencyTable extends AbstractTableGateway {
                     }
                }
                if($parameters['sampleTestedDates']!=''){
-                    $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+                    $sQuery = $sQuery->where("(r.sample_collection_date >='".$start_date."' AND r.sample_collection_date<='".$end_date."')");
                }
                if($parameters['tOutcome']!=''){
                     $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
@@ -2805,7 +2805,7 @@ class RecencyTable extends AbstractTableGateway {
                     }
                }
                if($parameters['sampleTestedDates']!=''){
-                    $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+                    $sQuery = $sQuery->where("(r.sample_collection_date >='".$start_date."' AND r.sample_collection_date<='".$end_date."')");
                }
                if($parameters['tOutcome']!=''){
                     $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));

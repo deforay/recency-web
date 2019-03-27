@@ -81,7 +81,7 @@
 								
 						<div class="row items-push">
 							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getTesterwiseFinalOutcomeChart();getTesterwiseInvalidChart();getFacilityWiseInvalidChart();getLotChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getTesterwiseFinalOutcomeChart();getTesterwiseInvalidChart();getFacilityWiseInvalidChart();getLotChart();getQualityCheckVolume();"><i class="fa fa-fw fa-check"></i> Search</a>
 								
 							</div>
 						</div>
@@ -237,7 +237,14 @@
 							</div>
 						</div>
 
-						
+						<h2 class="content-heading">
+							<i class="fa fa-angle-right text-muted mr-1"></i> Quality Check Volume
+						</h2>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								<div id="qualityCheckVolume" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
+						</div>
 
 					<h2 class="content-heading ">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
@@ -286,7 +293,7 @@
 				getTesterwiseInvalidChart();
 				getFacilityWiseInvalidChart();
 				getLotChart();
-				//getQualityCheckVolume();
+				getQualityCheckVolume();
 				oTable = $('#facilityDataTable').dataTable( {
 					"bAutoWidth": false,
 					"bProcessing": true,
@@ -466,7 +473,7 @@
 	}
 
 	function getQualityCheckVolume() {		
-		$.post("<?php echo $this->url('recency',array('action'=>'get-quality-check-volume')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+		$.post("<?php echo $this->url('quality-check',array('action'=>'get-quality-check-volume-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
 		function(data){
 			$("#qualityCheckVolume").html(data);
 		});
