@@ -2376,8 +2376,8 @@ class RecencyTable extends AbstractTableGateway {
               $sQuery =   $sql->select()->from(array('r' => 'recency'))
               ->columns(
                array(
-               "week" => new Expression("WEEKOFYEAR(hiv_recency_date)"),
-               "monthyear" => new Expression("DATE_FORMAT(hiv_recency_date, '%Y')"),
+               "week" => new Expression("WEEKOFYEAR(sample_collection_date)"),
+               "monthyear" => new Expression("DATE_FORMAT(sample_collection_date, '%Y')"),
                "ritaRecent" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'RITA Recent') THEN 1 ELSE 0 END))"),
                "longTerm" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'Long Term') THEN 1 ELSE 0 END))"),
                "inconclusive" => new Expression("SUM(CASE WHEN (r.final_outcome = 'Inconclusive') THEN 1 ELSE 0 END)"),
@@ -2389,7 +2389,7 @@ class RecencyTable extends AbstractTableGateway {
                ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
                ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
                //->group(array(new Expression('YEAR(hiv_recency_date)'),new Expression('MONTH(hiv_recency_date)')))
-               ->group(array(new Expression('WEEKOFYEAR(hiv_recency_date)')))
+               ->group(array(new Expression('WEEKOFYEAR(sample_collection_date)')))
                ;
                     
                if($parameters['fName']!=''){
