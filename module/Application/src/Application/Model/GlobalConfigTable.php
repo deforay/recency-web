@@ -352,7 +352,8 @@ class GlobalConfigTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('global_config')
-                        ->where('global_name IN ("technical_support_name","admin_phone","admin_email")');
+                        ->where('global_name IN ("technical_support_name","admin_phone","admin_email")')
+                        ->order("config_id DESC");
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if(count($rResult) > 0) {
