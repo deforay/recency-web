@@ -2852,6 +2852,7 @@ class RecencyTable extends AbstractTableGateway {
                ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
                ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
                ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->where("(r.hiv_recency_date is NOT NULL AND r.hiv_recency_date !='')")
                ->group('gender');
                     
                if($parameters['fName']!=''){
@@ -2882,13 +2883,7 @@ class RecencyTable extends AbstractTableGateway {
                if($parameters['sampleTestedDates']!=''){
                     $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
                }
-               if($parameters['tOutcome']!=''){
-                    $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
-                    }
                
-                    if($parameters['finalOutcome']!=''){
-                    $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
-                    }
                $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                //\Zend\Debug\Debug::dump($sQueryStr);die;
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -2901,8 +2896,76 @@ class RecencyTable extends AbstractTableGateway {
                     if($sRow["gender"]=='not_reported'){
                          $sRow["gender"]='Not Reported';
                     }
-                    
+
                     $result['gender'][$j] = ucwords($sRow["gender"]);
+                    $j++;
+               }
+              return $result;
+
+          }
+
+          public function fetchRecentInfectionByDistrictChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+              ->columns(
+                    array(
+                    "total" => new Expression('COUNT(*)'),
+                    "male" => new Expression("(SUM(CASE WHEN (r.gender = 'male') THEN 1 ELSE 0 END))"),
+                    "female" => new Expression("(SUM(CASE WHEN (r.gender = 'female') THEN 1 ELSE 0 END))"),
+                    "not_reported" => new Expression("(SUM(CASE WHEN (r.gender = 'not_reported') THEN 1 ELSE 0 END))"),
+                    )
+               )
+               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+               ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'))
+               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
+               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->where(array('r.final_outcome'=>'RITA Recent'))
+               ->where("(r.hiv_recency_date is NOT NULL AND r.hiv_recency_date !='')")
+               ->group('d.district_name');
+                    
+               if($parameters['fName']!=''){
+                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+               }
+               if($parameters['testingFacility']!=''){
+               $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+               }
+               if($parameters['locationOne']!=''){
+                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                    if($parameters['locationTwo']!=''){
+                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    }
+                    if($parameters['locationThree']!=''){
+                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    }
+               }
+               if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                    $s_c_date = explode("to", $_POST['sampleTestedDates']);
+                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                    }
+                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                    }
+               }
+     
+               if($parameters['sampleTestedDates']!=''){
+                    $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+               }
+               
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               $j=0;
+               foreach($rResult as $sRow){
+                    if($sRow["district_name"] == null) continue;
+                    $result['finalOutCome']['Male'][$j] = (isset($sRow['male']) && $sRow['male'] != NULL) ? $sRow['male'] : 0;
+                    $result['finalOutCome']['Female'][$j] = (isset($sRow['female']) && $sRow['female'] != NULL) ? $sRow['female'] : 0;
+                    $result['finalOutCome']['Not Reported'][$j] = (isset($sRow['not_reported']) && $sRow['not_reported'] != NULL) ? $sRow['not_reported'] : 0;
+                    $result['district_name'][$j] = ucwords($sRow["district_name"]);
                     $j++;
                }
               return $result;
@@ -2911,4 +2974,4 @@ class RecencyTable extends AbstractTableGateway {
      }
 
 
-     ?>
+?>

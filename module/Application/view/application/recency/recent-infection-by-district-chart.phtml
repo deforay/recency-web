@@ -1,8 +1,7 @@
 <?php if(count($result)>0){
-$color=['#ad7bf7','#0178b7','#898989','#cca9ff','#4fafe2','#a8a8a8','#dfd0f4','#9cd5f4','#dbd9d9'];
 ?>
 <script>
-Highcharts.chart('container', {
+Highcharts.chart('infectionByDistrict', {
     credits: {
             enabled: false
     },
@@ -30,12 +29,9 @@ Highcharts.chart('container', {
     title: {
         text: ''
     },
-    subtitle: {
-        text: ''
-    },
     xAxis: {
         categories: [
-            <?php  foreach($result['gender'] as $res){?>
+            <?php  foreach($result['district_name'] as $res){?>
                     '<?php echo $res; ?>',
                <?php } ?>
         ],
@@ -44,8 +40,11 @@ Highcharts.chart('container', {
     yAxis: {
         min: 0,
         title: {
-            text: ' '
+            text: 'Recent'
         }
+    },
+    legend: {
+        reversed: true
     },
     tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -55,8 +54,10 @@ Highcharts.chart('container', {
         shared: true,
         useHTML: true
     },
+    
     plotOptions: {
         series: {
+            stacking: 'normal',
             borderWidth: 0,
             dataLabels: {
                 enabled: true,
@@ -64,6 +65,11 @@ Highcharts.chart('container', {
             }
         }
     },
+    colors: [
+        '#0178b7',
+        '#ad7bf7',
+        '#898989'
+	],
     series: [
         <?php
         $k=0;
@@ -74,7 +80,6 @@ Highcharts.chart('container', {
         name: '<?php echo $key;?>',
         data: [<?php
                   foreach($condition as $count){
-                    //echo $count.",";
                 ?>
                 
                 { y: <?php echo $count; ?>, color: '<?php echo $color[$k]; ?>'}, 
@@ -90,8 +95,7 @@ Highcharts.chart('container', {
               }
            }
             ?>]
-
-
+    
 });
 </script>
 <?php }else{
