@@ -22,6 +22,7 @@ use Application\Model\DistrictTable;
 use Application\Model\CityTable;
 use Application\Model\QualityCheckTable;
 use Application\Model\TestingFacilityTypeTable;
+use Application\Model\ManageColumnsMapTable;
 
 // Service
 
@@ -156,6 +157,12 @@ class Module{
                         $table = new TestingFacilityTypeTable($dbAdapter);
                         return $table;
                     },
+                    'ManageColumnsMapTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new ManageColumnsMapTable($dbAdapter);
+                        return $table;
+                    },
+                    
                     
 
 

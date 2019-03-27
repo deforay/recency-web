@@ -39,11 +39,13 @@ class RecencyTable extends AbstractTableGateway {
           $role = $sessionLogin->roleId;
           $roleCode = $sessionLogin->roleCode;
           $common = new CommonService();
-
-
                          
-          $aColumns = array('r.sample_id','r.patient_id','DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")','DATE_FORMAT(r.sample_receipt_date,"%d-%b-%Y")','r.received_specimen_type','f.facility_name' ,'ft.facility_name','tf.testing_facility_type_name' ,'DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','DATE_FORMAT(r.kit_expiry_date,"%d-%b-%Y")','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','DATE_FORMAT(r.dob,"%d-%b-%Y")','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','DATE_FORMAT(r.form_initiation_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.form_transfer_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
-          $orderColumns = array('r.sample_id','r.patient_id','r.sample_collection_date','r.sample_receipt_date','r.received_specimen_type','f.facility_name','f.facility_name','ft.facility_name', 'tf.testing_facility_type_name','r.hiv_diagnosis_date','r.hiv_recency_date','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.kit_lot_no','r.kit_expiry_date','r.term_outcome','r.final_outcome','r.vl_result','r.tester_name','r.dob','r.age','r.gender','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','r.form_initiation_datetime','r.form_transfer_datetime','r.vl_test_date');
+
+                       
+
+
+          $aColumns = array('r.sample_id','f.facility_name','DATE_FORMAT(r.hiv_recency_date,"%d-%b-%Y")','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.term_outcome','r.vl_result','r.final_outcome','r.gender','r.age'  ,'r.patient_id','DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")','DATE_FORMAT(r.sample_receipt_date,"%d-%b-%Y")','r.received_specimen_type' ,'ft.facility_name','tf.testing_facility_type_name' ,'DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','r.kit_lot_no','DATE_FORMAT(r.kit_expiry_date,"%d-%b-%Y")','r.tester_name','DATE_FORMAT(r.dob,"%d-%b-%Y")','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','DATE_FORMAT(r.form_initiation_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.form_transfer_datetime ,"%d-%b-%Y %H:%i:%s")');
+          $orderColumns = array('r.sample_id','f.facility_name','r.hiv_recency_date','r.vl_test_date','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.term_outcome','r.vl_result','r.final_outcome','r.gender','r.age','r.patient_id','r.sample_collection_date','r.sample_receipt_date','r.received_specimen_type','f.facility_name','ft.facility_name', 'tf.testing_facility_type_name','r.hiv_diagnosis_date','r.kit_lot_no','r.kit_expiry_date','r.tester_name','r.dob','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','r.form_initiation_datetime','r.form_transfer_datetime');
 
           /* Paging */
           $sLimit = "";
@@ -196,29 +198,36 @@ class RecencyTable extends AbstractTableGateway {
                             $formTransferDate = $common->humanDateFormat($formTransferAry[0])." ".$formTransferAry[1];
                          }
                          $row[] = $aRow['sample_id'];
+                         $row[] = $aRow['facility_name'];
+                         $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                         $row[] = $common->humanDateFormat($aRow['vl_test_date']);
+                         $row[] = ucwords($aRow['control_line']);
+                         $row[] = ucwords($aRow['positive_verification_line']);
+                         $row[] = ucwords($aRow['long_term_verification_line']);
+                         $row[] = $aRow['term_outcome'];
+                         $row[] = ucwords($aRow['vl_result']);
+                         $row[] = $aRow['final_outcome'];
+                         $row[] = ucwords($aRow['gender']);
+                         $row[] = $aRow['age'];
+
                          $row[] = $aRow['patient_id'];
                          $row[] =  $common->humanDateFormat($aRow['sample_collection_date']);
                          $row[] =  $common->humanDateFormat($aRow['sample_receipt_date']);
                          $row[] = str_replace("_"," ",ucwords($aRow['received_specimen_type']));
-                         $row[] = $aRow['facility_name'];
+                        
                          $row[] = $aRow['testing_facility_name'];
                          $row[] = $aRow['testing_facility_type_name'];
                          
                          $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
-                         $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
-
-                         $row[] = ucwords($aRow['control_line']);
-                         $row[] = ucwords($aRow['positive_verification_line']);
-                         $row[] = ucwords($aRow['long_term_verification_line']);
                          $row[] = $aRow['kit_lot_no'];
                          $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
-                         $row[] = $aRow['term_outcome'];
-                         $row[] = $aRow['final_outcome'];
-                         $row[] = ucwords($aRow['vl_result']);
+                         
+                         
+                        
                          $row[] = ucwords($aRow['tester_name']);
                          $row[] = $common->humanDateFormat($aRow['dob']);
-                         $row[] = $aRow['age'];
-                         $row[] = ucwords($aRow['gender']);
+                         
+                         
                          $row[] = str_replace("_"," ",ucwords($aRow['marital_status']));
                          $row[] = ucwords($aRow['residence']);
                          $row[] =  str_replace("_"," ",ucwords($aRow['education_level']));
@@ -233,7 +242,7 @@ class RecencyTable extends AbstractTableGateway {
                          
                          $row[] = $formInitiationDate;
                          $row[] = $formTransferDate;
-                         $row[] = $common->humanDateFormat($aRow['vl_test_date']);
+                         
 
                          $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                          <a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>
@@ -1253,7 +1262,7 @@ class RecencyTable extends AbstractTableGateway {
           public function updateVlSampleResult($params)
           {
               //\Zend\Debug\Debug::dump($params);die;
-               $common = new CommonService();
+               $common = new CommonService(); $common = new CommonService();
                $sampleVlResult = explode(",",$params['vlResult']);
                $sampleVlResultId = explode(",",$params['vlResultRowId']);
                $dataOutcome = explode(",",$params['vlDataOutCome']);

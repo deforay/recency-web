@@ -1,6 +1,10 @@
 <?php
 namespace Application\Controller;
 
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Expression;
+use Zend\Session\Container;
+
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -10,20 +14,25 @@ class RecencyController extends AbstractActionController
 
      public function indexAction()
      {
+          $logincontainer = new Container('credo');
+          $userId = $logincontainer->userId;
           $request = $this->getRequest();
+          $recencyService = $this->getServiceLocator()->get('RecencyService');
           if ($request->isPost()) {
                $params = $request->getPost();
-               $recencyService = $this->getServiceLocator()->get('RecencyService');
                $result = $recencyService->getRecencyDetails($params);
-               
 
                return $this->getResponse()->setContent(Json::encode($result));
           }else{
             $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            
             $facilityResult=$facilityService->getFacilitiesAllDetails();
+            $manageColumnsResult=$recencyService->getAllManagaColumnsDetails($userId);
             
             return new ViewModel(array(
-                'facilityResult' => $facilityResult
+                'facilityResult' => $facilityResult,
+                'manageColumnsResult' => $manageColumnsResult,
+                
            ));
           }
      }
@@ -192,5 +201,21 @@ class RecencyController extends AbstractActionController
                 ->setTerminal(true);
         return $viewModel;
     }
+
+    public function mapManageColumnsAction()
+     {
+        $request = $this->getRequest();
+        if($request->isPost())
+        {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result=$recencyService->mapManageColumnsDetails($params);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' =>$result));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
+     }
+    
     
 }

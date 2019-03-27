@@ -14,6 +14,6 @@ if(count($result['facility'])>0){
         $facility .='<option value="'.base64_encode($name['facility_id']).'">'.$name['facility_name'].'</option>';
     }
 }
-$facility .='<option value="other">Other</option>';
+//$facility .='<option value="other">Other</option>';
 
 echo $city.'##'.$facility;
