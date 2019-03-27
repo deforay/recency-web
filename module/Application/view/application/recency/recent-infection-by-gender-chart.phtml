@@ -1,0 +1,101 @@
+<?php if(count($result)>0){
+$color=['#ad7bf7','#0178b7','#898989','#cca9ff','#4fafe2','#a8a8a8','#dfd0f4','#9cd5f4','#dbd9d9'];
+?>
+<script>
+Highcharts.chart('container', {
+    credits: {
+            enabled: false
+    },
+    exporting: {
+    buttons: {
+      contextButton: {
+        menuItems: [
+          'printChart',
+          'separator',
+          'downloadPNG',
+          'downloadJPEG',
+          'downloadPDF',
+          'downloadSVG',
+          'separator',
+          'downloadCSV',
+          'downloadXLS',
+          'viewData'
+        ]
+      }
+    }
+    },
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: ''
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        categories: [
+            <?php  foreach($result['gender'] as $res){?>
+                    '<?php echo $res; ?>',
+               <?php } ?>
+        ],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: ' '
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                format: '{point.y}'
+            }
+        }
+    },
+    series: [
+        <?php
+        $k=0;
+           if(isset($result['finalOutCome']) && count($result['finalOutCome']) >0){
+              foreach($result['finalOutCome'] as $key=>$condition){
+              ?>
+        {
+        name: '<?php echo $key;?>',
+        data: [<?php
+                  foreach($condition as $count){
+                    //echo $count.",";
+                    $col="#ad7bf7";
+                    
+                ?>
+                
+                { y: <?php echo $count; ?>, color: '<?php echo $color[$k]; ?>'}, 
+                <?php
+                $k++;
+                  }
+              ?>
+              
+              ]
+
+    }, 
+    <?php
+              }
+           }
+            ?>]
+
+
+});
+</script>
+<?php }else{
+    echo "<h2 style='text-align:center;'>No data available</h2>";
+} ?>

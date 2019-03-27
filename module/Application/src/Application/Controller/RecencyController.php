@@ -186,7 +186,7 @@ class RecencyController extends AbstractActionController
         $viewModel->setVariables(array('result' => $result))
                 ->setTerminal(true);
         return $viewModel;
-    }
+     }
 
      public function getFinalOutcomeChartAction()
      {
@@ -286,6 +286,21 @@ class RecencyController extends AbstractActionController
           $params = $request->getPost();
            $recencyService = $this->getServiceLocator()->get('RecencyService');
            $result=$recencyService->getLotChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+     }
+
+     public function recentInfectionByGenderChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getRecentInfectionByGenderChart($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))

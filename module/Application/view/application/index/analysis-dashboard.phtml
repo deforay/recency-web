@@ -63,7 +63,7 @@
 								
 						<div class="row items-push">
 							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+								<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
 								
 							</div>
 						</div>
@@ -76,7 +76,7 @@
 
 						
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> FInal Outcome Chart
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Gender:
 						</h2>
 						<div class="block block-rounded block-bordered">
 						<div class="block-content block-content-full">
@@ -96,18 +96,13 @@
 			/* Table initialisation */
 			oTable = null;
 			$(document).ready(function() {
-
-				getRecencyAllDataCount();
 				getFinalOutcomeChart();
-
-				
-
 				<?php foreach($globalConfigResult as $config){
 				?>
 				getLocationDeatils('<?php echo $config["global_name"];?>');
 				<?php
 				break;
-			} ?>
+				} ?>
 
 		$('#sampleTestedDates').daterangepicker({
 			format: 'DD-MMM-YYYY',
@@ -124,26 +119,20 @@
 					'This Month': [moment().startOf('month'), moment().endOf('month')],
 					'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
 					}
-	},
-	function(start, end) {
-		startDate = start.format('YYYY-MM-DD');
-		endDate = end.format('YYYY-MM-DD');
-		$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
-		$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
-	});
+		},
+		function(start, end) {
+			startDate = start.format('YYYY-MM-DD');
+			endDate = end.format('YYYY-MM-DD');
+			$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
+			$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+		});
 
 	});
 				});
 
-			function searchData(){
-				$.blockUI();
-				oTable.fnDraw();
-				$.unblockUI();
-			}
 
 
-
-			function getLocationDeatils(globalName,nxtGlobalName)
+		function getLocationDeatils(globalName,nxtGlobalName)
 		{
 			var selectValue = document.getElementById(globalName).value;
 			var innerId = '';
@@ -179,40 +168,12 @@
 			});
 		}
 
-		function exportRecencyInfo()
-		{
-			$.blockUI();
-			$.post("<?php echo $this->url('home',array('action'=>'export-recency-data')); ?>",
-				function(data){
-				if(data == "" || data == null || data == undefined){
-				$.unblockUI();
-				alert('Unable to generate download');
-				}else{
-				$.unblockUI();
-				document.location.href = '/temporary/'+data;
-				}
-			});
-		}
-
-	function getRecencyAllDataCount() {
-		
-			$.post("<?php echo $this->url('recency',array('action'=>'get-recency-all-data-count')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
-				function(data){
-					var obj = JSON.parse(data);
-					$("#totalSamples").html(obj.totalSamples);
-					$("#samplesTestedRecency").html(obj.samplesTestedRecency);
-					$("#samplesTestedViralLoad").html(obj.samplesTestedViralLoad);
-					$("#samplesFinalOutcome").html(obj.samplesFinalOutcome);
-			});
-	}
-
 		function getFinalOutcomeChart() {
-		
-			$.post("<?php echo $this->url('recency',array('action'=>'get-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-gender-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
 				function(data){
 					$("#container").html(data);
 			});
-	}
+		}
 
 
 	</script>
