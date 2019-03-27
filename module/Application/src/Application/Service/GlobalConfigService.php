@@ -70,5 +70,12 @@ class GlobalConfigService {
         $globalConfigDb = $this->sm->get('GlobalConfigTable');
         return $globalConfigDb->fetchRecencyHideDetailsApi();
     }
+
+    
+    public function getTechnicalSupportDetailsApi()
+    {
+        $globalConfigDb = $this->sm->get('GlobalConfigTable');
+        return $globalConfigDb->fetchTechnicalSupportDetailsApi();
+    }
 }
 ?>

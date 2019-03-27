@@ -343,5 +343,26 @@ class GlobalConfigTable extends AbstractTableGateway {
         return $configValues[0]['global_value'];
         
     }
+
+    
+    public function fetchTechnicalSupportDetailsApi()
+    {
+        $common = new CommonService();
+        $config = new \Zend\Config\Reader\Ini();
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery = $sql->select()->from('global_config')
+                        ->where('global_name IN ("technical_support_name","admin_phone","admin_email")');
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            if(count($rResult) > 0) {
+                $response['status']='success';
+                $response['result'] =$rResult;
+            } else {
+                $response["status"] = "fail";
+                $response["message"] = "Date not found!";
+            }
+       return $response;
+    }
 }
 ?>

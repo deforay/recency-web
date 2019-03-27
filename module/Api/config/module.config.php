@@ -181,6 +181,18 @@ return array(
                          ),
                     ),
                 ),
+                'api-technical-support' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/technical-support[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\TechnicalSupport',
+                         ),
+                    ),
+                ),
 
           ),
      ),
@@ -201,6 +213,8 @@ return array(
                'Api\Controller\RecencyHide' => 'Api\Controller\RecencyHideController',
                'Api\Controller\QualityCheck' => 'Api\Controller\QualityCheckController',
                'Api\Controller\TatReport' => 'Api\Controller\TatReportController',
+               'Api\Controller\TechnicalSupport' => 'Api\Controller\TechnicalSupportController',
+               
           ),
      ),
      'view_manager' => array(
