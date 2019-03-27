@@ -237,6 +237,8 @@
 							</div>
 						</div>
 
+						
+
 					<h2 class="content-heading ">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
 							<a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
@@ -272,7 +274,6 @@
 	<script src="<?php echo $this->basePath() . '/assets/js/highcharts.js'; ?>"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/export-data.js'; ?>"></script>
-										
 	<script type="text/javascript">
 			/* Table initialisation */
 			oTable = null;
@@ -285,6 +286,7 @@
 				getTesterwiseInvalidChart();
 				getFacilityWiseInvalidChart();
 				getLotChart();
+				//getQualityCheckVolume();
 				oTable = $('#facilityDataTable').dataTable( {
 					"bAutoWidth": false,
 					"bProcessing": true,
@@ -460,6 +462,13 @@
 		$.post("<?php echo $this->url('recency',array('action'=>'get-lot-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
 		function(data){
 			$("#lotReport").html(data);
+		});
+	}
+
+	function getQualityCheckVolume() {		
+		$.post("<?php echo $this->url('recency',array('action'=>'get-quality-check-volume')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+		function(data){
+			$("#qualityCheckVolume").html(data);
 		});
 	}
 	</script>
