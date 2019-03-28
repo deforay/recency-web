@@ -251,3 +251,6 @@ ALTER TABLE `manage_columns_map`
 
   ALTER TABLE `manage_columns_map`
   MODIFY `map_id` int(11) NOT NULL AUTO_INCREMENT;
+--sathish 28 Mar 2019
+
+  ALTER TABLE `quality_check_test` ADD `testing_facility_id` INT NULL DEFAULT NULL AFTER `added_by`;

@@ -134,6 +134,21 @@ $lineOutComeColor2 = "#000000";
                               <div class="col-sm-4">
                                    <input type="text" name="testerName" id="testerName" class="form-control isRequired" placeholder="Enter the tester name" title="Please enter the tester name"/>
                               </div>
+
+                              <label class="col-sm-2 col-form-label for="">Testing Facility</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control disbaledResult" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+                                                <option value="">--Select--</option>
+                                                <?php foreach($facilityResult['facilityTest'] as $testingFacility){ ?>
+                                                        <option value="<?php echo $testingFacility['facility_id']; ?>"><?php echo $testingFacility['facility_name']; ?></option>
+                                                <?php } ?>
+                                                <!-- <option value="other">Other</option> -->
+                                            </select>
+                                            &nbsp;
+                                            <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter testing facility name" value="" placeholder="Enter testing facility name" >
+                                            &nbsp;
+                                        </div>
+
                               <label class="col-sm-2 col-form-label" for="">Comments<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <textarea type="text" name="comment" id="comment" class="form-control isRequired" placeholder="Enter the comment" title="Please enter the comment"/></textarea>

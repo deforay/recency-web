@@ -28,6 +28,14 @@ class QualityCheckController extends AbstractActionController
                $result = $qcService->addQcTestDetails($params);
                return $this->_redirect()->toRoute('quality-check');
           }
+          else{
+               $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+               $facilityResult=$facilityService->getFacilitiesAllDetails();
+              
+               return new ViewModel(array(
+                    'facilityResult' => $facilityResult,
+               ));
+          }
      }
 
      public function editAction()
@@ -44,8 +52,11 @@ class QualityCheckController extends AbstractActionController
           {
                $qualityCheckId=base64_decode( $this->params()->fromRoute('id') );
                $result=$qcService->getQualityCheckDetailsById($qualityCheckId);
+               $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+               $facilityResult=$facilityService->getFacilitiesAllDetails();
                return new ViewModel(array(
                     'result' => $result,
+                    'facilityResult' => $facilityResult,
                ));
           }
      }

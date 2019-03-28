@@ -126,7 +126,7 @@ $HideVal = implode(',', $resultArr);
                        $v = str_replace("_"," ",$chk);
                         ?>
                         <div class="col-sm-3">
-                        <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i;?>);" value="<?php echo $i;?>" <?php if(in_array($i, $arrFields)){ echo " checked=\"checked\""; } ?> name="recencyCheckbox[]" id="iCol<?php echo $i;?>"  class="showhideCheckBox" /><label><?php echo ucwords($v) ; ?></label>
+                        <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i;?>);" value="<?php echo $i;?>" <?php if(in_array($i, $arrFields)){ echo " checked=\"checked\""; } ?> name="recencyCheckbox[]" id="iCol<?php echo $i;?>"  class="showhideCheckBox" />&nbsp;&nbsp;<label><?php echo ucwords($v) ; ?></label>
                         </div>                                          
                     <?php $i++;} 
                     ?>
