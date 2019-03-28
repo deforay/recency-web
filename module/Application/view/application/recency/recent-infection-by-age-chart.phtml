@@ -1,0 +1,83 @@
+<?php if(count($result)>0){ ?>
+<script>
+Highcharts.chart('infectionByAge', {
+    credits: {
+        enabled: false
+    },
+    exporting: {
+    buttons: {
+      contextButton: {
+        menuItems: [
+          'printChart',
+          'separator',
+          'downloadPNG',
+          'downloadJPEG',
+          'downloadPDF',
+          'downloadSVG',
+          'separator',
+          'downloadCSV',
+          'downloadXLS',
+          'viewData'
+        ]
+      }
+    }
+    },
+    chart: {
+        type: 'column',
+    },
+    title: {
+        text: 'Age Group Report',
+        align: 'center',
+        verticalAlign: 'bottom',
+        floating: true,
+        style: {
+          fontSize: '15px',
+        }
+    },
+  
+    xAxis: {
+        type: 'category',
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Recent'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        pointFormat: '<b>{point.y}</b>'
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        },
+        series: {
+            dataLabels: {
+                enabled: true,
+                format: '{point.y}'
+            }
+        }
+    },
+    colors: [
+        '#fec16f'
+	],
+    series: [{
+        name: '',
+        data: [
+            <?php foreach($result as $key=>$val){
+                echo "['".ucwords($key)."',".$val."],";  
+             } ?>
+            
+        ]
+    }]
+
+
+});
+</script>
+<?php }else{
+    echo "<h2 style='text-align:center;'>No data available</h2>";
+} ?>

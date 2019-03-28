@@ -1205,5 +1205,11 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyLabActivityChart($params);
     }
+
+    public function getRecentInfectionByAgeChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecentInfectionByAgeChart($params);
+    }
 }
 

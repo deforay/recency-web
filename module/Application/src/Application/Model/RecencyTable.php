@@ -3039,6 +3039,95 @@ class RecencyTable extends AbstractTableGateway {
               return $result;
 
           }
+
+          public function fetchRecentInfectionByAgeChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+              ->columns(
+                    array(
+                    'gender',
+                    "total" => new Expression('COUNT(*)'),
+                    "15T24" => new Expression("(SUM(CASE WHEN (r.age >= '15' AND r.age<=24) THEN 1 ELSE 0 END))"),
+                    "25T34" => new Expression("(SUM(CASE WHEN (r.age >= '25' AND r.age<=34) THEN 1 ELSE 0 END))"),
+                    "35T44" => new Expression("(SUM(CASE WHEN (r.age >= '35' AND r.age<=44) THEN 1 ELSE 0 END))"),
+                    "45+" => new Expression("(SUM(CASE WHEN (r.age>='45') THEN 1 ELSE 0 END))"),
+                    )
+               )
+               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+               ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'))
+               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
+               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->where(array('r.final_outcome'=>'RITA Recent'))
+               ->where("(r.hiv_recency_date is NOT NULL AND r.hiv_recency_date !='')")
+               ->group('r.gender');
+                    
+               if($parameters['fName']!=''){
+                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+               }
+               if($parameters['testingFacility']!=''){
+               $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+               }
+               if($parameters['locationOne']!=''){
+                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                    if($parameters['locationTwo']!=''){
+                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    }
+                    if($parameters['locationThree']!=''){
+                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    }
+               }
+               if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                    $s_c_date = explode("to", $_POST['sampleTestedDates']);
+                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                    }
+                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                    }
+               }
+     
+               if($parameters['sampleTestedDates']!=''){
+                    $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+               }
+               
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               
+               $j=0;
+               $result=array();
+
+               foreach($rResult as $sRow){
+                    if(!isset($result['15-24'])){
+                         $result['15-24']=$sRow['15T24'];
+                    }else{
+                         $result['15-24']+=$sRow['15T24'];
+                    }
+
+                    if(!isset($result['25-34'])){
+                         $result['25-34']=$sRow['25T34'];
+                    }else{
+                         $result['25-34']+=$sRow['25T34'];
+                    }
+
+                    if(!isset($result['35-44'])){
+                         $result['35-44']=$sRow['35T44'];
+                    }else{
+                         $result['35-44']+=$sRow['35T44'];
+                    }
+
+                    if(!isset($result['45+'])){
+                         $result['45+']=$sRow['45+'];
+                    }else{
+                         $result['45+']+=$sRow['45+'];
+                    }
+               }
+              return $result;
+          }
      }
 
 

@@ -1,4 +1,11 @@
-<?php if(count($result)>0){ ?>
+<?php if(count($result)>0){ 
+    $n=count($result['date']);
+    if($n>4){
+        $max='4';
+    }else{
+        $max=$n-1;
+    }
+?>
 <script>
 Highcharts.chart('container', {
     credits: {
@@ -45,7 +52,7 @@ Highcharts.chart('container', {
         ],
         crosshair: true,
         min: 0,
-        max: 3,
+        max: '<?php echo $max; ?>',
         scrollbar: {
             enabled: true
         }

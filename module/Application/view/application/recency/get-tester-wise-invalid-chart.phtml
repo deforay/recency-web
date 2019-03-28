@@ -1,4 +1,11 @@
-<?php if(count($result)>0){ ?>
+<?php if(count($result)>0){
+    $n=count($result['testerName']);
+    if($n>4){
+        $max='4';
+    }else{
+        $max=$n-1;
+    }
+?>
 <script>
 Highcharts.chart('testerWiseInvalid', {
     credits: {
@@ -26,7 +33,13 @@ Highcharts.chart('testerWiseInvalid', {
         type: 'column'
     },
     title: {
-        text: ''
+        text: 'Name of Recency Tester',
+        align: 'center',
+        verticalAlign: 'bottom',
+        floating: true,
+        style: {
+          fontSize: '15px',
+        }
     },
     subtitle: {
         text: ''
@@ -39,7 +52,7 @@ Highcharts.chart('testerWiseInvalid', {
         ],
         crosshair: true,
         min: 0,
-        max: 4,
+        max: '<?php echo $max; ?>',
         scrollbar: {
             enabled: true
         }
