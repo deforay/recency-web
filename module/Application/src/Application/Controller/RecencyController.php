@@ -28,11 +28,13 @@ class RecencyController extends AbstractActionController
             
             $facilityResult=$facilityService->getFacilitiesAllDetails();
             $manageColumnsResult=$recencyService->getAllManagaColumnsDetails($userId);
+            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+            $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
             
             return new ViewModel(array(
                 'facilityResult' => $facilityResult,
                 'manageColumnsResult' => $manageColumnsResult,
-                
+                'globalConfigResult' => $globalConfigResult,
            ));
           }
      }

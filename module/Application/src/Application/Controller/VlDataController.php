@@ -9,7 +9,6 @@ class VlDataController extends AbstractActionController
 {
     public function indexAction()
     {
-
         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
         $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
         return new ViewModel(array(
@@ -49,7 +48,6 @@ class VlDataController extends AbstractActionController
 
     public function recentInfectionAction()
     {
-
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
