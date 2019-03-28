@@ -1152,7 +1152,7 @@ class RecencyService
         return $recencyDb->fetchFinalOutcomeChart($params);
     }
     
- public function mapManageColumnsDetails($params)
+    public function mapManageColumnsDetails($params)
     {
         $recencyDb = $this->sm->get('ManageColumnsMapTable');
         return $recencyDb->mapManageColumnsDetails($params);
@@ -1198,6 +1198,12 @@ class RecencyService
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecentInfectionByDistrictChart($params);
+    }
+
+    public function getRecencyLabActivityChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecencyLabActivityChart($params);
     }
 }
 

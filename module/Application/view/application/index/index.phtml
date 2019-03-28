@@ -5,7 +5,7 @@
 	$roleCode = $sessionLogin->roleCode;
 	//\Zend\Debug\Debug::dump($globalConfigResult);die;
 
-	$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+	$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
 	$startDate=date('d-M-Y', strtotime('today - 29 days'));
 	$currentDate=date('d-M-Y');
 	?>
@@ -185,15 +185,15 @@
 
 						
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> FInal Outcome Chart
+							<i class="fa fa-angle-right text-muted mr-1"></i> RITA Result Weekly Summary
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
-								<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+								<div id="container" style="height: 400px; min-width: 320px; margin: 0 auto"></div>
 							</div>
 						</div>                
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Lab Activity
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Testing Site Activity
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -202,7 +202,7 @@
 						</div>
 						
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i>  Tester Wise Final Outcome Chart
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Tests Performed by Testers
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -211,7 +211,7 @@
 						</div>
 						
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Tester Wise Invalid Result
+							<i class="fa fa-angle-right text-muted mr-1"></i> Tester Wise Inconclusive Result
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -220,7 +220,7 @@
 						</div>
 
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Wise Invalid Result
+							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Wise Inconclusive Result
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -262,7 +262,6 @@
 										<th>No.of Samples Rejected</th>
 										<th>No.of Samples Backlog</th>
 										<th>No.of Samples VL Pending</th>
-										<th>No.of VL Pending</th>
 										<th>No.of Samples Tested With Recency</th>
 										<th>No.of Samples Tested With Viral Load</th>
 										<th>No.of Samples With Final Outcome</th>
@@ -278,9 +277,11 @@
 			</div>
 		</div>
 	</div>
-	<script src="<?php echo $this->basePath() . '/assets/js/highcharts.js'; ?>"></script>
+	<script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/export-data.js'; ?>"></script>
+
+	
 	<script type="text/javascript">
 			/* Table initialisation */
 			oTable = null;

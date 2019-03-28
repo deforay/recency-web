@@ -2700,7 +2700,7 @@ class RecencyTable extends AbstractTableGateway {
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                $j=0;
                foreach($rResult as $sRow){
-                    if($sRow["tester_name"] == null) continue;
+                    if($sRow["tester_name"] == null || $sRow['assayInvalid']==0) continue;
                     $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['testerName'][$j] = $sRow['tester_name'];
                     $j++;
@@ -2767,7 +2767,7 @@ class RecencyTable extends AbstractTableGateway {
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                $j=0;
                foreach($rResult as $sRow){
-                    if($sRow["facility_name"] == null) continue;
+                    if($sRow["facility_name"] == null || $sRow['assayInvalid']==0) continue;
                     $result['fInvalidReport']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['facilityName'][$j] = $sRow['facility_name'];
                     $j++;
