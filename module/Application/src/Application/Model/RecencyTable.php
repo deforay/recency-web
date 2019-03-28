@@ -2459,9 +2459,20 @@ class RecencyTable extends AbstractTableGateway {
                          $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
                      }
                   
-                     if($parameters['finalOutcome']!=''){
+                    if($parameters['finalOutcome']!=''){
                          $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
-                     }
+                    }
+                    
+                    if(isset($parameters['ritaFilter']) && trim($parameters['ritaFilter'])!='' ){
+                         if($parameters['ritaFilter']=='inconclusive'){
+                              $sQuery=$sQuery->order("inconclusive DESC");
+                         }else if($parameters['ritaFilter']=='longTerm'){
+                              $sQuery=$sQuery->order("longTerm DESC");
+                         }else if($parameters['ritaFilter']=='ritaRecent'){
+                              $sQuery=$sQuery->order("ritaRecent DESC");
+                         }
+                    }
+
               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                //\Zend\Debug\Debug::dump($sQueryStr);die;
               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -2555,16 +2566,28 @@ class RecencyTable extends AbstractTableGateway {
                     }
                     if($parameters['tOutcome']!=''){
                          $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
-                     }
+                    }
                   
-                     if($parameters['finalOutcome']!=''){
+                    if($parameters['finalOutcome']!=''){
                          $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
-                     }
-              $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+                    }
+                    if(isset($parameters['activityFilter']) && trim($parameters['activityFilter'])!='' ){
+                         if($parameters['activityFilter']=='recencyDone'){
+                              $sQuery=$sQuery->order("samplesTested DESC");
+                         }else if($parameters['activityFilter']=='vlDone'){
+                              $sQuery=$sQuery->order("VLDone DESC");
+                         }else if($parameters['activityFilter']=='vlPending'){
+                              $sQuery=$sQuery->order("VLPending DESC");
+                         }
+                    }else{
+                         $sQuery=$sQuery->order("samplesCollected DESC");
+                    }
+                    
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                //\Zend\Debug\Debug::dump($sQueryStr);die;
-              $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-              $j=0;
-                foreach($rResult as $sRow){
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               $j=0;
+               foreach($rResult as $sRow){
                     if($sRow["testing_facility_name"] == null) continue;
                     $result['labActivity']['Samples Collected'][$j] = (isset($sRow['samplesCollected']) && $sRow['samplesCollected'] != NULL) ? $sRow['samplesCollected'] : 0;
                     $result['labActivity']['Recency Test Done'][$j] = (isset($sRow['samplesTested']) && $sRow['samplesTested'] != NULL) ? $sRow['samplesTested'] : 0;
@@ -2573,7 +2596,7 @@ class RecencyTable extends AbstractTableGateway {
                     $result['date'][$j] = $sRow["testing_facility_name"];
                     
                     $j++;
-                }
+               }
               
               return $result;
 
@@ -2610,21 +2633,21 @@ class RecencyTable extends AbstractTableGateway {
                ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
                ->group('tester_name');
                     
-               if($parameters['fName']!=''){
-                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
-                }
-                if($parameters['testingFacility']!=''){
-                    $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
-                }
-                if($parameters['locationOne']!=''){
-                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
-                    if($parameters['locationTwo']!=''){
-                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    if($parameters['fName']!=''){
+                         $sQuery->where(array('r.facility_id'=>$parameters['fName']));
                     }
-                    if($parameters['locationThree']!=''){
-                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    if($parameters['testingFacility']!=''){
+                         $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
                     }
-              }
+                    if($parameters['locationOne']!=''){
+                         $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                         if($parameters['locationTwo']!=''){
+                              $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                         }
+                         if($parameters['locationThree']!=''){
+                              $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                         }
+                    }
                     if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
                          $s_c_date = explode("to", $parameters['sampleTestedDates']);
                          if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
@@ -2640,15 +2663,28 @@ class RecencyTable extends AbstractTableGateway {
                     }
                     if($parameters['tOutcome']!=''){
                          $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
-                     }
+                    }
                   
-                     if($parameters['finalOutcome']!=''){
+                    if($parameters['finalOutcome']!=''){
                          $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
-                     }
-              $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-               //\Zend\Debug\Debug::dump($sQueryStr);die;
-              $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-              $j=0;
+                    }
+
+                    if(isset($parameters['recencyTesterFilter']) && trim($parameters['recencyTesterFilter'])!='' ){
+                         if($parameters['recencyTesterFilter']=='assayRecent'){
+                              $sQuery=$sQuery->order("assayRecent DESC");
+                         }else if($parameters['recencyTesterFilter']=='assayLongTerm'){
+                              $sQuery=$sQuery->order("assayLongTerm DESC");
+                         }else if($parameters['recencyTesterFilter']=='assayInvalid'){
+                              $sQuery=$sQuery->order("assayInvalid DESC");
+                         }
+                    }else{
+                         $sQuery=$sQuery->order("totalSamples DESC");
+                    }
+
+                    $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+                    //\Zend\Debug\Debug::dump($sQueryStr);die;
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               $j=0;
                 foreach($rResult as $sRow){
                     if($sRow["tester_name"] == null) continue;
                     $result['finalOutCome']['Total'][$j] = (isset($sRow['totalSamples']) && $sRow['totalSamples'] != NULL) ? $sRow['totalSamples'] : 0;
@@ -2726,7 +2762,7 @@ class RecencyTable extends AbstractTableGateway {
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                $j=0;
                foreach($rResult as $sRow){
-                    if($sRow["tester_name"] == null) continue;
+                    if($sRow["tester_name"] == null || $sRow['assayInvalid']==0) continue;
                     $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['testerName'][$j] = $sRow['tester_name'];
                     $j++;
@@ -2793,7 +2829,7 @@ class RecencyTable extends AbstractTableGateway {
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                $j=0;
                foreach($rResult as $sRow){
-                    if($sRow["facility_name"] == null) continue;
+                    if($sRow["facility_name"] == null || $sRow['assayInvalid']==0) continue;
                     $result['fInvalidReport']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['facilityName'][$j] = $sRow['facility_name'];
                     $j++;
@@ -2807,7 +2843,7 @@ class RecencyTable extends AbstractTableGateway {
               $sql = new Sql($dbAdapter);
               $general = new CommonService();
               $sQuery =   $sql->select()->from(array('r' => 'recency'))
-               ->columns(array('kit_lot_no',"total" => new Expression('COUNT(*)')))
+               ->columns(array('kit_lot_no','kit_expiry_date',"total" => new Expression('COUNT(*)')))
                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
                ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'),'left')
@@ -2852,8 +2888,14 @@ class RecencyTable extends AbstractTableGateway {
                //\Zend\Debug\Debug::dump($sQueryStr);die;
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                foreach($rResult as $sRow){
+                    $expDate="";
                     if($sRow["kit_lot_no"] == null) continue;
-                    $result[$sRow['kit_lot_no']] = (isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
+                    if(trim($sRow['kit_expiry_date'])!=""){
+                         $expDate=$general->humanDateFormat($sRow['kit_expiry_date']);
+                    }
+                    
+
+                    $result[$sRow['kit_lot_no']." (".$expDate.")"] = (isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
                }
                return $result;
           }

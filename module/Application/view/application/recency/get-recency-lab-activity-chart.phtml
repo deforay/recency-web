@@ -37,18 +37,23 @@ Highcharts.chart('recencyLabActivity', {
                     '<?php echo $res; ?>',
                <?php } ?>
         ],
-        crosshair: true
+        crosshair: true,
+        min: 0,
+        max: 4,
+        scrollbar: {
+            enabled: true
+        }
     },
     yAxis: {
         min: 0,
         title: {
-            text: ''
+            text: 'Number of Tests'
         }
     },
     tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true
@@ -57,6 +62,12 @@ Highcharts.chart('recencyLabActivity', {
         column: {
             pointPadding: 0.2,
             borderWidth: 0
+        },
+        series: {
+            dataLabels: {
+                enabled: true,
+                format: '{point.y}'
+            }
         }
     },
     colors: [
