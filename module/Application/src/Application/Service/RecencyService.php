@@ -1193,5 +1193,11 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecentInfectionByGenderChart($params);
     }
+
+    public function getRecentInfectionByDistrictChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecentInfectionByDistrictChart($params);
+    }
 }
 
