@@ -182,6 +182,7 @@ class QualityCheckTable extends AbstractTableGateway {
 
                public function addQualityCheckTestResultDetails($params)
                {
+                    //\Zend\Debug\Debug::dump($params);die;
                      $dbAdapter = $this->adapter;
                      $sql = new Sql($dbAdapter);
                      $logincontainer = new Container('credo');
@@ -204,6 +205,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                'term_outcome'=>$params['outcomeData'],
                                'tester_name' => $params['testerName'],
                                'comment' => $params['comment'],
+                               'testing_facility_id' => $params['testingFacilityId'],
 
                                'added_on' => date("Y-m-d H:i:s"),
                                'added_by' => $logincontainer->userId,
@@ -256,6 +258,7 @@ class QualityCheckTable extends AbstractTableGateway {
                               'term_outcome'=>$params['outcomeData'],
                               'tester_name' => $params['testerName'],
                               'comment' => $params['comment'],
+                              'testing_facility_id' => $params['testingFacilityId'],
                               //'added_on' => date("Y-m-d H:i:s"),
                               'added_by' => $logincontainer->userId,
 
@@ -332,6 +335,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                     'form_initiation_datetime'=>$qcTest['formInitDateTime'],
                                     'form_transfer_datetime'=>$qcTest['formTransferDateTime'],
                                     'form_saved_datetime'=>$qcTest['formSavedDateTime'],
+                                    'testing_facility_id'=>$qcTest['testingFacility'],
                                     'unique_id'=>isset($qcTest['unique_id'])?$qcTest['unique_id']:NULL,
                                 );
 

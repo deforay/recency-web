@@ -4,6 +4,18 @@ $common = new \Application\Service\CommonService();
 <hr/>
 <a href="javascript:void(0)" class="btn btn-info saveResult"  onclick="updateVlResult();">Save Result</a>
 <br/><br/>
+<div class="js-wizard-simple block block block-rounded block-bordered">
+
+             <ul class="nav nav-tabs">
+             <li class="nav-item">
+             <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+                              </li>
+                              <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#menu1">Menu 1</a>
+  </li>
+                         </ul>
+                         <div class="tab-content">
+    <div id="home" class="container tab-pane active"><br>
 <table class="table table-bordered table-striped table-vcenter" id="sampleData">
 <thead>
                         <tr>
@@ -117,6 +129,21 @@ if(count($result)>0){
 </tr>
 </tfoot>
 </table>
+</div>
+
+ <div id="menu1" class="container tab-pane fade"><br>
+
+  <table class="table table-bordered table-striped table-vcenter" id="sampleDataNull">
+dsfdsfs
+</table>
+
+</div>
+
+
+</div>
+
+
+
 <br/>
 <a href="javascript:void(0)" class="btn btn-info saveResult" onclick="updateVlResult();">Save Result</a>
 <br/><br/>
@@ -130,4 +157,7 @@ if(count($result)>0){
     $(document).ready(function(){
         $('#sampleData').dataTable({"ordering": false});
     });
+
+
+ 
 </script>
