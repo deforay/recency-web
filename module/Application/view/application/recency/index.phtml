@@ -16,6 +16,14 @@ $acti = $manageColumnsResult['manage_columns'];
 $resultArr =array_diff($arrnum,$arrFields);
 $HideVal = implode(',', $resultArr);
 
+for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
+    $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
+}
+$resultArr2 = array();
+if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
+    $resultArr2 = explode(",",$arr['display_fields']);
+}
+//\Zend\Debug\Debug::dump($resultArr2);die;
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -126,8 +134,14 @@ $HideVal = implode(',', $resultArr);
                        $v = str_replace("_"," ",$chk);
                         ?>
                         <div class="col-sm-3">
+                        <?php if(isset($manageColumnsResult['user_id']) && $manageColumnsResult['user_id']!=''){ ?>
                         <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i;?>);" value="<?php echo $i;?>" <?php if(in_array($i, $arrFields)){ echo " checked=\"checked\""; } ?> name="recencyCheckbox[]" id="iCol<?php echo $i;?>"  class="showhideCheckBox" />&nbsp;&nbsp;<label><?php echo ucwords($v) ; ?></label>
-                        </div>                                          
+                        <?php } else{  ?> 
+
+                             <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i;?>);" value="<?php echo $i;?>" checked="checked" name="recencyCheckbox[]" id="iCol<?php echo $i;?>"  class="showhideCheckBox" />&nbsp;&nbsp;<label><?php echo ucwords($v) ; ?></label>
+                       
+                      <?php  } ?>
+                    </div>                                          
                     <?php $i++;} 
                     ?>
 
@@ -138,7 +152,7 @@ $HideVal = implode(',', $resultArr);
                     <table id="facilityDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
                          <thead>
                               <tr>
-                              <th>Sample ID</th>
+                                    <th>Sample ID</th>
                                     <th>Facility Name</th>
                                     <th>HIV Recency Date</th>
                                     <th>Viral Test Date</th>
@@ -242,12 +256,14 @@ oTable = $('#facilityDataTable').dataTable( {
                 "bAutoWidth": false,
                 "bProcessing": true,
                 "bServerSide": true,
-                  "columnDefs": [
-                      {
-                        "targets": [ <?php echo $HideVal;?>  ],
-                        "visible": false,
-                      }
-                 ],
+                <?php if(isset($manageColumnsResult['user_id']) && $manageColumnsResult['user_id']!=''){ ?>
+                     "columnDefs": [
+                        {
+                          "targets": [ <?php echo $HideVal;?>  ],
+                          "visible": false,
+                        }
+                   ],
+              <?php  } ?>
                 "sAjaxSource": "<?php echo $this->url('recency',array('action' => 'index')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     aoData.push({"name": "fName", "value": $("#facilityName").val()});

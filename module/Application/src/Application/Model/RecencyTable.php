@@ -1255,7 +1255,33 @@ class RecencyTable extends AbstractTableGateway {
                             $sQuery = $sQuery->where(array('r.vl_result is null OR r.vl_result=""'));
                          }
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            $rResult['withTermOutcome'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+
+                         $sQueryTerm = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_date', 'term_outcome', 'vl_result', 'final_outcome'))
+                         ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+                         ->where('r.term_outcome != "Assay Recent"');
+                         if(isset($params['province']) && $params['province']!=''){
+                              $sQueryTerm = $sQueryTerm->where(array('f.province'=>$params['province']));
+                         }
+                         if(isset($params['district']) && $params['district']!=''){
+                              $sQueryTerm = $sQueryTerm->where(array('f.district'=>$params['district']));
+                         }
+                         if(isset($params['city']) && $params['city']!=''){
+                              $sQueryTerm = $sQueryTerm->where(array('f.city'=>$params['city']));
+                         }
+                         if(isset($params['facility']) && $params['facility']!=''){
+                              $sQueryTerm = $sQueryTerm->where(array('r.vl_test_date'=>$params['vlTestDate']));
+                         }
+                         if(isset($params['onloadData']) && $params['onloadData']=='yes'){
+                              $sQueryTerm = $sQueryTerm->where(array('r.vl_result is null OR r.vl_result=""'));
+                         }
+               $sQueryStrTerm = $sql->getSqlStringForSqlObject($sQueryTerm);
+               $rResult['withOutTermOutcome'] = $dbAdapter->query($sQueryStrTerm, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+
+
+
             return $rResult;
           }
 

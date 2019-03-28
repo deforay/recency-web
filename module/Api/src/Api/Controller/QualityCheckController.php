@@ -8,7 +8,6 @@ use Zend\Json\Json;
 
 class QualityCheckController extends AbstractRestfulController
 {
-
     public function create($params) {
         $qcService = $this->getServiceLocator()->get('QualityCheckService');
         $response = $qcService->addQualityCheckDataApi($params);

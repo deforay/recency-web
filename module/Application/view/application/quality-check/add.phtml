@@ -135,9 +135,9 @@ $lineOutComeColor2 = "#000000";
                                    <input type="text" name="testerName" id="testerName" class="form-control isRequired" placeholder="Enter the tester name" title="Please enter the tester name"/>
                               </div>
 
-                              <label class="col-sm-2 col-form-label for="">Testing Facility</label>
+                              <label class="col-sm-2 col-form-label for="">Testing Facility<span class="mandatory">*</span></label>
                                         <div class="col-sm-4">
-                                            <select class="form-control disbaledResult" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+                                            <select class="form-control isRequired" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
                                                 <option value="">--Select--</option>
                                                 <?php foreach($facilityResult['facilityTest'] as $testingFacility){ ?>
                                                         <option value="<?php echo $testingFacility['facility_id']; ?>"><?php echo $testingFacility['facility_name']; ?></option>

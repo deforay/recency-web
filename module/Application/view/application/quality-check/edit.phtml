@@ -157,9 +157,9 @@ if($result['term_outcome']==''){
                               <div class="col-sm-4">
                                    <input type="text" value="<?php echo $result['tester_name']; ?>" class="form-control isRequired" id="testerName" name="testerName" placeholder="Enter the tester name" title="Please enter the tester name">
                               </div>
-                              <label class="col-sm-2 col-form-label " for="">Testing Facility</label>
+                              <label class="col-sm-2 col-form-label " for="">Testing Facility<span class="mandatory">*</span></label>
 												<div class="col-sm-4 <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>">
-													<select class="form-control disbaledResult" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+													<select class="form-control isRequired" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
 														<option value="">--Select--</option>
 														<?php foreach($facilityResult['facilityTest'] as $testingFacility){?>
 															<option value="<?php echo $testingFacility['facility_id']; ?>" <?php echo($testingFacility['facility_id'] == $result['testing_facility_id'] )?'selected="selected"':''; ?>><?php echo ucwords($testingFacility['facility_name']); ?></option>
