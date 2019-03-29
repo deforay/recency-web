@@ -28,7 +28,7 @@ Highcharts.chart('container', {
         type: 'column'
     },
     title: {
-        text: ''
+        text: 'Gender Wise Report',
     },
     subtitle: {
         text: ''
@@ -39,13 +39,23 @@ Highcharts.chart('container', {
                     '<?php echo $res; ?>',
                <?php } ?>
         ],
-        crosshair: true
+        crosshair: true,
+        title: {
+            enabled: true,
+            text: 'Gender Report',
+            style: {
+                fontWeight: 'normal'
+            }
+        }
     },
     yAxis: {
         min: 0,
         title: {
             text: ' '
         }
+    },
+    legend: {
+        enabled: false
     },
     tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -64,6 +74,18 @@ Highcharts.chart('container', {
             }
         }
     },
+    colors: [
+        '#0d233a',
+        '#ada4ec',
+        '#24CBE5',
+        '#A47D7C',
+        '#fec16f',
+        '#989898',
+        '#f5c3f5',
+        '#215682',
+        '#8dafbc',
+        '#66d3c5'
+	],
     series: [
         <?php
         $k=0;

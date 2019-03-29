@@ -1,4 +1,10 @@
 <?php if(count($result)>0){
+    $n=count($result['district_name']);
+    if($n>4){
+        $max='4';
+    }else{
+        $max=$n-1;
+    }
 ?>
 <script>
 Highcharts.chart('infectionByDistrict', {
@@ -35,7 +41,19 @@ Highcharts.chart('infectionByDistrict', {
                     '<?php echo $res; ?>',
                <?php } ?>
         ],
-        crosshair: true
+        crosshair: true,
+        min: 0,
+        max: '<?php echo $max; ?>',
+        scrollbar: {
+            enabled: true
+        },
+        title: {
+            enabled: true,
+            text: 'District Report',
+            style: {
+                fontSize: '15px',
+            }
+        }
     },
     yAxis: {
         min: 0,

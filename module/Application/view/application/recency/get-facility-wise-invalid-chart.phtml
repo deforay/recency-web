@@ -1,4 +1,11 @@
-<?php if(count($result)>0){ ?>
+<?php if(count($result)>0){
+    $n=count($result['facilityName']);
+    if($n>4){
+        $max='4';
+    }else{
+        $max=$n-1;
+    }
+?>
 <script>
 Highcharts.chart('facilityWiseInvalid', {
     credits: {
@@ -28,9 +35,6 @@ Highcharts.chart('facilityWiseInvalid', {
     title: {
         text: ''
     },
-    subtitle: {
-        text: ''
-    },
     xAxis: {
         categories: [
             <?php  foreach($result['facilityName'] as $res){?>
@@ -39,9 +43,16 @@ Highcharts.chart('facilityWiseInvalid', {
         ],
         crosshair: true,
         min: 0,
-        max: 4,
+        max: '<?php echo $max; ?>',
         scrollbar: {
             enabled: true
+        },
+        title: {
+            enabled: true,
+            text: 'Name of Facility',
+            style: {
+                fontSize: '15px',
+            }
         }
     },
     yAxis: {

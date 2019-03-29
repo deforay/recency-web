@@ -63,7 +63,7 @@
 								
 						<div class="row items-push">
 							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+								<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
 								
 							</div>
 						</div>
@@ -88,11 +88,18 @@
 								<div id="infectionByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 							</div>
 						</div>
-							
-					
-					
+
+						<h2 class="content-heading">
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Age:
+						</h2>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								<div id="infectionByAge" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
+						</div>
+
 	</div>
-	<script src="<?php echo $this->basePath() . '/assets/js/highcharts.js'; ?>"></script>
+	<script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/export-data.js'; ?>"></script>
 
@@ -102,6 +109,7 @@
 		$(document).ready(function() {
 				getFinalOutcomeChart();
 				getInfectionByDistrictChart();
+				getInfectionByAgeChart();
 			<?php foreach($globalConfigResult as $config){
 			?>
 			getLocationDeatils('<?php echo $config["global_name"];?>');
@@ -183,9 +191,15 @@
 
 		function getInfectionByDistrictChart() {
 			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-district-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
-				function(data){
-					$("#infectionByDistrict").html(data);
+			function(data){
+				$("#infectionByDistrict").html(data);
 			});
 		}
 		
+		function getInfectionByAgeChart() {		
+			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-age-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
+			function(data){
+				$("#infectionByAge").html(data);
+			});
+		}
 	</script>
