@@ -33,13 +33,7 @@ Highcharts.chart('testerWiseInvalid', {
         type: 'column'
     },
     title: {
-        text: 'Name of Recency Tester',
-        align: 'center',
-        verticalAlign: 'bottom',
-        floating: true,
-        style: {
-          fontSize: '15px',
-        }
+        text: '',
     },
     subtitle: {
         text: ''
@@ -55,6 +49,13 @@ Highcharts.chart('testerWiseInvalid', {
         max: '<?php echo $max; ?>',
         scrollbar: {
             enabled: true
+        },
+        title: {
+            enabled: true,
+            text: 'Name of Recency Tester',
+            style: {
+                fontSize: '15px',
+            }
         }
     },
     yAxis: {

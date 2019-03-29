@@ -33,13 +33,7 @@ Highcharts.chart('recencyLabActivity', {
         type: 'column'
     },
     title: {
-        text: 'Name of the Recency Test Site',
-        align: 'center',
-        verticalAlign: 'bottom',
-        floating: true,
-        style: {
-          fontSize: '15px',
-        }
+        text: '',
     },
     subtitle: {
         text: ''
@@ -55,6 +49,13 @@ Highcharts.chart('recencyLabActivity', {
         max: '<?php echo $max; ?>',
         scrollbar: {
             enabled: true
+        },
+        title: {
+            enabled: true,
+            text: 'Name of the Recency Test Site',
+            style: {
+                fontSize: '15px',
+            }
         }
     },
     yAxis: {

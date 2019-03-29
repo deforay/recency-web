@@ -190,54 +190,47 @@
 						<h2 class="content-heading">
 							<i class="fa fa-angle-right text-muted mr-1"></i> RITA Result Weekly Summary
 						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+								<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 50%;margin-bottom: 0px;">
 									<tbody>
 										<tr>
-											<td><b>Sort By:</b></td>
+											<td style="width:20%;"><b>Sort By:</b></td>
 											<td>
-												<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter">
+												<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
 													
 													<option value="inconclusive">No. of Inconclusive</option>
 													<option value="longTerm">No. of Long Term</option>
 													<option value="ritaRecent" selected>No. of RITA Recent</option>
 												</select>
 											</td>
-											<td colspan="2">
-												<input type="button" onclick="getFinalOutcomeChart();" value="Search" class="btn btn-info">
-											</td>
 										</tr>
-						
 									</tbody>
 								</table>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								
 								<div id="container" style="height: 400px; min-width: 320px; margin: 0 auto"></div>
 							</div>
 						</div>                
 						<h2 class="content-heading">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Testing Site Activity
 						</h2>
+							<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 50%;margin-bottom: 0px;">
+								<tbody>
+									<tr>
+										<td style="width:20%;"><b>Sort By:</b></td>
+										<td>
+											<select class="form-control" id="activityFilter" name="activityFilter" title="Please select activity filter" onchange="getRecencyLabActivityChart();">
+												<option value="">No. of Samples Collected</option>
+												<option value="recencyDone">Recency Test Done</option>
+												<option value="vlDone">VL Test Done</option>
+												<option value="vlPending">VL Test Pending</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
-								<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-									<tbody>
-										<tr>
-											<td><b>Sort By:</b></td>
-											<td>
-												<select class="form-control" id="activityFilter" name="activityFilter" title="Please select activity filter" style="width:100%;">
-													<option value="">No. of Samples Collected</option>
-													<option value="recencyDone">Recency Test Done</option>
-													<option value="vlDone">VL Test Done</option>
-													<option value="vlPending">VL Test Pending</option>
-												</select>
-											</td>
-											<td colspan="2">
-												<input type="button" onclick="getRecencyLabActivityChart();" value="Search" class="btn btn-info">
-											</td>
-										</tr>
-						
-									</tbody>
-								</table>
 								<div id="recencyLabActivity" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 							</div>
 						</div>
@@ -245,27 +238,23 @@
 						<h2 class="content-heading">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Tests Performed by Testers
 						</h2>
+						<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 50%;margin-bottom: 0px;">
+								<tbody>
+									<tr>
+										<td style="width:20%;"><b>Sort By:</b></td>
+										<td>
+											<select class="form-control" id="recencyTesterFilter" name="recencyTesterFilter" title="Please select recency tester filter" onchange="getTesterwiseFinalOutcomeChart();">
+												<option value="">No. of Samples Collected</option>
+												<option value="assayLongTerm">Assay Long Term</option>
+												<option value="assayRecent">Assay Recent</option>
+												<option value="assayInvalid">Assay Invalid</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+						</table>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
-								<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-									<tbody>
-										<tr>
-											<td><b>Sort By:</b></td>
-											<td>
-												<select class="form-control" id="recencyTesterFilter" name="recencyTesterFilter" title="Please select recency tester filter" style="width:100%;">
-													<option value="">No. of Samples Collected</option>
-													<option value="assayLongTerm">Assay Long Term</option>
-													<option value="assayRecent">Assay Recent</option>
-													<option value="assayInvalid">Assay Invalid</option>
-												</select>
-											</td>
-											<td colspan="2">
-												<input type="button" onclick="getTesterwiseFinalOutcomeChart();" value="Search" class="btn btn-info">
-											</td>
-										</tr>
-						
-									</tbody>
-								</table>
 								<div id="finalOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 							</div>
 						</div>

@@ -33,13 +33,7 @@ Highcharts.chart('container', {
         type: 'column',
     },
     title: {
-        text: 'Weekly Report',
-        align: 'center',
-        verticalAlign: 'bottom',
-        floating: true,
-        style: {
-          fontSize: '15px',
-        }
+        text: ''
     },
     subtitle: {
         text: ''
@@ -55,6 +49,13 @@ Highcharts.chart('container', {
         max: '<?php echo $max; ?>',
         scrollbar: {
             enabled: true
+        },
+        title: {
+            enabled: true,
+            text: 'Weekly Report',
+            style: {
+                fontSize: '15px',
+            }
         }
     },
     yAxis: {

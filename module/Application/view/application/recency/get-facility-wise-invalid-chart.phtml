@@ -35,9 +35,6 @@ Highcharts.chart('facilityWiseInvalid', {
     title: {
         text: ''
     },
-    subtitle: {
-        text: ''
-    },
     xAxis: {
         categories: [
             <?php  foreach($result['facilityName'] as $res){?>
@@ -49,6 +46,13 @@ Highcharts.chart('facilityWiseInvalid', {
         max: '<?php echo $max; ?>',
         scrollbar: {
             enabled: true
+        },
+        title: {
+            enabled: true,
+            text: 'Name of Facility',
+            style: {
+                fontSize: '15px',
+            }
         }
     },
     yAxis: {

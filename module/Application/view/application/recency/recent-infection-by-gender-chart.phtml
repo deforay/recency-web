@@ -29,12 +29,6 @@ Highcharts.chart('container', {
     },
     title: {
         text: 'Gender Wise Report',
-        align: 'center',
-        verticalAlign: 'bottom',
-        floating: true,
-        style: {
-          fontSize: '15px',
-        }
     },
     subtitle: {
         text: ''
@@ -45,7 +39,14 @@ Highcharts.chart('container', {
                     '<?php echo $res; ?>',
                <?php } ?>
         ],
-        crosshair: true
+        crosshair: true,
+        title: {
+            enabled: true,
+            text: 'Gender Report',
+            style: {
+                fontWeight: 'normal'
+            }
+        }
     },
     yAxis: {
         min: 0,
