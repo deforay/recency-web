@@ -237,7 +237,7 @@ class GlobalConfigTable extends AbstractTableGateway {
 
 
 
-        $row[] = in_array("Hiv Recency Date",$explodField)?"hivRecencyDate":"";
+        $row[] = in_array("Hiv Recency Test Date",$explodField)?"hivRecencyTestDate":"";
         $row[] = in_array("Control Line",$explodField)?"ctrlLine":"";
         $row[] = in_array("Positive Verification Line",$explodField)?"positiveLine":"";
         $row[] = in_array("Long Term Verification Line",$explodField)?"longTermLine":"";
@@ -297,7 +297,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         $row['lastHivStatus'] = in_array("Last HIV Status",$explodField)?true:false;
         $row['patientOnArt'] = in_array("Patient on ART",$explodField)?true:false;
        
-        $row['hivRecencyDate'] = in_array("Hiv Recency Date",$explodField)?true:false;
+        $row['hivRecencyTestDate'] = in_array("Hiv Recency Test Date",$explodField)?true:false;
         $row['ctrlLine'] = in_array("Control Line",$explodField)?true:false;
         $row['positiveLine'] = in_array("Positive Verification Line",$explodField)?true:false;
         $row['longTermLine'] = in_array("Long Term Verification Line",$explodField)?true:false;

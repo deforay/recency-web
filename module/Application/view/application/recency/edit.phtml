@@ -19,9 +19,9 @@ $hivDiagnosisDate = '';
 if($result['hiv_diagnosis_date']!= '' && $result['hiv_diagnosis_date']!= null && $result['hiv_diagnosis_date']!= '0000-00-00'){
 	 $hivDiagnosisDate = $common->humanDateFormat($result['hiv_diagnosis_date']);
 }
-$hivRecencyDate = '';
-if($result['hiv_recency_date']!= '' && $result['hiv_recency_date']!= null && $result['hiv_recency_date']!= '0000-00-00'){
-	 $hivRecencyDate = $common->humanDateFormat($result['hiv_recency_date']);
+$hivRecencyTestDate = '';
+if($result['hiv_recency_test_date']!= '' && $result['hiv_recency_test_date']!= null && $result['hiv_recency_test_date']!= '0000-00-00'){
+	 $hivRecencyTestDate = $common->humanDateFormat($result['hiv_recency_test_date']);
 }
 $dob = '';
 if($result['dob']!= '' && $result['dob']!= null && $result['dob']!= '0000-00-00'){
@@ -72,7 +72,7 @@ $sample = in_array("Sample Id",$resultArr)?"isRequired":"";
 $patient = in_array("Patient Id",$resultArr)?"isRequired":"";
 $facility = in_array("Facility Name",$resultArr)?"isRequired":"";
 $hivDiagnosisRequiredDate = in_array("Hiv Diagnosis Date",$resultArr)?"isRequired":"";
-$hivRecencyRequiredDate = in_array("Hiv Recency Date",$resultArr)?"isRequired":"";
+$hivRecencyRequiredDate = in_array("Hiv Recency Test Date",$resultArr)?"isRequired":"";
 $controlLineResult = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
 $positiveVerificationLine = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
 $longTermVerificationLine = in_array("Long Term Verification Line",$resultArr)?"isRequired":"";
@@ -410,9 +410,9 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
 												
 
-											<label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Date",$resultArr2)?"showFields":"hideFields";?>" for="">HIV Recency Date<?php echo(in_array("Hiv Recency Date",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
-												<div class="col-sm-4 <?php echo in_array("Hiv Recency Date",$resultArr2)?"showFields":"hideFields";?>">
-													<input type="text" value="<?php echo $hivRecencyDate;?>" class="js-datepicker form-control disbaledResult <?php echo $hivRecencyRequiredDate; ?>" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
+											<label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">HIV Recency Test Date<?php echo(in_array("Hiv Recency Test Date",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+												<div class="col-sm-4 <?php echo in_array("Hiv Recency Test Date",$resultArr2)?"showFields":"hideFields";?>">
+													<input type="text" value="<?php echo $hivRecencyTestDate;?>" class="js-datepicker form-control disbaledResult <?php echo $hivRecencyRequiredDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date"  readonly="readonly">
 												</div>
 												<br>
 												<br>
@@ -901,7 +901,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 					$(".hideDiv").css('visibility','hidden');
 					$("#recencyTestNotPerformed").val("").removeClass("isRequired");
 					$("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
-					$("#hivRecencyDate").addClass("<?php echo $hivRecencyDate;?>");
+					$("#hivRecencyTestDate").addClass("<?php echo $hivRecencyTestDate;?>");
 					$("#controlLine").addClass("<?php echo $controlLineResult;?>");
 					$("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
 					$("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine;?>");

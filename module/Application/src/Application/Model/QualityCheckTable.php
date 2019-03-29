@@ -26,8 +26,8 @@ class QualityCheckTable extends AbstractTableGateway {
           $role = $sessionLogin->roleId;
           $roleCode = $sessionLogin->roleCode;
           $common = new CommonService();
-          $aColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','DATE_FORMAT(qc.kit_expiry_date,"%d-%b-%Y")','DATE_FORMAT(qc.hiv_recency_date,"%d-%b-%Y")','qc.control_line','qc.positive_verification_line','qc.long_term_verification_line','qc.term_outcome','qc.tester_name');
-          $orderColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','qc.kit_expiry_date','qc.hiv_recency_date','qc.control_line','qc.positive_verification_line','qc.long_term_verification_line','qc.term_outcome','qc.tester_name');
+          $aColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','DATE_FORMAT(qc.kit_expiry_date,"%d-%b-%Y")','DATE_FORMAT(qc.hiv_recency_test_date,"%d-%b-%Y")','qc.control_line','qc.positive_verification_line','qc.long_term_verification_line','qc.term_outcome','qc.tester_name');
+          $orderColumns = array('qc.qc_sample_id','qc.qc_test_date','qc.reference_result','qc.kit_lot_no','qc.kit_expiry_date','qc.hiv_recency_test_date','qc.control_line','qc.positive_verification_line','qc.long_term_verification_line','qc.term_outcome','qc.tester_name');
 
           /* Paging */
           $sLimit = "";
@@ -159,7 +159,7 @@ class QualityCheckTable extends AbstractTableGateway {
                          $row[] = str_replace("_"," ",ucwords($aRow['reference_result']));
                          $row[] = ucwords($aRow['kit_lot_no']);
                          $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
-                         $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                         $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
                          $row[] = ucwords($aRow['control_line']);
                          $row[] = ucwords($aRow['positive_verification_line']);
                          $row[] = ucwords($aRow['long_term_verification_line']);
@@ -198,7 +198,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                // 'recency_test_performed'=>$params['recencyTestPerformed'],
                                // 'recency_test_not_performed_reason'=> $params['recencyTestNotPerformedReason'],
                                // 'other_recency_test_not_performed_reason'=> $params['otherRecencyTestNotPerformedReason'],
-                               'hiv_recency_date' => (isset($params['hivRecencyDate']) && $params['hivRecencyDate']!='')?$common->dbDateFormat($params['hivRecencyDate']):NULL,
+                               'hiv_recency_test_date' => (isset($params['hivRecencyTestDate']) && $params['hivRecencyTestDate']!='')?$common->dbDateFormat($params['hivRecencyTestDate']):NULL,
                                'control_line' => (isset($params['controlLine']) && $params['controlLine']!='')?$params['controlLine']:NULL,
                                'positive_verification_line' => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine']!='')?$params['positiveVerificationLine']:NULL,
                                'long_term_verification_line' => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine']!='')?$params['longTermVerificationLine']:NULL,
@@ -251,7 +251,7 @@ class QualityCheckTable extends AbstractTableGateway {
                               // 'recency_test_performed'=>$params['recencyTestPerformed'],
                               // 'recency_test_not_performed_reason'=> $params['recencyTestNotPerformedReason'],
                               // 'other_recency_test_not_performed_reason'=> $params['otherRecencyTestNotPerformedReason'],
-                              'hiv_recency_date' => (isset($params['hivRecencyDate']) && $params['hivRecencyDate']!='')?$common->dbDateFormat($params['hivRecencyDate']):NULL,
+                              'hiv_recency_test_date' => (isset($params['hivRecencyTestDate']) && $params['hivRecencyTestDate']!='')?$common->dbDateFormat($params['hivRecencyTestDate']):NULL,
                               'control_line' => (isset($params['controlLine']) && $params['controlLine']!='')?$params['controlLine']:NULL,
                               'positive_verification_line' => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine']!='')?$params['positiveVerificationLine']:NULL,
                               'long_term_verification_line' => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine']!='')?$params['longTermVerificationLine']:NULL,
@@ -322,7 +322,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                     //'recency_test_performed'=>$qcTest['recencyTestPerformed'],
                                     //'recency_test_not_performed_reason'=> $qcTest['recencyTestNotPerformedReason'],
                                     //'other_recency_test_not_performed_reason'=> $qcTest['otherRecencyTestNotPerformedReason'],
-                                    'hiv_recency_date' => (isset($qcTest['hivRecencyDate']) && $qcTest['hivRecencyDate']!='')?$common->dbDateFormat($qcTest['hivRecencyDate']):NULL,
+                                    'hiv_recency_test_date' => (isset($qcTest['hivRecencyTestDate']) && $qcTest['hivRecencyTestDate']!='')?$common->dbDateFormat($qcTest['hivRecencyTestDate']):NULL,
                                     'control_line' => (isset($qcTest['ctrlLine']) && $qcTest['ctrlLine']!='')?$qcTest['ctrlLine']:NULL,
                                     'positive_verification_line' => (isset($qcTest['positiveLine']) && $qcTest['positiveLine']!='')?$qcTest['positiveLine']:NULL,
                                     'long_term_verification_line' => (isset($qcTest['longTermLine']) && $qcTest['longTermLine']!='')?$qcTest['longTermLine']:NULL,

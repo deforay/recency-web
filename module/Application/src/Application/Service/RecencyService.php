@@ -175,7 +175,7 @@ class RecencyService
                     $row[] = ucwords($aRow['facility_name']);
                     $row[] = ucwords($aRow['testing_facility_name']);
                     $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
-                    $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
 
                     $row[] = ucwords($aRow['control_line']);
                     $row[] = ucwords($aRow['positive_verification_line']);
@@ -244,7 +244,7 @@ class RecencyService
             $sheet->setCellValue('C1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('D1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('E1', html_entity_decode('HIV Diagnosis Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('HIV Recency Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('HIV Recency Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('G1', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('H1', html_entity_decode('Positive Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('I1', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -384,7 +384,7 @@ class RecencyService
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
                     $row = array();
-                    $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
                     $row[] = $aRow['sample_id'];
                     $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
                     $row[] = $common->humanDateFormat($aRow['sample_receipt_date']);
@@ -508,7 +508,7 @@ class RecencyService
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
                     $row = array();
-                    $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
                     $row[] = $aRow['sample_id'];
                     $row[] = $aRow['term_outcome'];
                     $row[] = $aRow['final_outcome'];
@@ -641,7 +641,7 @@ class RecencyService
                     $row[] = $aRow['sample_id'];
                     $row[] = ucwords($aRow['testing_facility_name']);
                     $row[] = $aRow['final_outcome'];
-                    $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
                     $row[] = $common->humanDateFormat($aRow['vl_test_date']);
                     $row[] = date('d-M-Y',strtotime($aRow['vl_result_entry_date']));
                     $row[] = $aRow['diffInDays'];

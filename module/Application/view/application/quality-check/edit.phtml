@@ -9,9 +9,9 @@ if($result->qc_test_date!= '' && $result->qc_test_date!= null && $result->qc_tes
      $qcTestDateFormat = $common->humanDateFormat($result->qc_test_date);
 }
 
-$hivRecencyDateFormat = '';
-if($result->hiv_recency_date!= '' && $result->hiv_recency_date!= null && $result->hiv_recency_date!= '0000-00-00'){
-     $hivRecencyDateFormat = $common->humanDateFormat($result->hiv_recency_date);
+$hivRecencyTestDateFormat = '';
+if($result->hiv_recency_test_date!= '' && $result->hiv_recency_test_date!= null && $result->hiv_recency_test_date!= '0000-00-00'){
+     $hivRecencyTestDateFormat = $common->humanDateFormat($result->hiv_recency_test_date);
 }
 
 $testKitExpiryDateFormat = '';
@@ -91,31 +91,13 @@ if($result['term_outcome']==''){
                               <div class="col-sm-4">
                                    <input type="text" value="<?php echo $testKitExpiryDateFormat; ?>" class="js-datepicker form-control isRequired" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">HIV Recency Date <span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">HIV Recency Test Date <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $hivRecencyDateFormat; ?>" class="js-datepicker form-control disbaledResult isRequired" id="hivRecencyDate" name="hivRecencyDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency date" title="Please enter the HIV recency date"  readonly="readonly">
+                                   <input type="text" value="<?php echo $hivRecencyTestDateFormat; ?>" class="js-datepicker form-control disbaledResult isRequired" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV Recency Test Date" title="Please enter the HIV Recency Test Date"  readonly="readonly">
                               </div>
                          </div>
 
-                         <!-- <div class="form-group row" >
-                              <label id="recencyTestNotPerformedReasonLabel" class="col-sm-2 col-form-label" for="">Reason Why Test Not Performed ? <span class="mandatory">*</span></label>
-                              <div class="col-sm-4">
-                                   <select class="form-control removeClassReq" id="recencyTestNotPerformedReason" name="recencyTestNotPerformedReason" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
-                                        <option value="">select</option>
-                                        <option value="no_consent_from_the_client" <?php //echo($result['recency_test_not_performed_reason'] == 'no_consent_from_the_client' )?'selected="selected"':''; ?>>No Consent</option>
-                                        <option value="no_sample_collected" <?php // echo($result['recency_test_not_performed_reason'] == 'no_sample_collected' )?'selected="selected"':''; ?>>No Sample Collected</option>
-                                        <option value="newly_not_diagnosed" <?php// echo($result['recency_test_not_performed_reason'] == 'newly_not_diagnosed' )?'selected="selected"':''; ?>>No New Diagnosis</option>
-                                        <option value="other" <?php// echo($result['recency_test_not_performed_reason'] == 'other' )?'selected="selected"':''; ?>>Others</option>
-                                   </select>
-                              </div>
-
-                              <label style="display:none;" class="col-sm-2 col-form-label" id="otherRecencyTestNotPerformedReasonLabel" for="">Other Recency Test Not Performed<span class="mandatory">*</span></label>
-                              <div class="col-sm-4">
-                                   <input style="display:none;"  type="text" class="form-control col-sm-12 removeClassReq" value="<?php echo $result['other_recency_test_not_performed_reason']; ?>"  id="otherRecencyTestNotPerformedReason" name="otherRecencyTestNotPerformedReason"  title="Please Enter the Other recency test not performed" placeholder="Enter other recency test not performed">
-                              </div>
-
-
-                         </div> -->
+        
 
                          <div class="form-group row">
 

@@ -72,6 +72,8 @@ public function Header() {
     // set image scale factor
     $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
+    $pdf->Cell($width_cell[0],10,'1',1,0,C,false);
+
     // set font
     $pdf->SetFont('helvetica', '', 8);
   $pdf->AddPage();
@@ -83,13 +85,14 @@ public function Header() {
            $pdfContent.='<td style="border:1px solid #333;"><strong>Patient ID</strong></td>';
            $pdfContent.='<td style="border:1px solid #333;"><strong>Facility Name</strong></td>';
            $pdfContent.='<td style="border:1px solid #333;"><strong>HIV Diagnosis Date</strong></td>';
-           $pdfContent.='<td style="border:1px solid #333;"><strong>HIV Recency Date</strong></td>';
+           $pdfContent.='<td style="border:1px solid #333;"><strong>Final Outcome</strong></td>';
+           $pdfContent.='<td style="border:1px solid #333;"><strong>HIV Recency Test Date</strong></td>';
            $pdfContent.='<td style="border:1px solid #333;"><strong>Control Line</strong></td>';
            $pdfContent.='<td style="border:1px solid #333;"><strong>Positive Verification Line</strong></td>';
            $pdfContent.='<td style="border:1px solid #333;"><strong>Long Verification Line</strong></td>';
            $pdfContent.='<td style="border:1px solid #333;"><strong>Viral Load Result</strong></td>';
            $pdfContent.='<td style="border:1px solid #333;"><strong>Viral Load Test Date</strong></td>';
-           $pdfContent.='<td style="border:1px solid #333;"><strong>Final Outcome</strong></td>';
+          
            $pdfContent.='</tr>';
            for($s=0;$s<count($result);$s++){
             $pdfContent.='<tr>';
@@ -97,13 +100,14 @@ public function Header() {
             $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['patient_id'].'</td>';
             $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['facility_name'].'</td>';
             $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['hiv_diagnosis_date'].'</td>';
-            $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['hiv_recency_date'].'</td>';
+            $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['final_outcome'].'</td>';
+            $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['hiv_recency_test_date'].'</td>';
             $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['control_line'].'</td>';
             $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['positive_verification_line'].'</td>';
             $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['long_term_verification_line'].'</td>';
             $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['vl_result'].'</td>';
             $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['vl_test_date'].'</td>';
-            $pdfContent.='<td style="border:1px solid #333;">'.$result[$s]['final_outcome'].'</td>';
+           
             $pdfContent.='</tr>';
            }
            $pdfContent.='</table>';

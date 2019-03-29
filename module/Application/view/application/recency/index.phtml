@@ -7,7 +7,7 @@ $roleCode = $sessionLogin->roleCode;
 // {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 // {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 
-$formFields = array('sample_id','facility_name','hiv_recency_date','vl_test_date','control_line','positive_verification_line','long_term_verification_line','term_outcome','vl_result','final_outcome','gender','age','patient_id','sample_collection_date','sample_receipt_date','received_specimen_type','testing_facility_type','testing_facility_type_name','hiv_diagnosis_date',
+$formFields = array('sample_id','facility_name','hiv_recency_test_date','vl_test_date','control_line','positive_verification_line','long_term_verification_line','term_outcome','vl_result','final_outcome','gender','age','patient_id','sample_collection_date','sample_receipt_date','received_specimen_type','testing_facility_type','testing_facility_type_name','hiv_diagnosis_date',
 'kit_lot_no','kit_expiry_date','tester_name','dob','marital_status','residence','education_level','name','pregnancy_status','current_sexual_partner','past_hiv_testing','last_hiv_status','patient_on_art','test_last_12_month','exp_violence_last_12_month',
 'form_initiation_datetime','form_transfer_datetime');
 $arrFields = explode(", ",$manageColumnsResult['manage_columns']);
@@ -154,7 +154,7 @@ if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
                               <tr>
                                     <th>Sample ID</th>
                                     <th>Facility Name</th>
-                                    <th>HIV Recency Date</th>
+                                    <th>HIV Recency Test Date</th>
                                     <th>Viral Test Date</th>
                                     <th>Control Line</th>
                                     <th>Positive Verification</th>
@@ -204,7 +204,7 @@ if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
                               <tr>
                               <th>Sample ID</th>
                                     <th>Facility Name</th>
-                                    <th>HIV Recency Date</th>
+                                    <th>HIV Recency Test Date</th>
                                     <th>Viral Test Date</th>
                                     <th>Control Line</th>
                                     <th>Positive Verification</th>

@@ -63,7 +63,7 @@ ALTER TABLE `facilities` ADD `city` VARCHAR(255) NULL DEFAULT NULL AFTER `distri
 
 -- saravanan 03-Oct-2018
 ALTER TABLE `recency` CHANGE `hiv_recency_result` `long_term_verification_line` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
-ALTER TABLE `recency` ADD `control_line` VARCHAR(255) NULL DEFAULT NULL AFTER `hiv_recency_date`, ADD `positive_verification_line` VARCHAR(255) NULL DEFAULT NULL AFTER `control_line`;
+ALTER TABLE `recency` ADD `control_line` VARCHAR(255) NULL DEFAULT NULL AFTER `hiv_recency_test_date`, ADD `positive_verification_line` VARCHAR(255) NULL DEFAULT NULL AFTER `control_line`;
 
 -- Thanaseelan 03-Oct-2018
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Recency Mandatory Fields', 'mandatory_fields', NULL);
@@ -80,7 +80,7 @@ ALTER TABLE `recency` ADD `exp_violence_last_12_month` VARCHAR(255) NULL DEFAULT
 -- saravanan 15-oct-2018
 ALTER TABLE `recency` ADD `term_outcome` VARCHAR(255) NULL DEFAULT NULL AFTER `long_term_verification_line`;
 
-ALTER TABLE `recency` ADD `recency_test_performed` VARCHAR(255) NULL DEFAULT NULL AFTER `hiv_recency_date`;
+ALTER TABLE `recency` ADD `recency_test_performed` VARCHAR(255) NULL DEFAULT NULL AFTER `hiv_recency_test_date`;
 
 -- vivek 16-oct-2018
 ALTER TABLE `recency` CHANGE `control_line` `control_line` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `positive_verification_line` `positive_verification_line` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `long_term_verification_line` `long_term_verification_line` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
@@ -93,7 +93,7 @@ ALTER TABLE `recency` ADD `notes` VARCHAR(255) NULL DEFAULT NULL AFTER `location
 
 
 -- vivek 25th-oct-2018
-CREATE TABLE `recency_app`.`quality_check_test` ( `qc_test_id` INT(11) NOT NULL AUTO_INCREMENT , `qc_test_date` DATE NULL DEFAULT NULL , `qc_sample_id` VARCHAR(255) NULL DEFAULT NULL , `reference_result` VARCHAR(255) NULL DEFAULT NULL , `kit_lot_no` VARCHAR(255) NULL DEFAULT NULL , `kit_expiry_date` DATE NULL DEFAULT NULL , `hiv_recency_date` DATE NULL DEFAULT NULL , `control_line` VARCHAR(255) NULL DEFAULT NULL , `positive_verification_line` VARCHAR(255) NULL DEFAULT NULL , `long_term_verification_line` VARCHAR(255) NULL DEFAULT NULL , `tester_name` VARCHAR(255) NULL DEFAULT NULL , `added_on` DATETIME NULL DEFAULT NULL , `added_by` INT(11) NULL DEFAULT NULL , PRIMARY KEY (`qc_test_id`)) ENGINE = InnoDB;
+CREATE TABLE `recency_app`.`quality_check_test` ( `qc_test_id` INT(11) NOT NULL AUTO_INCREMENT , `qc_test_date` DATE NULL DEFAULT NULL , `qc_sample_id` VARCHAR(255) NULL DEFAULT NULL , `reference_result` VARCHAR(255) NULL DEFAULT NULL , `kit_lot_no` VARCHAR(255) NULL DEFAULT NULL , `kit_expiry_date` DATE NULL DEFAULT NULL , `hiv_recency_test_date` DATE NULL DEFAULT NULL , `control_line` VARCHAR(255) NULL DEFAULT NULL , `positive_verification_line` VARCHAR(255) NULL DEFAULT NULL , `long_term_verification_line` VARCHAR(255) NULL DEFAULT NULL , `tester_name` VARCHAR(255) NULL DEFAULT NULL , `added_on` DATETIME NULL DEFAULT NULL , `added_by` INT(11) NULL DEFAULT NULL , PRIMARY KEY (`qc_test_id`)) ENGINE = InnoDB;
 
 
 -- vivek 26th-oct-2018
@@ -254,3 +254,6 @@ ALTER TABLE `manage_columns_map`
 --sathish 28 Mar 2019
 
   ALTER TABLE `quality_check_test` ADD `testing_facility_id` INT NULL DEFAULT NULL AFTER `added_by`;
+--sathish 29 Mar 2019
+ALTER TABLE `recency` CHANGE `hiv_recency_test_date` `hiv_recency_test_date` DATE NULL DEFAULT NULL;
+ALTER TABLE `quality_check_test` CHANGE `hiv_recency_date` `hiv_recency_test_date` DATE NULL DEFAULT NULL;

@@ -109,7 +109,7 @@ class QualityCheckService {
                     $row[] = str_replace("_"," ",ucwords($aRow['reference_result']));
                     $row[] = ucwords($aRow['kit_lot_no']);
                     $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
-                    $row[] = $common->humanDateFormat($aRow['hiv_recency_date']);
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
                     $row[] = ucwords($aRow['control_line']);
                     $row[] = ucwords($aRow['positive_verification_line']);
                     $row[] = ucwords($aRow['long_term_verification_line']);
@@ -166,7 +166,7 @@ class QualityCheckService {
             $sheet->setCellValue('C3', html_entity_decode('Reference Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('D3', html_entity_decode('Kit Lot Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('E3', html_entity_decode('Kit Expiry Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F3', html_entity_decode('HIV Recency Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F3', html_entity_decode('HIV Recency Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('G3', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('H3', html_entity_decode('Positive Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('I3', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);

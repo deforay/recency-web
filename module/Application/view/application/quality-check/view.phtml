@@ -145,10 +145,10 @@ if($result['term_outcome']==''){
                                     ?> -->
                                     <div class="col-md-6">
                                          <div class="form-group">
-                                              <label for="termsOfPay" class="col-lg-4 control-label">HIV Recency Date</label>
+                                              <label for="termsOfPay" class="col-lg-4 control-label">HIV Recency Test Date</label>
                                               <label for="company" class="col-lg-1 control-label">: </label>
                                               <span style="text-align: left;" for="company" class="col-lg-4 control-label">
-                                                   <?php echo ($result->hiv_recency_date!='' && $result->hiv_recency_date!='0000:00:00')?$common->humanDateFormat($result->hiv_recency_date):''; ?>
+                                                   <?php echo ($result->hiv_recency_test_date!='' && $result->hiv_recency_test_date!='0000:00:00')?$common->humanDateFormat($result->hiv_recency_test_date):''; ?>
                                               </span>
                                          </div>
                                     </div>
