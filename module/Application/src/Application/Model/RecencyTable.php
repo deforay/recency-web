@@ -2411,6 +2411,7 @@ class RecencyTable extends AbstractTableGateway {
               $sQuery =   $sql->select()->from(array('r' => 'recency'))
               ->columns(
                array(
+               "total" => new Expression('COUNT(*)'),
                "week" => new Expression("WEEKOFYEAR(sample_collection_date)"),
                "monthyear" => new Expression("DATE_FORMAT(sample_collection_date, '%Y')"),
                "ritaRecent" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'RITA Recent') THEN 1 ELSE 0 END))"),
@@ -2486,8 +2487,8 @@ class RecencyTable extends AbstractTableGateway {
 
                     $result['date'][$j] = $weekDateOfMonth[0]." to ".$weekDateOfMonth[1];
                     
-                    //$weekDateOfMonth=$this->getStartAndEndDate($sRow["week"],$sRow['monthyear']);
-                    
+                    //$result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
+                    $result['total']+=$result['finalOutCome']['RITA Recent'][$j]+$result['finalOutCome']['Long Term'][$j]+$result['finalOutCome']['Inconclusive'][$j];
                     $j++;
                 }
               
@@ -2595,6 +2596,8 @@ class RecencyTable extends AbstractTableGateway {
                     $result['labActivity']['VL Test Pending'][$j] = (isset($sRow['VLPending']) && $sRow['VLPending'] != NULL) ? $sRow['VLPending'] : 0;
                     $result['date'][$j] = $sRow["testing_facility_name"];
                     
+                    $result['total']+=$result['labActivity']['Samples Collected'][$j];
+                    
                     $j++;
                }
               
@@ -2685,6 +2688,7 @@ class RecencyTable extends AbstractTableGateway {
                     //\Zend\Debug\Debug::dump($sQueryStr);die;
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                $j=0;
+               $result['total']=0;
                 foreach($rResult as $sRow){
                     if($sRow["tester_name"] == null) continue;
                     $result['finalOutCome']['Total'][$j] = (isset($sRow['totalSamples']) && $sRow['totalSamples'] != NULL) ? $sRow['totalSamples'] : 0;
@@ -2693,6 +2697,8 @@ class RecencyTable extends AbstractTableGateway {
                     $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['testerName'][$j] = $sRow['tester_name'];
                     
+                    $result['total']+=$result['finalOutCome']['Total'][$j];
+
                     $j++;
                 }
               
@@ -2761,10 +2767,12 @@ class RecencyTable extends AbstractTableGateway {
                //\Zend\Debug\Debug::dump($sQueryStr);die;
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                $j=0;
+               //$result['total']=0;
                foreach($rResult as $sRow){
                     if($sRow["tester_name"] == null || $sRow['assayInvalid']==0) continue;
                     $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['testerName'][$j] = $sRow['tester_name'];
+                    $result['total']+=$result['finalOutCome']['Assay Invaild'][$j];
                     $j++;
                }
                return $result;
@@ -2832,6 +2840,7 @@ class RecencyTable extends AbstractTableGateway {
                     if($sRow["facility_name"] == null || $sRow['assayInvalid']==0) continue;
                     $result['fInvalidReport']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['facilityName'][$j] = $sRow['facility_name'];
+                    $result['total']+=$result['fInvalidReport']['Assay Invaild'][$j];
                     $j++;
                }
                return $result;
