@@ -3138,6 +3138,12 @@ class RecencyTable extends AbstractTableGateway {
 
                foreach($rResult as $sRow){
                    if($sRow["gender"] == null) continue;
+                   
+                   if($sRow["gender"]=='not_reported'){
+                         $sRow["gender"]='Not Reported';
+                   }else{
+                         $sRow["gender"]=ucwords($sRow["gender"]);
+                   }
                    $result['finalOutCome'][$sRow["gender"]]['15-24'] += (isset($sRow['15T24']) && $sRow['15T24'] != NULL) ? $sRow['15T24'] : 0;
                    $result['finalOutCome'][$sRow["gender"]]['25-34'] += (isset($sRow['25T34']) && $sRow['25T34'] != NULL) ? $sRow['25T34'] : 0;
                    $result['finalOutCome'][$sRow["gender"]]['35-44'] += (isset($sRow['35T44']) && $sRow['35T44'] != NULL) ? $sRow['35T44'] : 0;
