@@ -33,7 +33,7 @@ Highcharts.chart('infectionByDistrict', {
         type: 'column'
     },
     title: {
-        text: ''
+        text: "N=<?php echo $result['total']; ?>"
     },
     xAxis: {
         categories: [
@@ -100,7 +100,7 @@ Highcharts.chart('infectionByDistrict', {
                   foreach($condition as $count){
                 ?>
                 
-                { y: <?php echo $count; ?>, color: '<?php echo $color[$k]; ?>'}, 
+                { y: <?php echo $count; ?>}, 
                 <?php
                 $k++;
                   }

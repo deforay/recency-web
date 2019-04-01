@@ -2964,8 +2964,8 @@ class RecencyTable extends AbstractTableGateway {
                     if($sRow["gender"]=='not_reported'){
                          $sRow["gender"]='Not Reported';
                     }
-
                     $result['gender'][$j] = ucwords($sRow["gender"]);
+                    $result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;;
                     $j++;
                }
               return $result;
@@ -3034,6 +3034,9 @@ class RecencyTable extends AbstractTableGateway {
                     $result['finalOutCome']['Female'][$j] = (isset($sRow['female']) && $sRow['female'] != NULL) ? $sRow['female'] : 0;
                     $result['finalOutCome']['Not Reported'][$j] = (isset($sRow['not_reported']) && $sRow['not_reported'] != NULL) ? $sRow['not_reported'] : 0;
                     $result['district_name'][$j] = ucwords($sRow["district_name"]);
+
+                    $result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;;
+
                     $j++;
                }
               return $result;
@@ -3062,8 +3065,9 @@ class RecencyTable extends AbstractTableGateway {
                ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
                ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
                ->where(array('r.final_outcome'=>'RITA Recent'))
-               ->where("(r.hiv_recency_date is NOT NULL AND r.hiv_recency_date !='')")
-               ->group('r.gender');
+               ->where("(r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date !='')")
+               ->group('r.gender')
+               ->order("gender ASC");
                     
                if($parameters['fName']!=''){
                     $sQuery->where(array('r.facility_id'=>$parameters['fName']));
@@ -3100,7 +3104,7 @@ class RecencyTable extends AbstractTableGateway {
                
                $j=0;
                $result=array();
-
+               /*
                foreach($rResult as $sRow){
                     if(!isset($result['15-24'])){
                          $result['15-24']=$sRow['15T24'];
@@ -3126,6 +3130,23 @@ class RecencyTable extends AbstractTableGateway {
                          $result['45+']+=$sRow['45+'];
                     }
                }
+               */
+              $result['ageGroup'][0] = '15-24';
+              $result['ageGroup'][1] = '25-34';
+              $result['ageGroup'][2] = '35-44';
+              $result['ageGroup'][3] = '45+';
+
+               foreach($rResult as $sRow){
+                   if($sRow["gender"] == null) continue;
+                   $result['finalOutCome'][$sRow["gender"]]['15-24'] += (isset($sRow['15T24']) && $sRow['15T24'] != NULL) ? $sRow['15T24'] : 0;
+                   $result['finalOutCome'][$sRow["gender"]]['25-34'] += (isset($sRow['25T34']) && $sRow['25T34'] != NULL) ? $sRow['25T34'] : 0;
+                   $result['finalOutCome'][$sRow["gender"]]['35-44'] += (isset($sRow['35T44']) && $sRow['35T44'] != NULL) ? $sRow['35T44'] : 0;
+                   $result['finalOutCome'][$sRow["gender"]]['45+'] += (isset($sRow['45+']) && $sRow['45+'] != NULL) ? $sRow['45+'] : 0;
+                   
+                   $result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;;
+                   $j++;
+               }
+               //\Zend\Debug\Debug::dump($result);die;
               return $result;
           }
      }
