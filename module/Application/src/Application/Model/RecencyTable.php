@@ -2907,7 +2907,7 @@ class RecencyTable extends AbstractTableGateway {
                     }
                     
 
-                    $result[$sRow['kit_lot_no']." (Exp.Date:".$expDate.")"] = (isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
+                    $result[$sRow['kit_lot_no']." (Exp. Date: ".$expDate.")"] = (isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
                }
                return $result;
           }
