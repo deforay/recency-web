@@ -7,6 +7,7 @@ Highcharts.chart('container', {
             enabled: false
     },
     exporting: {
+    filename : 'Recency Infection by Gender',
     buttons: {
       contextButton: {
         menuItems: [
@@ -39,7 +40,7 @@ Highcharts.chart('container', {
         crosshair: true,
         title: {
             enabled: true,
-            text: 'Gender Report <br>(N=<?php echo $result['total']; ?>)',
+            text: 'Gender<br>(N=<?php echo $result['total']; ?>)',
             style: {
                 fontWeight: 'normal'
             }

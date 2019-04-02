@@ -5,6 +5,7 @@ Highcharts.chart('hivViralLoad', {
         enabled: false
     },
     exporting: {
+    filename : 'HIV Viral Load',
     buttons: {
       contextButton: {
         menuItems: [
@@ -32,9 +33,9 @@ Highcharts.chart('hivViralLoad', {
         type: 'category',
         title: {
             enabled: true,
-            text: 'RNA Levels <br>(N=<?php echo $result['total']; ?>)',
+            text: 'HIV Viral Load <br>(N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },

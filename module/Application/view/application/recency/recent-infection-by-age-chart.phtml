@@ -6,6 +6,7 @@ Highcharts.chart('infectionByAge', {
             enabled: false
     },
     exporting: {
+    filename : 'Recent Infection by Age',
     buttons: {
       contextButton: {
         menuItems: [
@@ -38,9 +39,9 @@ Highcharts.chart('infectionByAge', {
         crosshair: true,
         title: {
             enabled: true,
-            text: 'Age Report <br>(N=<?php echo $result['total']; ?>)',
+            text: 'Age<br>(N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },

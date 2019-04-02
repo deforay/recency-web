@@ -12,7 +12,9 @@ Highcharts.chart('container', {
             enabled: false
     },
     exporting: {
+        filename : 'RITA Result Weekly Summary',
     buttons: {
+      
       contextButton: {
         menuItems: [
           'printChart',
@@ -54,7 +56,7 @@ Highcharts.chart('container', {
             enabled: true,
             text: 'Weekly Report<br>(N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },

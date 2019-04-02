@@ -12,6 +12,7 @@ Highcharts.chart('recencyLabActivity', {
             enabled: false
     },
     exporting: {
+    filename : 'Recency Testing Site Activity',
     buttons: {
       contextButton: {
         menuItems: [
@@ -54,7 +55,7 @@ Highcharts.chart('recencyLabActivity', {
             enabled: true,
             text: 'Name of the Recency Test Site<br>(N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },

@@ -2475,6 +2475,8 @@ class RecencyTable extends AbstractTableGateway {
                               $sQuery=$sQuery->order("longTerm DESC");
                          }else if($parameters['ritaFilter']=='ritaRecent'){
                               $sQuery=$sQuery->order("ritaRecent DESC");
+                         }else if($parameters['ritaFilter']=='hivRecencyTestDate'){
+                            $sQuery=$sQuery->order("hiv_recency_test_date DESC");
                          }
                     }
 

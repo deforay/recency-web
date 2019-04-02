@@ -9,6 +9,7 @@ Highcharts.chart('qualityCheckVolume', {
         type: 'pie'
     },
     exporting: {
+    filename:'Tester QA Participation',
     buttons: {
       contextButton: {
         menuItems: [
@@ -58,7 +59,7 @@ Highcharts.chart('qualityCheckVolume', {
     series: [{
         
         colorByPoint: true,
-        name: 'Total',
+        name: 'Total QA Tests Recorded',
         data: [
             <?php
 				foreach($result as $key=>$val){

@@ -12,6 +12,7 @@ Highcharts.chart('facilityWiseInvalid', {
             enabled: false
     },
     exporting: {
+    filename:'Facility Wise Inconclusive Results',
     buttons: {
       contextButton: {
         menuItems: [
@@ -51,12 +52,13 @@ Highcharts.chart('facilityWiseInvalid', {
             enabled: true,
             text: 'Name of Facility <br>(N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },
     yAxis: {
         min: 0,
+        allowDecimals: false,
         title: {
             text: ''
         }
@@ -72,7 +74,8 @@ Highcharts.chart('facilityWiseInvalid', {
     plotOptions: {
         column: {
             pointPadding: 0.2,
-            borderWidth: 0
+            borderWidth: 0,
+            maxPointWidth: 40,
         },
         series: {
             dataLabels: {

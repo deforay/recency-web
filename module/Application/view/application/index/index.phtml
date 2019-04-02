@@ -103,7 +103,7 @@
 										<i class="fa fa-eye"></i>
 									</div>
 									<div class="text-black display-4 font-w700 " id="totalSamplesNotTested"></div>
-									<div class="text-muted mt-1">Samples Tested with no Viral Load</div>
+									<div class="text-muted mt-1">Samples with VL Pending</div>
 								</div>
 							</a>
 						</div>
@@ -206,10 +206,10 @@
 											<td style="width:20%;"><b>Sort By:</b></td>
 											<td>
 												<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
-													
+													<option value="hivRecencyTestDate" selected>Recency Test Date</option>
 													<option value="inconclusive">No. of Inconclusive</option>
 													<option value="longTerm">No. of Long Term</option>
-													<option value="ritaRecent" selected>No. of RITA Recent</option>
+													<option value="ritaRecent">No. of RITA Recent</option>
 												</select>
 											</td>
 										</tr>
@@ -270,7 +270,7 @@
 						</div>
 						
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Tester Wise Inconclusive Result
+							<i class="fa fa-angle-right text-muted mr-1"></i> Tester Wise Inconclusive Results
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -279,7 +279,7 @@
 						</div>
 
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Wise Inconclusive Result
+							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Wise Inconclusive Results
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -297,7 +297,7 @@
 						</div>
 
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Quality Check Volume
+							<i class="fa fa-angle-right text-muted mr-1"></i> Tester QA Participation
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">

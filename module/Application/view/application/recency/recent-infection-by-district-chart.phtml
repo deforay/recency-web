@@ -12,6 +12,7 @@ Highcharts.chart('infectionByDistrict', {
             enabled: false
     },
     exporting: {
+    filename : 'Recent Infection by District',
     buttons: {
       contextButton: {
         menuItems: [
@@ -49,9 +50,9 @@ Highcharts.chart('infectionByDistrict', {
         },
         title: {
             enabled: true,
-            text: 'District Report <br>(N=<?php echo $result['total']; ?>)',
+            text: 'Districts<br>(N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },
