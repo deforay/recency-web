@@ -9,6 +9,7 @@ $userName = $sessionLogin->userName;
 $dashboardMenu="";
 $dashboardMenu.="<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
 $dashboardMenu.="<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=". $this->url('analysis-dashboard')."><span class='nav-main-link-name'>Analysis</span></a></li>";
+$dashboardMenu.="<li id='nav-main-item'><a id='behaviour-dashboard' class='nav-main-link' href='javascript:alert(\"The Behaviour Dashboard page is under development. \",\"err\")'><span class='nav-main-link-name'>Behaviour</span></a></li>";
 
 $userMenu = "";
 $userMenu.="<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=". $this->url('global-config', array('action' => 'index')) ."><span class='nav-main-link-name'>Global Config</span></a></li>";
