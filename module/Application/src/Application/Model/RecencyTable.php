@@ -2353,6 +2353,10 @@ class RecencyTable extends AbstractTableGateway {
                                                            WHEN (((r.term_outcome='' AND  recency_test_not_performed='') )) THEN 1
                                                            ELSE 0
                                                            END)"),
+                    "samplesNotTestedViralLoad" => new Expression("SUM(CASE 
+                                                           WHEN (((r.term_outcome='Assay Recent' AND vl_result='') )) THEN 1
+                                                           ELSE 0
+                                                           END)")
                    )
                    )
               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
@@ -2498,8 +2502,8 @@ class RecencyTable extends AbstractTableGateway {
 
           public function getStartAndEndDate($week,$year) {
                
-               $dates[0] = date("d-M-Y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT)));
-               $dates[1] = date("d-M-Y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT).' +6 days'));
+               $dates[0] = date("d-M-y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT)));
+               $dates[1] = date("d-M-y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT).' +6 days'));
                return $dates;
           }
           
@@ -3163,6 +3167,86 @@ class RecencyTable extends AbstractTableGateway {
                }
                //\Zend\Debug\Debug::dump($result);die;
               return $result;
+          }
+
+
+          public function fetchRecentViralLoadChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+              ->columns(
+                    array(
+                    'gender',
+                    "1000<10K" => new Expression("(SUM(CASE WHEN (r.vl_result >= '1000' AND r.vl_result<10000) THEN 1 ELSE 0 END))"),
+                    "10K100K" => new Expression("(SUM(CASE WHEN (r.vl_result >= '10000' AND r.vl_result<100000) THEN 1 ELSE 0 END))"),
+                    "100K1M" => new Expression("(SUM(CASE WHEN (r.vl_result >= '100000' AND r.vl_result<1000000) THEN 1 ELSE 0 END))"),
+                    "1M>" => new Expression("(SUM(CASE WHEN (r.vl_result>='1000000') THEN 1 ELSE 0 END))"),
+                    )
+               )
+               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+               ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'))
+               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
+               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->where(array('r.final_outcome'=>'RITA Recent'))
+               ->where("(r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date !='')")
+               ->group('r.vl_result');
+                    
+               if($parameters['fName']!=''){
+                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+               }
+               if($parameters['testingFacility']!=''){
+               $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+               }
+               if($parameters['locationOne']!=''){
+                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                    if($parameters['locationTwo']!=''){
+                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    }
+                    if($parameters['locationThree']!=''){
+                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    }
+               }
+               if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                    $s_c_date = explode("to", $_POST['sampleTestedDates']);
+                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                    }
+                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                    }
+               }
+     
+               if($parameters['sampleTestedDates']!=''){
+                    $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+               }
+               
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               
+               $j=0;
+               $result=array();
+               /*
+               $result['rnaGroup'][0] = '1000<10K';
+               $result['rnaGroup'][1] = '10K100K';
+               $result['rnaGroup'][2] = '100K1M';
+               $result['rnaGroup'][3] = '1M>';
+               */
+
+               foreach($rResult as $sRow){
+                   $result['finalOutCome']['1000<10K'] += (isset($sRow['1000<10K']) && $sRow['1000<10K'] != NULL) ? $sRow['1000<10K'] : 0;
+                   $result['finalOutCome']['10K100K'] += (isset($sRow['10K100K']) && $sRow['10K100K'] != NULL) ? $sRow['10K100K'] : 0;
+                   $result['finalOutCome']['100K1M'] += (isset($sRow['100K1M']) && $sRow['100K1M'] != NULL) ? $sRow['100K1M'] : 0;
+                   $result['finalOutCome']['1M>'] += (isset($sRow['1M>']) && $sRow['1M>'] != NULL) ? $sRow['1M>'] : 0;
+                   
+                   $result['total']+=$sRow['1000<10K']+$sRow['10K100K']+$sRow['100K1M']+$sRow['1M>'];
+                   $j++;
+               }
+               
+               return $result;
           }
      }
 

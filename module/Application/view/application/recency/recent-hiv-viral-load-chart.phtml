@@ -1,0 +1,81 @@
+<?php if(count($result)>0){ ?>
+<script>
+Highcharts.chart('hivViralLoad', {
+    credits: {
+        enabled: false
+    },
+    exporting: {
+    buttons: {
+      contextButton: {
+        menuItems: [
+          'printChart',
+          'separator',
+          'downloadPNG',
+          'downloadJPEG',
+          'downloadPDF',
+          'downloadSVG',
+          'separator',
+          'downloadCSV',
+          'downloadXLS',
+          'viewData'
+        ]
+      }
+    }
+    },
+    chart: {
+        type: 'column',
+    },
+    title: {
+        text: "N=<?php echo $result['total']; ?>"
+    },
+    xAxis: {
+        type: 'category',
+        title: {
+            enabled: true,
+            text: 'RNA Levels',
+            style: {
+                fontSize: '15px',
+            }
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Recent'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        pointFormat: '<b>{point.y}</b>'
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        },
+        series: {
+            dataLabels: {
+                enabled: true,
+                format: '{point.y}'
+            }
+        }
+    },
+   
+    series: [{
+        name: '',
+        data: [
+            <?php foreach($result['finalOutCome'] as $key=>$val){
+                echo "['".ucwords($key)."',".$val."],";  
+             } ?>
+            
+        ]
+    }]
+
+
+});
+</script>
+<?php }else{
+    echo "<h2 style='text-align:center;'>No data available</h2>";
+} ?>

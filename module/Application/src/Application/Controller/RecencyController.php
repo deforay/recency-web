@@ -325,8 +325,8 @@ class RecencyController extends AbstractActionController
         return $viewModel;
      }
 
-     public function recentInfectionByAgeChartAction()
-     {
+      public function recentInfectionByAgeChartAction()
+      {
         $result = "";
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -338,5 +338,20 @@ class RecencyController extends AbstractActionController
         $viewModel->setVariables(array('result' => $result))
                 ->setTerminal(true);
         return $viewModel;
-     }
+      }
+
+      public function recentHivViralLoadChartAction()
+      {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getRecentViralLoadChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+      }
 }

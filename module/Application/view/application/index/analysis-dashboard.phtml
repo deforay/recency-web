@@ -63,7 +63,7 @@
 								
 						<div class="row items-push">
 							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+								<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getHivViralLoadChart();"><i class="fa fa-fw fa-check"></i> Search</a>
 								
 							</div>
 						</div>
@@ -98,6 +98,15 @@
 							</div>
 						</div>
 
+						<h2 class="content-heading">
+							<i class="fa fa-angle-right text-muted mr-1"></i> HIV Viral Load
+						</h2>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								<div id="hivViralLoad" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
+						</div>
+
 	</div>
 	<script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
@@ -110,6 +119,7 @@
 				getFinalOutcomeChart();
 				getInfectionByDistrictChart();
 				getInfectionByAgeChart();
+				getHivViralLoadChart();
 			<?php foreach($globalConfigResult as $config){
 			?>
 			getLocationDeatils('<?php echo $config["global_name"];?>');
@@ -202,4 +212,11 @@
 				$("#infectionByAge").html(data);
 			});
 		}
+		function getHivViralLoadChart() {		
+			$.post("<?php echo $this->url('recency',array('action'=>'recent-hiv-viral-load-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
+			function(data){
+				$("#hivViralLoad").html(data);
+			});
+		}
+		
 	</script>

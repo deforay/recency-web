@@ -45,7 +45,7 @@
 										<i class="fa fa-eye"></i>
 									</div>
 									<div class="text-black display-4 font-w700 " id="totalSamplesBacklog"></div>
-									<div class="text-muted mt-1">Samples Backlog</div>
+									<div class="text-muted mt-1">Samples Waiting For Testing</div>
 									
 								</div>
 							</a>
@@ -79,7 +79,7 @@
 										<i class="fa fa-eye text-xmodern"></i>
 									</div>
 									<div class="text-black display-4 font-w700" id="samplesTestedRecency"></div>
-									<div class="text-muted mt-1">Samples Tested with Recency</div>
+									<div class="text-muted mt-1">Samples with Assay Recent</div>
 									
 								</div>
 							</a>
@@ -105,6 +105,17 @@
 									<div class="text-black display-4 font-w700" id="samplesFinalOutcome"></div>
 									<div class="text-muted mt-1">Samples with RITA Recent</div>
 									
+								</div>
+							</a>
+						</div>
+						<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
+							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+								<div class="block-content block-content-full">
+									<div style="background-color:#e8cb96;" class="item item-circle mx-auto my-3">
+										<i class="fa fa-eye"></i>
+									</div>
+									<div class="text-black display-4 font-w700 " id="totalSamplesNotTested"></div>
+									<div class="text-muted mt-1">Samples Tested with no Viral Load</div>
 								</div>
 							</a>
 						</div>
@@ -308,9 +319,9 @@
 										<th>No.of Samples Registered</th>
 										<th>No.of Samples Received at Hub</th>
 										<th>No.of Samples Rejected</th>
-										<th>No.of Samples Backlog</th>
+										<th>No.of Samples Waiting For Testing</th>
 										<th>No.of Samples VL Pending</th>
-										<th>No.of Samples Tested With Recency</th>
+										<th>No.of Samples with Assay Recent</th>
 										<th>No.of Samples Tested With Viral Load</th>
 										<th>No.of Samples With Final Outcome</th>
 								</tr>
@@ -464,7 +475,7 @@
 
 	function getRecencyAllDataCount() {
 		
-			$.post("<?php echo $this->url('recency',array('action'=>'get-recency-all-data-count')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+			$.post("<?php echo $this->url('recency',array('action'=>'get-recency-all-data-count')); ?>",{locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
 				function(data){
 					var obj = JSON.parse(data);
 					$("#totalSamples").html(obj.totalSamples);
@@ -474,6 +485,8 @@
 					$("#totalSamplesRejected").html(obj.samplesTestRejected);
 					$("#totalSamplesPosVerificationAbsent").html(obj.samplesPosVerificationAbsent);
 					$("#totalSamplesBacklog").html(obj.samplesTestBacklog);
+					$("#totalSamplesNotTested").html(obj.samplesNotTestedViralLoad);
+					
 			});
 
 	}
