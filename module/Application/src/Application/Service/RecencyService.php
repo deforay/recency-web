@@ -1052,6 +1052,8 @@ class RecencyService
                          $row[] = $aRow['totalSamples'];
                          $row[] = $aRow['samplesReceived'];
                          $row[] = $aRow['samplesRejected'];
+                         $row[] = $aRow['samplesTestBacklog'];
+                         $row[] = $aRow['samplesTestVlPending'];
                          $row[] = $aRow['samplesTestedRecency'];
                          $row[] = $aRow['samplesTestedViralLoad'];
                          $row[] = $aRow['samplesFinalOutcome'];
@@ -1091,9 +1093,11 @@ class RecencyService
             $sheet->setCellValue('C1', html_entity_decode('No.of Samples Registered', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('D1', html_entity_decode('No.of Samples Received at Hub', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('E1', html_entity_decode('No.of Samples Rejected', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('No.of Samples Tested With Recency', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('No.of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H1', html_entity_decode('No.of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('No.of Samples Waiting For Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('No.of Samples VL Pending', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('No.of Samples With Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('No.of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('J1', html_entity_decode('No.of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -1105,7 +1109,8 @@ class RecencyService
             $sheet->getStyle('F1')->applyFromArray($styleArray);
             $sheet->getStyle('G1')->applyFromArray($styleArray);
             $sheet->getStyle('H1')->applyFromArray($styleArray);
-          
+            $sheet->getStyle('I1')->applyFromArray($styleArray);
+            $sheet->getStyle('J1')->applyFromArray($styleArray);
 
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;

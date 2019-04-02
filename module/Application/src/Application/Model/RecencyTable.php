@@ -2789,10 +2789,6 @@ class RecencyTable extends AbstractTableGateway {
                ->columns(
                     array(
                     "inconclusive" => new Expression("SUM(CASE WHEN (r.final_outcome = 'Inconclusive') THEN 1 ELSE 0 END)"),
-                    /*"assayInvalid" => new Expression("SUM(CASE 
-                                                  WHEN ((term_outcome ='Invalid' OR term_outcome ='invalid')) THEN 1
-                                                  ELSE 0
-                                                  END)"),*/
                     )
                     )
                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))

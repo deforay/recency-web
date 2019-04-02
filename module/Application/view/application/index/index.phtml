@@ -461,7 +461,7 @@
 		function exportRecencyInfo()
 		{
 			$.blockUI();
-			$.post("<?php echo $this->url('home',array('action'=>'export-recency-data')); ?>",
+			$.post("<?php echo $this->url('export-recency-data'); ?>",
 				function(data){
 				if(data == "" || data == null || data == undefined){
 				$.unblockUI();
