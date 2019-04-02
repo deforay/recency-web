@@ -253,7 +253,7 @@ ALTER TABLE `manage_columns_map`
   MODIFY `map_id` int(11) NOT NULL AUTO_INCREMENT;
 --sathish 28 Mar 2019
 
-  ALTER TABLE `quality_check_test` ADD `testing_facility_id` INT NULL DEFAULT NULL AFTER `added_by`;
+ALTER TABLE `quality_check_test` ADD `testing_facility_id` INT NULL DEFAULT NULL AFTER `added_by`;
 --sathish 29 Mar 2019
-ALTER TABLE `recency` CHANGE `hiv_recency_test_date` `hiv_recency_test_date` DATE NULL DEFAULT NULL;
+ALTER TABLE `recency` CHANGE `hiv_recency_date` `hiv_recency_test_date` DATE NULL DEFAULT NULL;
 ALTER TABLE `quality_check_test` CHANGE `hiv_recency_date` `hiv_recency_test_date` DATE NULL DEFAULT NULL;
