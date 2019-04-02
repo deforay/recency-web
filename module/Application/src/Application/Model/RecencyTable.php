@@ -2719,10 +2719,8 @@ class RecencyTable extends AbstractTableGateway {
                ->columns(
                     array(
                     'tester_name',
-                    "assayInvalid" => new Expression("SUM(CASE 
-                                                  WHEN ((term_outcome ='Invalid' OR term_outcome ='invalid')) THEN 1
-                                                  ELSE 0
-                                                  END)"),
+                    "inconclusive" => new Expression("SUM(CASE WHEN (r.final_outcome = 'Inconclusive') THEN 1 ELSE 0 END)"),
+                    
                     )
                     )
                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
@@ -2773,8 +2771,8 @@ class RecencyTable extends AbstractTableGateway {
                $j=0;
                //$result['total']=0;
                foreach($rResult as $sRow){
-                    if($sRow["tester_name"] == null || $sRow['assayInvalid']==0) continue;
-                    $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
+                    if($sRow["tester_name"] == null || $sRow['inconclusive']==0) continue;
+                    $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['inconclusive']) && $sRow['inconclusive'] != NULL) ? $sRow['inconclusive'] : 0;
                     $result['testerName'][$j] = $sRow['tester_name'];
                     $result['total']+=$result['finalOutCome']['Assay Invaild'][$j];
                     $j++;
@@ -2790,10 +2788,11 @@ class RecencyTable extends AbstractTableGateway {
               $sQuery =   $sql->select()->from(array('r' => 'recency'))
                ->columns(
                     array(
-                    "assayInvalid" => new Expression("SUM(CASE 
+                    "inconclusive" => new Expression("SUM(CASE WHEN (r.final_outcome = 'Inconclusive') THEN 1 ELSE 0 END)"),
+                    /*"assayInvalid" => new Expression("SUM(CASE 
                                                   WHEN ((term_outcome ='Invalid' OR term_outcome ='invalid')) THEN 1
                                                   ELSE 0
-                                                  END)"),
+                                                  END)"),*/
                     )
                     )
                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
@@ -2841,8 +2840,8 @@ class RecencyTable extends AbstractTableGateway {
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                $j=0;
                foreach($rResult as $sRow){
-                    if($sRow["facility_name"] == null || $sRow['assayInvalid']==0) continue;
-                    $result['fInvalidReport']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
+                    if($sRow["facility_name"] == null || $sRow['inconclusive']==0) continue;
+                    $result['fInvalidReport']['Assay Invaild'][$j] = (isset($sRow['inconclusive']) && $sRow['inconclusive'] != NULL) ? $sRow['inconclusive'] : 0;
                     $result['facilityName'][$j] = $sRow['facility_name'];
                     $result['total']+=$result['fInvalidReport']['Assay Invaild'][$j];
                     $j++;
