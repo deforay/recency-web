@@ -1,8 +1,9 @@
-<?php if(count($result)>0){ ?>
+<?php if(count($result)>0){
+?>
 <script>
 Highcharts.chart('infectionByAge', {
     credits: {
-        enabled: false
+            enabled: false
     },
     exporting: {
     buttons: {
@@ -23,20 +24,25 @@ Highcharts.chart('infectionByAge', {
     }
     },
     chart: {
-        type: 'column',
+        type: 'column'
     },
     title: {
-        text: 'Age Group Report',
-        align: 'center',
-        verticalAlign: 'bottom',
-        floating: true,
-        style: {
-          fontSize: '15px',
-        }
+        text: "N=<?php echo $result['total']; ?>"
     },
-  
     xAxis: {
-        type: 'category',
+        categories: [
+            <?php  foreach($result['ageGroup'] as $res){?>
+                    '<?php echo $res; ?>',
+               <?php } ?>
+        ],
+        crosshair: true,
+        title: {
+            enabled: true,
+            text: 'Age Report',
+            style: {
+                fontSize: '15px',
+            }
+        }
     },
     yAxis: {
         min: 0,
@@ -44,18 +50,18 @@ Highcharts.chart('infectionByAge', {
             text: 'Recent'
         }
     },
-    legend: {
-        enabled: false
-    },
     tooltip: {
-        pointFormat: '<b>{point.y}</b>'
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
     },
+    
     plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        },
         series: {
+            borderWidth: 0,
             dataLabels: {
                 enabled: true,
                 format: '{point.y}'
@@ -63,19 +69,36 @@ Highcharts.chart('infectionByAge', {
         }
     },
     colors: [
-        '#fec16f'
+        '#ad7bf7',
+        '#0178b7',
+        '#898989'
 	],
-    series: [{
-        name: '',
-        data: [
-            <?php foreach($result as $key=>$val){
-                echo "['".ucwords($key)."',".$val."],";  
-             } ?>
-            
-        ]
-    }]
+    series: [
+        <?php
+        $k=0;
+           if(isset($result['finalOutCome']) && count($result['finalOutCome']) >0){
+              foreach($result['finalOutCome'] as $key=>$condition){
+              ?>
+        {
+        name: '<?php echo $key;?>',
+        data: [<?php
+                  foreach($condition as $count){
+                ?>
+                
+                { y: <?php echo $count; ?>}, 
+                <?php
+                $k++;
+                  }
+              ?>
+              
+              ]
 
-
+    }, 
+    <?php
+              }
+           }
+            ?>]
+    
 });
 </script>
 <?php }else{

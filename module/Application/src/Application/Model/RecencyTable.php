@@ -2353,6 +2353,10 @@ class RecencyTable extends AbstractTableGateway {
                                                            WHEN (((r.term_outcome='' AND  recency_test_not_performed='') )) THEN 1
                                                            ELSE 0
                                                            END)"),
+                    "samplesNotTestedViralLoad" => new Expression("SUM(CASE 
+                                                           WHEN (((r.term_outcome='Assay Recent' AND vl_result='') )) THEN 1
+                                                           ELSE 0
+                                                           END)")
                    )
                    )
               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
@@ -2411,6 +2415,7 @@ class RecencyTable extends AbstractTableGateway {
               $sQuery =   $sql->select()->from(array('r' => 'recency'))
               ->columns(
                array(
+               "total" => new Expression('COUNT(*)'),
                "week" => new Expression("WEEKOFYEAR(sample_collection_date)"),
                "monthyear" => new Expression("DATE_FORMAT(sample_collection_date, '%Y')"),
                "ritaRecent" => new Expression("(SUM(CASE WHEN (r.final_outcome = 'RITA Recent') THEN 1 ELSE 0 END))"),
@@ -2486,8 +2491,8 @@ class RecencyTable extends AbstractTableGateway {
 
                     $result['date'][$j] = $weekDateOfMonth[0]." to ".$weekDateOfMonth[1];
                     
-                    //$weekDateOfMonth=$this->getStartAndEndDate($sRow["week"],$sRow['monthyear']);
-                    
+                    //$result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
+                    $result['total']+=$result['finalOutCome']['RITA Recent'][$j]+$result['finalOutCome']['Long Term'][$j]+$result['finalOutCome']['Inconclusive'][$j];
                     $j++;
                 }
               
@@ -2497,8 +2502,8 @@ class RecencyTable extends AbstractTableGateway {
 
           public function getStartAndEndDate($week,$year) {
                
-               $dates[0] = date("d-M-Y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT)));
-               $dates[1] = date("d-M-Y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT).' +6 days'));
+               $dates[0] = date("d-M-y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT)));
+               $dates[1] = date("d-M-y", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT).' +6 days'));
                return $dates;
           }
           
@@ -2595,6 +2600,8 @@ class RecencyTable extends AbstractTableGateway {
                     $result['labActivity']['VL Test Pending'][$j] = (isset($sRow['VLPending']) && $sRow['VLPending'] != NULL) ? $sRow['VLPending'] : 0;
                     $result['date'][$j] = $sRow["testing_facility_name"];
                     
+                    $result['total']+=$result['labActivity']['Samples Collected'][$j];
+                    
                     $j++;
                }
               
@@ -2685,6 +2692,7 @@ class RecencyTable extends AbstractTableGateway {
                     //\Zend\Debug\Debug::dump($sQueryStr);die;
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                $j=0;
+               $result['total']=0;
                 foreach($rResult as $sRow){
                     if($sRow["tester_name"] == null) continue;
                     $result['finalOutCome']['Total'][$j] = (isset($sRow['totalSamples']) && $sRow['totalSamples'] != NULL) ? $sRow['totalSamples'] : 0;
@@ -2693,6 +2701,8 @@ class RecencyTable extends AbstractTableGateway {
                     $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['testerName'][$j] = $sRow['tester_name'];
                     
+                    $result['total']+=$result['finalOutCome']['Total'][$j];
+
                     $j++;
                 }
               
@@ -2761,10 +2771,12 @@ class RecencyTable extends AbstractTableGateway {
                //\Zend\Debug\Debug::dump($sQueryStr);die;
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                $j=0;
+               //$result['total']=0;
                foreach($rResult as $sRow){
                     if($sRow["tester_name"] == null || $sRow['assayInvalid']==0) continue;
                     $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['testerName'][$j] = $sRow['tester_name'];
+                    $result['total']+=$result['finalOutCome']['Assay Invaild'][$j];
                     $j++;
                }
                return $result;
@@ -2832,6 +2844,7 @@ class RecencyTable extends AbstractTableGateway {
                     if($sRow["facility_name"] == null || $sRow['assayInvalid']==0) continue;
                     $result['fInvalidReport']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != NULL) ? $sRow['assayInvalid'] : 0;
                     $result['facilityName'][$j] = $sRow['facility_name'];
+                    $result['total']+=$result['fInvalidReport']['Assay Invaild'][$j];
                     $j++;
                }
                return $result;
@@ -2964,8 +2977,8 @@ class RecencyTable extends AbstractTableGateway {
                     if($sRow["gender"]=='not_reported'){
                          $sRow["gender"]='Not Reported';
                     }
-
                     $result['gender'][$j] = ucwords($sRow["gender"]);
+                    $result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;;
                     $j++;
                }
               return $result;
@@ -3034,6 +3047,9 @@ class RecencyTable extends AbstractTableGateway {
                     $result['finalOutCome']['Female'][$j] = (isset($sRow['female']) && $sRow['female'] != NULL) ? $sRow['female'] : 0;
                     $result['finalOutCome']['Not Reported'][$j] = (isset($sRow['not_reported']) && $sRow['not_reported'] != NULL) ? $sRow['not_reported'] : 0;
                     $result['district_name'][$j] = ucwords($sRow["district_name"]);
+
+                    $result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;;
+
                     $j++;
                }
               return $result;
@@ -3062,8 +3078,9 @@ class RecencyTable extends AbstractTableGateway {
                ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
                ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
                ->where(array('r.final_outcome'=>'RITA Recent'))
-               ->where("(r.hiv_recency_date is NOT NULL AND r.hiv_recency_date !='')")
-               ->group('r.gender');
+               ->where("(r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date !='')")
+               ->group('r.gender')
+               ->order("gender ASC");
                     
                if($parameters['fName']!=''){
                     $sQuery->where(array('r.facility_id'=>$parameters['fName']));
@@ -3100,7 +3117,7 @@ class RecencyTable extends AbstractTableGateway {
                
                $j=0;
                $result=array();
-
+               /*
                foreach($rResult as $sRow){
                     if(!isset($result['15-24'])){
                          $result['15-24']=$sRow['15T24'];
@@ -3126,7 +3143,110 @@ class RecencyTable extends AbstractTableGateway {
                          $result['45+']+=$sRow['45+'];
                     }
                }
+               */
+              $result['ageGroup'][0] = '15-24';
+              $result['ageGroup'][1] = '25-34';
+              $result['ageGroup'][2] = '35-44';
+              $result['ageGroup'][3] = '45+';
+
+               foreach($rResult as $sRow){
+                   if($sRow["gender"] == null) continue;
+                   
+                   if($sRow["gender"]=='not_reported'){
+                         $sRow["gender"]='Not Reported';
+                   }else{
+                         $sRow["gender"]=ucwords($sRow["gender"]);
+                   }
+                   $result['finalOutCome'][$sRow["gender"]]['15-24'] += (isset($sRow['15T24']) && $sRow['15T24'] != NULL) ? $sRow['15T24'] : 0;
+                   $result['finalOutCome'][$sRow["gender"]]['25-34'] += (isset($sRow['25T34']) && $sRow['25T34'] != NULL) ? $sRow['25T34'] : 0;
+                   $result['finalOutCome'][$sRow["gender"]]['35-44'] += (isset($sRow['35T44']) && $sRow['35T44'] != NULL) ? $sRow['35T44'] : 0;
+                   $result['finalOutCome'][$sRow["gender"]]['45+'] += (isset($sRow['45+']) && $sRow['45+'] != NULL) ? $sRow['45+'] : 0;
+                   
+                   $result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;;
+                   $j++;
+               }
+               //\Zend\Debug\Debug::dump($result);die;
               return $result;
+          }
+
+
+          public function fetchRecentViralLoadChart($parameters)
+          {
+              $dbAdapter = $this->adapter;
+              $sql = new Sql($dbAdapter);
+              $general = new CommonService();
+              $sQuery =   $sql->select()->from(array('r' => 'recency'))
+              ->columns(
+                    array(
+                    'gender',
+                    "1000<10K" => new Expression("(SUM(CASE WHEN (r.vl_result >= '1000' AND r.vl_result<10000) THEN 1 ELSE 0 END))"),
+                    "10K100K" => new Expression("(SUM(CASE WHEN (r.vl_result >= '10000' AND r.vl_result<100000) THEN 1 ELSE 0 END))"),
+                    "100K1M" => new Expression("(SUM(CASE WHEN (r.vl_result >= '100000' AND r.vl_result<1000000) THEN 1 ELSE 0 END))"),
+                    "1M>" => new Expression("(SUM(CASE WHEN (r.vl_result>='1000000') THEN 1 ELSE 0 END))"),
+                    )
+               )
+               ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+               ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'))
+               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
+               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left')
+               ->where(array('r.final_outcome'=>'RITA Recent'))
+               ->where("(r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date !='')")
+               ->group('r.vl_result');
+                    
+               if($parameters['fName']!=''){
+                    $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+               }
+               if($parameters['testingFacility']!=''){
+               $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+               }
+               if($parameters['locationOne']!=''){
+                    $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+                    if($parameters['locationTwo']!=''){
+                          $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+                    }
+                    if($parameters['locationThree']!=''){
+                          $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+                    }
+               }
+               if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+                    $s_c_date = explode("to", $_POST['sampleTestedDates']);
+                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                    }
+                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                    }
+               }
+     
+               if($parameters['sampleTestedDates']!=''){
+                    $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+               }
+               
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               //\Zend\Debug\Debug::dump($sQueryStr);die;
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               
+               $j=0;
+               $result=array();
+               /*
+               $result['rnaGroup'][0] = '1000<10K';
+               $result['rnaGroup'][1] = '10K100K';
+               $result['rnaGroup'][2] = '100K1M';
+               $result['rnaGroup'][3] = '1M>';
+               */
+
+               foreach($rResult as $sRow){
+                   $result['finalOutCome']['1000<10K'] += (isset($sRow['1000<10K']) && $sRow['1000<10K'] != NULL) ? $sRow['1000<10K'] : 0;
+                   $result['finalOutCome']['10K100K'] += (isset($sRow['10K100K']) && $sRow['10K100K'] != NULL) ? $sRow['10K100K'] : 0;
+                   $result['finalOutCome']['100K1M'] += (isset($sRow['100K1M']) && $sRow['100K1M'] != NULL) ? $sRow['100K1M'] : 0;
+                   $result['finalOutCome']['1M>'] += (isset($sRow['1M>']) && $sRow['1M>'] != NULL) ? $sRow['1M>'] : 0;
+                   
+                   $result['total']+=$sRow['1000<10K']+$sRow['10K100K']+$sRow['100K1M']+$sRow['1M>'];
+                   $j++;
+               }
+               
+               return $result;
           }
      }
 
