@@ -33,7 +33,7 @@ Highcharts.chart('infectionByDistrict', {
         type: 'column'
     },
     title: {
-        text: "N=<?php echo $result['total']; ?>"
+        text: ""
     },
     xAxis: {
         categories: [
@@ -49,7 +49,7 @@ Highcharts.chart('infectionByDistrict', {
         },
         title: {
             enabled: true,
-            text: 'District Report',
+            text: 'District Report <br>(N=<?php echo $result['total']; ?>)',
             style: {
                 fontSize: '15px',
             }

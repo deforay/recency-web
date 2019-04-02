@@ -28,10 +28,7 @@ Highcharts.chart('container', {
         type: 'column'
     },
     title: {
-        text: "N=<?php echo $result['total']; ?>"
-    },
-    subtitle: {
-        text: ''
+        text: ""
     },
     xAxis: {
         categories: [
@@ -42,7 +39,7 @@ Highcharts.chart('container', {
         crosshair: true,
         title: {
             enabled: true,
-            text: 'Gender Report',
+            text: 'Gender Report <br>(N=<?php echo $result['total']; ?>)',
             style: {
                 fontWeight: 'normal'
             }

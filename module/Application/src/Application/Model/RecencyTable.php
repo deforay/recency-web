@@ -2093,7 +2093,7 @@ class RecencyTable extends AbstractTableGateway {
            $rQueryStr = $sql->getSqlStringForSqlObject($rQuery);
            $fResult = $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
            return $fResult;
-        }
+          }
         
         
         public function fetchAllRecencyResult($parameters)
@@ -2478,10 +2478,10 @@ class RecencyTable extends AbstractTableGateway {
                          }
                     }
 
-              $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
                //\Zend\Debug\Debug::dump($sQueryStr);die;
-              $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-              $j=0;
+               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+               $j=0;
                 foreach($rResult as $sRow){
                     $weekDateOfMonth=$this->getStartAndEndDate($sRow["week"],$sRow['monthyear']);
                     if($sRow["week"] == null) continue;

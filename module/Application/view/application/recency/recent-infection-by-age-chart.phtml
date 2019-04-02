@@ -27,7 +27,7 @@ Highcharts.chart('infectionByAge', {
         type: 'column'
     },
     title: {
-        text: "N=<?php echo $result['total']; ?>"
+        text: ""
     },
     xAxis: {
         categories: [
@@ -38,7 +38,7 @@ Highcharts.chart('infectionByAge', {
         crosshair: true,
         title: {
             enabled: true,
-            text: 'Age Report',
+            text: 'Age Report <br>(N=<?php echo $result['total']; ?>)',
             style: {
                 fontSize: '15px',
             }

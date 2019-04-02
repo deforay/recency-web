@@ -33,7 +33,7 @@ Highcharts.chart('facilityWiseInvalid', {
         type: 'column'
     },
     title: {
-        text: "N=<?php echo $result['total']; ?>"
+        text: ""
     },
     xAxis: {
         categories: [
@@ -49,7 +49,7 @@ Highcharts.chart('facilityWiseInvalid', {
         },
         title: {
             enabled: true,
-            text: 'Name of Facility',
+            text: 'Name of Facility <br>(N=<?php echo $result['total']; ?>)',
             style: {
                 fontSize: '15px',
             }

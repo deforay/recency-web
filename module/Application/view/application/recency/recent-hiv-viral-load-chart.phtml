@@ -26,13 +26,13 @@ Highcharts.chart('hivViralLoad', {
         type: 'column',
     },
     title: {
-        text: "N=<?php echo $result['total']; ?>"
+        text: ""
     },
     xAxis: {
         type: 'category',
         title: {
             enabled: true,
-            text: 'RNA Levels',
+            text: 'RNA Levels <br>(N=<?php echo $result['total']; ?>)',
             style: {
                 fontSize: '15px',
             }
