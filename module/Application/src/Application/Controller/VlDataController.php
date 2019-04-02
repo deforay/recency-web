@@ -170,9 +170,10 @@ class VlDataController extends AbstractActionController
                $params = $request->getPost();
                if(isset($params['pdfFile']))
                {
-                $result = $recencyService->updateEmailSendResult($params);
-                return $this->_redirect()->toUrl('/vl-data/email-result');
-               }else{
+                   $result = $recencyService->updateEmailSendResult($params);
+                   return $this->_redirect()->toUrl('/vl-data/email-result');
+                }else{
+                    //\Zend\Debug\Debug::dump($params);die;
                $result = $recencyService->getEmailSendResult($params);
                return new ViewModel(array(
                 'result' => $result,
