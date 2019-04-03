@@ -2191,7 +2191,7 @@ class RecencyTable extends AbstractTableGateway {
                                                                  ELSE 0
                                                                  END)"),
                          "samplesTestedViralLoad" => new Expression("SUM(CASE 
-                                                                 WHEN (((r.vl_test_date is NOT NULL) )) THEN 1
+                                                                 WHEN (( r.term_outcome='Assay Recent' AND (r.vl_result is NOT NULL or r.vl_result != '') )) THEN 1
                                                                  ELSE 0
                                                                  END)"),
                          "samplesFinalOutcome" => new Expression("SUM(CASE 
@@ -2199,11 +2199,11 @@ class RecencyTable extends AbstractTableGateway {
                                                                  ELSE 0
                                                                  END)"),
                          "samplesTestBacklog" => new Expression("SUM(CASE 
-                                                                 WHEN (((r.term_outcome='' AND  recency_test_not_performed='') )) THEN 1
+                                                                 WHEN (((r.term_outcome is null AND (recency_test_not_performed IS NULL OR recency_test_not_performed ='') ) )) THEN 1
                                                                  ELSE 0
                                                                  END)"),
                          "samplesTestVlPending" => new Expression("SUM(CASE 
-                                                                 WHEN (((r.term_outcome='Assay Recent' AND vl_result='') )) THEN 1
+                                                                 WHEN (((r.term_outcome='Assay Recent' AND (vl_result='' or vl_result is null)))) THEN 1
                                                                  ELSE 0
                                                                  END)")                                        
                                                                                                          
@@ -2267,7 +2267,7 @@ class RecencyTable extends AbstractTableGateway {
                     }
                     $queryContainer->exportRecencyDataResultDataQuery = $sQuery;
                     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-                     //echo $sQueryStr;die;
+                    //echo $sQueryStr;die;
                     $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
                     /* Data set length after filtering */
@@ -2334,15 +2334,19 @@ class RecencyTable extends AbstractTableGateway {
                                                            ELSE 0
                                                            END)"),
                    "samplesTestedViralLoad" => new Expression("SUM(CASE 
-                                                           WHEN (((r.vl_test_date is NOT NULL) )) THEN 1
+                                                           WHEN (( r.term_outcome='Assay Recent' AND (r.vl_result is NOT NULL or r.vl_result != '') )) THEN 1
                                                            ELSE 0
                                                            END)"),
                    "samplesFinalOutcome" => new Expression("SUM(CASE 
-                                                           WHEN (((r.final_outcome='RITA Recent') )) THEN 1
+                                                           WHEN (((r.final_outcome like 'RITA Recent') )) THEN 1
+                                                           ELSE 0
+                                                           END)"),
+                   "samplesFinalOutcomeLT" => new Expression("SUM(CASE 
+                                                           WHEN (((r.final_outcome = 'Long Term') )) THEN 1
                                                            ELSE 0
                                                            END)"),
                     "samplesTestRejected" => new Expression("SUM(CASE 
-                                                           WHEN (((r.recency_test_not_performed='sample_rejected') )) THEN 1
+                                                           WHEN (((r.recency_test_not_performed IS NOT NULL AND r.recency_test_not_performed != '') )) THEN 1
                                                            ELSE 0
                                                            END)"),
                     "samplesPosVerificationAbsent" => new Expression("SUM(CASE 
@@ -2350,11 +2354,11 @@ class RecencyTable extends AbstractTableGateway {
                                                            ELSE 0
                                                            END)"),
                     "samplesTestBacklog" => new Expression("SUM(CASE 
-                                                           WHEN (((r.term_outcome='' AND  recency_test_not_performed='') )) THEN 1
+                                                           WHEN (((r.term_outcome is null AND (recency_test_not_performed IS NULL OR recency_test_not_performed ='') ) )) THEN 1
                                                            ELSE 0
                                                            END)"),
                     "samplesNotTestedViralLoad" => new Expression("SUM(CASE 
-                                                           WHEN (((r.term_outcome='Assay Recent' AND vl_result='') )) THEN 1
+                                                           WHEN (((r.term_outcome='Assay Recent' AND (vl_result is null or vl_result ='')) )) THEN 1
                                                            ELSE 0
                                                            END)")
                    )
@@ -2365,41 +2369,41 @@ class RecencyTable extends AbstractTableGateway {
               ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'),'left')
               ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'),'left');
 
-           if($parameters['fName']!=''){
-               $sQuery->where(array('r.facility_id'=>$parameters['fName']));
-           }
-           if($parameters['testingFacility']!=''){
-               $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
-           }
-           if($parameters['locationOne']!=''){
-               $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
-               if($parameters['locationTwo']!=''){
-                     $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
-               }
-               if($parameters['locationThree']!=''){
-                     $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
-               }
-         }
-               if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
-                    $s_c_date = explode("to", $_POST['sampleTestedDates']);
-                    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-                         $start_date = $general->dbDateFormat(trim($s_c_date[0]));
-                    }
-                    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-                         $end_date = $general->dbDateFormat(trim($s_c_date[1]));
-                    }
-               }
+        //    if($parameters['fName']!=''){
+        //        $sQuery->where(array('r.facility_id'=>$parameters['fName']));
+        //    }
+        //    if($parameters['testingFacility']!=''){
+        //        $sQuery->where(array('r.testing_facility_id'=>$parameters['testingFacility']));
+        //    }
+        //    if($parameters['locationOne']!=''){
+        //        $sQuery = $sQuery->where(array('p.province_id'=>$parameters['locationOne']));
+        //        if($parameters['locationTwo']!=''){
+        //              $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationTwo']));
+        //        }
+        //        if($parameters['locationThree']!=''){
+        //              $sQuery = $sQuery->where(array('c.city_id'=>$parameters['locationThree']));
+        //        }
+        //     }
+        //        if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+        //             $s_c_date = explode("to", $_POST['sampleTestedDates']);
+        //             if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+        //                  $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+        //             }
+        //             if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+        //                  $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+        //             }
+        //        }
 
-               if($parameters['sampleTestedDates']!=''){
-                    $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
-               }
-               if($parameters['tOutcome']!=''){
-                    $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
-                }
+        //        if($parameters['sampleTestedDates']!=''){
+        //             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date ."'", "r.sample_collection_date <='" . $end_date."'"));
+        //        }
+        //        if($parameters['tOutcome']!=''){
+        //             $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
+        //         }
              
-                if($parameters['finalOutcome']!=''){
-                    $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
-                }
+        //         if($parameters['finalOutcome']!=''){
+        //             $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
+        //         }
 
               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -2531,7 +2535,7 @@ class RecencyTable extends AbstractTableGateway {
                                                   END)"),
 
                "VLPending" => new Expression("SUM(CASE 
-                                                  WHEN (((r.term_outcome='Assay Recent' AND vl_result='') )) THEN 1
+                                                  WHEN (((r.term_outcome='Assay Recent' AND (vl_result='' or vl_result is null)))) THEN 1
                                                   ELSE 0
                                                   END)")
                )
@@ -3176,10 +3180,10 @@ class RecencyTable extends AbstractTableGateway {
               ->columns(
                     array(
                     'gender',
-                    "1000<10K" => new Expression("(SUM(CASE WHEN (r.vl_result >= '1000' AND r.vl_result<10000) THEN 1 ELSE 0 END))"),
-                    "10K100K" => new Expression("(SUM(CASE WHEN (r.vl_result >= '10000' AND r.vl_result<100000) THEN 1 ELSE 0 END))"),
-                    "100K1M" => new Expression("(SUM(CASE WHEN (r.vl_result >= '100000' AND r.vl_result<1000000) THEN 1 ELSE 0 END))"),
-                    "1M>" => new Expression("(SUM(CASE WHEN (r.vl_result>='1000000') THEN 1 ELSE 0 END))"),
+                    "1000<10K" => new Expression("(SUM(CASE WHEN (r.vl_result >= 1000 AND r.vl_result<10000) THEN 1 ELSE 0 END))"),
+                    "10K100K" => new Expression("(SUM(CASE WHEN (r.vl_result >= 10000 AND r.vl_result<100000) THEN 1 ELSE 0 END))"),
+                    "100K1M" => new Expression("(SUM(CASE WHEN (r.vl_result >= 100000 AND r.vl_result<1000000) THEN 1 ELSE 0 END))"),
+                    "1M>" => new Expression("(SUM(CASE WHEN (r.vl_result>=1000000) THEN 1 ELSE 0 END))"),
                     )
                )
                ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))

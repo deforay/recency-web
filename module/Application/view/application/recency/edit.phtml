@@ -849,6 +849,15 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
 	 jQuery(document).ready(function($) {
 
+		if($("#vlLoadResult")){
+            $("#vlLoadResult").on('keyup keypress blur change paste', function(){
+                if ($('#vlLoadResult').val() != $('#vlLoadResult').val().replace(/[^\d\.]/g,"")) { 
+                    $('#vlLoadResult').val('');
+                    alert('Please enter only numeric values for Viral Load Result')
+                }                
+            });
+         }		 
+
 		  changeTermLine();
 		  $("#facilityId").select2({
                placeholder: "Choose Facility",
