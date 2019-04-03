@@ -1134,7 +1134,7 @@ class RecencyService
             }
 
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'Recency-Data-' . date('d-M-Y-H-i-s') . '.xls';
+            $filename = 'Facility-Recency-Results-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             return $filename;
         } catch (Exception $exc) {
