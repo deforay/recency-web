@@ -19,7 +19,7 @@
 	<div class="bg-body-light">
 		<div class="content content-full">
 			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-				<h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Analysis Dashboard</h1>
+				<h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">QA &amp; Analysis Dashboard</h1>
 			</div>
 		</div>
 	</div>
@@ -85,7 +85,7 @@
 						</div>
 
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by District
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Infection by District
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -94,7 +94,7 @@
 						</div>
 
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Age
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Infection by Age
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -102,14 +102,7 @@
 							</div>
 						</div>
 
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> HIV Viral Load
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="hivViralLoad" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
+						
 
 						<h2 class="content-heading">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Map (feature is under development)
@@ -152,7 +145,7 @@ L.marker([-1.9565912,30.0595336]).addTo(mymap);
 				getFinalOutcomeChart();
 				getInfectionByDistrictChart();
 				getInfectionByAgeChart();
-				getHivViralLoadChart();
+				//getHivViralLoadChart();
 			<?php foreach($globalConfigResult as $config){
 			?>
 			getLocationDeatils('<?php echo $config["global_name"];?>');

@@ -46,7 +46,7 @@
 										<i class="fa fa-eye text-xplay"></i>
 									</div>
 									<div class="text-black display-4 font-w700" id="samplesFinalOutcome"></div>
-									<div class="text-muted mt-1">Samples with RITA Recent</div>
+									<div class="text-muted mt-1">Samples classified as RITA Recent</div>
 									
 								</div>
 							</a>
@@ -58,7 +58,7 @@
 										<i class="fa fa-eye text-xplay"></i>
 									</div>
 									<div class="text-black display-4 font-w700" id="samplesFinalOutcomeLT"></div>
-									<div class="text-muted mt-1">Samples with Long Term</div>
+									<div class="text-muted mt-1">Samples classified as Long Term</div>
 									
 								</div>
 							</a>
@@ -238,7 +238,7 @@
 						<h2 class="content-heading">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Testing Site Activity
 						</h2>
-							<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 50%;margin-bottom: 0px;">
+							<table class="" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 50%;margin-bottom: 0px;">
 								<tbody>
 									<tr>
 										<td style="width:20%;"><b>Sort By:</b></td>
@@ -259,65 +259,7 @@
 							</div>
 						</div>
 						
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Tests Performed by Testers
-						</h2>
-						<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 50%;margin-bottom: 0px;">
-								<tbody>
-									<tr>
-										<td style="width:20%;"><b>Sort By:</b></td>
-										<td>
-											<select class="form-control" id="recencyTesterFilter" name="recencyTesterFilter" title="Please select recency tester filter" onchange="getTesterwiseFinalOutcomeChart();">
-												<option value="">No. of Samples Collected</option>
-												<option value="assayLongTerm">Assay Long Term</option>
-												<option value="assayRecent">Assay Recent</option>
-												<option value="assayInvalid">Assay Invalid</option>
-											</select>
-										</td>
-									</tr>
-								</tbody>
-						</table>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="finalOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
 						
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Tester Wise Inconclusive Results
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="testerWiseInvalid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
-
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Wise Inconclusive Results
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="facilityWiseInvalid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
-						
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Lot Information
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="lotReport" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
-
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Tester QA Participation
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="qualityCheckVolume" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
 
 					<h2 class="content-heading ">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
@@ -363,11 +305,11 @@
 				getRecencyAllDataCount();
 				getFinalOutcomeChart();
 				getRecencyLabActivityChart();
-				getTesterwiseFinalOutcomeChart();
-				getTesterwiseInvalidChart();
-				getFacilityWiseInvalidChart();
-				getLotChart();
-				getQualityCheckVolume();
+				//getTesterwiseFinalOutcomeChart();
+				//getTesterwiseInvalidChart();
+				//getFacilityWiseInvalidChart();
+				//getLotChart();
+				//getQualityCheckVolume();
 				oTable = $('#facilityDataTable').dataTable( {
 					"bAutoWidth": false,
 					"bProcessing": true,

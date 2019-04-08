@@ -2976,7 +2976,7 @@ class RecencyTable extends AbstractTableGateway {
                     $result['finalOutCome']['Long Term'][$j] = (isset($sRow['longTerm']) && $sRow['longTerm'] != NULL) ? $sRow['longTerm'] : 0;
                     $result['finalOutCome']['RITA Recent'][$j] = (isset($sRow['ritaRecent']) && $sRow['ritaRecent'] != NULL) ? $sRow['ritaRecent'] : 0;
                     if($sRow["gender"]=='not_reported'){
-                         $sRow["gender"]='Not Reported';
+                         $sRow["gender"]='Gender Missing';
                     }
                     $result['gender'][$j] = ucwords($sRow["gender"]);
                     $result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;;
@@ -3046,7 +3046,7 @@ class RecencyTable extends AbstractTableGateway {
                     if($sRow["district_name"] == null) continue;
                     $result['finalOutCome']['Male'][$j] = (isset($sRow['male']) && $sRow['male'] != NULL) ? $sRow['male'] : 0;
                     $result['finalOutCome']['Female'][$j] = (isset($sRow['female']) && $sRow['female'] != NULL) ? $sRow['female'] : 0;
-                    $result['finalOutCome']['Not Reported'][$j] = (isset($sRow['not_reported']) && $sRow['not_reported'] != NULL) ? $sRow['not_reported'] : 0;
+                    $result['finalOutCome']['Gender Missing'][$j] = (isset($sRow['not_reported']) && $sRow['not_reported'] != NULL) ? $sRow['not_reported'] : 0;
                     $result['district_name'][$j] = ucwords($sRow["district_name"]);
 
                     $result['total']+=(isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;;
@@ -3154,7 +3154,7 @@ class RecencyTable extends AbstractTableGateway {
                    if($sRow["gender"] == null) continue;
                    
                    if($sRow["gender"]=='not_reported'){
-                         $sRow["gender"]='Not Reported';
+                         $sRow["gender"]='Gender Missing';
                    }else{
                          $sRow["gender"]=ucwords($sRow["gender"]);
                    }
