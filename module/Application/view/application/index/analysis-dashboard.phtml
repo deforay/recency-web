@@ -29,7 +29,7 @@
 			<div class="form-group row">
 				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
 							<div class="col-sm-4">
-							<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="<?php echo $startDate." to ".$currentDate;?>"/>
+							<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value=""/>
 								</div>
 							<?php
 							foreach($globalConfigResult as $config){ ?>
@@ -67,7 +67,7 @@
 								
 						<div class="row items-push">
 							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getHivViralLoadChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+								<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
 								
 							</div>
 						</div>
@@ -76,7 +76,11 @@
 						</div>
 					
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Infection by Gender
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Gender &nbsp;&nbsp;&nbsp;&nbsp;
+									<small class="custom-control custom-switch custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="recent-infection-by-gender-percentage" name="recent-infection-by-gender-percentage" checked  onchange="getFinalOutcomeChart();">
+													<label class="custom-control-label" for="recent-infection-by-gender-percentage">Percentage</label>
+												</small>
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -85,7 +89,12 @@
 						</div>
 
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Infection by District
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by District
+							&nbsp;&nbsp;&nbsp;&nbsp;
+									<small class="custom-control custom-switch custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="recent-infection-by-district-percentage" name="recent-infection-by-district-percentage" checked  onchange="getInfectionByDistrictChart();">
+													<label class="custom-control-label" for="recent-infection-by-district-percentage">Percentage</label>
+												</small>
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -94,7 +103,12 @@
 						</div>
 
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Infection by Age
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Age
+							&nbsp;&nbsp;&nbsp;&nbsp;
+									<small class="custom-control custom-switch custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="recent-infection-by-age-percentage" name="recent-infection-by-age-percentage" checked  onchange="getInfectionByAgeChart();">
+													<label class="custom-control-label" for="recent-infection-by-age-percentage">Percentage</label>
+												</small>
 						</h2>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
@@ -221,30 +235,48 @@ L.marker([-1.9565912,30.0595336]).addTo(mymap);
 		}
 
 		function getFinalOutcomeChart() {
-			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-gender-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
+			var format = null;
+			if($('#recent-infection-by-gender-percentage').prop('checked')){
+				format = 'percentage';
+			}else{
+				format = 'number';
+			}			
+			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-gender-chart')); ?>",{format:format, sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
 				function(data){
 					$("#container").html(data);
 			});
 		}
 
 		function getInfectionByDistrictChart() {
-			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-district-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
+			var format = null;
+			if($('#recent-infection-by-district-percentage').prop('checked')){
+				format = 'percentage';
+			}else{
+				format = 'number';
+			}
+			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-district-chart')); ?>",{format:format, sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
 			function(data){
 				$("#infectionByDistrict").html(data);
 			});
 		}
 		
-		function getInfectionByAgeChart() {		
-			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-age-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
+		function getInfectionByAgeChart() {	
+			var format = null;
+			if($('#recent-infection-by-age-percentage').prop('checked')){
+				format = 'percentage';
+			}else{
+				format = 'number';
+			}				
+			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-age-chart')); ?>",{format:format,sampleTestedDates:$("#sampleTestedDates").val()},
 			function(data){
 				$("#infectionByAge").html(data);
 			});
 		}
-		function getHivViralLoadChart() {		
-			$.post("<?php echo $this->url('recency',array('action'=>'recent-hiv-viral-load-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
-			function(data){
-				$("#hivViralLoad").html(data);
-			});
-		}
+		// function getHivViralLoadChart() {		
+		// 	$.post("<?php echo $this->url('recency',array('action'=>'recent-hiv-viral-load-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
+		// 	function(data){
+		// 		$("#hivViralLoad").html(data);
+		// 	});
+		// }
 		
 	</script>

@@ -1,4 +1,7 @@
-<?php if(count($result)>0){ 
+<?php 
+
+if(count($result)>0){ 
+    $format = $result['format'];
     $n=count($result['date']);
     if($n>4){
         $max='4';
@@ -53,7 +56,7 @@ Highcharts.chart('recencyLabActivity', {
         },
         title: {
             enabled: true,
-            text: 'Name of the Recency Test Site<br>(N=<?php echo $result['total']; ?>)',
+            text: 'Name of the Recency Test Site (N=<?php echo $result['total']; ?>)',
             style: {
                 fontSize: '12px',
             }
@@ -61,8 +64,15 @@ Highcharts.chart('recencyLabActivity', {
     },
     yAxis: {
         min: 0,
+        <?php if($format =='percentage') { ?>
+        max:100,
+        <?php } ?>        
         title: {
+            <?php if($format =='percentage') { ?>
+            text: 'Percentage'
+            <?php } else { ?>
             text: 'Number of Tests'
+            <?php } ?>
         }
     },
     tooltip: {
@@ -81,7 +91,14 @@ Highcharts.chart('recencyLabActivity', {
         series: {
             dataLabels: {
                 enabled: true,
-                format: '{point.y}'
+                formatter: function() {
+                    
+                    <?php if($format =='percentage') { ?>
+                        return this.y > 0 ? this.y + '%' : 0;
+                    <?php } else { ?>
+                        return this.y;
+                    <?php } ?>                    
+                }
             }
         }
     },

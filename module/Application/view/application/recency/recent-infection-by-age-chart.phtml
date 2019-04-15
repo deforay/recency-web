@@ -1,4 +1,8 @@
-<?php if(count($result)>0){
+<?php 
+
+$format = $result['format'];
+
+if(count($result)>0){
 ?>
 <script>
 Highcharts.chart('infectionByAge', {
@@ -6,7 +10,7 @@ Highcharts.chart('infectionByAge', {
             enabled: false
     },
     exporting: {
-    filename : 'Recency Infection by Age',
+    filename : 'Recent Infection by Age',
     buttons: {
       contextButton: {
         menuItems: [
@@ -39,7 +43,7 @@ Highcharts.chart('infectionByAge', {
         crosshair: true,
         title: {
             enabled: true,
-            text: 'Age<br>(N=<?php echo $result['total']; ?>)',
+            text: 'Age (N=<?php echo $result['total']; ?>)',
             style: {
                 fontSize: '12px',
             }
@@ -47,9 +51,16 @@ Highcharts.chart('infectionByAge', {
     },
     yAxis: {
         min: 0,
+        <?php if($format =='percentage') { ?>
+        max:100,
+        <?php } ?> 
         title: {
-            text: 'Recent'
-        }
+            <?php if($format =='percentage') { ?>
+            text: 'Recent Infection %'
+            <?php } else { ?>
+            text: 'Recent Infections'
+            <?php } ?>
+        }        
     },
     tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -65,7 +76,13 @@ Highcharts.chart('infectionByAge', {
             borderWidth: 0,
             dataLabels: {
                 enabled: true,
-                format: '{point.y}'
+                formatter: function() {
+                    <?php if($format =='percentage') { ?>
+                        return this.y > 0 ? this.y + '%' : 0;
+                    <?php } else { ?>
+                        return this.y;
+                    <?php } ?>                    
+                }
             }
         }
     },

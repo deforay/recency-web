@@ -1,4 +1,10 @@
-<?php if(count($result)>0){ 
+<?php 
+
+
+if(count($result)>0){
+
+    $format = $result['format'];
+
     $n=count($result['date']);
     if($n>4){
         $max='4';
@@ -33,6 +39,7 @@ Highcharts.chart('container', {
     },
     chart: {
         type: 'column',
+        height: '450px',
     },
     title: {
         text: ""
@@ -54,7 +61,7 @@ Highcharts.chart('container', {
         },
         title: {
             enabled: true,
-            text: 'Weekly Report<br>(N=<?php echo $result['total']; ?>)',
+            text: 'Weekly Report (N=<?php echo $result['total']; ?>)',
             style: {
                 fontSize: '12px',
             }
@@ -62,8 +69,16 @@ Highcharts.chart('container', {
     },
     yAxis: {
         min: 0,
+        <?php if($format =='percentage') { ?>
+        max:100,
+        <?php } ?>
+        
         title: {
-            text: 'Number of RITA Results'
+            <?php if($format =='percentage') { ?>
+            text: 'Percentage'
+            <?php } else { ?>
+            text: 'Number of Tests'
+            <?php } ?>
         }
     },
     tooltip: {
@@ -84,7 +99,13 @@ Highcharts.chart('container', {
         series: {
             dataLabels: {
                 enabled: true,
-                format: '{point.y}'
+                formatter: function() {
+                    <?php if($format =='percentage') { ?>
+                        return this.y > 0 ? this.y + '%' : 0;
+                    <?php } else { ?>
+                        return this.y;
+                    <?php } ?>                    
+                }
             }
         }
     },

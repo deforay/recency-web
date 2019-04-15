@@ -1,16 +1,16 @@
 	<?php
-	use Zend\Session\Container;
-	$sessionLogin = new Container('credo');
-	$roleCode = $sessionLogin->roleCode;
-	//\Zend\Debug\Debug::dump($globalConfigResult);die;
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
+//\Zend\Debug\Debug::dump($globalConfigResult);die;
 
-	$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
-	$startDate=date('d-M-Y', strtotime('today - 365 days'));
-	$currentDate=date('d-M-Y');
-	?>
+$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+$startDate = date('d-M-Y', strtotime('today - 365 days'));
+$currentDate = date('d-M-Y');
+?>
 	<style>
 	</style>
-	<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css'?>" rel="stylesheet">
+	<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 	<div class="bg-body-light">
 		<div class="content content-full">
 			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -34,7 +34,7 @@
 									</div>
 									<div class="text-black display-4 font-w700 " id="totalSamples"></div>
 									<div class="text-muted mt-1">Samples Registered</div>
-									
+
 								</div>
 							</a>
 						</div>
@@ -47,7 +47,7 @@
 									</div>
 									<div class="text-black display-4 font-w700" id="samplesFinalOutcome"></div>
 									<div class="text-muted mt-1">Samples classified as RITA Recent</div>
-									
+
 								</div>
 							</a>
 						</div>
@@ -59,10 +59,10 @@
 									</div>
 									<div class="text-black display-4 font-w700" id="samplesFinalOutcomeLT"></div>
 									<div class="text-muted mt-1">Samples classified as Long Term</div>
-									
+
 								</div>
 							</a>
-						</div>						
+						</div>
 						<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
 							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
 								<div class="block-content block-content-full">
@@ -71,7 +71,7 @@
 									</div>
 									<div class="text-black display-4 font-w700 " id="totalSamplesBacklog"></div>
 									<div class="text-muted mt-1">Samples Waiting For Testing</div>
-									
+
 								</div>
 							</a>
 						</div>
@@ -104,8 +104,8 @@
 										<i class="fa fa-eye text-xmodern"></i>
 									</div>
 									<div class="text-black display-4 font-w700" id="samplesTestedRecency"></div>
-									<div class="text-muted mt-1">Samples with Assay Recent</div>
-									
+									<div class="text-muted mt-1">Samples Classified as Assay Recent</div>
+
 								</div>
 							</a>
 						</div>
@@ -117,7 +117,7 @@
 									</div>
 									<div class="text-black display-4 font-w700" id="samplesTestedViralLoad"></div>
 									<div class="text-muted mt-1">Samples Tested with Viral Load</div>
-								
+
 								</div>
 							</a>
 						</div>
@@ -128,11 +128,11 @@
 										<i class="fa fa-eye"></i>
 									</div>
 									<div class="text-black display-4 font-w700 " id="totalSamplesNotTested"></div>
-									<div class="text-muted mt-1">Samples with VL Pending</div>
+									<div class="text-muted mt-1">Samples with VL Test Pending</div>
 								</div>
 							</a>
 						</div>
-						
+
 					</div>
 				</div>
 			</div>
@@ -143,19 +143,19 @@
 			<div class="form-group row">
 					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
 							<div class="col-sm-4">
-							<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="<?php echo $startDate." to ".$currentDate;?>"/>
+							<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value=""/>
 								</div>
 							<?php
-							foreach($globalConfigResult as $config){ ?>
-								<?php if($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three'){ ?>
+foreach ($globalConfigResult as $config) {?>
+								<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') {?>
 									<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
 									<div class="col-sm-4">
-										<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
+										<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
 											<option value="">-- Select --</option>
 										</select>
 									</div>
 								<?php }
-							}?>
+}?>
 							<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
 							<div class="col-sm-4">
 								<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
@@ -168,13 +168,16 @@
 									<select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
 									<option value=""> -- Select -- </option>
 										<?php
-										foreach($facilityResult['facilityTest'] as $facilityRow){
-											if(2 != (int)$facilityRow['facility_type_id']) continue;
-										?>
-										<option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
+foreach ($facilityResult['facilityTest'] as $facilityRow) {
+    if (2 != (int) $facilityRow['facility_type_id']) {
+        continue;
+    }
+
+    ?>
+										<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
 										<?php
-										}
-										?>
+}
+?>
 									</select>
 								</div>
 								<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Assay Outcome</label>
@@ -196,60 +199,74 @@
                                     <option value="inconclusive">Inconclusive</option>
                                 </select>
 								</div>
-								
+
 						<div class="row items-push">
 							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getTesterwiseFinalOutcomeChart();getTesterwiseInvalidChart();getFacilityWiseInvalidChart();getLotChart();getQualityCheckVolume();"><i class="fa fa-fw fa-check"></i> Search</a>
-								
+								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+
 							</div>
 						</div>
 						</div>
 						</div>
 						</div>
-					
-						
 
 
-						
+
+
+
 						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> RITA Result Weekly Summary
+							<i class="fa fa-angle-right text-muted mr-1"></i> RITA Result Weekly Summary 
+							
 						</h2>
-								<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 50%;margin-bottom: 0px;">
+								<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 80%;margin-bottom: 0px;">
 									<tbody>
 										<tr>
-											<td style="width:20%;"><b>Sort By:</b></td>
+											<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
 											<td>
 												<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
-													<option value="hivRecencyTestDate" selected>Recency Test Date</option>
-													<option value="inconclusive">No. of Inconclusive</option>
-													<option value="longTerm">No. of Long Term</option>
-													<option value="ritaRecent">No. of RITA Recent</option>
+													<option value="hivRecencyTestDate" selected>Recency Test Date (DESC)</option>
+													<option value="ritaRecent">RITA Recent (DESC)</option>
+													<option value="longTerm">Long Term (DESC)</option>
+													<option value="inconclusive">Inconclusive (DESC)</option>
 												</select>
+											</td>
+											<td>
+												<div class="custom-control custom-switch custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="rita-recent-weekly-percentage" name="rita-recent-weekly-percentage" checked  onchange="getFinalOutcomeChart();">
+													<label class="custom-control-label" for="rita-recent-weekly-percentage">Percentage</label>
+												</div>
 											</td>
 										</tr>
 									</tbody>
 								</table>
 						<div class="block block-rounded block-bordered">
 							<div class="block-content block-content-full">
-								
-								<div id="container" style="height: 400px; min-width: 320px; margin: 0 auto"></div>
+
+								<div id="container" style="height: 450px; min-width: 320px; margin: 0 auto"></div>
 							</div>
-						</div>                
+						</div>
 						<h2 class="content-heading">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Testing Site Activity
 						</h2>
-							<table class="" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 50%;margin-bottom: 0px;">
+						<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 80%;margin-bottom: 0px;">
 								<tbody>
 									<tr>
-										<td style="width:20%;"><b>Sort By:</b></td>
+										<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
 										<td>
 											<select class="form-control" id="activityFilter" name="activityFilter" title="Please select activity filter" onchange="getRecencyLabActivityChart();">
-												<option value="">No. of Samples Collected</option>
-												<option value="recencyDone">Recency Test Done</option>
-												<option value="vlDone">VL Test Done</option>
-												<option value="vlPending">VL Test Pending</option>
+												<option value="">Samples Collected (DESC)</option>
+												<option value="recencyDone">Recency Tests Done (DESC)</option>
+												<option value="vlDone">VL Tests Done (DESC)</option>
+												<option value="vlPending">VL Tests Pending (DESC)</option>
 											</select>
 										</td>
+
+											<td>
+												<div class="custom-control custom-switch custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="recency-testing-site-activity-percentage" name="recency-testing-site-activity-percentage" checked  onchange="getRecencyLabActivityChart();">
+													<label class="custom-control-label" for="recency-testing-site-activity-percentage">Percentage</label>
+												</div>
+											</td>										
 									</tr>
 								</tbody>
 							</table>
@@ -258,28 +275,28 @@
 								<div id="recencyLabActivity" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 							</div>
 						</div>
-						
-						
+
+
 
 					<h2 class="content-heading ">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
 							<a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
 						</h2>
 						<div class="block block-rounded block-bordered">
-						<div class="block-content block-content-full">     
+						<div class="block-content block-content-full">
 						<table id="facilityDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
 							<thead>
 								<tr>
 										<th>Facility Name</th>
 										<th>Testing Site Name</th>
-										<th>No.of Samples Registered</th>
-										<th>No.of Samples Received at Hub</th>
-										<th>No.of Samples Rejected</th>
-										<th>No.of Samples Waiting For Testing</th>
-										<th>No.of Samples VL Pending</th>
-										<th>No.of Samples with Assay Recent</th>
-										<th>No.of Samples Tested With Viral Load</th>
-										<th>No.of Samples With Final Outcome</th>
+										<th>No. of Samples Registered</th>
+										<th>No. of Samples Received at Hub</th>
+										<th>No. of Samples Rejected</th>
+										<th>No. of Samples Waiting For Testing</th>
+										<th>No. of Samples VL Pending</th>
+										<th>No. of Samples classified as Assay Recent</th>
+										<th>No. of Samples Tested With Viral Load</th>
+										<th>No. of Samples With Final Outcome</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -296,8 +313,11 @@
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/export-data.js'; ?>"></script>
 
-	
+
 	<script type="text/javascript">
+
+	    	$(document).ajaxStart($.blockUI).ajaxComplete($.unblockUI);
+
 			/* Table initialisation */
 			oTable = null;
 			$(document).ready(function() {
@@ -315,9 +335,9 @@
 					"bProcessing": true,
 					"bServerSide": true,
 					"aoColumns": [
-							<?php echo $editAction;?>
+							<?php echo $editAction; ?>
 					],
-					"sAjaxSource": "<?php echo $this->url('home',array('action' => 'index')); ?>",
+					"sAjaxSource": "<?php echo $this->url('home', array('action' => 'index')); ?>",
 					"fnServerData": function ( sSource, aoData, fnCallback ) {
 						aoData.push({"name": "fName", "value": $("#facilityId").val()});
 						aoData.push({"name": "locationOne", "value": $("#location_one").val()});
@@ -337,12 +357,12 @@
 					}
 				} );
 
-				<?php foreach($globalConfigResult as $config){
-				?>
-				getLocationDeatils('<?php echo $config["global_name"];?>');
+				<?php foreach ($globalConfigResult as $config) {
+    ?>
+				getLocationDeatils('<?php echo $config["global_name"]; ?>');
 				<?php
-				break;
-			} ?>
+break;
+}?>
 
 		$('#sampleTestedDates').daterangepicker({
 			format: 'DD-MMM-YYYY',
@@ -373,15 +393,12 @@
 				});
 
 			function searchData(){
-				$.blockUI();
 				oTable.fnDraw();
-				$.unblockUI();
 			}
 
 
 
-			function getLocationDeatils(globalName,nxtGlobalName)
-		{
+		function getLocationDeatils(globalName,nxtGlobalName){
 			var selectValue = document.getElementById(globalName).value;
 			var innerId = '';
 			var path = '';
@@ -399,12 +416,10 @@
 					getFacilityListByLocation(globalName);
 				}
 				if(path!=''){
-					$.blockUI();
 					$.post("/common/"+path, {selectValue:selectValue},
 					function(data) {
 						$("#"+innerId).html(data);
 						getFacilityListByLocation(globalName);
-						$.unblockUI();
 					});
 				}
 		}
@@ -418,22 +433,19 @@
 
 		function exportRecencyInfo()
 		{
-			$.blockUI();
 			$.post("<?php echo $this->url('export-recency-data'); ?>",
 				function(data){
 				if(data == "" || data == null || data == undefined){
-				$.unblockUI();
-				alert('Unable to generate download');
+					alert('Unable to generate download');
 				}else{
-				$.unblockUI();
-				document.location.href = '/temporary/'+data;
+					document.location.href = '/temporary/'+data;
 				}
 			});
 		}
 
 	function getRecencyAllDataCount() {
-		
-			$.post("<?php echo $this->url('recency',array('action'=>'get-recency-all-data-count')); ?>",{locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+
+			$.post("<?php echo $this->url('recency', array('action' => 'get-recency-all-data-count')); ?>",{locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
 				function(data){
 					var obj = JSON.parse(data);
 					$("#totalSamples").html(obj.totalSamples);
@@ -445,58 +457,71 @@
 					$("#totalSamplesBacklog").html(obj.samplesTestBacklog);
 					$("#totalSamplesNotTested").html(obj.samplesNotTestedViralLoad);
 					$("#samplesFinalOutcomeLT").html(obj.samplesFinalOutcomeLT);
-					
+
 			});
 
 	}
 
 	function getFinalOutcomeChart() {
-		$.post("<?php echo $this->url('recency',array('action'=>'get-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
+		var format = null;
+		if($('#rita-recent-weekly-percentage').prop('checked')){
+			format = 'percentage';
+		}else{
+			format = 'number';
+		}
+		
+		$.post("<?php echo $this->url('recency', array('action' => 'get-final-outcome-chart')); ?>",{format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
 			function(data){
 				$("#container").html(data);
 		});
 	}
 
 	function getRecencyLabActivityChart() {
-		
-		$.post("<?php echo $this->url('recency',array('action'=>'get-recency-lab-activity-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),activityFilter:$("#activityFilter").val()},
+
+		var format = null;
+		if($('#recency-testing-site-activity-percentage').prop('checked')){
+			format = 'percentage';
+		}else{
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('recency', array('action' => 'get-recency-lab-activity-chart')); ?>",{format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),activityFilter:$("#activityFilter").val()},
 			function(data){
 				$("#recencyLabActivity").html(data);
 		});
 	}
 
-	function getTesterwiseFinalOutcomeChart() {		
-		$.post("<?php echo $this->url('recency',array('action'=>'get-tester-wise-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),recencyTesterFilter:$("#recencyTesterFilter").val()},
-		function(data){
-			$("#finalOutcomeChart").html(data);
-		});
-	}
+	// function getTesterwiseFinalOutcomeChart() {
+	// 	$.post("<?php echo $this->url('recency', array('action' => 'get-tester-wise-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),recencyTesterFilter:$("#recencyTesterFilter").val()},
+	// 	function(data){
+	// 		$("#finalOutcomeChart").html(data);
+	// 	});
+	// }
 
-	function getTesterwiseInvalidChart() {		
-		$.post("<?php echo $this->url('recency',array('action'=>'get-tester-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
-		function(data){
-			$("#testerWiseInvalid").html(data);
-		});
-	}
-	
-	function getFacilityWiseInvalidChart() {		
-		$.post("<?php echo $this->url('recency',array('action'=>'get-facility-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
-		function(data){
-			$("#facilityWiseInvalid").html(data);
-		});
-	}
+	// function getTesterwiseInvalidChart() {
+	// 	$.post("<?php echo $this->url('recency', array('action' => 'get-tester-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+	// 	function(data){
+	// 		$("#testerWiseInvalid").html(data);
+	// 	});
+	// }
 
-	function getLotChart() {		
-		$.post("<?php echo $this->url('recency',array('action'=>'get-lot-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
-		function(data){
-			$("#lotReport").html(data);
-		});
-	}
+	// function getFacilityWiseInvalidChart() {
+	// 	$.post("<?php echo $this->url('recency', array('action' => 'get-facility-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+	// 	function(data){
+	// 		$("#facilityWiseInvalid").html(data);
+	// 	});
+	// }
 
-	function getQualityCheckVolume() {		
-		$.post("<?php echo $this->url('quality-check',array('action'=>'get-quality-check-volume-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
-		function(data){
-			$("#qualityCheckVolume").html(data);
-		});
-	}
+	// function getLotChart() {
+	// 	$.post("<?php echo $this->url('recency', array('action' => 'get-lot-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+	// 	function(data){
+	// 		$("#lotReport").html(data);
+	// 	});
+	// }
+
+	// function getQualityCheckVolume() {
+	// 	$.post("<?php echo $this->url('quality-check', array('action' => 'get-quality-check-volume-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
+	// 	function(data){
+	// 		$("#qualityCheckVolume").html(data);
+	// 	});
+	// }
 	</script>

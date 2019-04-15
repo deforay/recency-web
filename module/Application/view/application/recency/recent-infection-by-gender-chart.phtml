@@ -1,4 +1,8 @@
-<?php if(count($result)>0){
+<?php 
+
+$format = $result['format'];
+
+if(count($result)>0){
 $color=['#ad7bf7','#0178b7','#898989','#cca9ff','#4fafe2','#a8a8a8','#dfd0f4','#9cd5f4','#dbd9d9'];
 ?>
 <script>
@@ -7,7 +11,12 @@ Highcharts.chart('container', {
             enabled: false
     },
     exporting: {
-    filename : 'Recency Infection by Gender',
+    chartOptions:{
+        title: {
+            text:'Recent Infection by Gender',
+        }
+    }   ,     
+    filename : 'Recent Infection by Gender',
     buttons: {
       contextButton: {
         menuItems: [
@@ -40,7 +49,7 @@ Highcharts.chart('container', {
         crosshair: true,
         title: {
             enabled: true,
-            text: 'Gender<br>(N=<?php echo $result['total']; ?>)',
+            text: 'Gender (N=<?php echo $result['total']; ?>)',
             style: {
                 fontWeight: 'normal'
             }
@@ -48,13 +57,20 @@ Highcharts.chart('container', {
     },
     yAxis: {
         min: 0,
+        <?php if($format =='percentage') { ?>
+        max:100,
+        <?php } ?>        
         title: {
-            text: ' '
+            <?php if($format =='percentage') { ?>
+            text: 'Final Outcome %'
+            <?php } else { ?>
+            text: 'Number of Tests'
+            <?php } ?>
         }
     },
     legend: {
-        enabled: false
-    },
+      enabled: true,
+    },    
     tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -68,7 +84,13 @@ Highcharts.chart('container', {
             borderWidth: 0,
             dataLabels: {
                 enabled: true,
-                format: '{point.y}'
+                formatter: function() {
+                    <?php if($format =='percentage') { ?>
+                        return this.y > 0 ? this.y + '%' : 0;
+                    <?php } else { ?>
+                        return this.y;
+                    <?php } ?>                    
+                }
             }
         }
     },
@@ -88,16 +110,17 @@ Highcharts.chart('container', {
         <?php
         $k=0;
            if(isset($result['finalOutCome']) && count($result['finalOutCome']) >0){
-              foreach($result['finalOutCome'] as $key=>$condition){
+              foreach($result['finalOutCome'] as $seriesName => $values){
               ?>
         {
-        name: '<?php echo $key;?>',
+        name: '<?php echo $seriesName;?>',
+        color : "#555",
         data: [<?php
-                  foreach($condition as $count){
+                  foreach($values as $valueName => $count){
                     //echo $count.",";
                 ?>
                 
-                { y: <?php echo $count; ?>, color: '<?php echo $color[$k]; ?>'}, 
+                { name : '<?php echo $valueName; ?>', y: <?php echo $count; ?>, color: '<?php echo $color[$k]; ?>'}, 
                 <?php
                 $k++;
                   }
