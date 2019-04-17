@@ -5,6 +5,7 @@ Highcharts.chart('hivViralLoad', {
         enabled: false
     },
     exporting: {
+    filename : 'HIV Viral Load',
     buttons: {
       contextButton: {
         menuItems: [
@@ -26,15 +27,15 @@ Highcharts.chart('hivViralLoad', {
         type: 'column',
     },
     title: {
-        text: "N=<?php echo $result['total']; ?>"
+        text: ""
     },
     xAxis: {
         type: 'category',
         title: {
             enabled: true,
-            text: 'RNA Levels',
+            text: 'HIV Viral Load <br>(N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },
@@ -77,5 +78,5 @@ Highcharts.chart('hivViralLoad', {
 });
 </script>
 <?php }else{
-    echo "<h2 style='text-align:center;'>No data available</h2>";
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
 } ?>

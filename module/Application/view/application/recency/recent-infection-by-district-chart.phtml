@@ -1,4 +1,8 @@
-<?php if(count($result)>0){
+<?php
+
+$format = $result['format'];
+
+if(count($result)>0){
     $n=count($result['district_name']);
     if($n>4){
         $max='4';
@@ -12,6 +16,7 @@ Highcharts.chart('infectionByDistrict', {
             enabled: false
     },
     exporting: {
+    filename : 'Recent Infection by District',
     buttons: {
       contextButton: {
         menuItems: [
@@ -33,7 +38,7 @@ Highcharts.chart('infectionByDistrict', {
         type: 'column'
     },
     title: {
-        text: "N=<?php echo $result['total']; ?>"
+        text: ""
     },
     xAxis: {
         categories: [
@@ -49,16 +54,24 @@ Highcharts.chart('infectionByDistrict', {
         },
         title: {
             enabled: true,
-            text: 'District Report',
+            text: 'Districts (N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },
     yAxis: {
         min: 0,
+        <?php if($format =='percentage') { ?>
+        max:100,
+        <?php } ?>
         title: {
-            text: 'Recent'
+            
+            <?php if($format =='percentage') { ?>
+                text: 'Recent Infection %'
+            <?php } else { ?>
+                text: 'Recent Infections'
+            <?php } ?>            
         }
     },
     legend: {
@@ -79,7 +92,13 @@ Highcharts.chart('infectionByDistrict', {
             borderWidth: 0,
             dataLabels: {
                 enabled: true,
-                format: '{point.y}'
+                formatter: function() {
+                    <?php if($format =='percentage') { ?>
+                        return this.y > 0 ? this.y + '%' : 0;
+                    <?php } else { ?>
+                        return this.y;
+                    <?php } ?>                    
+                }
             }
         }
     },
@@ -117,5 +136,5 @@ Highcharts.chart('infectionByDistrict', {
 });
 </script>
 <?php }else{
-    echo "<h2 style='text-align:center;'>No data available</h2>";
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
 } ?>

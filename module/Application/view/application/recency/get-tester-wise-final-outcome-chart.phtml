@@ -12,6 +12,7 @@ Highcharts.chart('finalOutcomeChart', {
             enabled: false
     },
     exporting: {
+    filename : 'Recency Tests Performed by Testers',
     buttons: {
       contextButton: {
         menuItems: [
@@ -33,7 +34,7 @@ Highcharts.chart('finalOutcomeChart', {
         type: 'column'
     },
     title: {
-        text: "N=<?php echo $result['total']; ?>"
+        text: ""
     },
     subtitle: {
         text: ''
@@ -52,9 +53,9 @@ Highcharts.chart('finalOutcomeChart', {
         },
         title: {
             enabled: true,
-            text: 'Name of Recency Tester',
+            text: 'Name of Recency Tester <br>(N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },
@@ -118,5 +119,5 @@ Highcharts.chart('finalOutcomeChart', {
 });
 </script>
 <?php }else{
-    echo "<h2 style='text-align:center;'>No data available</h2>";
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
 } ?>

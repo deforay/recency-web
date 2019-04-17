@@ -8,7 +8,7 @@ $userName = $sessionLogin->userName;
 // \Zend\Debug\Debug::dump($roleCode);die;
 $dashboardMenu="";
 $dashboardMenu.="<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
-$dashboardMenu.="<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=". $this->url('analysis-dashboard')."><span class='nav-main-link-name'>Analysis</span></a></li>";
+$dashboardMenu.="<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=". $this->url('analysis-dashboard')."><span class='nav-main-link-name'>QA &amp; Analysis</span></a></li>";
 
 $userMenu = "";
 $userMenu.="<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=". $this->url('global-config', array('action' => 'index')) ."><span class='nav-main-link-name'>Global Config</span></a></li>";
@@ -92,6 +92,7 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
 <body>
      <!-- Page Container -->
      <div id="page-container" class="sidebar-o sidebar-mini enable-page-overlay side-scroll page-header-fixed page-header-dark main-content-narrow">
+
      <!-- sidebar-o enable-page-overlay side-scroll page-header-fixed page-header-dark main-content-narrow -->
      
           <!-- Side Overlay-->
@@ -128,7 +129,17 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
 
           
 
-          <nav id="sidebar" aria-label="Main Navigation" data-simplebar="init"><div class="simplebar-track vertical" style="visibility: hidden;"><div class="simplebar-scrollbar" style="visibility: visible; top: 0px; height: 358px;"></div></div><div class="simplebar-track horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="visibility: visible; left: 0px; width: 138px;"></div></div><div class="simplebar-scroll-content" style="padding-right: 15px; margin-bottom: -30px;"><div class="simplebar-content" style="padding-bottom: 15px; margin-right: -15px;">
+          <nav id="sidebar" aria-label="Main Navigation" data-simplebar="init">
+          <div class="simplebar-track vertical" style="visibility: hidden;">
+            <div class="simplebar-scrollbar" style="visibility: visible; top: 0px; height: 358px;">
+            </div>
+          </div>
+          <div class="simplebar-track horizontal" style="visibility: hidden;">
+            <div class="simplebar-scrollbar" style="visibility: visible; left: 0px; width: 138px;">
+            </div>
+          </div>
+          <div class="simplebar-scroll-content" style="padding-right: 15px; margin-bottom: -30px;">
+          <div class="simplebar-content" style="padding-bottom: 15px; margin-right: -15px;">
   
                <!-- Side Header -->
                <div class="bg-header-dark">

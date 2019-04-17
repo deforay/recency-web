@@ -12,6 +12,7 @@ Highcharts.chart('testerWiseInvalid', {
             enabled: false
     },
     exporting: {
+    filename:'Tester Wise Inconclusive Results',
     buttons: {
       contextButton: {
         menuItems: [
@@ -33,7 +34,7 @@ Highcharts.chart('testerWiseInvalid', {
         type: 'column'
     },
     title: {
-        text: "N=<?php echo $result['total']; ?>"
+        text: ""
     },
     subtitle: {
         text: ''
@@ -52,14 +53,15 @@ Highcharts.chart('testerWiseInvalid', {
         },
         title: {
             enabled: true,
-            text: 'Name of Recency Tester',
+            text: 'Name of Recency Tester <br>(N=<?php echo $result['total']; ?>)',
             style: {
-                fontSize: '15px',
+                fontSize: '12px',
             }
         }
     },
     yAxis: {
         min: 0,
+        allowDecimals: false,
         title: {
             text: ''
         }
@@ -75,7 +77,8 @@ Highcharts.chart('testerWiseInvalid', {
     plotOptions: {
         column: {
             pointPadding: 0.2,
-            borderWidth: 0
+            borderWidth: 0,
+            maxPointWidth: 40,
         },
         series: {
             dataLabels: {
@@ -119,5 +122,5 @@ Highcharts.chart('testerWiseInvalid', {
 });
 </script>
 <?php }else{
-    echo "<h2 style='text-align:center;'>No data available</h2>";
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
 } ?>

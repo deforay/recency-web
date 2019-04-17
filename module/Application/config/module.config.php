@@ -30,6 +30,16 @@ return array(
                          ),
                     ),
                     ),
+                    'export-recency-data' => array(
+                         'type'    => 'Literal',
+                         'options' => array(
+                             'route'    => '/export-recency-data',
+                              'defaults' => array(
+                                 'controller' => 'Application\Controller\Index',
+                                 'action' => 'export-recency-data',
+                              ),
+                         ),
+                    ),
                     'login' => array(
                         'type' => 'segment',
                         'options' => array(

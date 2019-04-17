@@ -9,6 +9,7 @@ Highcharts.chart('qualityCheckVolume', {
         type: 'pie'
     },
     exporting: {
+    filename:'Tester QA Participation',
     buttons: {
       contextButton: {
         menuItems: [
@@ -58,7 +59,7 @@ Highcharts.chart('qualityCheckVolume', {
     series: [{
         
         colorByPoint: true,
-        name: 'Total',
+        name: 'Total QA Tests Recorded',
         data: [
             <?php
 				foreach($result as $key=>$val){
@@ -72,5 +73,5 @@ Highcharts.chart('qualityCheckVolume', {
 });
 </script>
 <?php }else{
-    echo "<h2 style='text-align:center;'>No data available</h2>";
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
 } ?>
