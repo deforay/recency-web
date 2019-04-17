@@ -40,10 +40,6 @@ class RecencyTable extends AbstractTableGateway {
           $roleCode = $sessionLogin->roleCode;
           $common = new CommonService();
                          
-
-                       
-
-
           $aColumns = array('r.sample_id','f.facility_name','DATE_FORMAT(r.hiv_recency_test_date,"%d-%b-%Y")','DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.term_outcome','r.vl_result','r.final_outcome','r.gender','r.age'  ,'r.patient_id','DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")','DATE_FORMAT(r.sample_receipt_date,"%d-%b-%Y")','r.received_specimen_type' ,'ft.facility_name','tf.testing_facility_type_name' ,'DATE_FORMAT(r.hiv_diagnosis_date,"%d-%b-%Y")','r.kit_lot_no','DATE_FORMAT(r.kit_expiry_date,"%d-%b-%Y")','r.tester_name','DATE_FORMAT(r.dob,"%d-%b-%Y")','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','DATE_FORMAT(r.form_initiation_datetime ,"%d-%b-%Y %H:%i:%s")','DATE_FORMAT(r.form_transfer_datetime ,"%d-%b-%Y %H:%i:%s")');
           $orderColumns = array('r.sample_id','f.facility_name','r.hiv_recency_test_date','r.vl_test_date','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.term_outcome','r.vl_result','r.final_outcome','r.gender','r.age','r.patient_id','r.sample_collection_date','r.sample_receipt_date','r.received_specimen_type','f.facility_name','ft.facility_name', 'tf.testing_facility_type_name','r.hiv_diagnosis_date','r.kit_lot_no','r.kit_expiry_date','r.tester_name','r.dob','r.marital_status','r.residence','r.education_level','rp.name','r.pregnancy_status','r.current_sexual_partner','r.past_hiv_testing','r.last_hiv_status','r.patient_on_art','r.test_last_12_month','r.exp_violence_last_12_month','r.form_initiation_datetime','r.form_transfer_datetime');
 
@@ -119,8 +115,8 @@ class RecencyTable extends AbstractTableGateway {
                         ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name') , 'left')
                         ->join(array('tf' => 'testing_facility_type'), 'tf.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name') , 'left')
-                        ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name') , 'left')
-                        ->order("r.recency_id DESC");
+                        ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name') , 'left');
+                        //->order("r.recency_id DESC");
                     if (isset($sWhere) && $sWhere != "") {
                          $sQuery->where($sWhere);
                     }
@@ -249,7 +245,7 @@ class RecencyTable extends AbstractTableGateway {
                          <a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
                          <a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf('.$aRow['recency_id'].')"><i class="far fa-file-pdf"></i> PDF</a>
                          </div>';
-
+						//\Zend\Debug\Debug::dump($row);die;
                          $output['aaData'][] = $row;
 
                     }

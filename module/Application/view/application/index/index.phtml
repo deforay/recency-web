@@ -361,6 +361,7 @@
 					"aoColumns": [
 							<?php echo $editAction;?>
 					],
+					
 					"sAjaxSource": "<?php echo $this->url('home',array('action' => 'index')); ?>",
 					"fnServerData": function ( sSource, aoData, fnCallback ) {
 						aoData.push({"name": "fName", "value": $("#facilityId").val()});

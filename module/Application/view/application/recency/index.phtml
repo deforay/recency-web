@@ -264,6 +264,7 @@ oTable = $('#facilityDataTable').dataTable( {
                         }
                    ],
               <?php  } ?>
+              "aaSorting": [[0, "desc" ]],
                 "sAjaxSource": "<?php echo $this->url('recency',array('action' => 'index')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     aoData.push({"name": "fName", "value": $("#facilityName").val()});
