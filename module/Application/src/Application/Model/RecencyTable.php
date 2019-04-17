@@ -119,8 +119,8 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
             ->join(array('tf' => 'testing_facility_type'), 'tf.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left')
-            ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'), 'left')
-            ->order("r.recency_id DESC");
+            ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'), 'left');
+            //->order("r.recency_id DESC");
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
