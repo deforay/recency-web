@@ -187,7 +187,7 @@ ALTER TABLE `recency` ADD `mail_sent_status` VARCHAR(255) NULL DEFAULT NULL AFTE
 ALTER TABLE `recency` ADD `upload_result_datetime` DATETIME NULL DEFAULT NULL AFTER `vl_test_date`;
 
 -- vivek 24-jan-2019
-CREATE TABLE `recency_app`.`facility_type` ( `facility_type_id` INT(11) NOT NULL AUTO_INCREMENT , `facility_type_name` VARCHAR(255) NULL DEFAULT NULL , `facility_type_status` VARCHAR(255) NULL DEFAULT NULL , PRIMARY KEY (`facility_type_id`)) ENGINE = InnoDB;
+CREATE TABLE `facility_type` ( `facility_type_id` INT(11) NOT NULL AUTO_INCREMENT , `facility_type_name` VARCHAR(255) NULL DEFAULT NULL , `facility_type_status` VARCHAR(255) NULL DEFAULT NULL , PRIMARY KEY (`facility_type_id`)) ENGINE = InnoDB;
 
 -- vivek 24-jan-2019
 INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`, `facility_type_status`) VALUES (NULL, 'Normal', 'active'), (NULL, 'Testing', 'active');
