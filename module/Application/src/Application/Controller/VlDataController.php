@@ -173,8 +173,8 @@ class VlDataController extends AbstractActionController
                    $result = $recencyService->updateEmailSendResult($params);
                    return $this->_redirect()->toUrl('/vl-data/email-result');
                 }else{
-                    //\Zend\Debug\Debug::dump($params);die;
-               $result = $recencyService->getEmailSendResult($params);
+                    $result = $recencyService->getEmailSendResult($params);
+                    //\Zend\Debug\Debug::dump(count($result));die;
                return new ViewModel(array(
                 'result' => $result,
                 'formFields'=>json_encode($params)

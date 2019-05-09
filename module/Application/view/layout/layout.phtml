@@ -18,6 +18,10 @@ $userMenu.="<li id='nav-main-item'><a id='facilities' class='nav-main-link' href
 $recencyMenu = "";
 $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
 
+// $settingsMenu = "";
+// $settingsMenu.="<li id='nav-main-item'><a id='settings' class='nav-main-link' href=". $this->url('settings', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
+
+
 $qcMenu = "";
 $qcMenu="<li id='nav-main-item'><a id='quality-check' class='nav-main-link' href=". $this->url('quality-check', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Quality Check Testing</span></a></li>";
 
@@ -181,6 +185,8 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
                          <?php } ?>
                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $recencyMenu;?>
+                         <!-- <li class="nav-main-heading" style="padding:3px;"></li>
+                         <?php //echo $settingsMenu;?> -->
                          <?php if($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user'){ ?>
                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $qcMenu;?>
