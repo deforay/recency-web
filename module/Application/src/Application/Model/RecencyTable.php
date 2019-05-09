@@ -2165,6 +2165,14 @@ class RecencyTable extends AbstractTableGateway
                                                                  WHEN (((r.term_outcome='Assay Recent' AND (vl_result='' or vl_result is null)))) THEN 1
                                                                  ELSE 0
                                                                  END)"),
+                    "samplesFinalLongTerm" => new Expression("SUM(CASE
+                                                                 WHEN ((r.final_outcome='Long Term')) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "ritaRecent" => new Expression("SUM(CASE
+                                                                 WHEN ((r.final_outcome='RITA Recent')) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
 
                 )
             )
@@ -2174,7 +2182,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->group('r.facility_id');
-        //->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
+        
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -2227,6 +2235,7 @@ class RecencyTable extends AbstractTableGateway
         $queryContainer->exportRecencyDataResultDataQuery = $sQuery;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         //echo $sQueryStr;die;
+        
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
@@ -2248,7 +2257,7 @@ class RecencyTable extends AbstractTableGateway
 
         $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
+        
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
             "iTotalRecords" => count($iResult),
@@ -2257,7 +2266,14 @@ class RecencyTable extends AbstractTableGateway
         );
 
         foreach ($rResult as $aRow) {
-
+            $ltper=0;
+            $arper=0;
+            if(trim($aRow['samplesFinalLongTerm'])!=""){
+                $ltper=round((($aRow['samplesFinalLongTerm']/$aRow['samplesFinalOutcome'])*100),2).'%';
+            }
+            if(trim($aRow['ritaRecent'])!=""){
+                $arper=round((($aRow['ritaRecent']/$aRow['samplesFinalOutcome'])*100),2).'%';
+            }
             $row = array();
 
             $row[] = $aRow['facility_name'];
@@ -2270,6 +2286,10 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['samplesTestedRecency'];
             $row[] = $aRow['samplesTestedViralLoad'];
             $row[] = $aRow['samplesFinalOutcome'];
+            $row[] = $aRow['samplesFinalLongTerm'];
+            $row[] = $ltper;
+            $row[] = $aRow['ritaRecent'];
+            $row[] = $arper;
 
             $output['aaData'][] = $row;
         }
@@ -3322,4 +3342,243 @@ class RecencyTable extends AbstractTableGateway
 
         return $result;
     }
+
+    public function fetchDistrictWiseRecencyResult($parameters)
+    {
+        /* Array of database columns which should be read and sent back to DataTables. Use a space where
+         * you want to insert a non-database field (for example a counter or static image)
+         */
+        $queryContainer = new Container('query');
+        $common = new CommonService();
+        $general = new CommonService();
+        $aColumns = array('d.district_name','samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome');
+        $orderColumns = array('d.district_name','totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome','samplesFinalLongTerm','','ritaRecent');
+
+        /* Paging */
+        $sLimit = "";
+        if (isset($parameters['iDisplayStart']) && $parameters['iDisplayLength'] != '-1') {
+            $sOffset = $parameters['iDisplayStart'];
+            $sLimit = $parameters['iDisplayLength'];
+        }
+
+        /* Ordering */
+        $sOrder = "";
+        if (isset($parameters['iSortCol_0'])) {
+            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
+                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
+                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+                }
+            }
+            $sOrder = substr_replace($sOrder, "", -1);
+        }
+
+        /*
+         * Filtering
+         * NOTE this does not match the built-in DataTables filtering which does it
+         * word by word on any field. It's possible to do here, but concerned about efficiency
+         * on very large tables, and MySQL's regex functionality is very limited
+         */
+
+        $sWhere = "";
+        if (isset($parameters['sSearch']) && $parameters['sSearch'] != "") {
+            $searchArray = explode(" ", $parameters['sSearch']);
+            $sWhereSub = "";
+            foreach ($searchArray as $search) {
+                if ($sWhereSub == "") {
+                    $sWhereSub .= "(";
+                } else {
+                    $sWhereSub .= " AND (";
+                }
+                $colSize = count($aColumns);
+
+                for ($i = 0; $i < $colSize; $i++) {
+                    if ($i < $colSize - 1) {
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' OR ";
+                    } else {
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' ";
+                    }
+                }
+                $sWhereSub .= ")";
+            }
+            $sWhere .= $sWhereSub;
+        }
+
+        /* Individual column filtering */
+        for ($i = 0; $i < count($aColumns); $i++) {
+            if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
+                if ($sWhere == "") {
+                    $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                } else {
+                    $sWhere .= " AND " . $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                }
+            }
+        }
+
+        /*
+         * SQL queries
+         * Get data to display
+         */
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $totalSamples = array();
+        $sQuery = $sql->select()->from(array('r' => 'recency'))
+            ->columns(
+                array(
+                    "totalSamples" => new Expression('COUNT(*)'),
+                    "samplesReceived" => new Expression("SUM(CASE
+                                                               WHEN (((r.sample_receipt_date is NOT NULL) )) THEN 1
+                                                               ELSE 0
+                                                               END)"),
+                    "samplesRejected" => new Expression("SUM(CASE
+                                                                 WHEN (((r.recency_test_not_performed ='sample_rejected') )) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "samplesTestedRecency" => new Expression("SUM(CASE
+                                                                 WHEN (((r.term_outcome='Assay Recent') )) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "samplesTestedViralLoad" => new Expression("SUM(CASE
+                                                                 WHEN (( r.term_outcome='Assay Recent' AND (r.vl_result is NOT NULL or r.vl_result != '') )) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "samplesFinalOutcome" => new Expression("SUM(CASE
+                                                                 WHEN (((r.final_outcome is NOT NULL) )) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "samplesTestBacklog" => new Expression("SUM(CASE
+                                                                 WHEN (((r.term_outcome is null AND (recency_test_not_performed IS NULL OR recency_test_not_performed ='') ) )) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "samplesTestVlPending" => new Expression("SUM(CASE
+                                                                 WHEN (((r.term_outcome='Assay Recent' AND (vl_result='' or vl_result is null)))) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "samplesFinalLongTerm" => new Expression("SUM(CASE
+                                                                 WHEN ((r.final_outcome='Long Term')) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "ritaRecent" => new Expression("SUM(CASE
+                                                                 WHEN ((r.final_outcome='RITA Recent')) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+
+                )
+            )
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
+            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
+            ->group('r.location_two');
+        
+        if (isset($sWhere) && $sWhere != "") {
+            $sQuery->where($sWhere);
+        }
+        if ($parameters['fName'] != '') {
+            $sQuery->where(array('r.facility_id' => $parameters['fName']));
+        }
+        if ($parameters['testingFacility'] != '') {
+            $sQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
+        }
+        if ($parameters['locationOne'] != '') {
+            $sQuery = $sQuery->where(array('p.province_id' => $parameters['locationOne']));
+            if ($parameters['locationTwo'] != '') {
+                $sQuery = $sQuery->where(array('d.district_id' => $parameters['locationTwo']));
+            }
+            if ($parameters['locationThree'] != '') {
+                $sQuery = $sQuery->where(array('c.city_id' => $parameters['locationThree']));
+            }
+        }
+        if (isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates']) != '') {
+            $s_c_date = explode("to", $_POST['sampleTestedDates']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($parameters['sampleTestedDates'] != '') {
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+        }
+
+        if ($parameters['tOutcome'] != '') {
+            $sQuery->where(array('term_outcome' => $parameters['tOutcome']));
+        }
+
+        if ($parameters['finalOutcome'] != '') {
+            $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
+        }
+
+        if (isset($sOrder) && $sOrder != "") {
+            $sQuery->order($sOrder);
+        }
+
+        if (isset($sLimit) && isset($sOffset)) {
+            $sQuery->limit($sLimit);
+            $sQuery->offset($sOffset);
+        }
+        $queryContainer->exportDistrictwiseRecencyResult = $sQuery;
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        //echo $sQueryStr;die;
+        
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+
+        /* Data set length after filtering */
+        $sQuery->reset('limit');
+        $sQuery->reset('offset');
+        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+        $iFilteredTotal = count($aResultFilterTotal);
+
+        /* Total data set length */
+        $iQuery = $sql->select()->from(array('r' => 'recency'))
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+            //->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
+            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
+            ->group('r.location_two');
+
+        $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        
+        $output = array(
+            "sEcho" => intval($parameters['sEcho']),
+            "iTotalRecords" => count($iResult),
+            "iTotalDisplayRecords" => $iFilteredTotal,
+            "aaData" => array(),
+        );
+
+        foreach ($rResult as $aRow) {
+            $ltper=0;
+            $arper=0;
+            if(trim($aRow['samplesFinalLongTerm'])!=""){
+                $ltper=round((($aRow['samplesFinalLongTerm']/$aRow['samplesFinalOutcome'])*100),2).'%';
+            }
+            if(trim($aRow['ritaRecent'])!=""){
+                $arper=round((($aRow['ritaRecent']/$aRow['samplesFinalOutcome'])*100),2).'%';
+            }
+            $row = array();
+
+            $row[] = $aRow['district_name'];
+            $row[] = $aRow['totalSamples'];
+            $row[] = $aRow['samplesReceived'];
+            $row[] = $aRow['samplesRejected'];
+            $row[] = $aRow['samplesTestBacklog'];
+            $row[] = $aRow['samplesTestVlPending'];
+            $row[] = $aRow['samplesTestedRecency'];
+            $row[] = $aRow['samplesTestedViralLoad'];
+            $row[] = $aRow['samplesFinalOutcome'];
+            $row[] = $aRow['samplesFinalLongTerm'];
+            $row[] = $ltper;
+            $row[] = $aRow['ritaRecent'];
+            $row[] = $arper;
+
+            $output['aaData'][] = $row;
+        }
+        return $output;
+    }
+
 }
