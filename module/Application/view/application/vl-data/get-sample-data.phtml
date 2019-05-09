@@ -7,15 +7,15 @@ $common = new \Application\Service\CommonService();
 <div class="js-wizard-simple block block block-rounded block-bordered">
 
              <ul class="nav nav-tabs nav-tabs-block nav-justified">
-             <!-- <li class="nav-item">
-             <a class="nav-link active" data-toggle="tab" href="#home">Pending Recency Results</a>
-                              </li> -->
-                              <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#menu1">Pending VL Results</a>
-  </li>
+             <li class="nav-item">
+             <a class="nav-link active" data-toggle="tab" href="#home">Pending VL Results</a>
+                              </li>
+                              <!-- <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#menu1">Pending Recency Results</a>
+  </li> -->
                          </ul>
                          <div class="tab-content">
-    <div id="home" class="container tab-pane"><br>
+    <div id="home" class="container tab-pane active"><br>
 
 <table class="table table-bordered table-striped table-vcenter table-responsive" id="sampleData">
 <thead>
@@ -26,7 +26,7 @@ $common = new \Application\Service\CommonService();
 if(count($result['withTermOutcome'])>0){
     $vlResultOptionAry = array('TND','BDL','failed','&lt; 20','&lt; 40');
     
-    foreach($result['withTermOutcome'] as $key=>$sample){
+    foreach($result['withTermOutcome'] as $sample){
         $vlResultTextValue = '';
     ?>
     <tr>
@@ -131,7 +131,7 @@ if(count($result['withTermOutcome'])>0){
 </table>
 </div>
 
- <div id="menu1" class="container tab-pane active"><br>
+ <!-- <div id="menu1" class="container tab-pane "><br>
 
 <table class="table table-bordered table-striped table-vcenter table-responsive" id="sampleDataWithoutTerm">
 <thead>
@@ -210,13 +210,13 @@ if(count($result['withOutTermOutcome'])>0){
                 </select>
             <?php }
          } ?>
-        <!-- < ?php
+       < ?php
         if($sample['term_outcome']!='' && $sample['term_outcome']=='Long Term' && $sample['final_outcome']=='Long Term'){
         }else if($sample['term_outcome']!=''){
             if($sample['vl_result']==''){ ?>
             < ?php }else{ ?>
             < ?php }
-         } ?> -->
+         } ?>
         </td>
         <td><?php echo $sampleWithout['term_outcome'];?></td>
         <td><?php echo $sampleWithout['final_outcome'];?></td>
@@ -247,7 +247,7 @@ if(count($result['withOutTermOutcome'])>0){
 </tfoot>
 </table>
 
-</div>
+</div> -->
 
 
 </div>
@@ -266,7 +266,7 @@ if(count($result['withOutTermOutcome'])>0){
     }); 
     $(document).ready(function(){
         $('#sampleData').dataTable({"ordering": false});
-        $('#sampleDataWithoutTerm').dataTable({"ordering": false});
+        //$('#sampleDataWithoutTerm').dataTable({"ordering": false});
     });
 
 </script>
