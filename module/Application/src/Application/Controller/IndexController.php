@@ -43,7 +43,12 @@ class IndexController extends AbstractActionController
        {
            $params = $request->getPost();
            $recencyService = $this->getServiceLocator()->get('RecencyService');
-           $result=$recencyService->fetchExportRecencyData($params);
+           if(isset($params['comingFrom']) && trim($params['comingFrom'])=='district'){
+            $result=$recencyService->exportDistrictRecencyData($params);
+           }else{
+            $result=$recencyService->fetchExportRecencyData($params);
+           }
+           
            $viewModel = new ViewModel();
            $viewModel->setVariables(array('result' =>$result));
            $viewModel->setTerminal(true);

@@ -1024,10 +1024,14 @@ class RecencyService
     public function getAllRecencyResult($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        return $recencyDb->fetchAllRecencyResult($params);
+        if(isset($params['comingFrom']) && trim($params['comingFrom'])=='district'){
+            return $recencyDb->fetchDistrictWiseRecencyResult($params);
+        }else{
+            return $recencyDb->fetchAllRecencyResult($params);
+        }
+        
     }
 
-    
     public function fetchExportRecencyData($params)
     {
         try {
@@ -1046,8 +1050,17 @@ class RecencyService
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
+                    $ltper=0;
+                    $arper=0;
                     $row = array();
-                    $row[] = $aRow['facility_name'];
+                    if(trim($aRow['samplesFinalLongTerm'])!=""){
+                        $ltper=round((($aRow['samplesFinalLongTerm']/$aRow['samplesFinalOutcome'])*100),2)."%";
+                    }
+                    if(trim($aRow['ritaRecent'])!=""){
+                        $arper=round((($aRow['ritaRecent']/$aRow['samplesFinalOutcome'])*100),2)."%";
+                    }
+
+                        $row[] = $aRow['facility_name'];
                          $row[] = $aRow['testing_facility_name'];
                          $row[] = $aRow['totalSamples'];
                          $row[] = $aRow['samplesReceived'];
@@ -1057,6 +1070,10 @@ class RecencyService
                          $row[] = $aRow['samplesTestedRecency'];
                          $row[] = $aRow['samplesTestedViralLoad'];
                          $row[] = $aRow['samplesFinalOutcome'];
+                         $row[] = $aRow['samplesFinalLongTerm'];
+                         $row[] = $ltper;
+                         $row[] = $aRow['ritaRecent'];
+                         $row[] = $arper;
                     $output[] = $row;
                 }
             }
@@ -1098,6 +1115,11 @@ class RecencyService
             $sheet->setCellValue('H1', html_entity_decode('No. of Samples With Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('I1', html_entity_decode('No. of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('J1', html_entity_decode('No. of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+
+            $sheet->setCellValue('K1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('N1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -1111,6 +1133,10 @@ class RecencyService
             $sheet->getStyle('H1')->applyFromArray($styleArray);
             $sheet->getStyle('I1')->applyFromArray($styleArray);
             $sheet->getStyle('J1')->applyFromArray($styleArray);
+            $sheet->getStyle('K1')->applyFromArray($styleArray);
+            $sheet->getStyle('L1')->applyFromArray($styleArray);
+            $sheet->getStyle('M1')->applyFromArray($styleArray);
+            $sheet->getStyle('N1')->applyFromArray($styleArray);
 
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;
@@ -1143,7 +1169,6 @@ class RecencyService
             error_log($exc->getTraceAsString());
         }
     }
-
     
     public function getRecencyAllDataCount($params)
     {
@@ -1221,6 +1246,143 @@ class RecencyService
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecentViralLoadChart($params);
+    }
+
+    public function exportDistrictRecencyData($params)
+    {
+        try {
+            $common = new \Application\Service\CommonService();
+            $queryContainer = new Container('query');
+            $excel = new PHPExcel();
+            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
+            $cacheSettings = array('memoryCacheSize' => '80MB');
+            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $output = array();
+            $sheet = $excel->getActiveSheet();
+            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $sql = new Sql($dbAdapter);
+
+            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportDistrictwiseRecencyResult);
+            $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            if (count($sResult) > 0) {
+                foreach ($sResult as $aRow) {
+                    $ltper=0;
+                    $arper=0;
+                    $row = array();
+                    if(trim($aRow['samplesFinalLongTerm'])!=""){
+                        $ltper=round((($aRow['samplesFinalLongTerm']/$aRow['samplesFinalOutcome'])*100),2).'%';
+                    }
+                    if(trim($aRow['ritaRecent'])!=""){
+                        $arper=round((($aRow['ritaRecent']/$aRow['samplesFinalOutcome'])*100),2).'%';
+                    }
+
+                        $row[] = $aRow['district_name'];
+                         $row[] = $aRow['totalSamples'];
+                         $row[] = $aRow['samplesReceived'];
+                         $row[] = $aRow['samplesRejected'];
+                         $row[] = $aRow['samplesTestBacklog'];
+                         $row[] = $aRow['samplesTestVlPending'];
+                         $row[] = $aRow['samplesTestedRecency'];
+                         $row[] = $aRow['samplesTestedViralLoad'];
+                         $row[] = $aRow['samplesFinalOutcome'];
+                         $row[] = $aRow['samplesFinalLongTerm'];
+                         $row[] = $ltper;
+                         $row[] = $aRow['ritaRecent'];
+                         $row[] = $arper;
+                    $output[] = $row;
+                }
+            }
+
+            $styleArray = array(
+                'font' => array(
+                    'bold' => true,
+                    'size' => 12,
+                ),
+                'alignment' => array(
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+
+            $borderStyle = array(
+                'alignment' => array(
+                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+
+            $sheet->setCellValue('A1', html_entity_decode('District Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            
+            $sheet->setCellValue('B1', html_entity_decode('No. of Samples Registered', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('No. of Samples Received at Hub', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('No. of Samples Rejected', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('No. of Samples Waiting For Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('No. of Samples VL Pending', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('No. of Samples With Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('No. of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('No. of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+
+            $sheet->setCellValue('J1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            
+            //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
+
+            $sheet->getStyle('A1')->applyFromArray($styleArray);
+            $sheet->getStyle('B1')->applyFromArray($styleArray);
+            $sheet->getStyle('C1')->applyFromArray($styleArray);
+            $sheet->getStyle('D1')->applyFromArray($styleArray);
+            $sheet->getStyle('E1')->applyFromArray($styleArray);
+            $sheet->getStyle('F1')->applyFromArray($styleArray);
+            $sheet->getStyle('G1')->applyFromArray($styleArray);
+            $sheet->getStyle('H1')->applyFromArray($styleArray);
+            $sheet->getStyle('I1')->applyFromArray($styleArray);
+            $sheet->getStyle('J1')->applyFromArray($styleArray);
+            $sheet->getStyle('K1')->applyFromArray($styleArray);
+            $sheet->getStyle('L1')->applyFromArray($styleArray);
+            $sheet->getStyle('M1')->applyFromArray($styleArray);
+            
+
+            foreach ($output as $rowNo => $rowData) {
+                $colNo = 0;
+                foreach ($rowData as $field => $value) {
+                    if (!isset($value)) {
+                        $value = "";
+                    }
+                    if (is_numeric($value)) {
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    } else {
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    }
+                    $rRowCount = $rowNo + 2;
+                    $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->getColumn();
+                    $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+                    $sheet->getDefaultRowDimension()->setRowHeight(18);
+                    $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
+                    $sheet->getStyleByColumnAndRow($colNo, $rowNo + 5)->getAlignment()->setWrapText(true);
+                    $colNo++;
+                }
+            }
+
+            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+            $filename = 'District-Recency-Results-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            return $filename;
+        } catch (Exception $exc) {
+            return "";
+            error_log("DISTRICT-DATA-REPORT-EXCEL--" . $exc->getMessage());
+            error_log($exc->getTraceAsString());
+        }
     }
 }
 

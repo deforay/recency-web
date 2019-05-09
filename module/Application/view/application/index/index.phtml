@@ -4,7 +4,7 @@ $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 //\Zend\Debug\Debug::dump($globalConfigResult);die;
 
-$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
 $startDate = date('d-M-Y', strtotime('today - 365 days'));
 $currentDate = date('d-M-Y');
 ?>
@@ -278,7 +278,7 @@ foreach ($facilityResult['facilityTest'] as $facilityRow) {
 
 
 
-					<h2 class="content-heading ">
+						<h2 class="content-heading ">
 							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
 							<a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
 						</h2>
@@ -297,6 +297,10 @@ foreach ($facilityResult['facilityTest'] as $facilityRow) {
 										<th>No. of Samples classified as Assay Recent</th>
 										<th>No. of Samples Tested With Viral Load</th>
 										<th>No. of Samples With Final Outcome</th>
+										<th>Long Term</th>
+										<th>Long Term (%)</th>
+										<th>RITA Recent</th>
+										<th>RITA Recent (%)</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -304,10 +308,46 @@ foreach ($facilityResult['facilityTest'] as $facilityRow) {
 									<td colspan="8" class="dataTables_empty">Loading data from server</td>
 								</tr>
 								<tr>
-								</tbody>
-							</table>
-			</div>
-		</div>
+							</tbody>
+						</table>
+						</div>
+						</div>
+
+						<h2 class="content-heading ">
+							<i class="fa fa-angle-right text-muted mr-1"></i> District Wise Recency Results
+							<a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportDistrictRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+						</h2>
+						<div class="block block-rounded block-bordered">
+						<div class="block-content block-content-full">
+						<table id="districtwiseDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
+							<thead>
+								<tr>
+										<th>District Name</th>
+										<th>No. of Samples Registered</th>
+										<th>No. of Samples Received at Hub</th>
+										<th>No. of Samples Rejected</th>
+										<th>No. of Samples Waiting For Testing</th>
+										<th>No. of Samples VL Pending</th>
+										<th>No. of Samples classified as Assay Recent</th>
+										<th>No. of Samples Tested With Viral Load</th>
+										<th>No. of Samples With Final Outcome</th>
+										<th>Long Term</th>
+										<th>Long Term (%)</th>
+										<th>RITA Recent</th>
+										<th>RITA Recent (%)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td colspan="8" class="dataTables_empty">Loading data from server</td>
+								</tr>
+								<tr>
+							</tbody>
+						</table>
+						</div>
+						</div>
+
+
 	</div>
 	<script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
@@ -320,6 +360,7 @@ foreach ($facilityResult['facilityTest'] as $facilityRow) {
 
 			/* Table initialisation */
 			oTable = null;
+			dTable = null;
 			$(document).ready(function() {
 
 				getRecencyAllDataCount();
@@ -347,6 +388,46 @@ foreach ($facilityResult['facilityTest'] as $facilityRow) {
 						aoData.push({"name": "sampleTestedDates", "value": $("#sampleTestedDates").val()});
 						aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
                     	aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
+						$.ajax({
+							"dataType": 'json',
+							"type": "POST",
+							"url": sSource,
+							"data": aoData,
+							"success": fnCallback
+						});
+					}
+				} );
+
+				oTable = $('#districtwiseDataTable').dataTable( {
+					"bAutoWidth": false,
+					"bProcessing": true,
+					"bServerSide": true,
+					"aoColumns": [
+						{"sClass":"center"},
+						{"sClass":"center"},
+						{"sClass":"center"},
+						{"sClass":"center"},
+						{"sClass":"center"},
+						{"sClass":"center"},
+						{"sClass":"center"},
+						{"sClass":"center"},
+						{"sClass":"center"},
+						{"sClass":"center"},
+						{"sClass":"center","bSortable":false},
+						{"sClass":"center"},
+						{"sClass":"center","bSortable":false}
+					],
+					"sAjaxSource": "<?php echo $this->url('home', array('action' => 'index')); ?>",
+					"fnServerData": function ( sSource, aoData, fnCallback ) {
+						aoData.push({"name": "fName", "value": $("#facilityId").val()});
+						aoData.push({"name": "locationOne", "value": $("#location_one").val()});
+						aoData.push({"name": "locationTwo", "value": $("#location_two").val()});
+						aoData.push({"name": "locationThree", "value": $("#location_three").val()});
+						aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
+						aoData.push({"name": "sampleTestedDates", "value": $("#sampleTestedDates").val()});
+						aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
+                    	aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
+						aoData.push({"name": "comingFrom", "value": "district"});
 						$.ajax({
 							"dataType": 'json',
 							"type": "POST",
@@ -487,6 +568,18 @@ break;
 		$.post("<?php echo $this->url('recency', array('action' => 'get-recency-lab-activity-chart')); ?>",{format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),activityFilter:$("#activityFilter").val()},
 			function(data){
 				$("#recencyLabActivity").html(data);
+		});
+	}
+
+	function exportDistrictRecencyInfo()
+	{
+		$.post("<?php echo $this->url('export-recency-data'); ?>",{comingFrom:"district"},
+			function(data){
+			if(data == "" || data == null || data == undefined){
+				alert('Unable to generate download');
+			}else{
+				document.location.href = '/temporary/'+data;
+			}
 		});
 	}
 
