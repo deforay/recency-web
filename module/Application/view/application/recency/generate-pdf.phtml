@@ -88,11 +88,11 @@ $html .='</tr>';
      
 $html .='<tr>';
 $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE ID</td>';
-$html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE COLLECTION DATE</td>';
+
 $html .='</tr>';
 $html .='<tr>';
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['sample_id'].'</td>';
-$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['sample_collection_date']).'</td>';
+
 $html .='</tr>';
 $html .='<tr>';
 $html .='<td colspan="3" style="line-height:10px;"></td>';
@@ -106,7 +106,7 @@ $html .='</tr>';
 $html .='<tr>';
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_id'].'</td>';
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['age'].'</td>';
-$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['gender'].'</td>';
+$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['gender']).'</td>';
 $html .='</tr>';
 $html .='<tr>';
 $html .='<td colspan="3" style="line-height:10px;"></td>';
@@ -144,35 +144,38 @@ $html .='<tr>';
 $html .='<td colspan="3" style="line-height:10px;"></td>';
 $html .='</tr>';
 $html .='<tr>';
-$html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE RECEIPT DATE</td>';
-$html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE TEST DATE</td>';
-$html .='</tr>';
-$html .='<tr>';
-$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['sample_receipt_date']).'</td>';
-$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['hiv_recency_test_date']).'</td>';
-$html .='</tr>';
-$html .='<tr>';
-$html .='<td colspan="3" style="line-height:10px;"></td>';
-$html .='</tr>';
-
-
 $sampleTypes = array('whole_blood' => 'Whole Blood', 'plasma' => 'Plasma');
 $receivedSpecimenType = '';
 if(isset($result['received_specimen_type'])){
     $receivedSpecimenType = $sampleTypes[$result['received_specimen_type']];
 }
-
-
-
-$html .='<tr>';
+$html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE COLLECTION DATE</td>';
+$html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE RECEIPT DATE</td>';
 $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SPECIMEN TYPE</td>';
-$html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ASSAY NAME</td>';
-// $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL PLATFORM(if VL performed)</td>';
 $html .='</tr>';
 $html .='<tr>';
+$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['sample_collection_date']).'</td>';
+$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['sample_receipt_date']).'</td>';
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$receivedSpecimenType.'</td>';
-$html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;"></td>';
-// $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+$html .='</tr>';
+$html .='<tr>';
+$html .='<td colspan="4" style="line-height:10px;"></td>';
+$html .='</tr>';
+
+$html .='<tr>';
+
+$html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ASSAY NAME</td>';
+$html .='<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HIV RECENCY TEST DATE</td>';
+if(isset($result['vl_test_date']) && $result['vl_test_date'] !=''){
+$html .='<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL TEST DATE </td>';
+}
+$html .='</tr>';
+$html .='<tr>';
+$html .='<td  style="line-height:11px;font-size:11px;text-align:left;"></td>';
+$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['hiv_recency_test_date']).'</td>';
+if(isset($result['vl_test_date']) && $result['vl_test_date'] !=''){
+$html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result['vl_test_date']).'</td>';
+}
 $html .='</tr>';
 
 
@@ -189,7 +192,7 @@ $html .='<td colspan="3" style="line-height:10px;"></td>';
 $html .='</tr>';
 
 $html .='<tr>';
-$html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">RESULTS</td>';
+$html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">RECENCY TEST RESULT</td>';
 $html .='</tr>';
 $html .='<tr>';
 $html .='<td colspan="3" ></td>';
@@ -205,7 +208,7 @@ $html .='</tr>';
 
 if(isset($result['vl_result']) && !empty($result['vl_result'])){
     $html .='<tr>';
-    $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VIRAL LOAD RESULT(copies/ml)**&nbsp;&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['vl_result'].'</span></td>';
+    $html .='<td colspan="3" style="line-height:11px;font-size:11px;text-align:left;">VIRAL LOAD RESULT(copies/ml)**&nbsp;&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['vl_result'].'</span></td>';
     $html .='</tr>';
 }
 
