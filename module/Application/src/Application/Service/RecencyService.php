@@ -1384,5 +1384,11 @@ class RecencyService
             error_log($exc->getTraceAsString());
         }
     }
+
+    public function getModalityWiseFinalOutcomeChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchModalityWiseFinalOutcomeChart($params);
+    }
 }
 
