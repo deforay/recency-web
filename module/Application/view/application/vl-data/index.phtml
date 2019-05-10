@@ -23,7 +23,9 @@ input[type=number]::-webkit-outer-spin-button {
                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Viral Load Data</h1>
                <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                         <li class="breadcrumb-item active" aria-current="page"> Add Viral Load Data</li>
+                    <li class="breadcrumb-item">
+                              <a href="<?php echo $this->url('vl-data',array('action' => 'upload-result'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Upload Viral Load Data</a>
+                              </li>
                     </ol>
                </nav>
           </div>

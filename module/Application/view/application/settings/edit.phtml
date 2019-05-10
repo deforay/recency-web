@@ -1,0 +1,122 @@
+<?php
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+use Application\Service\CommonService;
+$common = new CommonService();
+$testKitExpiryDate = '';
+if($result['kit_expiry_date']!= '' && $result['kit_expiry_date']!= null && $result['kit_expiry_date']!= '0000-00-00'){
+	 $testKitExpiryDate = $common->humanDateFormat($result['kit_expiry_date']);
+}
+?>
+<style type="text/css">
+
+</style>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Settings</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <a href="<?php echo $this->url('settings', array('action' => 'index')); ?>"><li class="breadcrumb-item">Settings Details</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Edit</li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+               <h3 class="block-title">Add Settings Details</h3>
+          </div>
+          <div class="block-content">
+               <div class="col-md-12 table-responsive" id="hide">
+                    <form name="settingsInformation" id="settingsInformation"  class="mb-5" action="<?php echo $this->url('settings', array('action' => 'edit')); ?>" method="post">
+                         <div class="form-group row">
+
+                           <label class="col-sm-2 col-form-label" for="">Test Kit Manufacturers<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control isRequired" id="testKitName" name="testKitName" title="Please select the Test Kit Manufacturers">
+                                   <option value="">-- Select --</option>
+                                        <option value="long_term_sample"<?php echo($result['reference_result'] == 'long_term_sample' )?'selected="selected"':''; ?>>Long Term Sample</option>
+                                        <option value="preliminary_recent_sample"<?php echo($result['reference_result'] == 'preliminary_recent_sample' )?'selected="selected"':''; ?>>Preliminary Recent Sample</option>
+                                        <option value="hiv_negative_sample"<?php echo($result['reference_result'] == 'hiv_negative_sample' )?'selected="selected"':''; ?>>Hiv Negative Sample</option>
+                                        
+                                   </select>
+
+                              </div>
+
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot Number<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control isRequired" id="testKitNumber" name="testKitNumber" value="<?php echo $result['kit_lot_no']; ?>"  placeholder="Enter the facility Test Kit Lot Number" title="Please enter the Test Kit Lot Number" onblur="checkNameValidation('tester_information', 'kit_lot_no', this,'<?php echo "kit_lot_no##".$result['kit_lot_no'];?>', 'The kit number that you entered already exists . Please try another number..');">
+                              </div>
+                              <label class="col-sm-2 col-form-label" for="">Test Kit Expire Date<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">               
+                              <input type="text" class="js-datepicker form-control isRequired"  value="<?php echo $testKitExpiryDate; ?>" id="testKitDate" name="testKitDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Test Kit Expire Date" title="Please enter Test Kit Expire Date"  readonly="readonly">
+                                        </div>
+
+                                         <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control isRequired" id="status" name="status" title="Please select the status">
+                                        <option value="active"<?php echo($result['status'] == 'active' )?'selected="selected"':''; ?>>Active</option>
+                                        <option value="inactive"<?php echo($result['status'] == 'inactive' )?'selected="selected"':''; ?>>Inactive</option>
+                                   </select>
+                              </div>
+                         </div>
+                         <input type="hidden" class="form-control" value="<?php echo $result['test_id']; ?>" id="testId" name="testId" value="">
+                       
+
+                         <div class="row items-push">
+                              <div class="col-lg-7 offset-lg-4">
+                                   <a href="<?php echo $this->url('settings', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                   <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                              </div>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+
+<script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+<script type="text/javascript">
+
+     jQuery(document).ready(function($) {
+     
+     });
+     duplicateName = true;
+     function validateNow() {
+          var selVal = [];
+          flag = deforayValidator.init({
+               formId: 'facilityInformation'
+          });
+          if (flag) {
+               if (duplicateName) {
+                    $.blockUI();
+
+                    document.getElementById('facilityInformation').submit();
+               }
+          }
+     }
+     function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+        checkValue = document.getElementById(obj.id).value;
+        if($.trim(checkValue)!= ''){
+            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
+            function(data) {
+                if (data > 0)
+                {
+                        alert(msg);
+                        duplicateName = false;
+                        document.getElementById(obj.id).value = "";
+                }
+                else {
+                        duplicateName = true;
+                }
+            });
+        }
+    }
+
+
+</script>
