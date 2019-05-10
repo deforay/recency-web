@@ -2063,7 +2063,7 @@ class RecencyTable extends AbstractTableGateway
         $queryContainer = new Container('query');
         $common = new CommonService();
         $general = new CommonService();
-        $aColumns = array('f.facility_name', 'ft.facility_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome');
+        $aColumns = array('f.facility_name', 'ft.facility_name');
         $orderColumns = array('f.facility_name', 'ft.facility_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome');
 
         /* Paging */
@@ -3351,7 +3351,7 @@ class RecencyTable extends AbstractTableGateway
         $queryContainer = new Container('query');
         $common = new CommonService();
         $general = new CommonService();
-        $aColumns = array('d.district_name','samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome');
+        $aColumns = array('d.district_name');
         $orderColumns = array('d.district_name','totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome','samplesFinalLongTerm','','ritaRecent');
 
         /* Paging */
@@ -3465,7 +3465,7 @@ class RecencyTable extends AbstractTableGateway
                 )
             )
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            //->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
             ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
@@ -3581,4 +3581,142 @@ class RecencyTable extends AbstractTableGateway
         return $output;
     }
 
+    public function fetchModalityWiseFinalOutcomeChart($parameters)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $general = new CommonService();
+        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $sQuery = $sql->select()->from(array('r' => 'recency'));
+        if ($format == 'percentage') {
+            $sQuery = $sQuery
+            ->columns(
+                array(
+                    'testing_facility_type',
+                    "totalSamples" => new Expression('COUNT(*)'),
+                    "assayRecent" => new Expression("(SUM(CASE
+                                             WHEN ((term_outcome ='Assay Recent' OR term_outcome ='assay recent')) THEN 1
+                                             ELSE 0
+                                             END) / COUNT(*)) * 100"),
+                    "assayLongTerm" => new Expression("(SUM(CASE
+                                             WHEN ((term_outcome ='Long Term' OR term_outcome ='long term')) THEN 1
+                                             ELSE 0
+                                             END) / COUNT(*)) * 100"),
+                    "assayInvalid" => new Expression("(SUM(CASE
+                                             WHEN ((term_outcome ='Invalid' OR term_outcome ='invalid')) THEN 1
+                                             ELSE 0
+                                             END)/ COUNT(*)) * 100"),
+                )
+                );
+
+        } else {
+            $sQuery = $sQuery
+            ->columns(
+                array(
+                    'testing_facility_type',
+                    "totalSamples" => new Expression('COUNT(*)'),
+                    "assayRecent" => new Expression("SUM(CASE
+                                             WHEN ((term_outcome ='Assay Recent' OR term_outcome ='assay recent')) THEN 1
+                                             ELSE 0
+                                             END)"),
+                    "assayLongTerm" => new Expression("SUM(CASE
+                                             WHEN ((term_outcome ='Long Term' OR term_outcome ='long term')) THEN 1
+                                             ELSE 0
+                                             END)"),
+                    "assayInvalid" => new Expression("SUM(CASE
+                                             WHEN ((term_outcome ='Invalid' OR term_outcome ='invalid')) THEN 1
+                                             ELSE 0
+                                             END)"),
+                )
+            );
+        }
+        
+        $sQuery = $sQuery
+            ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'))
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
+            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
+            ->group('testing_facility_type');
+
+        if ($parameters['fName'] != '') {
+            $sQuery->where(array('r.facility_id' => $parameters['fName']));
+        }
+        if ($parameters['testingFacility'] != '') {
+            $sQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
+        }
+        if ($parameters['locationOne'] != '') {
+            $sQuery = $sQuery->where(array('p.province_id' => $parameters['locationOne']));
+            if ($parameters['locationTwo'] != '') {
+                $sQuery = $sQuery->where(array('d.district_id' => $parameters['locationTwo']));
+            }
+            if ($parameters['locationThree'] != '') {
+                $sQuery = $sQuery->where(array('c.city_id' => $parameters['locationThree']));
+            }
+        }
+        if (isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates']) != '') {
+            $s_c_date = explode("to", $parameters['sampleTestedDates']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($parameters['sampleTestedDates'] != '') {
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+        }
+        if ($parameters['tOutcome'] != '') {
+            $sQuery->where(array('term_outcome' => $parameters['tOutcome']));
+        }
+
+        if ($parameters['finalOutcome'] != '') {
+            $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
+        }
+
+        if (isset($parameters['recencyTesterFilter']) && trim($parameters['recencyTesterFilter']) != '') {
+            if ($parameters['recencyTesterFilter'] == 'assayRecent') {
+                $sQuery = $sQuery->order("assayRecent DESC");
+            } else if ($parameters['recencyTesterFilter'] == 'assayLongTerm') {
+                $sQuery = $sQuery->order("assayLongTerm DESC");
+            } else if ($parameters['recencyTesterFilter'] == 'assayInvalid') {
+                $sQuery = $sQuery->order("assayInvalid DESC");
+            }
+        } else {
+            $sQuery = $sQuery->order("totalSamples DESC");
+        }
+
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        //\Zend\Debug\Debug::dump($sQueryStr);die;
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        
+        $j = 0;
+        $result = array();
+        $result['format']= $format;
+        foreach ($rResult as $sRow) {
+            if ($sRow["testing_facility_type_name"] == null) {
+                continue;
+            }
+
+            $n = (isset($sRow['totalSamples']) && $sRow['totalSamples'] != null) ? $sRow['totalSamples'] : 0;
+            
+            //$result['finalOutCome']['Total'][$j] = (isset($sRow['totalSamples']) && $sRow['totalSamples'] != null) ? $sRow['totalSamples'] : 0;
+            $result['finalOutCome']['Assay Long Term'][$j] = (isset($sRow['assayLongTerm']) && $sRow['assayLongTerm'] != null) ? round($sRow['assayLongTerm'], 2) : 0;
+            $result['finalOutCome']['Assay Recent'][$j] = (isset($sRow['assayRecent']) && $sRow['assayRecent'] != null) ? round($sRow['assayRecent'], 2) : 0;
+            $result['finalOutCome']['Assay Invaild'][$j] = (isset($sRow['assayInvalid']) && $sRow['assayInvalid'] != null) ? round($sRow['assayInvalid'], 2) : 0;
+            $result['modality'][$j] = ($sRow["testing_facility_type_name"]) . " (N=$n)";
+
+            $result['total'] += $n;
+
+            $j++;
+        }
+        //\Zend\Debug\Debug::dump($result); die;
+        return $result;
+        
+        
+        
+
+    }
 }

@@ -1,0 +1,138 @@
+<?php
+
+$format = $result['format'];
+
+if(count($result)>0){
+    $n=count($result['modality']);
+    if($n>4){
+        $max='4';
+    }else{
+        $max=$n-1;
+    }
+?>
+<script>
+Highcharts.chart('modalityFinalOutcomeChart', {
+    credits: {
+        enabled: false
+    },
+    exporting: {
+    filename : 'Recent Infection by Modality',
+    buttons: {
+      contextButton: {
+        menuItems: [
+          'printChart',
+          'separator',
+          'downloadPNG',
+          'downloadJPEG',
+          'downloadPDF',
+          'downloadSVG',
+          'separator',
+          'downloadCSV',
+          'downloadXLS',
+          'viewData'
+        ]
+      }
+    }
+    },
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: ""
+    },
+    xAxis: {
+        categories: [
+            <?php  foreach($result['modality'] as $res){?>
+                    '<?php echo $res; ?>',
+               <?php } ?>
+        ],
+        crosshair: true,
+        min: 0,
+        max: '<?php echo $max; ?>',
+        scrollbar: {
+            enabled: true
+        },
+        title: {
+            enabled: true,
+            text: 'Modality (N=<?php echo $result['total']; ?>)',
+            style: {
+                fontSize: '12px',
+            }
+        }
+    },
+    yAxis: {
+        min: 0,
+        <?php if($format =='percentage') { ?>
+        max:100,
+        <?php } ?>
+        title: {
+            
+            <?php if($format =='percentage') { ?>
+                text: 'Percentage %'
+            <?php } else { ?>
+                text: 'Number of Tests'
+            <?php } ?>            
+        }
+    },
+    legend: {
+        reversed: true
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    
+    plotOptions: {
+        series: {
+            stacking: 'normal',
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                formatter: function() {
+                    <?php if($format =='percentage') { ?>
+                        return this.y > 0 ? this.y + '%' : 0;
+                    <?php } else { ?>
+                        return this.y;
+                    <?php } ?>                    
+                }
+            }
+        }
+    },
+    colors: [
+        '#24CBE5',
+        '#ffd480',
+        '#898989'
+	],
+    series: [
+        <?php
+        $k=0;
+           if(isset($result['finalOutCome']) && count($result['finalOutCome']) >0){
+              foreach($result['finalOutCome'] as $key=>$condition){
+              ?>
+        {
+        name: '<?php echo $key;?>',
+        data: [<?php
+                  foreach($condition as $count){
+                ?>
+                
+                { y: <?php echo $count; ?>}, 
+                <?php
+                $k++;
+                  }
+              ?>
+              ]
+    }, 
+    <?php
+              }
+           }
+            ?>]
+    
+});
+</script>
+<?php }else{
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
+} ?>

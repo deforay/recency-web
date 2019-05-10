@@ -354,4 +354,19 @@ class RecencyController extends AbstractActionController
                 ->setTerminal(true);
         return $viewModel;
       }
+
+      public function getModalityWiseFinalOutcomeChartAction()
+      {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getModalityWiseFinalOutcomeChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+     }
 }
