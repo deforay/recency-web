@@ -18,12 +18,12 @@ $userMenu.="<li id='nav-main-item'><a id='facilities' class='nav-main-link' href
 $recencyMenu = "";
 $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
 
-// $settingsMenu = "";
-// $settingsMenu.="<li id='nav-main-item'><a id='settings' class='nav-main-link' href=". $this->url('settings', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
+$settingsMenu = "";
+$settingsMenu.="<li id='nav-main-item'><a id='settings' class='nav-main-link' href=". $this->url('settings', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
 
 
 $qcMenu = "";
-$qcMenu="<li id='nav-main-item'><a id='quality-check' class='nav-main-link' href=". $this->url('quality-check', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Quality Check Testing</span></a></li>";
+$qcMenu="<li id='nav-main-item'><a id='quality-check' class='nav-main-link' href=". $this->url('quality-check', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-settings'></i> Quality Check Testing</span></a></li>";
 
 $vlDataMenu = "";
 $vlDataMenu="<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Pending Results</span></a></li>";
@@ -41,10 +41,10 @@ $weeklyReportMenu = "";
 $weeklyReportMenu="<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'weekly-report')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
 
 $emailMenu = "";
-$emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'email-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Email Results</span></a></li>";
+$emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'email-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
 
-$uploadResultMenu = "";
-$uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'upload-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Upload Results</span></a></li>";
+// $uploadResultMenu = "";
+// $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'upload-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Upload Results</span></a></li>";
 
 ?>
 
@@ -164,7 +164,7 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
                          <li class="nav-main-heading"></li>
                               <li class="nav-main-item " id="dashboard">
                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                                        <i class="nav-main-link-icon si si-grid"></i>
+                                        <i class="nav-main-link-icon si si-cursor"></i>
                                         <span class="nav-main-link-name ">Dashboard</span>
                                    </a>
                                    <ul class="nav-main-submenu">
@@ -185,8 +185,8 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
                          <?php } ?>
                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $recencyMenu;?>
-                         <!-- <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php //echo $settingsMenu;?> -->
+                         <li class="nav-main-heading" style="padding:3px;"></li>
+                         <?php echo $settingsMenu;?>
                          <?php if($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user'){ ?>
                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $qcMenu;?>
@@ -198,8 +198,8 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
                           ?>
                           <li class="nav-main-heading" style="padding:3px;"></li>
                           <?php echo $emailMenu; ?>
-                           <li class="nav-main-heading" style="padding:3px;"></li>
-                          <?php echo $uploadResultMenu;
+                           <!-- <li class="nav-main-heading" style="padding:3px;"></li>
+                          <?php //echo $uploadResultMenu; -->
                           }
                         if($roleCode=='VLTS' || $roleCode == 'admin' || $roleCode == 'user'){ ?>
                               <li class="nav-main-heading"></li>
@@ -383,6 +383,11 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
             $('#manage').removeClass('open');
             $('#'+splitsUrl[1]).addClass('active');
           }
+          else if(splitsUrl[1]=='settings')
+          {
+            $('#settings').removeClass('open');
+            $('#'+splitsUrl[1]).addClass('active');
+          }
           else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='recent-infection')
           {
             $('#manage').removeClass('open');
@@ -403,6 +408,10 @@ $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-
           {
             $('#manage').removeClass('open');
             $('#reports').addClass('open');
+            $('#'+splitsUrl[2]).addClass('active');
+          }else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='email-result')
+          {
+            $('#email-result').removeClass('open');
             $('#'+splitsUrl[2]).addClass('active');
           }
           else if(splitsUrl[1]=='vl-data')

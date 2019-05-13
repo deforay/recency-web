@@ -211,7 +211,7 @@ class VlDataController extends AbstractActionController
             $params = $request->getPost();
             $recencyService = $this->getServiceLocator()->get('RecencyService');
             $recencyService->uploadResult($params);
-            return $this->_redirect()->toUrl('/vl-data/upload-result');
+            return $this->_redirect()->toUrl('/vl-data');
         }
     }
 

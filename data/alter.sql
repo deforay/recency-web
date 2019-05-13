@@ -257,3 +257,18 @@ ALTER TABLE `quality_check_test` ADD `testing_facility_id` INT NULL DEFAULT NULL
 --sathish 29 Mar 2019
 ALTER TABLE `recency` CHANGE `hiv_recency_date` `hiv_recency_test_date` DATE NULL DEFAULT NULL;
 ALTER TABLE `quality_check_test` CHANGE `hiv_recency_date` `hiv_recency_test_date` DATE NULL DEFAULT NULL;
+
+--sathish 10 May 2019
+CREATE TABLE `tester_information` (
+  `test_id` int(11) NOT NULL,
+  `reference_result` varchar(255) DEFAULT NULL,
+  `kit_lot_no` varchar(255) DEFAULT NULL,
+  `kit_expiry_date` date DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `tester_information`
+  ADD PRIMARY KEY (`test_id`);
+
+ALTER TABLE `tester_information`
+  MODIFY `test_id` int(11) NOT NULL AUTO_INCREMENT;

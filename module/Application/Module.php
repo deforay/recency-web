@@ -16,6 +16,7 @@ use Application\Model\RiskPopulationsTable;
 use Application\Model\GlobalConfigTable;
 use Application\Model\UserFacilityMapTable;
 use Application\Model\TempMailTable;
+use Application\Model\SettingsTable;
 
 use Application\Model\ProvinceTable;
 use Application\Model\DistrictTable;
@@ -33,6 +34,7 @@ use Application\Service\RecencyService;
 use Application\Service\RiskPopulationsService;
 use Application\Service\GlobalConfigService;
 use Application\Service\QualityCheckService;
+use Application\Service\SettingsService;
 
 class Module{
      public function onBootstrap(MvcEvent $e){
@@ -162,6 +164,11 @@ class Module{
                         $table = new ManageColumnsMapTable($dbAdapter);
                         return $table;
                     },
+                    'SettingsTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new SettingsTable($dbAdapter);
+                        return $table;
+                    },
                     
                     
 
@@ -190,7 +197,10 @@ class Module{
 
                     'QualityCheckService' => function($sm) {
                          return new QualityCheckService($sm);
-               },
+                    },
+                    'SettingsService' => function($sm) {
+                        return new SettingsService($sm);
+                    },
 
                )
           );

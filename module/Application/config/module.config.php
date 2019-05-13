@@ -154,6 +154,16 @@ return array(
                               ),
                         ),
                   ),
+                  'settings' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                          'route' => '/settings[/:action][/][:id]',
+                          'defaults' => array(
+                                'controller' => 'Application\Controller\Settings',
+                                'action' => 'index',
+                          ),
+                    ),
+              ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -222,6 +232,7 @@ return array(
                'Application\Controller\Captcha' => 'Application\Controller\CaptchaController',
                'Application\Controller\VlData' => 'Application\Controller\VlDataController',
                'Application\Controller\Cron' => 'Application\Controller\CronController',
+               'Application\Controller\Settings' => 'Application\Controller\SettingsController',
           ),
      ),
      'controller_plugins' => array(

@@ -202,14 +202,14 @@ $html .='</tr>';
 
 $html .='<tr>';
 
-$html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ASSAY NAME</td>';
+//$html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ASSAY NAME</td>';
 $html .='<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HIV RECENCY TEST DATE</td>';
 if(isset($result[$s]['vl_test_date']) && $result[$s]['vl_test_date'] !=''){
 $html .='<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL TEST DATE </td>';
 }
 $html .='</tr>';
 $html .='<tr>';
-$html .='<td  style="line-height:11px;font-size:11px;text-align:left;"></td>';
+//$html .='<td  style="line-height:11px;font-size:11px;text-align:left;"></td>';
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result[$s]['hiv_recency_test_date']).'</td>';
 if(isset($result[$s]['vl_test_date']) && $result[$s]['vl_test_date'] !=''){
 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$common->humanDateFormat($result[$s]['vl_test_date']).'</td>';
