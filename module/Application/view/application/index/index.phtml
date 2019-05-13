@@ -360,6 +360,20 @@ foreach ($facilityResult['facilityTest'] as $facilityRow) {
 								<div id="modalityFinalOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 							</div>
 						</div>
+
+						<h2 class="content-heading">
+							<i class="fa fa-angle-right text-muted mr-1"></i> Recent by Month and Sex
+							&nbsp;&nbsp;&nbsp;&nbsp;
+									<small class="custom-control custom-switch custom-control-inline">
+										<input type="checkbox" class="custom-control-input" id="recent-infection-by-sex" name="recent-infection-by-sex" checked  onchange="getInfectionBySexChart();">
+										<label class="custom-control-label" for="recent-infection-by-sex">Percentage</label>
+									</small>
+						</h2>
+						<div class="block block-rounded block-bordered">
+							<div class="block-content block-content-full">
+								<div id="recentInfectionBySex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+							</div>
+						</div>
 	</div>
 	<script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
@@ -379,6 +393,7 @@ foreach ($facilityResult['facilityTest'] as $facilityRow) {
 				getFinalOutcomeChart();
 				getRecencyLabActivityChart();
 				getInfectionByModalityChart();
+				getInfectionBySexChart();
 				//getTesterwiseFinalOutcomeChart();
 				//getTesterwiseInvalidChart();
 				//getFacilityWiseInvalidChart();
@@ -606,6 +621,19 @@ break;
 			$.post("<?php echo $this->url('recency',array('action'=>'get-modality-wise-final-outcome-chart')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
 			function(data){
 				$("#modalityFinalOutcomeChart").html(data);
+			});
+	}
+
+	function getInfectionBySexChart() {
+			var format = null;
+			if($('#recent-infection-by-sex').prop('checked')){
+				format = 'percentage';
+			}else{
+				format = 'number';
+			}
+			$.post("<?php echo $this->url('recency',array('action'=>'get-recent-infection-by-sex')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
+			function(data){
+				$("#recentInfectionBySex").html(data);
 			});
 	}
 
