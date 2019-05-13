@@ -3055,7 +3055,7 @@ class RecencyTable extends AbstractTableGateway
             $result['total'] += $n;
             $j++;
         }
-        \Zend\Debug\Debug::dump($result);//die;
+        //\Zend\Debug\Debug::dump($result);//die;
         return $result;
 
     }
@@ -3713,6 +3713,106 @@ class RecencyTable extends AbstractTableGateway
             $j++;
         }
         //\Zend\Debug\Debug::dump($result); die;
+        return $result;
+    }
+
+    public function fetchRecentInfectionBySexLineChart($parameters)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $general = new CommonService();
+
+        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+
+        $sQuery = $sql->select()->from(array('r' => 'recency'));
+
+        if ($format == 'percentage') {
+            $sQuery = $sQuery
+                ->columns(
+                    array(
+                        'added_on',
+                        "total" => new Expression('COUNT(*)'),
+                        "monthyear" => new Expression("DATE_FORMAT(r.added_on, '%b-%Y')"),
+                        "male" => new Expression("(SUM(CASE WHEN (r.gender = 'male') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                        "female" => new Expression("(SUM(CASE WHEN (r.gender = 'female') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                        "not_reported" => new Expression("(SUM(CASE WHEN (r.gender = 'not_reported') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                    )
+                );
+        } else {
+            $sQuery = $sQuery
+                ->columns(
+                    array(
+                        'added_on',
+                        "total" => new Expression('COUNT(*)'),
+                        "monthyear" => new Expression("DATE_FORMAT(r.added_on, '%b-%Y')"),
+                        "male" => new Expression("(SUM(CASE WHEN (r.gender = 'male') THEN 1 ELSE 0 END))"),
+                        "female" => new Expression("(SUM(CASE WHEN (r.gender = 'female') THEN 1 ELSE 0 END))"),
+                        "not_reported" => new Expression("(SUM(CASE WHEN (r.gender = 'not_reported') THEN 1 ELSE 0 END))"),
+                    )
+                );
+        }
+
+        
+
+        $sQuery = $sQuery
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
+            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
+            ->group(array(new Expression("DATE_FORMAT(added_on,'%b-%Y')")))
+            ->order("r.added_on");
+
+        if ($parameters['fName'] != '') {
+            $sQuery->where(array('r.facility_id' => $parameters['fName']));
+        }
+        if ($parameters['testingFacility'] != '') {
+            $sQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
+        }
+        if ($parameters['locationOne'] != '') {
+            $sQuery = $sQuery->where(array('p.province_id' => $parameters['locationOne']));
+            if ($parameters['locationTwo'] != '') {
+                $sQuery = $sQuery->where(array('d.district_id' => $parameters['locationTwo']));
+            }
+            if ($parameters['locationThree'] != '') {
+                $sQuery = $sQuery->where(array('c.city_id' => $parameters['locationThree']));
+            }
+        }
+        if (isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates']) != '') {
+            $s_c_date = explode("to", $_POST['sampleTestedDates']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($parameters['sampleTestedDates'] != '') {
+            //$sQuery = $sQuery->where(array("DATE(r.added_on) >='" . $start_date . "'", "DATE(r.added_on) <='" . $end_date . "'"));
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+        }
+
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $j = 0;
+        $result = array();
+        $result['format'] = $format;
+
+        foreach ($rResult as $sRow) {
+            if ($sRow["monthyear"] == null) {
+                continue;
+            }
+            
+            $result['finalOutComeTotal'][$j] = (isset($sRow['total']) && $sRow['total'] != null) ? $sRow['total'] : 0;
+            $result['finalOutComeMale'][$j] = (isset($sRow["male"]) && $sRow["male"] != null) ? round($sRow["male"], 2) : 0;
+            $result['finalOutComeFemale'][$j] = (isset($sRow["female"]) && $sRow["female"] != null) ? round($sRow["female"], 2) : 0;
+            $result['finalOutComeGenderMissing'][$j] = (isset($sRow['not_reported']) && $sRow['not_reported'] != null) ? round($sRow['not_reported'], 2) : 0;
+            
+            $result['date'][$j] = $sRow["monthyear"];
+            $j++;
+        }
+
         return $result;
     }
 }
