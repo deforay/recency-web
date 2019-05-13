@@ -3789,6 +3789,7 @@ class RecencyTable extends AbstractTableGateway
         }
 
         if ($parameters['sampleTestedDates'] != '') {
+            //$sQuery = $sQuery->where(array("DATE(r.added_on) >='" . $start_date . "'", "DATE(r.added_on) <='" . $end_date . "'"));
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
