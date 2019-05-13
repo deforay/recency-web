@@ -1,13 +1,14 @@
 	<?php
-use Zend\Session\Container;
-$sessionLogin = new Container('credo');
-$roleCode = $sessionLogin->roleCode;
-//\Zend\Debug\Debug::dump($globalConfigResult);die;
+	use Zend\Session\Container;
 
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
-$startDate = date('d-M-Y', strtotime('today - 365 days'));
-$currentDate = date('d-M-Y');
-?>
+	$sessionLogin = new Container('credo');
+	$roleCode = $sessionLogin->roleCode;
+	//\Zend\Debug\Debug::dump($globalConfigResult);die;
+
+	$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+	$startDate = date('d-M-Y', strtotime('today - 365 days'));
+	$currentDate = date('d-M-Y');
+	?>
 	<style>
 	</style>
 	<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
@@ -19,347 +20,347 @@ $currentDate = date('d-M-Y');
 		</div>
 	</div>
 	<div class="content">
-			<h2 class="content-heading">
-				<i class="fa fa-angle-right text-muted mr-1"></i> Quick Overview
-			</h2>
+		<h2 class="content-heading">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Quick Overview
+		</h2>
 
-			<div class="block block-rounded block-bordered">
-				<div class="block-content block-content-full">
-					<div style="margin-top: 27px;margin-bottom: 10px;" class="row row-deck __web-inspector-hide-shortcut__">
-						<div class="col-sm-4 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear">
-							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-								<div class="block-content block-content-full">
-									<div class="item item-circle bg-xwork-lighter mx-auto my-3">
-										<i class="fa fa-eye"></i>
-									</div>
-									<div class="text-black display-4 font-w700 " id="totalSamples"></div>
-									<div class="text-muted mt-1">Samples Registered</div>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<div style="margin-top: 27px;margin-bottom: 10px;" class="row row-deck __web-inspector-hide-shortcut__">
+					<div class="col-sm-4 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear">
+						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+							<div class="block-content block-content-full">
+								<div class="item item-circle bg-xwork-lighter mx-auto my-3">
+									<i class="fa fa-eye"></i>
+								</div>
+								<div class="text-black display-4 font-w700 " id="totalSamples"></div>
+								<div class="text-muted mt-1">Samples Registered</div>
 
-								</div>
-							</a>
-						</div>
-
-<div class="col-sm-4 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
-							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-								<div class="block-content block-content-full">
-								<div class="item item-circle bg-gd-sea-op mx-auto my-3">
-										<i class="fa fa-eye text-xplay"></i>
-									</div>
-									<div class="text-black display-4 font-w700" id="samplesFinalOutcome"></div>
-									<div class="text-muted mt-1">Samples classified as RITA Recent</div>
-
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-4 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
-							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-								<div class="block-content block-content-full">
-								<div class="item item-circle bg-gd-sea-op mx-auto my-3">
-										<i class="fa fa-eye text-xplay"></i>
-									</div>
-									<div class="text-black display-4 font-w700" id="samplesFinalOutcomeLT"></div>
-									<div class="text-muted mt-1">Samples classified as Long Term</div>
-
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
-							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-								<div class="block-content block-content-full">
-									<div style="background-color:#fdb489" class="item item-circle mx-auto my-3">
-										<i class="fa fa-eye"></i>
-									</div>
-									<div class="text-black display-4 font-w700 " id="totalSamplesBacklog"></div>
-									<div class="text-muted mt-1">Samples Waiting For Testing</div>
-
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
-							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-								<div class="block-content block-content-full">
-									<div style="background-color:#ece8f5;" class="item item-circle mx-auto my-3">
-										<i class="fa fa-eye"></i>
-									</div>
-									<div class="text-black display-4 font-w700 " id="totalSamplesRejected"></div>
-									<div class="text-muted mt-1">Recency Test Not Performed</div>
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
-							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-								<div class="block-content block-content-full">
-									<div style="background-color:#b2e7fb;" class="item item-circle mx-auto my-3">
-										<i class="fa fa-eye "></i>
-									</div>
-									<div class="text-black display-4 font-w700 " id="totalSamplesPosVerificationAbsent"></div>
-									<div class="text-muted mt-1">Positive Verification Line Absent</div>
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="150">
-							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-								<div class="block-content block-content-full">
-									<div class="item item-circle bg-xmodern-lighter mx-auto my-3">
-										<i class="fa fa-eye text-xmodern"></i>
-									</div>
-									<div class="text-black display-4 font-w700" id="samplesTestedRecency"></div>
-									<div class="text-muted mt-1">Samples Classified as Assay Recent</div>
-
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="300">
-							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-								<div class="block-content block-content-full">
-									<div class="item item-circle bg-xsmooth-lighter mx-auto my-3">
-										<i class="fa fa-eye text-xsmooth"></i>
-									</div>
-									<div class="text-black display-4 font-w700" id="samplesTestedViralLoad"></div>
-									<div class="text-muted mt-1">Samples Tested with Viral Load</div>
-
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
-							<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
-								<div class="block-content block-content-full">
-									<div style="background-color:#e8cb96;" class="item item-circle mx-auto my-3">
-										<i class="fa fa-eye"></i>
-									</div>
-									<div class="text-black display-4 font-w700 " id="totalSamplesNotTested"></div>
-									<div class="text-muted mt-1">Samples with VL Test Pending</div>
-								</div>
-							</a>
-						</div>
-
+							</div>
+						</a>
 					</div>
+
+					<div class="col-sm-4 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+							<div class="block-content block-content-full">
+								<div class="item item-circle bg-gd-sea-op mx-auto my-3">
+									<i class="fa fa-eye text-xplay"></i>
+								</div>
+								<div class="text-black display-4 font-w700" id="samplesFinalOutcome"></div>
+								<div class="text-muted mt-1">Samples classified as RITA Recent</div>
+
+							</div>
+						</a>
+					</div>
+					<div class="col-sm-4 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+							<div class="block-content block-content-full">
+								<div class="item item-circle bg-gd-sea-op mx-auto my-3">
+									<i class="fa fa-eye text-xplay"></i>
+								</div>
+								<div class="text-black display-4 font-w700" id="samplesFinalOutcomeLT"></div>
+								<div class="text-muted mt-1">Samples classified as Long Term</div>
+
+							</div>
+						</a>
+					</div>
+					<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
+						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+							<div class="block-content block-content-full">
+								<div style="background-color:#fdb489" class="item item-circle mx-auto my-3">
+									<i class="fa fa-eye"></i>
+								</div>
+								<div class="text-black display-4 font-w700 " id="totalSamplesBacklog"></div>
+								<div class="text-muted mt-1">Samples Waiting For Testing</div>
+
+							</div>
+						</a>
+					</div>
+					<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
+						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+							<div class="block-content block-content-full">
+								<div style="background-color:#ece8f5;" class="item item-circle mx-auto my-3">
+									<i class="fa fa-eye"></i>
+								</div>
+								<div class="text-black display-4 font-w700 " id="totalSamplesRejected"></div>
+								<div class="text-muted mt-1">Recency Test Not Performed</div>
+							</div>
+						</a>
+					</div>
+					<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
+						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+							<div class="block-content block-content-full">
+								<div style="background-color:#b2e7fb;" class="item item-circle mx-auto my-3">
+									<i class="fa fa-eye "></i>
+								</div>
+								<div class="text-black display-4 font-w700 " id="totalSamplesPosVerificationAbsent"></div>
+								<div class="text-muted mt-1">Positive Verification Line Absent</div>
+							</div>
+						</a>
+					</div>
+					<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="150">
+						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+							<div class="block-content block-content-full">
+								<div class="item item-circle bg-xmodern-lighter mx-auto my-3">
+									<i class="fa fa-eye text-xmodern"></i>
+								</div>
+								<div class="text-black display-4 font-w700" id="samplesTestedRecency"></div>
+								<div class="text-muted mt-1">Samples Classified as Assay Recent</div>
+
+							</div>
+						</a>
+					</div>
+					<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="300">
+						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+							<div class="block-content block-content-full">
+								<div class="item item-circle bg-xsmooth-lighter mx-auto my-3">
+									<i class="fa fa-eye text-xsmooth"></i>
+								</div>
+								<div class="text-black display-4 font-w700" id="samplesTestedViralLoad"></div>
+								<div class="text-muted mt-1">Samples Tested with Viral Load</div>
+
+							</div>
+						</a>
+					</div>
+					<div class="col-sm-6 col-xl-2 js-appear-enabled animated fadeIn" data-toggle="appear">
+						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
+							<div class="block-content block-content-full">
+								<div style="background-color:#e8cb96;" class="item item-circle mx-auto my-3">
+									<i class="fa fa-eye"></i>
+								</div>
+								<div class="text-black display-4 font-w700 " id="totalSamplesNotTested"></div>
+								<div class="text-muted mt-1">Samples with VL Test Pending</div>
+							</div>
+						</a>
+					</div>
+
 				</div>
 			</div>
+		</div>
 
 
-			<div class="block block-rounded block-bordered">
+		<div class="block block-rounded block-bordered">
 			<div class="block-content block-content-full">
-			<div class="form-group row">
+				<div class="form-group row">
 					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
+					<div class="col-sm-4">
+						<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
+					</div>
+					<?php
+					foreach ($globalConfigResult as $config) { ?>
+						<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
+							<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
 							<div class="col-sm-4">
-							<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value=""/>
-								</div>
-							<?php
-foreach ($globalConfigResult as $config) {?>
-								<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') {?>
-									<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
-									<div class="col-sm-4">
-										<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
-											<option value="">-- Select --</option>
-										</select>
-									</div>
-								<?php }
-}?>
-							<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
-							<div class="col-sm-4">
-								<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+								<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
 									<option value="">-- Select --</option>
 								</select>
 							</div>
+						<?php }
+				} ?>
+					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
+					<div class="col-sm-4">
+						<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+							<option value="">-- Select --</option>
+						</select>
+					</div>
 
-							<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
-							<div class="col-sm-4">
-									<select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
-									<option value=""> -- Select -- </option>
-										<?php
-foreach ($facilityResult['facilityTest'] as $facilityRow) {
-    if (2 != (int) $facilityRow['facility_type_id']) {
-        continue;
-    }
-
-    ?>
-										<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
-										<?php
-}
-?>
-									</select>
-								</div>
-								<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Assay Outcome</label>
-							<div class="col-sm-4">
-							<select class="form-control" id="termOut" name="termOut" title="Please select assay outcome" style="width:100%;">
+					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+					<div class="col-sm-4">
+						<select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
 							<option value=""> -- Select -- </option>
-                                    <option value="Assay Negative">Assay Negative</option>
-                                    <option value="Assay Recent">Assay Recent</option>
-                                    <option value="Long Term">Long Term</option>
-                                    <option value="Invalid">Invalid</option>
-									</select>
-								</div>
-								<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Final Outcome</label>
-							<div class="col-sm-4">
-							<select class="form-control" id="finalOutcome" name="finalOutcome" title="Please select fianl outcome" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <option value="RITA Recent">RITA Recent</option>
-                                    <option value="Long Term">Long Term</option>
-                                    <option value="inconclusive">Inconclusive</option>
-                                </select>
-								</div>
+							<?php
+							foreach ($facilityResult['facilityTest'] as $facilityRow) {
+								if (2 != (int)$facilityRow['facility_type_id']) {
+									continue;
+								}
 
-						<div class="row items-push">
-							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+								?>
+								<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+							<?php
+						}
+						?>
+						</select>
+					</div>
+					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Assay Outcome</label>
+					<div class="col-sm-4">
+						<select class="form-control" id="termOut" name="termOut" title="Please select assay outcome" style="width:100%;">
+							<option value=""> -- Select -- </option>
+							<option value="Assay Negative">Assay Negative</option>
+							<option value="Assay Recent">Assay Recent</option>
+							<option value="Long Term">Long Term</option>
+							<option value="Invalid">Invalid</option>
+						</select>
+					</div>
+					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Final Outcome</label>
+					<div class="col-sm-4">
+						<select class="form-control" id="finalOutcome" name="finalOutcome" title="Please select fianl outcome" style="width:100%;">
+							<option value=""> -- Select -- </option>
+							<option value="RITA Recent">RITA Recent</option>
+							<option value="Long Term">Long Term</option>
+							<option value="inconclusive">Inconclusive</option>
+						</select>
+					</div>
 
-							</div>
+					<div class="row items-push">
+						<div class="col-lg-7 ">
+							<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<h2 class="content-heading">
+			<i class="fa fa-angle-right text-muted mr-1"></i> RITA Result Weekly Summary
+
+		</h2>
+		<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 80%;margin-bottom: 0px;">
+			<tbody>
+				<tr>
+					<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
+					<td>
+						<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
+							<option value="hivRecencyTestDate" selected>Recency Test Date (DESC)</option>
+							<option value="ritaRecent">RITA Recent (DESC)</option>
+							<option value="longTerm">Long Term (DESC)</option>
+							<option value="inconclusive">Inconclusive (DESC)</option>
+						</select>
+					</td>
+					<td>
+						<div class="custom-control custom-switch custom-control-inline">
+							<input type="checkbox" class="custom-control-input" id="rita-recent-weekly-percentage" name="rita-recent-weekly-percentage" checked onchange="getFinalOutcomeChart();">
+							<label class="custom-control-label" for="rita-recent-weekly-percentage">Percentage</label>
 						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+
+				<div id="container" style="height: 450px; min-width: 320px; margin: 0 auto"></div>
+			</div>
+		</div>
+		<h2 class="content-heading">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Recency Testing Site Activity
+		</h2>
+		<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 80%;margin-bottom: 0px;">
+			<tbody>
+				<tr>
+					<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
+					<td>
+						<select class="form-control" id="activityFilter" name="activityFilter" title="Please select activity filter" onchange="getRecencyLabActivityChart();">
+							<option value="">Samples Collected (DESC)</option>
+							<option value="recencyDone">Recency Tests Done (DESC)</option>
+							<option value="vlDone">VL Tests Done (DESC)</option>
+							<option value="vlPending">VL Tests Pending (DESC)</option>
+						</select>
+					</td>
+
+					<td>
+						<div class="custom-control custom-switch custom-control-inline">
+							<input type="checkbox" class="custom-control-input" id="recency-testing-site-activity-percentage" name="recency-testing-site-activity-percentage" checked onchange="getRecencyLabActivityChart();">
+							<label class="custom-control-label" for="recency-testing-site-activity-percentage">Percentage</label>
 						</div>
-						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<div id="recencyLabActivity" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			</div>
+		</div>
 
 
 
+		<h2 class="content-heading ">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
+			<a href="javascript:void(0);" class="btn btn-success float-right" onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<table id="facilityDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
+					<thead>
+						<tr>
+							<th>Facility Name</th>
+							<th>Testing Site Name</th>
+							<th>No. of Samples Registered</th>
+							<th>No. of Samples Received at Hub</th>
+							<th>No. of Samples Rejected</th>
+							<th>No. of Samples Waiting For Testing</th>
+							<th>No. of Samples VL Pending</th>
+							<th>No. of Samples classified as Assay Recent</th>
+							<th>No. of Samples Tested With Viral Load</th>
+							<th>No. of Samples With Final Outcome</th>
+							<th>Long Term</th>
+							<th>Long Term (%)</th>
+							<th>RITA Recent</th>
+							<th>RITA Recent (%)</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="8" class="dataTables_empty">Loading data from server</td>
+						</tr>
+						<tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 
+		<h2 class="content-heading ">
+			<i class="fa fa-angle-right text-muted mr-1"></i> District Wise Recency Results
+			<a href="javascript:void(0);" class="btn btn-success float-right" onclick="exportDistrictRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<table id="districtwiseDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
+					<thead>
+						<tr>
+							<th>District Name</th>
+							<th>No. of Samples Registered</th>
+							<th>No. of Samples Received at Hub</th>
+							<th>No. of Samples Rejected</th>
+							<th>No. of Samples Waiting For Testing</th>
+							<th>No. of Samples VL Pending</th>
+							<th>No. of Samples classified as Assay Recent</th>
+							<th>No. of Samples Tested With Viral Load</th>
+							<th>No. of Samples With Final Outcome</th>
+							<th>Long Term</th>
+							<th>Long Term (%)</th>
+							<th>RITA Recent</th>
+							<th>RITA Recent (%)</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="8" class="dataTables_empty">Loading data from server</td>
+						</tr>
+						<tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> RITA Result Weekly Summary 
-							
-						</h2>
-								<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 80%;margin-bottom: 0px;">
-									<tbody>
-										<tr>
-											<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
-											<td>
-												<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
-													<option value="hivRecencyTestDate" selected>Recency Test Date (DESC)</option>
-													<option value="ritaRecent">RITA Recent (DESC)</option>
-													<option value="longTerm">Long Term (DESC)</option>
-													<option value="inconclusive">Inconclusive (DESC)</option>
-												</select>
-											</td>
-											<td>
-												<div class="custom-control custom-switch custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="rita-recent-weekly-percentage" name="rita-recent-weekly-percentage" checked  onchange="getFinalOutcomeChart();">
-													<label class="custom-control-label" for="rita-recent-weekly-percentage">Percentage</label>
-												</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-
-								<div id="container" style="height: 450px; min-width: 320px; margin: 0 auto"></div>
-							</div>
-						</div>
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recency Testing Site Activity
-						</h2>
-						<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 80%;margin-bottom: 0px;">
-								<tbody>
-									<tr>
-										<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
-										<td>
-											<select class="form-control" id="activityFilter" name="activityFilter" title="Please select activity filter" onchange="getRecencyLabActivityChart();">
-												<option value="">Samples Collected (DESC)</option>
-												<option value="recencyDone">Recency Tests Done (DESC)</option>
-												<option value="vlDone">VL Tests Done (DESC)</option>
-												<option value="vlPending">VL Tests Pending (DESC)</option>
-											</select>
-										</td>
-
-											<td>
-												<div class="custom-control custom-switch custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="recency-testing-site-activity-percentage" name="recency-testing-site-activity-percentage" checked  onchange="getRecencyLabActivityChart();">
-													<label class="custom-control-label" for="recency-testing-site-activity-percentage">Percentage</label>
-												</div>
-											</td>										
-									</tr>
-								</tbody>
-							</table>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="recencyLabActivity" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
-
-
-
-						<h2 class="content-heading ">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
-							<a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-						</h2>
-						<div class="block block-rounded block-bordered">
-						<div class="block-content block-content-full">
-						<table id="facilityDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
-							<thead>
-								<tr>
-										<th>Facility Name</th>
-										<th>Testing Site Name</th>
-										<th>No. of Samples Registered</th>
-										<th>No. of Samples Received at Hub</th>
-										<th>No. of Samples Rejected</th>
-										<th>No. of Samples Waiting For Testing</th>
-										<th>No. of Samples VL Pending</th>
-										<th>No. of Samples classified as Assay Recent</th>
-										<th>No. of Samples Tested With Viral Load</th>
-										<th>No. of Samples With Final Outcome</th>
-										<th>Long Term</th>
-										<th>Long Term (%)</th>
-										<th>RITA Recent</th>
-										<th>RITA Recent (%)</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td colspan="8" class="dataTables_empty">Loading data from server</td>
-								</tr>
-								<tr>
-							</tbody>
-						</table>
-						</div>
-						</div>
-
-						<h2 class="content-heading ">
-							<i class="fa fa-angle-right text-muted mr-1"></i> District Wise Recency Results
-							<a href="javascript:void(0);" class="btn btn-success float-right"  onclick="exportDistrictRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-						</h2>
-						<div class="block block-rounded block-bordered">
-						<div class="block-content block-content-full">
-						<table id="districtwiseDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
-							<thead>
-								<tr>
-										<th>District Name</th>
-										<th>No. of Samples Registered</th>
-										<th>No. of Samples Received at Hub</th>
-										<th>No. of Samples Rejected</th>
-										<th>No. of Samples Waiting For Testing</th>
-										<th>No. of Samples VL Pending</th>
-										<th>No. of Samples classified as Assay Recent</th>
-										<th>No. of Samples Tested With Viral Load</th>
-										<th>No. of Samples With Final Outcome</th>
-										<th>Long Term</th>
-										<th>Long Term (%)</th>
-										<th>RITA Recent</th>
-										<th>RITA Recent (%)</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td colspan="8" class="dataTables_empty">Loading data from server</td>
-								</tr>
-								<tr>
-							</tbody>
-						</table>
-						</div>
-						</div>
-
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recent and Long-Term by Testing Modality
-							&nbsp;&nbsp;&nbsp;&nbsp;
-									<small class="custom-control custom-switch custom-control-inline">
-										<input type="checkbox" class="custom-control-input" id="recent-infection-by-modality-percentage" name="recent-infection-by-modality-percentage" checked  onchange="getInfectionByModalityChart();">
-										<label class="custom-control-label" for="recent-infection-by-modality-percentage">Percentage</label>
-									</small>
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="modalityFinalOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
+		<h2 class="content-heading">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Recent and Long-Term by Testing Modality
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<small class="custom-control custom-switch custom-control-inline">
+				<input type="checkbox" class="custom-control-input" id="recent-infection-by-modality-percentage" name="recent-infection-by-modality-percentage" checked onchange="getInfectionByModalityChart();">
+				<label class="custom-control-label" for="recent-infection-by-modality-percentage">Percentage</label>
+			</small>
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<div id="modalityFinalOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			</div>
+		</div>
 	</div>
 	<script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
@@ -367,180 +368,271 @@ foreach ($facilityResult['facilityTest'] as $facilityRow) {
 
 
 	<script type="text/javascript">
+		$(document).ajaxStart($.blockUI).ajaxComplete($.unblockUI);
 
-	    	$(document).ajaxStart($.blockUI).ajaxComplete($.unblockUI);
+		/* Table initialisation */
+		oTable = null;
+		dTable = null;
+		$(document).ready(function() {
 
-			/* Table initialisation */
-			oTable = null;
-			dTable = null;
-			$(document).ready(function() {
+			getRecencyAllDataCount();
+			getFinalOutcomeChart();
+			getRecencyLabActivityChart();
+			getInfectionByModalityChart();
+			//getTesterwiseFinalOutcomeChart();
+			//getTesterwiseInvalidChart();
+			//getFacilityWiseInvalidChart();
+			//getLotChart();
+			//getQualityCheckVolume();
+			oTable = $('#facilityDataTable').dataTable({
+				"bAutoWidth": false,
+				"bProcessing": true,
+				"bServerSide": true,
+				"aoColumns": [
+					<?php echo $editAction; ?>
+				],
+				"sAjaxSource": "<?php echo $this->url('home', array('action' => 'index')); ?>",
+				"fnServerData": function(sSource, aoData, fnCallback) {
+					aoData.push({
+						"name": "fName",
+						"value": $("#facilityId").val()
+					});
+					aoData.push({
+						"name": "locationOne",
+						"value": $("#location_one").val()
+					});
+					aoData.push({
+						"name": "locationTwo",
+						"value": $("#location_two").val()
+					});
+					aoData.push({
+						"name": "locationThree",
+						"value": $("#location_three").val()
+					});
+					aoData.push({
+						"name": "testingFacility",
+						"value": $("#testingFacility").val()
+					});
+					aoData.push({
+						"name": "sampleTestedDates",
+						"value": $("#sampleTestedDates").val()
+					});
+					aoData.push({
+						"name": "tOutcome",
+						"value": $("#termOut").val()
+					});
+					aoData.push({
+						"name": "finalOutcome",
+						"value": $("#finalOutcome").val()
+					});
+					$.ajax({
+						"dataType": 'json',
+						"type": "POST",
+						"url": sSource,
+						"data": aoData,
+						"success": fnCallback
+					});
+				}
+			});
 
-				getRecencyAllDataCount();
-				getFinalOutcomeChart();
-				getRecencyLabActivityChart();
-				getInfectionByModalityChart();
-				//getTesterwiseFinalOutcomeChart();
-				//getTesterwiseInvalidChart();
-				//getFacilityWiseInvalidChart();
-				//getLotChart();
-				//getQualityCheckVolume();
-				oTable = $('#facilityDataTable').dataTable( {
-					"bAutoWidth": false,
-					"bProcessing": true,
-					"bServerSide": true,
-					"aoColumns": [
-							<?php echo $editAction; ?>
-					],
-					"sAjaxSource": "<?php echo $this->url('home', array('action' => 'index')); ?>",
-					"fnServerData": function ( sSource, aoData, fnCallback ) {
-						aoData.push({"name": "fName", "value": $("#facilityId").val()});
-						aoData.push({"name": "locationOne", "value": $("#location_one").val()});
-						aoData.push({"name": "locationTwo", "value": $("#location_two").val()});
-						aoData.push({"name": "locationThree", "value": $("#location_three").val()});
-						aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
-						aoData.push({"name": "sampleTestedDates", "value": $("#sampleTestedDates").val()});
-						aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
-                    	aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
-						$.ajax({
-							"dataType": 'json',
-							"type": "POST",
-							"url": sSource,
-							"data": aoData,
-							"success": fnCallback
-						});
+			oTable = $('#districtwiseDataTable').dataTable({
+				"bAutoWidth": false,
+				"bProcessing": true,
+				"bServerSide": true,
+				"aoColumns": [{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center",
+						"bSortable": false
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center",
+						"bSortable": false
 					}
-				} );
+				],
+				"sAjaxSource": "<?php echo $this->url('home', array('action' => 'index')); ?>",
+				"fnServerData": function(sSource, aoData, fnCallback) {
+					aoData.push({
+						"name": "fName",
+						"value": $("#facilityId").val()
+					});
+					aoData.push({
+						"name": "locationOne",
+						"value": $("#location_one").val()
+					});
+					aoData.push({
+						"name": "locationTwo",
+						"value": $("#location_two").val()
+					});
+					aoData.push({
+						"name": "locationThree",
+						"value": $("#location_three").val()
+					});
+					aoData.push({
+						"name": "testingFacility",
+						"value": $("#testingFacility").val()
+					});
+					aoData.push({
+						"name": "sampleTestedDates",
+						"value": $("#sampleTestedDates").val()
+					});
+					aoData.push({
+						"name": "tOutcome",
+						"value": $("#termOut").val()
+					});
+					aoData.push({
+						"name": "finalOutcome",
+						"value": $("#finalOutcome").val()
+					});
+					aoData.push({
+						"name": "comingFrom",
+						"value": "district"
+					});
+					$.ajax({
+						"dataType": 'json',
+						"type": "POST",
+						"url": sSource,
+						"data": aoData,
+						"success": fnCallback
+					});
+				}
+			});
 
-				oTable = $('#districtwiseDataTable').dataTable( {
-					"bAutoWidth": false,
-					"bProcessing": true,
-					"bServerSide": true,
-					"aoColumns": [
-						{"sClass":"center"},
-						{"sClass":"center"},
-						{"sClass":"center"},
-						{"sClass":"center"},
-						{"sClass":"center"},
-						{"sClass":"center"},
-						{"sClass":"center"},
-						{"sClass":"center"},
-						{"sClass":"center"},
-						{"sClass":"center"},
-						{"sClass":"center","bSortable":false},
-						{"sClass":"center"},
-						{"sClass":"center","bSortable":false}
-					],
-					"sAjaxSource": "<?php echo $this->url('home', array('action' => 'index')); ?>",
-					"fnServerData": function ( sSource, aoData, fnCallback ) {
-						aoData.push({"name": "fName", "value": $("#facilityId").val()});
-						aoData.push({"name": "locationOne", "value": $("#location_one").val()});
-						aoData.push({"name": "locationTwo", "value": $("#location_two").val()});
-						aoData.push({"name": "locationThree", "value": $("#location_three").val()});
-						aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
-						aoData.push({"name": "sampleTestedDates", "value": $("#sampleTestedDates").val()});
-						aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
-                    	aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
-						aoData.push({"name": "comingFrom", "value": "district"});
-						$.ajax({
-							"dataType": 'json',
-							"type": "POST",
-							"url": sSource,
-							"data": aoData,
-							"success": fnCallback
-						});
-					}
-				} );
-
-				<?php foreach ($globalConfigResult as $config) {
-    ?>
+			<?php foreach ($globalConfigResult as $config) {
+				?>
 				getLocationDeatils('<?php echo $config["global_name"]; ?>');
 				<?php
-break;
-}?>
+				break;
+			} ?>
 
-		$('#sampleTestedDates').daterangepicker({
-			format: 'DD-MMM-YYYY',
-			autoUpdateInput: false,
-				separator: ' to ',
-				startDate: moment().subtract('days', 29),
-				endDate: moment(),
-				maxDate: moment(),
-				ranges: {
-					'Today': [moment(), moment()],
-					'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-					'Last 7 Days': [moment().subtract('days', 6), moment()],
-					'Last 30 Days': [moment().subtract('days', 29), moment()],
-					'Last 60 Days': [moment().subtract('days', 59), moment()],
-					'Last 180 Days': [moment().subtract('days', 179), moment()],
-					'This Month': [moment().startOf('month'), moment().endOf('month')],
-					'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+			$('#sampleTestedDates').daterangepicker({
+					format: 'DD-MMM-YYYY',
+					autoUpdateInput: false,
+					separator: ' to ',
+					startDate: moment().subtract('days', 29),
+					endDate: moment(),
+					maxDate: moment(),
+					ranges: {
+						'Today': [moment(), moment()],
+						'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+						'Last 7 Days': [moment().subtract('days', 6), moment()],
+						'Last 30 Days': [moment().subtract('days', 29), moment()],
+						'Last 60 Days': [moment().subtract('days', 59), moment()],
+						'Last 180 Days': [moment().subtract('days', 179), moment()],
+						'This Month': [moment().startOf('month'), moment().endOf('month')],
+						'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
 					}
-	},
-	function(start, end) {
-		startDate = start.format('YYYY-MM-DD');
-		endDate = end.format('YYYY-MM-DD');
-		$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
-		$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
-	});
+				},
+				function(start, end) {
+					startDate = start.format('YYYY-MM-DD');
+					endDate = end.format('YYYY-MM-DD');
+					$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
+						$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+					});
 
-	});
 				});
+		});
 
-			function searchData(){
-				oTable.fnDraw();
-			}
+		function searchData() {
+			oTable.fnDraw();
+		}
 
 
 
-		function getLocationDeatils(globalName,nxtGlobalName){
+		function getLocationDeatils(globalName, nxtGlobalName) {
 			var selectValue = document.getElementById(globalName).value;
 			var innerId = '';
 			var path = '';
-				if(globalName=='location_one' && selectValue==''){
-					path = 'get-province';
-					innerId = 'location_one';
-				}else if(globalName=='location_one' && selectValue!=''){
-					path = 'get-district';
-					innerId = 'location_two';
-					$("#location_three").html("<option value=''>-- Select --</option>");
-				}else if(globalName=='location_two' && selectValue!=''){
-					path = 'get-city';
-					innerId = 'location_three';
-				}else if(globalName=='location_three' || globalName=='location_two'){
-					getFacilityListByLocation(globalName);
-				}
-				if(path!=''){
-					$.post("/common/"+path, {selectValue:selectValue},
+			if (globalName == 'location_one' && selectValue == '') {
+				path = 'get-province';
+				innerId = 'location_one';
+			} else if (globalName == 'location_one' && selectValue != '') {
+				path = 'get-district';
+				innerId = 'location_two';
+				$("#location_three").html("<option value=''>-- Select --</option>");
+			} else if (globalName == 'location_two' && selectValue != '') {
+				path = 'get-city';
+				innerId = 'location_three';
+			} else if (globalName == 'location_three' || globalName == 'location_two') {
+				getFacilityListByLocation(globalName);
+			}
+			if (path != '') {
+				$.post("/common/" + path, {
+						selectValue: selectValue
+					},
 					function(data) {
-						$("#"+innerId).html(data);
+						$("#" + innerId).html(data);
 						getFacilityListByLocation(globalName);
 					});
-				}
-		}
-		function getFacilityListByLocation(globalName)
-		{
-			$.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),globalName:globalName},
-			function(data) {
-				$("#facilityId").html('<option value="">-- Select --</option>'+data);
-			});
+			}
 		}
 
-		function exportRecencyInfo()
-		{
+		function getFacilityListByLocation(globalName) {
+			$.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {
+					locationOne: $("#location_one").val(),
+					locationTwo: $("#location_two").val(),
+					locationThree: $("#location_three").val(),
+					globalName: globalName
+				},
+				function(data) {
+					$("#facilityId").html('<option value="">-- Select --</option>' + data);
+				});
+		}
+
+		function exportRecencyInfo() {
 			$.post("<?php echo $this->url('export-recency-data'); ?>",
-				function(data){
-				if(data == "" || data == null || data == undefined){
-					alert('Unable to generate download');
-				}else{
-					document.location.href = '/temporary/'+data;
-				}
-			});
+				function(data) {
+					if (data == "" || data == null || data == undefined) {
+						alert('Unable to generate download');
+					} else {
+						document.location.href = '/temporary/' + data;
+					}
+				});
 		}
 
-	function getRecencyAllDataCount() {
+		function getRecencyAllDataCount() {
 
-			$.post("<?php echo $this->url('recency', array('action' => 'get-recency-all-data-count')); ?>",{locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
-				function(data){
+			$.post("<?php echo $this->url('recency', array('action' => 'get-recency-all-data-count')); ?>", {
+					locationOne: $("#location_one").val(),
+					locationTwo: $("#location_two").val(),
+					locationThree: $("#location_three").val(),
+					fName: $("#facilityId").val(),
+					testingFacility: $("#testingFacility").val(),
+					tOutcome: $("#termOut").val(),
+					finalOutcome: $("#finalOutcome").val()
+				},
+				function(data) {
 					var obj = JSON.parse(data);
 					$("#totalSamples").html(obj.totalSamples);
 					$("#samplesTestedRecency").html(obj.samplesTestedRecency);
@@ -552,95 +644,130 @@ break;
 					$("#totalSamplesNotTested").html(obj.samplesNotTestedViralLoad);
 					$("#samplesFinalOutcomeLT").html(obj.samplesFinalOutcomeLT);
 
-			});
+				});
 
-	}
-
-	function getFinalOutcomeChart() {
-		var format = null;
-		if($('#rita-recent-weekly-percentage').prop('checked')){
-			format = 'percentage';
-		}else{
-			format = 'number';
 		}
-		
-		$.post("<?php echo $this->url('recency', array('action' => 'get-final-outcome-chart')); ?>",{format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
-			function(data){
-				$("#container").html(data);
-		});
-	}
 
-	function getRecencyLabActivityChart() {
-
-		var format = null;
-		if($('#recency-testing-site-activity-percentage').prop('checked')){
-			format = 'percentage';
-		}else{
-			format = 'number';
-		}
-		$.post("<?php echo $this->url('recency', array('action' => 'get-recency-lab-activity-chart')); ?>",{format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),activityFilter:$("#activityFilter").val()},
-			function(data){
-				$("#recencyLabActivity").html(data);
-		});
-	}
-
-	function exportDistrictRecencyInfo()
-	{
-		$.post("<?php echo $this->url('export-recency-data'); ?>",{comingFrom:"district"},
-			function(data){
-			if(data == "" || data == null || data == undefined){
-				alert('Unable to generate download');
-			}else{
-				document.location.href = '/temporary/'+data;
-			}
-		});
-	}
-
-	function getInfectionByModalityChart() {
+		function getFinalOutcomeChart() {
 			var format = null;
-			if($('#recent-infection-by-modality-percentage').prop('checked')){
+			if ($('#rita-recent-weekly-percentage').prop('checked')) {
 				format = 'percentage';
-			}else{
+			} else {
 				format = 'number';
 			}
-			$.post("<?php echo $this->url('recency',array('action'=>'get-modality-wise-final-outcome-chart')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
-			function(data){
-				$("#modalityFinalOutcomeChart").html(data);
-			});
-	}
 
-	// function getTesterwiseFinalOutcomeChart() {
-	// 	$.post("< ?php echo $this->url('recency', array('action' => 'get-tester-wise-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),recencyTesterFilter:$("#recencyTesterFilter").val()},
-	// 	function(data){
-	// 		$("#finalOutcomeChart").html(data);
-	// 	});
-	// }
+			$.post("<?php echo $this->url('recency', array('action' => 'get-final-outcome-chart')); ?>", {
+					format: format,
+					sampleTestedDates: $("#sampleTestedDates").val(),
+					locationOne: $("#location_one").val(),
+					locationTwo: $("#location_two").val(),
+					locationThree: $("#location_three").val(),
+					fName: $("#facilityId").val(),
+					testingFacility: $("#testingFacility").val(),
+					tOutcome: $("#termOut").val(),
+					finalOutcome: $("#finalOutcome").val(),
+					ritaFilter: $("#ritaFilter").val()
+				},
+				function(data) {
+					$("#container").html(data);
+				});
+		}
 
-	// function getTesterwiseInvalidChart() {
-	// 	$.post("< ?php echo $this->url('recency', array('action' => 'get-tester-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
-	// 	function(data){
-	// 		$("#testerWiseInvalid").html(data);
-	// 	});
-	// }
+		function getRecencyLabActivityChart() {
 
-	// function getFacilityWiseInvalidChart() {
-	// 	$.post("< ?php echo $this->url('recency', array('action' => 'get-facility-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
-	// 	function(data){
-	// 		$("#facilityWiseInvalid").html(data);
-	// 	});
-	// }
+			var format = null;
+			if ($('#recency-testing-site-activity-percentage').prop('checked')) {
+				format = 'percentage';
+			} else {
+				format = 'number';
+			}
+			$.post("<?php echo $this->url('recency', array('action' => 'get-recency-lab-activity-chart')); ?>", {
+					format: format,
+					sampleTestedDates: $("#sampleTestedDates").val(),
+					locationOne: $("#location_one").val(),
+					locationTwo: $("#location_two").val(),
+					locationThree: $("#location_three").val(),
+					fName: $("#facilityId").val(),
+					testingFacility: $("#testingFacility").val(),
+					tOutcome: $("#termOut").val(),
+					finalOutcome: $("#finalOutcome").val(),
+					activityFilter: $("#activityFilter").val()
+				},
+				function(data) {
+					$("#recencyLabActivity").html(data);
+				});
+		}
 
-	// function getLotChart() {
-	// 	$.post("< ?php echo $this->url('recency', array('action' => 'get-lot-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
-	// 	function(data){
-	// 		$("#lotReport").html(data);
-	// 	});
-	// }
+		function exportDistrictRecencyInfo() {
+			$.post("<?php echo $this->url('export-recency-data'); ?>", {
+					comingFrom: "district"
+				},
+				function(data) {
+					if (data == "" || data == null || data == undefined) {
+						alert('Unable to generate download');
+					} else {
+						document.location.href = '/temporary/' + data;
+					}
+				});
+		}
 
-	// function getQualityCheckVolume() {
-	// 	$.post("< ?php echo $this->url('quality-check', array('action' => 'get-quality-check-volume-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
-	// 	function(data){
-	// 		$("#qualityCheckVolume").html(data);
-	// 	});
-	// }
+		function getInfectionByModalityChart() {
+			var format = null;
+			if ($('#recent-infection-by-modality-percentage').prop('checked')) {
+				format = 'percentage';
+			} else {
+				format = 'number';
+			}
+			$.post("<?php echo $this->url('recency', array('action' => 'get-modality-wise-final-outcome-chart')); ?>", {
+					format: format,
+					format: format,
+					sampleTestedDates: $("#sampleTestedDates").val(),
+					locationOne: $("#location_one").val(),
+					locationTwo: $("#location_two").val(),
+					locationThree: $("#location_three").val(),
+					fName: $("#facilityId").val(),
+					testingFacility: $("#testingFacility").val(),
+					tOutcome: $("#termOut").val(),
+					finalOutcome: $("#finalOutcome").val(),
+					ritaFilter: $("#ritaFilter").val()
+				},
+				function(data) {
+					$("#modalityFinalOutcomeChart").html(data);
+				});
+		}
+		
+		// function getTesterwiseFinalOutcomeChart() {
+		// 	$.post("< ?php echo $this->url('recency', array('action' => 'get-tester-wise-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),recencyTesterFilter:$("#recencyTesterFilter").val()},
+		// 	function(data){
+		// 		$("#finalOutcomeChart").html(data);
+		// 	});
+		// }
+
+		// function getTesterwiseInvalidChart() {
+		// 	$.post("< ?php echo $this->url('recency', array('action' => 'get-tester-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+		// 	function(data){
+		// 		$("#testerWiseInvalid").html(data);
+		// 	});
+		// }
+
+		// function getFacilityWiseInvalidChart() {
+		// 	$.post("< ?php echo $this->url('recency', array('action' => 'get-facility-wise-invalid-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+		// 	function(data){
+		// 		$("#facilityWiseInvalid").html(data);
+		// 	});
+		// }
+
+		// function getLotChart() {
+		// 	$.post("< ?php echo $this->url('recency', array('action' => 'get-lot-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val()},
+		// 	function(data){
+		// 		$("#lotReport").html(data);
+		// 	});
+		// }
+
+		// function getQualityCheckVolume() {
+		// 	$.post("< ?php echo $this->url('quality-check', array('action' => 'get-quality-check-volume-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
+		// 	function(data){
+		// 		$("#qualityCheckVolume").html(data);
+		// 	});
+		// }
 	</script>

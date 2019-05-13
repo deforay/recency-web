@@ -3714,9 +3714,5 @@ class RecencyTable extends AbstractTableGateway
         }
         //\Zend\Debug\Debug::dump($result); die;
         return $result;
-        
-        
-        
-
     }
 }

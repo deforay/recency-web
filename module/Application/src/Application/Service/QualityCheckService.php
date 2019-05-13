@@ -225,5 +225,23 @@ class QualityCheckService {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
         return $qualityCheckDb->fetchQualityCheckVolumeChart($params);
     }
+    
+    public function getQualityResultTermOutcomeChart($params)
+    {
+        $qualityCheckDb = $this->sm->get('QualityCheckTable');
+        return $qualityCheckDb->fetchQualityResultTermOutcomeChart($params);
+    }
+    
+    public function getKitLotNumberChartChart($params)
+    {
+        $qualityCheckDb = $this->sm->get('QualityCheckTable');
+        return $qualityCheckDb->fetchKitLotNumberChartChart($params);
+    }
+    
+    public function getSampleLotChartChart($params)
+    {
+        $qualityCheckDb = $this->sm->get('QualityCheckTable');
+        return $qualityCheckDb->fetchSampleLotChartChart($params);
+    }
 }
 ?>
