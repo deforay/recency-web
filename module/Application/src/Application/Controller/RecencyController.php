@@ -414,4 +414,19 @@ class RecencyController extends AbstractActionController
                 ->setTerminal(true);
         return $viewModel;
       }
+
+      public function recentInfectionByMonthSexChartAction()
+      {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getRecentInfectionByMonthSexChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+      }
 }

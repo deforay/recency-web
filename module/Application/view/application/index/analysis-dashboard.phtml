@@ -114,7 +114,23 @@ $currentDate = date('d-M-Y');
 			<div id="infectionByAge" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
+	
 
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Month and Sex
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="recent-infection-by-month-sex" name="recent-infection-by-month-sex" checked onchange="getRecentInfectionByMonthSexChart();">
+			<label class="custom-control-label" for="recent-infection-by-month-sex">Percentage</label>
+		</small>
+	</h2>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div id="infectionByMonthSex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		</div>
+	</div>
+
+	
 	<h2 class="content-heading">
 		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By Specimen Type
 		&nbsp;&nbsp;&nbsp;&nbsp;
@@ -259,6 +275,7 @@ $currentDate = date('d-M-Y');
 		getQualitySampleLotChart();
 		getQualityResultsLitLotNumberChart();
 		getTestingQualityChart();
+		getRecentInfectionByMonthSexChart();
 		//getHivViralLoadChart();
 		<?php foreach ($globalConfigResult as $config) {
 			?>
@@ -507,12 +524,28 @@ $currentDate = date('d-M-Y');
 			$("#testingQualityChartInvalid").html(data);
 		});
 		
-		// $.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-table')); ?>", {
+		// $.post("< ?php echo $this->url('quality-check', array('action' => 'get-testing-quality-table')); ?>", {
 		// 	format: format,
 		// 	sampleTestedDates: $("#sampleTestedDates").val()
 		// },
 		// function(data) {
 		// 	$("#testingQualityTable").html(data);
 		// });
+	}
+
+	function getRecentInfectionByMonthSexChart() {
+		var format = null;
+		if ($('#recent-infection-by-month-sex').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('recency', array('action' => 'recent-infection-by-month-sex-chart')); ?>", {
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
+			},
+			function(data) {
+				$("#infectionByMonthSex").html(data);
+			});
 	}
 </script>

@@ -1437,5 +1437,11 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchModalityWiseMissingViralLoadChart($params);
     }
+
+    public function getRecentInfectionByMonthSexChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecentInfectionByMonthSexChart($params);
+    }
 }
 
