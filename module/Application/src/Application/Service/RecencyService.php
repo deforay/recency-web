@@ -12,11 +12,13 @@ class RecencyService
 
     public $sm = null;
 
-    public function __construct($sm) {
+    public function __construct($sm)
+    {
         $this->sm = $sm;
     }
 
-    public function getServiceManager() {
+    public function getServiceManager()
+    {
         return $this->sm;
     }
 
@@ -384,16 +386,21 @@ class RecencyService
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
                     $row = array();
-                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
                     $row[] = $aRow['sample_id'];
+                    $row[] = $aRow['facility_name'];
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
+                    $row[] = ucwords($aRow['control_line']);
+                    $row[] = ucwords($aRow['positive_verification_line']);
+                    $row[] = ucwords($aRow['long_term_verification_line']);
+                    $row[] = $aRow['term_outcome'];
+                    $row[] = $aRow['vl_result'];
+                    $row[] = $aRow['final_outcome'];
+                    $row[] = ucwords($aRow['gender']);
+                    $row[] = $aRow['age'];
                     $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
                     $row[] = $common->humanDateFormat($aRow['sample_receipt_date']);
                     $row[] = ucwords(str_replace('_', ' ', $aRow['received_specimen_type']));
-                    $row[] = $aRow['term_outcome'];
-                    $row[] = $aRow['final_outcome'];
-                    $row[] = $aRow['facility_name'];
                     $row[] = ucwords($aRow['testing_facility_name']);
-                    $row[] = $aRow['vl_result'];
                     $row[] = $common->humanDateFormat($aRow['vl_test_date']);
                     $output[] = $row;
                 }
@@ -426,17 +433,22 @@ class RecencyService
                 ),
             );
 
-            $sheet->setCellValue('A1', html_entity_decode('Date Of Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('Sample Collection Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('Sample Receipt Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('Received Specimen Type', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('J1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('K1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Date Of Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('Positive Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('Long Term Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('J1', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Sample Collection Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('Sample Receipt Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('N1', html_entity_decode('Received Specimen Type', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('O1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('P1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -451,6 +463,11 @@ class RecencyService
             $sheet->getStyle('I1')->applyFromArray($styleArray);
             $sheet->getStyle('J1')->applyFromArray($styleArray);
             $sheet->getStyle('K1')->applyFromArray($styleArray);
+            $sheet->getStyle('L1')->applyFromArray($styleArray);
+            $sheet->getStyle('M1')->applyFromArray($styleArray);
+            $sheet->getStyle('N1')->applyFromArray($styleArray);
+            $sheet->getStyle('O1')->applyFromArray($styleArray);
+            $sheet->getStyle('P1')->applyFromArray($styleArray);
 
 
             foreach ($output as $rowNo => $rowData) {
@@ -508,13 +525,18 @@ class RecencyService
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
                     $row = array();
-                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
                     $row[] = $aRow['sample_id'];
-                    $row[] = $aRow['term_outcome'];
-                    $row[] = $aRow['final_outcome'];
                     $row[] = $aRow['facility_name'];
-                    $row[] = ucwords($aRow['testing_facility_name']);
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
+                    $row[] = ucwords($aRow['control_line']);
+                    $row[] = ucwords($aRow['positive_verification_line']);
+                    $row[] = ucwords($aRow['long_term_verification_line']);
+                    $row[] = $aRow['term_outcome'];
                     $row[] = $aRow['vl_result'];
+                    $row[] = $aRow['final_outcome'];
+                    $row[] = ucwords($aRow['gender']);
+                    $row[] = $aRow['age'];
+                    $row[] = ucwords($aRow['testing_facility_name']);
                     $row[] = $common->humanDateFormat($aRow['vl_test_date']);
                     $output[] = $row;
                 }
@@ -546,16 +568,19 @@ class RecencyService
                     ),
                 ),
             );
-
-
-            $sheet->setCellValue('A1', html_entity_decode('Date Of Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Date Of Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('Positive Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('Long Term Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('J1', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
@@ -566,8 +591,13 @@ class RecencyService
             $sheet->getStyle('D1')->applyFromArray($styleArray);
             $sheet->getStyle('E1')->applyFromArray($styleArray);
             $sheet->getStyle('F1')->applyFromArray($styleArray);
-           $sheet->getStyle('G1')->applyFromArray($styleArray);
-           $sheet->getStyle('H1')->applyFromArray($styleArray);
+            $sheet->getStyle('G1')->applyFromArray($styleArray);
+            $sheet->getStyle('H1')->applyFromArray($styleArray);
+            $sheet->getStyle('I1')->applyFromArray($styleArray);
+            $sheet->getStyle('J1')->applyFromArray($styleArray);
+            $sheet->getStyle('K1')->applyFromArray($styleArray);
+            $sheet->getStyle('L1')->applyFromArray($styleArray);
+            $sheet->getStyle('M1')->applyFromArray($styleArray);
 
 
 
@@ -643,7 +673,7 @@ class RecencyService
                     $row[] = $aRow['final_outcome'];
                     $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
                     $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-                    $row[] = date('d-M-Y',strtotime($aRow['vl_result_entry_date']));
+                    $row[] = date('d-M-Y', strtotime($aRow['vl_result_entry_date']));
                     $row[] = $aRow['diffInDays'];
                     $output[] = $row;
                 }
@@ -771,38 +801,37 @@ class RecencyService
         $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
         $sql = new Sql($dbAdapter);
         $allowedExtensions = array('xls', 'xlsx', 'csv');
-            $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['fileName']['name']);
-            $fileName = str_replace(" ", "-", $fileName);
-            $ranNumber = str_pad(rand(0, pow(10, 6)-1), 6, '0', STR_PAD_LEFT);
-            $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-            $fileName =$ranNumber.".".$extension;
-            if (in_array($extension, $allowedExtensions)) {
+        $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['fileName']['name']);
+        $fileName = str_replace(" ", "-", $fileName);
+        $ranNumber = str_pad(rand(0, pow(10, 6) - 1), 6, '0', STR_PAD_LEFT);
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $fileName = $ranNumber . "." . $extension;
+        if (in_array($extension, $allowedExtensions)) {
             if (!file_exists(UPLOAD_PATH) && !is_dir(UPLOAD_PATH)) {
                 mkdir(APPLICATION_PATH . DIRECTORY_SEPARATOR . "uploads");
             }
-            
+
             if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName)) {
-               
-                if (move_uploaded_file($_FILES['fileName']['tmp_name'], UPLOAD_PATH .  DIRECTORY_SEPARATOR . $fileName)) {
+
+                if (move_uploaded_file($_FILES['fileName']['tmp_name'], UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName)) {
                     $objPHPExcel = \PHPExcel_IOFactory::load(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
                     $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                     $count = count($sheetData);
                     $common = new \Application\Service\CommonService();
                     for ($i = 2; $i <= $count; ++$i) {
                         $sampleId = $sheetData[$i]['A'];
-                        if(isset($sheetData[$i]['A']) && trim($sheetData[$i]['A']) != '') {
+                        if (isset($sheetData[$i]['A']) && trim($sheetData[$i]['A']) != '') {
                             $cQuery = $sql->select()->from('recency')->columns(array('recency_id'))
-                                        ->where(array('sample_id'=>$sampleId));
+                                ->where(array('sample_id' => $sampleId));
                             $fQuery = $sql->getSqlStringForSqlObject($cQuery);
                             $fResult = $dbAdapter->query($fQuery, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-                            if(isset($fResult['recency_id']))
-                            {
+                            if (isset($fResult['recency_id'])) {
                                 $data = array(
-                                    'vl_test_date' => date('Y-m-d',strtotime($sheetData[$i]['C'])),
+                                    'vl_test_date' => date('Y-m-d', strtotime($sheetData[$i]['C'])),
                                     'vl_result' => $sheetData[$i]['B'],
                                     'upload_result_datetime' => date('Y-m-d h:i:s')
                                 );
-                                $recencyDb->update($data,array('recency_id'=>$fResult['recency_id']));
+                                $recencyDb->update($data, array('recency_id' => $fResult['recency_id']));
                             }
                         }
                     }
@@ -811,7 +840,7 @@ class RecencyService
                     $container->alertMsg = 'Result details uploaded successfully';
                 }
             }
-    }
+        }
     }
 
     public function getLocationBasedFacility($params)
@@ -856,23 +885,23 @@ class RecencyService
             $finalResult = 0;
             //if(isset($result[0]['Samples Tested']) && $result[0]['Samples Tested']!=''){
 
-                    $totalSamples = $result[0]['Samples Pending to be Tested'] + $result[0]['Samples Tested'];
-                    $termOutcome = $result[0]['Assay Recent'] + $result[0]['Long Term'] + $result[0]['Assay Negative'];
-                    $vlResult = $result[0]['Done'] + $result[0]['Pending'];
-                    $finalResult = $result[0]['RITA Recent'] + $result[0]['Long Term Final'] + $result[0]['Inconclusive'];
-                    $row = array();
-                    $row[] = $result[0]['Samples Received'];
-                    $row[] = $result[0]['Samples Pending to be Tested'];
-                    $row[] = $result[0]['Samples Tested'];
-                    $row[] = $result[0]['Assay Recent'];
-                    $row[] = $result[0]['Long Term'];
-                    $row[] = $result[0]['Assay Negative'];
-                    $row[] = $result[0]['Done'];
-                    $row[] = $result[0]['Pending'];
-                    $row[] = $result[0]['RITA Recent'];
-                    $row[] = $result[0]['Long Term Final'];
-                    $row[] = $result[0]['Inconclusive'];
-                    $output[] = $row;
+            $totalSamples = $result[0]['Samples Pending to be Tested'] + $result[0]['Samples Tested'];
+            $termOutcome = $result[0]['Assay Recent'] + $result[0]['Long Term'] + $result[0]['Assay Negative'];
+            $vlResult = $result[0]['Done'] + $result[0]['Pending'];
+            $finalResult = $result[0]['RITA Recent'] + $result[0]['Long Term Final'] + $result[0]['Inconclusive'];
+            $row = array();
+            $row[] = $result[0]['Samples Received'];
+            $row[] = $result[0]['Samples Pending to be Tested'];
+            $row[] = $result[0]['Samples Tested'];
+            $row[] = $result[0]['Assay Recent'];
+            $row[] = $result[0]['Long Term'];
+            $row[] = $result[0]['Assay Negative'];
+            $row[] = $result[0]['Done'];
+            $row[] = $result[0]['Pending'];
+            $row[] = $result[0]['RITA Recent'];
+            $row[] = $result[0]['Long Term Final'];
+            $row[] = $result[0]['Inconclusive'];
+            $output[] = $row;
                 
             //}
 
@@ -909,22 +938,22 @@ class RecencyService
             $sheet->mergeCells('D1:F1');
             $sheet->mergeCells('G1:H1');
             $sheet->mergeCells('I1:K1');
-             
-            $this->cellColor('C1:C2', '367fa9',$excel);
-            
-            $this->cellColor('D1:F1', 'ebed89',$excel);
-            $this->cellColor('D2:F2', '9cc2e5',$excel);
-            $this->cellColor('G1:H1', 'ebed89',$excel);
-            $this->cellColor('G2:H2', '95b78d',$excel);
-            $this->cellColor('I1:K1', '11aa06',$excel);
+
+            $this->cellColor('C1:C2', '367fa9', $excel);
+
+            $this->cellColor('D1:F1', 'ebed89', $excel);
+            $this->cellColor('D2:F2', '9cc2e5', $excel);
+            $this->cellColor('G1:H1', 'ebed89', $excel);
+            $this->cellColor('G2:H2', '95b78d', $excel);
+            $this->cellColor('I1:K1', '11aa06', $excel);
             //$this->cellColor('E2:F2', 'edda95',$excel);
-            $this->cellColor('I2:K2', 'dce5ed',$excel);
+            $this->cellColor('I2:K2', 'dce5ed', $excel);
                 
                 // cellColor('A7:I7', 'F28A8C');
                 // cellColor('A17:I17', 'F28A8C');
                 // cellColor('A30:Z30', 'F28A8C');
-            
-                
+
+
 
             $sheet->setCellValue('A1', html_entity_decode('Samples Received', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('B1', html_entity_decode('Samples Pending to be Tested', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -981,18 +1010,18 @@ class RecencyService
                     $colNo++;
                 }
             }
-            if(isset($result[0]['Samples Tested']) && $result[0]['Samples Tested']!=''){
+            if (isset($result[0]['Samples Tested']) && $result[0]['Samples Tested'] != '') {
                 $totalSamples = $result[0]['Samples Received'];
-                $sheet->setCellValue('B4', html_entity_decode(($result[0]['Samples Pending to be Tested']!='' && $result[0]['Samples Pending to be Tested']!=0) ? round(($result[0]['Samples Pending to be Tested'] / $totalSamples) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('C4', html_entity_decode(($result[0]['Samples Tested']!='' && $result[0]['Samples Tested']!=0) ? round(($result[0]['Samples Tested'] / $totalSamples) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('D4', html_entity_decode(($result[0]['Assay Recent']!='' && $result[0]['Assay Recent']!=0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('E4', html_entity_decode(($result[0]['Long Term']!='' && $result[0]['Long Term']!=0) ? round(($result[0]['Long Term'] / $termOutcome) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('F4', html_entity_decode(($result[0]['Assay Negative']!='' && $result[0]['Assay Negative']!=0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('G4', html_entity_decode(($result[0]['Done']!='' && $result[0]['Done']!=0) ? round(($result[0]['Done'] / $vlResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('H4', html_entity_decode(($result[0]['Pending']!='' && $result[0]['Pending']!=0) ? round(($result[0]['Pending'] / $vlResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('I4', html_entity_decode(($result[0]['RITA Recent']!='' && $result[0]['RITA Recent']!=0)?round(($result[0]['RITA Recent'] / $finalResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('J4', html_entity_decode(($result[0]['Long Term Final']!='' && $result[0]['Long Term Final']!=0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('K4', html_entity_decode(($result[0]['Inconclusive']!='' && $result[0]['Inconclusive']!=0)? round(($result[0]['Inconclusive'] / $finalResult) * 100,2)."%":0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('B4', html_entity_decode(($result[0]['Samples Pending to be Tested'] != '' && $result[0]['Samples Pending to be Tested'] != 0) ? round(($result[0]['Samples Pending to be Tested'] / $totalSamples) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('C4', html_entity_decode(($result[0]['Samples Tested'] != '' && $result[0]['Samples Tested'] != 0) ? round(($result[0]['Samples Tested'] / $totalSamples) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('D4', html_entity_decode(($result[0]['Assay Recent'] != '' && $result[0]['Assay Recent'] != 0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('E4', html_entity_decode(($result[0]['Long Term'] != '' && $result[0]['Long Term'] != 0) ? round(($result[0]['Long Term'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('F4', html_entity_decode(($result[0]['Assay Negative'] != '' && $result[0]['Assay Negative'] != 0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('G4', html_entity_decode(($result[0]['Done'] != '' && $result[0]['Done'] != 0) ? round(($result[0]['Done'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('H4', html_entity_decode(($result[0]['Pending'] != '' && $result[0]['Pending'] != 0) ? round(($result[0]['Pending'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('I4', html_entity_decode(($result[0]['RITA Recent'] != '' && $result[0]['RITA Recent'] != 0) ? round(($result[0]['RITA Recent'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('J4', html_entity_decode(($result[0]['Long Term Final'] != '' && $result[0]['Long Term Final'] != 0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('K4', html_entity_decode(($result[0]['Inconclusive'] != '' && $result[0]['Inconclusive'] != 0) ? round(($result[0]['Inconclusive'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             }
 
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
@@ -1006,11 +1035,12 @@ class RecencyService
         }
     }
 
-    function cellColor($cells,$color,$excel){
+    function cellColor($cells, $color, $excel)
+    {
         $excel->getActiveSheet()->getStyle($cells)->getFill()->applyFromArray(array(
             'type' => \PHPExcel_Style_Fill::FILL_SOLID,
             'startcolor' => array(
-                 'rgb' => $color
+                'rgb' => $color
             )
         ));
     }
@@ -1020,16 +1050,16 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyDetailsForPDF($recenyId);
     }
-    
+
     public function getAllRecencyResult($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        if(isset($params['comingFrom']) && trim($params['comingFrom'])=='district'){
+        if (isset($params['comingFrom']) && trim($params['comingFrom']) == 'district') {
             return $recencyDb->fetchDistrictWiseRecencyResult($params);
-        }else{
+        } else {
             return $recencyDb->fetchAllRecencyResult($params);
         }
-        
+
     }
 
     public function fetchExportRecencyData($params)
@@ -1050,30 +1080,30 @@ class RecencyService
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
-                    $ltper=0;
-                    $arper=0;
+                    $ltper = 0;
+                    $arper = 0;
                     $row = array();
-                    if(trim($aRow['samplesFinalLongTerm'])!=""){
-                        $ltper=round((($aRow['samplesFinalLongTerm']/$aRow['samplesFinalOutcome'])*100),2)."%";
+                    if (trim($aRow['samplesFinalLongTerm']) != "") {
+                        $ltper = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . "%";
                     }
-                    if(trim($aRow['ritaRecent'])!=""){
-                        $arper=round((($aRow['ritaRecent']/$aRow['samplesFinalOutcome'])*100),2)."%";
+                    if (trim($aRow['ritaRecent']) != "") {
+                        $arper = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . "%";
                     }
 
-                        $row[] = $aRow['facility_name'];
-                         $row[] = $aRow['testing_facility_name'];
-                         $row[] = $aRow['totalSamples'];
-                         $row[] = $aRow['samplesReceived'];
-                         $row[] = $aRow['samplesRejected'];
-                         $row[] = $aRow['samplesTestBacklog'];
-                         $row[] = $aRow['samplesTestVlPending'];
-                         $row[] = $aRow['samplesTestedRecency'];
-                         $row[] = $aRow['samplesTestedViralLoad'];
-                         $row[] = $aRow['samplesFinalOutcome'];
-                         $row[] = $aRow['samplesFinalLongTerm'];
-                         $row[] = $ltper;
-                         $row[] = $aRow['ritaRecent'];
-                         $row[] = $arper;
+                    $row[] = $aRow['facility_name'];
+                    $row[] = $aRow['testing_facility_name'];
+                    $row[] = $aRow['totalSamples'];
+                    $row[] = $aRow['samplesReceived'];
+                    $row[] = $aRow['samplesRejected'];
+                    $row[] = $aRow['samplesTestBacklog'];
+                    $row[] = $aRow['samplesTestVlPending'];
+                    $row[] = $aRow['samplesTestedRecency'];
+                    $row[] = $aRow['samplesTestedViralLoad'];
+                    $row[] = $aRow['samplesFinalOutcome'];
+                    $row[] = $aRow['samplesFinalLongTerm'];
+                    $row[] = $ltper;
+                    $row[] = $aRow['ritaRecent'];
+                    $row[] = $arper;
                     $output[] = $row;
                 }
             }
@@ -1169,31 +1199,31 @@ class RecencyService
             error_log($exc->getTraceAsString());
         }
     }
-    
+
     public function getRecencyAllDataCount($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyAllDataCount($params);
     }
-    
+
     public function getFinalOutcomeChart($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchFinalOutcomeChart($params);
     }
-    
+
     public function mapManageColumnsDetails($params)
     {
         $recencyDb = $this->sm->get('ManageColumnsMapTable');
         return $recencyDb->mapManageColumnsDetails($params);
     }
-    
+
     public function getAllManagaColumnsDetails($userId)
     {
         $recencyDb = $this->sm->get('ManageColumnsMapTable');
         return $recencyDb->fetchAllManagaColumnsDetails($userId);
     }
-    
+
     public function getTesterWiseFinalOutcomeChart($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
@@ -1266,29 +1296,29 @@ class RecencyService
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
-                    $ltper=0;
-                    $arper=0;
+                    $ltper = 0;
+                    $arper = 0;
                     $row = array();
-                    if(trim($aRow['samplesFinalLongTerm'])!=""){
-                        $ltper=round((($aRow['samplesFinalLongTerm']/$aRow['samplesFinalOutcome'])*100),2).'%';
+                    if (trim($aRow['samplesFinalLongTerm']) != "") {
+                        $ltper = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
                     }
-                    if(trim($aRow['ritaRecent'])!=""){
-                        $arper=round((($aRow['ritaRecent']/$aRow['samplesFinalOutcome'])*100),2).'%';
+                    if (trim($aRow['ritaRecent']) != "") {
+                        $arper = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
                     }
 
-                        $row[] = $aRow['district_name'];
-                         $row[] = $aRow['totalSamples'];
-                         $row[] = $aRow['samplesReceived'];
-                         $row[] = $aRow['samplesRejected'];
-                         $row[] = $aRow['samplesTestBacklog'];
-                         $row[] = $aRow['samplesTestVlPending'];
-                         $row[] = $aRow['samplesTestedRecency'];
-                         $row[] = $aRow['samplesTestedViralLoad'];
-                         $row[] = $aRow['samplesFinalOutcome'];
-                         $row[] = $aRow['samplesFinalLongTerm'];
-                         $row[] = $ltper;
-                         $row[] = $aRow['ritaRecent'];
-                         $row[] = $arper;
+                    $row[] = $aRow['district_name'];
+                    $row[] = $aRow['totalSamples'];
+                    $row[] = $aRow['samplesReceived'];
+                    $row[] = $aRow['samplesRejected'];
+                    $row[] = $aRow['samplesTestBacklog'];
+                    $row[] = $aRow['samplesTestVlPending'];
+                    $row[] = $aRow['samplesTestedRecency'];
+                    $row[] = $aRow['samplesTestedViralLoad'];
+                    $row[] = $aRow['samplesFinalOutcome'];
+                    $row[] = $aRow['samplesFinalLongTerm'];
+                    $row[] = $ltper;
+                    $row[] = $aRow['ritaRecent'];
+                    $row[] = $arper;
                     $output[] = $row;
                 }
             }
@@ -1321,7 +1351,7 @@ class RecencyService
             );
 
             $sheet->setCellValue('A1', html_entity_decode('District Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            
+
             $sheet->setCellValue('B1', html_entity_decode('No. of Samples Registered', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('C1', html_entity_decode('No. of Samples Received at Hub', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('D1', html_entity_decode('No. of Samples Rejected', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -1351,7 +1381,7 @@ class RecencyService
             $sheet->getStyle('K1')->applyFromArray($styleArray);
             $sheet->getStyle('L1')->applyFromArray($styleArray);
             $sheet->getStyle('M1')->applyFromArray($styleArray);
-            
+
 
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;

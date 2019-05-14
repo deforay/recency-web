@@ -1,9 +1,10 @@
 <?php
 
 use Zend\Session\Container;
+
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
 
 ?>
 <div class="bg-body-light">
@@ -20,16 +21,17 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                <div class="block-content block-content-full">
                <div class="form-group row">
                         <?php
-                         foreach($globalConfigResult as $config){ ?>
-                            <?php if($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three'){ ?>
+                        foreach ($globalConfigResult as $config) { ?>
+                            <?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
                                 <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
+                                    <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
                                         <option value="">-- Select --</option>
                                     </select>
                                 </div>
-                            <?php }
-                        }?>
+                            <?php 
+                        }
+                    } ?>
                         <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
@@ -41,51 +43,63 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                                 <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
                                 <option value=""> -- Select -- </option>
                                     <?php
-                                    foreach($facilityResult['facilityTest'] as $facilityRow){
-                                        if(2 != (int)$facilityRow['facility_type_id']) continue;
-                                    ?>
-                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
+                                    foreach ($facilityResult['facilityTest'] as $facilityRow) {
+                                        if (2 != (int)$facilityRow['facility_type_id']) continue;
+                                        ?>
+                                    <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
                                     <?php
-                                    }
-                                    ?>
+
+                                }
+                                ?>
                                 </select>
                             </div>
                     </div>
                     <div class="row items-push">
                         <div class="col-lg-7 ">
                             <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                            <?php if($roleCode=='admin'){ ?>
+                            <?php if ($roleCode == 'admin') { ?>
                               <a href="javascript:void(0);" class="btn btn-success"  onclick="exportRecentLTermInfection();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-                            <?php } ?>
+                            <?php 
+                        } ?>
                         </div>
-                    </div>
-                    <table id="ltInfectionTable" class="table table-bordered table-striped table-vcenter">
+                    </div> 
+                    <table id="ltInfectionTable" class="table-responsive table table-bordered table-striped table-vcenter">
                          <thead>
                               <tr>
-                                    <th>Date Of Testing</th>
                                     <th>Sample ID</th>
-                                    <th>Assay Test Result</th>
-                                    <th>Final Result</th>
                                     <th>Facility Name</th>
-                                    <th>Testing Site</th>
+                                    <th>Date Of Testing</th>
+                                    <th>Control Line</th>
+                                    <th>Positive Verification Line</th>
+                                    <th>Long Term Verification Line</th>
+                                    <th>Assay Test Result</th>
                                     <th>VL Result</th>
+                                    <th>Final Result</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                    <th>Testing Site</th>
                                     <th>VL Test Date</th>
                               </tr>
                          </thead>
                          <tbody>
                               <tr>
-                                    <td colspan='7' class='dataTables_empty'>Loading data from server</td>
+                                    <td colspan='13' class='dataTables_empty'>Loading data from server</td>
                               </tr>
                               </tbody>
                               <tfoot>
                               <tr>
-                                    <th>Date Of Testing</th>
                                     <th>Sample ID</th>
-                                    <th>Assay Test Result</th>
-                                    <th>Final Result</th>
                                     <th>Facility Name</th>
-                                    <th>Testing Site</th>
+                                    <th>Date Of Testing</th>
+                                    <th>Control Line</th>
+                                    <th>Positive Verification Line</th>
+                                    <th>Long Term Verification Line</th>
+                                    <th>Assay Test Result</th>
                                     <th>VL Result</th>
+                                    <th>Final Result</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                    <th>Testing Site</th>
                                     <th>VL Test Date</th>
                               </tr>
                          </tfoot>
@@ -103,9 +117,9 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 "bProcessing": true,
                 "bServerSide": true,
                 "aoColumns": [
-                        <?php echo $editAction;?>
+                        <?php echo $editAction; ?>
                 ],
-                "sAjaxSource": "<?php echo $this->url('vl-data',array('action' => 'lt-infection')); ?>",
+                "sAjaxSource": "<?php echo $this->url('vl-data', array('action' => 'lt-infection')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     aoData.push({"name": "fName", "value": $("#facilityId").val()});
                     aoData.push({"name": "locationOne", "value": $("#location_one").val()});
@@ -123,12 +137,12 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 }
             } );
 
-            <?php foreach($globalConfigResult as $config){
-             ?>
-             getLocationDeatils('<?php echo $config["global_name"];?>');
+            <?php foreach ($globalConfigResult as $config) {
+                ?>
+             getLocationDeatils('<?php echo $config["global_name"]; ?>');
              <?php
-             break;
-         } ?>
+            break;
+        } ?>
 
             } );
 
@@ -141,7 +155,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
         function exportRecencyData()
         {
             $.blockUI();
-            $.post("<?php echo $this->url('recency',array('action'=>'export-recency')); ?>",
+            $.post("<?php echo $this->url('recency', array('action' => 'export-recency')); ?>",
                 function(data){
                 if(data == "" || data == null || data == undefined){
                 $.unblockUI();
@@ -193,7 +207,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
      function exportRecentLTermInfection()
      {
          $.blockUI();
-         $.post("<?php echo $this->url('vl-data',array('action'=>'export-long-term-infected-data')); ?>",
+         $.post("<?php echo $this->url('vl-data', array('action' => 'export-long-term-infected-data')); ?>",
              function(data){
              if(data == "" || data == null || data == undefined){
              $.unblockUI();
