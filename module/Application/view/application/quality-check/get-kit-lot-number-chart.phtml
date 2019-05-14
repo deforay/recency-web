@@ -33,7 +33,7 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
 
             xAxis: {
                 categories: [
-                    <?php foreach ($result['result'] as $res) { ?> '<?php echo $res['kit_lot_no']; ?>',
+                    <?php foreach ($result['result'] as $key=>$res) { ?> '<?php echo $key; ?>',
                     <?php } ?>
                 ],
                 crosshair: true,
@@ -87,7 +87,7 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
                 colorByPoint: true,
                 data: [
                     <?php foreach ($result['result'] as $val) { ?> 
-                        <?php echo $val['total']; ?>,
+                        <?php echo $val; ?>,
                     <?php } ?>
                 ],
                 showInLegend: false

@@ -66,7 +66,7 @@ $currentDate = date('d-M-Y');
 
 				<div class="row items-push">
 					<div class="col-lg-7 ">
-						<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getQualityResultsChart();getQualitySampleLotChart();getQualityResultsLitLotNumberChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+						<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getQualityResultsChart();getQualitySampleLotChart();getQualityResultsLitLotNumberChart();getTestingQualityChart();"><i class="fa fa-fw fa-check"></i> Search</a>
 
 					</div>
 				</div>
@@ -130,7 +130,7 @@ $currentDate = date('d-M-Y');
 	</div>
 
 	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Sample Lot
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By QC Panel Lot
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<small class="custom-control custom-switch custom-control-inline">
 			<input type="checkbox" class="custom-control-input" id="quality-sample-lot-percentage" name="quality-sample-lot-percentage" checked onchange="getQualitySampleLotChart();">
@@ -144,7 +144,7 @@ $currentDate = date('d-M-Y');
 	</div>
 
 	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By Kit Lot Number
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By Kit Lot
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<small class="custom-control custom-switch custom-control-inline">
 			<input type="checkbox" class="custom-control-input" id="quality-result-by-kit-lot-number-percentage" name="quality-result-by-kit-lot-number-percentage" checked onchange="getQualityResultsLitLotNumberChart();">
@@ -156,6 +156,39 @@ $currentDate = date('d-M-Y');
 			<div id="qualityResultKitLotNumberChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Testing Quality
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="testing-quality-percentage" name="testing-quality-percentage" checked onchange="getTestingQualityChart();">
+			<label class="custom-control-label" for="testing-quality-percentage">Percentage</label>
+		</small>
+	</h2>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="testingQualityChartNegative" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="testingQualityChartInvalid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="row">
+		<div class="col-md-12">
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="testingQualityTable" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
+		</div>
+	</div> -->
 	
 	<h2 class="content-heading ">
 			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Facility
@@ -225,6 +258,7 @@ $currentDate = date('d-M-Y');
 		getQualityResultsChart();
 		getQualitySampleLotChart();
 		getQualityResultsLitLotNumberChart();
+		getTestingQualityChart();
 		//getHivViralLoadChart();
 		<?php foreach ($globalConfigResult as $config) {
 			?>
@@ -448,5 +482,37 @@ $currentDate = date('d-M-Y');
 			function(data) {
 				$("#qualityResultKitLotNumberChart").html(data);
 			});
+	}
+
+	function getTestingQualityChart() {
+		var format = null;
+		if ($('#testing-quality-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-negative-chart')); ?>", {
+			format: format,
+			sampleTestedDates: $("#sampleTestedDates").val()
+		},
+		function(data) {
+			$("#testingQualityChartNegative").html(data);
+		});
+		
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-invalid-chart')); ?>", {
+			format: format,
+			sampleTestedDates: $("#sampleTestedDates").val()
+		},
+		function(data) {
+			$("#testingQualityChartInvalid").html(data);
+		});
+		
+		// $.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-table')); ?>", {
+		// 	format: format,
+		// 	sampleTestedDates: $("#sampleTestedDates").val()
+		// },
+		// function(data) {
+		// 	$("#testingQualityTable").html(data);
+		// });
 	}
 </script>

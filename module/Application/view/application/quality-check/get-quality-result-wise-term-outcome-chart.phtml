@@ -32,8 +32,9 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
 
             xAxis: {
                 categories: [
-                    <?php foreach ($result['result'] as $res) { ?> '<?php echo $res['term_outcome']; ?>',
-                    <?php } ?>
+                    'Assay HIV Negative',
+                    'Long Term',
+                    'Assay Recent'
                 ],
                 crosshair: true,
                 scrollbar: {
@@ -74,20 +75,22 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
                         enabled: true,
                         formatter: function() {
                             <?php if ($format == 'percentage') { ?>
-                                return this.y > 0 ? this.y + '%' : 0;
+                                return this.y > 0 ? this.y.toFixed(2) + '%' : 0;
                             <?php } else { ?>
                                 return this.y;
                             <?php } ?>
                         }
-                    }
+                    },
+                    showInLegend: true
                 }
             },
             series: [{
                 type: 'column',
                 colorByPoint: true,
                 data: [
-                    <?php foreach ($result['result'] as $val) { ?> <?php echo $val['total']; ?>,
-                    <?php } ?>
+                    <?php echo $result['result']['negative']; ?>,
+                    <?php echo $result['result']['lt']; ?>,
+                    <?php echo $result['result']['r']; ?>
                 ],
                 showInLegend: false
             }]

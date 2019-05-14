@@ -130,7 +130,7 @@ class QualityCheckController extends AbstractActionController
         if ($request->isPost()) {
           $params = $request->getPost();
           $qcService = $this->getServiceLocator()->get('QualityCheckService');
-          $result=$qcService->getKitLotNumberChartChart($params);
+          $result=$qcService->getKitLotNumberChart($params);
         }
         $viewModel = new ViewModel();
         return $viewModel->setVariables(array('result' => $result))->setTerminal(true);
@@ -143,7 +143,33 @@ class QualityCheckController extends AbstractActionController
         if ($request->isPost()) {
           $params = $request->getPost();
           $qcService = $this->getServiceLocator()->get('QualityCheckService');
-          $result=$qcService->getSampleLotChartChart($params);
+          $result=$qcService->getSampleLotChart($params);
+        }
+        $viewModel = new ViewModel();
+        return $viewModel->setVariables(array('result' => $result))->setTerminal(true);
+     }
+     
+     public function getTestingQualityNegativeChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+          $qcService = $this->getServiceLocator()->get('QualityCheckService');
+          $result=$qcService->getTestingQualityNegativeChart($params);
+        }
+        $viewModel = new ViewModel();
+        return $viewModel->setVariables(array('result' => $result))->setTerminal(true);
+     }
+     
+     public function getTestingQualityInvalidChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+          $qcService = $this->getServiceLocator()->get('QualityCheckService');
+          $result=$qcService->getTestingQualityInvalidChart($params);
         }
         $viewModel = new ViewModel();
         return $viewModel->setVariables(array('result' => $result))->setTerminal(true);

@@ -1,0 +1,85 @@
+<?php
+// \Zend\Debug\Debug::dump($result['result']);die;
+$format = $result['format'];
+if (isset($result['result']) && count($result['result']) > 0) { ?>
+    <script>
+        Highcharts.chart('testingQualityChartInvalid', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+            },
+            exporting: {
+                filename:'Testing Quality Invalid Chart',
+                buttons: {
+                    contextButton: {
+                        menuItems: [
+                            'printChart',
+                            'separator',
+                            'downloadPNG',
+                            'downloadJPEG',
+                            'downloadPDF',
+                            'downloadSVG',
+                            'separator',
+                            'downloadCSV',
+                            'downloadXLS',
+                            'viewData'
+                        ]
+                    }
+                }
+            },
+            title: {
+                text: '<?php echo $result['result']['total'];?><br>RTRI Invalid',
+                align: 'center',
+                verticalAlign: 'middle',
+                y: 40
+            },
+            tooltip: {
+                <?php if ($format == 'percentage') { ?>
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                <?php } else { ?>
+                    pointFormat: '{series.name}: <b>{point.percentage:1f}</b>'
+                <?php } ?>
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            <?php if ($format == 'percentage') { ?>
+                                return this.y > 0 ? this.y.toFixed(2) + '%' : 0;
+                            <?php } else { ?>
+                                return this.y;
+                            <?php } ?>
+                        }
+                    },
+                    showInLegend: true,
+                    startAngle: -90,
+                    endAngle: 90
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                type: 'pie',
+                name: 'Total testing invalid recorded',
+                innerSize: '50%',
+                data: [
+                    ['Invalid – Please Verify', <?php echo $result['result']["invalid"];?>],
+                    {
+                        name: 'Others',
+                        y: (100-<?php echo $result['result']['invalid'];?>),
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }
+                ]
+            }]
+        });
+    </script>
+<?php } else {
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
+} ?>
