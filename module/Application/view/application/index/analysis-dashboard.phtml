@@ -156,7 +156,7 @@ $currentDate = date('d-M-Y');
 			<div id="qualityResultKitLotNumberChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
-<h2 class="content-heading">
+	<h2 class="content-heading">
 		<i class="fa fa-angle-right text-muted mr-1"></i> Testing Quality
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<small class="custom-control custom-switch custom-control-inline">
@@ -180,7 +180,7 @@ $currentDate = date('d-M-Y');
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<!-- <div class="row">
 		<div class="col-md-12">
 			<div class="block block-rounded block-bordered">
 				<div class="block-content block-content-full">
@@ -188,7 +188,7 @@ $currentDate = date('d-M-Y');
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	
 	<h2 class="content-heading ">
 			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Facility
@@ -507,12 +507,12 @@ $currentDate = date('d-M-Y');
 			$("#testingQualityChartInvalid").html(data);
 		});
 		
-		$.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-table')); ?>", {
-			format: format,
-			sampleTestedDates: $("#sampleTestedDates").val()
-		},
-		function(data) {
-			$("#testingQualityTable").html(data);
-		});
+		// $.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-table')); ?>", {
+		// 	format: format,
+		// 	sampleTestedDates: $("#sampleTestedDates").val()
+		// },
+		// function(data) {
+		// 	$("#testingQualityTable").html(data);
+		// });
 	}
 </script>
