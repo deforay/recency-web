@@ -3927,7 +3927,7 @@ class RecencyTable extends AbstractTableGateway
         }
 
         $sQuery=$sQuery
-            ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'))
+            ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'),'left')
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
@@ -3978,15 +3978,22 @@ class RecencyTable extends AbstractTableGateway
         $result = array();
         $result['format']= $format;
         foreach ($rResult as $sRow) {
-            if ($sRow["testing_facility_type_name"] == null || $sRow['missingViralLoad'] == 0) {
+            if ($sRow['missingViralLoad'] == 0) {
                 continue;
             }
 
             $n = (isset($sRow['total']) && $sRow['total'] != null) ? $sRow['total'] : 0;
             $result['finalOutCome']['Missing Viral Load'][$j] = (isset($sRow['missingViralLoad']) && $sRow['missingViralLoad'] != null) ? round($sRow['missingViralLoad'], 2) : 0;
-            $result['modality'][$j] = ($sRow["testing_facility_type_name"]) . " (N=$n)";
-            $result['total'] += $n;
+            
+            if ($sRow["testing_facility_type_name"] == null && $sRow['missingViralLoad']>0) {
+                $result['modality'][$j]="Missing Point-of-Testing"." (N=$n)";
+            }else{
+                $result['modality'][$j] = ($sRow["testing_facility_type_name"]) . " (N=$n)";
+            }
 
+            
+            $result['total'] += $n;
+            
             $j++;
         }
         return $result;
@@ -4089,8 +4096,6 @@ class RecencyTable extends AbstractTableGateway
 
             $j++;
         }
-
-        //\Zend\Debug\Debug::dump($result);die;
         return $result;
     }
 }
