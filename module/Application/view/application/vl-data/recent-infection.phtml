@@ -3,7 +3,7 @@
 use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -63,36 +63,46 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     <table id="recentInfectionTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
                          <thead>
                               <tr>
-                                    <th>Date Of Testing</th>
                                     <th>Sample ID</th>
+                                    <th>Facility Name</th>
+                                    <th>Date Of Testing</th>
+                                    <th>Control Line</th>
+                                    <th>Positive Verification Line</th>
+                                    <th>Long Term Verification Line</th>
+                                    <th>Assay Test Result</th>
+                                    <th>VL Result</th>
+                                    <th>Final Result</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
                                     <th>Sample Collection Date	</th>
                                     <th>Sample Receipt Date</th>
                                     <th>Received Specimen Type</th>
-                                    <th>Assay Test Result</th>
-                                    <th>Final Result</th>
-                                    <th>Facility Name</th>
                                     <th>Testing Site</th>
-                                    <th>VL Result</th>
                                     <th>VL Test Date</th>
                               </tr>
                          </thead>
                          <tbody>
                               <tr>
-                                    <td colspan='8' class='dataTables_empty'>Loading data from server</td>
+                                    <td colspan='16' class='dataTables_empty'>Loading data from server</td>
                               </tr>
                               </tbody>
                               <tfoot>
                               <tr>
+                              <th>Sample ID</th>
+                                    <th>Facility Name</th>
                                     <th>Date Of Testing</th>
-                                    <th>Sample ID</th>
+                                    <th>Control Line</th>
+                                    <th>Positive Verification Line</th>
+                                    <th>Long Term Verification Line</th>
+                                    <th>Assay Test Result</th>
+                                    <th>VL Result</th>
+                                    <th>Final Result</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
                                     <th>Sample Collection Date	</th>
                                     <th>Sample Receipt Date</th>
                                     <th>Received Specimen Type</th>
-                                    <th>Assay Test Result</th>
-                                    <th>Final Result</th>
-                                    <th>Facility Name</th>
                                     <th>Testing Site</th>
-                                    <th>VL Result</th>
                                     <th>VL Test Date</th>
                               </tr>
                          </tfoot>

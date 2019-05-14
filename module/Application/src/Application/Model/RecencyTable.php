@@ -1290,15 +1290,14 @@ class RecencyTable extends AbstractTableGateway
 
     public function fetchAllRecencyResultWithVlList($parameters)
     {
-
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
         $queryContainer = new Container('query');
         $common = new CommonService();
 
-        $aColumns = array('DATE_FORMAT(r.hiv_recency_test_date,"%d-%b-%Y")', 'r.sample_id', 'DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")', 'DATE_FORMAT(r.sample_receipt_date,"%d-%b-%Y")', 'r.received_specimen_type', 'r.term_outcome', 'r.final_outcome', 'f.facility_name', 'ft.facility_name', 'r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
-        $orderColumns = array('r.hiv_recency_test_date', 'r.sample_id', 'r.sample_collection_date', 'r.sample_receipt_date', 'r.received_specimen_type', 'r.term_outcome', 'r.final_outcome', 'f.facility_name', 'ft.facility_name', 'r.vl_result', 'r.vl_test_date');
+        $aColumns = array('r.sample_id','f.facility_name','DATE_FORMAT(r.hiv_recency_test_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line', 'r.term_outcome','r.vl_result', 'r.final_outcome','r.gender','r.age', 'DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")', 'DATE_FORMAT(r.sample_receipt_date,"%d-%b-%Y")', 'r.received_specimen_type',  'ft.facility_name',  'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
+        $orderColumns = array('r.sample_id','f.facility_name','r.hiv_recency_test_date','r.control_line', 'r.positive_verification_line','r.long_term_verification_line','r.term_outcome','r.vl_result', 'r.final_outcome','r.gender','r.age','r.sample_collection_date', 'r.sample_receipt_date', 'r.received_specimen_type', 'ft.facility_name', 'r.vl_test_date');
 
         /* Paging */
         $sLimit = "";
@@ -1367,7 +1366,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_test_date','control_line','positive_verification_line','long_term_verification_line','age','gender','sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
@@ -1428,21 +1427,23 @@ class RecencyTable extends AbstractTableGateway
         );
 
         foreach ($rResult as $aRow) {
-
             $row = array();
-
-            $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
-            $row[] = $aRow['sample_id'];
-            $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
-            $row[] = $common->humanDateFormat($aRow['sample_receipt_date']);
-            $row[] = ucwords(str_replace('_', ' ', $aRow['received_specimen_type']));
-            $row[] = $aRow['term_outcome'];
-            $row[] = $aRow['final_outcome'];
-            $row[] = $aRow['facility_name'];
-            $row[] = $aRow['testing_facility_name'];
-            $row[] = $aRow['vl_result'];
-            $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-
+                    $row[] = $aRow['sample_id'];
+                    $row[] = $aRow['facility_name'];
+                    $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
+                    $row[] = ucwords($aRow['control_line']);
+                    $row[] = ucwords($aRow['positive_verification_line']);
+                    $row[] = ucwords($aRow['long_term_verification_line']);
+                    $row[] = $aRow['term_outcome'];
+                    $row[] = $aRow['vl_result'];
+                    $row[] = $aRow['final_outcome'];
+                    $row[] = ucwords($aRow['gender']);
+                    $row[] = $aRow['age'];
+                    $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
+                    $row[] = $common->humanDateFormat($aRow['sample_receipt_date']);
+                    $row[] = ucwords(str_replace('_', ' ', $aRow['received_specimen_type']));
+                    $row[] = ucwords($aRow['testing_facility_name']);
+                    $row[] = $common->humanDateFormat($aRow['vl_test_date']);
             $output['aaData'][] = $row;
         }
         return $output;
@@ -1457,8 +1458,8 @@ class RecencyTable extends AbstractTableGateway
         $queryContainer = new Container('query');
         $common = new CommonService();
 
-        $aColumns = array('DATE_FORMAT(r.hiv_recency_test_date,"%d-%b-%Y")', 'r.sample_id', 'r.term_outcome', 'r.final_outcome', 'f.facility_name', 'ft.facility_name', 'r.vl_result', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
-        $orderColumns = array('r.hiv_recency_test_date', 'r.sample_id', 'r.term_outcome', 'r.final_outcome', 'f.facility_name', 'ft.facility_name', 'r.vl_result', 'r.vl_test_date');
+        $aColumns = array('r.sample_id','f.facility_name','DATE_FORMAT(r.hiv_recency_test_date,"%d-%b-%Y")','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.term_outcome',  'r.vl_result','r.final_outcome','r.gender','r.age', 'ft.facility_name', 'DATE_FORMAT(r.vl_test_date,"%d-%b-%Y")');
+        $orderColumns = array('r.sample_id','f.facility_name','r.hiv_recency_test_date','r.control_line','r.positive_verification_line','r.long_term_verification_line','r.term_outcome', 'r.vl_result', 'r.final_outcome','r.gender','r.age', 'ft.facility_name', 'r.vl_test_date');
 
         /* Paging */
         $sLimit = "";
@@ -1527,7 +1528,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_test_date','control_line','positive_verification_line','long_term_verification_line','age','gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
@@ -1591,16 +1592,19 @@ class RecencyTable extends AbstractTableGateway
         foreach ($rResult as $aRow) {
 
             $row = array();
-
-            $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
             $row[] = $aRow['sample_id'];
-            $row[] = $aRow['term_outcome'];
-            $row[] = $aRow['final_outcome'];
             $row[] = $aRow['facility_name'];
-            $row[] = $aRow['testing_facility_name'];
+            $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
+            $row[] = ucwords($aRow['control_line']);
+            $row[] = ucwords($aRow['positive_verification_line']);
+            $row[] = ucwords($aRow['long_term_verification_line']);
+            $row[] = $aRow['term_outcome'];
             $row[] = $aRow['vl_result'];
+            $row[] = $aRow['final_outcome'];
+            $row[] = ucwords($aRow['gender']);
+            $row[] = $aRow['age'];
+            $row[] = ucwords($aRow['testing_facility_name']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-
             $output['aaData'][] = $row;
         }
         return $output;
