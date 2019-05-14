@@ -255,5 +255,11 @@ class QualityCheckService {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
         return $qualityCheckDb->fetchTestingQualityInvalidChart($params);
     }
+
+    public function getPassedQualityBasedOnFacility($params)
+    {
+         $qcTestDb = $this->sm->get('QualityCheckTable');
+         return $qcTestDb->fetchPassedQualityBasedOnFacility($params);
+    }
 }
 ?>

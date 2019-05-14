@@ -174,4 +174,14 @@ class QualityCheckController extends AbstractActionController
         $viewModel = new ViewModel();
         return $viewModel->setVariables(array('result' => $result))->setTerminal(true);
      }
+
+     public function getPassRateByFacilityAction(){
+          $request = $this->getRequest();
+          if ($request->isPost()) {
+               $params = $request->getPost();
+               $qcService = $this->getServiceLocator()->get('QualityCheckService');
+               $result = $qcService->getPassedQualityBasedOnFacility($params);
+               return $this->getResponse()->setContent(Json::encode($result));
+          }
+     }
 }

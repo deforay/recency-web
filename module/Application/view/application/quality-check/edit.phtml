@@ -134,6 +134,7 @@ if($result['term_outcome']==''){
                               <div class="col-sm-4 outcome">
                                    <span class="outcome form-control" style="border:none;" id="outcome"><?php echo $result['term_outcome'];?></span>
                                    <input type="hidden" name="outcomeData" id="outcomeData" value="<?php echo $result['term_outcome'];?>"/>
+                                   <input type="hidden" name="finalResult" id="finalResult" vlue="<?php echo $result['final_result']; ?>"/>
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Tester Name<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
@@ -220,6 +221,29 @@ if($result['term_outcome']==''){
                formId: 'qcEditInformation'
           });
           document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+          refResult=$("#referenceResult").val();
+          outcData=$("#outcomeData").val();
+          if(refResult=='long_term_sample'){
+               if(outcData=='Long Term'){
+                    $("#finalResult").val('pass');
+               }else{
+                    $("#finalResult").val('fail');
+               }
+          }
+          if(refResult=='preliminary_recent_sample'){
+               if(outcData=='Assay Recent'){
+                    $("#finalResult").val('pass');
+               }else{
+                    $("#finalResult").val('fail');
+               }
+          }
+          if(refResult=='hiv_negative_sample'){
+               if(outcData=='Assay HIV Negative'){
+                    $("#finalResult").val('pass');
+               }else{
+                    $("#finalResult").val('fail');
+               }
+          }
           if (flag) {
                if (duplicateName) {
                     $.blockUI();

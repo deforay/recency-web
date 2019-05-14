@@ -272,3 +272,11 @@ ALTER TABLE `tester_information`
 
 ALTER TABLE `tester_information`
   MODIFY `test_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--ilahir 14-May-2019
+ALTER TABLE `quality_check_test` ADD `final_result` VARCHAR(255) NULL DEFAULT NULL AFTER `testing_facility_id`;
+
+
+UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='long_term_sample' AND `term_outcome`='Long Term'
+UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='preliminary_recent_sample' AND `term_outcome`='Assay Recent'
+UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='hiv_negative_sample' AND `term_outcome`='Assay HIV Negative'
