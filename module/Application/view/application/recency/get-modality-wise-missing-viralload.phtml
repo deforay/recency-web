@@ -1,0 +1,128 @@
+<?php if(count($result)>0){
+    $format = $result['format'];
+    $n=count($result['modality']);
+    if($n>4){
+        $max='4';
+    }else{
+        $max=$n-1;
+    }
+?>
+<script>
+Highcharts.chart('missingViralLoadByModality', {
+    credits: {
+            enabled: false
+    },
+    exporting: {
+    filename:'Missing Viral Load Result by Point-of-Testing',
+    buttons: {
+      contextButton: {
+        menuItems: [
+          'printChart',
+          'separator',
+          'downloadPNG',
+          'downloadJPEG',
+          'downloadPDF',
+          'downloadSVG',
+          'separator',
+          'downloadCSV',
+          'downloadXLS',
+          'viewData'
+        ]
+      }
+    }
+    },
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: ""
+    },
+    xAxis: {
+        categories: [
+            <?php  foreach($result['modality'] as $res){?>
+                    '<?php echo $res; ?>',
+               <?php } ?>
+        ],
+        crosshair: true,
+        min: 0,
+        max: '<?php echo $max; ?>',
+        scrollbar: {
+            enabled: true
+        },
+        title: {
+            enabled: true,
+            text: 'Name of Point-of-Testing <br>(N=<?php echo $result['total']; ?>)',
+            style: {
+                fontSize: '12px',
+            }
+        }
+    },
+    yAxis: {
+        min: 0,
+        <?php if($format =='percentage') { ?>
+        max:100,
+        <?php } ?>        
+        title: {
+            <?php if($format =='percentage') { ?>
+            text: 'Percentage (%)'
+            <?php } else { ?>
+            text: 'Number of count'
+            <?php } ?>
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0,
+            maxPointWidth: 40,
+        },
+        series: {
+            dataLabels: {
+                enabled: true,
+                formatter: function() {
+                    
+                    <?php if($format =='percentage') { ?>
+                        return this.y > 0 ? this.y + '%' : 0;
+                    <?php } else { ?>
+                        return this.y;
+                    <?php } ?>                    
+                }
+                
+            }
+        }
+    },
+    colors: [
+        '#048989',
+	],
+    series: [
+        <?php
+           if(isset($result['finalOutCome']) && count($result['finalOutCome']) >0){
+              foreach($result['finalOutCome'] as $key=>$condition){
+              ?>
+        {
+        name: '<?php echo $key;?>',
+        data: [<?php
+                  foreach($condition as $count){
+                    echo $count.",";
+                  }
+              ?>]
+    }, 
+    <?php
+              }
+           }
+            ?>]
+
+
+});
+</script>
+<?php }else{
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
+} ?>

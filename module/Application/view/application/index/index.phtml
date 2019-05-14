@@ -203,7 +203,7 @@
 
 					<div class="row items-push">
 						<div class="col-lg-7 ">
-							<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+							<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getInfectionByModalityChart();getInfectionBySexChart();getMissingVlByDistrict();getMissingVlByModality();"><i class="fa fa-fw fa-check"></i> Search</a>
 
 						</div>
 					</div>
@@ -374,6 +374,34 @@
 				<div id="recentInfectionBySex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 			</div>
 		</div>
+		
+		<h2 class="content-heading">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Missing Viral Load Results by District
+			&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="missing-viralload-district" name="missing-viralload-district" checked  onchange="getMissingVlByDistrict();">
+						<label class="custom-control-label" for="missing-viralload-district">Percentage</label>
+					</small>
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<div id="missingViralLoadByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			</div>
+		</div>
+		
+		<h2 class="content-heading">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Missing Viral Load Results by Point-of-Testing
+			&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="missing-viralload-modality" name="missing-viralload-modality" checked  onchange="getMissingVlByModality();">
+						<label class="custom-control-label" for="missing-viralload-modality">Percentage</label>
+					</small>
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<div id="missingViralLoadByModality" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			</div>
+		</div>
 
 	</div>
 	<script src="https://code.highcharts.com/stock/highstock.js"></script>
@@ -394,6 +422,8 @@
 			getRecencyLabActivityChart();
 			getInfectionByModalityChart();
 			getInfectionBySexChart();
+			getMissingVlByDistrict();
+			getMissingVlByModality();
 			//getTesterwiseFinalOutcomeChart();
 			//getTesterwiseInvalidChart();
 			//getFacilityWiseInvalidChart();
@@ -761,6 +791,32 @@
 			$.post("<?php echo $this->url('recency',array('action'=>'get-recent-infection-by-sex')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
 			function(data){
 				$("#recentInfectionBySex").html(data);
+			});
+		}
+		
+		function getMissingVlByDistrict() {
+			var format = null;
+			if($('#missing-viralload-district').prop('checked')){
+				format = 'percentage';
+			}else{
+				format = 'number';
+			}
+			$.post("<?php echo $this->url('recency',array('action'=>'get-district-wise-missing-viralload')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
+			function(data){
+				$("#missingViralLoadByDistrict").html(data);
+			});
+		}
+
+		function getMissingVlByModality() {
+			var format = null;
+			if($('#missing-viralload-modality').prop('checked')){
+				format = 'percentage';
+			}else{
+				format = 'number';
+			}
+			$.post("<?php echo $this->url('recency',array('action'=>'get-modality-wise-missing-viralload')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
+			function(data){
+				$("#missingViralLoadByModality").html(data);
 			});
 		}
 		

@@ -3680,18 +3680,6 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
         }
 
-        if (isset($parameters['recencyTesterFilter']) && trim($parameters['recencyTesterFilter']) != '') {
-            if ($parameters['recencyTesterFilter'] == 'assayRecent') {
-                $sQuery = $sQuery->order("assayRecent DESC");
-            } else if ($parameters['recencyTesterFilter'] == 'assayLongTerm') {
-                $sQuery = $sQuery->order("assayLongTerm DESC");
-            } else if ($parameters['recencyTesterFilter'] == 'assayInvalid') {
-                $sQuery = $sQuery->order("assayInvalid DESC");
-            }
-        } else {
-            $sQuery = $sQuery->order("totalSamples DESC");
-        }
-
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -3793,7 +3781,6 @@ class RecencyTable extends AbstractTableGateway
         }
 
         if ($parameters['sampleTestedDates'] != '') {
-            //$sQuery = $sQuery->where(array("DATE(r.added_on) >='" . $start_date . "'", "DATE(r.added_on) <='" . $end_date . "'"));
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
@@ -3808,12 +3795,202 @@ class RecencyTable extends AbstractTableGateway
                 continue;
             }
             
+            if($sRow["male"]==0 && $sRow["female"]==0 && $sRow["female"]==0){
+                $sRow['not_reported']=$sRow['total'];
+            }
             $result['finalOutComeTotal'][$j] = (isset($sRow['total']) && $sRow['total'] != null) ? $sRow['total'] : 0;
             $result['finalOutComeMale'][$j] = (isset($sRow["male"]) && $sRow["male"] != null) ? round($sRow["male"], 2) : 0;
             $result['finalOutComeFemale'][$j] = (isset($sRow["female"]) && $sRow["female"] != null) ? round($sRow["female"], 2) : 0;
             $result['finalOutComeGenderMissing'][$j] = (isset($sRow['not_reported']) && $sRow['not_reported'] != null) ? round($sRow['not_reported'], 2) : 0;
             
             $result['date'][$j] = $sRow["monthyear"];
+            $j++;
+        }
+
+        return $result;
+    }
+
+    public function fetchDistrictWiseMissingViralLoadChart($parameters)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $general = new CommonService();
+        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $sQuery = $sql->select()->from(array('r' => 'recency'));
+        if ($format == 'percentage') {
+            $sQuery = $sQuery
+                ->columns(
+                    array(
+                        "total" => new Expression('COUNT(*)'),
+                        "missingViralLoad" => new Expression("(SUM(CASE
+                                WHEN (((r.term_outcome='Assay Recent' AND (vl_result is null or vl_result='')) )) THEN 1 ELSE 0 END)/COUNT(*))*100"),
+                    )
+                );
+        } else {
+            $sQuery = $sQuery
+                ->columns(
+                    array(
+                        "total" => new Expression('COUNT(*)'),
+                        "missingViralLoad" => new Expression("SUM(CASE
+                                WHEN (((r.term_outcome='Assay Recent' AND (vl_result is null or vl_result='')) )) THEN 1 ELSE 0 END)"),
+                    )
+                );
+        }
+
+        $sQuery=$sQuery
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
+            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
+            ->group('district_name');
+
+        if ($parameters['fName'] != '') {
+            $sQuery->where(array('r.facility_id' => $parameters['fName']));
+        }
+        if ($parameters['testingFacility'] != '') {
+            $sQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
+        }
+        if ($parameters['locationOne'] != '') {
+            $sQuery = $sQuery->where(array('p.province_id' => $parameters['locationOne']));
+            if ($parameters['locationTwo'] != '') {
+                $sQuery = $sQuery->where(array('d.district_id' => $parameters['locationTwo']));
+            }
+            if ($parameters['locationThree'] != '') {
+                $sQuery = $sQuery->where(array('c.city_id' => $parameters['locationThree']));
+            }
+        }
+        if (isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates']) != '') {
+            $s_c_date = explode("to", $parameters['sampleTestedDates']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($parameters['sampleTestedDates'] != '') {
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+        }
+        if ($parameters['tOutcome'] != '') {
+            $sQuery->where(array('term_outcome' => $parameters['tOutcome']));
+        }
+        if ($parameters['finalOutcome'] != '') {
+            $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
+        }
+
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        //echo $sQueryStr;die;
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+        $j = 0;
+        $result = array();
+        $result['format']= $format;
+        foreach ($rResult as $sRow) {
+            if ($sRow["district_name"] == null || $sRow['missingViralLoad'] == 0) {
+                continue;
+            }
+
+            $n = (isset($sRow['total']) && $sRow['total'] != null) ? $sRow['total'] : 0;
+            $result['finalOutCome']['Missing Viral Load'][$j] = (isset($sRow['missingViralLoad']) && $sRow['missingViralLoad'] != null) ? round($sRow['missingViralLoad'], 2) : 0;
+            $result['districtName'][$j] = ($sRow["district_name"]) . " (N=$n)";
+            $result['total'] += $n;
+
+            $j++;
+        }
+
+        return $result;
+    }
+
+    public function fetchModalityWiseMissingViralLoadChart($parameters)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $general = new CommonService();
+        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $sQuery = $sql->select()->from(array('r' => 'recency'));
+        if ($format == 'percentage') {
+            $sQuery = $sQuery
+                ->columns(
+                    array(
+                        "total" => new Expression('COUNT(*)'),
+                        "missingViralLoad" => new Expression("(SUM(CASE
+                                WHEN (((r.term_outcome='Assay Recent' AND (vl_result is null or vl_result='')) )) THEN 1 ELSE 0 END)/COUNT(*))*100"),
+                    )
+                );
+        } else {
+            $sQuery = $sQuery
+                ->columns(
+                    array(
+                        "total" => new Expression('COUNT(*)'),
+                        "missingViralLoad" => new Expression("SUM(CASE
+                                WHEN (((r.term_outcome='Assay Recent' AND (vl_result is null or vl_result='')) )) THEN 1 ELSE 0 END)"),
+                    )
+                );
+        }
+
+        $sQuery=$sQuery
+            ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'))
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
+            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
+            ->group('r.testing_facility_type');
+
+        if ($parameters['fName'] != '') {
+            $sQuery->where(array('r.facility_id' => $parameters['fName']));
+        }
+        if ($parameters['testingFacility'] != '') {
+            $sQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
+        }
+        if ($parameters['locationOne'] != '') {
+            $sQuery = $sQuery->where(array('p.province_id' => $parameters['locationOne']));
+            if ($parameters['locationTwo'] != '') {
+                $sQuery = $sQuery->where(array('d.district_id' => $parameters['locationTwo']));
+            }
+            if ($parameters['locationThree'] != '') {
+                $sQuery = $sQuery->where(array('c.city_id' => $parameters['locationThree']));
+            }
+        }
+        if (isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates']) != '') {
+            $s_c_date = explode("to", $parameters['sampleTestedDates']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($parameters['sampleTestedDates'] != '') {
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+        }
+        if ($parameters['tOutcome'] != '') {
+            $sQuery->where(array('term_outcome' => $parameters['tOutcome']));
+        }
+        if ($parameters['finalOutcome'] != '') {
+            $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
+        }
+
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        //echo $sQueryStr;die;
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+        $j = 0;
+        $result = array();
+        $result['format']= $format;
+        foreach ($rResult as $sRow) {
+            if ($sRow["testing_facility_type_name"] == null || $sRow['missingViralLoad'] == 0) {
+                continue;
+            }
+
+            $n = (isset($sRow['total']) && $sRow['total'] != null) ? $sRow['total'] : 0;
+            $result['finalOutCome']['Missing Viral Load'][$j] = (isset($sRow['missingViralLoad']) && $sRow['missingViralLoad'] != null) ? round($sRow['missingViralLoad'], 2) : 0;
+            $result['modality'][$j] = ($sRow["testing_facility_type_name"]) . " (N=$n)";
+            $result['total'] += $n;
+
             $j++;
         }
 

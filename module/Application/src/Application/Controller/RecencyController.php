@@ -370,7 +370,7 @@ class RecencyController extends AbstractActionController
         return $viewModel;
      }
 
-     public function getRecentInfectionBySexAction()
+      public function getRecentInfectionBySexAction()
       {
         $result = "";
         $request = $this->getRequest();
@@ -383,5 +383,35 @@ class RecencyController extends AbstractActionController
         $viewModel->setVariables(array('result' => $result))
                 ->setTerminal(true);
         return $viewModel;
-     }
+      }
+
+      public function getDistrictWiseMissingViralloadAction()
+      {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getDistrictWiseMissingViralLoadChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+      }
+
+      public function getModalityWiseMissingViralloadAction()
+      {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+           $recencyService = $this->getServiceLocator()->get('RecencyService');
+           $result=$recencyService->getModalityWiseMissingViralLoadChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+      }
 }
