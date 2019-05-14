@@ -421,6 +421,7 @@ class QualityCheckTable extends AbstractTableGateway {
      {
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
+          $general = new CommonService();
           $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
           if ($format == 'percentage') {
                $sQuery = $sql->select()->from('quality_check_test')
@@ -433,11 +434,23 @@ class QualityCheckTable extends AbstractTableGateway {
                ->group('term_outcome')
                ->where("term_outcome != 'NULL'");
           }
+
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if($parameters['sampleTestedDates']!=''){
+               $sQuery = $sQuery->where("(qc_test_date >='".$start_date."' AND qc_test_date<='".$end_date."')");
+          }
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;
           $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
           $rResult['format'] = $format;
-          // \Zend\Debug\Debug::dump($rResult);die;
           return $rResult;
      }
      
@@ -445,6 +458,7 @@ class QualityCheckTable extends AbstractTableGateway {
      {
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
+          $general = new CommonService();
           $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
           if ($format == 'percentage') {
                $sQuery = $sql->select()->from('quality_check_test')
@@ -458,6 +472,19 @@ class QualityCheckTable extends AbstractTableGateway {
                     ->where("kit_lot_no != 'NULL'");
 
           }
+
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if($parameters['sampleTestedDates']!=''){
+               $sQuery = $sQuery->where("(qc_test_date >='".$start_date."' AND qc_test_date<='".$end_date."')");
+          }
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;
           $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -469,6 +496,7 @@ class QualityCheckTable extends AbstractTableGateway {
      {
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
+          $general = new CommonService();
           $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
           if ($format == 'percentage') {
                $sQuery = $sql->select()->from('quality_check_test')
@@ -481,6 +509,18 @@ class QualityCheckTable extends AbstractTableGateway {
                     ->group('qc_sample_id')
                     ->where("qc_sample_id != 'NULL'");
 
+          }
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if($parameters['sampleTestedDates']!=''){
+               $sQuery = $sQuery->where("(qc_test_date >='".$start_date."' AND qc_test_date<='".$end_date."')");
           }
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;

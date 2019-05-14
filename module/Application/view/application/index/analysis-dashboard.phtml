@@ -66,7 +66,7 @@ $currentDate = date('d-M-Y');
 
 				<div class="row items-push">
 					<div class="col-lg-7 ">
-						<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+						<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getQualityResultsChart();getQualitySampleLotChart();getQualityResultsLitLotNumberChart();"><i class="fa fa-fw fa-check"></i> Search</a>
 
 					</div>
 				</div>
@@ -128,7 +128,7 @@ $currentDate = date('d-M-Y');
 			<div id="qualityResultTermOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
-	
+
 	<h2 class="content-heading">
 		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Sample Lot
 		&nbsp;&nbsp;&nbsp;&nbsp;
@@ -142,7 +142,7 @@ $currentDate = date('d-M-Y');
 			<div id="qualitySampleLotChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
-	
+
 	<h2 class="content-heading">
 		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By Kit Lot Number
 		&nbsp;&nbsp;&nbsp;&nbsp;
@@ -353,13 +353,14 @@ $currentDate = date('d-M-Y');
 			format = 'number';
 		}
 		$.post("<?php echo $this->url('quality-check', array('action' => 'get-quality-result-wise-term-outcome-chart')); ?>", {
-				format: format
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
 			},
 			function(data) {
 				$("#qualityResultTermOutcomeChart").html(data);
 			});
 	}
-	
+
 	function getQualitySampleLotChart() {
 		var format = null;
 		if ($('#quality-sample-lot-percentage').prop('checked')) {
@@ -368,7 +369,8 @@ $currentDate = date('d-M-Y');
 			format = 'number';
 		}
 		$.post("<?php echo $this->url('quality-check', array('action' => 'get-sample-lot-chart')); ?>", {
-				format: format
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
 			},
 			function(data) {
 				$("#qualitySampleLotChart").html(data);
@@ -383,7 +385,8 @@ $currentDate = date('d-M-Y');
 			format = 'number';
 		}
 		$.post("<?php echo $this->url('quality-check', array('action' => 'get-kit-lot-number-chart')); ?>", {
-				format: format
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
 			},
 			function(data) {
 				$("#qualityResultKitLotNumberChart").html(data);
