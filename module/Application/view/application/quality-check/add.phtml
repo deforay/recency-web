@@ -129,6 +129,7 @@ $lineOutComeColor2 = "#000000";
                               <div class="col-sm-4 outcome">
                                    <span class="outcome form-control" style="border:none;" id="outcome"></span>
                                    <input type="hidden" name="outcomeData" id="outcomeData"/>
+                                   <input type="hidden" name="finalResult" id="finalResult"/>
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Tester Name<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
@@ -232,6 +233,30 @@ function validateNow() {
           formId: 'qcAddInformation'
      });
      document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+     refResult=$("#referenceResult").val();
+     outcData=$("#outcomeData").val();
+     if(refResult=='long_term_sample'){
+          if(outcData=='Long Term'){
+               $("#finalResult").val('pass');
+          }else{
+               $("#finalResult").val('fail');
+          }
+     }
+     if(refResult=='preliminary_recent_sample'){
+          if(outcData=='Assay Recent'){
+               $("#finalResult").val('pass');
+          }else{
+               $("#finalResult").val('fail');
+          }
+     }
+     if(refResult=='hiv_negative_sample'){
+          if(outcData=='Assay HIV Negative'){
+               $("#finalResult").val('pass');
+          }else{
+               $("#finalResult").val('fail');
+          }
+     }
+
      if (flag) {
           if (duplicateName) {
                $.blockUI();

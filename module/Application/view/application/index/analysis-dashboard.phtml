@@ -156,7 +156,32 @@ $currentDate = date('d-M-Y');
 			<div id="qualityResultKitLotNumberChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
-
+	
+	<h2 class="content-heading ">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Facility
+			
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<table id="passRateFacilityWiseDataTable" class="table table-bordered table-striped table-vcenter">
+					<thead>
+						<tr>
+							<th>Facility</th>
+							<th>Kit</th>
+							<th>District Name</th>
+							<th>% Passed</th>
+							
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="5" class="dataTables_empty">Loading data from server</td>
+						</tr>
+						<tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 
 
 	<h2 class="content-heading">
@@ -235,6 +260,38 @@ $currentDate = date('d-M-Y');
 
 			});
 
+			oTable = $('#passRateFacilityWiseDataTable').dataTable({
+				"bAutoWidth": false,
+				"bProcessing": true,
+				"bServerSide": true,
+				"aoColumns": [
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					
+					{
+						"sClass": "center",
+						"bSortable": false
+					}
+				],
+				"sAjaxSource": "<?php echo $this->url('quality-check', array('action' => 'get-pass-rate-by-facility')); ?>",
+				"fnServerData": function(sSource, aoData, fnCallback) {
+					
+					$.ajax({
+						"dataType": 'json',
+						"type": "POST",
+						"url": sSource,
+						"data": aoData,
+						"success": fnCallback
+					});
+				}
+			});
 	});
 
 
@@ -339,7 +396,7 @@ $currentDate = date('d-M-Y');
 			});
 	}
 	// function getHivViralLoadChart() {		
-	// 	$.post("<?php echo $this->url('recency', array('action' => 'recent-hiv-viral-load-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
+	// 	$.post("< ?php echo $this->url('recency', array('action' => 'recent-hiv-viral-load-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
 	// 	function(data){
 	// 		$("#hivViralLoad").html(data);
 	// 	});
