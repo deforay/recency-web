@@ -1,0 +1,86 @@
+<?php
+// \Zend\Debug\Debug::dump($result['result']);die;
+$format = $result['format'];
+if (isset($result['result']) && count($result['result']) > 0) { ?>
+    <script>
+        Highcharts.chart('testingQualityChartNegative', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+            },
+            exporting: {
+                filename:'Testing Quality Negative Chart',
+                buttons: {
+                    contextButton: {
+                        menuItems: [
+                            'printChart',
+                            'separator',
+                            'downloadPNG',
+                            'downloadJPEG',
+                            'downloadPDF',
+                            'downloadSVG',
+                            'separator',
+                            'downloadCSV',
+                            'downloadXLS',
+                            'viewData'
+                        ]
+                    }
+                }
+            },
+            title: {
+                text: '<?php echo $result['result']['total'];?><br>RTRI Negative',
+                align: 'center',
+                verticalAlign: 'middle',
+                y: 40
+            },
+            tooltip: {
+                <?php if ($format == 'percentage') { ?>
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                <?php } else { ?>
+                    pointFormat: '{series.name}: <b>{point.percentage:1f}</b>'
+                <?php } ?>
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            <?php if ($format == 'percentage') { ?>
+                                return this.y > 0 ? this.y.toFixed(2) + '%' : 0;
+                            <?php } else { ?>
+                                return this.y;
+                            <?php } ?>
+                        }
+                    },
+                    showInLegend: true,
+                    startAngle: -90,
+                    endAngle: 90,
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                type: 'pie',
+                name: 'Total testing negative recorded',
+                innerSize: '50%',
+                showInLegend: true,
+                data: [
+                    ['Assay HIV Negative', <?php echo $result['result']["negative"];?>],
+                    {
+                        name: 'Others',
+                        y: (100-<?php echo $result['result']['negative'];?>),
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }
+                ]
+            }]
+        });
+    </script>
+<?php } else {
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
+} ?>

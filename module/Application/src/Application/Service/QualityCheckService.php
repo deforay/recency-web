@@ -232,16 +232,28 @@ class QualityCheckService {
         return $qualityCheckDb->fetchQualityResultTermOutcomeChart($params);
     }
     
-    public function getKitLotNumberChartChart($params)
+    public function getKitLotNumberChart($params)
     {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
-        return $qualityCheckDb->fetchKitLotNumberChartChart($params);
+        return $qualityCheckDb->fetchKitLotNumberChart($params);
     }
     
-    public function getSampleLotChartChart($params)
+    public function getSampleLotChart($params)
     {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
-        return $qualityCheckDb->fetchSampleLotChartChart($params);
+        return $qualityCheckDb->fetchSampleLotChart($params);
+    }
+    
+    public function getTestingQualityNegativeChart($params)
+    {
+        $qualityCheckDb = $this->sm->get('QualityCheckTable');
+        return $qualityCheckDb->fetchTestingQualityNegativeChart($params);
+    }
+    
+    public function getTestingQualityInvalidChart($params)
+    {
+        $qualityCheckDb = $this->sm->get('QualityCheckTable');
+        return $qualityCheckDb->fetchTestingQualityInvalidChart($params);
     }
 }
 ?>

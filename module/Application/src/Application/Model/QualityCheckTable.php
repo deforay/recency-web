@@ -425,14 +425,38 @@ class QualityCheckTable extends AbstractTableGateway {
           $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
           if ($format == 'percentage') {
                $sQuery = $sql->select()->from('quality_check_test')
-               ->columns(array('term_outcome',"total" => new Expression('((COUNT(*) / 100) * COUNT(*))')))
-               ->group('term_outcome')
-               ->where("term_outcome != 'NULL'");
+               ->columns(array(
+                    "totalSamples" => new Expression('COUNT(*)'),
+                    "negative" => new Expression("(SUM(CASE
+                                             WHEN (term_outcome ='Assay HIV Negative') THEN 1
+                                             ELSE 0
+                                             END) / COUNT(*)) * 100"),
+                    "lt" => new Expression("(SUM(CASE
+                                             WHEN (term_outcome ='Long Term') THEN 1
+                                             ELSE 0
+                                             END) / COUNT(*)) * 100"),
+                    "r" => new Expression("(SUM(CASE
+                                             WHEN (term_outcome ='Assay Recent') THEN 1
+                                             ELSE 0
+                                             END) / COUNT(*)) * 100")
+               ));
           }else{
                $sQuery = $sql->select()->from('quality_check_test')
-               ->columns(array('term_outcome',"total" => new Expression('COUNT(*)')))
-               ->group('term_outcome')
-               ->where("term_outcome != 'NULL'");
+               ->columns(array(
+                    "totalSamples" => new Expression('COUNT(*)'),
+                    "negative" => new Expression("SUM(CASE
+                                             WHEN (term_outcome ='Assay HIV Negative') THEN 1
+                                             ELSE 0
+                                             END)"),
+                    "lt" => new Expression("SUM(CASE
+                                             WHEN (term_outcome ='Long Term') THEN 1
+                                             ELSE 0
+                                             END)"),
+                    "r" => new Expression("SUM(CASE
+                                             WHEN (term_outcome ='Assay Recent') THEN 1
+                                             ELSE 0
+                                             END)")
+               ));
           }
 
           if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
@@ -449,12 +473,107 @@ class QualityCheckTable extends AbstractTableGateway {
           }
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;
-          $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+          $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           $rResult['format'] = $format;
           return $rResult;
      }
      
-     public function fetchKitLotNumberChartChart($parameters)
+     public function fetchKitLotNumberChart($parameters)
+     {
+          $dbAdapter = $this->adapter;
+          $sql = new Sql($dbAdapter);
+          $general = new CommonService();
+          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          $sQuery = $sql->select()->from('quality_check_test')
+          ->columns(array('kit_lot_no',"total" => new Expression('COUNT(*)')))
+          ->group('kit_lot_no')
+          ->where("kit_lot_no != 'NULL'");
+
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if($parameters['sampleTestedDates']!=''){
+               $sQuery = $sQuery->where("(qc_test_date >='".$start_date."' AND qc_test_date<='".$end_date."')");
+          }
+          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          // echo $sQueryStr;die;
+          $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+          // To get total count from the list
+          foreach($result as $count){
+               $total[] = $count['total'];
+          }
+          $totalVal = array_sum($total);
+          // To get format list
+          if($format == "percentage"){
+               foreach($result as $count){
+                    $totalResult[$count['kit_lot_no']] = number_format((($count['total']/$totalVal)*100),2);
+               }
+          }else{
+               foreach($result as $count){
+                    $totalResult[$count['kit_lot_no']] = $count['total'];
+               }
+          }
+          $rResult['result'] = $totalResult;
+          $rResult['total'] = $totalVal;
+          $rResult['format'] = $format;
+          return $rResult;
+     }
+     
+     public function fetchSampleLotChart($parameters)
+     {
+          $dbAdapter = $this->adapter;
+          $sql = new Sql($dbAdapter);
+          $general = new CommonService();
+          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          $sQuery = $sql->select()->from('quality_check_test')
+               ->columns(array('qc_sample_id',"total" => new Expression('COUNT(*)')))
+               ->group('qc_sample_id')
+               ->where("qc_sample_id != 'NULL'");
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if($parameters['sampleTestedDates']!=''){
+               $sQuery = $sQuery->where("(qc_test_date >='".$start_date."' AND qc_test_date<='".$end_date."')");
+          }
+          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          // echo $sQueryStr;die;
+          $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+          
+          // To get total count from the list
+          foreach($result as $count){
+               $total[] = $count['total'];
+          }
+          $totalVal = array_sum($total);
+          // To get format list
+          if($format == "percentage"){
+               foreach($result as $count){
+                    $totalResult[$count['qc_sample_id']] = number_format((($count['total']/$totalVal)*100),2);
+               }
+          }else{
+               foreach($result as $count){
+                    $totalResult[$count['qc_sample_id']] = $count['total'];
+               }
+          }
+          $rResult['result'] = $totalResult;
+          $rResult['total'] = $totalVal;
+          $rResult['format'] = $format;
+          return $rResult;
+     }
+     
+     public function fetchTestingQualityNegativeChart($parameters)
      {
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
@@ -462,17 +581,18 @@ class QualityCheckTable extends AbstractTableGateway {
           $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
           if ($format == 'percentage') {
                $sQuery = $sql->select()->from('quality_check_test')
-                    ->columns(array('kit_lot_no',"total" => new Expression('((COUNT(*) / 100) * COUNT(*))')))
-                    ->group('kit_lot_no')
-                    ->where("kit_lot_no != 'NULL'");
+                    ->columns(array(
+                         "totalSamples" => new Expression('COUNT(*)'),
+                         "negative" => new Expression("(SUM(CASE
+                                                  WHEN (term_outcome ='Assay HIV Negative') THEN 1
+                                                  ELSE 0
+                                                  END) / COUNT(*)) * 100")
+                    ));
           }else{
                $sQuery = $sql->select()->from('quality_check_test')
-                    ->columns(array('kit_lot_no',"total" => new Expression('COUNT(*)')))
-                    ->group('kit_lot_no')
-                    ->where("kit_lot_no != 'NULL'");
-
+                    ->columns(array('term_outcome',"totalSamples" => new Expression('COUNT(*)'),"negative" => new Expression('COUNT(*)')))
+                    ->where(array('term_outcome'=>'Assay HIV Negative'));
           }
-
           if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
                $s_c_date = explode("to", $parameters['sampleTestedDates']);
                if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
@@ -487,12 +607,23 @@ class QualityCheckTable extends AbstractTableGateway {
           }
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;
-          $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+          $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           $rResult['format'] = $format;
+          
+          $tQuery = $sql->select()->from('quality_check_test')
+                    ->columns(array(
+                         "total" => new Expression("SUM(CASE
+                                                  WHEN (term_outcome ='Assay HIV Negative') THEN 1
+                                                  ELSE 0
+                                                  END)")
+                    ));
+          $tQueryStr = $sql->getSqlStringForSqlObject($tQuery);
+          $total = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+          $rResult['result']['total'] = $total['total'];
           return $rResult;
      }
      
-     public function fetchSampleLotChartChart($parameters)
+     public function fetchTestingQualityInvalidChart($parameters)
      {
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
@@ -500,15 +631,17 @@ class QualityCheckTable extends AbstractTableGateway {
           $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
           if ($format == 'percentage') {
                $sQuery = $sql->select()->from('quality_check_test')
-                    ->columns(array('qc_sample_id',"total" => new Expression('((COUNT(*) / 100) * COUNT(*))')))
-                    ->group('qc_sample_id')
-                    ->where("qc_sample_id != 'NULL'");
+                    ->columns(array(
+                         "totalSamples" => new Expression('COUNT(*)'),
+                         "invalid" => new Expression("(SUM(CASE
+                                                  WHEN (term_outcome ='Invalid – Please Verify') THEN 1
+                                                  ELSE 0
+                                                  END) / COUNT(*)) * 100")
+                    ));
           }else{
                $sQuery = $sql->select()->from('quality_check_test')
-                    ->columns(array('qc_sample_id',"total" => new Expression('COUNT(*)')))
-                    ->group('qc_sample_id')
-                    ->where("qc_sample_id != 'NULL'");
-
+                    ->columns(array('term_outcome',"totalSamples" => new Expression('COUNT(*)'),"invalid" => new Expression('COUNT(*)')))
+                    ->where(array('term_outcome'=>'Invalid – Please Verify'));
           }
           if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
                $s_c_date = explode("to", $parameters['sampleTestedDates']);
@@ -524,8 +657,19 @@ class QualityCheckTable extends AbstractTableGateway {
           }
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;
-          $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+          $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           $rResult['format'] = $format;
+
+          $tQuery = $sql->select()->from('quality_check_test')
+                    ->columns(array(
+                         "total" => new Expression("SUM(CASE
+                                                  WHEN (term_outcome ='Invalid – Please Verify') THEN 1
+                                                  ELSE 0
+                                                  END)")
+                    ));
+          $tQueryStr = $sql->getSqlStringForSqlObject($tQuery);
+          $total = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+          $rResult['result']['total'] = $total['total'];
           return $rResult;
      }
 }
