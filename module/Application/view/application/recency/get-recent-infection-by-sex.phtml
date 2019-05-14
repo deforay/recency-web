@@ -1,0 +1,98 @@
+<?php 
+$format = $result['format'];
+if(count($result)>0){
+?>
+<script>
+Highcharts.chart('recentInfectionBySex', {
+    chart: {
+        type: 'spline'
+    },
+    title: {
+        text: ''
+    },
+    xAxis: {
+            //categories: ["21 Mar", "22 Mar", "23 Mar", "24 Mar", "25 Mar", "26 Mar", "27 Mar"]
+            categories: [<?php
+                    if (isset($result['date']) && count($result['date']) > 0) {
+                        foreach ($result['date'] as $date) {
+                            echo "'" . $date . "',";
+                        }
+                    }
+    ?>]
+        },
+    yAxis: {
+        title: {
+            <?php if($format =='percentage') { ?>
+            text: 'Percentage %'
+            <?php } else { ?>
+            text: 'Recent Infection'
+            <?php } ?>
+        }
+        
+    },
+    tooltip: {
+        crosshairs: true,
+        shared: true
+    },
+    plotOptions: {
+        spline: {
+            marker: {
+                radius: 4,
+                lineColor: '#666666',
+                lineWidth: 1
+            }
+        }
+    },
+    series: [
+        <?php 
+        if (isset($result['finalOutComeTotal'])) {
+        ?>
+            {
+                showInLegend: true,
+                name: 'Overall',
+                data: [<?php echo implode(",", $result['finalOutComeTotal']); ?>],
+                color : '#800000',
+            },
+        <?php
+        }
+        if (isset($result['finalOutComeMale'])) {
+            ?>
+            {
+                //connectNulls : false,
+                showInLegend: true,
+                name: 'Male',
+                data: [<?php echo implode(",", $result['finalOutComeMale']); ?>],
+                color : '#0178b7',
+            },
+        <?php
+        }
+        if (isset($result['finalOutComeFemale'])) {
+        ?>
+            {
+                //connectNulls : false,
+                showInLegend: true,
+                name: 'Female',
+                data: [<?php echo implode(",", $result['finalOutComeFemale']); ?>],
+                color : '#ad7bf7',
+            },
+        <?php
+        }
+        if (isset($result['finalOutComeGenderMissing'])) {
+        ?>
+            {
+                //connectNulls : false,
+                showInLegend: true,
+                name: 'Gender Missing',
+                data: [<?php echo implode(",", $result['finalOutComeGenderMissing']); ?>],
+                color : '#898989',
+            },
+        <?php
+        }
+        ?>
+        
+    ]
+});
+</script>
+<?php }else{
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
+} ?>

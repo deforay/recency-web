@@ -1420,5 +1420,11 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchModalityWiseFinalOutcomeChart($params);
     }
+
+    public function getRecentInfectionBySexLineChart($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecentInfectionBySexLineChart($params);
+    }
 }
 

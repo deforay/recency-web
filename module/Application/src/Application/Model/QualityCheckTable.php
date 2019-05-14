@@ -416,5 +416,117 @@ class QualityCheckTable extends AbstractTableGateway {
           }
           return $result;
      }
+     
+     public function fetchQualityResultTermOutcomeChart($parameters)
+     {
+          $dbAdapter = $this->adapter;
+          $sql = new Sql($dbAdapter);
+          $general = new CommonService();
+          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          if ($format == 'percentage') {
+               $sQuery = $sql->select()->from('quality_check_test')
+               ->columns(array('term_outcome',"total" => new Expression('((COUNT(*) / 100) * COUNT(*))')))
+               ->group('term_outcome')
+               ->where("term_outcome != 'NULL'");
+          }else{
+               $sQuery = $sql->select()->from('quality_check_test')
+               ->columns(array('term_outcome',"total" => new Expression('COUNT(*)')))
+               ->group('term_outcome')
+               ->where("term_outcome != 'NULL'");
+          }
+
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if($parameters['sampleTestedDates']!=''){
+               $sQuery = $sQuery->where("(qc_test_date >='".$start_date."' AND qc_test_date<='".$end_date."')");
+          }
+          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          // echo $sQueryStr;die;
+          $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+          $rResult['format'] = $format;
+          return $rResult;
+     }
+     
+     public function fetchKitLotNumberChartChart($parameters)
+     {
+          $dbAdapter = $this->adapter;
+          $sql = new Sql($dbAdapter);
+          $general = new CommonService();
+          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          if ($format == 'percentage') {
+               $sQuery = $sql->select()->from('quality_check_test')
+                    ->columns(array('kit_lot_no',"total" => new Expression('((COUNT(*) / 100) * COUNT(*))')))
+                    ->group('kit_lot_no')
+                    ->where("kit_lot_no != 'NULL'");
+          }else{
+               $sQuery = $sql->select()->from('quality_check_test')
+                    ->columns(array('kit_lot_no',"total" => new Expression('COUNT(*)')))
+                    ->group('kit_lot_no')
+                    ->where("kit_lot_no != 'NULL'");
+
+          }
+
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if($parameters['sampleTestedDates']!=''){
+               $sQuery = $sQuery->where("(qc_test_date >='".$start_date."' AND qc_test_date<='".$end_date."')");
+          }
+          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          // echo $sQueryStr;die;
+          $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+          $rResult['format'] = $format;
+          return $rResult;
+     }
+     
+     public function fetchSampleLotChartChart($parameters)
+     {
+          $dbAdapter = $this->adapter;
+          $sql = new Sql($dbAdapter);
+          $general = new CommonService();
+          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          if ($format == 'percentage') {
+               $sQuery = $sql->select()->from('quality_check_test')
+                    ->columns(array('qc_sample_id',"total" => new Expression('((COUNT(*) / 100) * COUNT(*))')))
+                    ->group('qc_sample_id')
+                    ->where("qc_sample_id != 'NULL'");
+          }else{
+               $sQuery = $sql->select()->from('quality_check_test')
+                    ->columns(array('qc_sample_id',"total" => new Expression('COUNT(*)')))
+                    ->group('qc_sample_id')
+                    ->where("qc_sample_id != 'NULL'");
+
+          }
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if($parameters['sampleTestedDates']!=''){
+               $sQuery = $sQuery->where("(qc_test_date >='".$start_date."' AND qc_test_date<='".$end_date."')");
+          }
+          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          // echo $sQueryStr;die;
+          $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+          $rResult['format'] = $format;
+          return $rResult;
+     }
 }
 ?>

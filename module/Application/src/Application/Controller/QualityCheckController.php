@@ -109,4 +109,43 @@ class QualityCheckController extends AbstractActionController
                 ->setTerminal(true);
         return $viewModel;
      }
+     
+     public function getQualityResultWiseTermOutcomeChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+          $qcService = $this->getServiceLocator()->get('QualityCheckService');
+          $result=$qcService->getQualityResultTermOutcomeChart($params);
+        }
+        $viewModel = new ViewModel();
+        return $viewModel->setVariables(array('result' => $result))->setTerminal(true);
+     }
+     
+     public function getKitLotNumberChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+          $qcService = $this->getServiceLocator()->get('QualityCheckService');
+          $result=$qcService->getKitLotNumberChartChart($params);
+        }
+        $viewModel = new ViewModel();
+        return $viewModel->setVariables(array('result' => $result))->setTerminal(true);
+     }
+     
+     public function getSampleLotChartAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+          $qcService = $this->getServiceLocator()->get('QualityCheckService');
+          $result=$qcService->getSampleLotChartChart($params);
+        }
+        $viewModel = new ViewModel();
+        return $viewModel->setVariables(array('result' => $result))->setTerminal(true);
+     }
 }

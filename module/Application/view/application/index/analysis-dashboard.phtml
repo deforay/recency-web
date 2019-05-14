@@ -1,175 +1,216 @@
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-   crossorigin=""/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />
 
-	<?php
+<?php
 
-	use Zend\Session\Container;
-	$sessionLogin = new Container('credo');
-	$roleCode = $sessionLogin->roleCode;
-	//\Zend\Debug\Debug::dump($globalConfigResult);die;
+use Zend\Session\Container;
 
-	$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
-	$startDate=date('d-M-Y', strtotime('today - 365 days'));
-	$currentDate=date('d-M-Y');
-	?>
-	<style>
-	</style>
-	<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css'?>" rel="stylesheet">
-	<div class="bg-body-light">
-		<div class="content content-full">
-			<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-				<h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">QA &amp; Analysis Dashboard</h1>
+$sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
+//\Zend\Debug\Debug::dump($globalConfigResult);die;
+
+$editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+$startDate = date('d-M-Y', strtotime('today - 365 days'));
+$currentDate = date('d-M-Y');
+?>
+<style>
+</style>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
+<div class="bg-body-light">
+	<div class="content content-full">
+		<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+			<h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">QA &amp; Analysis Dashboard</h1>
+		</div>
+	</div>
+</div>
+<div class="content">
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div class="form-group row">
+				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
+				<div class="col-sm-4">
+					<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
+				</div>
+				<?php
+				foreach ($globalConfigResult as $config) { ?>
+					<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
+						<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+						<div class="col-sm-4">
+							<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
+								<option value="">-- Select --</option>
+							</select>
+						</div>
+					<?php }
+			} ?>
+				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
+				<div class="col-sm-4">
+					<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+						<option value="">-- Select --</option>
+					</select>
+				</div>
+
+				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+				<div class="col-sm-4">
+					<select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
+						<option value=""> -- Select -- </option>
+						<?php
+						foreach ($facilityResult['facilityTest'] as $facilityRow) {
+							if (2 != (int)$facilityRow['facility_type_id']) continue;
+							?>
+							<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+						<?php
+					}
+					?>
+					</select>
+				</div>
+
+
+				<div class="row items-push">
+					<div class="col-lg-7 ">
+						<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getQualityResultsChart();getQualitySampleLotChart();getQualityResultsLitLotNumberChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="content">
-			<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-			<div class="form-group row">
-				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
-							<div class="col-sm-4">
-							<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value=""/>
-								</div>
-							<?php
-							foreach($globalConfigResult as $config){ ?>
-								<?php if($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three'){ ?>
-									<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
-									<div class="col-sm-4">
-										<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
-											<option value="">-- Select --</option>
-										</select>
-									</div>
-								<?php }
-							}?>
-							<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
-							<div class="col-sm-4">
-								<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
-									<option value="">-- Select --</option>
-								</select>
-							</div>
 
-							<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
-							<div class="col-sm-4">
-									<select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
-									<option value=""> -- Select -- </option>
-										<?php
-										foreach($facilityResult['facilityTest'] as $facilityRow){
-											if(2 != (int)$facilityRow['facility_type_id']) continue;
-										?>
-										<option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
-										<?php
-										}
-										?>
-									</select>
-								</div>
-								
-								
-						<div class="row items-push">
-							<div class="col-lg-7 ">
-								<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();"><i class="fa fa-fw fa-check"></i> Search</a>
-								
-							</div>
-						</div>
-						</div>
-						</div>
-						</div>
-					
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Gender &nbsp;&nbsp;&nbsp;&nbsp;
-									<small class="custom-control custom-switch custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="recent-infection-by-gender-percentage" name="recent-infection-by-gender-percentage" checked  onchange="getFinalOutcomeChart();">
-													<label class="custom-control-label" for="recent-infection-by-gender-percentage">Percentage</label>
-												</small>
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
-
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by District
-							&nbsp;&nbsp;&nbsp;&nbsp;
-									<small class="custom-control custom-switch custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="recent-infection-by-district-percentage" name="recent-infection-by-district-percentage" checked  onchange="getInfectionByDistrictChart();">
-													<label class="custom-control-label" for="recent-infection-by-district-percentage">Percentage</label>
-												</small>
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="infectionByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
-
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Age
-							&nbsp;&nbsp;&nbsp;&nbsp;
-									<small class="custom-control custom-switch custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="recent-infection-by-age-percentage" name="recent-infection-by-age-percentage" checked  onchange="getInfectionByAgeChart();">
-													<label class="custom-control-label" for="recent-infection-by-age-percentage">Percentage</label>
-												</small>
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="infectionByAge" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-							</div>
-						</div>
-
-						
-
-						<h2 class="content-heading">
-							<i class="fa fa-angle-right text-muted mr-1"></i> Map (feature is under development)
-						</h2>
-						<div class="block block-rounded block-bordered">
-							<div class="block-content block-content-full">
-								<div id="mapid" style="height: 480px;"></div>
-							</div>
-						</div>
-
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Gender &nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="recent-infection-by-gender-percentage" name="recent-infection-by-gender-percentage" checked onchange="getFinalOutcomeChart();">
+			<label class="custom-control-label" for="recent-infection-by-gender-percentage">Percentage</label>
+		</small>
+	</h2>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		</div>
 	</div>
-	<script src="https://code.highcharts.com/stock/highstock.js"></script>
-	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
-	<script src="<?php echo $this->basePath() . '/assets/js/export-data.js'; ?>"></script>
 
- <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-   integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-   crossorigin=""></script>
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by District
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="recent-infection-by-district-percentage" name="recent-infection-by-district-percentage" checked onchange="getInfectionByDistrictChart();">
+			<label class="custom-control-label" for="recent-infection-by-district-percentage">Percentage</label>
+		</small>
+	</h2>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div id="infectionByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		</div>
+	</div>
 
-	<script type="text/javascript">
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Age
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="recent-infection-by-age-percentage" name="recent-infection-by-age-percentage" checked onchange="getInfectionByAgeChart();">
+			<label class="custom-control-label" for="recent-infection-by-age-percentage">Percentage</label>
+		</small>
+	</h2>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div id="infectionByAge" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		</div>
+	</div>
 
-var mymap = L.map('mapid').setView([-1.9565912,30.0595336], 14);
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By Specimen Type
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="quality-result-by-speciman-percentage" name="quality-result-by-speciman-percentage" checked onchange="getQualityResultsChart();">
+			<label class="custom-control-label" for="quality-result-by-speciman-percentage">Percentage</label>
+		</small>
+	</h2>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div id="qualityResultTermOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		</div>
+	</div>
 
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-	maxZoom: 18,
-	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-		'Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Sample Lot
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="quality-sample-lot-percentage" name="quality-sample-lot-percentage" checked onchange="getQualitySampleLotChart();">
+			<label class="custom-control-label" for="quality-sample-lot-percentage">Percentage</label>
+		</small>
+	</h2>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div id="qualitySampleLotChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		</div>
+	</div>
+
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By Kit Lot Number
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="quality-result-by-kit-lot-number-percentage" name="quality-result-by-kit-lot-number-percentage" checked onchange="getQualityResultsLitLotNumberChart();">
+			<label class="custom-control-label" for="quality-result-by-kit-lot-number-percentage">Percentage</label>
+		</small>
+	</h2>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div id="qualityResultKitLotNumberChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		</div>
+	</div>
+
+
+
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Map (feature is under development)
+	</h2>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div id="mapid" style="height: 480px;"></div>
+		</div>
+	</div>
+
+</div>
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/export-data.js'; ?>"></script>
+
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+
+<script type="text/javascript">
+	var mymap = L.map('mapid').setView([-1.9565912, 30.0595336], 14);
+
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
-}).addTo(mymap);
+	}).addTo(mymap);
 
-L.marker([-1.9565912,30.0595336]).addTo(mymap);
-
-
+	L.marker([-1.9565912, 30.0595336]).addTo(mymap);
 
 
-		/* Table initialisation */
-		oTable = null;
-		$(document).ready(function() {
-				getFinalOutcomeChart();
-				getInfectionByDistrictChart();
-				getInfectionByAgeChart();
-				//getHivViralLoadChart();
-			<?php foreach($globalConfigResult as $config){
+
+
+	/* Table initialisation */
+	oTable = null;
+	$(document).ready(function() {
+		getFinalOutcomeChart();
+		getInfectionByDistrictChart();
+		getInfectionByAgeChart();
+		getQualityResultsChart();
+		getQualitySampleLotChart();
+		getQualityResultsLitLotNumberChart();
+		//getHivViralLoadChart();
+		<?php foreach ($globalConfigResult as $config) {
 			?>
-			getLocationDeatils('<?php echo $config["global_name"];?>');
+			getLocationDeatils('<?php echo $config["global_name"]; ?>');
 			<?php
 			break;
-			} ?>
+		} ?>
 
 		$('#sampleTestedDates').daterangepicker({
-			format: 'DD-MMM-YYYY',
-			autoUpdateInput: false,
+				format: 'DD-MMM-YYYY',
+				autoUpdateInput: false,
 				separator: ' to ',
 				startDate: moment().subtract('days', 29),
 				endDate: moment(),
@@ -183,100 +224,172 @@ L.marker([-1.9565912,30.0595336]).addTo(mymap);
 					'Last 180 Days': [moment().subtract('days', 179), moment()],
 					'This Month': [moment().startOf('month'), moment().endOf('month')],
 					'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-					}
-		},
-		function(start, end) {
-			startDate = start.format('YYYY-MM-DD');
-			endDate = end.format('YYYY-MM-DD');
-			$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
-			$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
-		});
+				}
+			},
+			function(start, end) {
+				startDate = start.format('YYYY-MM-DD');
+				endDate = end.format('YYYY-MM-DD');
+				$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
+					$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+				});
 
-		});
+			});
 
-		});
+	});
 
 
 
-		function getLocationDeatils(globalName,nxtGlobalName)
-		{
-			var selectValue = document.getElementById(globalName).value;
-			var innerId = '';
-			var path = '';
-				if(globalName=='location_one' && selectValue==''){
-					path = 'get-province';
-					innerId = 'location_one';
-				}else if(globalName=='location_one' && selectValue!=''){
-					path = 'get-district';
-					innerId = 'location_two';
-					$("#location_three").html("<option value=''>-- Select --</option>");
-				}else if(globalName=='location_two' && selectValue!=''){
-					path = 'get-city';
-					innerId = 'location_three';
-				}else if(globalName=='location_three' || globalName=='location_two'){
+	function getLocationDeatils(globalName, nxtGlobalName) {
+		var selectValue = document.getElementById(globalName).value;
+		var innerId = '';
+		var path = '';
+		if (globalName == 'location_one' && selectValue == '') {
+			path = 'get-province';
+			innerId = 'location_one';
+		} else if (globalName == 'location_one' && selectValue != '') {
+			path = 'get-district';
+			innerId = 'location_two';
+			$("#location_three").html("<option value=''>-- Select --</option>");
+		} else if (globalName == 'location_two' && selectValue != '') {
+			path = 'get-city';
+			innerId = 'location_three';
+		} else if (globalName == 'location_three' || globalName == 'location_two') {
+			getFacilityListByLocation(globalName);
+		}
+		if (path != '') {
+			$.blockUI();
+			$.post("/common/" + path, {
+					selectValue: selectValue
+				},
+				function(data) {
+					$("#" + innerId).html(data);
 					getFacilityListByLocation(globalName);
-				}
-				if(path!=''){
-					$.blockUI();
-					$.post("/common/"+path, {selectValue:selectValue},
-					function(data) {
-						$("#"+innerId).html(data);
-						getFacilityListByLocation(globalName);
-						$.unblockUI();
-					});
-				}
+					$.unblockUI();
+				});
 		}
-		function getFacilityListByLocation(globalName)
-		{
-			$.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),globalName:globalName},
+	}
+
+	function getFacilityListByLocation(globalName) {
+		$.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {
+				locationOne: $("#location_one").val(),
+				locationTwo: $("#location_two").val(),
+				locationThree: $("#location_three").val(),
+				globalName: globalName
+			},
 			function(data) {
-				$("#facilityId").html('<option value="">-- Select --</option>'+data);
+				$("#facilityId").html('<option value="">-- Select --</option>' + data);
 			});
-		}
+	}
 
-		function getFinalOutcomeChart() {
-			var format = null;
-			if($('#recent-infection-by-gender-percentage').prop('checked')){
-				format = 'percentage';
-			}else{
-				format = 'number';
-			}			
-			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-gender-chart')); ?>",{format:format, sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
-				function(data){
-					$("#container").html(data);
+	function getFinalOutcomeChart() {
+		var format = null;
+		if ($('#recent-infection-by-gender-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('recency', array('action' => 'recent-infection-by-gender-chart')); ?>", {
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val(),
+				locationOne: $("#location_one").val(),
+				locationTwo: $("#location_two").val(),
+				locationThree: $("#location_three").val(),
+				fName: $("#facilityId").val(),
+				testingFacility: $("#testingFacility").val()
+			},
+			function(data) {
+				$("#container").html(data);
 			});
-		}
+	}
 
-		function getInfectionByDistrictChart() {
-			var format = null;
-			if($('#recent-infection-by-district-percentage').prop('checked')){
-				format = 'percentage';
-			}else{
-				format = 'number';
-			}
-			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-district-chart')); ?>",{format:format, sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
-			function(data){
+	function getInfectionByDistrictChart() {
+		var format = null;
+		if ($('#recent-infection-by-district-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('recency', array('action' => 'recent-infection-by-district-chart')); ?>", {
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val(),
+				locationOne: $("#location_one").val(),
+				locationTwo: $("#location_two").val(),
+				locationThree: $("#location_three").val(),
+				fName: $("#facilityId").val(),
+				testingFacility: $("#testingFacility").val()
+			},
+			function(data) {
 				$("#infectionByDistrict").html(data);
 			});
+	}
+
+	function getInfectionByAgeChart() {
+		var format = null;
+		if ($('#recent-infection-by-age-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
 		}
-		
-		function getInfectionByAgeChart() {	
-			var format = null;
-			if($('#recent-infection-by-age-percentage').prop('checked')){
-				format = 'percentage';
-			}else{
-				format = 'number';
-			}				
-			$.post("<?php echo $this->url('recency',array('action'=>'recent-infection-by-age-chart')); ?>",{format:format,sampleTestedDates:$("#sampleTestedDates").val()},
-			function(data){
+		$.post("<?php echo $this->url('recency', array('action' => 'recent-infection-by-age-chart')); ?>", {
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
+			},
+			function(data) {
 				$("#infectionByAge").html(data);
 			});
+	}
+	// function getHivViralLoadChart() {		
+	// 	$.post("<?php echo $this->url('recency', array('action' => 'recent-hiv-viral-load-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
+	// 	function(data){
+	// 		$("#hivViralLoad").html(data);
+	// 	});
+	// }
+
+	function getQualityResultsChart() {
+		var format = null;
+		if ($('#quality-result-by-speciman-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
 		}
-		// function getHivViralLoadChart() {		
-		// 	$.post("<?php echo $this->url('recency',array('action'=>'recent-hiv-viral-load-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
-		// 	function(data){
-		// 		$("#hivViralLoad").html(data);
-		// 	});
-		// }
-		
-	</script>
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-quality-result-wise-term-outcome-chart')); ?>", {
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
+			},
+			function(data) {
+				$("#qualityResultTermOutcomeChart").html(data);
+			});
+	}
+
+	function getQualitySampleLotChart() {
+		var format = null;
+		if ($('#quality-sample-lot-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-sample-lot-chart')); ?>", {
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
+			},
+			function(data) {
+				$("#qualitySampleLotChart").html(data);
+			});
+	}
+
+	function getQualityResultsLitLotNumberChart() {
+		var format = null;
+		if ($('#quality-result-by-kit-lot-number-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-kit-lot-number-chart')); ?>", {
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
+			},
+			function(data) {
+				$("#qualityResultKitLotNumberChart").html(data);
+			});
+	}
+</script>
