@@ -267,5 +267,10 @@ class QualityCheckService {
         $qcTestDb = $this->sm->get('QualityCheckTable');
         return $qcTestDb->fetchMonthWiseQualityControlChart($params);
     }
+
+    public function getDistrictWiseQualityCheckInvalid($params){
+        $qualityCheckDb = $this->sm->get('QualityCheckTable');
+        return $qualityCheckDb->fetchDistrictWiseQualityCheckInvalid($params);
+    }
 }
 ?>

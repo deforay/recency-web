@@ -1,7 +1,14 @@
 <?php
 // \Zend\Debug\Debug::dump($result);die;
 $format = $result['format'];
-if (isset($result['result']) && count($result['result']) > 0) { ?>
+if (isset($result['result']) && count($result['result']) > 0) {
+    $n=count($result['result']);
+    if($n>4){
+        $max='4';
+    }else{
+        $max=$n-1;
+    }
+?>
     <script>
         Highcharts.chart('qualityResultKitLotNumberChart', {
             credits: {
@@ -37,9 +44,18 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
                     <?php } ?>
                 ],
                 crosshair: true,
+                min: 0,
+                max: '<?php echo $max; ?>',
                 scrollbar: {
                     enabled: true
                 },
+                title: {
+                    enabled: true,
+                    text: 'Lot Number <br>(N=<?php echo $result['total']; ?>)',
+                    style: {
+                        fontSize: '12px',
+                    }
+                }
             },
             yAxis: {
                 min: 0,
@@ -50,7 +66,7 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
                     <?php if ($format == 'percentage') { ?>
                         text: 'Percentage %'
                     <?php } else { ?>
-                        text: 'Kit Lot Numbers'
+                        text: 'Number of count'
                     <?php } ?>
                 }
             },

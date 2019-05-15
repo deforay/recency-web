@@ -505,7 +505,7 @@ class QualityCheckTable extends AbstractTableGateway {
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;
           $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
+          
           // To get total count from the list
           foreach($result as $count){
                $total[] = $count['total'];
@@ -571,6 +571,7 @@ class QualityCheckTable extends AbstractTableGateway {
           $rResult['result'] = $totalResult;
           $rResult['total'] = $totalVal;
           $rResult['format'] = $format;
+          //\Zend\Debug\Debug::dump($rResult);die;
           return $rResult;
      }
      
@@ -760,8 +761,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                    "pass" => new Expression("(SUM(CASE WHEN (qc.final_result = 'pass') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
                                    "fail" => new Expression("(SUM(CASE WHEN (qc.final_result = 'fail' or final_result is NULL or final_result='') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
                               )
-                         );
-                    
+                         );                    
                
                $sQuery = $sQuery
                     ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'))
@@ -829,8 +829,8 @@ class QualityCheckTable extends AbstractTableGateway {
         $general = new CommonService();
         $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
         $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'));
-        if ($format == 'percentage') {
-            $sQuery = $sQuery
+          if ($format == 'percentage') {
+               $sQuery = $sQuery
                 ->columns(
                     array(
                         "total" => new Expression('COUNT(*)'),
@@ -839,23 +839,41 @@ class QualityCheckTable extends AbstractTableGateway {
                         "fail" => new Expression("(SUM(CASE WHEN (qc.final_result = 'fail' or final_result is NULL or final_result='') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
                     )
                 );
-        } else {
-            $sQuery = $sQuery
-                ->columns(
-                    array(
-                        "total" => new Expression('COUNT(*)'),
-                        "monthyear" => new Expression("DATE_FORMAT(qc.qc_test_date, '%b-%Y')"),
-                        "pass" => new Expression("SUM(CASE WHEN (qc.final_result='pass') THEN 1 ELSE 0 END)"),
-                        "fail" => new Expression("SUM(CASE WHEN ((qc.final_result='fail' or final_result is NULL or final_result='')) THEN 1 ELSE 0 END)"),
-                    )
-                );
-        }
+          } else {
+               $sQuery = $sQuery
+                    ->columns(
+                         array(
+                         "total" => new Expression('COUNT(*)'),
+                         "monthyear" => new Expression("DATE_FORMAT(qc.qc_test_date, '%b-%Y')"),
+                         "pass" => new Expression("SUM(CASE WHEN (qc.final_result='pass') THEN 1 ELSE 0 END)"),
+                         "fail" => new Expression("SUM(CASE WHEN ((qc.final_result='fail' or final_result is NULL or final_result='')) THEN 1 ELSE 0 END)"),
+                         )
+                    );
+          }
 
-        $sQuery=$sQuery
+          $sQuery=$sQuery
                ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
                ->join(array('d' => 'district_details'), 'd.district_id = ft.district', array('district_name'), 'left')
                ->group(array(new Expression("DATE_FORMAT(qc.qc_test_date,'%b-%Y')")))
                ->order("qc.qc_test_date");
+
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!=''){
+               $sQuery = $sQuery->where("(qc.qc_test_date >='".$start_date."' AND qc.qc_test_date<='".$end_date."')");
+          }
+
+          if(isset($parameters['testingFacility']) && trim($parameters['testingFacility'])!=""){
+               $sQuery = $sQuery->where(array('qc.testing_facility_id'=>$parameters['testingFacility']));
+          }
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         //echo $sQueryStr;die;
@@ -881,6 +899,46 @@ class QualityCheckTable extends AbstractTableGateway {
           }
           //\Zend\Debug\Debug::dump($result);die;
           return $result;
+     }
+
+     public function fetchDistrictWiseQualityCheckInvalid($parameters){
+          $dbAdapter = $this->adapter;
+          $sql = new Sql($dbAdapter);
+          $general = new CommonService();
+          $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
+                    ->columns(array(
+                         "total" => new Expression('COUNT(*)'),
+                         "negativePercentage" => new Expression("(SUM(CASE WHEN (term_outcome ='Assay HIV Negative') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                         "negativeCount" => new Expression("SUM(CASE WHEN (term_outcome='Assay HIV Negative') THEN 1 ELSE 0 END)"),
+                         "invalidPercentage" => new Expression("(SUM(CASE WHEN (term_outcome = 'Invalid – Please Verify') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                         "invalidCount" => new Expression("SUM(CASE WHEN (term_outcome='Invalid – Please Verify') THEN 1 ELSE 0 END)")
+                    ))
+                    ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'))
+                    ->join(array('d' => 'district_details'), 'd.district_id = ft.district', array('district_name'), 'left')
+                    ->group('district_name');
+
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!= ''){
+               $s_c_date = explode("to", $parameters['sampleTestedDates']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if(isset($parameters['sampleTestedDates']) && trim($parameters['sampleTestedDates'])!=''){
+               $sQuery = $sQuery->where("(qc.qc_test_date >='".$start_date."' AND qc.qc_test_date<='".$end_date."')");
+          }
+
+          if(isset($parameters['testingFacility']) && trim($parameters['testingFacility'])!=""){
+               $sQuery = $sQuery->where(array('qc.testing_facility_id'=>$parameters['testingFacility']));
+          }
+          if(isset($parameters['locationThree']) && trim($parameters['locationThree'])!=""){
+               $sQuery = $sQuery->where(array('d.district_id'=>$parameters['locationThree']));
+          }
+
+          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
      }
 }
 ?>
