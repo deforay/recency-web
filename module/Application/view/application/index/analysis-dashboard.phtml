@@ -206,7 +206,7 @@ $currentDate = date('d-M-Y');
 		</div>
 	</div> -->
 	
-	<h2 class="content-heading ">
+		<h2 class="content-heading ">
 			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Facility
 			
 		</h2>
@@ -232,6 +232,19 @@ $currentDate = date('d-M-Y');
 			</div>
 		</div>
 
+		<h2 class="content-heading">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Month
+			&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="quality-control-by-month" name="quality-control-by-month" checked  onchange="getQualityControlByMonth();">
+						<label class="custom-control-label" for="quality-control-by-month">Percentage</label>
+					</small>
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<div id="qualityControlByMonthwise" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			</div>
+		</div>
 
 	<h2 class="content-heading">
 		<i class="fa fa-angle-right text-muted mr-1"></i> Map (feature is under development)
@@ -276,6 +289,7 @@ $currentDate = date('d-M-Y');
 		getQualityResultsLitLotNumberChart();
 		getTestingQualityChart();
 		getRecentInfectionByMonthSexChart();
+		getQualityControlByMonth();
 		//getHivViralLoadChart();
 		<?php foreach ($globalConfigResult as $config) {
 			?>
@@ -546,6 +560,19 @@ $currentDate = date('d-M-Y');
 			},
 			function(data) {
 				$("#infectionByMonthSex").html(data);
+			});
+	}
+
+	function getQualityControlByMonth() {
+			var format = null;
+			if($('#quality-control-by-month').prop('checked')){
+				format = 'percentage';
+			}else{
+				format = 'number';
+			}
+			$.post("<?php echo $this->url('quality-check',array('action'=>'get-month-wise-quality-control')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
+			function(data){
+				$("#qualityControlByMonthwise").html(data);
 			});
 	}
 </script>

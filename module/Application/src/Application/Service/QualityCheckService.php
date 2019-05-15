@@ -258,8 +258,14 @@ class QualityCheckService {
 
     public function getPassedQualityBasedOnFacility($params)
     {
-         $qcTestDb = $this->sm->get('QualityCheckTable');
-         return $qcTestDb->fetchPassedQualityBasedOnFacility($params);
+        $qcTestDb = $this->sm->get('QualityCheckTable');
+        return $qcTestDb->fetchPassedQualityBasedOnFacility($params);
+    }
+
+    public function getMonthWiseQualityControlChart($params)
+    {
+        $qcTestDb = $this->sm->get('QualityCheckTable');
+        return $qcTestDb->fetchMonthWiseQualityControlChart($params);
     }
 }
 ?>

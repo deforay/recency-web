@@ -758,8 +758,7 @@ class QualityCheckTable extends AbstractTableGateway {
                                    'kit_lot_no',
                                    "total" => new Expression('COUNT(*)'),
                                    "pass" => new Expression("(SUM(CASE WHEN (qc.final_result = 'pass') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
-                                   "fail" => new Expression("(SUM(CASE WHEN (qc.final_result = 'fail') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
-                                   
+                                   "fail" => new Expression("(SUM(CASE WHEN (qc.final_result = 'fail' or final_result is NULL or final_result='') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
                               )
                          );
                     
@@ -820,8 +819,68 @@ class QualityCheckTable extends AbstractTableGateway {
                     
                     $output['aaData'][] = $row;
                }
-
                return $output;
+     }
+
+     public function fetchMonthWiseQualityControlChart($parameters)
+     {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $general = new CommonService();
+        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'));
+        if ($format == 'percentage') {
+            $sQuery = $sQuery
+                ->columns(
+                    array(
+                        "total" => new Expression('COUNT(*)'),
+                        "monthyear" => new Expression("DATE_FORMAT(qc.qc_test_date, '%b-%Y')"),
+                        "pass" => new Expression("(SUM(CASE WHEN (qc.final_result = 'pass') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                        "fail" => new Expression("(SUM(CASE WHEN (qc.final_result = 'fail' or final_result is NULL or final_result='') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                    )
+                );
+        } else {
+            $sQuery = $sQuery
+                ->columns(
+                    array(
+                        "total" => new Expression('COUNT(*)'),
+                        "monthyear" => new Expression("DATE_FORMAT(qc.qc_test_date, '%b-%Y')"),
+                        "pass" => new Expression("SUM(CASE WHEN (qc.final_result='pass') THEN 1 ELSE 0 END)"),
+                        "fail" => new Expression("SUM(CASE WHEN ((qc.final_result='fail' or final_result is NULL or final_result='')) THEN 1 ELSE 0 END)"),
+                    )
+                );
+        }
+
+        $sQuery=$sQuery
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('testing_facility_name' => 'facility_name'),'left')
+               ->join(array('d' => 'district_details'), 'd.district_id = ft.district', array('district_name'), 'left')
+               ->group(array(new Expression("DATE_FORMAT(qc.qc_test_date,'%b-%Y')")))
+               ->order("qc.qc_test_date");
+
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        //echo $sQueryStr;die;
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+        $j = 0;
+        $result = array();
+        $result['format']= $format;
+          foreach ($rResult as $sRow) {
+               if ($sRow["monthyear"] == null) {
+                    continue;
+               }
+
+               $n = (isset($sRow['total']) && $sRow['total'] != null) ? $sRow['total'] : 0;
+               $result['pass'][$j] = (isset($sRow['pass']) && $sRow['pass'] != null) ? round($sRow['pass'], 2) : 0;
+               $result['fail'][$j] = (isset($sRow["fail"]) && $sRow["fail"] != null) ? round($sRow["fail"], 2) : 0;
+
+               $result['date'][$j] = ($sRow["monthyear"]) . " (N=$n)";
+            
+               $result['total'] += $n;
+
+               $j++;
+          }
+          //\Zend\Debug\Debug::dump($result);die;
+          return $result;
      }
 }
 ?>
