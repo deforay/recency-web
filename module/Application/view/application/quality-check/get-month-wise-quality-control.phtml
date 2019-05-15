@@ -1,0 +1,134 @@
+<?php if(count($result['date'])>0){
+    $format = $result['format'];
+    $n=count($result['date']);
+    if($n>4){
+        $max='4';
+    }else{
+        $max=$n-1;
+    }
+?>
+<script>
+Highcharts.chart('qualityControlByMonthwise', {
+    credits: {
+            enabled: false
+    },
+    chart: {
+        zoomType: 'xy'
+    },
+    title: {
+        text: ''
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: [{
+        categories: [
+            <?php  foreach($result['date'] as $res){?>
+                    '<?php echo $res; ?>',
+               <?php } ?>
+        ],
+        crosshair: true,
+        min: 0,
+        max: '<?php echo $max; ?>',
+        scrollbar: {
+            enabled: true
+        },
+    }],
+    yAxis: [{ // Primary yAxis
+        labels: {
+            <?php if($format =='percentage') { ?>
+            format: '{value}%',
+            <?php } else { ?>
+                format: '{value}',
+            <?php } ?> 
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        },
+        title: {
+            <?php if($format =='percentage') { ?>
+                text: 'Fail (%)',
+            <?php } else { ?>
+                text: 'Fail',
+            <?php } ?> 
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        }
+    }, { // Secondary yAxis
+        title: {
+            <?php if($format =='percentage') { ?>
+                text: 'Pass (%)',
+            <?php } else { ?>
+                text: 'Pass',
+            <?php } ?> 
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        labels: {
+            <?php if($format =='percentage') { ?>
+                format: '{value}%',
+            <?php } else { ?>
+                format: '{value}',
+            <?php } ?>
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        opposite: true
+    }
+    ],
+    tooltip: {
+        shared: true
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        x: 120,
+        verticalAlign: 'top',
+        y: 100,
+        floating: true,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'rgba(255,255,255,0.25)'
+    },
+    series: [
+    <?php 
+    if (isset($result['pass'])) {
+    ?>
+        {
+        name: 'Pass',
+        type: 'column',
+        yAxis: 1,
+        data: [<?php echo implode(",", $result['pass']); ?>],
+        tooltip: {
+            <?php if($format =='percentage') { ?>
+                valueSuffix: '%'
+            <?php } ?>
+        }
+
+    },
+    <?php
+    }
+    if (isset($result['fail'])) {
+    ?>
+        {
+            
+            showInLegend: true,
+            name: 'Fail',
+            type: 'spline',
+            data: [<?php echo implode(",", $result['fail']); ?>],
+            tooltip: {
+            <?php if($format =='percentage') { ?>
+                valueSuffix: '%'
+            <?php } ?>
+            }
+        },
+    <?php
+    }
+    ?>
+    ]
+});
+</script>
+<?php }else{
+    echo "<br><br><br><br><br><br><br><h2 style='text-align:center;color:#aaa'>No data available</h2>";
+} ?>

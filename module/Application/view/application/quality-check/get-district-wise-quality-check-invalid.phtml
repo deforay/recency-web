@@ -1,0 +1,53 @@
+<?php
+if(count($result)>0){
+?>
+<style>
+
+    .amountCol{
+        text-align:right !important;
+    }
+	
+	
+</style>
+<table class="table table-bordered table-striped table-vcenter" style="width:100%;" id="districtDataTable">
+    <thead>
+        <tr>
+            <th>District Name</th>
+            <th style="width:10%;">Negative</th>
+            <th style="width:15%;">Negative %</th>
+            <th style="width:10%;">Invalid</th>
+            <th style="width:15%;">Invalid %</th>
+            <th style="width:10%;">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        foreach($result as $val){
+        ?>
+            <tr>
+                <td><?php echo $val['district_name']; ?></td>
+                <td class="amountCol"><?php echo $val['negativeCount']; ?></td>
+                <td class="amountCol"><?php echo round($val['negativePercentage'],2); ?></td>
+                <td class="amountCol"><?php echo $val['invalidCount']; ?></td>
+                <td class="amountCol"><?php echo round($val['invalidPercentage'],2); ?></td>
+                <td class="amountCol"><?php echo $val['total']; ?></td>
+            </tr>
+        <?php
+        }
+        ?>
+
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(function () {
+        oTable=$('#districtDataTable').DataTable({
+            'paging': false
+        });
+    });
+</script>
+<?php
+}else{
+    echo "<h4 style='text-align:center;'>No data availble</h4>";
+}
+?>
+

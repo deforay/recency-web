@@ -3915,7 +3915,7 @@ class RecencyTable extends AbstractTableGateway
             $result['finalOutCome']['Missing Viral Load'][$j] = (isset($sRow['missingViralLoad']) && $sRow['missingViralLoad'] != null) ? round($sRow['missingViralLoad'], 2) : 0;
             $result['districtName'][$j] = ($sRow["district_name"]) . " (N=$n)";
             $result['total'] += $n;
-
+            
             $j++;
         }
 
@@ -4013,10 +4013,9 @@ class RecencyTable extends AbstractTableGateway
             } else {
                 $result['modality'][$j] = ($sRow["testing_facility_type_name"]) . " (N=$n)";
             }
-
-
+            
             $result['total'] += $n;
-
+            
             $j++;
         }
         return $result;

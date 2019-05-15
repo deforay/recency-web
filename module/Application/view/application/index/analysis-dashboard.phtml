@@ -66,7 +66,7 @@ $currentDate = date('d-M-Y');
 
 				<div class="row items-push">
 					<div class="col-lg-7 ">
-						<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getQualityResultsChart();getQualitySampleLotChart();getQualityResultsLitLotNumberChart();getTestingQualityChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+						<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getQualityResultsChart();getQualitySampleLotChart();getQualityResultsLitLotNumberChart();getTestingQualityChart();getQualityControlByMonth();"><i class="fa fa-fw fa-check"></i> Search</a>
 
 					</div>
 				</div>
@@ -196,17 +196,23 @@ $currentDate = date('d-M-Y');
 			</div>
 		</div>
 	</div>
-	<!-- <div class="row">
+	
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> % RTRI Negative or Invalid by District
+	</h2>
+	<div class="row">
 		<div class="col-md-12">
 			<div class="block block-rounded block-bordered">
 				<div class="block-content block-content-full">
-					<div id="testingQualityTable" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+					<div id="testingQualityTable" style="min-width: 310px;">
+
+					</div>
 				</div>
 			</div>
 		</div>
-	</div> -->
+	</div>
 	
-	<h2 class="content-heading ">
+		<h2 class="content-heading ">
 			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Facility
 			
 		</h2>
@@ -232,6 +238,19 @@ $currentDate = date('d-M-Y');
 			</div>
 		</div>
 
+		<h2 class="content-heading">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Month
+			&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="quality-control-by-month" name="quality-control-by-month" checked  onchange="getQualityControlByMonth();">
+						<label class="custom-control-label" for="quality-control-by-month">Percentage</label>
+					</small>
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<div id="qualityControlByMonthwise" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			</div>
+		</div>
 
 	<h2 class="content-heading">
 		<i class="fa fa-angle-right text-muted mr-1"></i> Map (feature is under development)
@@ -276,6 +295,7 @@ $currentDate = date('d-M-Y');
 		getQualityResultsLitLotNumberChart();
 		getTestingQualityChart();
 		getRecentInfectionByMonthSexChart();
+		getQualityControlByMonth();
 		//getHivViralLoadChart();
 		<?php foreach ($globalConfigResult as $config) {
 			?>
@@ -313,8 +333,8 @@ $currentDate = date('d-M-Y');
 
 			oTable = $('#passRateFacilityWiseDataTable').dataTable({
 				"bAutoWidth": false,
-				"bProcessing": true,
-				"bServerSide": true,
+                "bProcessing": true,
+                "bServerSide": true,
 				"aoColumns": [
 					{
 						"sClass": "center"
@@ -524,13 +544,15 @@ $currentDate = date('d-M-Y');
 			$("#testingQualityChartInvalid").html(data);
 		});
 		
-		// $.post("< ?php echo $this->url('quality-check', array('action' => 'get-testing-quality-table')); ?>", {
-		// 	format: format,
-		// 	sampleTestedDates: $("#sampleTestedDates").val()
-		// },
-		// function(data) {
-		// 	$("#testingQualityTable").html(data);
-		// });
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-district-wise-quality-check-invalid')); ?>", {
+		 	format: format,
+		 	sampleTestedDates: $("#sampleTestedDates").val(),
+			locationThree: $("#location_three").val(),
+			testingFacility: $("#testingFacility").val()
+		},
+		function(data) {
+		 	$("#testingQualityTable").html(data);
+		});
 	}
 
 	function getRecentInfectionByMonthSexChart() {
@@ -546,6 +568,19 @@ $currentDate = date('d-M-Y');
 			},
 			function(data) {
 				$("#infectionByMonthSex").html(data);
+			});
+	}
+
+	function getQualityControlByMonth() {
+			var format = null;
+			if($('#quality-control-by-month').prop('checked')){
+				format = 'percentage';
+			}else{
+				format = 'number';
+			}
+			$.post("<?php echo $this->url('quality-check',array('action'=>'get-month-wise-quality-control')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
+			function(data){
+				$("#qualityControlByMonthwise").html(data);
 			});
 	}
 </script>

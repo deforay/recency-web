@@ -184,4 +184,33 @@ class QualityCheckController extends AbstractActionController
                return $this->getResponse()->setContent(Json::encode($result));
           }
      }
+
+     public function getMonthWiseQualityControlAction()
+     {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+          $params = $request->getPost();
+          $qcService = $this->getServiceLocator()->get('QualityCheckService');
+          $result=$qcService->getMonthWiseQualityControlChart($params);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+                ->setTerminal(true);
+        return $viewModel;
+     }
+
+     public function getDistrictWiseQualityCheckInvalidAction(){
+          $result = "";
+          $request = $this->getRequest();
+          if ($request->isPost()) {
+               $params = $request->getPost();
+               $qcService = $this->getServiceLocator()->get('QualityCheckService');
+               $result=$qcService->getDistrictWiseQualityCheckInvalid($params);
+          }
+          $viewModel = new ViewModel();
+          $viewModel->setVariables(array('result' => $result))
+                    ->setTerminal(true);
+          return $viewModel;
+     }
 }
