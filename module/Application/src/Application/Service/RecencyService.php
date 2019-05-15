@@ -1443,5 +1443,19 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecentInfectionByMonthSexChart($params);
     }
+
+    
+    public function getRecentDetailsForPDF($recenyId)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecentDetailsForPDF($recenyId);
+    }
+    public function getLTermDetailsForPDF($recenyId)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchLTermDetailsForPDF($recenyId);
+    }
+    
+
 }
 

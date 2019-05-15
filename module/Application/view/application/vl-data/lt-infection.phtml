@@ -4,7 +4,7 @@ use Zend\Session\Container;
 
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 
 ?>
 <div class="bg-body-light">
@@ -79,11 +79,12 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                                     <th>Age</th>
                                     <th>Testing Site</th>
                                     <th>VL Test Date</th>
+                                    <th>Action</th>
                               </tr>
                          </thead>
                          <tbody>
                               <tr>
-                                    <td colspan='13' class='dataTables_empty'>Loading data from server</td>
+                                    <td colspan='14' class='dataTables_empty'>Loading data from server</td>
                               </tr>
                               </tbody>
                               <tfoot>
@@ -101,6 +102,8 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                                     <th>Age</th>
                                     <th>Testing Site</th>
                                     <th>VL Test Date</th>
+                                    <th>Action</th>
+
                               </tr>
                          </tfoot>
                          </table>
@@ -218,5 +221,22 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
              }
          });
      }
+
+           function generateLTermPdf(recencyId)
+        {
+           console.log(recencyId);
+            $.blockUI();
+            $.post("<?php echo $this->url('vl-data',array('action'=>'generate-l-term-pdf')); ?>",{recencyId:recencyId},
+                function(data){
+                if(data == "" || data == null || data == undefined){
+                $.unblockUI();
+                alert('Unable to generate download');
+                }else{
+                $.unblockUI();
+                window.open('/temporary/'+data,'blank');
+                //document.location.href = '/temporary/'+data;
+                }
+            });
+        }
 
      </script>

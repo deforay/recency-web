@@ -247,4 +247,31 @@ class VlDataController extends AbstractActionController
             return $viewModel;
         }
     }
+
+    public function generateRecentPdfAction() {
+        $request = $this->getRequest();
+        if($request->isPost())
+        {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result=$recencyService->getRecentDetailsForPDF($params['recencyId']);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' =>$result));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
+    }
+    public function generateLTermPdfAction() {
+        $request = $this->getRequest();
+        if($request->isPost())
+        {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result=$recencyService->getLTermDetailsForPDF($params['recencyId']);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' =>$result));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
+    }
 }

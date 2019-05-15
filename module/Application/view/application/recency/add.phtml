@@ -419,9 +419,9 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
                                        <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
                                        <div class="col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
-                                           <input type="text" name="vlLoadResult" id="vlLoadResult" class=" form-control vlResultFields <?php echo $vlLoadResult; ?>" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)" onblur="updateVlResultFields('vlField')" disabled/>
+                                           <input type="text" name="vlLoadResult" id="vlLoadResult" class=" form-control vlResultFields <?php echo $vlLoadResult; ?>" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)" onblur="updateVlResultFields('vlField')"/>
 
-<div class="text-center" style="padding:2px 0px 2px 0px">OR</div>
+                                            <div class="text-center" style="padding:2px 0px 2px 0px">OR</div>
                                            <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption" disabled onchange="updateVlResultFields('vlField')">
                                                     <option value="">-- Select -- </option>
                                                     <option value="TND">TND - Target not detected</option>
@@ -686,7 +686,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
         }
 
         if(fieldValue=='Long Term' || fieldValue=='Assay Recent' || fieldValue=='Assay Negative'){
-            
+           
             if(fieldValue=='Assay Negative'){
                 $("#vlResultoutcome").html('Inconclusive').css({"color":"<?php echo $lineOutComeColor2;?>"});
                 $(".vlResultoutcome").css({"visibility":"visible"});
