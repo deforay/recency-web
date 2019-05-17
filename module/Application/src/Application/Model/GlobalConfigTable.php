@@ -133,7 +133,11 @@ class GlobalConfigTable extends AbstractTableGateway {
             foreach ($rResult as $aRow) {
                 $row = array();
                 $row[] = ($aRow['display_name']);
+                if($aRow['global_name'] == 'logo_image'){
+                    $row[] = '<img src="/uploads/logo_image/'. $aRow['global_value'].'" style="width:100px;height:100px;"/><br>';
+                }
                 $row[] = ($aRow['global_value']);
+
                 $output['aaData'][] = $row;
             }
         return $output;
@@ -153,11 +157,25 @@ class GlobalConfigTable extends AbstractTableGateway {
 
     public function updateGlobalConfigDetails($params)
     {
-         //\Zend\Debug\Debug::dump($params);die;
         $result = 1;
         foreach ($params as $fieldName => $fieldValue) {
             $this->update(array('global_value' => $fieldValue), array('global_name' => $fieldName));
         }
+
+        if (isset($params['removeLogoImage']) && $params['removeLogoImage'] != '') {
+            if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $params['removeLogoImage'])) {
+                unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $params['removeLogoImage']);
+                $this->update(array('global_value' => ""), array('global_name' => 'logo_image'));
+            }
+        }
+        // if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image")) {
+        //     mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image");
+        // }
+        $pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image";
+        if (move_uploaded_file($_FILES["logo_image"]["tmp_name"], $pathname . DIRECTORY_SEPARATOR .$_FILES['logo_image']['name'])) {
+            $this->update(array('global_value' => $_FILES['logo_image']['name']), array('global_name' => 'logo_image'));
+        }
+
         $selectedDataIndex = explode(",",$params['selectedRecencyDataAttr']);
         sort($selectedDataIndex);
         $decodeAllFields  = json_decode($params['allFields']);

@@ -167,8 +167,10 @@ class RecencyController extends AbstractActionController
             $params = $request->getPost();
             $recencyService = $this->getServiceLocator()->get('RecencyService');
             $result=$recencyService->getRecencyDetailsForPDF($params['recencyId']);
+            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+            $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
             $viewModel = new ViewModel();
-            $viewModel->setVariables(array('result' =>$result));
+            $viewModel->setVariables(array('result' =>$result,'globalConfigResult' => $globalConfigResult));
             $viewModel->setTerminal(true);
             return $viewModel;
         }

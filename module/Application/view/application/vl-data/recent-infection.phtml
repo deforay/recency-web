@@ -228,9 +228,8 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
 
       function generateRecentPdf(recencyId)
         {
-           console.log(recencyId);
             $.blockUI();
-            $.post("<?php echo $this->url('vl-data',array('action'=>'generate-recent-pdf')); ?>",{recencyId:recencyId},
+            $.post("<?php echo $this->url('recency',array('action'=>'generate-pdf')); ?>",{recencyId:recencyId},
                 function(data){
                 if(data == "" || data == null || data == undefined){
                 $.unblockUI();

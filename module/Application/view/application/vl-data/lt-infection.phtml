@@ -226,7 +226,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
         {
            console.log(recencyId);
             $.blockUI();
-            $.post("<?php echo $this->url('vl-data',array('action'=>'generate-l-term-pdf')); ?>",{recencyId:recencyId},
+            $.post("<?php echo $this->url('recency',array('action'=>'generate-pdf')); ?>",{recencyId:recencyId},
                 function(data){
                 if(data == "" || data == null || data == undefined){
                 $.unblockUI();

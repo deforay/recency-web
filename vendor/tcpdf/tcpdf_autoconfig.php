@@ -72,6 +72,10 @@ if (!defined('K_PATH_MAIN')) {
 	define ('K_PATH_MAIN', dirname(__FILE__).'/');
 }
 
+// if (!defined('LOGO_PATH')) {
+// 	define ('LOGO_PATH', dirname(dirname(dirname(__FILE__))) .'/public/uploads/logo_image/logo_example.jpg' );
+// }
+
 if (!defined('K_PATH_FONTS')) {
 	define ('K_PATH_FONTS', K_PATH_MAIN.'fonts/');
 }

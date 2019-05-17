@@ -36,6 +36,7 @@ $formFields2 = array('Sample Id','Patient Id','Facility Name','Province','Distri
 'Viral Load Test Date', 'Viral Load Result', 'Testing Facility','Sample Collection Date from the Client',
 'Sample Receipt Date at the Recency Testing Site','Received Specimen Type','Testing Modality');
 $allFileds2 = json_encode($formFields2);
+
 ?>
 <style>
     .select2-selection__choice{
@@ -87,7 +88,7 @@ $allFileds2 = json_encode($formFields2);
         </div>
         <div class="block-content">
             <div class="col-md-12 table-responsive" id="hide">
-                <form name="globalConfigTable" id="globalConfigTable"  class="mb-5" action="<?php echo $this->url('global-config', array('action' => 'edit')); ?>" method="post">
+                <form name="globalConfigTable" id="globalConfigTable"  class="mb-5" action="<?php echo $this->url('global-config', array('action' => 'edit')); ?>" enctype="multipart/form-data"  method="post">
                     <div class="form-group row">
                         <?php foreach($globalConfigResult as $config){ ?>
                             <?php if($config['global_name'] != 'mandatory_fields' && $config['global_name'] != 'display_fields'){ ?>
@@ -100,7 +101,22 @@ $allFileds2 = json_encode($formFields2);
                                     <div class="">
                                         <?php if($config['global_name'] == 'admin_message'){  ?>
                                             <textarea class="form-control " id="configValue" name="<?php echo $config['global_name']; ?>" placeholder="Enter the config value" title="Please enter the config value"><?php echo $config['global_value']; ?></textarea>
-                                        <?php } else { ?> 
+                                        <?php } else if($config['global_name'] == 'logo_image'){ 
+                                            
+                                            $isUploadFiles = true;
+                                            if(isset($config['global_value']) && $config['global_value']!= null && trim($config['global_value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image"  . DIRECTORY_SEPARATOR . $config['global_value'])){
+                                                $isUploadFiles = false;
+                                            ?>
+                                                <!-- <?php //echo $config['global_value']; ?> -->
+                                                <span id="imgSection">
+                                            <img src="/uploads/logo_image/<?php echo $config['global_value']; ?>" style="width:100px;height:100px;"/><br>
+                                          <a href="/uploads/logo_image/<?php echo $config['global_value']; ?>" target="_blank"><?php echo $config['global_value']; ?></a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="removeLogoImage();" title="Remove"><i class="si si-close"></i></a></span>
+                                          <input type="hidden" name="existLogoImage" id="existLogoImage" value="<?php echo $config['global_value']; ?>"/>  
+                                          <?php  } ?>
+                                                         <input type="file" class="form-control logoImg" title="please choose Profile Picture" name="<?php echo $config['global_name']; ?>" id="configValue"  style="display:<?php echo($isUploadFiles == true)?'':'none'; ?>">
+                                                         <input type="hidden" id="removeLogoImage" name="removeLogoImage" />
+                                       
+                                            <?php } else { ?> 
                                             <input type="text" value="<?php echo $config['global_value']; ?>" class="form-control isRequired" id="configValue" name="<?php echo $config['global_name']; ?>" placeholder="Enter the config value" title="Please enter the config value">
                                             <input type="hidden" name="gobalConfigId[]" value="<?php echo base64_encode($config['config_id']);?>" />
                                         <?php } ?>
@@ -110,6 +126,7 @@ $allFileds2 = json_encode($formFields2);
                         <?php } ?>
                     </div>
 
+                   
                     <div class="display-fields">
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label" for=""><?php echo ucfirst($globalConfigResult[6]['display_name']); ?><span class="mandatory">*</span></label>
@@ -355,6 +372,14 @@ function setReqValue(){
         //$("#search").find('option[value="'+$(selected).val()+'"]').show();
     });
 
+}
+
+function removeLogoImage() {
+    $('#imgSection').hide();
+    $('.logoImg').show();
+    //$('#removeLogoImage').val(rImage);
+    existImg = $("#existLogoImage").val();
+      $("#removeLogoImage").val(existImg);
 }
 // function setReqValue1(){
 //     var seletedVal = [];

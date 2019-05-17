@@ -220,7 +220,6 @@ return array(
 
      'controllers' => array(
           'invokables' => array(
-
                'Application\Controller\Index' => 'Application\Controller\IndexController',
                'Application\Controller\Common' => 'Application\Controller\CommonController',
                'Application\Controller\Login' => 'Application\Controller\LoginController',

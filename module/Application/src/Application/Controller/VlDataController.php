@@ -170,9 +170,12 @@ class VlDataController extends AbstractActionController
                 return $this->_redirect()->toUrl('/vl-data/email-result');
             } else {
                 $result = $recencyService->getEmailSendResult($params);
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                     //\Zend\Debug\Debug::dump(count($result));die;
                 return new ViewModel(array(
                     'result' => $result,
+                    'globalConfigResult' => $globalConfigResult,
                     'formFields' => json_encode($params)
                 ));
             }
