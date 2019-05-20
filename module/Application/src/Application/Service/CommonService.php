@@ -204,6 +204,7 @@ class CommonService {
                          $tempDb->updateTempMailStatus($id);
 
                          $fromEmail = $globalDb->getGlobalValue('email_id');
+                         //\Zend\Debug\Debug::dump($globalDb->getGlobalValue('email_password'));die;
                          if(trim($result['attachment'])!=''){
                             $options = new SmtpOptions(array(
                             'host' => $configResult["email"]["host"],

@@ -168,9 +168,9 @@ class GlobalConfigTable extends AbstractTableGateway {
                 $this->update(array('global_value' => ""), array('global_name' => 'logo_image'));
             }
         }
-        // if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image")) {
-        //     mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image");
-        // }
+        if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image")) {
+            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image");
+        }
         $pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image";
         if (move_uploaded_file($_FILES["logo_image"]["tmp_name"], $pathname . DIRECTORY_SEPARATOR .$_FILES['logo_image']['name'])) {
             $this->update(array('global_value' => $_FILES['logo_image']['name']), array('global_name' => 'logo_image'));
