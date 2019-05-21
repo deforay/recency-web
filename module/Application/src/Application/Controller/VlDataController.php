@@ -170,6 +170,7 @@ class VlDataController extends AbstractActionController
                 return $this->_redirect()->toUrl('/vl-data/email-result');
             } else {
                 $result = $recencyService->getEmailSendResult($params);
+                $recencyService->UpdateMultiplePdfUpdatedDate($params);
                 $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
                 $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                     //\Zend\Debug\Debug::dump(count($result));die;
@@ -276,5 +277,23 @@ class VlDataController extends AbstractActionController
             $viewModel->setTerminal(true);
             return $viewModel;
         }
+    }
+
+    public function qcReportAction()
+    {
+         $request = $this->getRequest();
+         if ($request->isPost()) {
+              $parameters = $request->getPost();
+              $qcService = $this->getServiceLocator()->get('QualityCheckService');
+              $result = $qcService->getQualityCheckReportDetails($parameters);
+              return $this->getResponse()->setContent(Json::encode($result));
+         }else{
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult = $facilityService->getFacilitiesAllDetails();
+    
+            return new ViewModel(array(
+                'facilityResult' => $facilityResult
+            ));
+         }
     }
 }

@@ -164,6 +164,26 @@ return array(
                           ),
                     ),
               ),
+               'province' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/province[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Province',
+                              'action' => 'index',
+                         ),
+                    ),
+                    ),
+                    'district' => array(
+                         'type' => 'segment',
+                         'options' => array(
+                              'route' => '/district[/:action][/][:id]',
+                              'defaults' => array(
+                                   'controller' => 'Application\Controller\District',
+                                   'action' => 'index',
+                              ),
+                         ),
+                         ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -232,6 +252,8 @@ return array(
                'Application\Controller\VlData' => 'Application\Controller\VlDataController',
                'Application\Controller\Cron' => 'Application\Controller\CronController',
                'Application\Controller\Settings' => 'Application\Controller\SettingsController',
+               'Application\Controller\Province' => 'Application\Controller\ProvinceController',
+               'Application\Controller\District' => 'Application\Controller\DistrictController',
           ),
      ),
      'controller_plugins' => array(

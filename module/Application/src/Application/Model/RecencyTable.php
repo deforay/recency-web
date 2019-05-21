@@ -139,6 +139,13 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['testingFacility'] != '') {
             $sQuery->where(array('testing_facility_id' => $parameters['testingFacility']));
         }
+        if ($parameters['vlResult'] != '') {
+            if($parameters['vlResult'] == 'panding'){
+                $sQuery->where(array('term_outcome' => 'Assay Recent'));
+            }else if($parameters['vlResult'] == 'vl_load_tested'){
+                $sQuery->where('term_outcome = "" OR  term_outcome = NULL ');
+            }
+        }
 
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
@@ -734,7 +741,7 @@ class RecencyTable extends AbstractTableGateway
             }
             $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-            if (count($recencyResult) > 0) {
+            if (count($recencyResult) > 0) {-
                 $response['status'] = 'success';
                 $response['recency'] = $recencyResult;
             } else {
@@ -4156,5 +4163,41 @@ class RecencyTable extends AbstractTableGateway
         return $rResult;
     }
 
+    
 
+    public function UpdatePdfUpdatedDateDetails($recenyId)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $fQuery = $sql->select()->from(array('r' => 'recency'))
+                                ->where(array('(recency_id="'.$recenyId.'" )'));
+        $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+        $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        if (!isset($fResult['result_printed_on']) && $fResult['result_printed_on'] == '') {
+            $results =  $this->update(array('result_printed_on' => date("Y-m-d H:i:s")), array('recency_id' => $recenyId));
+        }else{
+            $results = "0";
+        }
+            return $recenyId;
+        
+    }
+
+    
+    public function UpdateMultiplePdfUpdatedDateDetails($params)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $fQuery = $sql->select()->from(array('r' => 'recency'))
+        ->where("recency_id IN(" . $params['selectedSampleId'] . ")");
+        $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+        $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        foreach($fResult as $res){
+            if (!isset($res['result_printed_on']) && $res['result_printed_on'] == '') {
+                $results =  $this->update(array('result_printed_on' => date("Y-m-d H:i:s")), array('recency_id' => $res['recency_id']));
+            }else{
+                $results = "0";
+            }
+        }
+            return $results;
+    }
 }

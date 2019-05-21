@@ -14,6 +14,8 @@ $userMenu = "";
 $userMenu.="<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=". $this->url('global-config', array('action' => 'index')) ."><span class='nav-main-link-name'>Global Config</span></a></li>";
 $userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $this->url('user', array('action' => 'index')) ."><span class='nav-main-link-name'>User</span></a></li>";
 $userMenu.="<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=". $this->url('facilities', array('action' => 'index')) ."><span class='nav-main-link-name'>Facilities</span></a></li>";
+$userMenu.="<li id='nav-main-item'><a id='province' class='nav-main-link' href=". $this->url('province', array('action' => 'index')) ."><span class='nav-main-link-name'>Province</span></a></li>";
+$userMenu.="<li id='nav-main-item'><a id='district' class='nav-main-link' href=". $this->url('district', array('action' => 'index')) ."><span class='nav-main-link-name'>District</span></a></li>";
 
 $recencyMenu = "";
 $recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
@@ -39,6 +41,10 @@ $tatMenu="<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href="
 
 $weeklyReportMenu = "";
 $weeklyReportMenu="<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'weekly-report')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
+
+$qcReportMenu = "";
+$qcReportMenu="<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'qc-report')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Qc Report</span></a></li>";
+
 
 $emailMenu = "";
 $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'email-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
@@ -182,7 +188,9 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
                                         <?php echo $userMenu;?>
                                    </ul>
                               </li>
-                         <?php } ?>
+                         <?php } 
+                            if($roleCode != 'MGMT'){ 
+                         ?>
                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $recencyMenu;?>
                          <li class="nav-main-heading" style="padding:3px;"></li>
@@ -194,6 +202,7 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $vlDataMenu; 
                          }
+                    }
                          if($roleCode=='VLTS' || $roleCode == 'admin'){
                           ?>
                           <li class="nav-main-heading" style="padding:3px;"></li>
@@ -217,6 +226,8 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
                                     <?php echo $tatMenu;?>
                                     <li class="nav-main-heading" style="padding:3px;"></li>
                                     <?php echo $weeklyReportMenu; ?>
+                                    <li class="nav-main-heading" style="padding:3px;"></li>
+                                    <?php echo $qcReportMenu; ?>
                                    </ul>
                               </li>
                          <?php }
@@ -358,7 +369,7 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
      $(function () {
           str=$(location).attr('pathname');
           splitsUrl=str.split("/",4);
-          if(splitsUrl[1]=='facilities' || splitsUrl[1]=='user' || splitsUrl[1]=='recency' || splitsUrl[1]=='global-config' )
+          if(splitsUrl[1]=='facilities' || splitsUrl[1]=='user' || splitsUrl[1]=='recency' || splitsUrl[1]=='global-config'|| splitsUrl[1]=='province' || splitsUrl[1]=='district' )
           {
                if(splitsUrl[1] != 'recency'){
                     $('#manage').addClass('open');
@@ -404,7 +415,7 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
             $('#manage').removeClass('open');
             $('#reports').addClass('open');
             $('#'+splitsUrl[2]).addClass('active');
-          }else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='weekly-report')
+          }else if(splitsUrl[1]=='vl-data' && (splitsUrl[2]=='weekly-report' || splitsUrl[2]=='qc-report'))
           {
             $('#manage').removeClass('open');
             $('#reports').addClass('open');

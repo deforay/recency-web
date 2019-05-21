@@ -35,6 +35,8 @@ use Application\Service\RiskPopulationsService;
 use Application\Service\GlobalConfigService;
 use Application\Service\QualityCheckService;
 use Application\Service\SettingsService;
+use Application\Service\ProvinceService;
+use Application\Service\DistrictService;
 
 class Module{
      public function onBootstrap(MvcEvent $e){
@@ -169,6 +171,7 @@ class Module{
                         $table = new SettingsTable($dbAdapter);
                         return $table;
                     },
+                   
                     
                     
 
@@ -201,6 +204,14 @@ class Module{
                     'SettingsService' => function($sm) {
                         return new SettingsService($sm);
                     },
+                    'ProvinceService' => function($sm) {
+                        return new ProvinceService($sm);
+                    },
+                    'DistrictService' => function($sm) {
+                        return new DistrictService($sm);
+                    },
+                    
+                    
 
                )
           );

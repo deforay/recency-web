@@ -166,6 +166,7 @@ class RecencyController extends AbstractActionController
         {
             $params = $request->getPost();
             $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $recencyService->UpdatePdfUpdatedDate($params['recencyId']);
             $result=$recencyService->getRecencyDetailsForPDF($params['recencyId']);
             $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
             $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();

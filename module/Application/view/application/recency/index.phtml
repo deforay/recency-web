@@ -115,6 +115,17 @@ if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
                                     ?>
                                 </select>                                
                             </td>
+
+                            <td><b>Viral Load :</b></td>
+                            <td>
+                                <select class="form-control" id="vlResult" name="vlResult"  title="Please select Viral Load Results" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="panding">Pending</option>
+                                    <option value="vl_load_tested">Viral Load Tested</option>
+                                    <option value="all">All</option>
+                                
+                                </select>                                
+                            </td>
                             
                         </tr>
                         <tr>
@@ -273,6 +284,7 @@ oTable = $('#facilityDataTable').dataTable( {
                     aoData.push({"name": "gender", "value": $("#gender").val()});
                     aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
                     aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
+                    aoData.push({"name": "vlResult", "value": $("#vlResult").val()});
                     $.ajax({
                         "dataType": 'json',
                         "type": "POST",

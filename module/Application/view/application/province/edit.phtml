@@ -1,0 +1,88 @@
+<?php
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+?>
+<style type="text/css">
+
+</style>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Provinces</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <a href="<?php echo $this->url('province', array('action' => 'index')); ?>"><li class="breadcrumb-item">Provinces Details</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Edit</li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+               <h3 class="block-title">Edit Provinces Details</h3>
+          </div>
+          <div class="block-content">
+               <div class="col-md-12 table-responsive" id="hide">
+                    <form name="provinceInformation" id="provinceInformation"  class="mb-5" action="<?php echo $this->url('province', array('action' => 'edit')); ?>" method="post">
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Province Name<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control isRequired" id="provinceName" name="provinceName" placeholder="Enter the province name" value="<?php echo $result['province_name']; ?>" title="Please enter the province name" onblur="checkNameValidation('province_details', 'province_name', this,'<?php echo "province_id##".$result['province_id'];?>', 'The province name that you entered already exists . Please try another name..');">
+                              </div>
+                         </div>
+                         <div class="row items-push">
+                              <div class="col-lg-7 offset-lg-4">
+                              <input type="hidden" name="provinceId" value="<?php echo $result['province_id']; ?>"/>
+                                   <a href="<?php echo $this->url('province', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                   <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                              </div>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+
+<script type="text/javascript">
+
+     jQuery(document).ready(function($) {
+         
+     });
+
+     duplicateName = true;
+     function validateNow() {
+          var selVal = [];
+          flag = deforayValidator.init({
+               formId: 'provinceInformation'
+          });
+          if (flag) {
+               if (duplicateName) {
+                    $.blockUI();
+                    document.getElementById('provinceInformation').submit();
+               }
+          }
+     }
+     function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+        checkValue = document.getElementById(obj.id).value;
+        if($.trim(checkValue)!= ''){
+            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
+            function(data) {
+                if (data > 0)
+                {
+                        alert(msg);
+                        duplicateName = false;
+                        document.getElementById(obj.id).value = "";
+                }
+                else {
+                        duplicateName = true;
+                }
+            });
+        }
+    }
+    
+
+</script>

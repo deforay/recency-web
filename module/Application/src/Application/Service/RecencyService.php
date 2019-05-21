@@ -1455,6 +1455,21 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchLTermDetailsForPDF($recenyId);
     }
+
+    
+    public function UpdatePdfUpdatedDate($recencyId)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->UpdatePdfUpdatedDateDetails($recencyId);
+    }
+    public function UpdateMultiplePdfUpdatedDate($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->UpdateMultiplePdfUpdatedDateDetails($params);
+    }
+
+    
+
     
 
 }

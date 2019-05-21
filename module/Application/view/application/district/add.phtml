@@ -1,0 +1,100 @@
+<?php
+use Zend\Session\Container;
+$sessionLogin = new Container('credo');
+?>
+<style type="text/css">
+
+</style>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">District</h1>
+               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                         <a href="<?php echo $this->url('district', array('action' => 'index')); ?>"><li class="breadcrumb-item">District Details</li></a>
+                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
+                    </ol>
+               </nav>
+          </div>
+     </div>
+</div>
+
+
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          <div class="block-header block-header-default">
+               <h3 class="block-title">Add District Details</h3>
+          </div>
+          <div class="block-content">
+               <div class="col-md-12 table-responsive" id="hide">
+                    <form name="districtInformation" id="districtInformation"  class="mb-5" action="<?php echo $this->url('district', array('action' => 'add')); ?>" method="post">
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">District Name<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" class="form-control isRequired" id="districtName" name="districtName" placeholder="Enter the district name" title="Please enter the district name" onblur="checkNameValidation('district_details', 'district_name', this,'NULL', 'The district name that you entered already exists . Please try another name..');">
+                              </div>
+
+                                <label class="col-sm-2 col-form-label" for="">Province Name</label>
+                              <div class="col-sm-4">
+                                   <select  id="provinceName" class="form-control" name="provinceName" >
+                                        <?php foreach($provinceResult as $province){ ?>
+                                             <option value="<?php echo $province['province_id']; ?>"><?php echo ucwords($province['province_name']); ?></option>
+                                        <?php } ?>
+                                   </select>
+                         </div>
+                         </div>
+                         <div class="row items-push">
+                              <div class="col-lg-7 offset-lg-4">
+
+                                   <a href="<?php echo $this->url('district', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                   <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                              </div>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+
+<script type="text/javascript">
+
+     jQuery(document).ready(function($) {
+         
+     });
+
+     duplicateName = true;
+     function validateNow() {
+          var selVal = [];
+        
+
+          flag = deforayValidator.init({
+               formId: 'districtInformation'
+          });
+          if (flag) {
+               if (duplicateName) {
+                    $.blockUI();
+
+                    document.getElementById('districtInformation').submit();
+               }
+          }
+     }
+     function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+        checkValue = document.getElementById(obj.id).value;
+        if($.trim(checkValue)!= ''){
+            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
+            function(data) {
+                if (data > 0)
+                {
+                        alert(msg);
+                        duplicateName = false;
+                        document.getElementById(obj.id).value = "";
+                }
+                else {
+                        duplicateName = true;
+                }
+            });
+        }
+    }
+    
+
+</script>
