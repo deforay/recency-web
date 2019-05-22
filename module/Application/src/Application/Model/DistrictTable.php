@@ -229,5 +229,18 @@ class DistrictTable extends AbstractTableGateway {
         return $params['districtId'];
     }
 
+    
+    public function fetchCities()
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+
+        $sQuery = $sql->select()->from(array('d' => 'district_details'));
+
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        return $rResult;
+    }
+
 }
 ?>

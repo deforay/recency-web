@@ -4,8 +4,9 @@ $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
     $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
     $startDate = date('d-M-Y', strtotime('today - 365 days'));
-	$currentDate = date('d-M-Y');
+    $currentDate = date('d-M-Y');
 ?>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css'?>" rel="stylesheet">
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -27,7 +28,7 @@ $roleCode = $sessionLogin->roleCode;
                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Samples Collected Date</label>
                         <div class="col-sm-4">
                         <input type="text" id="testDate" name="testDate" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
-                            </div>
+                           </div>
 
                         <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
                         <div class="col-sm-4">
@@ -60,7 +61,6 @@ $roleCode = $sessionLogin->roleCode;
                         </div>
                     </div>
                     <table id="qcDataTable" class="table table-bordered table-striped table-vcenter">
-                   
                          <thead>
                               <tr>
                                     <th>Tester Name</th>
@@ -91,30 +91,6 @@ $roleCode = $sessionLogin->roleCode;
           /* Table initialisation */
           oTable = null;
           $(document).ready(function() {
-
-                $('#testDate').daterangepicker({
-					format: 'DD-MMM-YYYY',
-                        separator: ' to ',
-                        autoUpdateInput: false,
-                        startDate: moment().subtract('days', 30),
-                        endDate: moment(),
-                        maxDate: moment(),
-                        ranges: {
-                            'Today': [moment(), moment()],
-                            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                            'Last 7 Days': [moment().subtract('days', 6), moment()],
-                            'Last 30 Days': [moment().subtract('days', 29), moment()],
-                            'Last 60 Days': [moment().subtract('days', 59), moment()],
-                            'Last 180 Days': [moment().subtract('days', 179), moment()],
-                            'This Month': [moment().startOf('month'), moment().endOf('month')],
-                            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-                            }
-				},
-				function(start, end) {
-					startDate = start.format('YYYY-MM-DD');
-					endDate = end.format('YYYY-MM-DD');
-				});
-
             oTable = $('#qcDataTable').dataTable( {
                 "bAutoWidth": false,
                 "bProcessing": true,
@@ -136,6 +112,34 @@ $roleCode = $sessionLogin->roleCode;
                     });
                 }
             } );
+
+                $('#testDate').daterangepicker({
+				format: 'DD-MMM-YYYY',
+				autoUpdateInput: false,
+				separator: ' to ',
+				startDate: moment().subtract('days', 29),
+				endDate: moment(),
+				maxDate: moment(),
+				ranges: {
+					'Today': [moment(), moment()],
+					'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+					'Last 7 Days': [moment().subtract('days', 6), moment()],
+					'Last 30 Days': [moment().subtract('days', 29), moment()],
+					'Last 60 Days': [moment().subtract('days', 59), moment()],
+					'Last 180 Days': [moment().subtract('days', 179), moment()],
+					'This Month': [moment().startOf('month'), moment().endOf('month')],
+					'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+				}
+			},
+			function(start, end) {
+				startDate = start.format('YYYY-MM-DD');
+				endDate = end.format('YYYY-MM-DD');
+				$('input[name="testDate"]').on('apply.daterangepicker', function(ev, picker) {
+					$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+				});
+
+			});
+
         } );
 
 

@@ -8,10 +8,10 @@ $sessionLogin = new Container('credo');
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2"><?php echo $globalConfigResult[1]['global_value'] ?></h1>
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2"><?php echo $globalConfigResult[2]['global_value'] ?></h1>
                <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                         <a href="<?php echo $this->url('district', array('action' => 'index')); ?>"><li class="breadcrumb-item"><?php echo $globalConfigResult[1]['global_value'] ?> Details</li></a>
+                         <a href="<?php echo $this->url('district', array('action' => 'index')); ?>"><li class="breadcrumb-item"><?php echo $globalConfigResult[0]['global_value'] ?> Details</li></a>
                          <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Edit</li>
                     </ol>
                </nav>
@@ -22,30 +22,29 @@ $sessionLogin = new Container('credo');
 <div class="content">
      <div class="block block-rounded block-bordered">
           <div class="block-header block-header-default">
-               <h3 class="block-title">Edit <?php echo $globalConfigResult[1]['global_value'] ?> Details</h3>
+               <h3 class="block-title">Edit <?php echo $globalConfigResult[2]['global_value'] ?> Details</h3>
           </div>
           <div class="block-content">
                <div class="col-md-12 table-responsive" id="hide">
-                    <form name="districtInformation" id="districtInformation"  class="mb-5" action="<?php echo $this->url('district', array('action' => 'edit')); ?>" method="post">
+                    <form name="cityInformation" id="cityInformation"  class="mb-5" action="<?php echo $this->url('city', array('action' => 'edit')); ?>" method="post">
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for=""><?php echo $globalConfigResult[1]['global_value'] ?> Name<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for=""><?php echo $globalConfigResult[2]['global_value'] ?> Name<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control isRequired" id="districtName" name="districtName" placeholder="Enter the <?php echo $globalConfigResult[1]['global_value'] ?> name" value="<?php echo $result['district_name']; ?>" title="Please enter the <?php echo $globalConfigResult[1]['global_value'] ?> name" onblur="checkNameValidation('district_details', 'district_name', this,'<?php echo "district_id##".$result['district_id'];?>', 'The <?php echo $globalConfigResult[1]['global_value'] ?> name that you entered already exists . Please try another name..');">
+                                   <input type="text" class="form-control isRequired" id="cityName" name="cityName" placeholder="Enter the city name" value="<?php echo $result['city_name']; ?>" title="Please enter the <?php echo $globalConfigResult[2]['global_value'] ?> name" onblur="checkNameValidation('city_details', 'city_name', this,'<?php echo "city_id##".$result['city_id'];?>', 'The <?php echo $globalConfigResult[2]['global_value'] ?> name that you entered already exists . Please try another name..');">
                               </div>
-                              <label class="col-sm-2 col-form-label" for=""><?php echo $globalConfigResult[0]['global_value'] ?> Name</label>
+                              <label class="col-sm-2 col-form-label" for=""><?php echo $globalConfigResult[1]['global_value'] ?> Name</label>
                               <div class="col-sm-4">
-                                   <select  id="provinceName" class="form-control" name="provinceName" >
-                                   <option value="">--select--</option>
-                                        <?php foreach($provinceResult as $province){ ?>
-                                             <option value="<?php echo $province['province_id']; ?>"<?php echo($province['province_id'] == $result['province_id'] )?'selected="selected"':''; ?>><?php echo ucwords($province['province_name']); ?></option>
-                                        <?php } ?>
+                              <select  id="districtName" class="form-control" name="districtName" >
+                              <?php foreach($districtResult as $district){ ?>
+                                   <option value="<?php echo $district['district_id']; ?>" <?php echo($district['district_id'] == $result['district_id'] )?'selected="selected"':''; ?>><?php echo ucwords($district['district_name']); ?></option>
+                                             <?php } ?>
                                    </select>
                          </div>
                          </div>
                          <div class="row items-push">
                               <div class="col-lg-7 offset-lg-4">
-                              <input type="hidden" name="districtId" value="<?php echo $result['district_id']; ?>"/>
-                                   <a href="<?php echo $this->url('district', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                              <input type="hidden" name="cityId" value="<?php echo $result['city_id']; ?>"/>
+                                   <a href="<?php echo $this->url('city', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
                                    <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
                               </div>
                          </div>
@@ -65,12 +64,12 @@ $sessionLogin = new Container('credo');
      function validateNow() {
           var selVal = [];
           flag = deforayValidator.init({
-               formId: 'districtInformation'
+               formId: 'cityInformation'
           });
           if (flag) {
                if (duplicateName) {
                     $.blockUI();
-                    document.getElementById('districtInformation').submit();
+                    document.getElementById('cityInformation').submit();
                }
           }
      }

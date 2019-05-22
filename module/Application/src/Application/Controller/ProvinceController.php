@@ -18,7 +18,13 @@ class ProvinceController extends AbstractActionController
                 $provinceService = $this->getServiceLocator()->get('ProvinceService');
                 $result = $provinceService->getProvinceDetails($params);
                 return $this->getResponse()->setContent(Json::encode($result));
-            }
+            }else{
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+                return new ViewModel(array(
+                    'globalConfigResult' => $globalConfigResult,
+               ));
+              }
     }
 
     public function addAction()
@@ -30,7 +36,13 @@ class ProvinceController extends AbstractActionController
                 $result = $provinceService->addProvinceDetails($params);
                 // \Zend\Debug\Debug::dump($params);die;
                 return $this->_redirect()->toRoute('province');
-            }
+            }else{
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+                return new ViewModel(array(
+                    'globalConfigResult' => $globalConfigResult,
+               ));
+              }
     }
 
     public function editAction()
@@ -49,9 +61,11 @@ class ProvinceController extends AbstractActionController
             {
                 $provinceId=base64_decode( $this->params()->fromRoute('id') );
                 $result=$provinceService->getProvinceDetailsById($provinceId);
-             
+                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
                     'result' => $result,
+                    'globalConfigResult' => $globalConfigResult,
                 ));
             
         }

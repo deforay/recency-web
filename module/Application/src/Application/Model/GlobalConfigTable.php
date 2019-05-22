@@ -383,5 +383,14 @@ class GlobalConfigTable extends AbstractTableGateway {
             }
        return $response;
     }
+
+    public function fetchAllGlobalConfigDataForMenu(){
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery =  $sql->select()->from('global_config');
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        return $rResult;
+    }
 }
 ?>

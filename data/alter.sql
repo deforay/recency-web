@@ -284,3 +284,6 @@ UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='hi
 --sathish 20 May 2019
 INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `role_status`) VALUES (NULL, 'Management', 'MGMT', 'active');
 ALTER TABLE `recency` ADD `result_printed_on` DATETIME NULL DEFAULT NULL AFTER `testing_facility_type`;
+--sathish 22 May 2019
+INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Mail Host', 'mail_host', 'smtp.gmail.com'), (NULL, 'Mail Port', 'mail_port', '587');
+INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Mail SSL', 'mail_ssl', 'tls'), (NULL, 'Mail Auth', 'mail_auth', 'login');

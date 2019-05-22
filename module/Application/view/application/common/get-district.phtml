@@ -6,7 +6,7 @@ if(count($result['district'])>0){
         $district .='<option value="'.$name['district_id'].'">'.$name['district_name'].'</option>';
     }
 }
-$district .='<option value="other">Other</option>';
+//$district .='<option value="other">Other</option>';
 
 $facility = '<option value="">-- Select --</option>';
 if(count($result['facility'])>0){
@@ -14,7 +14,7 @@ if(count($result['facility'])>0){
         $facility .='<option value="'.base64_encode($name['facility_id']).'">'.$name['facility_name'].'</option>';
     }
 }
-$facility .='<option value="other">Other</option>';
+//$facility .='<option value="other">Other</option>';
 
 echo $district.'##'.$facility;
 

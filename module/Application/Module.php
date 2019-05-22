@@ -37,6 +37,7 @@ use Application\Service\QualityCheckService;
 use Application\Service\SettingsService;
 use Application\Service\ProvinceService;
 use Application\Service\DistrictService;
+use Application\Service\CityService;
 
 class Module{
      public function onBootstrap(MvcEvent $e){
@@ -210,6 +211,10 @@ class Module{
                     'DistrictService' => function($sm) {
                         return new DistrictService($sm);
                     },
+                    'CityService' => function($sm) {
+                        return new CityService($sm);
+                    },
+                    
                     
                     
 

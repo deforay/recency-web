@@ -5,11 +5,11 @@
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">District</h1>
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2"><?php echo $globalConfigResult[1]['global_value'] ?></h1>
                     <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                          <ol class="breadcrumb">
                               <li class="breadcrumb-item">
-                              <a href="<?php echo $this->url('district',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New District</a>
+                              <a href="<?php echo $this->url('district',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New <?php echo $globalConfigResult[1]['global_value'] ?></a>
                               </li>
                          </ol>
                     </nav>
@@ -25,8 +25,8 @@
                     <table id="DistrictDataTable" class="table table-bordered table-striped table-vcenter">
                          <thead>
                               <tr>
-                                    <th>Province Name</th>
-                                    <th>District Name</th>
+                                    <th><?php echo $globalConfigResult[0]['global_value'] ?> Name</th>
+                                    <th><?php echo $globalConfigResult[1]['global_value'] ?> Name</th>
                                     <th>Action</th>
                               </tr>
                          </thead>

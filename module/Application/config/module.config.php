@@ -184,6 +184,16 @@ return array(
                               ),
                          ),
                          ),
+                         'city' => array(
+                              'type' => 'segment',
+                              'options' => array(
+                                   'route' => '/city[/:action][/][:id]',
+                                   'defaults' => array(
+                                        'controller' => 'Application\Controller\City',
+                                        'action' => 'index',
+                                   ),
+                              ),
+                              ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -254,6 +264,7 @@ return array(
                'Application\Controller\Settings' => 'Application\Controller\SettingsController',
                'Application\Controller\Province' => 'Application\Controller\ProvinceController',
                'Application\Controller\District' => 'Application\Controller\DistrictController',
+               'Application\Controller\City' => 'Application\Controller\CityController',
           ),
      ),
      'controller_plugins' => array(
@@ -280,6 +291,8 @@ return array(
      'view_helpers' => array(
           'invokables'=> array(
                'category_helper' => 'Application\View\Helper\CategoryHelper',
+               'global_config_helper' => 'Application\View\Helper\GlobalConfigHelper',
+               
           )
      ),
      // Placeholder for console routes

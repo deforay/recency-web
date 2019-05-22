@@ -108,6 +108,9 @@ class QualityCheckTable extends AbstractTableGateway {
                     if($parameters['tOutcome']!=''){
                         $sQuery->where(array('term_outcome'=>$parameters['tOutcome']));
                     }
+                    if ($parameters['testingFacility'] != '') {
+                         $sQuery->where(array('testing_facility_id' => $parameters['testingFacility']));
+                     }
 
                     if (isset($sOrder) && $sOrder != "") {
                          $sQuery->order($sOrder);
@@ -943,7 +946,6 @@ class QualityCheckTable extends AbstractTableGateway {
 
      
      public function fetchQualityCheckReportDetails($parameters) {
-
           /* Array of database columns which should be read and sent back to DataTables. Use a space where
           * you want to insert a non-database field (for example a counter or static image)
           */
@@ -951,7 +953,7 @@ class QualityCheckTable extends AbstractTableGateway {
           $common = new CommonService();
           $aColumns = array('qc.tester_name','total','ft.facility_name');
           $orderColumns = array('qc.tester_name','total','ft.facility_name');
-
+          $general = new CommonService();
           /* Paging */
           $sLimit = "";
           if (isset($parameters['iDisplayStart']) && $parameters['iDisplayLength'] != '-1') {
@@ -1028,8 +1030,7 @@ class QualityCheckTable extends AbstractTableGateway {
                               )
                               )
                               ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'))
-                              ->group("tester_name");     
-                              
+                              ->group(new Expression("tester_name,facility_name"));   
                               
                if(isset($parameters['testDate']) && trim($parameters['testDate'])!= ''){
                     $s_c_date = explode("to", $parameters['testDate']);
@@ -1085,7 +1086,7 @@ class QualityCheckTable extends AbstractTableGateway {
                /* Total data set length */
                $iQuery = $sql->select()->from(array( 'qc' => 'quality_check_test' ))
                          ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'))
-                         ->group("tester_name");   
+                         ->group(new Expression("tester_name,facility_name"));  
 
                $iQueryStr = $sql->getSqlStringForSqlObject($iQuery);
                $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();

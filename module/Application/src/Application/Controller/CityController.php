@@ -6,7 +6,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 
-class DistrictController extends AbstractActionController
+class CityController extends AbstractActionController
 {
 
     public function indexAction()
@@ -15,8 +15,8 @@ class DistrictController extends AbstractActionController
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
-                $districtService = $this->getServiceLocator()->get('DistrictService');
-                $result = $districtService->getDistrictDetails($params);
+                $cityService = $this->getServiceLocator()->get('CityService');
+                $result = $cityService->getCityDetails($params);
                 return $this->getResponse()->setContent(Json::encode($result));
             }else{
                 $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
@@ -32,19 +32,19 @@ class DistrictController extends AbstractActionController
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
-                $districtService = $this->getServiceLocator()->get('DistrictService');
-                $result = $districtService->addDistrictDetails($params);
+                $cityService = $this->getServiceLocator()->get('CityService');
+                $result = $cityService->addCityDetails($params);
                 // \Zend\Debug\Debug::dump($params);die;
-                return $this->_redirect()->toRoute('district');
+                return $this->_redirect()->toRoute('city');
             }
             else
             {
-                $ProvinceService = $this->getServiceLocator()->get('ProvinceService');
-                $provinceResult = $ProvinceService->getProvince();
+                $districtService = $this->getServiceLocator()->get('DistrictService');
+                $districtResult = $districtService->getCities();
                 $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
                 $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
-                    'provinceResult' => $provinceResult,
+                    'districtResult' => $districtResult,
                     'globalConfigResult' => $globalConfigResult,
                 ));
             }
@@ -52,24 +52,24 @@ class DistrictController extends AbstractActionController
 
     public function editAction()
     {
-            $districtService = $this->getServiceLocator()->get('DistrictService');
+            $cityService = $this->getServiceLocator()->get('CityService');
             if($this->getRequest()->isPost())
             {
                 $params=$this->getRequest()->getPost();
-                $result=$districtService->updateDistrictDetails($params);
-                return $this->redirect()->toRoute('district');
+                $result=$cityService->updateCityDetails($params);
+                return $this->redirect()->toRoute('city');
             }
             else
             {
-                $districtId=base64_decode( $this->params()->fromRoute('id') );
-                $result=$districtService->getDistrictDetailsById($districtId);
-                $ProvinceService = $this->getServiceLocator()->get('ProvinceService');
-                $provinceResult = $ProvinceService->getProvince();
+                $cityId=base64_decode( $this->params()->fromRoute('id') );
+                $result=$cityService->getCityDetailsById($cityId);
+                $districtService = $this->getServiceLocator()->get('DistrictService');
+                $districtResult = $districtService->getCities();
                 $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
                 $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
                     'result' => $result,
-                    'provinceResult' => $provinceResult,
+                    'districtResult' => $districtResult,
                     'globalConfigResult' => $globalConfigResult,
                 ));
             

@@ -488,8 +488,8 @@ class RecencyTable extends AbstractTableGateway
                 $data['vl_result'] = htmlentities($params['vlResultOption']);
                 $data['vl_result_entry_date'] = date("Y-m-d H:i:s");
             }
-            //  print_r($data);
-            //  die;
+            //   print_r($data);
+            //   die;
 
             //  if (strpos($params['outcomeData'], 'Long Term') !== false){
             //       $data['final_outcome'] = 'Long Term';

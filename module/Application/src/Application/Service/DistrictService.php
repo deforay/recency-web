@@ -74,29 +74,11 @@ class DistrictService {
         }
     }
 
-    public function getFacilitiesAllDetails()
-    {
-        $facilityDb = $this->sm->get('FacilitiesTable');
-        return $facilityDb->fetchFacilitiesAllDetails();
-    }
     
-   
-    public function getAllFacilityListApi($params)
+    public function getCities()
     {
-        $facilityDb = $this->sm->get('FacilitiesTable');
-        return $facilityDb->fetchFacilitiesDetailsApi($params);
-    }
-    public function getFacilityByLocation($params)
-    {
-        $facilityDb = $this->sm->get('FacilitiesTable');
-        return $facilityDb->fetchFacilityByLocation($params);
-    }
-
-    
-    public function getTestingFacilitiesTypeDetails()
-    {
-        $facilityDb = $this->sm->get('TestingFacilityTypeTable');
-        return $facilityDb->fetchTestingFacilitiesTypeDetails();
+        $districteDb = $this->sm->get('DistrictTable');
+        return $districteDb->fetchCities();
     }
 
     

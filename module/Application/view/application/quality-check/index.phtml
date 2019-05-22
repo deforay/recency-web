@@ -38,8 +38,22 @@ $roleCode = $sessionLogin->roleCode;
                                     <option value="Long Term">Long Term</option>
                                     <option value="Invalid – Please Verify">Invalid</option>
                                 </select>
-
-                    
+                                </td>
+                                <td><b>Testing Site :</b></td>
+                            <td>
+                            <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
+                                <option value=""> -- Select -- </option>
+                                    <?php
+                                    foreach($facilityResult['facilityTest'] as $facilityRow){
+                                        if(2 != (int)$facilityRow['facility_type_id']) continue;
+                                    ?>
+                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                                </td>
+                                </tr> <tr>
                                 <td colspan="4"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
                                 &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
                                 &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
@@ -156,9 +170,8 @@ $roleCode = $sessionLogin->roleCode;
                 ],
                 "sAjaxSource": "<?php echo $this->url('quality-check',array('action' => 'index')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
-
                     aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
-                    
+                    aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
                     $.ajax({
                         "dataType": 'json',
                         "type": "POST",

@@ -16,7 +16,14 @@ class QualityCheckController extends AbstractActionController
                $qcService = $this->getServiceLocator()->get('QualityCheckService');
                $result = $qcService->getQualityCheckDetails($params);
                return $this->getResponse()->setContent(Json::encode($result));
-          }
+          } else {
+               $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+               $facilityResult = $facilityService->getFacilitiesAllDetails();
+   
+               return new ViewModel(array(
+                   'facilityResult' => $facilityResult
+               ));
+           }
      }
 
      public function addAction()
