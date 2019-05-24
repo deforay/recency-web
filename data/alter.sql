@@ -277,9 +277,9 @@ ALTER TABLE `tester_information`
 ALTER TABLE `quality_check_test` ADD `final_result` VARCHAR(255) NULL DEFAULT NULL AFTER `testing_facility_id`;
 
 
-UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='long_term_sample' AND `term_outcome`='Long Term'
-UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='preliminary_recent_sample' AND `term_outcome`='Assay Recent'
-UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='hiv_negative_sample' AND `term_outcome`='Assay HIV Negative'
+UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='long_term_sample' AND `term_outcome`='Long Term';
+UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='preliminary_recent_sample' AND `term_outcome`='Assay Recent';
+UPDATE quality_check_test SET `final_result`='pass' WHERE `reference_result`='hiv_negative_sample' AND `term_outcome`='Assay HIV Negative';
 
 --sathish 20 May 2019
 INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `role_status`) VALUES (NULL, 'Management', 'MGMT', 'active');
@@ -288,6 +288,5 @@ ALTER TABLE `recency` ADD `result_printed_on` DATETIME NULL DEFAULT NULL AFTER `
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Mail Host', 'mail_host', 'smtp.gmail.com'), (NULL, 'Mail Port', 'mail_port', '587');
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Mail SSL', 'mail_ssl', 'tls'), (NULL, 'Mail Auth', 'mail_auth', 'login');
 --sathish 24 May 2019
-RENAME TABLE `recency_app`.`tester_information` TO `recency_app`.`test_kit_information`;
-ALTER TABLE `test_kit_information` ADD `adden_on` DATETIME NULL DEFAULT NULL AFTER `status`, ADD `added_by` INT(11) NULL DEFAULT NULL AFTER `adden_on`;
-ALTER TABLE `test_kit_information` CHANGE `adden_on` `added_on` DATETIME NULL DEFAULT NULL;
+RENAME TABLE `tester_information` TO `recency_app`.`test_kit_information`;
+ALTER TABLE `test_kit_information` ADD `added_on` DATETIME NULL DEFAULT NULL AFTER `status`, ADD `added_by` INT(11) NULL DEFAULT NULL AFTER `added_on`;

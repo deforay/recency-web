@@ -244,21 +244,20 @@ class FacilitiesTable extends AbstractTableGateway
         $logincontainer = new Container('credo');
         $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
 
-        if ($logincontainer->roleCode == 'user') {
-            $sQuery = $sql->select()->from(array('ufm' => 'user_facility_map'))
-                ->join(array('f' => 'facilities'), 'f.facility_id = ufm.facility_id', array('facility_name', 'facility_id'))
-                ->where(array('f.status' => 'active', 'ufm.user_id' => $logincontainer->userId));
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        }
-        //admin
-        else {
+        // if ($logincontainer->roleCode == 'user') {
+        //     $sQuery = $sql->select()->from(array('ufm' => 'user_facility_map'))
+        //         ->join(array('f' => 'facilities'), 'f.facility_id = ufm.facility_id', array('facility_name', 'facility_id'))
+        //         ->where(array('f.status' => 'active', 'ufm.user_id' => $logincontainer->userId));
+        //     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        //     $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        // }
+        // //admin
+        // else {
             $sQuery = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
-                        //->where(array('status' => 'active', 'f.facility_type_id IS NULL OR f.facility_type_id="1" OR f.facility_type_id=""'));
                         ->where(array('status' => 'active'));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        }
+        //}
         $sQueryTest = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
             ->where(array('f.status' => 'active', 'f.facility_name IS NOT NULL', 'facility_type_id="2"'));
         $sQueryStrTest = $sql->getSqlStringForSqlObject($sQueryTest);
@@ -275,14 +274,14 @@ class FacilitiesTable extends AbstractTableGateway
         if ($params['userId'] != '') {
             $sQuery = $sql->select()->from(array('f' => 'facilities'))
                 ->join(array('r' => 'recency'), 'f.facility_id = r.facility_id', array('sample_id'))
-                ->where(array('f.status' => 'active', '(f.facility_type_id IS NULL OR f.facility_type_id="1" OR f.facility_type_id="")', 'r.added_by' => $params['userId']))
+                ->where(array('f.status' => 'active', 'r.added_by' => $params['userId']))
                 ->order('f.facility_id DESC');
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
             $rResult['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         } else {
             $sQuery = $sql->select()->from(array('f' => 'facilities'))
-                ->where(array('status' => 'active', 'f.facility_type_id IS NULL OR f.facility_type_id="1" OR f.facility_type_id=""'));
+                ->where(array('status' => 'active'));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
             $rResult['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         }
@@ -323,17 +322,16 @@ class FacilitiesTable extends AbstractTableGateway
         return $fResult;
     }
 
-    public function checkFacilityName($fName, $facilityType)
-    {
+    public function checkFacilityName($fName, $facilityType) {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $fQuery = $sql->select()->from('facilities')->columns(array('facility_id', 'facility_name', 'facility_type_id'))
             ->where(array('facility_name' => trim($fName)));
-        if ($facilityType == 1) {
-            $fQuery = $fQuery->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
-        } else if ($facilityType == 2) {
-            $fQuery = $fQuery->where(array('facility_type_id' => $facilityType));
-        }
+        // if ($facilityType == 1) {
+        //     $fQuery = $fQuery->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
+        // } else if ($facilityType == 2) {
+        //     $fQuery = $fQuery->where(array('facility_type_id' => $facilityType));
+        // }
         $fQueryStr = $sql->getSqlStringForSqlObject($fQuery); // Get the string of the Sql, instead of the Select-instance
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
@@ -364,8 +362,7 @@ class FacilitiesTable extends AbstractTableGateway
         return $cResult;
     }
 
-    public function fetchLocationBasedFacility($params)
-    {
+    public function fetchLocationBasedFacility($params) {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $fResult = '';
