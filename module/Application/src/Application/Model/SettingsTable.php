@@ -10,7 +10,7 @@ use Zend\Session\Container;
 class SettingsTable extends AbstractTableGateway
 {
 
-    protected $table = 'tester_information';
+    protected $table = 'test_kit_information';
 
     public function __construct(Adapter $adapter)
     {
@@ -96,7 +96,7 @@ class SettingsTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $roleId = $sessionLogin->roleId;
 
-        $sQuery = $sql->select()->from(array('t' => 'tester_information'))
+        $sQuery = $sql->select()->from(array('t' => 'test_kit_information'))
             //->join(array('p' => 'province_details'), 'p.province_id=f.province', array('province_name'), 'left')
             //->join(array('d' => 'district_details'), 'd.district_id=f.district', array('district_name'), 'left')
         ;
@@ -149,6 +149,8 @@ class SettingsTable extends AbstractTableGateway
 
     public function addSettingsDetails($params)
     {
+        
+        $logincontainer = new Container('credo');
         $common = new CommonService();
         if (isset($params['testKitName']) && trim($params['testKitName']) != "") {
             $data = array(
@@ -156,7 +158,10 @@ class SettingsTable extends AbstractTableGateway
                 'kit_lot_no' => $params['testKitNumber'],
                 'kit_expiry_date' => $common->dbDateFormat($params['testKitDate']),
                 'status' => $params['status'],
+                'added_on' => date("Y-m-d H:i:s"),
+                'added_by' => $logincontainer->userId,
             );
+           
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
         }
@@ -165,10 +170,11 @@ class SettingsTable extends AbstractTableGateway
 
     public function fetchSettingsDetailsById($testId)
     {
+
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $common = new CommonService();
-        $sQuery = $sql->select()->from(array('t' => 'tester_information'))
+        $sQuery = $sql->select()->from(array('t' => 'test_kit_information'))
             ->where(array('t.test_id' => $testId));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
@@ -178,6 +184,7 @@ class SettingsTable extends AbstractTableGateway
 
     public function updateSettingsDetails($params)
     {
+        $logincontainer = new Container('credo');
         $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
         $common = new CommonService();
         if (isset($params['testKitName']) && trim($params['testKitName']) != "") {

@@ -40,9 +40,8 @@ if($result['kit_expiry_date']!= '' && $result['kit_expiry_date']!= null && $resu
                               <div class="col-sm-4">
                                    <select class="form-control isRequired" id="testKitName" name="testKitName" title="Please select the Test Kit Manufacturers">
                                    <option value="">-- Select --</option>
-                                        <option value="long_term_sample"<?php echo($result['reference_result'] == 'long_term_sample' )?'selected="selected"':''; ?>>Long Term Sample</option>
-                                        <option value="preliminary_recent_sample"<?php echo($result['reference_result'] == 'preliminary_recent_sample' )?'selected="selected"':''; ?>>Preliminary Recent Sample</option>
-                                        <option value="hiv_negative_sample"<?php echo($result['reference_result'] == 'hiv_negative_sample' )?'selected="selected"':''; ?>>Hiv Negative Sample</option>
+                                        <option value="SED"<?php echo($result['reference_result'] == 'SED' )?'selected="selected"':''; ?>>SEDIA Bioscience (SED)</option>
+                                        <option value="MAX"<?php echo($result['reference_result'] == 'MAX' )?'selected="selected"':''; ?>>Maxim Biomedical (MAX)</option>
                                         
                                    </select>
 
@@ -50,7 +49,7 @@ if($result['kit_expiry_date']!= '' && $result['kit_expiry_date']!= null && $resu
 
                               <label class="col-sm-2 col-form-label" for="">Test Kit Lot Number<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control isRequired" id="testKitNumber" name="testKitNumber" value="<?php echo $result['kit_lot_no']; ?>"  placeholder="Enter the facility Test Kit Lot Number" title="Please enter the Test Kit Lot Number" onblur="checkNameValidation('tester_information', 'kit_lot_no', this,'<?php echo "kit_lot_no##".$result['kit_lot_no'];?>', 'The kit number that you entered already exists . Please try another number..');">
+                                   <input type="text" class="form-control isRequired" id="testKitNumber" name="testKitNumber" value="<?php echo $result['kit_lot_no']; ?>"  placeholder="Enter the facility Test Kit Lot Number" title="Please enter the Test Kit Lot Number" onblur="checkNameValidation('test_kit_information', 'kit_lot_no', this,'<?php echo "kit_lot_no##".$result['kit_lot_no'];?>', 'The kit number that you entered already exists . Please try another number..');">
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Test Kit Expire Date<span class="mandatory">*</span></label>
                               <div class="col-sm-4">               

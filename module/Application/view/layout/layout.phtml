@@ -190,13 +190,17 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
                                         <?php echo $userMenu;?>
                                    </ul>
                               </li>
-                         <?php } 
+                            
+                         <?php } ?> 
+                         <li class="nav-main-heading" style="padding:3px;"></li>
+                         <?php echo $settingsMenu;?>
+                         <?php
                             if($roleCode != 'MGMT'){ 
                          ?>
                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $recencyMenu;?>
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $settingsMenu;?>
+                       
+                         
                          <?php if($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user'){ ?>
                          <li class="nav-main-heading" style="padding:3px;"></li>
                          <?php echo $qcMenu;?>

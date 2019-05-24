@@ -287,3 +287,7 @@ ALTER TABLE `recency` ADD `result_printed_on` DATETIME NULL DEFAULT NULL AFTER `
 --sathish 22 May 2019
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Mail Host', 'mail_host', 'smtp.gmail.com'), (NULL, 'Mail Port', 'mail_port', '587');
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Mail SSL', 'mail_ssl', 'tls'), (NULL, 'Mail Auth', 'mail_auth', 'login');
+--sathish 24 May 2019
+RENAME TABLE `recency_app`.`tester_information` TO `recency_app`.`test_kit_information`;
+ALTER TABLE `test_kit_information` ADD `adden_on` DATETIME NULL DEFAULT NULL AFTER `status`, ADD `added_by` INT(11) NULL DEFAULT NULL AFTER `adden_on`;
+ALTER TABLE `test_kit_information` CHANGE `adden_on` `added_on` DATETIME NULL DEFAULT NULL;
