@@ -170,9 +170,9 @@
 							<option value=""> -- Select -- </option>
 							<?php
 							foreach ($facilityResult['facilityTest'] as $facilityRow) {
-								if (2 != (int)$facilityRow['facility_type_id']) {
-									continue;
-								}
+								//if (2 != (int)$facilityRow['facility_type_id']) {
+									//continue;
+								//}
 
 								?>
 								<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
