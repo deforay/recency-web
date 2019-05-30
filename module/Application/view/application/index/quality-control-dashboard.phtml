@@ -18,7 +18,7 @@ $currentDate = date('d-M-Y');
 <div class="bg-body-light">
 	<div class="content content-full">
 		<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-			<h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">QA &amp; Analysis Dashboard</h1>
+			<h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Quality Control Dashboard</h1>
 		</div>
 	</div>
 </div>
@@ -66,7 +66,7 @@ $currentDate = date('d-M-Y');
 
 				<div class="row items-push">
 					<div class="col-lg-7 ">
-						<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getRecentInfectionByMonthSexChart();"><i class="fa fa-fw fa-check"></i> Search</a>
+						<a href="javascript:void(0);" class="btn btn-primary" onclick="getQualityResultsChart();getQualitySampleLotChart();getQualityResultsLitLotNumberChart();getTestingQualityChart();getQualityControlByMonth();"><i class="fa fa-fw fa-check"></i> Search</a>
 
 					</div>
 				</div>
@@ -74,70 +74,129 @@ $currentDate = date('d-M-Y');
 		</div>
 	</div>
 
+	
 	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Gender &nbsp;&nbsp;&nbsp;&nbsp;
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By Specimen Type
+		&nbsp;&nbsp;&nbsp;&nbsp;
 		<small class="custom-control custom-switch custom-control-inline">
-			<input type="checkbox" class="custom-control-input" id="recent-infection-by-gender-percentage" name="recent-infection-by-gender-percentage" checked onchange="getFinalOutcomeChart();">
-			<label class="custom-control-label" for="recent-infection-by-gender-percentage">Percentage</label>
+			<input type="checkbox" class="custom-control-input" id="quality-result-by-speciman-percentage" name="quality-result-by-speciman-percentage" checked onchange="getQualityResultsChart();">
+			<label class="custom-control-label" for="quality-result-by-speciman-percentage">Percentage</label>
 		</small>
 	</h2>
 	<div class="block block-rounded block-bordered">
 		<div class="block-content block-content-full">
-			<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			<div id="qualityResultTermOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
 
 	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by District
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By QC Panel Lot
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<small class="custom-control custom-switch custom-control-inline">
-			<input type="checkbox" class="custom-control-input" id="recent-infection-by-district-percentage" name="recent-infection-by-district-percentage" checked onchange="getInfectionByDistrictChart();">
-			<label class="custom-control-label" for="recent-infection-by-district-percentage">Percentage</label>
+			<input type="checkbox" class="custom-control-input" id="quality-sample-lot-percentage" name="quality-sample-lot-percentage" checked onchange="getQualitySampleLotChart();">
+			<label class="custom-control-label" for="quality-sample-lot-percentage">Percentage</label>
 		</small>
 	</h2>
 	<div class="block block-rounded block-bordered">
 		<div class="block-content block-content-full">
-			<div id="infectionByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			<div id="qualitySampleLotChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
 
 	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Age
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By Kit Lot
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<small class="custom-control custom-switch custom-control-inline">
-			<input type="checkbox" class="custom-control-input" id="recent-infection-by-age-percentage" name="recent-infection-by-age-percentage" checked onchange="getInfectionByAgeChart();">
-			<label class="custom-control-label" for="recent-infection-by-age-percentage">Percentage</label>
+			<input type="checkbox" class="custom-control-input" id="quality-result-by-kit-lot-number-percentage" name="quality-result-by-kit-lot-number-percentage" checked onchange="getQualityResultsLitLotNumberChart();">
+			<label class="custom-control-label" for="quality-result-by-kit-lot-number-percentage">Percentage</label>
 		</small>
 	</h2>
 	<div class="block block-rounded block-bordered">
 		<div class="block-content block-content-full">
-			<div id="infectionByAge" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			<div id="qualityResultKitLotNumberChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		</div>
+	</div>
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Testing Quality
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="testing-quality-percentage" name="testing-quality-percentage" checked onchange="getTestingQualityChart();">
+			<label class="custom-control-label" for="testing-quality-percentage">Percentage</label>
+		</small>
+	</h2>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="testingQualityChartNegative" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="testingQualityChartInvalid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 	
-
 	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Month and Sex
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<small class="custom-control custom-switch custom-control-inline">
-			<input type="checkbox" class="custom-control-input" id="recent-infection-by-month-sex" name="recent-infection-by-month-sex" checked onchange="getRecentInfectionByMonthSexChart();">
-			<label class="custom-control-label" for="recent-infection-by-month-sex">Percentage</label>
-		</small>
+		<i class="fa fa-angle-right text-muted mr-1"></i> % RTRI Negative or Invalid by District
 	</h2>
-	<div class="block block-rounded block-bordered">
-		<div class="block-content block-content-full">
-			<div id="infectionByMonthSex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="testingQualityTable" style="min-width: 310px;">
+
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-
-	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Map (feature is under development)
-	</h2>
-	<div class="block block-rounded block-bordered">
-		<div class="block-content block-content-full">
-			<div id="mapid" style="height: 480px;"></div>
+	
+		<h2 class="content-heading ">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Facility
+			
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<table id="passRateFacilityWiseDataTable" class="table table-bordered table-striped table-vcenter">
+					<thead>
+						<tr>
+							<th>Facility</th>
+							<th>Kit</th>
+							<th>District Name</th>
+							<th>% Passed</th>
+							
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="5" class="dataTables_empty">Loading data from server</td>
+						</tr>
+						<tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</div>
+
+		<h2 class="content-heading">
+			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Month
+			&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="quality-control-by-month" name="quality-control-by-month" checked  onchange="getQualityControlByMonth();">
+						<label class="custom-control-label" for="quality-control-by-month">Percentage</label>
+					</small>
+		</h2>
+		<div class="block block-rounded block-bordered">
+			<div class="block-content block-content-full">
+				<div id="qualityControlByMonthwise" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			</div>
+		</div>
+
+	
 
 </div>
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
@@ -147,30 +206,17 @@ $currentDate = date('d-M-Y');
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
 
 <script type="text/javascript">
-	var mymap = L.map('mapid').setView([-1.9565912, 30.0595336], 14);
-
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox.streets'
-	}).addTo(mymap);
-
-	L.marker([-1.9565912, 30.0595336]).addTo(mymap);
-
-
 
 
 	/* Table initialisation */
 	oTable = null;
 	$(document).ready(function() {
-		getFinalOutcomeChart();
-		getInfectionByDistrictChart();
-		getInfectionByAgeChart();
-		getRecentInfectionByMonthSexChart();
 		
-		//getHivViralLoadChart();
+		getQualityResultsChart();
+		getQualitySampleLotChart();
+		getQualityResultsLitLotNumberChart();
+		getTestingQualityChart();
+		getQualityControlByMonth();
 		<?php foreach ($globalConfigResult as $config) {
 			?>
 			getLocationDeatils('<?php echo $config["global_name"]; ?>');
@@ -205,7 +251,38 @@ $currentDate = date('d-M-Y');
 
 			});
 
-			
+			oTable = $('#passRateFacilityWiseDataTable').dataTable({
+				"bAutoWidth": false,
+                "bProcessing": true,
+                "bServerSide": true,
+				"aoColumns": [
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					
+					{
+						"sClass": "center",
+						"bSortable": false
+					}
+				],
+				"sAjaxSource": "<?php echo $this->url('quality-check', array('action' => 'get-pass-rate-by-facility')); ?>",
+				"fnServerData": function(sSource, aoData, fnCallback) {
+					
+					$.ajax({
+						"dataType": 'json',
+						"type": "POST",
+						"url": sSource,
+						"data": aoData,
+						"success": fnCallback
+					});
+				}
+			});
 	});
 
 
@@ -252,84 +329,101 @@ $currentDate = date('d-M-Y');
 			});
 	}
 
-	function getFinalOutcomeChart() {
+	
+	function getQualityResultsChart() {
 		var format = null;
-		if ($('#recent-infection-by-gender-percentage').prop('checked')) {
+		if ($('#quality-result-by-speciman-percentage').prop('checked')) {
 			format = 'percentage';
 		} else {
 			format = 'number';
 		}
-		$.post("<?php echo $this->url('recency', array('action' => 'recent-infection-by-gender-chart')); ?>", {
-				format: format,
-				sampleTestedDates: $("#sampleTestedDates").val(),
-				locationOne: $("#location_one").val(),
-				locationTwo: $("#location_two").val(),
-				locationThree: $("#location_three").val(),
-				fName: $("#facilityId").val(),
-				testingFacility: $("#testingFacility").val()
-			},
-			function(data) {
-				$("#container").html(data);
-			});
-	}
-
-	function getInfectionByDistrictChart() {
-		var format = null;
-		if ($('#recent-infection-by-district-percentage').prop('checked')) {
-			format = 'percentage';
-		} else {
-			format = 'number';
-		}
-		$.post("<?php echo $this->url('recency', array('action' => 'recent-infection-by-district-chart')); ?>", {
-				format: format,
-				sampleTestedDates: $("#sampleTestedDates").val(),
-				locationOne: $("#location_one").val(),
-				locationTwo: $("#location_two").val(),
-				locationThree: $("#location_three").val(),
-				fName: $("#facilityId").val(),
-				testingFacility: $("#testingFacility").val()
-			},
-			function(data) {
-				$("#infectionByDistrict").html(data);
-			});
-	}
-
-	function getInfectionByAgeChart() {
-		var format = null;
-		if ($('#recent-infection-by-age-percentage').prop('checked')) {
-			format = 'percentage';
-		} else {
-			format = 'number';
-		}
-		$.post("<?php echo $this->url('recency', array('action' => 'recent-infection-by-age-chart')); ?>", {
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-quality-result-wise-term-outcome-chart')); ?>", {
 				format: format,
 				sampleTestedDates: $("#sampleTestedDates").val()
 			},
 			function(data) {
-				$("#infectionByAge").html(data);
+				$("#qualityResultTermOutcomeChart").html(data);
 			});
 	}
-	// function getHivViralLoadChart() {		
-	// 	$.post("< ?php echo $this->url('recency', array('action' => 'recent-hiv-viral-load-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val()},
-	// 	function(data){
-	// 		$("#hivViralLoad").html(data);
-	// 	});
-	// }
+
+	function getQualitySampleLotChart() {
+		var format = null;
+		if ($('#quality-sample-lot-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-sample-lot-chart')); ?>", {
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
+			},
+			function(data) {
+				$("#qualitySampleLotChart").html(data);
+			});
+	}
+
+	function getQualityResultsLitLotNumberChart() {
+		var format = null;
+		if ($('#quality-result-by-kit-lot-number-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-kit-lot-number-chart')); ?>", {
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
+			},
+			function(data) {
+				$("#qualityResultKitLotNumberChart").html(data);
+			});
+	}
+
+	function getTestingQualityChart() {
+		var format = null;
+		if ($('#testing-quality-percentage').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-negative-chart')); ?>", {
+			format: format,
+			sampleTestedDates: $("#sampleTestedDates").val()
+		},
+		function(data) {
+			$("#testingQualityChartNegative").html(data);
+		});
+		
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-invalid-chart')); ?>", {
+			format: format,
+			sampleTestedDates: $("#sampleTestedDates").val()
+		},
+		function(data) {
+			$("#testingQualityChartInvalid").html(data);
+		});
+		
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-district-wise-quality-check-invalid')); ?>", {
+		 	format: format,
+		 	sampleTestedDates: $("#sampleTestedDates").val(),
+			locationThree: $("#location_three").val(),
+			testingFacility: $("#testingFacility").val()
+		},
+		function(data) {
+		 	$("#testingQualityTable").html(data);
+		});
+	}
+
 	
 
-	function getRecentInfectionByMonthSexChart() {
-		var format = null;
-		if ($('#recent-infection-by-month-sex').prop('checked')) {
-			format = 'percentage';
-		} else {
-			format = 'number';
-		}
-		$.post("<?php echo $this->url('recency', array('action' => 'recent-infection-by-month-sex-chart')); ?>", {
-				format: format,
-				sampleTestedDates: $("#sampleTestedDates").val()
-			},
-			function(data) {
-				$("#infectionByMonthSex").html(data);
+	function getQualityControlByMonth() {
+			var format = null;
+			if($('#quality-control-by-month').prop('checked')){
+				format = 'percentage';
+			}else{
+				format = 'number';
+			}
+			$.post("<?php echo $this->url('quality-check',array('action'=>'get-month-wise-quality-control')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
+			function(data){
+				$("#qualityControlByMonthwise").html(data);
 			});
 	}
 </script>

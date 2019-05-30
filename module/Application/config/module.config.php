@@ -10,7 +10,7 @@
 return array(
      'router' => array(
             'routes' => array(
-                  'home' => array(
+                    'home' => array(
                         'type' => 'Literal',
                         'options' => array(
                               'route'    => '/',
@@ -19,16 +19,26 @@ return array(
                               'action'     => 'index',
                               ),
                         ),
-                  ),
-                  'analysis-dashboard' => array(
-                    'type'    => 'Literal',
-                    'options' => array(
-                        'route'    => '/analysis-dashboard',
-                         'defaults' => array(
-                            'controller' => 'Application\Controller\Index',
-                            'action' => 'analysis-dashboard',
+                    ),
+                    'analysis-dashboard' => array(
+                         'type'    => 'Literal',
+                         'options' => array(
+                              'route'    => '/analysis-dashboard',
+                              'defaults' => array(
+                              'controller' => 'Application\Controller\Index',
+                              'action' => 'analysis-dashboard',
+                              ),
                          ),
                     ),
+                    'quality-control-dashboard' => array(
+                         'type'    => 'Literal',
+                         'options' => array(
+                              'route'    => '/quality-control-dashboard',
+                              'defaults' => array(
+                              'controller' => 'Application\Controller\Index',
+                              'action' => 'quality-control-dashboard',
+                              ),
+                         ),
                     ),
                     'export-recency-data' => array(
                          'type'    => 'Literal',
