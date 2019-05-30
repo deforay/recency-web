@@ -81,18 +81,38 @@ class IndexController extends AbstractActionController
                $recencyService = $this->getServiceLocator()->get('RecencyService');
                $result = $recencyService->getAllRecencyResult($params);
                return $this->getResponse()->setContent(Json::encode($result));
-          }else{
-            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-            $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult=$facilityService->getFacilitiesAllDetails();
+        }else{
+        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+        $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+        $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+        $facilityResult=$facilityService->getFacilitiesAllDetails();
 
-            return new ViewModel(array(
-                'globalConfigResult' => $globalConfigResult,
-                'facilityResult' => $facilityResult
-            ));
-          }
+        return new ViewModel(array(
+            'globalConfigResult' => $globalConfigResult,
+            'facilityResult' => $facilityResult
+        ));
+        }
     }
 
+    public function qualityControlDashboardAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+               $params = $request->getPost();
+               $recencyService = $this->getServiceLocator()->get('RecencyService');
+               $result = $recencyService->getAllRecencyResult($params);
+               return $this->getResponse()->setContent(Json::encode($result));
+        }else{
+        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+        $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+        $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+        $facilityResult=$facilityService->getFacilitiesAllDetails();
+
+        return new ViewModel(array(
+            'globalConfigResult' => $globalConfigResult,
+            'facilityResult' => $facilityResult
+        ));
+        }
+    }
 }
 
