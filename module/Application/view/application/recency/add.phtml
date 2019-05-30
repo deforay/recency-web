@@ -1,5 +1,7 @@
 <?php
 use Zend\Session\Container;
+$config = new \Zend\Config\Reader\Ini();
+$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 $sessionLogin = new Container('credo');
 $arr = array();
 
@@ -16,7 +18,7 @@ $resultArr2 = array();
 if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
      $resultArr2 = explode(",",$arr['display_fields']);
 }
-$sample = in_array("Sample Id",$resultArr)?"isRequired":"";
+$sample = in_array("Sample Id",$resultArr)?"isRequired":"isRequired";
 $patient = in_array("Patient Id",$resultArr)?"isRequired":"";
 $facility = in_array("Facility Name",$resultArr)?"isRequired":"";
 $hivDiagnosisDate = in_array("Hiv Diagnosis Date",$resultArr)?"isRequired":"";
@@ -120,7 +122,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                    <a class="nav-link" href="javascript:void(0)" id="step2" onclick="validateStep1();"> Section 2/2 <i class="fa fa-check stepTwo" style="color:green;visibility:hidden;"></i></a>
                               </li>
                          </ul>
-                         <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
+                         <div name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
                               <div class="block-content block-content-sm"> </div>
                               <div class="block-content block-content-full tab-content" style="min-height: 300px;">
                                 <?php
@@ -403,8 +405,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                             </select>
                                         </div>
 
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Test Date<?php echo(in_array("Viral Load Test Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                       <div class="col-sm-4 <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>">
+                                        <label class="hide-lab-req col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Test Date<?php echo(in_array("Viral Load Test Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                       <div class="hide-lab-req col-sm-4 <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>">
                                            <input type="text" name="vlTestDate" id="vlTestDate" class="js-datepicker vlResultFields form-control <?php echo $vlTestDate; ?>"  data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the Viral Load Test Date" title="Please enter the Viral Load Test Date" readonly="readonly" disabled  onblur="updateVlResultFields('vlField')"/>
                                        </div>
 
@@ -416,9 +418,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                         <br>
                                         <br>
                                         <br>
-
-                                       <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                       <div class="col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
+                                       <label class="hide-lab-req col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
+                                       <div class="hide-lab-req col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
                                            <input type="text" name="vlLoadResult" id="vlLoadResult" class="form-control vlResultFields <?php echo $vlLoadResult; ?>" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)" onblur="updateVlResultFields('vlField')"/>
 
                                             <div class="text-center" style="padding:2px 0px 2px 0px">OR</div>
@@ -431,7 +432,27 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                     <option value="&lt; 40"> &lt; 40</option>
                                            </select>
                                        </div>
-                                       
+                                       <div class="is-vl-lab col-md-6" style="display:none;">
+                                            <div class="col-sm-2">
+                                                <label class="col-form-label" for="isFacilityLab">Facility <span class='mandatory'>*</span></label>
+                                                <label class="col-form-label" for="isVlLab" style=" padding-top: 35px; ">Viral Load Lab <span class='mandatory'>*</span></label>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <select class="select2 form-control isVlLabRequired is-facility" name="isFacilityLab" id="isFacilityLab" title="Please select facility lab">
+                                                    <option value="">-- Select -- </option>
+                                                </select>
+                                                <select class="select2 form-control isVlLabRequired is-viral-lab" name="isVlLab" id="isVlLab" title="Please select viral load lab" style=" margin-top: 35px; ">
+                                                    <option value="">-- Select -- </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="is-vl-lab col-sm-6" style="display:none;">
+                                            <label class="col-sm-2 form-check-label rm-lab-req" for="sendVlsm" style=" padding-top: 35px; ">Send a Viral Load Test Request to VLSM</label>
+                                            <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);">&nbsp;Yes
+                                            </div>
+                                        </div>
                                        <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
                                        <div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
                                            <span class=" form-control " style="border:none;" id="vlResultoutcome"></span>
@@ -582,7 +603,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                              </div>
                                         </div>
                                    </div>
-                              </form>
+                                </div>
                          </div>
                     </div>
                </div>
@@ -602,73 +623,72 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
           var postiveLine = $("#positiveVerificationLine").val();
           var longTermLine = $("#longTermVerificationLine").val();
           
-
-          if(ctrlLine!='' && postiveLine!='' && longTermLine!='' ){
-               if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
+        $('.isVlLabRequired').removeClass('isRequired');
+        if(ctrlLine!='' && postiveLine!='' && longTermLine!='' ){
+            if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
+            $(".outcome").css({"visibility":"visible"});
+                $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                updateVlResultFields();
+            }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
+                $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
                 $(".outcome").css({"visibility":"visible"});
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    
-                    updateVlResultFields();
-
-                    
-               }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                   
-                    updateVlResultFields();
-
-                   
-                    
-               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                    
-                    updateVlResultFields();
-                    
-               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                    
-                    updateVlResultFields();
-
-                    
-               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
-                    $("#outcome").html('Assay Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                 
-                    updateVlResultFields('Assay Negative');
-
-                    
-               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-
-                    updateVlResultFields();
-                    
-               }
-               
-               else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent') {
-                   
-                    $("#outcome").html('Assay Recent - Please ensure you add Viral Load Result').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                  
-                    updateVlResultFields('Assay Recent');
-
-               }
-               else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
-                    $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-
-                    updateVlResultFields('Long Term');
-                    
-               }
-          }else{
-               $("#outcome").html('');
-               $(".outcome","#outcome").css({"visibility":"hidden"});
-               $("#vlResultoutcome").html('');
-			   $(".vlResultoutcome").css({"visibility":"hidden"});
-          }
+                updateVlResultFields();
+            }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
+                $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                $(".outcome").css({"visibility":"visible"});
+                updateVlResultFields();
+            }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
+                $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                $(".outcome").css({"visibility":"visible"});
+                updateVlResultFields();
+            }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
+                $("#outcome").html('Assay Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
+                $(".outcome").css({"visibility":"visible"});
+                updateVlResultFields('Assay Negative');
+            }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
+                $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
+                $(".outcome").css({"visibility":"visible"});
+                updateVlResultFields();
+            }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent') {
+                $("#outcome").html('Assay Recent - Please ensure you add Viral Load Result').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                $(".outcome").css({"visibility":"visible"});
+                getFacilities();
+                updateVlResultFields('Assay Recent');
+            }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
+                $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
+                $(".outcome").css({"visibility":"visible"});
+                updateVlResultFields('Long Term');
+            }
+        }else{
+            $("#outcome").html('');
+            $(".outcome","#outcome").css({"visibility":"hidden"});
+            $("#vlResultoutcome").html('');
+            $(".vlResultoutcome").css({"visibility":"hidden"});
+        }
      }
+
+     function getFacilities() {
+        // read Facility List
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", '<?php echo $configResult['vlsm']['domain'];?>api/fetchFacilities.php', false ); // false for synchronous request
+        xmlHttp.send( null );
+        if(typeof xmlHttp.responseText != 'undefined' && xmlHttp.responseText != ""){
+            jsonData = JSON.parse(xmlHttp.responseText);
+            $('.is-vl-lab').css('display','contents');
+            $('.isVlLabRequired').addClass('isRequired');
+            jsonData.forEach(function(item){
+                if(item.facility_type == '1'){
+                    $('.is-facility').append('<option value="'+item.facility_id+'">'+item.facility_name+'</option>');
+                }else if(item.facility_type == '2'){
+                    $('.is-viral-lab').append('<option value="'+item.facility_id+'">'+item.facility_name+'</option>');
+                }
+            });
+        }else{
+            console.log('Facility API not working! Please check domain url of vlsm');return;
+        }
+        
+    }
+
      function updateVlResultFields(fieldValue=null)
      {
         var vlDataResult = $("#vlLoadResult").val();
@@ -849,7 +869,12 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                     $("#otherFacilityName").removeClass("isRequired").hide();
                }
           });
-
+            // VLSM Facility and VLlab API select
+            $("#isFacilityLab").select2({
+                placeholder: "Select the facility",
+                width:"260px",
+                allowClear: true,
+            });
           $("#facilityId").select2({
                placeholder: "Choose Facility",
                width:"250px",
@@ -919,34 +944,61 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
           $(".nxtBtn").show();
      }
 
-     function validateNow() {
-          if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
-               if( ( $("#dob").val() != "" ) || ( $("#age").val() != "" ) ){
-                    flag = deforayValidator.init({
-                         formId: 'recencyInformation'
-                    });
-                    
-                    document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
-                    if(document.getElementById("outcome").innerHTML=='Assay Recent - Please ensure you add Viral Load Result')
-                    {
-                        document.getElementById("outcomeData").value = 'Assay Recent';
+    function validateNow() {
+        var jsonArr = [];
+        if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
+            if($('#sendVlsm').is(':checked')){
+                jsonArr['sampleId'] = $("#sampleId").val();
+                jsonArr['patientId'] = $("#patientId").val();
+                jsonArr['facilityId'] = $("#isFacilityLab").val();
+                jsonArr['province'] = $("#location_one").val();
+                jsonArr['district'] = $("#location_two").val();
+                jsonArr['sampleCollectionDate'] = $("#sampleCollectionDate").val();
+                jsonArr['sampleType'] = $("#receivedSpecimenType").val();
+                jsonArr['viralLoad'] = $("#isVlLab").val();
+
+                var http = new XMLHttpRequest();
+                var url = '<?php echo $configResult['vlsm']['domain'];?>api/recency/requestVlTest.php';
+                // var params = JSON.stringify(jsonArr);
+                http.open('POST', url, true);
+
+                //Send the proper header information along with the request
+                http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+                http.onreadystatechange = function() {//Call a function when the state changes.
+                    if(http.readyState == 4 && http.status == 200) {
+                        console.log(http.responseText);
                     }
-                    document.getElementById("vlfinaloutcomeResult").value=document.getElementById("vlResultoutcome").innerHTML;
-                    if (flag) {
-                         $.blockUI();
-                         document.getElementById('recencyInformation').submit();
-                    }
-               }else{
-                    $("#age").focus();
-                    $("#age").css("border","1px solid rgb(207, 51, 57)");
-                    alert("Please enter either DOB or age  ",'err');
-               }
-          }else{
-               $("#sampleId").focus();
-               $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
-               alert("Please enter either sample or patient id  ",'err');
-          }
-     }
+                }
+                http.send(jsonArr);
+            }
+            return;
+            if( ( $("#dob").val() != "" ) || ( $("#age").val() != "" ) ){
+                flag = deforayValidator.init({
+                        formId: 'recencyInformation'
+                });
+                
+                document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
+                if(document.getElementById("outcome").innerHTML=='Assay Recent - Please ensure you add Viral Load Result')
+                {
+                    document.getElementById("outcomeData").value = 'Assay Recent';
+                }
+                document.getElementById("vlfinaloutcomeResult").value=document.getElementById("vlResultoutcome").innerHTML;
+                if (flag) {
+                        // $.blockUI();
+                        // document.getElementById('recencyInformation').submit();
+                }
+            }else{
+                $("#age").focus();
+                $("#age").css("border","1px solid rgb(207, 51, 57)");
+                alert("Please enter either DOB or age  ",'err');
+            }
+        }else{
+            $("#sampleId").focus();
+            $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
+            alert("Please enter either sample or patient id  ",'err');
+        }
+    }
 
      function ageCalculate(){
           var agYrs = '';
@@ -1068,4 +1120,14 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         });
         }
      }
+
+    function sendViralLoadTestRequest(obj){
+        if($(obj).is(':checked')){
+            $('.hide-lab-req').hide();
+            $('.rm-lab-req').css('padding-top','0px')
+        }else{
+            $('.hide-lab-req').show();
+            $('.rm-lab-req').css('padding-top','35px')
+        }
+    }
 </script>

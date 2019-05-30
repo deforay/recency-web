@@ -290,3 +290,5 @@ INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global
 --sathish 24 May 2019
 RENAME TABLE `tester_information` TO `recency_app`.`test_kit_information`;
 ALTER TABLE `test_kit_information` ADD `added_on` DATETIME NULL DEFAULT NULL AFTER `status`, ADD `added_by` INT(11) NULL DEFAULT NULL AFTER `added_on`;
+-- Thanaseelan 30-May-2019 Created for Between vlsm and recnecy (API VL Lab test request)
+ALTER TABLE `facilities` ADD `is_vl_lab` VARCHAR(255) NULL DEFAULT 'no' AFTER `facility_type_id`;
