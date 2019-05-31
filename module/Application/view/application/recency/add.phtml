@@ -122,7 +122,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                    <a class="nav-link" href="javascript:void(0)" id="step2" onclick="validateStep1();"> Section 2/2 <i class="fa fa-check stepTwo" style="color:green;visibility:hidden;"></i></a>
                               </li>
                          </ul>
-                         <div name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
+                         <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
                               <div class="block-content block-content-sm"> </div>
                               <div class="block-content block-content-full tab-content" style="min-height: 300px;">
                                 <?php
@@ -434,7 +434,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                        </div>
                                        <div class="is-vl-lab col-md-6" style="display:none;">
                                             <div class="col-sm-2">
-                                                <label class="col-form-label" for="isFacilityLab">Facility <span class='mandatory'>*</span></label>
+                                                <label class="col-form-label" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
                                                 <label class="col-form-label" for="isVlLab" style=" padding-top: 35px; ">Viral Load Lab <span class='mandatory'>*</span></label>
                                             </div>
 
@@ -603,7 +603,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                              </div>
                                         </div>
                                    </div>
-                                </div>
+                                </form>
                          </div>
                     </div>
                </div>
@@ -948,18 +948,19 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         var jsonArr = [];
         if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
             if($('#sendVlsm').is(':checked')){
-                jsonArr['sampleId'] = $("#sampleId").val();
-                jsonArr['patientId'] = $("#patientId").val();
-                jsonArr['facilityId'] = $("#isFacilityLab").val();
-                jsonArr['province'] = $("#location_one").val();
-                jsonArr['district'] = $("#location_two").val();
+                jsonArr['sampleId']             = $("#sampleId").val();
+                jsonArr['patientId']            = $("#patientId").val();
+                jsonArr['facilityId']           = $("#isFacilityLab").val();
+                jsonArr['province']             = $("#location_one").val();
+                jsonArr['district']             = $("#location_two").val();
                 jsonArr['sampleCollectionDate'] = $("#sampleCollectionDate").val();
-                jsonArr['sampleType'] = $("#receivedSpecimenType").val();
-                jsonArr['viralLoad'] = $("#isVlLab").val();
+                jsonArr['sampleType']           = $("#receivedSpecimenType").val();
+                jsonArr['viralLoad']            = $("#isVlLab").val();
+                jsonArr['request_created_by']   = 'recency##<?php echo $sessionLogin->userId;?>';
+                var params = ''+jsonArr['sampleId']+'&'+jsonArr['patientId']+'&'+jsonArr['facilityId']+'&'+jsonArr['province']+'&'+jsonArr['district']+'&'+jsonArr['sampleCollectionDate']+'&'+jsonArr['sampleType']+'&'+jsonArr['viralLoad']+'&'+jsonArr['request_created_by']+'';
 
                 var http = new XMLHttpRequest();
                 var url = '<?php echo $configResult['vlsm']['domain'];?>api/recency/requestVlTest.php';
-                // var params = JSON.stringify(jsonArr);
                 http.open('POST', url, true);
 
                 //Send the proper header information along with the request
@@ -967,12 +968,11 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
                 http.onreadystatechange = function() {//Call a function when the state changes.
                     if(http.readyState == 4 && http.status == 200) {
-                        console.log(http.responseText);
+                        alert(http.responseText);
                     }
                 }
-                http.send(jsonArr);
+                http.send(params);
             }
-            return;
             if( ( $("#dob").val() != "" ) || ( $("#age").val() != "" ) ){
                 flag = deforayValidator.init({
                         formId: 'recencyInformation'
@@ -985,8 +985,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 }
                 document.getElementById("vlfinaloutcomeResult").value=document.getElementById("vlResultoutcome").innerHTML;
                 if (flag) {
-                        // $.blockUI();
-                        // document.getElementById('recencyInformation').submit();
+                        $.blockUI();
+                        document.getElementById('recencyInformation').submit();
                 }
             }else{
                 $("#age").focus();
