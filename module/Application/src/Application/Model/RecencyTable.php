@@ -4203,12 +4203,13 @@ class RecencyTable extends AbstractTableGateway
     
     public function saveVlTestResultApi($params)
     {
+        $common = new CommonService();
         $responseStatus['status'] = 'fail';
         if(isset($params['sampleId']) && $params['sampleId'] != ""){
             $data = array(
                 'vl_result'             => $params['result'],
                 'vl_test_date'          => date('Y-m-d', strtotime($params['sampleTestedDatetime'])),
-                'vl_result_entry_date'  => $params['sampleTestedDatetime']
+                'vl_result_entry_date'  => $common->getDateTime()
             );
             $results =  $this->update($data, array('sample_id' => $params['sampleId']));
         }
