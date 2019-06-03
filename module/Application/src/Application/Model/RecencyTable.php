@@ -4198,6 +4198,25 @@ class RecencyTable extends AbstractTableGateway
                 $results = "0";
             }
         }
-            return $results;
+        return $results;
+    }
+    
+    public function saveVlTestResultApi($params)
+    {
+        $responseStatus['status'] = 'fail';
+        if(isset($params['sampleId']) && $params['sampleId'] != ""){
+            $data = array(
+                'vl_result'             => $params['result'],
+                'vl_test_date'          => date('Y-m-d', strtotime($params['sampleTestedDatetime'])),
+                'vl_result_entry_date'  => $params['sampleTestedDatetime']
+            );
+            $results =  $this->update($data, array('sample_id' => $params['sampleId']));
+        }
+        if(isset($results) && $results > 0){
+            $responseStatus['status'] = 'success';
+        }else{
+            $responseStatus['status'] = 'fail';
+        }
+        return $responseStatus;
     }
 }
