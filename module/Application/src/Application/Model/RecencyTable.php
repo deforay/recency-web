@@ -120,7 +120,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
             ->join(array('tf' => 'testing_facility_type'), 'tf.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left')
             ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'), 'left');
-            //->order("r.recency_id DESC");
+        //->order("r.recency_id DESC");
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
@@ -140,9 +140,9 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->where(array('testing_facility_id' => $parameters['testingFacility']));
         }
         if ($parameters['vlResult'] != '') {
-            if($parameters['vlResult'] == 'panding'){
+            if ($parameters['vlResult'] == 'panding') {
                 $sQuery->where(array('term_outcome' => 'Assay Recent'));
-            }else if($parameters['vlResult'] == 'vl_load_tested'){
+            } else if ($parameters['vlResult'] == 'vl_load_tested') {
                 $sQuery->where('term_outcome = "" OR  term_outcome = NULL ');
             }
         }
@@ -253,7 +253,6 @@ class RecencyTable extends AbstractTableGateway
                          </div>';
 
             $output['aaData'][] = $row;
-
         }
 
         return $output;
@@ -322,7 +321,7 @@ class RecencyTable extends AbstractTableGateway
 
     public function addRecencyDetails($params)
     {
-        //\Zend\Debug\Debug::dump($params);die;
+        // \Zend\Debug\Debug::dump($params);die;
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $logincontainer = new Container('credo');
@@ -470,16 +469,17 @@ class RecencyTable extends AbstractTableGateway
                 //'kit_name'=>$params['testKitName'],
                 'kit_lot_no' => $params['testKitLotNo'],
                 'kit_expiry_date' => ($params['testKitExpDate'] != '') ? $common->dbDateFormat($params['testKitExpDate']) : null,
+                'vl_request_sent' => $params['sendVlsmStatus'],
+                'vl_request_sent_date_time' => ($params['sendVlsmStatus'] == 'yes')?$common->getDateTime():null,
                 'tester_name' => $params['testerName'],
-
                 'vl_test_date' => ($params['vlTestDate'] != '') ? $common->dbDateFormat($params['vlTestDate']) : null,
+                'vl_lab' => ($params['isVlLab'] != '') ? $params['isViralLabText'] : null,
                 //'vl_result'=>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
                 'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate'] != '') ? $common->dbDateFormat($params['sampleCollectionDate']) : null,
                 'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate'] != '') ? $common->dbDateFormat($params['sampleReceiptDate']) : null,
                 'received_specimen_type' => $params['receivedSpecimenType'],
                 'unique_id' => $this->randomizer(10),
                 'testing_facility_type' => $params['testingModality'],
-
             );
             if ($params['vlLoadResult'] != '') {
                 $data['vl_result'] = $params['vlLoadResult'];
@@ -488,9 +488,7 @@ class RecencyTable extends AbstractTableGateway
                 $data['vl_result'] = htmlentities($params['vlResultOption']);
                 $data['vl_result_entry_date'] = date("Y-m-d H:i:s");
             }
-            //   print_r($data);
-            //   die;
-
+            
             //  if (strpos($params['outcomeData'], 'Long Term') !== false){
             //       $data['final_outcome'] = 'Long Term';
             //  }else if (strpos($params['outcomeData'], 'Invalid') !== false){
@@ -741,8 +739,8 @@ class RecencyTable extends AbstractTableGateway
             }
             $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-            if (count($recencyResult) > 0) {-
-                $response['status'] = 'success';
+            if (count($recencyResult) > 0) {
+                -$response['status'] = 'success';
                 $response['recency'] = $recencyResult;
             } else {
                 $response["status"] = "fail";
@@ -1256,26 +1254,30 @@ class RecencyTable extends AbstractTableGateway
 
         $rResult['withTermOutcome'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-        // $sQueryTerm = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome'))
-        //     ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
-        //     ->where('r.term_outcome != "Assay Recent"');
-        // if (isset($params['province']) && $params['province'] != '') {
-        //     $sQueryTerm = $sQueryTerm->where(array('f.province' => $params['province']));
-        // }
-        // if (isset($params['district']) && $params['district'] != '') {
-        //     $sQueryTerm = $sQueryTerm->where(array('f.district' => $params['district']));
-        // }
-        // if (isset($params['city']) && $params['city'] != '') {
-        //     $sQueryTerm = $sQueryTerm->where(array('f.city' => $params['city']));
-        // }
-        // if (isset($params['facility']) && $params['facility'] != '') {
-        //     $sQueryTerm = $sQueryTerm->where(array('r.vl_test_date' => $params['vlTestDate']));
-        // }
-        // if (isset($params['onloadData']) && $params['onloadData'] == 'yes') {
-        //     $sQueryTerm = $sQueryTerm->where(array('r.vl_result is null OR r.vl_result=""'));
-        // }
-        // $sQueryStrTerm = $sql->getSqlStringForSqlObject($sQueryTerm);
-        // $rResult['withOutTermOutcome'] = $dbAdapter->query($sQueryStrTerm, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $sQueryTerm = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'vl_lab', 'vl_request_sent_date_time', 'vl_test_date', 'vl_request_sent', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome'))
+            ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+            ->where('r.vl_result is null')
+            ->where('r.vl_request_sent != "no"');
+
+        if (isset($params['province']) && $params['province'] != '') {
+            $sQueryTerm = $sQueryTerm->where(array('f.province' => $params['province']));
+        }
+        if (isset($params['district']) && $params['district'] != '') {
+            $sQueryTerm = $sQueryTerm->where(array('f.district' => $params['district']));
+        }
+        if (isset($params['city']) && $params['city'] != '') {
+            $sQueryTerm = $sQueryTerm->where(array('f.city' => $params['city']));
+        }
+        if (isset($params['facility']) && $params['facility'] != '') {
+            $sQueryTerm = $sQueryTerm->where(array('r.vl_test_date' => $params['vlTestDate']));
+        }
+        if (isset($params['onloadData']) && $params['onloadData'] == 'yes') {
+            $sQueryTerm = $sQueryTerm->where(array('r.vl_result is null OR r.vl_result=""'));
+        }
+        $sQueryStrTerm = $sql->getSqlStringForSqlObject($sQueryTerm);
+        // echo $sQueryStrTerm;die;
+        $rResult['withOutTermOutcome'] = $dbAdapter->query($sQueryStrTerm, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
         return $rResult;
     }
 
@@ -1961,7 +1963,8 @@ class RecencyTable extends AbstractTableGateway
             || ($controlLine == 'absent' && $positiveControlLine == 'absent' && $longControlLine == 'present')
             || ($controlLine == 'absent' && $positiveControlLine == 'present' && $longControlLine == 'absent')
             || ($controlLine == 'absent' && $positiveControlLine == 'present' && $longControlLine == 'present')
-            || ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'present')) {
+            || ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'present')
+        ) {
             $this->update(array('term_outcome' => 'Invalid â€“ Please Verify'), array('recency_id' => $recencyId));
         } else if ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'absent') {
             $this->update(array('term_outcome' => 'Assay Negative'), array('recency_id' => $recencyId));
@@ -2537,7 +2540,6 @@ class RecencyTable extends AbstractTableGateway
         }
 
         return $result;
-
     }
 
     public function getStartAndEndDate($week, $year)
@@ -2679,7 +2681,6 @@ class RecencyTable extends AbstractTableGateway
         }
 
         return $result;
-
     }
 
     public function fetchTesterWiseFinalOutcomeChart($parameters)
@@ -2783,7 +2784,6 @@ class RecencyTable extends AbstractTableGateway
         }
 
         return $result;
-
     }
 
     public function fetchTesterWiseInvalidChart($parameters)
@@ -3091,7 +3091,6 @@ class RecencyTable extends AbstractTableGateway
         }
         //\Zend\Debug\Debug::dump($result);//die;
         return $result;
-
     }
 
     public function fetchRecentInfectionByDistrictChart($parameters)
@@ -3186,7 +3185,6 @@ class RecencyTable extends AbstractTableGateway
             $j++;
         }
         return $result;
-
     }
 
     public function fetchRecentInfectionByAgeChart($parameters)
@@ -3642,7 +3640,6 @@ class RecencyTable extends AbstractTableGateway
                                              END)/ COUNT(*)) * 100"),
                     )
                 );
-
         } else {
             $sQuery = $sQuery
                 ->columns(
@@ -3723,7 +3720,7 @@ class RecencyTable extends AbstractTableGateway
             }
 
             $n = (isset($sRow['totalSamples']) && $sRow['totalSamples'] != null) ? $sRow['totalSamples'] : 0;
-            
+
             //$result['finalOutCome']['Total'][$j] = (isset($sRow['totalSamples']) && $sRow['totalSamples'] != null) ? $sRow['totalSamples'] : 0;
             $result['finalOutCome']['Assay Long Term'][$j] = (isset($sRow['assayLongTerm']) && $sRow['assayLongTerm'] != null) ? round($sRow['assayLongTerm'], 2) : 0;
             $result['finalOutCome']['Assay Recent'][$j] = (isset($sRow['assayRecent']) && $sRow['assayRecent'] != null) ? round($sRow['assayRecent'], 2) : 0;
@@ -3922,7 +3919,7 @@ class RecencyTable extends AbstractTableGateway
             $result['finalOutCome']['Missing Viral Load'][$j] = (isset($sRow['missingViralLoad']) && $sRow['missingViralLoad'] != null) ? round($sRow['missingViralLoad'], 2) : 0;
             $result['districtName'][$j] = ($sRow["district_name"]) . " (N=$n)";
             $result['total'] += $n;
-            
+
             $j++;
         }
 
@@ -4020,9 +4017,9 @@ class RecencyTable extends AbstractTableGateway
             } else {
                 $result['modality'][$j] = ($sRow["testing_facility_type_name"]) . " (N=$n)";
             }
-            
+
             $result['total'] += $n;
-            
+
             $j++;
         }
         return $result;
@@ -4163,49 +4160,48 @@ class RecencyTable extends AbstractTableGateway
         return $rResult;
     }
 
-    
+
 
     public function UpdatePdfUpdatedDateDetails($recenyId)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $fQuery = $sql->select()->from(array('r' => 'recency'))
-                                ->where(array('(recency_id="'.$recenyId.'" )'));
+            ->where(array('(recency_id="' . $recenyId . '" )'));
         $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         if (!isset($fResult['result_printed_on']) && $fResult['result_printed_on'] == '') {
             $results =  $this->update(array('result_printed_on' => date("Y-m-d H:i:s")), array('recency_id' => $recenyId));
-        }else{
+        } else {
             $results = "0";
         }
-            return $recenyId;
-        
+        return $recenyId;
     }
 
-    
+
     public function UpdateMultiplePdfUpdatedDateDetails($params)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $fQuery = $sql->select()->from(array('r' => 'recency'))
-        ->where("recency_id IN(" . $params['selectedSampleId'] . ")");
+            ->where("recency_id IN(" . $params['selectedSampleId'] . ")");
         $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        foreach($fResult as $res){
+        foreach ($fResult as $res) {
             if (!isset($res['result_printed_on']) && $res['result_printed_on'] == '') {
                 $results =  $this->update(array('result_printed_on' => date("Y-m-d H:i:s")), array('recency_id' => $res['recency_id']));
-            }else{
+            } else {
                 $results = "0";
             }
         }
         return $results;
     }
-    
+
     public function saveVlTestResultApi($params)
     {
         $common = new CommonService();
         $responseStatus['status'] = 'fail';
-        if(isset($params['sampleId']) && $params['sampleId'] != ""){
+        if (isset($params['sampleId']) && $params['sampleId'] != "") {
             $data = array(
                 'vl_result'             => $params['result'],
                 'vl_test_date'          => date('Y-m-d', strtotime($params['sampleTestedDatetime'])),
@@ -4213,9 +4209,9 @@ class RecencyTable extends AbstractTableGateway
             );
             $results =  $this->update($data, array('sample_id' => $params['sampleId']));
         }
-        if(isset($results) && $results > 0){
+        if (isset($results) && $results > 0) {
             $responseStatus['status'] = 'success';
-        }else{
+        } else {
             $responseStatus['status'] = 'fail';
         }
         return $responseStatus;

@@ -1,35 +1,41 @@
 <?php
 use Zend\Session\Container;
+
 $sessionLogin = new Container('credo');
 ?>
 <style>
-.saveResult { pointer-events : none;}
-.form-control:disabled, .form-control[readonly] {
-    background-color: #e9ecef00;
-    opacity: 1;
-    width: 130px;
-}
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0; 
-}
+    .saveResult {
+        pointer-events: none;
+    }
+
+    .form-control:disabled,
+    .form-control[readonly] {
+        background-color: #e9ecef00;
+        opacity: 1;
+        width: 130px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
 </style>
 <div class="bg-body-light">
-     <div class="content content-full">
-          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Viral Load Data</h1>
-               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Viral Load Data</h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                              <a href="<?php echo $this->url('vl-data',array('action' => 'upload-result'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Upload Viral Load Data</a>
-                              </li>
-                    </ol>
-               </nav>
-          </div>
-     </div>
+                        <a href="<?php echo $this->url('vl-data', array('action' => 'upload-result')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Upload Viral Load Data</a>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
 </div>
 
 <div class="content">
@@ -39,126 +45,135 @@ input[type=number]::-webkit-outer-spin-button {
         </div>
         <div class="block-content">
             <div class="col-md-12 table-responsive" id="hide">
-                   
-                    <h3 class="block-title" style=" margin-bottom: 2%; ">Use Province, District, City filters for sample ID</h3>
-                    <div class="form-group row">
-                        <?php
-                         foreach($globalConfigResult as $config){ ?>
-                            <?php if($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three'){ ?>
-                                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
-                                <div class="col-sm-4">
-                                    <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
-                                        <option value="">-- Select --</option>
-                                    </select>
-                                </div>
-                            <?php }
-                        }?>
-                        <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
-                                <option value="">-- Select --</option>
-                            </select>
-                        </div>
-                    </div>
 
-                    <div class="row items-push">
-                        <div class="col-lg-7 offset-lg-4">
-                            <a href="javascript:void(0);" class="btn btn-danger">Reset</a>&nbsp;
-                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                        </div>
+                <h3 class="block-title" style=" margin-bottom: 2%; ">Use Province, District, City filters for sample ID</h3>
+                <div class="form-group row">
+                    <?php
+                    foreach ($globalConfigResult as $config) { ?>
+                        <?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
+                            <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
+                                    <option value="">-- Select --</option>
+                                </select>
+                            </div>
+                        <?php }
+                } ?>
+                    <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+                            <option value="">-- Select --</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div id="recencyData">
-                        
+                <div class="row items-push">
+                    <div class="col-lg-7 offset-lg-4">
+                        <a href="javascript:void(0);" class="btn btn-danger">Reset</a>&nbsp;
+                        <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
                     </div>
-                    <input type="hidden" name="vlEnteredDataResult" id="vlEnteredDataResult"/>
-                    <input type="hidden" name="vlEnteredDataId" id="vlEnteredDataId"/>
-                    <input type="hidden" name="vlDataOutCome" id="vlDataOutCome"/>
+                </div>
+
+                <div id="recencyData">
+
+                </div>
+                <input type="hidden" name="vlEnteredDataResult" id="vlEnteredDataResult" />
+                <input type="hidden" name="vlEnteredDataId" id="vlEnteredDataId" />
+                <input type="hidden" name="vlDataOutCome" id="vlDataOutCome" />
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
     duplicateName = true;
-    function searchData(onloadData=null) {
+    
+    function searchData(onloadData = null) {
         var province = $("#location_one").val();
         var district = $("#location_two").val();
         var city = $("#location_three").val();
         var facility = $("#facilityId").val();
         //if($.trim(province)!= '' || $.trim(facility)!=''){
-            $.blockUI();
-            $.post("<?php echo $this->url('vl-data', array('action' => 'get-sample-data')); ?>", {province:province,district:district,city:city,facility:facility,onloadData:onloadData },
+        $.blockUI();
+        $.post("<?php echo $this->url('vl-data', array('action' => 'get-sample-data')); ?>", {
+                province: province,
+                district: district,
+                city: city,
+                facility: facility,
+                onloadData: onloadData
+            },
             function(data) {
                 $.unblockUI();
                 $("#recencyData").html(data);
             });
         //}
     }
-    
-    $(document).ready(function(){
 
-        <?php foreach($globalConfigResult as $config){
-             ?>
-             getLocationDeatils('<?php echo $config["global_name"];?>');
-             <?php
-             break;
-         } ?>
-         searchData('yes');
+    $(document).ready(function() {
+        <?php foreach ($globalConfigResult as $config) {?>
+            getLocationDeatils('<?php echo $config["global_name"]; ?>');
+            <?php break;
+        } ?>
+        searchData('yes');
     });
-    function getLocationDeatils(globalName,nxtGlobalName)
-     {
+
+    function getLocationDeatils(globalName, nxtGlobalName) {
         var selectValue = document.getElementById(globalName).value;
         var innerId = '';
         var path = '';
-            if(globalName=='location_one' && selectValue==''){
-                path = 'get-province';
-                innerId = 'location_one';
-            }else if(globalName=='location_one' && selectValue!=''){
-                path = 'get-district';
-                innerId = 'location_two';
-                $("#location_three").html("<option value=''>-- Select --</option>");
-            }else if(globalName=='location_two' && selectValue!=''){
-                path = 'get-city';
-                innerId = 'location_three';
-            }else if(globalName=='location_three' || globalName=='location_two'){
-                getFacilityListByLocation(globalName);
-            }
-            if(path!=''){
-                $.blockUI();
-                $.post("/common/"+path, {selectValue:selectValue},
+        if (globalName == 'location_one' && selectValue == '') {
+            path = 'get-province';
+            innerId = 'location_one';
+        } else if (globalName == 'location_one' && selectValue != '') {
+            path = 'get-district';
+            innerId = 'location_two';
+            $("#location_three").html("<option value=''>-- Select --</option>");
+        } else if (globalName == 'location_two' && selectValue != '') {
+            path = 'get-city';
+            innerId = 'location_three';
+        } else if (globalName == 'location_three' || globalName == 'location_two') {
+            getFacilityListByLocation(globalName);
+        }
+        if (path != '') {
+            $.blockUI();
+            $.post("/common/" + path, {
+                    selectValue: selectValue
+                },
                 function(data) {
-                    $("#"+innerId).html(data);
+                    $("#" + innerId).html(data);
                     getFacilityListByLocation(globalName);
                     $.unblockUI();
                 });
-            }
-     }
+        }
+    }
 
-     function getFacilityListByLocation(globalName)
-     {
+    function getFacilityListByLocation(globalName) {
         $.blockUI();
-        $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),globalName:globalName},
-        function(data) {
-            $("#facilityId").html('<option value="">-- Select --</option>'+data);
-            $.unblockUI();
-        });
-     }
+        $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {
+                locationOne: $("#location_one").val(),
+                locationTwo: $("#location_two").val(),
+                locationThree: $("#location_three").val(),
+                globalName: globalName
+            },
+            function(data) {
+                $("#facilityId").html('<option value="">-- Select --</option>' + data);
+                $.unblockUI();
+            });
+    }
 
-     function getVlResult()
-     {
+    function getVlResult() {
         var vlResultAry = [];
         var vlResultIdAry = [];
         var vlDataOutcome = [];
-        $(".vlResultData").each(function(){
-            if(this.value!=''){
+        $(".vlResultData").each(function() {
+            if (this.value != '') {
                 //vlDataOutcome.push($(this).attr('data-term-outcome'));
                 vlResultAry.push(this.value);
                 vlResultIdAry.push(this.id);
-                $("#vlResultOption"+this.id).val('');
+                $("#vlResultOption" + this.id).val('');
             }
         });
-        $(".vlResultOption").each(function(){
-            if(this.value!=''){
+        $(".vlResultOption").each(function() {
+            if (this.value != '') {
                 vlResultAry.push(this.value);
                 vlResultIdAry.push(this.id);
             }
@@ -166,43 +181,48 @@ input[type=number]::-webkit-outer-spin-button {
         $("#vlEnteredDataResult").val(vlResultAry.join());
         $("#vlEnteredDataId").val(vlResultIdAry.join());
         //$("#vlDataOutCome").val(vlDataOutcome.join());
-        if($("#vlEnteredDataId").val()!=''){
-            $(".saveResult").css("pointer-events","auto");
-        }else{
-            $(".saveResult").css("pointer-events","none");
+        if ($("#vlEnteredDataId").val() != '') {
+            $(".saveResult").css("pointer-events", "auto");
+        } else {
+            $(".saveResult").css("pointer-events", "none");
         }
-     }
-     
-     function updateVlResult()
-     {
-        var confrm = confirm("Are you sure want to update vl result?");
-        var vlTestDate = $("input[name='vlTestDate[]']").map(function () {
-            return this.value; 
-        }).get();
-        var recencyId = $("input[name='recencyId[]']").map(function () {
-            return this.value; 
-        }).get();
-        if(confrm){
-            $.blockUI();
-            $.post("<?php echo $this->url('vl-data', array('action' => 'update-vl-sample-result')); ?>", {vlResult:$("#vlEnteredDataResult").val(),vlResultRowId:$("#vlEnteredDataId").val(),vlDataOutCome:$("#vlDataOutCome").val(),vlTestDate:vlTestDate,recencyId:recencyId},
-            function(data) {
-                alert('VL Result updated');
-                searchData();
-            });
-        }
-     }
-    function editVlResult(id)
-    {
-        $("#span"+id).hide();
-        $("#vlDateSpan"+id).hide();
-        $("#"+id).show();
-        $("#vlResultOption"+id).prev().show();
-        $("#vlResultOption"+id).show();
-        $("#vlTestDate"+id).show();
     }
-    function updateVlResultFields(id)
-    {
-        $("#"+id).val('');
+
+    function updateVlResult() {
+        var confrm = confirm("Are you sure want to update vl result?");
+        var vlTestDate = $("input[name='vlTestDate[]']").map(function() {
+            return this.value;
+        }).get();
+        var recencyId = $("input[name='recencyId[]']").map(function() {
+            return this.value;
+        }).get();
+        if (confrm) {
+            $.blockUI();
+            $.post("<?php echo $this->url('vl-data', array('action' => 'update-vl-sample-result')); ?>", {
+                    vlResult: $("#vlEnteredDataResult").val(),
+                    vlResultRowId: $("#vlEnteredDataId").val(),
+                    vlDataOutCome: $("#vlDataOutCome").val(),
+                    vlTestDate: vlTestDate,
+                    recencyId: recencyId
+                },
+                function(data) {
+                    alert('VL Result updated');
+                    searchData();
+                });
+        }
+    }
+
+    function editVlResult(id) {
+        $("#span" + id).hide();
+        $("#vlDateSpan" + id).hide();
+        $("#" + id).show();
+        $("#vlResultOption" + id).prev().show();
+        $("#vlResultOption" + id).show();
+        $("#vlTestDate" + id).show();
+    }
+
+    function updateVlResultFields(id) {
+        $("#" + id).val('');
         getVlResult();
     }
 </script>
