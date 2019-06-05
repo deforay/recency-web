@@ -471,7 +471,6 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
                                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);" value="yes">&nbsp;Yes
                                                 </div>
-                                                <input type="hidden" name="sendVlsmStatus" id="sendVlsmStatus" value="no"/>
                                             </div>
                                             <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
                                             <div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
@@ -1055,15 +1054,13 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                     if (http.readyState == 4 && http.status == 200) {
                         if (confirm(http.responseText));
                         if (http.responseText != "Viral Load Test Request has been send successfully") {
-                            $("#sendVlsmStatus").val('no');
+                            $("#sendVlsm").val('no');
                         } else {
-                            $("#sendVlsmStatus").val('yes');
+                            $("#sendVlsm").val('yes');
                         }
                     }
                 }
                 http.send(params);
-            }else{
-                $("#sendVlsmStatus").val('yes');
             }
             if (($("#dob").val() != "") || ($("#age").val() != "")) {
                 flag = deforayValidator.init({

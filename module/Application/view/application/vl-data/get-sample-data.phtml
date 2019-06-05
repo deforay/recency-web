@@ -151,7 +151,6 @@ $common = new \Application\Service\CommonService();
                 <tr>
                     <th>Sample ID</th>
                     <th>Recency Date</th>
-                    <th>VL Request Date</th>
                     <th>Request Send On</th>
                     <th>Viral Load Lab</th>
                     <th>Final outcome</th>
@@ -162,7 +161,6 @@ $common = new \Application\Service\CommonService();
                     <tr>
                         <td><?php echo $sampleWithout['sample_id']; ?></td>
                         <td><?php echo $common->humanDateFormat($sample['hiv_recency_test_date']); ?></td>
-                        <td><?php echo $common->humanDateFormat($sampleWithout['vl_test_date']); ?></td>
                         <td><?php echo date('d-M-Y h:i A',strtotime($sampleWithout['vl_request_sent_date_time'])); ?></td>
                         <td><?php echo $sampleWithout['vl_lab']; ?></td>
                         <td><?php echo $sampleWithout['final_outcome']; ?></td>
@@ -177,7 +175,6 @@ $common = new \Application\Service\CommonService();
                 <tr>
                     <th>Sample ID</th>
                     <th>Recency Date</th>
-                    <th>VL Request Date</th>
                     <th>Request Send On</th>
                     <th>Viral Load Lab</th>
                     <th>Final outcome</th>
