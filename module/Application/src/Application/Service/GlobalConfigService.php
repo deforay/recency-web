@@ -34,6 +34,12 @@ class GlobalConfigService {
         return $globalConfigDb->fetchGlobalConfigAllDetails();
     }
 
+    public function fetchGlobalConfig()
+    {
+        $globalConfigDb = $this->sm->get('GlobalConfigTable');
+        return $globalConfigDb->fetchGlobalConfig();
+    }    
+
     public function getGlobalConfigAllDetailsApi()
     {
         $globalConfigDb = $this->sm->get('GlobalConfigTable');

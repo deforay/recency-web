@@ -98,8 +98,7 @@ class FacilitiesTable extends AbstractTableGateway
 
         $sQuery = $sql->select()->from(array('f' => 'facilities'))
             ->join(array('p' => 'province_details'), 'p.province_id=f.province', array('province_name'), 'left')
-            ->join(array('d' => 'district_details'), 'd.district_id=f.district', array('district_name'), 'left')
-        ;
+            ->join(array('d' => 'district_details'), 'd.district_id=f.district', array('district_name'), 'left');
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -253,10 +252,10 @@ class FacilitiesTable extends AbstractTableGateway
         // }
         // //admin
         // else {
-            $sQuery = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
-                        ->where(array('status' => 'active'));
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $sQuery = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
+            ->where(array('status' => 'active'));
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         //}
         $sQueryTest = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
             ->where(array('f.status' => 'active', 'f.facility_name IS NOT NULL', 'facility_type_id="2"'));
@@ -267,18 +266,17 @@ class FacilitiesTable extends AbstractTableGateway
         return $result;
     }
 
-    public function fetchFacilitiesDetailsApi($params)
-    {
+    public function fetchFacilitiesDetailsApi($params) {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         if ($params['userId'] != '') {
             $sQuery = $sql->select()->from(array('f' => 'facilities'))
-                ->join(array('r' => 'recency'), 'f.facility_id = r.facility_id', array('sample_id'))
-                ->where(array('f.status' => 'active', 'r.added_by' => $params['userId']))
+                //->join(array('r' => 'recency'), 'f.facility_id = r.facility_id', array('sample_id'))
+                //->where(array('f.status' => 'active', 'r.added_by' => $params['userId']))
+                ->where(array('f.status' => 'active'))
                 ->order('f.facility_id DESC');
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
             $rResult['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
         } else {
             $sQuery = $sql->select()->from(array('f' => 'facilities'))
                 ->where(array('status' => 'active'));
@@ -291,9 +289,9 @@ class FacilitiesTable extends AbstractTableGateway
         $rResult['facilityTest'] = $dbAdapter->query($sQueryStrTest, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $sQueryTestFType = $sql->select()->from(array('f' => 'testing_facility_type'), array('testing_facility_type_name'))
-        ->where(array('f.testing_facility_type_status' => 'active'));
-    $sQueryStrTestFType = $sql->getSqlStringForSqlObject($sQueryTestFType);
-    $rResult['testingFacilityType'] = $dbAdapter->query($sQueryStrTestFType, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            ->where(array('f.testing_facility_type_status' => 'active'));
+        $sQueryStrTestFType = $sql->getSqlStringForSqlObject($sQueryTestFType);
+        $rResult['testingFacilityType'] = $dbAdapter->query($sQueryStrTestFType, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         return $rResult;
     }
@@ -322,7 +320,8 @@ class FacilitiesTable extends AbstractTableGateway
         return $fResult;
     }
 
-    public function checkFacilityName($fName, $facilityType) {
+    public function checkFacilityName($fName, $facilityType)
+    {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $fQuery = $sql->select()->from('facilities')->columns(array('facility_id', 'facility_name', 'facility_type_id'))
@@ -362,7 +361,8 @@ class FacilitiesTable extends AbstractTableGateway
         return $cResult;
     }
 
-    public function fetchLocationBasedFacility($params) {
+    public function fetchLocationBasedFacility($params)
+    {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $fResult = '';

@@ -1,7 +1,9 @@
 <?php
 use Application\Service\CommonService;
 $common = new CommonService();
-$logo=UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $globalConfigResult[11]["global_value"];
+
+
+$logo=UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $globalConfigResult["logo_image"];
 // Extend the TCPDF class to create custom Header and Footer
 class MYPDF extends TCPDF {
 

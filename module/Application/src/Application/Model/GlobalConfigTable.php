@@ -148,6 +148,17 @@ class GlobalConfigTable extends AbstractTableGateway {
         return $this->select()->toArray();
     }
 
+    public function fetchGlobalConfig()
+    {
+        $res =  $this->select()->toArray();
+        $response = array();
+        foreach($res as $row){
+            $response[$row['global_name']] = $row['global_value'];
+        }
+
+        return $response;
+    }    
+
     public function fetchGlobalConfigAllDetailsApi()
     {
         $response['status'] = 'success' ;
