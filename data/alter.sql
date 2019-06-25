@@ -290,3 +290,15 @@ INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global
 --sathish 24 May 2019
 RENAME TABLE `tester_information` TO `test_kit_information`;
 ALTER TABLE `test_kit_information` ADD `added_on` DATETIME NULL DEFAULT NULL AFTER `status`, ADD `added_by` INT(11) NULL DEFAULT NULL AFTER `added_on`;
+
+-- Thanaseelan 30-May-2019 Created for Between vlsm and recnecy (API VL Lab test request)
+ALTER TABLE `facilities` ADD `is_vl_lab` VARCHAR(255) NULL DEFAULT 'no' AFTER `facility_type_id`;
+
+-- Thanaseelan 04-Jun-2019 Created for VL Test Request send or not?
+ALTER TABLE `recency` ADD `vl_request_sent` VARCHAR(255) NOT NULL DEFAULT 'no' AFTER `kit_expiry_date`;
+
+-- Thanaseelan 04-Jun-2019 Created for VL Test Request send date time
+ALTER TABLE `recency` ADD `vl_request_sent_date_time` DATETIME NULL DEFAULT NULL AFTER `vl_request_sent`;
+
+-- Thanaseelan 04-Jun-2019 Created for showing the pending vl result from vlsm reference
+ALTER TABLE `recency` ADD `vl_lab` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_request_sent_date_time`;

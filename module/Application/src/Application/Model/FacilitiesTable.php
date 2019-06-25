@@ -154,6 +154,7 @@ class FacilitiesTable extends AbstractTableGateway
         if (isset($params['facilityName']) && trim($params['facilityName']) != "") {
             $data = array(
                 'facility_name' => $params['facilityName'],
+                // 'is_vl_lab' => $params['isVlLab'],
                 'province' => $params['location_one'],
                 'district' => $params['location_two'],
                 'city' => $params['location_three'],
@@ -207,6 +208,7 @@ class FacilitiesTable extends AbstractTableGateway
         if (isset($params['facilityId']) && trim($params['facilityId']) != "") {
             $data = array(
                 'facility_name' => $params['facilityName'],
+                // 'is_vl_lab' => $params['isVlLab'],
                 'province' => $params['location_one'],
                 'district' => $params['location_two'],
                 'city' => $params['location_three'],

@@ -193,6 +193,18 @@ return array(
                          ),
                     ),
                 ),
+                'api-vl-test-result' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/vl-test-result[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\VlTestResult',
+                         ),
+                    ),
+                ),
 
           ),
      ),
@@ -214,6 +226,7 @@ return array(
                'Api\Controller\QualityCheck' => 'Api\Controller\QualityCheckController',
                'Api\Controller\TatReport' => 'Api\Controller\TatReportController',
                'Api\Controller\TechnicalSupport' => 'Api\Controller\TechnicalSupportController',
+               'Api\Controller\VlTestResult' => 'Api\Controller\VlTestResultController',
                
           ),
      ),

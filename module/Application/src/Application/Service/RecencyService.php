@@ -1462,15 +1462,18 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->UpdatePdfUpdatedDateDetails($recencyId);
     }
+    
     public function UpdateMultiplePdfUpdatedDate($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->UpdateMultiplePdfUpdatedDateDetails($params);
     }
-
     
-
-    
+    public function addVlTestResultApi($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->saveVlTestResultApi($params);
+    }
 
 }
 

@@ -97,14 +97,25 @@ foreach($result['facilityMap'] as $data){
                             </select>
                         </div>
                         <label class="col-sm-2 col-form-label" for="">Faclity Type<span class="mandatory">*</span></label>
-                              <div class="col-sm-4">
-                                   <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select the facility type">
-                                   <option value="">-- Select --</option>
-                                        <option value="1" <?php echo($result['facility_type_id'] == '1' )?'selected="selected"':''; ?>>Clinic/Lab</option>
-                                        <option value="2" <?php echo($result['facility_type_id'] == '2' )?'selected="selected"':''; ?>>Testing</option>
-                                   </select>
-                              </div>
+                        <div class="col-sm-4">
+                            <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select the facility type">
+                            <option value="">-- Select --</option>
+                                <option value="1" <?php echo($result['facility_type_id'] == '1' )?'selected="selected"':''; ?>>Clinic/Lab</option>
+                                <option value="2" <?php echo($result['facility_type_id'] == '2' )?'selected="selected"':''; ?>>Testing</option>
+                            </select>
+                        </div>
                     </div>
+
+                    <!-- <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="isVlLab">Viral Load Lab Test<span class="mandatory">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control isRequired" id="isVlLab" name="isVlLab" title="Please select the viral load lab test">
+                            <option value="">-- Select --</option>
+                                <option value="no" <?php echo($result['is_vl_lab'] == 'no' )?'selected="selected"':''; ?>>No</option>
+                                <option value="yes" <?php echo($result['is_vl_lab'] == 'yes' )?'selected="selected"':''; ?>>Yes</option>
+                            </select>
+                        </div>
+                    </div> -->
 
                     <div class="form-group row">
                          <label class="col-sm-2 col-form-label" for="">Map User</label>

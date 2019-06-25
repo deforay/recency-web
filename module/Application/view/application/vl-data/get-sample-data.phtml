@@ -1,272 +1,202 @@
 <?php
 $common = new \Application\Service\CommonService();
 ?>
-<hr/>
-<a href="javascript:void(0)" class="btn btn-info saveResult"  onclick="updateVlResult();">Save Result</a>
-<br/><br/>
-<div class="js-wizard-simple block block block-rounded block-bordered">
-
-             <ul class="nav nav-tabs nav-tabs-block nav-justified">
-             <li class="nav-item">
-             <a class="nav-link active" data-toggle="tab" href="#home">Pending VL Results</a>
-                              </li>
-                              <!-- <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#menu1">Pending Recency Results</a>
-  </li> -->
-                         </ul>
-                         <div class="tab-content">
-    <div id="home" class="container tab-pane active"><br>
-
-<table class="table table-bordered table-striped table-vcenter table-responsive" id="sampleData">
-<thead>
-    <th>Sample ID</th><th>Patient ID</th><th>Recency Date</th><th style="width:25%;">VL Result Date</th><th style="width:25%;">VL Result</th><th>Recency Outcome</th><th>Final outcome</th><th>Action</th>
-</tr>
-</thead>
-<?php
-if(count($result['withTermOutcome'])>0){
-    $vlResultOptionAry = array('TND','BDL','failed','&lt; 20','&lt; 40');
-    
-    foreach($result['withTermOutcome'] as $sample){
-        $vlResultTextValue = '';
-    ?>
-    <tr>
-        <td><?php echo $sample['sample_id'];?></td>
-        <td><?php echo $sample['patient_id'];?></td>
-        <td><?php echo $common->humanDateFormat($sample['hiv_recency_test_date']);?></td>
-        <td>
-        <?php if($sample['final_outcome'] ==''){
-            if($sample['vl_test_date']==''){ ?>
-                <input type="text" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id'];?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" title="Please enter the vl test date" readonly="readonly">
-            <?php }else{ ?>
-                <span id="vlDateSpan<?php echo $sample['recency_id'];?>"><?php echo $common->humanDateFormat($sample['vl_test_date']);?></span>
-                <input style="display:none;" type="text" value="<?php echo $common->humanDateFormat($sample['vl_test_date']);?>" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id'];?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" title="Please enter the vl test date" readonly="readonly">
-            <?php }
-         }else{
-            if($sample['vl_test_date']!=''){ ?>
-                <input style="display:none;" type="text" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id'];?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="<?php echo $common->humanDateFormat($sample['vl_test_date']);?>" title="Please enter the vl test date">
-                <span id="vlDateSpan<?php echo $sample['recency_id'];?>"><?php echo $common->humanDateFormat($sample['vl_test_date']);?></span>
-            <?php }
-         } ?>
-        </td>
-        <td>
-        <?php if($sample['final_outcome'] ==''){
-            if($sample['vl_result']==''){ ?>
-                <input type="number" class="form-control checkNum vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $sample['vl_result'];?>" onchange="getVlResult();"/>
-                <div>----- OR -----</div>
-                <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sample['recency_id'];?>')">
-                    <option value="">-- Select -- </option>
-                    <option value="TND">TND</option>
-                    <option value="BDL">BDL</option>
-                    <option value="failed">Failed</option>
-                    <option value="&lt; 20"> &lt; 20</option>
-                    <option value="&lt; 40"> &lt; 40</option>
-                </select>
-            <?php }else{
-                $vlResultTextValue = (in_array($sample['vl_result'],$vlResultOptionAry))?'':$sample['vl_result'];
-                ?>
-                <span id="span<?php echo $sample['recency_id'];?>"><?php echo $vlResultTextValue;?></span>
-                <input style="display:none;" type="number" class="form-control vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $vlResultTextValue;?>" onchange="getVlResult();"/>
-                <div style="display:none;" class="vlResultFields vlResultOption">----- OR -----</div>
-                <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sample['recency_id'];?>')">
-                    <option value="">-- Select -- </option>
-                    <option value="TND" <?php echo($sample['vl_result'] == 'TND' )?'selected="selected"':''; ?>>TND</option>
-                    <option value="BDL" <?php echo($sample['vl_result'] == 'BDL' )?'selected="selected"':''; ?>>BDL</option>
-                    <option value="failed" <?php echo($sample['vl_result'] == 'failed' )?'selected="selected"':''; ?>>Failed</option>
-                    <option value="&lt; 20" <?php echo($sample['vl_result'] == '&lt; 20' )?'selected="selected"':''; ?>> &lt; 20</option>
-                    <option value="&lt; 40" <?php echo($sample['vl_result'] == '&lt; 40' )?'selected="selected"':''; ?>> &lt; 40</option>
-                </select>
-            <?php }
-         }else{
-            if($sample['vl_result']!=''){
-                $vlResultTextValue = (in_array($sample['vl_result'],$vlResultOptionAry))?'':$sample['vl_result'];
-                ?>
-                <span id="span<?php echo $sample['recency_id'];?>"><?php echo $sample['vl_result'];?></span>
-                <input style="display:none;" type="number" class="form-control checkNum vlResultData" data-term-outcome = "<?php echo $sample['term_outcome'];?>" name="vlResult[]" id="<?php echo $sample['recency_id'];?>" value="<?php echo $vlResultTextValue;?>" onchange="getVlResult();"/>
-                <div style="display:none;">----- OR -----</div>
-                <select style="display:none;" class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sample['recency_id'];?>')">
-                    <option value="">-- Select -- </option>
-                    <option value="TND" <?php echo($sample['vl_result'] == 'TND' )?'selected="selected"':''; ?>>TND</option>
-                    <option value="BDL" <?php echo($sample['vl_result'] == 'BDL' )?'selected="selected"':''; ?>>BDL</option>
-                    <option value="failed" <?php echo($sample['vl_result'] == 'failed' )?'selected="selected"':''; ?>>Failed</option>
-                    <option value="&lt; 20" <?php echo($sample['vl_result'] == '&lt; 20' )?'selected="selected"':''; ?>> &lt; 20</option>
-                    <option value="&lt; 40" <?php echo($sample['vl_result'] == '&lt; 40' )?'selected="selected"':''; ?>> &lt; 40</option>
-                </select>
-            <?php }
-         } ?>
-        <!-- < ?php
-        if($sample['term_outcome']!='' && $sample['term_outcome']=='Long Term' && $sample['final_outcome']=='Long Term'){
-        }else if($sample['term_outcome']!=''){
-            if($sample['vl_result']==''){ ?>
-            < ?php }else{ ?>
-            < ?php }
-         } ?> -->
-        </td>
-        <td><?php echo $sample['term_outcome'];?></td>
-        <td><?php echo $sample['final_outcome'];?></td>
-        <td>
-        <?php
-        if($sample['vl_result']!='' && $sample['term_outcome']=='Assay Recent'){
-            ?>
-                <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="editVlResult('<?php echo $sample['recency_id'];?>');"> <i class="fa fa-edit"></i> Edit</a>
-            <?php
-        }
-        ?>
-        </td>
-    </tr>
-    <?php
-    }
-}else{
-    ?>
-    <tr>
-    <td colspan="8" class="dataTables_empty">No data available</td>
-</tr>
-    <?php
-}
-?>
-<tfoot>
-<tr>
-    <th>Sample ID</th><th>Patient ID</th><th>Recency Date</th><th>VL Result Date</th><th>VL Result</th><th>Recency Outcome</th><th>Final outcome</th><th>Action</th>
-</tr>
-</tfoot>
-</table>
-</div>
-
- <!-- <div id="menu1" class="container tab-pane "><br>
-
-<table class="table table-bordered table-striped table-vcenter table-responsive" id="sampleDataWithoutTerm">
-<thead>
- <tr>
-    <th>Sample ID</th><th>Patient ID</th><th>Recency Date</th><th style="width:25%;">VL Result Date</th><th style="width:25%;">VL Result</th><th>Recency Outcome</th><th>Final outcome</th><th>Action</th>
-</tr>
-</thead>
-<?php
-if(count($result['withOutTermOutcome'])>0){
-    $vlResultOptionAry = array('TND','BDL','failed','&lt; 20','&lt; 40');
-    
-    foreach($result['withOutTermOutcome'] as $key=>$sampleWithout){
-        $vlResultTextValue = '';
-    ?>
-    <tr>
-        <td><?php echo $sampleWithout['sample_id'];?></td>
-        <td><?php echo $sampleWithout['patient_id'];?></td>
-        <td><?php echo $common->humanDateFormat($sample['hiv_recency_test_date']);?></td>
-        <td>
-        <?php if($sampleWithout['final_outcome'] ==''){
-            if($sampleWithout['vl_test_date']==''){ ?>
-                <input type="text" class="js-datepicker form-control" id="vlTestDate<?php echo $sampleWithout['recency_id'];?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" title="Please enter the vl test date" readonly="readonly">
-            <?php }else{ ?>
-                <span id="vlDateSpan<?php echo $sampleWithout['recency_id'];?>"><?php echo $common->humanDateFormat($sampleWithout['vl_test_date']);?></span>
-                <input style="display:none;" type="text" value="<?php echo $common->humanDateFormat($sampleWithout['vl_test_date']);?>" class="js-datepicker form-control" id="vlTestDate<?php echo $sampleWithout['recency_id'];?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" title="Please enter the vl test date" readonly="readonly">
-            <?php }
-         }else{
-            if($sampleWithout['vl_test_date']!=''){ ?>
-                <input style="display:none;" type="text" class="js-datepicker form-control" id="vlTestDate<?php echo $sampleWithout['recency_id'];?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="<?php echo $common->humanDateFormat($sampleWithout['vl_test_date']);?>" title="Please enter the vl test date">
-                <span id="vlDateSpan<?php echo $sampleWithout['recency_id'];?>"><?php echo $common->humanDateFormat($sampleWithout['vl_test_date']);?></span>
-            <?php }
-         } ?>
-        </td>
-        <td>
-        <?php if($sampleWithout['final_outcome'] ==''){
-            if($sampleWithout['vl_result']==''){ ?>
-                <input type="number" class="form-control checkNum vlResultData" data-term-outcome = "<?php echo $sampleWithout['term_outcome'];?>" name="vlResult[]" id="<?php echo $sampleWithout['recency_id'];?>" value="<?php echo $sampleWithout['vl_result'];?>" onchange="getVlResult();"/>
-                <div>----- OR -----</div>
-                <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sampleWithout['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sampleWithout['recency_id'];?>')">
-                    <option value="">-- Select -- </option>
-                    <option value="TND">TND</option>
-                    <option value="BDL">BDL</option>
-                    <option value="failed">Failed</option>
-                    <option value="&lt; 20"> &lt; 20</option>
-                    <option value="&lt; 40"> &lt; 40</option>
-                </select>
-            <?php }else{
-                $vlResultTextValue = (in_array($sampleWithout['vl_result'],$vlResultOptionAry))?'':$sampleWithout['vl_result'];
-                ?>
-                <span id="span<?php echo $sampleWithout['recency_id'];?>"><?php echo $vlResultTextValue;?></span>
-                <input style="display:none;" type="number" class="form-control vlResultData" data-term-outcome = "<?php echo $sampleWithout['term_outcome'];?>" name="vlResult[]" id="<?php echo $sampleWithout['recency_id'];?>" value="<?php echo $vlResultTextValue;?>" onchange="getVlResult();"/>
-                <div style="display:none;" class="vlResultFields vlResultOption">----- OR -----</div>
-                <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sampleWithout['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sampleWithout['recency_id'];?>')">
-                    <option value="">-- Select -- </option>
-                    <option value="TND" <?php echo($sampleWithout['vl_result'] == 'TND' )?'selected="selected"':''; ?>>TND</option>
-                    <option value="BDL" <?php echo($sampleWithout['vl_result'] == 'BDL' )?'selected="selected"':''; ?>>BDL</option>
-                    <option value="failed" <?php echo($sampleWithout['vl_result'] == 'failed' )?'selected="selected"':''; ?>>Failed</option>
-                    <option value="&lt; 20" <?php echo($sampleWithout['vl_result'] == '&lt; 20' )?'selected="selected"':''; ?>> &lt; 20</option>
-                    <option value="&lt; 40" <?php echo($sampleWithout['vl_result'] == '&lt; 40' )?'selected="selected"':''; ?>> &lt; 40</option>
-                </select>
-            <?php }
-         }else{
-            if($sampleWithout['vl_result']!=''){
-                $vlResultTextValue = (in_array($sampleWithout['vl_result'],$vlResultOptionAry))?'':$sampleWithout['vl_result'];
-                ?>
-                <span id="span<?php echo $sampleWithout['recency_id'];?>"><?php echo $sampleWithout['vl_result'];?></span>
-                <input style="display:none;" type="number" class="form-control checkNum vlResultData" data-term-outcome = "<?php echo $sampleWithout['term_outcome'];?>" name="vlResult[]" id="<?php echo $sampleWithout['recency_id'];?>" value="<?php echo $vlResultTextValue;?>" onchange="getVlResult();"/>
-                <div style="display:none;">----- OR -----</div>
-                <select style="display:none;" class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sampleWithout['recency_id'];?>" onchange="updateVlResultFields('<?php echo $sampleWithout['recency_id'];?>')">
-                    <option value="">-- Select -- </option>
-                    <option value="TND" <?php echo($sampleWithout['vl_result'] == 'TND' )?'selected="selected"':''; ?>>TND</option>
-                    <option value="BDL" <?php echo($sampleWithout['vl_result'] == 'BDL' )?'selected="selected"':''; ?>>BDL</option>
-                    <option value="failed" <?php echo($sampleWithout['vl_result'] == 'failed' )?'selected="selected"':''; ?>>Failed</option>
-                    <option value="&lt; 20" <?php echo($sampleWithout['vl_result'] == '&lt; 20' )?'selected="selected"':''; ?>> &lt; 20</option>
-                    <option value="&lt; 40" <?php echo($sampleWithout['vl_result'] == '&lt; 40' )?'selected="selected"':''; ?>> &lt; 40</option>
-                </select>
-            <?php }
-         } ?>
-       < ?php
-        if($sample['term_outcome']!='' && $sample['term_outcome']=='Long Term' && $sample['final_outcome']=='Long Term'){
-        }else if($sample['term_outcome']!=''){
-            if($sample['vl_result']==''){ ?>
-            < ?php }else{ ?>
-            < ?php }
-         } ?>
-        </td>
-        <td><?php echo $sampleWithout['term_outcome'];?></td>
-        <td><?php echo $sampleWithout['final_outcome'];?></td>
-        <td>
-        <?php
-        if($sampleWithout['term_outcome']!='Assay Recent'){
-            ?>
-                <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="editVlResult('<?php echo $sampleWithout['recency_id'];?>');"> <i class="fa fa-edit"></i> Edit</a>
-            <?php
-        }
-        ?>
-        </td>
-    </tr>
-    <?php
-    }
-}else{
-    ?>
-    <tr>
-    <td colspan="8" class="dataTables_empty">No data available</td>
-</tr>
-    <?php
-}
-?>
-<tfoot>
-<tr>
-    <th>Sample ID</th><th>Patient ID</th><th>Recency Date</th><th>VL Result Date</th><th>VL Result</th><th>Recency Outcome</th><th>Final outcome</th><th>Action</th>
-</tr>
-</tfoot>
-</table>
-
-</div> -->
-
-
-</div>
-
-
-
-<br/>
+<hr />
 <a href="javascript:void(0)" class="btn btn-info saveResult" onclick="updateVlResult();">Save Result</a>
-<br/><br/>
+<br /><br />
+
+<ul class="nav nav-tabs nav-tabs-block nav-justified">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#pendingVlResult">Pending VL Results</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#pedingFromVlsm">Pending From VLSM</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="pendingVlResult" class="container tab-pane active"><br>
+
+        <table class="table table-bordered table-striped table-vcenter table-responsive" id="sampleData">
+            <thead>
+                <th>Sample ID</th>
+                <th>Patient ID</th>
+                <th>Recency Date</th>
+                <th style="width:25%;">VL Result Date</th>
+                <th style="width:25%;">VL Result</th>
+                <th>Recency Outcome</th>
+                <th>Final outcome</th>
+                <th>Action</th>
+                </tr>
+            </thead>
+            <?php
+            if (count($result['withTermOutcome']) > 0) {
+                $vlResultOptionAry = array('TND', 'BDL', 'failed', '&lt; 20', '&lt; 40');
+
+                foreach ($result['withTermOutcome'] as $sample) {
+                    $vlResultTextValue = '';
+                    ?>
+                    <tr>
+                        <td><?php echo $sample['sample_id']; ?></td>
+                        <td><?php echo $sample['patient_id']; ?></td>
+                        <td><?php echo $common->humanDateFormat($sample['hiv_recency_test_date']); ?></td>
+                        <td>
+                            <?php if ($sample['final_outcome'] == '') {
+                                if ($sample['vl_test_date'] == '') { ?>
+                                    <input type="text" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id']; ?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" title="Please enter the vl test date" readonly="readonly">
+                                <?php } else { ?>
+                                    <span id="vlDateSpan<?php echo $sample['recency_id']; ?>"><?php echo $common->humanDateFormat($sample['vl_test_date']); ?></span>
+                                    <input style="display:none;" type="text" value="<?php echo $common->humanDateFormat($sample['vl_test_date']); ?>" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id']; ?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" title="Please enter the vl test date" readonly="readonly">
+                                <?php }
+                        } else {
+                            if ($sample['vl_test_date'] != '') { ?>
+                                    <input style="display:none;" type="text" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id']; ?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="<?php echo $common->humanDateFormat($sample['vl_test_date']); ?>" title="Please enter the vl test date">
+                                    <span id="vlDateSpan<?php echo $sample['recency_id']; ?>"><?php echo $common->humanDateFormat($sample['vl_test_date']); ?></span>
+                                <?php }
+                        } ?>
+                        </td>
+                        <td>
+                            <?php if ($sample['final_outcome'] == '') {
+                                if ($sample['vl_result'] == '') { ?>
+                                    <input type="number" class="form-control checkNum vlResultData" data-term-outcome="<?php echo $sample['term_outcome']; ?>" name="vlResult[]" id="<?php echo $sample['recency_id']; ?>" value="<?php echo $sample['vl_result']; ?>" onchange="getVlResult();" />
+                                    <div>----- OR -----</div>
+                                    <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id']; ?>" onchange="updateVlResultFields('<?php echo $sample['recency_id']; ?>')">
+                                        <option value="">-- Select -- </option>
+                                        <option value="TND">TND</option>
+                                        <option value="BDL">BDL</option>
+                                        <option value="failed">Failed</option>
+                                        <option value="&lt; 20"> &lt; 20</option>
+                                        <option value="&lt; 40"> &lt; 40</option>
+                                    </select>
+                                <?php } else {
+                                $vlResultTextValue = (in_array($sample['vl_result'], $vlResultOptionAry)) ? '' : $sample['vl_result'];
+                                ?>
+                                    <span id="span<?php echo $sample['recency_id']; ?>"><?php echo $vlResultTextValue; ?></span>
+                                    <input style="display:none;" type="number" class="form-control vlResultData" data-term-outcome="<?php echo $sample['term_outcome']; ?>" name="vlResult[]" id="<?php echo $sample['recency_id']; ?>" value="<?php echo $vlResultTextValue; ?>" onchange="getVlResult();" />
+                                    <div style="display:none;" class="vlResultFields vlResultOption">----- OR -----</div>
+                                    <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id']; ?>" onchange="updateVlResultFields('<?php echo $sample['recency_id']; ?>')">
+                                        <option value="">-- Select -- </option>
+                                        <option value="TND" <?php echo ($sample['vl_result'] == 'TND') ? 'selected="selected"' : ''; ?>>TND</option>
+                                        <option value="BDL" <?php echo ($sample['vl_result'] == 'BDL') ? 'selected="selected"' : ''; ?>>BDL</option>
+                                        <option value="failed" <?php echo ($sample['vl_result'] == 'failed') ? 'selected="selected"' : ''; ?>>Failed</option>
+                                        <option value="&lt; 20" <?php echo ($sample['vl_result'] == '&lt; 20') ? 'selected="selected"' : ''; ?>> &lt; 20</option>
+                                        <option value="&lt; 40" <?php echo ($sample['vl_result'] == '&lt; 40') ? 'selected="selected"' : ''; ?>> &lt; 40</option>
+                                    </select>
+                                <?php }
+                        } else {
+                            if ($sample['vl_result'] != '') {
+                                $vlResultTextValue = (in_array($sample['vl_result'], $vlResultOptionAry)) ? '' : $sample['vl_result'];
+                                ?>
+                                    <span id="span<?php echo $sample['recency_id']; ?>"><?php echo $sample['vl_result']; ?></span>
+                                    <input style="display:none;" type="number" class="form-control checkNum vlResultData" data-term-outcome="<?php echo $sample['term_outcome']; ?>" name="vlResult[]" id="<?php echo $sample['recency_id']; ?>" value="<?php echo $vlResultTextValue; ?>" onchange="getVlResult();" />
+                                    <div style="display:none;">----- OR -----</div>
+                                    <select style="display:none;" class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id']; ?>" onchange="updateVlResultFields('<?php echo $sample['recency_id']; ?>')">
+                                        <option value="">-- Select -- </option>
+                                        <option value="TND" <?php echo ($sample['vl_result'] == 'TND') ? 'selected="selected"' : ''; ?>>TND</option>
+                                        <option value="BDL" <?php echo ($sample['vl_result'] == 'BDL') ? 'selected="selected"' : ''; ?>>BDL</option>
+                                        <option value="failed" <?php echo ($sample['vl_result'] == 'failed') ? 'selected="selected"' : ''; ?>>Failed</option>
+                                        <option value="&lt; 20" <?php echo ($sample['vl_result'] == '&lt; 20') ? 'selected="selected"' : ''; ?>> &lt; 20</option>
+                                        <option value="&lt; 40" <?php echo ($sample['vl_result'] == '&lt; 40') ? 'selected="selected"' : ''; ?>> &lt; 40</option>
+                                    </select>
+                                <?php }
+                        } ?>
+                            <!-- < ?php
+                                if($sample['term_outcome']!='' && $sample['term_outcome']=='Long Term' && $sample['final_outcome']=='Long Term'){
+                                }else if($sample['term_outcome']!=''){
+                                    if($sample['vl_result']==''){ ?>
+                                    < ?php }else{ ?>
+                                    < ?php }
+                                 } ?> -->
+                        </td>
+                        <td><?php echo $sample['term_outcome']; ?></td>
+                        <td><?php echo $sample['final_outcome']; ?></td>
+                        <td>
+                            <?php
+                            if ($sample['vl_result'] != '' && $sample['term_outcome'] == 'Assay Recent') {
+                                ?>
+                                <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="editVlResult('<?php echo $sample['recency_id']; ?>');"> <i class="fa fa-edit"></i> Edit</a>
+                            <?php
+                        }
+                        ?>
+                        </td>
+                    </tr>
+                <?php
+            }
+        } else {
+            ?>
+                <tr>
+                    <td colspan="8" class="dataTables_empty">No data available</td>
+                </tr>
+            <?php
+        }
+        ?>
+            <tfoot>
+                <tr>
+                    <th>Sample ID</th>
+                    <th>Patient ID</th>
+                    <th>Recency Date</th>
+                    <th>VL Result Date</th>
+                    <th>VL Result</th>
+                    <th>Recency Outcome</th>
+                    <th>Final outcome</th>
+                    <th>Action</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div id="pedingFromVlsm" class="block-content block-content-full tab-pane"><br>
+
+        <table class="table table-bordered table-striped table-vcenter" id="pendingFromVlsm">
+            <thead>
+                <tr>
+                    <th>Sample ID</th>
+                    <th>Recency Date</th>
+                    <th>Request Send On</th>
+                    <th>Viral Load Lab</th>
+                    <th>Final outcome</th>
+                </tr>
+            </thead>
+            <?php if (count($result['withOutTermOutcome']) > 0) {
+                foreach($result['withOutTermOutcome'] as $sampleWithout){ ?>
+                    <tr>
+                        <td><?php echo $sampleWithout['sample_id']; ?></td>
+                        <td><?php echo $common->humanDateFormat($sample['hiv_recency_test_date']); ?></td>
+                        <td><?php echo date('d-M-Y h:i A',strtotime($sampleWithout['vl_request_sent_date_time'])); ?></td>
+                        <td><?php echo $sampleWithout['vl_lab']; ?></td>
+                        <td><?php echo $sampleWithout['final_outcome']; ?></td>
+                    </tr>
+                <?php }
+            }else { ?>
+                <tr>
+                    <td colspan="7" class="dataTables_empty">No data available</td>
+                </tr>
+            <?php }?>
+            <tfoot>
+                <tr>
+                    <th>Sample ID</th>
+                    <th>Recency Date</th>
+                    <th>Request Send On</th>
+                    <th>Viral Load Lab</th>
+                    <th>Final outcome</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<br />
+<a href="javascript:void(0)" class="btn btn-info saveResult" onclick="updateVlResult();">Save Result</a>
+<br /><br />
 <script>
-
     $(function() {
-        $( ".js-datepicker" ).datepicker({ 
-          dateFormat: "yyyy-mm-dd",
+        $(".js-datepicker").datepicker({
+            dateFormat: "yyyy-mm-dd",
         });
-    }); 
-    $(document).ready(function(){
-        $('#sampleData').dataTable({"ordering": false});
-        //$('#sampleDataWithoutTerm').dataTable({"ordering": false});
     });
-
+    $(document).ready(function() {
+        $('#sampleData').dataTable({
+            "ordering": false
+        });
+        $('#pendingFromVlsm').dataTable({"ordering": false});
+    });
 </script>

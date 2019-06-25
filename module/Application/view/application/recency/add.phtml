@@ -1,63 +1,66 @@
 <?php
 use Zend\Session\Container;
+
+$config = new \Zend\Config\Reader\Ini();
+$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 $sessionLogin = new Container('credo');
 $arr = array();
 
 //\Zend\Debug\Debug::dump($facilityResult);die;
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
-     $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
+    $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
 }
 
 $resultArr = array();
-if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
-     $resultArr = explode(",",$arr['mandatory_fields']);
+if (isset($arr['mandatory_fields']) && trim($arr['mandatory_fields']) != '') {
+    $resultArr = explode(",", $arr['mandatory_fields']);
 }
 $resultArr2 = array();
-if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
-     $resultArr2 = explode(",",$arr['display_fields']);
+if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
+    $resultArr2 = explode(",", $arr['display_fields']);
 }
-$sample = in_array("Sample Id",$resultArr)?"isRequired":"";
-$patient = in_array("Patient Id",$resultArr)?"isRequired":"";
-$facility = in_array("Facility Name",$resultArr)?"isRequired":"";
-$hivDiagnosisDate = in_array("Hiv Diagnosis Date",$resultArr)?"isRequired":"";
-$hivRecencyTestDate = in_array("Hiv Test Recency Test Date",$resultArr)?"isRequired":"";
-$controlLineResult = in_array("Control Line",$resultArr)?"isRequired":"";
-$positiveVerificationLine = in_array("Positive Verification Line",$resultArr)?"isRequired":"";
-$longTermVerificationLine = in_array("Long Term Verification Line",$resultArr)?"isRequired":"";
-$dob = in_array("Dob",$resultArr)?"isRequired":"";
-$comment = in_array("Comments",$resultArr)?"isRequired":"";
-$age = in_array("Age",$resultArr)?"isRequired":"";
-$gender = in_array("Gender",$resultArr)?"isRequired":"";
-$locationOne = in_array("Province",$resultArr)?"isRequired":"";
-$locationTwo = in_array("District",$resultArr)?"isRequired":"";
-$locationThree = in_array("City",$resultArr)?"isRequired":"";
-$residence = in_array("Residence",$resultArr)?"isRequired":"";
-$marital = in_array("Marital Status",$resultArr)?"isRequired":"";
-$education = in_array("Education Level",$resultArr)?"isRequired":"";
-$risk = in_array("Risk Population",$resultArr)?"isRequired":"";
-$pregnancy = in_array("Pregnancy Status",$resultArr)?"isRequired":"";
-$partner = in_array("Current Sexual Partner",$resultArr)?"isRequired":"";
-$testing = in_array("Past Hiv Testing",$resultArr)?"isRequired":"";
-$hivStatus = in_array("Last HIV Status",$resultArr)?"isRequired":"";
-$patientArt = in_array("Patient on ART",$resultArr)?"isRequired":"";
-$testNotPermform = in_array("Recency Test not performed",$resultArr)?"isRequired":"";
-$last = in_array("Test Last 12 Month",$resultArr)?"isRequired":"";
-$expViolence = in_array("Experience Violence Last 12 Month",$resultArr)?"isRequired":"";
-$kitName = in_array("Test Kit Name",$resultArr)?"isRequired":"";
-$kitLotNo = in_array("Test Kit Lot No",$resultArr)?"isRequired":"";
-$KitExpiryDate = in_array("Kit Expiry Date",$resultArr)?"isRequired":"";
-$testerName = in_array("Tester Name",$resultArr)?"isRequired":"";
+$sample = in_array("Sample Id", $resultArr) ? "isRequired" : "isRequired";
+$patient = in_array("Patient Id", $resultArr) ? "isRequired" : "";
+$facility = in_array("Facility Name", $resultArr) ? "isRequired" : "";
+$hivDiagnosisDate = in_array("Hiv Diagnosis Date", $resultArr) ? "isRequired" : "";
+$hivRecencyTestDate = in_array("Hiv Test Recency Test Date", $resultArr) ? "isRequired" : "";
+$controlLineResult = in_array("Control Line", $resultArr) ? "isRequired" : "";
+$positiveVerificationLine = in_array("Positive Verification Line", $resultArr) ? "isRequired" : "";
+$longTermVerificationLine = in_array("Long Term Verification Line", $resultArr) ? "isRequired" : "";
+$dob = in_array("Dob", $resultArr) ? "isRequired" : "";
+$comment = in_array("Comments", $resultArr) ? "isRequired" : "";
+$age = in_array("Age", $resultArr) ? "isRequired" : "";
+$gender = in_array("Gender", $resultArr) ? "isRequired" : "";
+$locationOne = in_array("Province", $resultArr) ? "isRequired" : "";
+$locationTwo = in_array("District", $resultArr) ? "isRequired" : "";
+$locationThree = in_array("City", $resultArr) ? "isRequired" : "";
+$residence = in_array("Residence", $resultArr) ? "isRequired" : "";
+$marital = in_array("Marital Status", $resultArr) ? "isRequired" : "";
+$education = in_array("Education Level", $resultArr) ? "isRequired" : "";
+$risk = in_array("Risk Population", $resultArr) ? "isRequired" : "";
+$pregnancy = in_array("Pregnancy Status", $resultArr) ? "isRequired" : "";
+$partner = in_array("Current Sexual Partner", $resultArr) ? "isRequired" : "";
+$testing = in_array("Past Hiv Testing", $resultArr) ? "isRequired" : "";
+$hivStatus = in_array("Last HIV Status", $resultArr) ? "isRequired" : "";
+$patientArt = in_array("Patient on ART", $resultArr) ? "isRequired" : "";
+$testNotPermform = in_array("Recency Test not performed", $resultArr) ? "isRequired" : "";
+$last = in_array("Test Last 12 Month", $resultArr) ? "isRequired" : "";
+$expViolence = in_array("Experience Violence Last 12 Month", $resultArr) ? "isRequired" : "";
+$kitName = in_array("Test Kit Name", $resultArr) ? "isRequired" : "";
+$kitLotNo = in_array("Test Kit Lot No", $resultArr) ? "isRequired" : "";
+$KitExpiryDate = in_array("Kit Expiry Date", $resultArr) ? "isRequired" : "";
+$testerName = in_array("Tester Name", $resultArr) ? "isRequired" : "";
 
-$vlTestDate = in_array("Viral Load Test Date",$resultArr)?"isRequired":"";
-$vlLoadResult = in_array("Viral Load Result",$resultArr)?"isRequired":"";
-$testingFacility = in_array("Testing Facility",$resultArr)?"isRequired":"";
+$vlTestDate = in_array("Viral Load Test Date", $resultArr) ? "isRequired" : "";
+$vlLoadResult = in_array("Viral Load Result", $resultArr) ? "isRequired" : "";
+$testingFacility = in_array("Testing Facility", $resultArr) ? "isRequired" : "";
 
-$sampleCollectionDateMandatory = in_array("Sample Collection Date from the Client",$resultArr)?"isRequired":"";
-$sampleReceiptDateMandatory  = in_array("Sample Receipt Date at the Recency Testing Site",$resultArr)?"isRequired":"";
-$receivedSpecimenTypeMandatory = in_array("Received Specimen Type",$resultArr)?"isRequired":"";
-$sampleReceivedDate = in_array("Sample Received Date",$resultArr)?"isRequired":"";
+$sampleCollectionDateMandatory = in_array("Sample Collection Date from the Client", $resultArr) ? "isRequired" : "";
+$sampleReceiptDateMandatory  = in_array("Sample Receipt Date at the Recency Testing Site", $resultArr) ? "isRequired" : "";
+$receivedSpecimenTypeMandatory = in_array("Received Specimen Type", $resultArr) ? "isRequired" : "";
+$sampleReceivedDate = in_array("Sample Received Date", $resultArr) ? "isRequired" : "";
 
-$testingModality = in_array("Testing Modality",$resultArr)?"isRequired":"";
+$testingModality = in_array("Testing Modality", $resultArr) ? "isRequired" : "";
 
 
 
@@ -66,13 +69,28 @@ $lineOutComeColor2 = "#000000";
 ?>
 
 <style>
-.btnHide,.hivResultStatusShow,.outcome.hideFields{display:none;}
-.btnHide,.hivResultStatusShow,.vlResultoutcome.hideFields{display:none;}
-.showFields{display:block;}
-.colour{color:red;}
+    .btnHide,
+    .hivResultStatusShow,
+    .outcome.hideFields {
+        display: none;
+    }
 
-/* Search Start*/
-/*
+    .btnHide,
+    .hivResultStatusShow,
+    .vlResultoutcome.hideFields {
+        display: none;
+    }
+
+    .showFields {
+        display: block;
+    }
+
+    .colour {
+        color: red;
+    }
+
+    /* Search Start*/
+    /*
 .typeahead { border: 1px solid #d4d4d4;border-radius: 4px;background: #ffff;padding: 8px 12px;max-width: 300px;min-width: 290px;
 color: #495057;}
 input.typeahead {min-width: 265px;}
@@ -83,96 +101,98 @@ ul.typeahead{margin:0px;padding:0px;background: #fafafa;}
 ul.typeahead.dropdown-menu li a {padding: 10px !important;	border-bottom:#d4d4d4 1px solid;color:black;}
 ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
-/* Search End */
-
+    /* Search End */
 </style>
-<link rel="stylesheet" href="<?php  echo $this->basePath() . '/assets/css/select2-new.min.css' ?>">
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/select2-new.min.css' ?>">
 <div class="bg-body-light">
-     <div class="content content-full">
-          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency</h1>
-               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                         <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>"><li class="breadcrumb-item">Recency Details</li></a>
-                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
-                    </ol>
-               </nav>
-          </div>
-     </div>
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency</h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>">
+                        <li class="breadcrumb-item">Recency Details</li>
+                    </a>
+                    <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
 </div>
 
 
 <div class="content">
-     <div class="block block-rounded block-bordered">
-          <div class="block-header block-header-default">
-               <h3 class="block-title">Add Recency Details</h3>
-          </div>
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Add Recency Details</h3>
+        </div>
 
-          <!--  Start Tab view-->
-          <div class="row">
-               <div class="col-md-12">
-                    <div class="js-wizard-simple block block block-rounded block-bordered">
-                         <ul class="nav nav-tabs nav-tabs-block nav-justified" role="tablist">
-                              <li class="nav-item">
-                                   <a class="nav-link active" href="javascript:void(0)" id="step1" onclick="validateStep2()"> Section 1/2 <i class="fa fa-check stepOne" style="color:green;visibility:hidden;"></i></a>
-                              </li>
-                              <li class="nav-item">
-                                   <a class="nav-link" href="javascript:void(0)" id="step2" onclick="validateStep1();"> Section 2/2 <i class="fa fa-check stepTwo" style="color:green;visibility:hidden;"></i></a>
-                              </li>
-                         </ul>
-                         <form name="recencyInformation" id="recencyInformation"  class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
-                              <div class="block-content block-content-sm"> </div>
-                              <div class="block-content block-content-full tab-content" style="min-height: 300px;">
-                                <?php
-                                if(isset($arr['admin_message']) && $arr['admin_message']!=''){
-                                    ?>
-                                    <h4><?php echo ucwords($arr['admin_message']);?></h4>
-                                    <?php
-                                }
+        <!--  Start Tab view-->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="js-wizard-simple block block block-rounded block-bordered">
+                    <ul class="nav nav-tabs nav-tabs-block nav-justified" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="javascript:void(0)" id="step1" onclick="validateStep2()"> Section 1/2 <i class="fa fa-check stepOne" style="color:green;visibility:hidden;"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)" id="step2" onclick="validateStep1();"> Section 2/2 <i class="fa fa-check stepTwo" style="color:green;visibility:hidden;"></i></a>
+                        </li>
+                    </ul>
+                    <form name="recencyInformation" id="recencyInformation" class="mb-5" action="<?php echo $this->url('recency', array('action' => 'add')); ?>" method="post">
+                        <div class="block-content block-content-sm"> </div>
+                        <div class="block-content block-content-full tab-content" style="min-height: 300px;">
+                            <?php
+                            if (isset($arr['admin_message']) && $arr['admin_message'] != '') {
                                 ?>
-                                <div class="tab-pane active" id="wizard-progress-step1" role="tabpanel">
+                                <h4><?php echo ucwords($arr['admin_message']); ?></h4>
+                            <?php
+                        }
+                        ?>
+                            <div class="tab-pane active" id="wizard-progress-step1" role="tabpanel">
 
-                                    <div class="form-group row form-horizontal">
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>" for="">Sample ID<?php echo(in_array("Sample Id",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="form-control <?php echo $sample; echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
-                                        </div>
-
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>" for="">Patient ID <?php echo(in_array("Patient Id",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="form-control <?php echo $patient; echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
-                                        </div>
-
-                                        
+                                <div class="form-group row form-horizontal">
+                                    <label class="col-sm-2 col-form-label <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Sample ID<?php echo (in_array("Sample Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                    <div class="col-sm-4 <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                        <input type="text" class="form-control <?php echo $sample;
+                                                                                echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
                                     </div>
-                                    <div class="form-group row form-horizontal">
-                                    <label class="col-sm-2 col-form-label <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Collection Date from the Client <?php echo(in_array("Sample Collection Date from the Client",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
-                                        <div class="col-sm-4 <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="js-datepicker form-control <?php echo $sampleCollectionDateMandatory; ?> <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample collection date">
-                                        </div>
 
-                                         <label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Receipt Date at the Recency Testing Site <?php echo(in_array("Sample Receipt Date at the Recency Testing Site",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
-                                        <div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="js-datepicker form-control <?php echo $sampleReceiptDateMandatory; ?> <?php  echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample receipt date">
-                                        </div>
+                                    <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Patient ID <?php echo (in_array("Patient Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                    <div class="col-sm-4 <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                        <input type="text" class="form-control <?php echo $patient;
+                                                                                echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
                                     </div>
-                                    <div class="form-group row form-horizontal">
-                                    <label class="col-sm-2 col-form-label <?php echo in_array("Received Specimen Type",$resultArr2)?"showFields":"hideFields";?>" for="">Received Specimen Type <?php echo(in_array("Received Specimen Type",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Received Specimen Type",$resultArr2)?"showFields":"hideFields";?>">
 
-                                              <select class="form-control <?php echo $receivedSpecimenTypeMandatory; ?> <?php echo in_array("Received Specimen Type",$resultArr2)?"showFields":"hideFields";?>" id="receivedSpecimenType" name="receivedSpecimenType" title="Enter the received specimen type" >
-                                                <option value="">--Select--</option>
-                                                <option value="whole_blood">Whole Blood</option>
-                                                <option value="plasma">Plasma</option>
-                                            </select>
-                                        </div>
-                                        <!-- <label class="col-sm-2 col-form-label <?php //echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Received Date<?php //echo(in_array("Sample Received Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
-                                        <div class="col-sm-4 <?php //echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="js-datepicker form-control <?php //echo $sampleReceivedDate; ?> <?php  //echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";?>" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Enter the sample received date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample received date">
-                                        </div> -->
 
+                                </div>
+                                <div class="form-group row form-horizontal">
+                                    <label class="col-sm-2 col-form-label <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Sample Collection Date from the Client <?php echo (in_array("Sample Collection Date from the Client", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
+                                    <div class="col-sm-4 <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                        <input type="text" class="js-datepicker form-control <?php echo $sampleCollectionDateMandatory; ?> <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" readonly="readonly" title="Please enter the sample collection date">
                                     </div>
-                                     <br>
+
+                                    <label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Sample Receipt Date at the Recency Testing Site <?php echo (in_array("Sample Receipt Date at the Recency Testing Site", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
+                                    <div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                        <input type="text" class="js-datepicker form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" readonly="readonly" title="Please enter the sample receipt date">
+                                    </div>
+                                </div>
+                                <div class="form-group row form-horizontal">
+                                    <label class="col-sm-2 col-form-label <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Received Specimen Type <?php echo (in_array("Received Specimen Type", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                    <div class="col-sm-4 <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>">
+
+                                        <select class="form-control <?php echo $receivedSpecimenTypeMandatory; ?> <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" id="receivedSpecimenType" name="receivedSpecimenType" title="Enter the received specimen type">
+                                            <option value="">--Select--</option>
+                                            <option value="whole_blood">Whole Blood</option>
+                                            <option value="plasma">Plasma</option>
+                                        </select>
+                                    </div>
+                                    <!-- <label class="col-sm-2 col-form-label <?php ?>" for="">Sample Received Date<?php ?> </label>
+                                    <div class="col-sm-4 <?php ?>">
+                                        <input type="text" class="js-datepicker form-control <?php ?> <?php ?>" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Enter the sample received date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample received date">
+                                    </div> -->
+                                </div>
+                                <br>
 
                                 <div class="col-md-12">
                                     <div class="block block-rounded block-bordered">
@@ -181,891 +201,1018 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                         </div>
                                         <br>
                                         <div class="form-group row form-horizontal col-sm-12">
-                                        
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>" for=""> Facility <?php echo(in_array("Facility Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                <div class="col-sm-4 <?php echo in_array("Facility Name",$resultArr2)?"showFields":"hideFields";?>">
-                                                    <select class="form-control <?php echo $facility; ?> select2" id="facilityId" name="facilityId" title="Please select the facility name" onchange="getLocationDataByFacility()">
-                                                        <option value="">--Select--</option>
-                                                        <?php foreach($facilityResult['facility'] as $facility){ ?>
-                                                            <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
-                                                        <?php } ?>
-                                                        <!-- <option value="other">Other</option> -->
-                                                    </select>
-                                                    &nbsp;
-                                                    <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherFacilityName" name="otherFacilityName" title="Please Enter facility name" value="" placeholder="Enter facility name"  >
-                                                    &nbsp;
-                                                </div>
-                                            
-                                                <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label <?php echo in_array("Province",$resultArr2)?"showFields":"hideFields";?>" for=""><?php echo ucfirst($globalConfigResult[0]['global_value']); ?><?php echo(in_array("Province",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                <div class="col-sm-4 <?php echo in_array("Province",$resultArr2)?"showFields":"hideFields";?>">
-                                                    <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name'];?>');">
-                                                        <option value="">-- Select --</option>
-                                                    </select>
-                                                </div>
 
-                                                <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label <?php echo in_array("District",$resultArr2)?"showFields":"hideFields";?>" for=""><?php echo ucfirst($globalConfigResult[1]['global_value']); ?><?php echo(in_array("District",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                <div class="col-sm-4 <?php echo in_array("District",$resultArr2)?"showFields":"hideFields";?>">
-                                                    <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name'];?>');">
-                                                        <option value="">-- Select --</option>
-                                                    </select>
-                                                    &nbsp;
-                                                    <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherDistrictName" name="otherDistrictName" title="Please Enter district name" value="" placeholder="Enter district name"  >
-                                                    &nbsp;
-                                                </div>
-
-                                                <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label <?php echo in_array("City",$resultArr2)?"showFields":"hideFields";?>" for=""><?php echo ucfirst($globalConfigResult[2]['global_value']); ?><?php echo(in_array("City",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                <div class="col-sm-4 <?php echo in_array("City",$resultArr2)?"showFields":"hideFields";?>">
-                                                    <select class="form-control <?php echo $locationThree; ?>" id="<?php echo $globalConfigResult[2]['global_name']; ?>" name="<?php echo $globalConfigResult[2]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[2]['global_name'];?>');">
-                                                        <option value="">-- Select --</option>
-                                                    </select>
-                                                    &nbsp;
-                                                    <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherCityName" name="otherCityName" title="Please Enter city name" value="" placeholder="Enter city name"  >
-                                                    &nbsp;
-                                                </div>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Facility Name", $resultArr2) ? "showFields" : "hideFields"; ?>" for=""> Facility <?php echo (in_array("Facility Name", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Facility Name", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control <?php echo $facility; ?> select2" id="facilityId" name="facilityId" title="Please select the facility name" onchange="getLocationDataByFacility()">
+                                                    <option value="">--Select--</option>
+                                                    <?php foreach ($facilityResult['facility'] as $facility) { ?>
+                                                        <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
+                                                    <?php } ?>
+                                                    <!-- <option value="other">Other</option> -->
+                                                </select>
+                                                &nbsp;
+                                                <input style="display:none;" type="text" class="form-control col-sm-12" id="otherFacilityName" name="otherFacilityName" title="Please Enter facility name" value="" placeholder="Enter facility name">
+                                                &nbsp;
                                             </div>
+
+                                            <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label <?php echo in_array("Province", $resultArr2) ? "showFields" : "hideFields"; ?>" for=""><?php echo ucfirst($globalConfigResult[0]['global_value']); ?><?php echo (in_array("Province", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Province", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name']; ?>');">
+                                                    <option value="">-- Select --</option>
+                                                </select>
+                                            </div>
+
+                                            <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label <?php echo in_array("District", $resultArr2) ? "showFields" : "hideFields"; ?>" for=""><?php echo ucfirst($globalConfigResult[1]['global_value']); ?><?php echo (in_array("District", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("District", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name']; ?>');">
+                                                    <option value="">-- Select --</option>
+                                                </select>
+                                                &nbsp;
+                                                <input style="display:none;" type="text" class="form-control col-sm-12" id="otherDistrictName" name="otherDistrictName" title="Please Enter district name" value="" placeholder="Enter district name">
+                                                &nbsp;
+                                            </div>
+
+                                            <label style="margin-bottom: 4%; " class="col-sm-2 col-form-label <?php echo in_array("City", $resultArr2) ? "showFields" : "hideFields"; ?>" for=""><?php echo ucfirst($globalConfigResult[2]['global_value']); ?><?php echo (in_array("City", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("City", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control <?php echo $locationThree; ?>" id="<?php echo $globalConfigResult[2]['global_name']; ?>" name="<?php echo $globalConfigResult[2]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[2]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[2]['global_name']; ?>');">
+                                                    <option value="">-- Select --</option>
+                                                </select>
+                                                &nbsp;
+                                                <input style="display:none;" type="text" class="form-control col-sm-12" id="otherCityName" name="otherCityName" title="Please Enter city name" value="" placeholder="Enter city name">
+                                                &nbsp;
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                             <div class="col-md-12">
-                                <div class="block block-rounded block-bordered">
-                                    <div class="block-header block-header-default">
-                                        <h3 class="block-title">HIV Diagnosis Test</h3>
-                                    </div>
-                                    <br>
-                                    <div class="form-group row form-horizontal col-sm-12">
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Diagnosis Date",$resultArr2)?"showFields":"hideFields";?>" for="">HIV Diagnosis Date <?php echo(in_array("Hiv Diagnosis Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Hiv Diagnosis Date",$resultArr2)?"showFields":"hideFields";?>">
-                                                <input type="text" class="js-datepicker form-control <?php echo $hivDiagnosisDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date"  readonly="readonly">
+                                <div class="col-md-12">
+                                    <div class="block block-rounded block-bordered">
+                                        <div class="block-header block-header-default">
+                                            <h3 class="block-title">HIV Diagnosis Test</h3>
                                         </div>
-
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Past Hiv Testing",$resultArr2)?"showFields":"hideFields";?>" for="">Past HIV Testing <?php echo(in_array("Past Hiv Testing",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Past Hiv Testing",$resultArr2)?"showFields":"hideFields";?>">
-                                            <select class="form-control  <?php echo $testing; ?>" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing" onchange="checkHivTesting(this);">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Yes</option>
-                                                <option value="no">No</option>
-                                                <option value="not_known">Not Known</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <label class="col-sm-2 col-form-label hivResultStatusShow <?php echo in_array("Test Last 12 Month",$resultArr2)?"showFields":"hideFields";?>" for="">Test Last 12 Month <?php echo(in_array("Test Last 12 Month",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 hivResultStatusShow <?php echo in_array("Test Last 12 Month",$resultArr2)?"showFields":"hideFields";?>">
-                                            <select class="form-control  <?php echo $last; ?>" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Yes</option>
-                                                <option value="no">No</option>
-                                                <option value="not_known">Not Known</option>
-                                            </select>
-                                        </div>
-                                        <label class="col-sm-2 col-form-label hivResultStatusShow <?php echo in_array("Last HIV Status",$resultArr2)?"showFields":"hideFields";?>" for="">Last HIV Status <?php echo(in_array("Last HIV Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 hivResultStatusShow <?php echo in_array("Last HIV Status",$resultArr2)?"showFields":"hideFields";?>">
-                                            <select class="form-control <?php echo $hivStatus; ?> " id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status" onchange="checkHivStatus(this);">
-                                                <option value="">--Select--</option>
-                                                <option value="negative">Negative</option>
-                                                <option value="positive">Positive</option>
-                                            </select>
-                                        </div>
-                                        <label class="col-sm-2 col-form-label hivResultStatusShow" for="patientOnArt">Is the Patient on ART? <?php echo(in_array("Patient on ART",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 hivResultStatusShow">
-                                            <select class="form-control <?php echo $patientArt; ?>" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Yes</option>
-                                                <option value="no">No</option>
-                                            </select>
-                                        </div>
-
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Kit Expiry Date",$resultArr2)?"showFields":"hideFields";?>" for="">Test Kit Expiry Date <?php echo(in_array("Kit Expiry Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Kit Expiry Date",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="js-datepicker form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  placeholder="Enter the kit expiry date"  value="" title="Please enter the Kit Expiry date"  readonly="readonly">
-                                        </div>
-                                        
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>" for="">Test Kit Lot No. <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" placeholder="Enter kit lot no." title="Please enter the kit lot no.">
-                                        </div>
-                                        
                                         <br>
-                                        <br>
-                                        
+                                        <div class="form-group row form-horizontal col-sm-12">
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Diagnosis Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">HIV Diagnosis Date <?php echo (in_array("Hiv Diagnosis Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Hiv Diagnosis Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" class="js-datepicker form-control <?php echo $hivDiagnosisDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date" readonly="readonly">
+                                            </div>
 
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>" for="">Tester Name <?php echo(in_array("Tester Name",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                       <div class="col-sm-4 <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>">
-                                           <input type="text" name="testerName" id="testerName" class="typeahead form-control <?php echo $testerName; ?>" placeholder="Enter the tester name" title="Please enter the tester name"/>
-                                       </div>
-                                       
-                                       <label class="col-sm-2 col-form-label <?php echo in_array("Testing Modality",$resultArr2)?"showFields":"hideFields";?>" for="">Testing Modality <?php echo(in_array("Testing Modality",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Testing Modality",$resultArr2)?"showFields":"hideFields";?>">
-                                            <select class="form-control <?php echo $testingModality; ?>" id="testingModality" name="testingModality" title="Please select the testing modality type">
-                                                <option value="">--Select--</option>
-                                                
-                                                <?php foreach($testFacilityTypeResult as $testingFacilityType){ ?>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Past Hiv Testing", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Past HIV Testing <?php echo (in_array("Past Hiv Testing", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Past Hiv Testing", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control  <?php echo $testing; ?>" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing" onchange="checkHivTesting(this);">
+                                                    <option value="">--Select--</option>
+                                                    <option value="yes">Yes</option>
+                                                    <option value="no">No</option>
+                                                    <option value="not_known">Not Known</option>
+                                                </select>
+                                            </div>
+
+                                            <label class="col-sm-2 col-form-label hivResultStatusShow <?php echo in_array("Test Last 12 Month", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Test Last 12 Month <?php echo (in_array("Test Last 12 Month", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 hivResultStatusShow <?php echo in_array("Test Last 12 Month", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control  <?php echo $last; ?>" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
+                                                    <option value="">--Select--</option>
+                                                    <option value="yes">Yes</option>
+                                                    <option value="no">No</option>
+                                                    <option value="not_known">Not Known</option>
+                                                </select>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label hivResultStatusShow <?php echo in_array("Last HIV Status", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Last HIV Status <?php echo (in_array("Last HIV Status", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 hivResultStatusShow <?php echo in_array("Last HIV Status", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control <?php echo $hivStatus; ?> " id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status" onchange="checkHivStatus(this);">
+                                                    <option value="">--Select--</option>
+                                                    <option value="negative">Negative</option>
+                                                    <option value="positive">Positive</option>
+                                                </select>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label hivResultStatusShow" for="patientOnArt">Is the Patient on ART? <?php echo (in_array("Patient on ART", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 hivResultStatusShow">
+                                                <select class="form-control <?php echo $patientArt; ?>" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
+                                                    <option value="">--Select--</option>
+                                                    <option value="yes">Yes</option>
+                                                    <option value="no">No</option>
+                                                </select>
+                                            </div>
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Kit Expiry Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Test Kit Expiry Date <?php echo (in_array("Kit Expiry Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Kit Expiry Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" class="js-datepicker form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" value="" title="Please enter the Kit Expiry date" readonly="readonly">
+                                            </div>
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Test Kit Lot No. <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" placeholder="Enter kit lot no." title="Please enter the kit lot no.">
+                                            </div>
+
+                                            <br>
+                                            <br>
+
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Tester Name <?php echo (in_array("Tester Name", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" name="testerName" id="testerName" class="typeahead form-control <?php echo $testerName; ?>" placeholder="Enter the tester name" title="Please enter the tester name" />
+                                            </div>
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Testing Modality", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Testing Modality <?php echo (in_array("Testing Modality", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Testing Modality", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control <?php echo $testingModality; ?>" id="testingModality" name="testingModality" title="Please select the testing modality type">
+                                                    <option value="">--Select--</option>
+
+                                                    <?php foreach ($testFacilityTypeResult as $testingFacilityType) { ?>
                                                         <option value="<?php echo $testingFacilityType['testing_facility_type_id']; ?>"><?php echo $testingFacilityType['testing_facility_type_name']; ?></option>
-                                                <?php } ?>
-                                                <option value="other">Other</option>
-                                            </select>
-                                            &nbsp;
-                                            <input style="display:none;" type="text"  class="form-control col-sm-12" id="othertestingmodality" name="othertestingmodality" title="Please Enter testing modality type" value="" placeholder="Enter testing modality type" >
-                                            &nbsp;
+                                                    <?php } ?>
+                                                    <option value="other">Other</option>
+                                                </select>
+                                                &nbsp;
+                                                <input style="display:none;" type="text" class="form-control col-sm-12" id="othertestingmodality" name="othertestingmodality" title="Please Enter testing modality type" value="" placeholder="Enter testing modality type">
+                                                &nbsp;
+                                            </div>
+
+
+
                                         </div>
 
-                                      
-                                       
                                     </div>
-                                    
-                                  </div>
-                             </div>
+                                </div>
 
-                            <div class="col-md-12">
-                                <div class="block block-rounded block-bordered">
-                                    <div class="block-header block-header-default">
-                                        <h3 class="block-title">Recency Test Results</h3>
-                                    </div>
-                                    <br>
-                                    <div class="form-group row form-horizontal col-sm-12 ">
-                                        <label class="col-sm-2 form-check-label <?php echo in_array("Recency Test not performed",$resultArr2)?"showFields":"hideFields";?>" for="">Recency Test not performed <?php echo(in_array("Recency Test not performed",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Recency Test not performed",$resultArr2)?"showFields":"hideFields";?>">
-                                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input <?php echo $testNotPermform; ?>" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" value="true"/>&nbsp;Yes
+                                <div class="col-md-12">
+                                    <div class="block block-rounded block-bordered">
+                                        <div class="block-header block-header-default">
+                                            <h3 class="block-title">Recency Test Results</h3>
                                         </div>
+                                        <br>
+                                        <div class="form-group row form-horizontal col-sm-12 ">
+                                            <label class="col-sm-2 form-check-label <?php echo in_array("Recency Test not performed", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Recency Test not performed <?php echo (in_array("Recency Test not performed", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Recency Test not performed", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input <?php echo $testNotPermform; ?>" style="border:none;" name="recencyTestPerformed" id="recencyTestPerformedYes" value="true" />&nbsp;Yes
+                                            </div>
 
 
-                                        <label style="visibility:hidden;" class="col-sm-2 col-form-label hideDiv" for="">Reason Recency Test Not Performed
-                                            <?php echo(in_array("Recency Test Not Performed",$resultArr)?"<span class='mandatory'>*</span>":""); ?>
-                                        </label>
+                                            <label style="visibility:hidden;" class="col-sm-2 col-form-label hideDiv" for="">Reason Recency Test Not Performed
+                                                <?php echo (in_array("Recency Test Not Performed", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?>
+                                            </label>
 
-                                        <div style="visibility:hidden;" class="col-sm-4 hideDiv">
-                                            <select class="form-control" id="recencyTestNotPerformed" name="recencyTestNotPerformed" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
-                                                <option value="">--Select--</option>
-                                                <option value="no_consent_from_the_client">No Consent</option>
-                                                <option value="no_sample_collected">No Sample Collected</option>
-                                                <option value="newly_not_diagnosed">No New Diagnosis</option>
-                                                <option value="sample_rejected">Sample Rejected</option>
-                                                <option value="other">Others</option>
-                                            </select>
-                                            <br>
-                                            <input style="display:none;" type="text" class="form-control col-sm-12" id="otherRecencyTestNotPerformed" name="otherRecencyTestNotPerformed" title="Please Enter the Other other recency test not performed" value="" placeholder="Enter other recency test not performed">
-                                            <br>
-                                        </div>
+                                            <div style="visibility:hidden;" class="col-sm-4 hideDiv">
+                                                <select class="form-control" id="recencyTestNotPerformed" name="recencyTestNotPerformed" title="Please select the recency test not performed" onchange="otherRecencyTestNotPerfomedCheck(this);">
+                                                    <option value="">--Select--</option>
+                                                    <option value="no_consent_from_the_client">No Consent</option>
+                                                    <option value="no_sample_collected">No Sample Collected</option>
+                                                    <option value="newly_not_diagnosed">No New Diagnosis</option>
+                                                    <option value="sample_rejected">Sample Rejected</option>
+                                                    <option value="other">Others</option>
+                                                </select>
+                                                <br>
+                                                <input style="display:none;" type="text" class="form-control col-sm-12" id="otherRecencyTestNotPerformed" name="otherRecencyTestNotPerformed" title="Please Enter the Other other recency test not performed" value="" placeholder="Enter other recency test not performed">
+                                                <br>
+                                            </div>
 
-                                         <label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>" for="">Testing Facility <?php echo(in_array("Testing Facility",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Testing Facility",$resultArr2)?"showFields":"hideFields";?>">
-                                            <select class="form-control disbaledResult<?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
-                                                <option value="">--Select--</option>
-                                                <?php foreach($facilityResult['facilityTest'] as $testingFacility){ ?>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Testing Facility <?php echo (in_array("Testing Facility", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control disbaledResult<?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+                                                    <option value="">--Select--</option>
+                                                    <?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
                                                         <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
-                                                <?php } ?>
-                                                <!-- <option value="other">Other</option> -->
-                                            </select>
-                                            &nbsp;
-                                            <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter testing facility name" value="" placeholder="Enter testing facility name" >
-                                            &nbsp;
-                                        </div>
-
-                                        
-
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">HIV Recency Test Date<?php echo(in_array("Hiv Recency Test Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Hiv Recency Test Date",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="js-datepicker form-control disbaledResult <?php echo $hivRecencyTestDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date"  readonly="readonly">
-                                        </div>
+                                                    <?php } ?>
+                                                    <!-- <option value="other">Other</option> -->
+                                                </select>
+                                                &nbsp;
+                                                <input style="display:none;" type="text" class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter testing facility name" value="" placeholder="Enter testing facility name">
+                                                &nbsp;
+                                            </div>
 
 
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Control Line",$resultArr2)?"showFields":"hideFields";?>" for="">Control Line
-                                            <?php echo(in_array("Control Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                            <div class="col-sm-4 <?php echo in_array("Control Line",$resultArr2)?"showFields":"hideFields";?>">
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">HIV Recency Test Date<?php echo (in_array("Hiv Recency Test Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" class="js-datepicker form-control disbaledResult <?php echo $hivRecencyTestDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
+                                            </div>
+
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Control Line
+                                                <?php echo (in_array("Control Line", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control disbaledResult
                                                 <?php echo $controlLineResult; ?>" id="controlLine" name="controlLine" title="Please select the control line" onchange="changeTermLine()">
-                                                <option value="">--Select--</option>
-                                                <option value="present">Present</option>
-                                                <option value="absent">Absent</option>
-                                            </select>
-                                        </div>
-                                        <br>
-                                        <br>
-                                        <br>
+                                                    <option value="">--Select--</option>
+                                                    <option value="present">Present</option>
+                                                    <option value="absent">Absent</option>
+                                                </select>
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <br>
 
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Positive Verification Line",$resultArr2)?"showFields":"hideFields";?>" for="">Positive Verification
-                                            <?php echo(in_array("Positive Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                            <div class="col-sm-4 <?php echo in_array("Positive Verification Line",$resultArr2)?"showFields":"hideFields";?>">
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Positive Verification
+                                                <?php echo (in_array("Positive Verification Line", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control disbaledResult
                                                 <?php echo $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
-                                                <option value="">--Select--</option>
-                                                <option value="present">Present(Positive/P)</option>
-                                                <option value="absent">Absent(Negative/N)</option>
-                                            </select>
-                                        </div>
+                                                    <option value="">--Select--</option>
+                                                    <option value="present">Present(Positive/P)</option>
+                                                    <option value="absent">Absent(Negative/N)</option>
+                                                </select>
+                                            </div>
 
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Long Term Verification Line",$resultArr2)?"showFields":"hideFields";?>" for="">Long Term Verification
-                                        <?php  echo(in_array("Long Term Verification Line",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                        <div class="col-sm-4 <?php echo in_array("Long Term Verification Line",$resultArr2)?"showFields":"hideFields";?>">
-                                            <select class="form-control disbaledResult <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
-                                                <option value="">--Select--</option>
-                                                <option value="present">Present(Long Term/LT)</option>
-                                                <option value="absent">Absent(Recent/R)</option>
-                                            </select>
-                                        </div>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Long Term Verification
+                                                <?php echo (in_array("Long Term Verification Line", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control disbaledResult <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
+                                                    <option value="">--Select--</option>
+                                                    <option value="present">Present(Long Term/LT)</option>
+                                                    <option value="absent">Absent(Recent/R)</option>
+                                                </select>
+                                            </div>
 
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Test Date<?php echo(in_array("Viral Load Test Date",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                       <div class="col-sm-4 <?php echo in_array("Viral Load Test Date",$resultArr2)?"showFields":"hideFields";?>">
-                                           <input type="text" name="vlTestDate" id="vlTestDate" class="js-datepicker vlResultFields form-control <?php echo $vlTestDate; ?>"  data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the Viral Load Test Date" title="Please enter the Viral Load Test Date" readonly="readonly" disabled  onblur="updateVlResultFields('vlField')"/>
-                                       </div>
+                                            <label class="hide-lab-req col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Viral Load Test Date<?php echo (in_array("Viral Load Test Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="hide-lab-req col-sm-4 <?php echo in_array("Viral Load Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" name="vlTestDate" id="vlTestDate" class="js-datepicker vlResultFields form-control <?php echo $vlTestDate; ?>" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the Viral Load Test Date" title="Please enter the Viral Load Test Date" readonly="readonly" disabled onblur="updateVlResultFields('vlField')" />
+                                            </div>
 
-                                        <label class="col-sm-2 col-form-label outcome " style="visibility:hidden" for="">Assay Outcome</label>
-                                        <div class="col-sm-4 " >
-                                            <span class="form-control" style="border:none;" id="outcome"></span>
-                                            <input type="hidden" name="outcomeData" id="outcomeData"/>
-                                        </div>
-                                        <br>
-                                        <br>
-                                        <br>
+                                            <label class="col-sm-2 col-form-label outcome " style="visibility:hidden" for="">Assay Outcome</label>
+                                            <div class="col-sm-4 ">
+                                                <span class="form-control" style="border:none;" id="outcome"></span>
+                                                <input type="hidden" name="outcomeData" id="outcomeData" />
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <label class="hide-lab-req col-sm-2 col-form-label <?php echo in_array("Viral Load Result", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Viral Load Result (cp/ml)<?php echo (in_array("Viral Load Result", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="hide-lab-req col-sm-4 <?php echo in_array("Viral Load Result", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" name="vlLoadResult" id="vlLoadResult" class="form-control vlResultFields <?php echo $vlLoadResult; ?>" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)" onblur="updateVlResultFields('vlField')" />
 
-                                       <label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>" for="">Viral Load Result (cp/ml)<?php echo(in_array("Viral Load Result",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                       <div class="col-sm-4 <?php echo in_array("Viral Load Result",$resultArr2)?"showFields":"hideFields";?>">
-                                           <input type="text" name="vlLoadResult" id="vlLoadResult" class="form-control vlResultFields <?php echo $vlLoadResult; ?>" placeholder="Enter the Viral Load Result (cp/ml)" title="Please enter the Viral Load Result (cp/ml)" onblur="updateVlResultFields('vlField')"/>
-
-                                            <div class="text-center" style="padding:2px 0px 2px 0px">OR</div>
-                                           <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption"  onchange="updateVlResultFields('vlField')">
+                                                <div class="text-center" style="padding:2px 0px 2px 0px">OR</div>
+                                                <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption" onchange="updateVlResultFields('vlField')">
                                                     <option value="">-- Select -- </option>
                                                     <option value="TND">TND - Target not detected</option>
                                                     <option value="BDL">BDL - Below Detection Line</option>
                                                     <option value="failed">Failed</option>
                                                     <option value="&lt; 20"> &lt; 20</option>
                                                     <option value="&lt; 40"> &lt; 40</option>
-                                           </select>
-                                       </div>
-                                       
-                                       <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
-                                       <div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
-                                           <span class=" form-control " style="border:none;" id="vlResultoutcome"></span>
-                                           <input type="hidden" name="vlfinaloutcomeResult" id="vlfinaloutcomeResult"/>
-                                       </div>
-
-                                       
-                                   
-                                       
-                                   
-                                    </div>
-                                  </div>
-                             </div>
-
-                               <!-- <div class="col-md-12">
-                                <div class="block block-rounded block-bordered"> -->
-                                    <!-- <div class="block-header block-header-default">
-                                        <h3 class="block-title">Testing Results</h3>
-                                    </div> -->
-                                    
-                                  <!-- </div>
-                             </div> -->
-                        </div>
-
-                                    <div class="tab-pane" id="wizard-progress-step2" role="tabpanel">
-                                            <div name="recencySectionForm2" id="recencySectionForm2"  class="mb-5">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Dob",$resultArr2)?"showFields":"hideFields";?>" for="">DOB <?php echo(in_array("Dob",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 <?php echo in_array("Dob",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <input type="text" class="js-datepicker form-control section2" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Select the dob" title="Please enter the date of birth" onchange="ageCalculate();"  readonly="readonly">
-                                                    </div>
-
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Age",$resultArr2)?"showFields":"hideFields";?>" for=""> Age in Years <?php echo(in_array("Age",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 <?php echo in_array("Age",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <input type="text" class="form-control section2" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
-                                                    </div>
+                                                </select>
+                                            </div>
+                                            <div class="is-vl-lab col-md-6" style="display:none;">
+                                                <div class="col-sm-2">
+                                                    <label class="col-form-label" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
+                                                    <label class="col-form-label" for="isVlLab" style=" padding-top: 35px; ">Viral Load Lab <span class='mandatory'>*</span></label>
                                                 </div>
-                                                <br>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Gender",$resultArr2)?"showFields":"hideFields";?>" for="">Gender <?php echo(in_array("Gender",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 <?php echo in_array("Gender",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <select class="form-control section2" id="gender" name="gender" title="Please select the gender" onchange="genderCheck(this);">
-                                                                <option value="">--Select--</option>
-                                                                <option value="male">Male</option>
-                                                                <option value="female">Female</option>
-                                                                <option value="not_reported">Not Reported</option>
-                                                        </select>
-                                                    </div>
-                                                    <br>
-                                                    <br>
-                                                    <label class="col-sm-2 col-form-label hidePregnancyResult <?php echo in_array("Pregnancy Status",$resultArr2)?"showFields":"hideFields";?>" for="">Pregnancy Status<?php echo(in_array("Pregnancy Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 hidePregnancyResult <?php echo in_array("Pregnancy Status",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <select class="form-control section2 " id="pregnancyStatus" name="pregnancyStatus" title="Please select the pregnancy status" >
-                                                                <option value="">--Select--</option>
-                                                                <option value="currently_pregnant">Currently Pregnant</option>
-                                                                <option value="not_pregnant">Not Pregnant</option>
-                                                                <option value="not_known">Not Known</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Marital Status",$resultArr2)?"showFields":"hideFields";?>" for="">Marital Status <?php echo(in_array("Marital Status",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 <?php echo in_array("Marital Status",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <select class="form-control section2" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
-                                                                <option value="">--Select--</option>
-                                                                <option value="never_married">Never Married</option>
-                                                                <option value="married_cohabited">Married - Cohabited</option>
-                                                                <option value="married_cohabiting">Married Cohabiting</option>
-                                                                <option value="widow">Widow</option>
-                                                                <option value="divorce_separated">Divorce - Separated</option>
-                                                        </select>
-                                                    </div>
 
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Education Level",$resultArr2)?"showFields":"hideFields";?>" for="">Education Level <?php echo(in_array("Education Level",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 <?php echo in_array("Education Level",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <select class="form-control section2" id="educationLevel" name="educationLevel" title="Please select the education level">
-                                                                <option value="">--Select--</option>
-                                                                <option value="primary">Primary</option>
-                                                                <option value="secondary">Secondary</option>
-                                                                <option value="university_or_higher">University or Higher</option>
-                                                        </select>
-                                                    </div>
+                                                <div class="col-sm-4">
+                                                    <select class="select2 form-control isVlLabRequired is-facility" name="isFacilityLab" id="isFacilityLab" title="Please select facility lab">
+                                                        <option value="">-- Select -- </option>
+                                                    </select>
+                                                    <select class="select2 form-control isVlLabRequired is-viral-lab" name="isVlLab" id="isVlLab" title="Please select viral load lab" style=" margin-top: 35px; ">
+                                                        <option value="">-- Select -- </option>
+                                                    </select>
                                                 </div>
-                                                <br>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Risk Population",$resultArr2)?"showFields":"hideFields";?>" for="">Risk Population <?php echo(in_array("Risk Population",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div id="riskPopulationSelect" class="col-sm-4 <?php echo in_array("Risk Population",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <select class="form-control section2" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
-                                                                <option value="">--Select--</option>
-                                                                <?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
-                                                                    <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo $riskPo['name']; ?></option>
-                                                                <?php } ?>
-                                                                <option value="Other">Other</option>
-                                                        </select>&nbsp;
-                                                        <input style="display:none;" type="text"  class="form-control section2 col-sm-12" id="otherRiskPopulation" name="otherRiskPopulation" title="Please Enter the Other Risk Population" value="" placeholder="Enter other population"  >
-                                                    </div>
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Residence",$resultArr2)?"showFields":"hideFields";?>" for="">Residence <?php echo(in_array("Residence",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 <?php echo in_array("Residence",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <select class="form-control section2" id="residence" name="residence" title="Please select the residence">
-                                                                <option value="">--Select--</option>
-                                                                <option value="urban">Urban</option>
-                                                                <option value="rural">Rural</option>
-                                                        </select>
-                                                        <br>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Current Sexual Partner",$resultArr2)?"showFields":"hideFields";?>" for="">Current Sexual Partner <?php echo(in_array("Current Sexual Partner",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 <?php echo in_array("Current Sexual Partner",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <select class="form-control section2" id="currentSexualPartner" name="currentSexualPartner" title="Please select the current sexual partner">
-                                                                <option value="">--Select--</option>
-                                                                <option value="1">1</option>
-                                                                <option value="2_3">2 - 3</option>
-                                                                <option value=">3">>3</option>
-                                                        </select>
-                                                    </div>
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Experience Violence Last 12 Month",$resultArr2)?"showFields":"hideFields";?>" for="">Experienced violence in last 12 months <?php echo(in_array("Experience Violence Last 12 Month",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 <?php echo in_array("Experience Violence Last 12 Month",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <select class="form-control section2" id="expViolence" name="expViolence" title="Please select the experienced violence in last 12 months">
-                                                                <option value="">--Select--</option>
-                                                                <option value="yes">Yes</option>
-                                                                <option value="no">No</option>
-                                                                <option value="not_known">Don't know</option>
-                                                        </select>
-                                                    </div>
-                                                    <label class="col-sm-2 col-form-label <?php echo in_array("Comments",$resultArr2)?"showFields":"hideFields";?>" for="">Comments <?php echo(in_array("Comments",$resultArr)?"<span class='mandatory'>*</span>":""); ?></label>
-                                                    <div class="col-sm-4 <?php echo in_array("Comments",$resultArr2)?"showFields":"hideFields";?>">
-                                                        <textarea class="form-control section2" name="comments" id="comments" title="Please enter comments"></textarea>
-                                                    </div>
+                                                <input type="hidden" name="isViralLabText" id="isViralLabText"/>
+                                            </div>
+                                            <div class="is-vl-lab col-sm-6" style="display:none;">
+                                                <label class="col-sm-2 form-check-label rm-lab-req" for="sendVlsm" style=" padding-top: 35px; ">Send a Viral Load Test Request to VLSM</label>
+                                                <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);" value="yes">&nbsp;Yes
                                                 </div>
                                             </div>
+                                            <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
+                                            <div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
+                                                <span class=" form-control " style="border:none;" id="vlResultoutcome"></span>
+                                                <input type="hidden" name="vlfinaloutcomeResult" id="vlfinaloutcomeResult" />
+                                            </div>
+
+
+
+
+
                                         </div>
                                     </div>
-                                   <!-- END Steps Content -->
-                                   <div class="block-content block-content-sm block-content-full bg-body-light rounded-bottom">
-                                        <div class="row">
-                                             <div class="col-6">
-                                                  <button type="button" class="btn btn-secondary btnHide" onclick="validateStep2()">
-                                                       <i class="fa fa-angle-left mr-1"></i> Previous
-                                                  </button>
-                                                  <a   href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger d-none btnHide" data-wizard="finish" >Cancel</a>&nbsp;
-                                                  <button  type="submit" class="btn btn-primary d-none btnHide" data-wizard="finish" onclick="validateNow();return false;"><i class="fa fa-check mr-1"></i> Submit</button>
-                                             </div>
-                                             <div class="col-6 text-right">
-                                                  <!-- <button type="button" class="btn btn-secondary" data-wizard="next"> -->
-                                                  <button type="button" class="btn btn-secondary nxtBtn" onclick="validateStep1()">Next <i class="fa fa-angle-right ml-1"></i>
-                                                  </button>
-                                             </div>
+                                </div>
+
+                                <!-- <div class="col-md-12">
+                                <div class="block block-rounded block-bordered"> -->
+                                <!-- <div class="block-header block-header-default">
+                                        <h3 class="block-title">Testing Results</h3>
+                                    </div> -->
+
+                                <!-- </div>
+                             </div> -->
+                            </div>
+
+                            <div class="tab-pane" id="wizard-progress-step2" role="tabpanel">
+                                <div name="recencySectionForm2" id="recencySectionForm2" class="mb-5">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Dob", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">DOB <?php echo (in_array("Dob", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Dob", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <input type="text" class="js-datepicker form-control section2" id="dob" name="dob" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Select the dob" title="Please enter the date of birth" onchange="ageCalculate();" readonly="readonly">
                                         </div>
-                                   </div>
-                              </form>
-                         </div>
-                    </div>
-               </div>
-               <!--  end tab view-->
-          </div>
-     </div>
+
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Age", $resultArr2) ? "showFields" : "hideFields"; ?>" for=""> Age in Years <?php echo (in_array("Age", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Age", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <input type="text" class="form-control section2" id="age" name="age" value="" placeholder="Enter the age" title="Please enter the age">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Gender", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Gender <?php echo (in_array("Gender", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Gender", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <select class="form-control section2" id="gender" name="gender" title="Please select the gender" onchange="genderCheck(this);">
+                                                <option value="">--Select--</option>
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                                <option value="not_reported">Not Reported</option>
+                                            </select>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <label class="col-sm-2 col-form-label hidePregnancyResult <?php echo in_array("Pregnancy Status", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Pregnancy Status<?php echo (in_array("Pregnancy Status", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 hidePregnancyResult <?php echo in_array("Pregnancy Status", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <select class="form-control section2 " id="pregnancyStatus" name="pregnancyStatus" title="Please select the pregnancy status">
+                                                <option value="">--Select--</option>
+                                                <option value="currently_pregnant">Currently Pregnant</option>
+                                                <option value="not_pregnant">Not Pregnant</option>
+                                                <option value="not_known">Not Known</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Marital Status", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Marital Status <?php echo (in_array("Marital Status", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Marital Status", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <select class="form-control section2" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
+                                                <option value="">--Select--</option>
+                                                <option value="never_married">Never Married</option>
+                                                <option value="married_cohabited">Married - Cohabited</option>
+                                                <option value="married_cohabiting">Married Cohabiting</option>
+                                                <option value="widow">Widow</option>
+                                                <option value="divorce_separated">Divorce - Separated</option>
+                                            </select>
+                                        </div>
+
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Education Level", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Education Level <?php echo (in_array("Education Level", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Education Level", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <select class="form-control section2" id="educationLevel" name="educationLevel" title="Please select the education level">
+                                                <option value="">--Select--</option>
+                                                <option value="primary">Primary</option>
+                                                <option value="secondary">Secondary</option>
+                                                <option value="university_or_higher">University or Higher</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Risk Population", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Risk Population <?php echo (in_array("Risk Population", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div id="riskPopulationSelect" class="col-sm-4 <?php echo in_array("Risk Population", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <select class="form-control section2" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
+                                                <option value="">--Select--</option>
+                                                <?php foreach ($facilityResult['riskPopulations'] as $riskPo) { ?>
+                                                    <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo $riskPo['name']; ?></option>
+                                                <?php } ?>
+                                                <option value="Other">Other</option>
+                                            </select>&nbsp;
+                                            <input style="display:none;" type="text" class="form-control section2 col-sm-12" id="otherRiskPopulation" name="otherRiskPopulation" title="Please Enter the Other Risk Population" value="" placeholder="Enter other population">
+                                        </div>
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Residence", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Residence <?php echo (in_array("Residence", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Residence", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <select class="form-control section2" id="residence" name="residence" title="Please select the residence">
+                                                <option value="">--Select--</option>
+                                                <option value="urban">Urban</option>
+                                                <option value="rural">Rural</option>
+                                            </select>
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Current Sexual Partner", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Current Sexual Partner <?php echo (in_array("Current Sexual Partner", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Current Sexual Partner", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <select class="form-control section2" id="currentSexualPartner" name="currentSexualPartner" title="Please select the current sexual partner">
+                                                <option value="">--Select--</option>
+                                                <option value="1">1</option>
+                                                <option value="2_3">2 - 3</option>
+                                                <option value=">3">>3</option>
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Experience Violence Last 12 Month", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Experienced violence in last 12 months <?php echo (in_array("Experience Violence Last 12 Month", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Experience Violence Last 12 Month", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <select class="form-control section2" id="expViolence" name="expViolence" title="Please select the experienced violence in last 12 months">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Yes</option>
+                                                <option value="no">No</option>
+                                                <option value="not_known">Don't know</option>
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Comments", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Comments <?php echo (in_array("Comments", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                        <div class="col-sm-4 <?php echo in_array("Comments", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <textarea class="form-control section2" name="comments" id="comments" title="Please enter comments"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Steps Content -->
+                        <div class="block-content block-content-sm block-content-full bg-body-light rounded-bottom">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-secondary btnHide" onclick="validateStep2()">
+                                        <i class="fa fa-angle-left mr-1"></i> Previous
+                                    </button>
+                                    <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger d-none btnHide" data-wizard="finish">Cancel</a>&nbsp;
+                                    <button type="submit" class="btn btn-primary d-none btnHide" data-wizard="finish" onclick="validateNow();return false;"><i class="fa fa-check mr-1"></i> Submit</button>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <!-- <button type="button" class="btn btn-secondary" data-wizard="next"> -->
+                                    <button type="button" class="btn btn-secondary nxtBtn" onclick="validateStep1()">Next <i class="fa fa-angle-right ml-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--  end tab view-->
+    </div>
+</div>
 <!-- vivek -->
 <!-- <script src="< ?php// echo $this->basePath() . '/assets/js/plugins/namesearch/typeahead.js'; ?>"></script> -->
 <script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
 <script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
 <!-- <script type="text/javascript" src="typeahead.js"></script> -->
 <script type="text/javascript">
-     $(".hideFields").remove();
-     function changeTermLine()
-     {
-          var ctrlLine = $("#controlLine").val();
-          var postiveLine = $("#positiveVerificationLine").val();
-          var longTermLine = $("#longTermVerificationLine").val();
-          
+    $(".hideFields").remove();
 
-          if(ctrlLine!='' && postiveLine!='' && longTermLine!='' ){
-               if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
-                $(".outcome").css({"visibility":"visible"});
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    
-                    updateVlResultFields();
+    function changeTermLine() {
+        var ctrlLine = $("#controlLine").val();
+        var postiveLine = $("#positiveVerificationLine").val();
+        var longTermLine = $("#longTermVerificationLine").val();
 
-                    
-               }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                   
-                    updateVlResultFields();
+        $('.isVlLabRequired').removeClass('isRequired');
+        if (ctrlLine != '' && postiveLine != '' && longTermLine != '') {
+            if (ctrlLine == 'absent' && postiveLine == 'absent' && longTermLine == 'absent') {
+                $(".outcome").css({
+                    "visibility": "visible"
+                });
+                $("#outcome").html('Invalid – Please Verify').css({
+                    "color": "<?php echo $lineOutComeColor; ?>"
+                });
+                updateVlResultFields();
+            } else if (ctrlLine == 'absent' && postiveLine == 'absent' && longTermLine == 'present') {
+                $("#outcome").html('Invalid – Please Verify').css({
+                    "color": "<?php echo $lineOutComeColor; ?>"
+                });
+                $(".outcome").css({
+                    "visibility": "visible"
+                });
+                updateVlResultFields();
+            } else if (ctrlLine == 'absent' && postiveLine == 'present' && longTermLine == 'absent') {
+                $("#outcome").html('Invalid – Please Verify').css({
+                    "color": "<?php echo $lineOutComeColor; ?>"
+                });
+                $(".outcome").css({
+                    "visibility": "visible"
+                });
+                updateVlResultFields();
+            } else if (ctrlLine == 'absent' && postiveLine == 'present' && longTermLine == 'present') {
+                $("#outcome").html('Invalid – Please Verify').css({
+                    "color": "<?php echo $lineOutComeColor; ?>"
+                });
+                $(".outcome").css({
+                    "visibility": "visible"
+                });
+                updateVlResultFields();
+            } else if (ctrlLine == 'present' && postiveLine == 'absent' && longTermLine == 'absent') {
+                $("#outcome").html('Assay Negative').css({
+                    "color": "<?php echo $lineOutComeColor; ?>"
+                });
+                $(".outcome").css({
+                    "visibility": "visible"
+                });
+                updateVlResultFields('Assay Negative');
+            } else if (ctrlLine == 'present' && postiveLine == 'absent' && longTermLine == 'present') {
+                $("#outcome").html('Invalid – Please Verify').css({
+                    "color": "<?php echo $lineOutComeColor; ?>"
+                });
+                $(".outcome").css({
+                    "visibility": "visible"
+                });
+                updateVlResultFields();
+            } else if (ctrlLine == 'present' && postiveLine == 'present' && longTermLine == 'absent') {
+                $("#outcome").html('Assay Recent - Please ensure you add Viral Load Result').css({
+                    "color": "<?php echo $lineOutComeColor2; ?>"
+                });
+                $(".outcome").css({
+                    "visibility": "visible"
+                });
+                getFacilities();
+                updateVlResultFields('Assay Recent');
+            } else if (ctrlLine == 'present' && postiveLine == 'present' && longTermLine == 'present') {
+                $("#outcome").html('Long Term').css({
+                    "color": "<?php echo $lineOutComeColor2; ?>"
+                });
+                $(".outcome").css({
+                    "visibility": "visible"
+                });
+                updateVlResultFields('Long Term');
+            }
+        } else {
+            $("#outcome").html('');
+            $(".outcome", "#outcome").css({
+                "visibility": "hidden"
+            });
+            $("#vlResultoutcome").html('');
+            $(".vlResultoutcome").css({
+                "visibility": "hidden"
+            });
+        }
+    }
 
-                   
-                    
-               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                    
-                    updateVlResultFields();
-                    
-               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                    
-                    updateVlResultFields();
+    function getFacilities() {
+        // read Facility List
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", '<?php echo $configResult['vlsm']['domain']; ?>api/fetchFacilities.php', false); // false for synchronous request
+        xmlHttp.send(null);
+        if (typeof xmlHttp.responseText != 'undefined' && xmlHttp.responseText != "") {
+            jsonData = JSON.parse(xmlHttp.responseText);
+            $('.is-vl-lab').css('display', 'contents');
+            $('.isVlLabRequired').addClass('isRequired');
+            jsonData.forEach(function(item) {
+                if (item.facility_type == '1') {
+                    $('.is-facility').append('<option value="' + item.facility_id + '">' + item.facility_name + '</option>');
+                } else if (item.facility_type == '2') {
+                    $('.is-viral-lab').append('<option value="' + item.facility_id + '">' + item.facility_name + '</option>');
+                }
+            });
+        } else {
+            console.log('Facility API from VLSM is not working! Please check domain url of vlsm');
+            return;
+        }
 
-                    
-               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
-                    $("#outcome").html('Assay Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                 
-                    updateVlResultFields('Assay Negative');
+    }
 
-                    
-               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-
-                    updateVlResultFields();
-                    
-               }
-               
-               else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent') {
-                   
-                    $("#outcome").html('Assay Recent - Please ensure you add Viral Load Result').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-                  
-                    updateVlResultFields('Assay Recent');
-
-               }
-               else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
-                    $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                    $(".outcome").css({"visibility":"visible"});
-
-                    updateVlResultFields('Long Term');
-                    
-               }
-          }else{
-               $("#outcome").html('');
-               $(".outcome","#outcome").css({"visibility":"hidden"});
-               $("#vlResultoutcome").html('');
-			   $(".vlResultoutcome").css({"visibility":"hidden"});
-          }
-     }
-     function updateVlResultFields(fieldValue=null)
-     {
+    function updateVlResultFields(fieldValue = null) {
         var vlDataResult = $("#vlLoadResult").val();
-        var vlResultOption  = $("#vlResultOption").val();
-        
-        $("#vlResultoutcome").html('');
-        $(".vlResultoutcome").css({"visibility":"hidden"});
+        var vlResultOption = $("#vlResultOption").val();
 
-        if(fieldValue=='vlField'){
+        $("#vlResultoutcome").html('');
+        $(".vlResultoutcome").css({
+            "visibility": "hidden"
+        });
+
+        if (fieldValue == 'vlField') {
             var fieldValue = $("#outcome").text();
-            if(fieldValue == 'Assay Recent - Please ensure you add Viral Load Result')
-            {
+            if (fieldValue == 'Assay Recent - Please ensure you add Viral Load Result') {
                 fieldValue = 'Assay Recent';
             }
         }
 
-        if(fieldValue=='Long Term' || fieldValue=='Assay Recent' || fieldValue=='Assay Negative'){
-           
-            if(fieldValue=='Assay Negative'){
-                $("#vlResultoutcome").html('Inconclusive').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                $(".vlResultoutcome").css({"visibility":"visible"});
-                $(".vlResultFields").prop('disabled',true);
+        if (fieldValue == 'Long Term' || fieldValue == 'Assay Recent' || fieldValue == 'Assay Negative') {
+
+            if (fieldValue == 'Assay Negative') {
+                $("#vlResultoutcome").html('Inconclusive').css({
+                    "color": "<?php echo $lineOutComeColor2; ?>"
+                });
+                $(".vlResultoutcome").css({
+                    "visibility": "visible"
+                });
+                $(".vlResultFields").prop('disabled', true);
                 $("#vlTestDate").val('');
                 $("#vlLoadResult").val('');
                 $("#vlResultOption").val('');
             }
-            if(fieldValue=='Long Term'){
-                $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                $(".vlResultoutcome").css({"visibility":"visible"});
-                $(".vlResultFields").prop('disabled',true);
+            if (fieldValue == 'Long Term') {
+                $("#vlResultoutcome").html('Long Term').css({
+                    "color": "<?php echo $lineOutComeColor2; ?>"
+                });
+                $(".vlResultoutcome").css({
+                    "visibility": "visible"
+                });
+                $(".vlResultFields").prop('disabled', true);
                 $("#vlTestDate").val('');
                 $("#vlLoadResult").val('');
                 $("#vlResultOption").val('');
             }
-            if(fieldValue=='Assay Recent')
-            {
-                $(".vlResultFields").prop('disabled',false);
-                <?php if(in_array("Viral Load Test Date",$resultArr2)){ ?>
-                    $("#vlTestDate").addClass('<?php echo $vlTestDate;?>');
+            if (fieldValue == 'Assay Recent') {
+                $(".vlResultFields").prop('disabled', false);
+                <?php if (in_array("Viral Load Test Date", $resultArr2)) { ?>
+                    $("#vlTestDate").addClass('<?php echo $vlTestDate; ?>');
                 <?php  }
-                if(in_array("Viral Load Result",$resultArr2)){ ?>
-                    $("#vlLoadResult").addClass('<?php echo $vlLoadResult;?>');
+            if (in_array("Viral Load Result", $resultArr2)) { ?>
+                    $("#vlLoadResult").addClass('<?php echo $vlLoadResult; ?>');
                 <?php } ?>
-                if((vlDataResult > 1000 && vlDataResult!='')){
-                $("#vlResultoutcome").html('RITA Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                $(".vlResultoutcome").css({"visibility":"visible"});
-                $("#vlResultOption").prop('disabled',true);
-                }else if(vlDataResult <=1000  && vlDataResult!='' ){
-                    $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                    $(".vlResultoutcome").css({"visibility":"visible"});
-                    $("#vlResultOption").prop('disabled',true);
-                }else if(vlResultOption!='' && vlResultOption=='failed'){
-                    $("#vlResultoutcome").html('Inconclusive').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                    $(".vlResultoutcome").css({"visibility":"visible"});
-                    $("#vlLoadResult").prop('disabled',true);
-                }else if(vlResultOption!=''){
-                    $("#vlResultoutcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                    $(".vlResultoutcome").css({"visibility":"visible"});
-                    $("#vlLoadResult").prop('disabled',true);
+                if ((vlDataResult > 1000 && vlDataResult != '')) {
+                    $("#vlResultoutcome").html('RITA Recent').css({
+                        "color": "<?php echo $lineOutComeColor2; ?>"
+                    });
+                    $(".vlResultoutcome").css({
+                        "visibility": "visible"
+                    });
+                    $("#vlResultOption").prop('disabled', true);
+                } else if (vlDataResult <= 1000 && vlDataResult != '') {
+                    $("#vlResultoutcome").html('Long Term').css({
+                        "color": "<?php echo $lineOutComeColor2; ?>"
+                    });
+                    $(".vlResultoutcome").css({
+                        "visibility": "visible"
+                    });
+                    $("#vlResultOption").prop('disabled', true);
+                } else if (vlResultOption != '' && vlResultOption == 'failed') {
+                    $("#vlResultoutcome").html('Inconclusive').css({
+                        "color": "<?php echo $lineOutComeColor2; ?>"
+                    });
+                    $(".vlResultoutcome").css({
+                        "visibility": "visible"
+                    });
+                    $("#vlLoadResult").prop('disabled', true);
+                } else if (vlResultOption != '') {
+                    $("#vlResultoutcome").html('Long Term').css({
+                        "color": "<?php echo $lineOutComeColor2; ?>"
+                    });
+                    $(".vlResultoutcome").css({
+                        "visibility": "visible"
+                    });
+                    $("#vlLoadResult").prop('disabled', true);
                 }
             }
 
-        }else{
-            $(".vlResultFields").prop('disabled',true);
-            $("#vlTestDate").removeClass('<?php echo $vlTestDate;?>');
-            $("#vlLoadResult").removeClass('<?php echo $vlLoadResult;?>');
+        } else {
+            $(".vlResultFields").prop('disabled', true);
+            $("#vlTestDate").removeClass('<?php echo $vlTestDate; ?>');
+            $("#vlLoadResult").removeClass('<?php echo $vlLoadResult; ?>');
             $("#vlResultoutcome").html('');
             $("#vlResultOption").val('');
-            $(".vlResultoutcome").css({"visibility":"hidden"});
+            $(".vlResultoutcome").css({
+                "visibility": "hidden"
+            });
         }
-     }
+    }
 
-     function riskPopulationCheck(obj){
-          if( obj.value == 'Other' ){
-               $("#otherRiskPopulation").css('display','block').addClass('isRequired');
-          }else{
-               $("#otherRiskPopulation").css('display','none').removeClass('isRequired');
-          }
-     }
+    function riskPopulationCheck(obj) {
+        if (obj.value == 'Other') {
+            $("#otherRiskPopulation").css('display', 'block').addClass('isRequired');
+        } else {
+            $("#otherRiskPopulation").css('display', 'none').removeClass('isRequired');
+        }
+    }
 
-     function otherRecencyTestNotPerfomedCheck(obj){
-          if( obj.value == 'other' ){
-               $("#otherRecencyTestNotPerformed").css('display','block');
-               $("#otherRecencyTestNotPerformed").addClass('isRequired');
+    function otherRecencyTestNotPerfomedCheck(obj) {
+        if (obj.value == 'other') {
+            $("#otherRecencyTestNotPerformed").css('display', 'block');
+            $("#otherRecencyTestNotPerformed").addClass('isRequired');
 
-          }else{
-               $("#otherRecencyTestNotPerformed").css('display','none');
-               $("#otherRecencyTestNotPerformed").removeClass('isRequired');
-          }
-     }
+        } else {
+            $("#otherRecencyTestNotPerformed").css('display', 'none');
+            $("#otherRecencyTestNotPerformed").removeClass('isRequired');
+        }
+    }
 
-     function checkHivTesting(obj){
-          if( obj.value == 'yes' ){
-               $(".hivResultStatusShow").css('display','block');
-               $("#lastHivStatus").addClass('isRequired');
-               $("#testLast12Month").addClass('isRequired');
-          }
+    function checkHivTesting(obj) {
+        if (obj.value == 'yes') {
+            $(".hivResultStatusShow").css('display', 'block');
+            $("#lastHivStatus").addClass('isRequired');
+            $("#testLast12Month").addClass('isRequired');
+        } else {
+            $(".hivResultStatusShow").css('display', 'none');
+            $("#lastHivStatus").removeClass('isRequired');
+            $("#patientOnArt").removeClass('isRequired');
+            $("#testLast12Month").removeClass('isRequired');
+        }
+    }
 
-          else{
-               $(".hivResultStatusShow").css('display','none');
-               $("#lastHivStatus").removeClass('isRequired');
-               $("#patientOnArt").removeClass('isRequired');
-               $("#testLast12Month").removeClass('isRequired');
-          }
-     }
+    function genderCheck(obj) {
+        if (obj.value == 'male') {
+            $(".hidePregnancyResult").css('display', 'none');
+            $("#pregnancyStatus").removeClass('isRequired');
+            $("#pregnancyStatus").val('');
+        } else {
+            $(".hidePregnancyResult").css('display', 'block');
+            $("#pregnancyStatus").addClass('isRequired');
+            $("#pregnancyStatus").val('');
+        }
+    }
 
-     function genderCheck(obj){
-          if( obj.value == 'male' ){
-               $(".hidePregnancyResult").css('display','none');
-               $("#pregnancyStatus").removeClass('isRequired');
-               $("#pregnancyStatus").val('');
-          } else{
-               $(".hidePregnancyResult").css('display','block');
-               $("#pregnancyStatus").addClass('isRequired');
-               $("#pregnancyStatus").val('');
-          }
-     }
+    function checkHivStatus(obj) {
+        if (obj.value == 'positive') {
+            $("#patientOnArt").attr("disabled", false).addClass('isRequired');
+        } else {
+            $("#patientOnArt").attr("disabled", true).removeClass('isRequired').val("");
+        }
+    }
 
-     function checkHivStatus(obj){
-          if( obj.value == 'positive' ){
-               $("#patientOnArt").attr("disabled",false).addClass('isRequired');
-          }else{
-               $("#patientOnArt").attr("disabled",true).removeClass('isRequired').val("");
-          }
-     }
-
-     jQuery(document).ready(function($) {
-
-         if($("#vlLoadResult")){
-            $("#vlLoadResult").on('keyup keypress blur change paste', function(){
-                if ($('#vlLoadResult').val() != $('#vlLoadResult').val().replace(/[^\d\.]/g,"")) { 
+    jQuery(document).ready(function($) {
+        $(".is-viral-lab").change(function(){
+            $('#isViralLabText').val($("#isVlLab option:selected").html());
+        });
+        if ($("#vlLoadResult")) {
+            $("#vlLoadResult").on('keyup keypress blur change paste', function() {
+                if ($('#vlLoadResult').val() != $('#vlLoadResult').val().replace(/[^\d\.]/g, "")) {
                     $('#vlLoadResult').val('');
                     alert('Please enter only numeric values for Viral Load Result')
-                }                
+                }
             });
-         }
+        }
 
-          $('#recencyTestPerformedYes').change(function() {
-               if(this.checked == true){
+        $('#recencyTestPerformedYes').change(function() {
+            if (this.checked == true) {
+                $("#outcome").html('');
+                $(".outcome", "#outcome").css({
+                    "visibility": "hidden"
+                });
 
-                    $("#outcome").html('');
-                    $(".outcome","#outcome").css({"visibility":"hidden"});
+                $("#vlResultoutcome").html('');
+                $(".vlResultoutcome").css({
+                    "visibility": "hidden"
+                });
 
-                    $("#vlResultoutcome").html('');
-                    $(".vlResultoutcome").css({"visibility":"hidden"});
+                $(".vlResultFields").prop('disabled', true);
 
-                    $(".vlResultFields").prop('disabled',true);
+                $("#vlTestDate").val('');
+                $("#vlLoadResult").val('');
+                $("#vlResultOption").val('');
 
-                    $("#vlTestDate").val('');
-                    $("#vlLoadResult").val('');
-                    $("#vlResultOption").val('');
+                $(".disbaledResult").attr("disabled", true).removeClass("isRequired").val("");
 
-                    $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+                $(".hideDiv").css({
+                    "visibility": "visible"
+                });
+                $("#recencyTestNotPerformed").addClass("isRequired");
 
-                    $(".hideDiv").css({"visibility":"visible"});
-                    $("#recencyTestNotPerformed").addClass("isRequired");
-                    
-                    
-               }else{
-                    $(".disbaledResult").addClass("isRequired");
-                    $(".disbaledResult").attr("disabled",false);
 
-                    $(".hideDiv").css({"visibility":"hidden"});
-                    $("#recencyTestNotPerformed").val("").removeClass("isRequired");
-                    $("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
+            } else {
+                $(".disbaledResult").addClass("isRequired");
+                $(".disbaledResult").attr("disabled", false);
 
-                    $("#hivRecencyTestDate").addClass("<?php echo $hivRecencyTestDate;?>");
-                    $("#controlLine").addClass("<?php echo $controlLineResult;?>");
-                    $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine;?>");
-                    $("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine;?>");
-               }
-          });
+                $(".hideDiv").css({
+                    "visibility": "hidden"
+                });
+                $("#recencyTestNotPerformed").val("").removeClass("isRequired");
+                $("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
 
-          $("#facilityId").change(function(){
-               if($(this).val() == 'other'){
-                    $("#otherFacilityName").addClass("isRequired").show();
-               }else{
-                    $("#otherFacilityName").removeClass("isRequired").hide();
-               }
-          });
+                $("#hivRecencyTestDate").addClass("<?php echo $hivRecencyTestDate; ?>");
+                $("#controlLine").addClass("<?php echo $controlLineResult; ?>");
+                $("#positiveVerificationLine").addClass("<?php echo $positiveVerificationLine; ?>");
+                $("#longTermVerificationLine").addClass("<?php echo $longTermVerificationLine; ?>");
+            }
+        });
 
-          $("#facilityId").select2({
-               placeholder: "Choose Facility",
-               width:"250px",
-               allowClear: true,
-          });
-          
-          $("#testingFacilityId").change(function(){
-               if($(this).val() == 'other'){
-                    $("#otherTestingFacility").addClass("isRequired").show();
-               }else{
-                    $("#otherTestingFacility").removeClass("isRequired").hide();
-               }
-          });
+        $("#facilityId").change(function() {
+            if ($(this).val() == 'other') {
+                $("#otherFacilityName").addClass("isRequired").show();
+            } else {
+                $("#otherFacilityName").removeClass("isRequired").hide();
+            }
+        });
+        // VLSM Facility and VLlab API select
+        $("#isFacilityLab").select2({
+            placeholder: "Select the facility",
+            width: "260px",
+            allowClear: true,
+        });
+        $("#facilityId").select2({
+            placeholder: "Choose Facility",
+            width: "250px",
+            allowClear: true,
+        });
 
-          $("#testingModality").change(function(){
-               if($(this).val() == 'other'){
-                    $("#othertestingmodality").addClass("isRequired").show();
-               }else{
-                    $("#othertestingmodality").removeClass("isRequired").hide();
-               }
-          });
+        $("#testingFacilityId").change(function() {
+            if ($(this).val() == 'other') {
+                $("#otherTestingFacility").addClass("isRequired").show();
+            } else {
+                $("#otherTestingFacility").removeClass("isRequired").hide();
+            }
+        });
 
-          <?php foreach($globalConfigResult as $config){?>
-               getLocationDeatils('<?php echo $config["global_name"];?>');
-          <?php break;}?>
-     });
+        $("#testingModality").change(function() {
+            if ($(this).val() == 'other') {
+                $("#othertestingmodality").addClass("isRequired").show();
+            } else {
+                $("#othertestingmodality").removeClass("isRequired").hide();
+            }
+        });
 
-     function validateStep1()
-     {
-          $("#wizard-progress-step1 .isRequired").each(function() {
-               ($(this).val() == '') ? $('.stepOne').css('visibility', 'hidden') : $('.stepOne').css('visibility', 'visible')
-          });
+        <?php foreach ($globalConfigResult as $config) { ?>
+            getLocationDeatils('<?php echo $config["global_name"]; ?>');
+            <?php break;
+        } ?>
+    });
+
+    function validateStep1() {
+        $("#wizard-progress-step1 .isRequired").each(function() {
+            ($(this).val() == '') ? $('.stepOne').css('visibility', 'hidden'): $('.stepOne').css('visibility', 'visible')
+        });
 
         //   if($("#vlLoadResult") && $("#vlLoadResult").val() != ''){
         //     updateVlResultFields();
         //   }
 
-          if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
-               flag = deforayValidator.init({
+        if (($("#sampleId").val() != "") || ($("#patientId").val() != "")) {
+            flag = deforayValidator.init({
+                formId: 'recencyInformation'
+            });
+        } else {
+            $("#sampleId").focus();
+            $("#sampleId").css("border", "1px solid rgb(207, 51, 57)");
+            alert("Please enter either sample or patient id  ", 'err');
+        }
+
+        setReq();
+        $("#step1,#wizard-progress-step1").removeClass("active");
+        $("#step2,#wizard-progress-step2").addClass("active");
+
+        $(".btnHide").show();
+        $(".nxtBtn").hide();
+    }
+
+    function validateStep2() {
+        $("#wizard-progress-step2 .isRequired").each(function() {
+            ($(this).val() == '') ? $('.stepTwo').css('visibility', 'hidden'): $('.stepTwo').css('visibility', 'visible')
+        });
+
+        $(".section2").removeClass('isRequired');
+        $("#step1,#wizard-progress-step1").addClass("active");
+        $("#step2,#wizard-progress-step2").removeClass("active");
+
+        $(".btnHide").hide();
+        $(".nxtBtn").show();
+    }
+
+    function validateNow() {
+        var jsonArr = [];
+        if (($("#sampleId").val() != "") || ($("#patientId").val() != "")) {
+            if ($('#sendVlsm').is(':checked')) {
+                jsonArr['sampleId'] = $("#sampleId").val();
+                jsonArr['patientId'] = $("#patientId").val();
+                jsonArr['facilityId'] = $("#isFacilityLab").val();
+                jsonArr['province'] = $("#location_one").val();
+                jsonArr['district'] = $("#location_two").val();
+                jsonArr['sampleCollectionDate'] = $("#sampleCollectionDate").val();
+                jsonArr['sampleType'] = $("#receivedSpecimenType").val();
+                jsonArr['viralLoad'] = $("#isVlLab").val();
+                jsonArr['request_created_by'] = 'recency##<?php echo $sessionLogin->userId; ?>';
+                var params = '' + jsonArr['sampleId'] + '&' + jsonArr['patientId'] + '&' + jsonArr['facilityId'] + '&' + jsonArr['province'] + '&' + jsonArr['district'] + '&' + jsonArr['sampleCollectionDate'] + '&' + jsonArr['sampleType'] + '&' + jsonArr['viralLoad'] + '&' + jsonArr['request_created_by'] + '';
+
+                var http = new XMLHttpRequest();
+                var url = '<?php echo $configResult['vlsm']['domain']; ?>api/recency/requestVlTest.php';
+                http.open('POST', url, true);
+                http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                http.onreadystatechange = function() {
+                    if (http.readyState == 4 && http.status == 200) {
+                        if (confirm(http.responseText));
+                        if (http.responseText != "Viral Load Test Request has been send successfully") {
+                            $("#sendVlsm").val('no');
+                        } else {
+                            $("#sendVlsm").val('yes');
+                        }
+                    }
+                }
+                http.send(params);
+            }
+            if (($("#dob").val() != "") || ($("#age").val() != "")) {
+                flag = deforayValidator.init({
                     formId: 'recencyInformation'
-               });
-          }else{
-               $("#sampleId").focus();
-               $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
-               alert("Please enter either sample or patient id  ",'err');
-          }
+                });
 
-          setReq();
-          $("#step1,#wizard-progress-step1").removeClass("active");
-          $("#step2,#wizard-progress-step2").addClass("active");
+                document.getElementById("outcomeData").value = document.getElementById("outcome").innerHTML;
+                if (document.getElementById("outcome").innerHTML == 'Assay Recent - Please ensure you add Viral Load Result') {
+                    document.getElementById("outcomeData").value = 'Assay Recent';
+                }
+                document.getElementById("vlfinaloutcomeResult").value = document.getElementById("vlResultoutcome").innerHTML;
+                if (flag) {
+                    $.blockUI();
+                    document.getElementById('recencyInformation').submit();
+                }
+            } else {
+                $("#age").focus();
+                $("#age").css("border", "1px solid rgb(207, 51, 57)");
+                alert("Please enter either DOB or age  ", 'err');
+            }
+        } else {
+            $("#sampleId").focus();
+            $("#sampleId").css("border", "1px solid rgb(207, 51, 57)");
+            alert("Please enter either sample or patient id  ", 'err');
+        }
+    }
 
-          $(".btnHide").show();
-          $(".nxtBtn").hide();
-     }
+    function ageCalculate() {
+        var agYrs = '';
+        var agMnths = '';
+        var dob = changeFormat($("#dob").val());
+        if ($.trim(dob) != '') {
+            //calculate age
+            var years = moment().diff(dob, 'years', false);
+            var months = (years == 0) ? moment().diff(dob, 'months', false) : '';
+            $("#age").val(years); // Gives difference as years
+        }
+    }
 
-     function validateStep2()
-     {
-          $("#wizard-progress-step2 .isRequired").each(function() {
-               ($(this).val() == '') ? $('.stepTwo').css('visibility', 'hidden') : $('.stepTwo').css('visibility', 'visible')
-          });
+    function changeFormat(date) {
+        splitDate = date.split("-");
+        var fDate = new Date(splitDate[1] + splitDate[2] + ", " + splitDate[0]);
+        var monthDigit = fDate.getMonth();
+        var fMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit) + parseInt(1));
+        fMonth = (fMonth < 10) ? '0' + fMonth : fMonth;
+        return splitDate[2] + '-' + fMonth + '-' + splitDate[0];
+    }
 
-          $(".section2").removeClass('isRequired');
-          $("#step1,#wizard-progress-step1").addClass("active");
-          $("#step2,#wizard-progress-step2").removeClass("active");
+    function getLocationDeatils(globalName) {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
 
-          $(".btnHide").hide();
-          $(".nxtBtn").show();
-     }
+        if (globalName == 'location_one' && selectValue == '') {
+            path = 'get-province';
+            innerId = 'location_one';
+        } else if (globalName == 'location_one' && selectValue != '') {
+            path = 'get-district';
+            innerId = 'location_two';
+            $("#location_three").html("<option value=''>-- Select --</option>");
 
-     function validateNow() {
-          if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
-               if( ( $("#dob").val() != "" ) || ( $("#age").val() != "" ) ){
-                    flag = deforayValidator.init({
-                         formId: 'recencyInformation'
-                    });
-                    
-                    document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
-                    if(document.getElementById("outcome").innerHTML=='Assay Recent - Please ensure you add Viral Load Result')
-                    {
-                        document.getElementById("outcomeData").value = 'Assay Recent';
-                    }
-                    document.getElementById("vlfinaloutcomeResult").value=document.getElementById("vlResultoutcome").innerHTML;
-                    if (flag) {
-                         $.blockUI();
-                         document.getElementById('recencyInformation').submit();
-                    }
-               }else{
-                    $("#age").focus();
-                    $("#age").css("border","1px solid rgb(207, 51, 57)");
-                    alert("Please enter either DOB or age  ",'err');
-               }
-          }else{
-               $("#sampleId").focus();
-               $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
-               alert("Please enter either sample or patient id  ",'err');
-          }
-     }
-
-     function ageCalculate(){
-          var agYrs = '';
-          var agMnths = '';
-          var dob = changeFormat($("#dob").val());
-          if($.trim(dob)!=''){
-               //calculate age
-               var years = moment().diff(dob, 'years',false);
-               var months = (years == 0)?moment().diff(dob, 'months',false):'';
-               $("#age").val(years); // Gives difference as years
-          }
-     }
-
-     function changeFormat(date){
-          splitDate = date.split("-");
-          var fDate = new Date(splitDate[1] + splitDate[2]+", "+splitDate[0]);
-          var monthDigit = fDate.getMonth();
-          var fMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
-          fMonth = (fMonth<10) ? '0'+fMonth: fMonth;
-          return splitDate[2]+'-'+fMonth+'-'+splitDate[0];
-     }
-
-     function getLocationDeatils(globalName)
-     {
-          var selectValue = document.getElementById(globalName).value;
-          var innerId = '';
-          var path = '';
-
-          if(globalName=='location_one' && selectValue==''){
-               path = 'get-province';
-               innerId = 'location_one';
-          }else if(globalName=='location_one' && selectValue!=''){
-               path = 'get-district';
-               innerId = 'location_two';
-               $("#location_three").html("<option value=''>-- Select --</option>");
-               
-          }else if(globalName=='location_two' && selectValue!=''){
-               path = 'get-city';
-               innerId = 'location_three';
-               if(selectValue=='other')
-               {
-                   $("#otherDistrictName").show();
-                   $("#otherDistrictName").addClass('isRequired');
-               }else{
+        } else if (globalName == 'location_two' && selectValue != '') {
+            path = 'get-city';
+            innerId = 'location_three';
+            if (selectValue == 'other') {
+                $("#otherDistrictName").show();
+                $("#otherDistrictName").addClass('isRequired');
+            } else {
                 $("#otherDistrictName").hide();
                 $("#otherDistrictName").removeClass('isRequired');
-               }
-          }else if(globalName=='location_three' && selectValue!=''){
-                path = 'get-facility';
-               if(selectValue=='other')
-               {
-                   $("#otherCityName").show();
-                   $("#otherCityName").addClass('isRequired');
-               }else{
+            }
+        } else if (globalName == 'location_three' && selectValue != '') {
+            path = 'get-facility';
+            if (selectValue == 'other') {
+                $("#otherCityName").show();
+                $("#otherCityName").addClass('isRequired');
+            } else {
                 $("#otherCityName").hide();
                 $("#otherCityName").removeClass('isRequired');
-               }
-          }
-          if(path!=''){
-               $.blockUI();
-               $.post("/common/"+path, {selectValue:selectValue},
-               function(data) {
-                    if(globalName=='location_one' && selectValue!=''){
+            }
+        }
+        if (path != '') {
+            $.blockUI();
+            $.post("/common/" + path, {
+                    selectValue: selectValue
+                },
+                function(data) {
+                    if (globalName == 'location_one' && selectValue != '') {
                         var splitOption = data.split("##");
-                        $("#"+innerId).html(splitOption[0]);
+                        $("#" + innerId).html(splitOption[0]);
                         $("#facilityId").html(splitOption[1]);
-                    }else if(globalName=='location_two' && selectValue!=''){
+                    } else if (globalName == 'location_two' && selectValue != '') {
                         var splitOption = data.split("##");
-                        $("#"+innerId).html(splitOption[0]);
+                        $("#" + innerId).html(splitOption[0]);
                         $("#facilityId").html(splitOption[1]);
-                    }else if(globalName=='location_three' && selectValue!=''){
+                    } else if (globalName == 'location_three' && selectValue != '') {
                         $("#facilityId").html(data);
-                    }else{
-                        $("#"+innerId).html(data);
+                    } else {
+                        $("#" + innerId).html(data);
                     }
                     $.unblockUI();
-               });
-          }
-     }
-
-     function setReq(){
-          $("#dob").addClass("<?php echo $dob;?>");
-          $("#gender").addClass("<?php echo $gender;?>");
-          $("#age").addClass("<?php echo $age;?>");
-          $("#residence").addClass("<?php echo $residence;?>");
-          $("#maritalStatus").addClass("<?php echo $marital;?>");
-          $("#educationLevel").addClass("<?php echo $education;?>");
-          $("#riskPopulation").addClass("<?php echo $risk;?>");
-          // $("#pregnancyStatus").addClass("<?php echo $pregnancy;?>");
-          $("#currentSexualPartner").addClass("<?php echo $partner;?>");
-          $("#expViolence").addClass("<?php echo $expViolence;?>");
-          $("#comments").addClass("<?php echo $comment;?>");
-     }
-
-     function getLocationDataByFacility()
-     {
-        var facilityId = $("#facilityId").val();
-        if(facilityId!='' && facilityId!='other'){
-        //$.blockUI();
-        $.post("/recency/get-location-based-facility", {facilityId:facilityId},
-        function(data) {
-            jsonData = JSON.parse(data);
-            if(typeof jsonData.province != "undefined" && jsonData.province!='')
-            {
-                $("#location_one").html("<option value=''>-- Select --</option><option value='"+jsonData.province+"' selected>"+jsonData.province_name+"</option>");
-            }
-            if(typeof jsonData.district != "undefined" && jsonData.district!='')
-            {
-                $("#location_two").html("<option value=''>-- Select --</option><option value='"+jsonData.district+"' selected>"+jsonData.district_name+"</option>");
-            }else{
-                $("#location_two").html("<option value=''>-- Select --</option>");
-            }
-            if(typeof jsonData.city != "undefined" && jsonData.city!='')
-            {
-                $("#location_three").html("<option value=''>-- Select --</option><option value='"+jsonData.city+"' selected>"+jsonData.city_name+"</option><option value='other'>Other</option>");
-            }else{
-                $("#location_three").html("<option value=''>-- Select --</option><option value='other'>Other</option>");
-            }
-        });
+                });
         }
-     }
+    }
+
+    function setReq() {
+        $("#dob").addClass("<?php echo $dob; ?>");
+        $("#gender").addClass("<?php echo $gender; ?>");
+        $("#age").addClass("<?php echo $age; ?>");
+        $("#residence").addClass("<?php echo $residence; ?>");
+        $("#maritalStatus").addClass("<?php echo $marital; ?>");
+        $("#educationLevel").addClass("<?php echo $education; ?>");
+        $("#riskPopulation").addClass("<?php echo $risk; ?>");
+        // $("#pregnancyStatus").addClass("<?php echo $pregnancy; ?>");
+        $("#currentSexualPartner").addClass("<?php echo $partner; ?>");
+        $("#expViolence").addClass("<?php echo $expViolence; ?>");
+        $("#comments").addClass("<?php echo $comment; ?>");
+    }
+
+    function getLocationDataByFacility() {
+        var facilityId = $("#facilityId").val();
+        if (facilityId != '' && facilityId != 'other') {
+            //$.blockUI();
+            $.post("/recency/get-location-based-facility", {
+                    facilityId: facilityId
+                },
+                function(data) {
+                    jsonData = JSON.parse(data);
+                    if (typeof jsonData.province != "undefined" && jsonData.province != '') {
+                        $("#location_one").html("<option value=''>-- Select --</option><option value='" + jsonData.province + "' selected>" + jsonData.province_name + "</option>");
+                    }
+                    if (typeof jsonData.district != "undefined" && jsonData.district != '') {
+                        $("#location_two").html("<option value=''>-- Select --</option><option value='" + jsonData.district + "' selected>" + jsonData.district_name + "</option>");
+                    } else {
+                        $("#location_two").html("<option value=''>-- Select --</option>");
+                    }
+                    if (typeof jsonData.city != "undefined" && jsonData.city != '') {
+                        $("#location_three").html("<option value=''>-- Select --</option><option value='" + jsonData.city + "' selected>" + jsonData.city_name + "</option><option value='other'>Other</option>");
+                    } else {
+                        $("#location_three").html("<option value=''>-- Select --</option><option value='other'>Other</option>");
+                    }
+                });
+        }
+    }
+
+    function sendViralLoadTestRequest(obj) {
+        if ($(obj).is(':checked')) {
+            $('.hide-lab-req').hide();
+            $('.rm-lab-req').css('padding-top', '0px')
+        } else {
+            $('.hide-lab-req').show();
+            $('.rm-lab-req').css('padding-top', '35px')
+        }
+    }
 </script>
