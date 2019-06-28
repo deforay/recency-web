@@ -29,7 +29,7 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
                 }
             },
             title: {
-                text: '<?php echo $result['result']['total'];?><br>RTRI Negative',
+                text: '<?php echo $result['result']["negativeCount"];?><br>Assay HIV Negative',
                 align: 'center',
                 verticalAlign: 'middle',
                 y: 40
@@ -65,14 +65,14 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
             },
             series: [{
                 type: 'pie',
-                name: 'Total testing negative recorded',
+                name: 'Recency Tests',
                 innerSize: '50%',
                 showInLegend: true,
                 data: [
-                    ['Assay HIV Negative', <?php echo $result['result']["negative"];?>],
+                    ['Assay HIV Negative', <?php echo round($result['result']["negative"],2);?>],
                     {
-                        name: 'Others',
-                        y: (100-<?php echo $result['result']['negative'];?>),
+                        name: 'Other',
+                        y: (<?php echo round($result['result']['others'],2);?>),
                         dataLabels: {
                             enabled: false
                         }

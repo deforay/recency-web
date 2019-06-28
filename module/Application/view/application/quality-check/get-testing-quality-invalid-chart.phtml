@@ -29,16 +29,16 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
                 }
             },
             title: {
-                text: '<?php echo $result['result']['total'];?><br>RTRI Invalid',
+                text: '<?php echo $result['result']['invalidCount'];?><br>Invalid',
                 align: 'center',
                 verticalAlign: 'middle',
                 y: 40
             },
             tooltip: {
                 <?php if ($format == 'percentage') { ?>
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    pointFormat: '<b>{point.percentage:.1f}%</b>'
                 <?php } else { ?>
-                    pointFormat: '{series.name}: <b>{point.percentage:1f}</b>'
+                    pointFormat: '<b>{point.percentage:1f}</b>'
                 <?php } ?>
             },
             plotOptions: {
@@ -65,13 +65,13 @@ if (isset($result['result']) && count($result['result']) > 0) { ?>
             },
             series: [{
                 type: 'pie',
-                name: 'Total testing invalid recorded',
+                name: 'Recency Tests',
                 innerSize: '50%',
                 data: [
-                    ['Invalid – Please Verify', <?php echo $result['result']["invalid"];?>],
+                    ['Results with Invalid Assay Outcome', <?php echo round($result['result']["invalid"],2);?>],
                     {
-                        name: 'Others',
-                        y: (100-<?php echo $result['result']['invalid'];?>),
+                        name: 'Results with non Invalid Assay Outcome',
+                        y: (<?php echo round($result['result']['others'],2);?>),
                         dataLabels: {
                             enabled: false
                         }

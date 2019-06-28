@@ -450,7 +450,14 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                     <option value="&lt; 40"> &lt; 40</option>
                                                 </select>
                                             </div>
-                                            <div class="is-vl-lab col-md-6" style="display:none;">
+<!--                                             
+                                            <div class="is-vl-lab col-sm-12 col-lg-12 col-md-12" style="display:none;clear:both;">
+                                                <label class="col-sm-2 form-check-label rm-lab-req" for="sendVlsm" style=" padding-top: 35px; ">Send a Viral Load Test Request to VLSM</label>
+                                                <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);" value="yes">&nbsp;Yes
+                                                </div>
+                                            </div> -->
+                                            <!-- <div class="is-vl-lab col-md-12 col-lg-12" style="display:none;">
                                                 <div class="col-sm-2">
                                                     <label class="col-form-label" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
                                                     <label class="col-form-label" for="isVlLab" style=" padding-top: 35px; ">Viral Load Lab <span class='mandatory'>*</span></label>
@@ -464,14 +471,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                         <option value="">-- Select -- </option>
                                                     </select>
                                                 </div>
-                                                <input type="hidden" name="isViralLabText" id="isViralLabText"/>
-                                            </div>
-                                            <div class="is-vl-lab col-sm-6" style="display:none;">
-                                                <label class="col-sm-2 form-check-label rm-lab-req" for="sendVlsm" style=" padding-top: 35px; ">Send a Viral Load Test Request to VLSM</label>
-                                                <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);" value="yes">&nbsp;Yes
-                                                </div>
-                                            </div>
+                                                <input type="hidden" name="isViralLabText" id="isViralLabText" />
+                                            </div> -->
+
                                             <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
                                             <div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
                                                 <span class=" form-control " style="border:none;" id="vlResultoutcome"></span>
@@ -895,7 +897,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
     }
 
     jQuery(document).ready(function($) {
-        $(".is-viral-lab").change(function(){
+        $(".is-viral-lab").change(function() {
             $('#isViralLabText').val($("#isVlLab option:selected").html());
         });
         if ($("#vlLoadResult")) {
@@ -1070,6 +1072,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 document.getElementById("outcomeData").value = document.getElementById("outcome").innerHTML;
                 if (document.getElementById("outcome").innerHTML == 'Assay Recent - Please ensure you add Viral Load Result') {
                     document.getElementById("outcomeData").value = 'Assay Recent';
+                }
+                if (document.getElementById("outcome").innerHTML == 'Invalid – Please Verify') {
+                    document.getElementById("outcomeData").value = 'Invalid';
                 }
                 document.getElementById("vlfinaloutcomeResult").value = document.getElementById("vlResultoutcome").innerHTML;
                 if (flag) {

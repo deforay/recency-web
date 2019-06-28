@@ -1,5 +1,6 @@
 <?php
 use Zend\Session\Container;
+
 namespace Application\Controller;
 
 $lineOutComeColor = "#de1d2b";
@@ -7,10 +8,13 @@ $lineOutComeColor2 = "#000000";
 
 ?>
 <style type="text/css">
+     .outcome {
+          display: none;
+     }
 
-.outcome{display:none;}
-.colour{color:red;}
-
+     .colour {
+          color: red;
+     }
 </style>
 
 <div class="bg-body-light">
@@ -19,7 +23,9 @@ $lineOutComeColor2 = "#000000";
                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Quality Check</h1>
                <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                         <a href="<?php echo $this->url('quality-check', array('action' => 'index')); ?>"><li class="breadcrumb-item">Quality Test Details</li></a>
+                         <a href="<?php echo $this->url('quality-check', array('action' => 'index')); ?>">
+                              <li class="breadcrumb-item">Quality Test Details</li>
+                         </a>
                          <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
                     </ol>
                </nav>
@@ -35,16 +41,16 @@ $lineOutComeColor2 = "#000000";
           </div>
           <div class="block-content">
                <div class="col-md-12 table-responsive" id="hide">
-                    <form name="qcAddInformation" id="qcAddInformation"  class="mb-5" action="<?php echo $this->url('quality-check', array('action' => 'add')); ?>" method="post">
+                    <form name="qcAddInformation" id="qcAddInformation" class="mb-5" action="<?php echo $this->url('quality-check', array('action' => 'add')); ?>" method="post">
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Qc Sample ID <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control isRequired" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC Sample id" title="Please enter the QC Sample id" >
+                                   <input type="text" class="form-control isRequired" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC Sample id" title="Please enter the QC Sample id">
                               </div>
 
                               <label class="col-sm-2 col-form-label" for="">Qc Test Date <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="js-datepicker form-control isRequired" id="qcTestDate" name="qcTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the QC test date" title="Please enter the QC test date"  readonly="readonly">
+                                   <input type="text" class="js-datepicker form-control isRequired" id="qcTestDate" name="qcTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the QC test date" title="Please enter the QC test date" readonly="readonly">
                               </div>
                          </div>
                          <br>
@@ -68,11 +74,11 @@ $lineOutComeColor2 = "#000000";
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Test Kit Expiry Date <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="js-datepicker form-control isRequired " id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
+                                   <input type="text" class="js-datepicker form-control isRequired " id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date" readonly="readonly">
                               </div>
                               <label class="col-sm-2 col-form-label" for="">HIV Recency Test Date<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="js-datepicker form-control disbaledResult isRequired" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV Recency Test Date" title="Please enter the HIV recency date"  readonly="readonly">
+                                   <input type="text" class="js-datepicker form-control disbaledResult isRequired" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV Recency Test Date" title="Please enter the HIV recency date" readonly="readonly">
                               </div>
                          </div>
 
@@ -97,7 +103,7 @@ $lineOutComeColor2 = "#000000";
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Control Line <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <select class="form-control disbaledResult isRequired" id="controlLine" name="controlLine" title="Please select the control line"  onchange="changeTermLine()">
+                                   <select class="form-control disbaledResult isRequired" id="controlLine" name="controlLine" title="Please select the control line" onchange="changeTermLine()">
                                         <option value="">--Select--</option>
                                         <option value="present">Present</option>
                                         <option value="absent">Absent</option>
@@ -105,7 +111,7 @@ $lineOutComeColor2 = "#000000";
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Positive Verification<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <select class="form-control disbaledResult isRequired" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line"  onchange="changeTermLine()">
+                                   <select class="form-control disbaledResult isRequired" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
                                         <option value="">--Select--</option>
                                         <option value="present">Present(Positive/P)</option>
                                         <option value="absent">Absent(Negative/N)</option>
@@ -117,7 +123,7 @@ $lineOutComeColor2 = "#000000";
 
                               <label class="col-sm-2 col-form-label" for="">Long Term Verification<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line"  onchange="changeTermLine()">
+                                   <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
                                         <option value="">--Select--</option>
                                         <option value="present">Present(Long Term/LT)</option>
                                         <option value="absent">Absent(Recent/R)</option>
@@ -128,31 +134,31 @@ $lineOutComeColor2 = "#000000";
                               <label class="col-sm-2 col-form-label outcome" for="">Outcome</label>
                               <div class="col-sm-4 outcome">
                                    <span class="outcome form-control" style="border:none;" id="outcome"></span>
-                                   <input type="hidden" name="outcomeData" id="outcomeData"/>
-                                   <input type="hidden" name="finalResult" id="finalResult"/>
+                                   <input type="hidden" name="outcomeData" id="outcomeData" />
+                                   <input type="hidden" name="finalResult" id="finalResult" />
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Tester Name<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" name="testerName" id="testerName" class="form-control isRequired" placeholder="Enter the tester name" title="Please enter the tester name"/>
+                                   <input type="text" name="testerName" id="testerName" class="form-control isRequired" placeholder="Enter the tester name" title="Please enter the tester name" />
                               </div>
 
-                              <label class="col-sm-2 col-form-label for="">Testing Facility<span class="mandatory">*</span></label>
-                                        <div class="col-sm-4">
-                                            <select class="form-control isRequired" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
-                                                <option value="">--Select--</option>
-                                                <?php foreach($facilityResult['facilityTest'] as $testingFacility){ ?>
-                                                        <option value="<?php echo $testingFacility['facility_id']; ?>"><?php echo $testingFacility['facility_name']; ?></option>
-                                                <?php } ?>
-                                                <!-- <option value="other">Other</option> -->
-                                            </select>
-                                            &nbsp;
-                                            <input style="display:none;" type="text"  class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter testing facility name" value="" placeholder="Enter testing facility name" >
-                                            &nbsp;
-                                        </div>
+                              <label class="col-sm-2 col-form-label for="">Testing Facility<span class=" mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <select class="form-control isRequired" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+                                        <option value="">--Select--</option>
+                                        <?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
+                                             <option value="<?php echo $testingFacility['facility_id']; ?>"><?php echo $testingFacility['facility_name']; ?></option>
+                                        <?php } ?>
+                                        <!-- <option value="other">Other</option> -->
+                                   </select>
+                                   &nbsp;
+                                   <input style="display:none;" type="text" class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter testing facility name" value="" placeholder="Enter testing facility name">
+                                   &nbsp;
+                              </div>
 
                               <label class="col-sm-2 col-form-label" for="">Comments<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <textarea type="text" name="comment" id="comment" class="form-control isRequired" placeholder="Enter the comment" title="Please enter the comment"/></textarea>
+                                   <textarea type="text" name="comment" id="comment" class="form-control isRequired" placeholder="Enter the comment" title="Please enter the comment" /></textarea>
                               </div>
                          </div>
 
@@ -171,41 +177,73 @@ $lineOutComeColor2 = "#000000";
 
 <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
-
-     function changeTermLine()
-     {
+     function changeTermLine() {
           var ctrlLine = $("#controlLine").val();
           var postiveLine = $("#positiveVerificationLine").val();
           var longTermLine = $("#longTermVerificationLine").val();
-          if(ctrlLine!='' && postiveLine!='' && longTermLine!=''){
-               if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='absent'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"display":"block"});
-               }else if(ctrlLine=='absent' && postiveLine=='absent' && longTermLine=='present'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"display":"block"});
-               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='absent'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"display":"block"});
-               }else if(ctrlLine=='absent' && postiveLine=='present' && longTermLine=='present'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"display":"block"});
-               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='absent'){
-                    $("#outcome").html('Assay HIV Negative').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"display":"block"});
-               }else if(ctrlLine=='present' && postiveLine=='absent' && longTermLine=='present'){
-                    $("#outcome").html('Invalid – Please Verify').css({"color":"<?php echo $lineOutComeColor;?>"});
-                    $(".outcome").css({"display":"block"});
-               }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='absent'){
-                    $("#outcome").html('Assay Recent').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                    $(".outcome").css({"display":"block"});
-               }else if(ctrlLine=='present' && postiveLine=='present' && longTermLine=='present'){
-                    $("#outcome").html('Long Term').css({"color":"<?php echo $lineOutComeColor2;?>"});
-                    $(".outcome").css({"display":"block"});
+          if (ctrlLine != '' && postiveLine != '' && longTermLine != '') {
+               if (ctrlLine == 'absent' && postiveLine == 'absent' && longTermLine == 'absent') {
+                    $("#outcome").html('Invalid – Please Verify').css({
+                         "color": "<?php echo $lineOutComeColor; ?>"
+                    });
+                    $(".outcome").css({
+                         "display": "block"
+                    });
+               } else if (ctrlLine == 'absent' && postiveLine == 'absent' && longTermLine == 'present') {
+                    $("#outcome").html('Invalid – Please Verify').css({
+                         "color": "<?php echo $lineOutComeColor; ?>"
+                    });
+                    $(".outcome").css({
+                         "display": "block"
+                    });
+               } else if (ctrlLine == 'absent' && postiveLine == 'present' && longTermLine == 'absent') {
+                    $("#outcome").html('Invalid – Please Verify').css({
+                         "color": "<?php echo $lineOutComeColor; ?>"
+                    });
+                    $(".outcome").css({
+                         "display": "block"
+                    });
+               } else if (ctrlLine == 'absent' && postiveLine == 'present' && longTermLine == 'present') {
+                    $("#outcome").html('Invalid – Please Verify').css({
+                         "color": "<?php echo $lineOutComeColor; ?>"
+                    });
+                    $(".outcome").css({
+                         "display": "block"
+                    });
+               } else if (ctrlLine == 'present' && postiveLine == 'absent' && longTermLine == 'absent') {
+                    $("#outcome").html('Assay HIV Negative').css({
+                         "color": "<?php echo $lineOutComeColor; ?>"
+                    });
+                    $(".outcome").css({
+                         "display": "block"
+                    });
+               } else if (ctrlLine == 'present' && postiveLine == 'absent' && longTermLine == 'present') {
+                    $("#outcome").html('Invalid – Please Verify').css({
+                         "color": "<?php echo $lineOutComeColor; ?>"
+                    });
+                    $(".outcome").css({
+                         "display": "block"
+                    });
+               } else if (ctrlLine == 'present' && postiveLine == 'present' && longTermLine == 'absent') {
+                    $("#outcome").html('Assay Recent').css({
+                         "color": "<?php echo $lineOutComeColor2; ?>"
+                    });
+                    $(".outcome").css({
+                         "display": "block"
+                    });
+               } else if (ctrlLine == 'present' && postiveLine == 'present' && longTermLine == 'present') {
+                    $("#outcome").html('Long Term').css({
+                         "color": "<?php echo $lineOutComeColor2; ?>"
+                    });
+                    $(".outcome").css({
+                         "display": "block"
+                    });
                }
-          }else{
+          } else {
                $("#outcome").html('').hide();
-               $(".outcome").css({"display":"none"});
+               $(".outcome").css({
+                    "display": "none"
+               });
           }
      }
 
@@ -224,66 +262,72 @@ $lineOutComeColor2 = "#000000";
      //      }
      // }
 
-duplicateName = true;
-var rowCount=1;
+     duplicateName = true;
+     var rowCount = 1;
 
-function validateNow() {
+     function validateNow() {
 
-     flag = deforayValidator.init({
-          formId: 'qcAddInformation'
+          flag = deforayValidator.init({
+               formId: 'qcAddInformation'
+          });
+          document.getElementById("outcomeData").value = document.getElementById("outcome").innerHTML;
+          document.getElementById("outcomeData").value = document.getElementById("outcome").innerHTML;
+          if (document.getElementById("outcome").innerHTML == 'Assay Recent - Please ensure you add Viral Load Result') {
+               document.getElementById("outcomeData").value = 'Assay Recent';
+          }
+          if (document.getElementById("outcome").innerHTML == 'Invalid – Please Verify') {
+               document.getElementById("outcomeData").value = 'Invalid';
+          }
+          refResult = $("#referenceResult").val();
+          outcData = $("#outcomeData").val();
+          if (refResult == 'long_term_sample') {
+               if (outcData == 'Long Term') {
+                    $("#finalResult").val('pass');
+               } else {
+                    $("#finalResult").val('fail');
+               }
+          }
+          if (refResult == 'preliminary_recent_sample') {
+               if (outcData == 'Assay Recent') {
+                    $("#finalResult").val('pass');
+               } else {
+                    $("#finalResult").val('fail');
+               }
+          }
+          if (refResult == 'hiv_negative_sample') {
+               if (outcData == 'Assay HIV Negative') {
+                    $("#finalResult").val('pass');
+               } else {
+                    $("#finalResult").val('fail');
+               }
+          }
+
+          if (flag) {
+               if (duplicateName) {
+                    $.blockUI();
+                    alert(formId);
+                    document.getElementById('qcAddInformation').submit();
+               }
+          }
+     }
+
+     jQuery(document).ready(function($) {
+          // $('#reasonNotPerform').hide();
+
+          // $('#recencyTestPerformedYes').change(function() {
+          //      if(this.checked == true){
+          //           // $('#reasonNotPerform').show();
+          //           $("#outcome").html('').hide();
+          //           $(".outcome").hide();
+          //           $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
+          //           $(".removeClassReq").addClass("isRequired");
+          //
+          //      }else{
+          //           $(".disbaledResult").addClass("isRequired");
+          //           $(".disbaledResult").attr("disabled",false);
+          //           $('#reasonNotPerform').hide();
+          //           $(".removeClassReq").removeClass("isRequired").val("");
+          //      }
+          // });
      });
-     document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
-     refResult=$("#referenceResult").val();
-     outcData=$("#outcomeData").val();
-     if(refResult=='long_term_sample'){
-          if(outcData=='Long Term'){
-               $("#finalResult").val('pass');
-          }else{
-               $("#finalResult").val('fail');
-          }
-     }
-     if(refResult=='preliminary_recent_sample'){
-          if(outcData=='Assay Recent'){
-               $("#finalResult").val('pass');
-          }else{
-               $("#finalResult").val('fail');
-          }
-     }
-     if(refResult=='hiv_negative_sample'){
-          if(outcData=='Assay HIV Negative'){
-               $("#finalResult").val('pass');
-          }else{
-               $("#finalResult").val('fail');
-          }
-     }
-
-     if (flag) {
-          if (duplicateName) {
-               $.blockUI();
-               alert(formId);
-               document.getElementById('qcAddInformation').submit();
-          }
-     }
-}
-
-jQuery(document).ready(function($) {
-     // $('#reasonNotPerform').hide();
-
-     // $('#recencyTestPerformedYes').change(function() {
-     //      if(this.checked == true){
-     //           // $('#reasonNotPerform').show();
-     //           $("#outcome").html('').hide();
-     //           $(".outcome").hide();
-     //           $(".disbaledResult").attr("disabled",true).removeClass("isRequired").val("");
-     //           $(".removeClassReq").addClass("isRequired");
-     //
-     //      }else{
-     //           $(".disbaledResult").addClass("isRequired");
-     //           $(".disbaledResult").attr("disabled",false);
-     //           $('#reasonNotPerform').hide();
-     //           $(".removeClassReq").removeClass("isRequired").val("");
-     //      }
-     // });
-});
-
 </script>

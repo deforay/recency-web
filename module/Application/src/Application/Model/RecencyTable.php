@@ -119,6 +119,8 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
             ->join(array('tf' => 'testing_facility_type'), 'tf.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left')
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
             ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'), 'left');
         //->order("r.recency_id DESC");
         if (isset($sWhere) && $sWhere != "") {
@@ -469,8 +471,8 @@ class RecencyTable extends AbstractTableGateway
                 //'kit_name'=>$params['testKitName'],
                 'kit_lot_no' => $params['testKitLotNo'],
                 'kit_expiry_date' => ($params['testKitExpDate'] != '') ? $common->dbDateFormat($params['testKitExpDate']) : null,
-                'vl_request_sent' => $params['sendVlsm'],
-                'vl_request_sent_date_time' => ($params['sendVlsm'] == 'yes')?$common->getDateTime():null,
+                'vl_request_sent' => isset($params['sendVlsm']) ? $params['sendVlsm'] : 'no',
+                'vl_request_sent_date_time' => (isset($params['sendVlsm']) && $params['sendVlsm'] == 'yes') ? $common->getDateTime() : null,
                 'tester_name' => $params['testerName'],
                 'vl_test_date' => ($params['vlTestDate'] != '') ? $common->dbDateFormat($params['vlTestDate']) : null,
                 'vl_lab' => ($params['isVlLab'] != '') ? $params['isViralLabText'] : null,

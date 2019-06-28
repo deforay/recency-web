@@ -26,7 +26,7 @@ $currentDate = date('d-M-Y');
 	<div class="block block-rounded block-bordered">
 		<div class="block-content block-content-full">
 			<div class="form-group row">
-				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
+				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Test Date</label>
 				<div class="col-sm-4">
 					<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
 				</div>
@@ -74,7 +74,56 @@ $currentDate = date('d-M-Y');
 		</div>
 	</div>
 
-	
+
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Testing Quality
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<small class="custom-control custom-switch custom-control-inline">
+			<input type="checkbox" class="custom-control-input" id="testing-quality-percentage" name="testing-quality-percentage" checked onchange="getTestingQualityChart();">
+			<label class="custom-control-label" for="testing-quality-percentage">Percentage</label>
+		</small>
+		<br>
+		<small style="font-size:0.7em;">&nbsp; &nbsp; To assess the quality of Recency Testing</small>
+	</h2>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="testingQualityChartNegative" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="testingQualityChartInvalid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h2 class="content-heading">
+		<i class="fa fa-angle-right text-muted mr-1"></i> % Assay Negative or Invalid by District
+
+		<br>
+		<small style="font-size:0.7em;">&nbsp; &nbsp; To assess the quality of Recency Testing</small>
+	</h2>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="testingQualityTable" style="min-width: 310px;">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<hr style="border:1px solid #ccc;">
+
+
 	<h2 class="content-heading">
 		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Results By Specimen Type
 		&nbsp;&nbsp;&nbsp;&nbsp;
@@ -116,87 +165,49 @@ $currentDate = date('d-M-Y');
 			<div id="qualityResultKitLotNumberChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
+	
+
+	<h2 class="content-heading ">
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Facility
+
+	</h2>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<table id="passRateFacilityWiseDataTable" class="table table-bordered table-striped table-vcenter">
+				<thead>
+					<tr>
+						<th>Facility</th>
+						<th>Kit</th>
+						<th>District Name</th>
+						<th>% Passed</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="5" class="dataTables_empty">Loading data from server</td>
+					</tr>
+					<tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
 	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Testing Quality
+		<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Month
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<small class="custom-control custom-switch custom-control-inline">
-			<input type="checkbox" class="custom-control-input" id="testing-quality-percentage" name="testing-quality-percentage" checked onchange="getTestingQualityChart();">
-			<label class="custom-control-label" for="testing-quality-percentage">Percentage</label>
+			<input type="checkbox" class="custom-control-input" id="quality-control-by-month" name="quality-control-by-month" checked onchange="getQualityControlByMonth();">
+			<label class="custom-control-label" for="quality-control-by-month">Percentage</label>
 		</small>
 	</h2>
-	<div class="row">
-		<div class="col-md-6">
-			<div class="block block-rounded block-bordered">
-				<div class="block-content block-content-full">
-					<div id="testingQualityChartNegative" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="block block-rounded block-bordered">
-				<div class="block-content block-content-full">
-					<div id="testingQualityChartInvalid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-				</div>
-			</div>
+	<div class="block block-rounded block-bordered">
+		<div class="block-content block-content-full">
+			<div id="qualityControlByMonthwise" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
-	
-	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> % RTRI Negative or Invalid by District
-	</h2>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="block block-rounded block-bordered">
-				<div class="block-content block-content-full">
-					<div id="testingQualityTable" style="min-width: 310px;">
 
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-		<h2 class="content-heading ">
-			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Facility
-			
-		</h2>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-				<table id="passRateFacilityWiseDataTable" class="table table-bordered table-striped table-vcenter">
-					<thead>
-						<tr>
-							<th>Facility</th>
-							<th>Kit</th>
-							<th>District Name</th>
-							<th>% Passed</th>
-							
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td colspan="5" class="dataTables_empty">Loading data from server</td>
-						</tr>
-						<tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
 
-		<h2 class="content-heading">
-			<i class="fa fa-angle-right text-muted mr-1"></i> Quality Control Pass Rate by Month
-			&nbsp;&nbsp;&nbsp;&nbsp;
-					<small class="custom-control custom-switch custom-control-inline">
-						<input type="checkbox" class="custom-control-input" id="quality-control-by-month" name="quality-control-by-month" checked  onchange="getQualityControlByMonth();">
-						<label class="custom-control-label" for="quality-control-by-month">Percentage</label>
-					</small>
-		</h2>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-				<div id="qualityControlByMonthwise" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-			</div>
-		</div>
-
-	
 
 </div>
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
@@ -206,12 +217,10 @@ $currentDate = date('d-M-Y');
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
 
 <script type="text/javascript">
-
-
 	/* Table initialisation */
 	oTable = null;
 	$(document).ready(function() {
-		
+
 		getQualityResultsChart();
 		getQualitySampleLotChart();
 		getQualityResultsLitLotNumberChart();
@@ -251,38 +260,37 @@ $currentDate = date('d-M-Y');
 
 			});
 
-			oTable = $('#passRateFacilityWiseDataTable').dataTable({
-				"bAutoWidth": false,
-                "bProcessing": true,
-                "bServerSide": true,
-				"aoColumns": [
-					{
-						"sClass": "center"
-					},
-					{
-						"sClass": "center"
-					},
-					{
-						"sClass": "center"
-					},
-					
-					{
-						"sClass": "center",
-						"bSortable": false
-					}
-				],
-				"sAjaxSource": "<?php echo $this->url('quality-check', array('action' => 'get-pass-rate-by-facility')); ?>",
-				"fnServerData": function(sSource, aoData, fnCallback) {
-					
-					$.ajax({
-						"dataType": 'json',
-						"type": "POST",
-						"url": sSource,
-						"data": aoData,
-						"success": fnCallback
-					});
+		oTable = $('#passRateFacilityWiseDataTable').dataTable({
+			"bAutoWidth": false,
+			"bProcessing": true,
+			"bServerSide": true,
+			"aoColumns": [{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+
+				{
+					"sClass": "center",
+					"bSortable": false
 				}
-			});
+			],
+			"sAjaxSource": "<?php echo $this->url('quality-check', array('action' => 'get-pass-rate-by-facility')); ?>",
+			"fnServerData": function(sSource, aoData, fnCallback) {
+
+				$.ajax({
+					"dataType": 'json',
+					"type": "POST",
+					"url": sSource,
+					"data": aoData,
+					"success": fnCallback
+				});
+			}
+		});
 	});
 
 
@@ -329,7 +337,7 @@ $currentDate = date('d-M-Y');
 			});
 	}
 
-	
+
 	function getQualityResultsChart() {
 		var format = null;
 		if ($('#quality-result-by-speciman-percentage').prop('checked')) {
@@ -386,43 +394,52 @@ $currentDate = date('d-M-Y');
 			format = 'number';
 		}
 		$.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-negative-chart')); ?>", {
-			format: format,
-			sampleTestedDates: $("#sampleTestedDates").val()
-		},
-		function(data) {
-			$("#testingQualityChartNegative").html(data);
-		});
-		
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
+			},
+			function(data) {
+				$("#testingQualityChartNegative").html(data);
+			});
+
 		$.post("<?php echo $this->url('quality-check', array('action' => 'get-testing-quality-invalid-chart')); ?>", {
-			format: format,
-			sampleTestedDates: $("#sampleTestedDates").val()
-		},
-		function(data) {
-			$("#testingQualityChartInvalid").html(data);
-		});
-		
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val()
+			},
+			function(data) {
+				$("#testingQualityChartInvalid").html(data);
+			});
+
 		$.post("<?php echo $this->url('quality-check', array('action' => 'get-district-wise-quality-check-invalid')); ?>", {
-		 	format: format,
-		 	sampleTestedDates: $("#sampleTestedDates").val(),
-			locationThree: $("#location_three").val(),
-			testingFacility: $("#testingFacility").val()
-		},
-		function(data) {
-		 	$("#testingQualityTable").html(data);
-		});
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val(),
+				locationThree: $("#location_three").val(),
+				testingFacility: $("#testingFacility").val()
+			},
+			function(data) {
+				$("#testingQualityTable").html(data);
+			});
 	}
 
-	
+
 
 	function getQualityControlByMonth() {
-			var format = null;
-			if($('#quality-control-by-month').prop('checked')){
-				format = 'percentage';
-			}else{
-				format = 'number';
-			}
-			$.post("<?php echo $this->url('quality-check',array('action'=>'get-month-wise-quality-control')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val()},
-			function(data){
+		var format = null;
+		if ($('#quality-control-by-month').prop('checked')) {
+			format = 'percentage';
+		} else {
+			format = 'number';
+		}
+		$.post("<?php echo $this->url('quality-check', array('action' => 'get-month-wise-quality-control')); ?>", {
+				format: format,
+				format: format,
+				sampleTestedDates: $("#sampleTestedDates").val(),
+				locationOne: $("#location_one").val(),
+				locationTwo: $("#location_two").val(),
+				locationThree: $("#location_three").val(),
+				fName: $("#facilityId").val(),
+				testingFacility: $("#testingFacility").val()
+			},
+			function(data) {
 				$("#qualityControlByMonthwise").html(data);
 			});
 	}

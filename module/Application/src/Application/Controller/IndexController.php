@@ -1,11 +1,11 @@
 <?php
 /**
-* Zend Framework (http://framework.zend.com/)
-*
-* @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
-* @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
-* @license   http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ */
 
 namespace Application\Controller;
 
@@ -20,77 +20,75 @@ class IndexController extends AbstractActionController
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
-               $params = $request->getPost();
-               $recencyService = $this->getServiceLocator()->get('RecencyService');
-               $result = $recencyService->getAllRecencyResult($params);
-               return $this->getResponse()->setContent(Json::encode($result));
-          }else{
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result = $recencyService->getAllRecencyResult($params);
+            return $this->getResponse()->setContent(Json::encode($result));
+        } else {
             $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-            $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+            $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
             $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult=$facilityService->getFacilitiesAllDetails();
+            $facilityResult = $facilityService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
                 'globalConfigResult' => $globalConfigResult,
                 'facilityResult' => $facilityResult
             ));
-          }
+        }
     }
     public function exportRecencyDataAction()
     {
-       $request = $this->getRequest();
-       if($request->isPost())
-       {
-           $params = $request->getPost();
-           $recencyService = $this->getServiceLocator()->get('RecencyService');
-           if(isset($params['comingFrom']) && trim($params['comingFrom'])=='district'){
-            $result=$recencyService->exportDistrictRecencyData($params);
-           }else{
-            $result=$recencyService->fetchExportRecencyData($params);
-           }
-           
-           $viewModel = new ViewModel();
-           $viewModel->setVariables(array('result' =>$result));
-           $viewModel->setTerminal(true);
-           return $viewModel;
-       }
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            if (isset($params['comingFrom']) && trim($params['comingFrom']) == 'district') {
+                $result = $recencyService->exportDistrictRecencyData($params);
+            } else {
+                $result = $recencyService->fetchExportRecencyData($params);
+            }
+
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' => $result));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
     }
 
-   
+
 
     public function  getRecencyAllDataCountAction()
     {
-       $request = $this->getRequest();
-       if($request->isPost())
-       {
-           $params = $request->getPost();
-           $recencyService = $this->getServiceLocator()->get('RecencyService');
-           $result=$recencyService->getRecencyAllDataCount($params);
-           $viewModel = new ViewModel();
-           $viewModel->setVariables(array('result' =>$result));
-           $viewModel->setTerminal(true);
-           return $viewModel;
-       }
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result = $recencyService->getRecencyAllDataCount($params);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' => $result));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
     }
-    
+
     public function analysisDashboardAction()
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
-               $params = $request->getPost();
-               $recencyService = $this->getServiceLocator()->get('RecencyService');
-               $result = $recencyService->getAllRecencyResult($params);
-               return $this->getResponse()->setContent(Json::encode($result));
-        }else{
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
-        $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-        $facilityResult=$facilityService->getFacilitiesAllDetails();
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result = $recencyService->getAllRecencyResult($params);
+            return $this->getResponse()->setContent(Json::encode($result));
+        } else {
+            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+            $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult = $facilityService->getFacilitiesAllDetails();
 
-        return new ViewModel(array(
-            'globalConfigResult' => $globalConfigResult,
-            'facilityResult' => $facilityResult
-        ));
+            return new ViewModel(array(
+                'globalConfigResult' => $globalConfigResult,
+                'facilityResult' => $facilityResult
+            ));
         }
     }
 
@@ -98,21 +96,20 @@ class IndexController extends AbstractActionController
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
-               $params = $request->getPost();
-               $recencyService = $this->getServiceLocator()->get('RecencyService');
-               $result = $recencyService->getAllRecencyResult($params);
-               return $this->getResponse()->setContent(Json::encode($result));
-        }else{
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
-        $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-        $facilityResult=$facilityService->getFacilitiesAllDetails();
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result = $recencyService->getAllRecencyResult($params);
+            return $this->getResponse()->setContent(Json::encode($result));
+        } else {
+            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+            $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult = $facilityService->getFacilitiesAllDetails();
 
-        return new ViewModel(array(
-            'globalConfigResult' => $globalConfigResult,
-            'facilityResult' => $facilityResult
-        ));
+            return new ViewModel(array(
+                'globalConfigResult' => $globalConfigResult,
+                'facilityResult' => $facilityResult
+            ));
         }
     }
 }
-

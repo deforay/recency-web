@@ -302,3 +302,8 @@ ALTER TABLE `recency` ADD `vl_request_sent_date_time` DATETIME NULL DEFAULT NULL
 
 -- Thanaseelan 04-Jun-2019 Created for showing the pending vl result from vlsm reference
 ALTER TABLE `recency` ADD `vl_lab` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_request_sent_date_time`;
+
+
+
+-- Amit 26 June 2019
+UPDATE `recency` SET `term_outcome` = 'Invalid' where `term_outcome` like 'Invalid%'

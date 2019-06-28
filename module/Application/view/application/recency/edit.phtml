@@ -1035,11 +1035,14 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 						 formId: 'recencyInformation'
 					});
 					//document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
-					document.getElementById("outcomeData").value=document.getElementById("outcome").innerHTML;
-                    if(document.getElementById("outcome").innerHTML=='Assay Recent - Please ensure you add Viral Load Result')
-                    {
-                        document.getElementById("outcomeData").value = 'Assay Recent';
-                    }
+					
+					document.getElementById("outcomeData").value = document.getElementById("outcome").innerHTML;
+					if (document.getElementById("outcome").innerHTML == 'Assay Recent - Please ensure you add Viral Load Result') {
+						document.getElementById("outcomeData").value = 'Assay Recent';
+					}
+					if (document.getElementById("outcome").innerHTML == 'Invalid – Please Verify') {
+						document.getElementById("outcomeData").value = 'Invalid';
+					}					
 					document.getElementById("vlfinaloutcomeResult").value=document.getElementById("vlResultoutcome").innerHTML;
 					
 					if (flag) {
