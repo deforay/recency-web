@@ -100,7 +100,8 @@ class QualityCheckTable extends AbstractTableGateway
           $sql = new Sql($dbAdapter);
           $roleId = $sessionLogin->roleId;
 
-          $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'));
+          $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
+                        ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
 
           if (isset($sWhere) && $sWhere != "") {
                $sQuery->where($sWhere);
@@ -824,6 +825,7 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery->offset($sOffset);
           }
 
+          $queryContainer = new Container('query');
           $queryContainer->exportQcDataQuery = $sQuery;
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           //echo $sQueryStr;die;
@@ -1114,6 +1116,7 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery->offset($sOffset);
           }
 
+          $queryContainer = new Container('query');
           $queryContainer->exportQcDataQuery = $sQuery;
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           //echo $sQueryStr;die;
