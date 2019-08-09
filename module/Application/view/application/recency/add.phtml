@@ -450,14 +450,14 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                     <option value="&lt; 40"> &lt; 40</option>
                                                 </select>
                                             </div>
-<!--                                             
+
                                             <div class="is-vl-lab col-sm-12 col-lg-12 col-md-12" style="display:none;clear:both;">
                                                 <label class="col-sm-2 form-check-label rm-lab-req" for="sendVlsm" style=" padding-top: 35px; ">Send a Viral Load Test Request to VLSM</label>
                                                 <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
                                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);" value="yes">&nbsp;Yes
                                                 </div>
-                                            </div> -->
-                                            <!-- <div class="is-vl-lab col-md-12 col-lg-12" style="display:none;">
+                                            </div>
+                                            <div class="is-vl-lab col-md-12 col-lg-12" style="display:none;">
                                                 <div class="col-sm-2">
                                                     <label class="col-form-label" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
                                                     <label class="col-form-label" for="isVlLab" style=" padding-top: 35px; ">Viral Load Lab <span class='mandatory'>*</span></label>
@@ -472,7 +472,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                     </select>
                                                 </div>
                                                 <input type="hidden" name="isViralLabText" id="isViralLabText" />
-                                            </div> -->
+                                            </div>
 
                                             <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
                                             <div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
@@ -695,6 +695,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 });
                 updateVlResultFields();
             } else if (ctrlLine == 'present' && postiveLine == 'present' && longTermLine == 'absent') {
+                $.blockUI();
                 $("#outcome").html('Assay Recent - Please ensure you add Viral Load Result').css({
                     "color": "<?php echo $lineOutComeColor2; ?>"
                 });
@@ -703,6 +704,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 });
                 getFacilities();
                 updateVlResultFields('Assay Recent');
+                $.unblockUI();
             } else if (ctrlLine == 'present' && postiveLine == 'present' && longTermLine == 'present') {
                 $("#outcome").html('Long Term').css({
                     "color": "<?php echo $lineOutComeColor2; ?>"
@@ -727,7 +729,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
     function getFacilities() {
         // read Facility List
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", '<?php echo $configResult['vlsm']['domain']; ?>api/fetchFacilities.php', false); // false for synchronous request
+        xmlHttp.open("GET", '<?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/fetchFacilities.php', false); // false for synchronous request
         xmlHttp.send(null);
         if (typeof xmlHttp.responseText != 'undefined' && xmlHttp.responseText != "") {
             jsonData = JSON.parse(xmlHttp.responseText);
@@ -1049,7 +1051,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 var params = '' + jsonArr['sampleId'] + '&' + jsonArr['patientId'] + '&' + jsonArr['facilityId'] + '&' + jsonArr['province'] + '&' + jsonArr['district'] + '&' + jsonArr['sampleCollectionDate'] + '&' + jsonArr['sampleType'] + '&' + jsonArr['viralLoad'] + '&' + jsonArr['request_created_by'] + '';
 
                 var http = new XMLHttpRequest();
-                var url = '<?php echo $configResult['vlsm']['domain']; ?>api/recency/requestVlTest.php';
+
+
+
+                var url = '<?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/requestVlTest.php';
                 http.open('POST', url, true);
                 http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 http.onreadystatechange = function() {
