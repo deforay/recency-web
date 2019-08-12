@@ -278,7 +278,7 @@ class VlDataController extends AbstractActionController
             return $viewModel;
         }
     }
-
+    
     public function qcReportAction()
     {
          $request = $this->getRequest();
@@ -295,5 +295,36 @@ class VlDataController extends AbstractActionController
                 'facilityResult' => $facilityResult
             ));
          }
+    }
+    
+    public function requestVlTestOnVlsmAction()
+    {
+         $request = $this->getRequest();
+         if ($request->isPost()) {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $recencyService->postReqVlTestOnVlsmDetails($params);
+            return $this->_redirect()->toUrl('/vl-data');
+         }else{
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult = $facilityService->getFacilitiesAllDetails();
+    
+            return new ViewModel(array(
+                'facilityResult' => $facilityResult
+            ));
+         }
+    }
+
+    public function getVlOnVlsmSampleAction() {
+        $request = $this->getRequest();
+        if($request->isPost())
+        {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result = $recencyService->getReqVlTestOnVlsmDetails($params);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' =>$result))->setTerminal(true);
+            return $viewModel;
+        }
     }
 }

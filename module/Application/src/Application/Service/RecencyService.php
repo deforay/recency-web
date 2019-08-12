@@ -6,12 +6,13 @@ use PHPExcel;
 use Zend\Db\Sql\Sql;
 use Zend\Session\Container;
 use TCPDF;
+use GuzzleHttp;
 
 class RecencyService
 {
-
+    
     public $sm = null;
-
+    
     public function __construct($sm)
     {
         $this->sm = $sm;
@@ -26,6 +27,12 @@ class RecencyService
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyDetails($params);
+    }
+    
+    public function getReqVlTestOnVlsmDetails($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchReqVlTestOnVlsmDetails($params);
     }
 
     public function addRecencyDetails($params)
@@ -1499,5 +1506,48 @@ class RecencyService
         return $recencyDb->saveVlTestResultApi($params);
     }
 
+    public function postReqVlTestOnVlsmDetails($params){
+        try{
+            // \Zend\Debug\Debug::dump($params);die;
+            $sessionLogin = new Container('credo');
+            $data = array();$check = false;
+            $recencyDb = $this->sm->get('RecencyTable');
+            $client = new GuzzleHttp\Client();
+            $config = new \Zend\Config\Reader\Ini();
+            $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+            $urlVlsm = $configResult['vlsm']['domain'].'recency/requestVlTest.php';
+            if(isset($params['rvlsm']) && count($params['rvlsm']) > 0){
+                foreach($params['rvlsm'] as $sample){
+                    $data =  $recencyDb->getDataBySampleId($sample);
+                    if(isset($data['sample_id']) && $data['sample_id'] != ""){
+                        $resultCart = $client->post($urlVlsm, [
+                            'form_params' => [
+                                'sampleId'              => $data['sample_id'],
+                                'patientId'             => $data['patient_id'],
+                                'isFacilityLab'         => $params['isFacilityLab'],
+                                // 'province'              => $data['province'],
+                                // 'district'              => $data['district'],
+                                'sCDate'                => $data['sample_collection_date'],
+                                // 'sampleType'            => $data['received_specimen_type'],
+                                'isVlLab'               => $params['isVlLab'],
+                                'userId'                => $sessionLogin->userId
+                            ]
+                        ]);
+                        $responseCart = $resultCart->getBody()->getContents();
+                        if($responseCart == 'Viral Load Test Request has been send successfully'){
+                            $recencyDb->saveRequestFlag($data['recency_id']);
+                            $check = true;
+                        }
+                    }
+                }
+                if($check){
+                    $alertContainer = new Container('alert');
+                    $alertContainer->alertMsg = 'VL Test request was send successfully';
+                }
+            }
+        }catch(Exception $e){
+            error_log('Error :' . $e->getMessage());
+        }
+    }
 }
 

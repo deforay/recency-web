@@ -1,0 +1,259 @@
+<?php
+// \Zend\Debug\Debug::dump($facilityResult);die;
+use Zend\Session\Container;
+$config = new \Zend\Config\Reader\Ini();
+$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+$sessionLogin = new Container('credo');
+?>
+<style>
+    .dataTables_empty {
+        text-align: center;
+    }
+
+    .saveResult {
+        pointer-events: none;
+    }
+
+    .form-control:disabled,
+    .form-control[readonly] {
+        background-color: #e9ecef00;
+        opacity: 1;
+        width: 130px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+    button#rvlsm_rightAll, button#rvlsm_rightSelected, button#rvlsm_leftSelected, button#rvlsm_leftAll {
+        background-color: #e1effe;
+        color: dimgray;
+    }
+    button#rvlsm_rightAll:hover, button#rvlsm_rightSelected:hover, button#rvlsm_leftSelected:hover, button#rvlsm_leftAll:hover {
+        background-color: #dbe4ef;
+        color: black;
+        font-weight : 700;
+    }
+    .hidden{
+        display:none;
+    }
+    div#ms-rvlsm {
+        width: 625px !important;
+    }
+</style>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/select2-new.min.css' ?>">
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath(); ?>/assets/css/multi-select.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath(); ?>/assets/css/jquery.multiselect.css">
+
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Request VLTest On VLSM</h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+            <h3 class="block-title"></h3>
+        </div>
+        <div class="block-content">
+            <div class="col-md-12 table-responsive" id="hide">
+                <form name="reqVlTestTable" id="reqVlTestTable"  class="mb-5" action="<?php echo $this->url('vl-data', array('action' => 'request-vl-test-on-vlsm')); ?>" enctype="multipart/form-data"  method="post">
+                <div class="form-group row">
+                    <label style=" margin-bottom: 2%; " class="col-sm-2 col-form-label" for="sampleTestedDates">Sample Collection Date</label>
+                    <div class="col-sm-4">
+                        <input type="text" value="" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;background:#fff;width: 100%;"/>
+                    </div>
+                    <label style=" margin-bottom: 2%; " class="col-sm-2 col-form-label" for="facilityId">Facility<span class="mandatory">*</span></label>
+                    <div class="col-sm-4">
+                        <select class="form-control isRequired js-select2" id="facilityId" name="facilityId" title="Please choose facility" style="width: 100%;" data-placeholder="Choose one..">
+                            <option value="">-- Select --</option>
+                            <?php foreach($facilityResult['facility'] as $facility){ ?>
+                                <option value="<?php echo base64_encode($facility['facility_id']);?>"><?php echo ucwords($facility['facility_name']);?></option>
+                            <?php }?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row items-push">
+                    <div class="col-lg-7 offset-lg-4">
+                        <a href="javascript:void(0);" class="btn btn-primary" onclick="searchSamples();"><i class="fa fa-fw fa-check"></i> Search</a>
+                        <a href="" class="btn btn-danger"><i class="si si-reload"></i> Reset</a>&nbsp;
+                        <a href="<?php echo $this->url('vl-data', array('action' => 'index')); ?>" class="btn btn-dark"><i class="fa fa-backward"></i> Back</a>
+                    </div>
+                </div>
+
+                <div class="showsample hidden">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-2" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
+                        <div class="col-sm-4">
+                            <select class="js-select2 form-control is-facility" name="isFacilityLab" id="isFacilityLab" title="Please select facility lab" style="width: 100%;" data-placeholder="Choose one..">
+                                <option value="">-- Select -- </option>
+                            </select>
+                        </div>
+                        <label class="col-form-label col-sm-2" for="isVlLab">Viral Load Lab <span class='mandatory'>*</span></label>
+                        <div class="col-sm-4">
+                            <select class="js-select2 form-control is-viral-lab" name="isVlLab" id="isVlLab" title="Please select viral load lab" style="width: 100%;" data-placeholder="Choose one..">
+                                <option value="">-- Select -- </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-md-2" for="rvlsm">Select the samples<span class="mandatory">*</span></label>
+                        <div class="col-md-10">
+                            <select class="form-control isRequired" id='rvlsm' name="rvlsm[]" multiple='multiple'></select>
+                        </div>
+                    </div>
+                    <div class="row items-push">
+                        <div class="col-lg-7 offset-lg-4">
+                            <a href="javascript:void(0);" class="btn btn-primary" onclick="sendRequest();"><i class="fa fa-fw fa-check"></i> Submit</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="<?php echo $this->basePath() . '/assets/js/jquery.multi-select.js' ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/jquery.quicksearch.js' ?>"></script>
+<script type="text/javascript">
+    var option = $('#rvlsm');
+    var selectedSample = [];
+
+    $(document).ready(function() {
+        $('#sampleTestedDates').daterangepicker({
+            format: 'DD-MMM-YYYY',
+            autoUpdateInput: false,
+            separator: ' to ',
+            startDate: moment().subtract('days', 29),
+            endDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'Last 60 Days': [moment().subtract('days', 59), moment()],
+                'Last 180 Days': [moment().subtract('days', 179), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
+        },
+        function(start, end) {
+            startDate = start.format('YYYY-MM-DD');
+            endDate = end.format('YYYY-MM-DD');
+            $('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+            });
+
+        });
+    });
+
+    function searchSamples(){
+        if($('#facilityId').val() != ""){
+            $.blockUI();
+            $.post("<?php echo $this->url('vl-data', array('action' => 'get-vl-on-vlsm-sample')); ?>", { sampleTestedDates: $('#sampleTestedDates').val(), facilityId: $('#facilityId').val()},
+            function(data) {
+                $('.showsample').show();
+                getFacilities()
+                option.html(data);
+                option.multiSelect('refresh');
+                $.unblockUI();
+            });
+        }else{
+            alert('Please select the facility to get samples','err');
+            $.unblockUI();
+        }
+    }
+
+    option.multiSelect({
+        selectableHeader: "<input type='text' class='form-control  search-input' autocomplete='off' placeholder='--Search--'>",
+        selectionHeader: "<input type='text' class='form-control  search-input' autocomplete='off' placeholder='--Search--'>",
+        afterInit: function(ms) {
+            var that = this,
+                $selectableSearch = that.$selectableUl.prev(),
+                $selectionSearch = that.$selectionUl.prev(),
+                selectableSearchString = '#' + that.$container.attr('id') +
+                ' .ms-elem-selectable:not(.ms-selected)',
+                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                .on('keydown', function(e) {
+                    if (e.which === 40) {
+                        that.$selectableUl.focus();
+                        return false;
+                    }
+                });
+
+            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                .on('keydown', function(e) {
+                    if (e.which == 40) {
+                        that.$selectionUl.focus();
+                        return false;
+                    }
+                });
+        },
+        afterSelect: function() {
+            this.qs1.cache();
+            this.qs2.cache();
+        },
+        afterDeselect: function() {
+            this.qs1.cache();
+            this.qs2.cache();
+        }
+    });
+
+    option.change(function(){ 
+        selectedSample = $(this).val();
+    });
+
+    function getFacilities() {
+        // read Facility List
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", '<?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/fetchFacilities.php', false); // false for synchronous request
+        xmlHttp.send(null);
+        if (typeof xmlHttp.responseText != 'undefined' && xmlHttp.responseText != "") {
+            jsonData = JSON.parse(xmlHttp.responseText);
+            jsonData.forEach(function(item) {
+                if (item.facility_type == '1') {
+                    $('.is-facility').append('<option value="' + item.facility_id + '">' + item.facility_name + '</option>');
+                } else if (item.facility_type == '2') {
+                    $('.is-viral-lab').append('<option value="' + item.facility_id + '">' + item.facility_name + '</option>');
+                }
+            });
+        } else {
+            console.log('Facility API from VLSM is not working! Please check domain url of vlsm');
+            return;
+        }
+
+    }
+
+    $('#facilityId').change(function(){
+        $('#isFacilityLab,#isVlLab').val('');$('.showsample').hide();
+        document.getElementById("rvlsm").options.length = 0;
+    });
+
+    function sendRequest(){
+        flag = deforayValidator.init({
+          formId: 'reqVlTestTable'
+        });
+        if (flag) {
+            $.blockUI();
+            document.getElementById('reqVlTestTable').submit();
+        }
+    }
+
+</script>

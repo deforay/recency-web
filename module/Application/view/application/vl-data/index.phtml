@@ -4,6 +4,9 @@ use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 ?>
 <style>
+    .dataTables_empty{
+        text-align: center;
+    }
     .saveResult {
         pointer-events: none;
     }
@@ -31,6 +34,7 @@ $sessionLogin = new Container('credo');
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="<?php echo $this->url('vl-data', array('action' => 'upload-result')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Upload Viral Load Data</a>
+                        <a href="<?php echo $this->url('vl-data', array('action' => 'request-vl-test-on-vlsm')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-file-medical-alt"></i>&nbsp;Request VL Test on VLSM</a>
                     </li>
                 </ol>
             </nav>
