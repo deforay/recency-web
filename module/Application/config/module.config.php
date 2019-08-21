@@ -1,179 +1,180 @@
 <?php
+
 /**
-* Zend Framework (http://framework.zend.com/)
-*
-* @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
-* @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
-* @license   http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ */
 
 return array(
      'router' => array(
-            'routes' => array(
-                    'home' => array(
-                        'type' => 'Literal',
-                        'options' => array(
-                              'route'    => '/',
-                              'defaults' => array(
+          'routes' => array(
+               'home' => array(
+                    'type' => 'Literal',
+                    'options' => array(
+                         'route'    => '/',
+                         'defaults' => array(
                               'controller' => 'Application\Controller\Index',
                               'action'     => 'index',
-                              ),
-                        ),
+                         ),
                     ),
-                    'analysis-dashboard' => array(
-                         'type'    => 'Literal',
-                         'options' => array(
-                              'route'    => '/analysis-dashboard',
-                              'defaults' => array(
+               ),
+               'analysis-dashboard' => array(
+                    'type'    => 'Literal',
+                    'options' => array(
+                         'route'    => '/analysis-dashboard',
+                         'defaults' => array(
                               'controller' => 'Application\Controller\Index',
                               'action' => 'analysis-dashboard',
-                              ),
                          ),
                     ),
-                    'quality-control-dashboard' => array(
-                         'type'    => 'Literal',
-                         'options' => array(
-                              'route'    => '/quality-control-dashboard',
-                              'defaults' => array(
+               ),
+               'quality-control-dashboard' => array(
+                    'type'    => 'Literal',
+                    'options' => array(
+                         'route'    => '/quality-control-dashboard',
+                         'defaults' => array(
                               'controller' => 'Application\Controller\Index',
                               'action' => 'quality-control-dashboard',
-                              ),
                          ),
                     ),
-                    'export-recency-data' => array(
-                         'type'    => 'Literal',
-                         'options' => array(
-                             'route'    => '/export-recency-data',
-                              'defaults' => array(
-                                 'controller' => 'Application\Controller\Index',
-                                 'action' => 'export-recency-data',
-                              ),
+               ),
+               'export-recency-data' => array(
+                    'type'    => 'Literal',
+                    'options' => array(
+                         'route'    => '/export-recency-data',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Index',
+                              'action' => 'export-recency-data',
                          ),
                     ),
-                    'login' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                              'route'    => '/login[/:action]',
-                              'defaults' => array(
-                                    'controller' => 'Application\Controller\Login',
-                                    'action' => 'index',
-                              ),
-                        ),
-                  ),
-
-                  'logout' => array(
-                        'type' => 'Zend\Mvc\Router\Http\Literal',
-                        'options' => array(
-                        'route'    => '/logout',
-                        'defaults' => array(
-                              'controller' => 'Application\Controller\Login',
-                              'action'     => 'logout',
-                        ),
-                        ),
-                  ),
-
-                  'common' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                        'route' => '/common[/:action][/][:id]',
-                        'defaults' => array(
-                              'controller' => 'Application\Controller\Common',
-                              'action' => 'index',
-                        ),
-                        ),
-                  ),
-
-                  'facilities' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                              'route' => '/facilities[/:action][/][:id]',
-                              'defaults' => array(
-                                    'controller' => 'Application\Controller\Facilities',
-                                    'action' => 'index',
-                              ),
-                        ),
-                  ),
-                  'user' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                              'route' => '/user[/:action][/][:id]',
-                              'defaults' => array(
-                                    'controller' => 'Application\Controller\User',
-                                    'action' => 'index',
-                              ),
-                        ),
-                  ),
-                  'recency' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                              'route' => '/recency[/:action][/][:id]',
-                              'defaults' => array(
-                                    'controller' => 'Application\Controller\Recency',
-                                    'action' => 'index',
-                              ),
-                        ),
-                  ),
-                  'global-config' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                              'route' => '/global-config[/:action][/][:id]',
-                              'defaults' => array(
-                                    'controller' => 'Application\Controller\GlobalConfig',
-                                    'action' => 'index',
-                              ),
-                        ),
-                  ),
-
-                  'quality-check' => array(
-                       'type' => 'segment',
-                       'options' => array(
-                            'route' => '/quality-check[/:action][/][:id]',
-                            'defaults' => array(
-                                 'controller' => 'Application\Controller\QualityCheck',
-                                 'action' => 'index',
-                            ),
-                       ),
-                  ),
-                  'captcha' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                             'route' => '/captcha[/][:id]',
-                            'defaults' => array(
-                                'controller' => 'Application\Controller\Captcha',
-                                'action' => 'index',
-                            ),
-                        ),
-                    ),
-                    'checkcaptcha' => array(
-                        'type' => 'literal',
-                        'options' => array(
-                            'route' => '/checkcaptcha',
-                            'defaults' => array(
-                                'controller' => 'Application\Controller\Captcha',
-                                'action' => 'check-captcha',
-                            ),
-                        ),
-                    ),
-                    'vl-data' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                              'route' => '/vl-data[/:action][/][:id]',
-                              'defaults' => array(
-                                    'controller' => 'Application\Controller\VlData',
-                                    'action' => 'index',
-                              ),
-                        ),
-                  ),
-                  'settings' => array(
+               ),
+               'login' => array(
                     'type' => 'segment',
                     'options' => array(
-                          'route' => '/settings[/:action][/][:id]',
-                          'defaults' => array(
-                                'controller' => 'Application\Controller\Settings',
-                                'action' => 'index',
-                          ),
+                         'route'    => '/login[/:action]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Login',
+                              'action' => 'index',
+                         ),
                     ),
-              ),
+               ),
+
+               'logout' => array(
+                    'type' => 'Zend\Mvc\Router\Http\Literal',
+                    'options' => array(
+                         'route'    => '/logout',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Login',
+                              'action'     => 'logout',
+                         ),
+                    ),
+               ),
+
+               'common' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/common[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Common',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
+
+               'facilities' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/facilities[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Facilities',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
+               'user' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/user[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\User',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
+               'recency' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/recency[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Recency',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
+               'global-config' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/global-config[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\GlobalConfig',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
+
+               'quality-check' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/quality-check[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\QualityCheck',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
+               'captcha' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/captcha[/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Captcha',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
+               'checkcaptcha' => array(
+                    'type' => 'literal',
+                    'options' => array(
+                         'route' => '/checkcaptcha',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Captcha',
+                              'action' => 'check-captcha',
+                         ),
+                    ),
+               ),
+               'vl-data' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/vl-data[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\VlData',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
+               'settings' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/settings[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Settings',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
                'province' => array(
                     'type' => 'segment',
                     'options' => array(
@@ -183,27 +184,27 @@ return array(
                               'action' => 'index',
                          ),
                     ),
+               ),
+               'district' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/district[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\District',
+                              'action' => 'index',
+                         ),
                     ),
-                    'district' => array(
-                         'type' => 'segment',
-                         'options' => array(
-                              'route' => '/district[/:action][/][:id]',
-                              'defaults' => array(
-                                   'controller' => 'Application\Controller\District',
-                                   'action' => 'index',
-                              ),
+               ),
+               'city' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/city[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\City',
+                              'action' => 'index',
                          ),
-                         ),
-                         'city' => array(
-                              'type' => 'segment',
-                              'options' => array(
-                                   'route' => '/city[/:action][/][:id]',
-                                   'defaults' => array(
-                                        'controller' => 'Application\Controller\City',
-                                        'action' => 'index',
-                                   ),
-                              ),
-                              ),
+                    ),
+               ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -229,8 +230,7 @@ return array(
                                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                         'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                                    ),
-                                   'defaults' => array(
-                                   ),
+                                   'defaults' => array(),
                               ),
                          ),
                     ),
@@ -260,21 +260,22 @@ return array(
 
      'controllers' => array(
           'invokables' => array(
-               'Application\Controller\Index' => 'Application\Controller\IndexController',
-               'Application\Controller\Common' => 'Application\Controller\CommonController',
-               'Application\Controller\Login' => 'Application\Controller\LoginController',
-               'Application\Controller\Facilities' => 'Application\Controller\FacilitiesController',
-               'Application\Controller\User' => 'Application\Controller\UserController',
-               'Application\Controller\Recency' => 'Application\Controller\RecencyController',
-               'Application\Controller\GlobalConfig' => 'Application\Controller\GlobalConfigController',
-               'Application\Controller\QualityCheck' => 'Application\Controller\QualityCheckController',
-               'Application\Controller\Captcha' => 'Application\Controller\CaptchaController',
-               'Application\Controller\VlData' => 'Application\Controller\VlDataController',
-               'Application\Controller\Cron' => 'Application\Controller\CronController',
-               'Application\Controller\Settings' => 'Application\Controller\SettingsController',
-               'Application\Controller\Province' => 'Application\Controller\ProvinceController',
-               'Application\Controller\District' => 'Application\Controller\DistrictController',
-               'Application\Controller\City' => 'Application\Controller\CityController',
+               'Application\Controller\Index'               => 'Application\Controller\IndexController',
+               'Application\Controller\Common'              => 'Application\Controller\CommonController',
+               'Application\Controller\Login'               => 'Application\Controller\LoginController',
+               'Application\Controller\Facilities'          => 'Application\Controller\FacilitiesController',
+               'Application\Controller\User'                => 'Application\Controller\UserController',
+               'Application\Controller\Recency'             => 'Application\Controller\RecencyController',
+               'Application\Controller\GlobalConfig'        => 'Application\Controller\GlobalConfigController',
+               'Application\Controller\QualityCheck'        => 'Application\Controller\QualityCheckController',
+               'Application\Controller\Captcha'             => 'Application\Controller\CaptchaController',
+               'Application\Controller\VlData'              => 'Application\Controller\VlDataController',
+               'Application\Controller\RequestVlTestOnVlsm' => 'Application\Controller\RequestVlTestOnVlsmController',
+               'Application\Controller\Cron'                => 'Application\Controller\CronController',
+               'Application\Controller\Settings'            => 'Application\Controller\SettingsController',
+               'Application\Controller\Province'            => 'Application\Controller\ProvinceController',
+               'Application\Controller\District'            => 'Application\Controller\DistrictController',
+               'Application\Controller\City'                => 'Application\Controller\CityController',
           ),
      ),
      'controller_plugins' => array(
@@ -299,47 +300,47 @@ return array(
           ),
      ),
      'view_helpers' => array(
-          'invokables'=> array(
+          'invokables' => array(
                'category_helper' => 'Application\View\Helper\CategoryHelper',
                'global_config_helper' => 'Application\View\Helper\GlobalConfigHelper',
-               
+
           )
      ),
      // Placeholder for console routes
      'console' => array(
-      'router' => array(
-          'routes' => array(
-              'mail-console-route' => array(
-                  'type'    => 'simple',
-                  'options' => array(
-                      'route'    => 'send-mail',
-                      'defaults' => array(
-                          'controller' => 'Application\Controller\Cron',
-                          'action' => 'send-mail'
-                      ),
-                  ),
-              ),
-              'update-outcome' => array(
-                  'type'    => 'simple',
-                  'options' => array(
-                      'route'    => 'update-outcome',
-                      'defaults' => array(
-                          'controller' => 'Application\Controller\Cron',
-                          'action' => 'update-outcome'
-                      ),
-                  ),
-              ),
-              'vlsm-sync' => array(
-                  'type'    => 'simple',
-                  'options' => array(
-                      'route'    => 'vlsm-sync',
-                      'defaults' => array(
-                          'controller' => 'Application\Controller\Cron',
-                          'action' => 'vlsm-sync'
-                      ),
-                  ),
-              ),
-            ),
-      ),
-),
+          'router' => array(
+               'routes' => array(
+                    'mail-console-route' => array(
+                         'type'    => 'simple',
+                         'options' => array(
+                              'route'    => 'send-mail',
+                              'defaults' => array(
+                                   'controller' => 'Application\Controller\Cron',
+                                   'action' => 'send-mail'
+                              ),
+                         ),
+                    ),
+                    'update-outcome' => array(
+                         'type'    => 'simple',
+                         'options' => array(
+                              'route'    => 'update-outcome',
+                              'defaults' => array(
+                                   'controller' => 'Application\Controller\Cron',
+                                   'action' => 'update-outcome'
+                              ),
+                         ),
+                    ),
+                    'vlsm-sync' => array(
+                         'type'    => 'simple',
+                         'options' => array(
+                              'route'    => 'vlsm-sync',
+                              'defaults' => array(
+                                   'controller' => 'Application\Controller\Cron',
+                                   'action' => 'vlsm-sync'
+                              ),
+                         ),
+                    ),
+               ),
+          ),
+     ),
 );

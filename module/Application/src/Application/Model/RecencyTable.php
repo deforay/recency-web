@@ -4218,4 +4218,52 @@ class RecencyTable extends AbstractTableGateway
         }
         return $responseStatus;
     }
+
+    public function fetchReqVlTestOnVlsmDetails($params){
+        $common = new CommonService();
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id','sample_id'))
+        ->where("vl_result IS NULL")
+        ->where(array('vl_request_sent' => 'no'));
+        $start_date = $end_date = date('Y-m-d');
+        if (isset($params['sampleTestedDates']) && trim($params['sampleTestedDates']) != '') {
+            $s_c_date = explode("to", $_POST['sampleTestedDates']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($params['sampleTestedDates'] != '') {
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+        }
+        if ($params['facilityId'] != '') {
+            $sQuery->where(array('r.facility_id' => base64_decode($params['facilityId'])));
+        }
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        // die($sQueryStr);
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+    }
+
+    public function getDataBySampleId($sId){
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array(
+            'recency_id','facility_id','sample_id','patient_id','sample_collection_date','vl_result','received_specimen_type'
+        ))->where(array('sample_id'=>$sId));
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+    }
+    
+    public function saveRequestFlag($rId){
+        $common = new CommonService();
+        $this->update(array(
+            'vl_request_sent'           => 'yes',
+            'vl_request_sent_date_time' => $common->getDateTime()
+        ),array('recency_id'=>$rId));
+    }
 }

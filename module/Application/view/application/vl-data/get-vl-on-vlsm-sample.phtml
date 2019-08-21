@@ -1,0 +1,9 @@
+<?php 
+$response = "";
+if(isset($result) && count($result) > 0){
+    foreach($result as $val){
+        $response.='<option value="'.$val['sample_id'].'">'.ucwords($val['sample_id']).'</option>';
+    }
+}
+echo $response;
+?>
