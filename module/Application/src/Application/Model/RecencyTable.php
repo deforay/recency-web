@@ -248,7 +248,7 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $formInitiationDate;
             $row[] = $formTransferDate;
 
-            $actionBtn .='<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
+            $actionBtn ='<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
             if ($roleCode != 'manager') {
                 $actionBtn.='<a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>';
             }
