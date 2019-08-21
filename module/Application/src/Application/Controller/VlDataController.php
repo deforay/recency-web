@@ -172,7 +172,7 @@ class VlDataController extends AbstractActionController
                 $result = $recencyService->getEmailSendResult($params);
                 $recencyService->UpdateMultiplePdfUpdatedDate($params);
                 $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+                $globalConfigResult = $globalConfigService->fetchGlobalConfig();
                     //\Zend\Debug\Debug::dump(count($result));die;
                 return new ViewModel(array(
                     'result' => $result,

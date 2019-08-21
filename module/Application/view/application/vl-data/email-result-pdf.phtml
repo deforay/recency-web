@@ -6,7 +6,8 @@ $common = new CommonService();
 $config = new \Zend\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 $domain = $configResult["domain"];
-$logoImage=UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $globalConfigResult[11]["global_value"];
+
+$logoImage=UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $globalConfigResult["logo_image"];
 class MYPDF extends TCPDF {
     //Page header
      public function setHeading($logo,$text,$logoImage) {
