@@ -2040,11 +2040,11 @@ class RecencyTable extends AbstractTableGateway
                                                                                 ELSE 0
                                                                                 END)"),
                     "Samples Pending to be Tested" => new Expression("SUM(CASE
-                                                                                WHEN (((r.hiv_recency_test_date is NULL OR r.hiv_recency_test_date =''))) THEN 1
+                                                                                WHEN (((r.term_outcome is NULL OR r.term_outcome =''))) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Samples Tested" => new Expression("SUM(CASE
-                                                                                WHEN (((r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date !=''))) THEN 1
+                                                                                WHEN (((r.term_outcome is NOT NULL AND r.term_outcome !=''))) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Assay Recent" => new Expression("SUM(CASE
@@ -2060,11 +2060,11 @@ class RecencyTable extends AbstractTableGateway
                                                                                 ELSE 0
                                                                                 END)"),
                     "VL Done" => new Expression("SUM(CASE
-                                                                                WHEN ((vl_result!='' AND vl_result is NOT NULL)) THEN 1
+                                                                                WHEN ((term_outcome ='Assay Recent' OR term_outcome ='assay recent') AND (vl_result!='' AND vl_result is NOT NULL)) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "VL Pending" => new Expression("SUM(CASE
-                                                                                WHEN ((vl_result='' OR vl_result is NULL)) THEN 1
+                                                                                WHEN ((term_outcome ='Assay Recent' OR term_outcome ='assay recent') AND (vl_result='' OR vl_result is NULL)) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "RITA Recent" => new Expression("SUM(CASE
