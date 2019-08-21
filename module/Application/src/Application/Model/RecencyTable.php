@@ -2056,11 +2056,11 @@ class RecencyTable extends AbstractTableGateway
                                                                                 ELSE 0
                                                                                 END)"),
                     "VL Done" => new Expression("SUM(CASE
-                                                                                WHEN ((vl_result!='' AND vl_result is NOT NULL)) THEN 1
+                                                                                WHEN ((term_outcome ='Assay Recent' OR term_outcome ='assay recent') AND (vl_result!='' AND vl_result is NOT NULL)) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "VL Pending" => new Expression("SUM(CASE
-                                                                                WHEN ((vl_result='' OR vl_result is NULL)) THEN 1
+                                                                                WHEN ((term_outcome ='Assay Recent' OR term_outcome ='assay recent') AND (vl_result='' OR vl_result is NULL)) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "RITA Recent" => new Expression("SUM(CASE
