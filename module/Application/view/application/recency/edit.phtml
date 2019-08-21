@@ -327,7 +327,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
 											
 
-											<label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>" for="">Test Kit Lot Number <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+											<label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>" for="testKitLotNo">Test Kit Lot Number <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 												<div class="col-sm-4 <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>">
 													<select  class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no">
 														<option value="">--Select--</option>
@@ -339,11 +339,11 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 												<br>
 												<br>
 												<br>
-											<label class="col-sm-2 col-form-label <?php echo in_array("Kit Expiry Date",$resultArr2)?"showFields":"hideFields";?>" for="">Test Kit Expiry Date <?php echo(in_array("Kit Expiry Date",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+												<label class="col-sm-2 col-form-label <?php echo in_array("Kit Expiry Date",$resultArr2)?"showFields":"hideFields";?>" for="testKitExpDate">Test Kit Expiry Date <?php echo(in_array("Kit Expiry Date",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 												<div class="col-sm-4 <?php echo in_array("Kit Expiry Date",$resultArr2)?"showFields":"hideFields";?>">
-													<input type="text" value="<?php echo $testKitExpiryDate; ?>" class="js-datepicker form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" title="Please enter the Kit Expiry date"  readonly="readonly">
+													<input type="text" value="<?php echo $testKitExpiryDate; ?>" class="form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" placeholder="Please select the kit lot no" title="Please select the kit lot no"  readonly="readonly">
 												</div>
-												<label class="col-sm-2 col-form-label <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>" for="">Tester Name <?php echo(in_array("Tester Name",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+												<label class="col-sm-2 col-form-label <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>" for="testerName">Tester Name <?php echo(in_array("Tester Name",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 												<div class="col-sm-4 <?php echo in_array("Tester Name",$resultArr2)?"showFields":"hideFields";?>">
 													<input type="text" value="<?php echo $result['tester_name'];?>" class="typeahead form-control <?php echo $testerName; ?>"  id="testerName" name="testerName" placeholder="Enter the tester name" title="Please enter the tester name">
 												</div>

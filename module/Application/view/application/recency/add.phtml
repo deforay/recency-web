@@ -298,12 +298,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 </select>
                                             </div>
 
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Kit Expiry Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Test Kit Expiry Date <?php echo (in_array("Kit Expiry Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
-                                            <div class="col-sm-4 <?php echo in_array("Kit Expiry Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <input type="text" class="js-datepicker form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the kit expiry date" value="" title="Please enter the Kit Expiry date" readonly="readonly">
-                                            </div>
-
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Test Kit Lot No. <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testKitLotNo">Test Kit Lot No. <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select  class="form-control <?php echo (in_array("Test Kit Lot No", $resultArr) ? "isRequired" : "");echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no">
                                                     <option value="">--Select--</option>
@@ -313,11 +308,15 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 </select>
                                             </div>
 
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Kit Expiry Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testKitExpDate">Test Kit Expiry Date <?php echo (in_array("Kit Expiry Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Kit Expiry Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" class="form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" placeholder="Please select the kit lot no" title="Please select the kit lot no" readonly="readonly">
+                                            </div>
                                             <br>
                                             <br>
 
 
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Tester Name <?php echo (in_array("Tester Name", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testerName">Tester Name <?php echo (in_array("Tester Name", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <input type="text" name="testerName" id="testerName" class="typeahead form-control <?php echo $testerName; ?>" placeholder="Enter the tester name" title="Please enter the tester name" />
                                             </div>
