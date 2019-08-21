@@ -97,6 +97,7 @@ class SettingsTable extends AbstractTableGateway
         $roleId = $sessionLogin->roleId;
 
         $sQuery = $sql->select()->from(array('t' => 'test_kit_information'))
+        ->join(array('u'=>'users'),'t.added_by = u.user_id',array('user_name'))
             //->join(array('p' => 'province_details'), 'p.province_id=f.province', array('province_name'), 'left')
             //->join(array('d' => 'district_details'), 'd.district_id=f.district', array('district_name'), 'left')
         ;
@@ -140,6 +141,8 @@ class SettingsTable extends AbstractTableGateway
             $row[] = ucwords($aRow['kit_lot_no']);
             $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
             $row[] = ucwords($aRow['status']);
+            $row[] = date('d-M-Y H:s A',strtotime($aRow['added_on']));
+            $row[] = ucwords($aRow['user_name']);
             $row[] = '<a href="/settings/edit/' . base64_encode($aRow['test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             $output['aaData'][] = $row;
         }
