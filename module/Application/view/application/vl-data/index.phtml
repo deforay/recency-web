@@ -1,7 +1,13 @@
 <?php
 use Zend\Session\Container;
-
+$syn = false;
+foreach($globalConfigResult as $result){
+    if($result['global_name'] == 'recency_to_vlsm_sync' && $result['global_value'] == 'yes'){
+        $syn = true;
+    }
+}
 $sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
 ?>
 <style>
     .dataTables_empty{
@@ -33,8 +39,12 @@ $sessionLogin = new Container('credo');
             <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
+                        <?php if($roleCode != "manager"){?>
                         <a href="<?php echo $this->url('vl-data', array('action' => 'upload-result')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Upload Viral Load Data</a>
+                        <?php if($syn){ ?>
                         <a href="<?php echo $this->url('vl-data', array('action' => 'request-vl-test-on-vlsm')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-file-medical-alt"></i>&nbsp;Request VL Test on VLSM</a>
+                        <?php }
+                        }?>
                     </li>
                 </ol>
             </nav>

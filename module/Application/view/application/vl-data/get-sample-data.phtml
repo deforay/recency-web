@@ -1,5 +1,9 @@
 <?php
+use Zend\Session\Container;
+
 $common = new \Application\Service\CommonService();
+$sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
 ?>
 <hr />
 <a href="javascript:void(0)" class="btn btn-info saveResult" onclick="updateVlResult();">Save Result</a>
@@ -111,7 +115,7 @@ $common = new \Application\Service\CommonService();
                         <td><?php echo $sample['final_outcome']; ?></td>
                         <td>
                             <?php
-                            if ($sample['vl_result'] != '' && $sample['term_outcome'] == 'Assay Recent') {
+                            if ($sample['vl_result'] != '' && $sample['term_outcome'] == 'Assay Recent' && $roleCode != "manager") {
                                 ?>
                                 <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="editVlResult('<?php echo $sample['recency_id']; ?>');"> <i class="fa fa-edit"></i> Edit</a>
                             <?php

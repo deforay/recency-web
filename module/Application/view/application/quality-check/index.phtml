@@ -11,10 +11,11 @@ $roleCode = $sessionLogin->roleCode;
                <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                          <li class="breadcrumb-item">
+                             <?php if($roleCode != "manager"){ ?>
                               <a href="<?php echo $this->url('quality-check',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add QC Testing</a>
-                                <?php if($roleCode=='admin'){ ?>
-                                   <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportQCData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-                                <?php } ?>
+                            <?php } if($roleCode=='admin' || $roleCode=='manager'){ ?>
+                                <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportQCData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                            <?php } ?>
                          </li>
                     </ol>
                </nav>

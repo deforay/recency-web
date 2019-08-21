@@ -299,20 +299,28 @@ class VlDataController extends AbstractActionController
     
     public function requestVlTestOnVlsmAction()
     {
-         $request = $this->getRequest();
-         if ($request->isPost()) {
-            $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $recencyService->postReqVlTestOnVlsmDetails($params);
-            return $this->_redirect()->toUrl('/vl-data');
-         }else{
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult = $facilityService->getFacilitiesAllDetails();
-    
-            return new ViewModel(array(
-                'facilityResult' => $facilityResult
-            ));
-         }
+        $syn = false;
+        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+        $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
+        foreach($globalConfigResult as $result){
+            if($result['global_name'] == 'recency_to_vlsm_sync' && $result['global_value'] == 'no'){
+                return $this->_redirect()->toUrl('/vl-data');
+            }
+        }
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+        $params = $request->getPost();
+        $recencyService = $this->getServiceLocator()->get('RecencyService');
+        $recencyService->postReqVlTestOnVlsmDetails($params);
+        return $this->_redirect()->toUrl('/vl-data');
+        }else{
+        $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+        $facilityResult = $facilityService->getFacilitiesAllDetails();
+
+        return new ViewModel(array(
+            'facilityResult' => $facilityResult
+        ));
+        }
     }
 
     public function getVlOnVlsmSampleAction() {

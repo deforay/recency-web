@@ -1,172 +1,180 @@
 <?php
+
 use Zend\Session\Container;
+
 $container = new Container('alert');
 $loginContainer = new Container('credo');
 ?>
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-        <title>Recency Management</title>
-        <meta name="description" content="Recency Management">
-        <!-- Icons -->
-        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
-        <link rel="shortcut icon" href="assets/media/favicons/favicon.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
-        <!-- END Icons -->
 
-        <!-- Stylesheets -->
-        <!-- Fonts and Dashmix framework -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/dashmix.min.css'?>" rel="stylesheet">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Recency Management</title>
+    <meta name="description" content="Recency Management">
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="assets/media/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <!-- END Icons -->
 
-        <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
-        <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/xwork.min.css"> -->
-        <!-- END Stylesheets -->
-    </head>
-    <body>
-        <!-- Page Container -->
-        <div id="page-container">
+    <!-- Stylesheets -->
+    <!-- Fonts and Dashmix framework -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/dashmix.min.css' ?>" rel="stylesheet">
 
-            <!-- Main Container -->
-            <main id="main-container">
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/xwork.min.css"> -->
+    <!-- END Stylesheets -->
+</head>
 
-                <!-- Page Content -->
+<body>
+    <!-- Page Container -->
+    <div id="page-container">
 
-                <!-- <div class="bg-video" data-vide-bg="<?php echo $this->basePath() . '/assets/media/videos/city_night'; ?>" data-vide-options="posterType: jpg"> -->
+        <!-- Main Container -->
+        <main id="main-container">
 
-                <div class="bg-image" style="background-image: url(<?php echo $this->basePath() . '/assets/media/photos/recency-web-bg.png'?>);">
-                    <div class="row no-gutters bg-primary-op">
-                        <!-- Main Section -->
-                        <div class="hero-static col-md-6 d-flex align-items-center bg-white">
-                            <div class="p-3 w-100">
-                                <!-- Header -->
-                                <div class="mb-3 text-center">
-                                    <a class="link-fx font-w700 font-size-h1" href="index.html">
-                                        <span class="text-dark">Recency</span> <span class="text-primary">Web</span>
-                                    </a>
-                                    <p class="text-uppercase font-w700 font-size-sm text-muted">Recency Management</p>
+            <!-- Page Content -->
 
-                                </div>
-                                <!-- END Header -->
+            <!-- <div class="bg-video" data-vide-bg="<?php echo $this->basePath() . '/assets/media/videos/city_night'; ?>" data-vide-options="posterType: jpg"> -->
 
-                                <div class="row no-gutters justify-content-center">
-                                    <div class="col-sm-8 col-xl-6">
-                                        <form class="js-validation-signin" id="adminLoginInformation" action="<?php echo $this->url('login',array('action'=>'index')); ?>" method="post" autocomplete="off" onsubmit="return doLogin();return false;">
-                                            <div class="py-3">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control isRequired form-control-lg form-control-alt" id="login-username" name="userName" placeholder="Email" title="Please enter E-mail id">
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="password" class="form-control isRequired form-control-lg form-control-alt" id="login-password" name="loginPassword" placeholder="Password" title="Please enter password">
-                                                </div>
+            <div class="bg-image" style="background-image: url(<?php echo $this->basePath() . '/assets/media/photos/recency-web-bg.png' ?>);">
+                <div class="row no-gutters bg-primary-op">
+                    <!-- Main Section -->
+                    <div class="hero-static col-md-6 d-flex align-items-center bg-white">
+                        <div class="p-3 w-100">
+                            <!-- Header -->
+                            <div class="mb-3 text-center">
+                                <a class="link-fx font-w700 font-size-h1" href="index.html">
+                                    <span class="text-dark">Recency</span> <span class="text-primary">Web</span>
+                                </a>
+                                <p class="text-uppercase font-w700 font-size-sm text-muted">Recency Management</p>
+
+                            </div>
+                            <!-- END Header -->
+
+                            <div class="row no-gutters justify-content-center">
+                                <div class="col-sm-8 col-xl-6">
+                                    <form class="js-validation-signin" id="adminLoginInformation" action="<?php echo $this->url('login', array('action' => 'index')); ?>" method="post" autocomplete="off" onsubmit="return doLogin();return false;">
+                                        <div class="py-3">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control isRequired form-control-lg form-control-alt" id="login-username" name="userName" placeholder="Email" title="Please enter E-mail id">
                                             </div>
                                             <div class="form-group">
+                                                <input type="password" class="form-control isRequired form-control-lg form-control-alt" id="login-password" name="loginPassword" placeholder="Password" title="Please enter password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-5">
                                                     <img id="capDiv" style="width:120px;height:61px;" src="/captcha/<?php echo rand(); ?>" />
                                                 </div>
                                                 <div class="col-md-7">
-                                                
-											<input type="text" class="pull-right form-control isRequired" placeholder="Enter text image" id="challengeResponse" title="Please enter the text from the image." maxlength="5" />
-                                            &nbsp;<a id="captcha-reload" href="javascript:getCaptcha('capDiv');">Get a new image</a>
-											
+
+                                                    <input type="text" class="pull-right form-control isRequired" placeholder="Enter text image" id="challengeResponse" title="Please enter the text from the image." maxlength="5" />
+                                                    &nbsp;<a id="captcha-reload" href="javascript:getCaptcha('capDiv');">Get a new image</a>
+
                                                 </div>
                                             </div>
-                                            
-											
-										<br/>
-                                                <button type="submit" class="btn btn-block btn-hero-lg btn-hero-primary" onClick="doLogin();return false;" >
-                                                    <i class="fa fa-fw fa-sign-in-alt mr-1"></i> Sign In
-                                                </button>
-                                                
-                                            </div>
-                                        </form>
-                                    </div>
+
+
+                                            <br />
+                                            <button type="submit" class="btn btn-block btn-hero-lg btn-hero-primary" onClick="doLogin();return false;">
+                                                <i class="fa fa-fw fa-sign-in-alt mr-1"></i> Sign In
+                                            </button>
+
+                                        </div>
+                                    </form>
                                 </div>
-                                <!-- END Sign In Form -->
                             </div>
+                            <!-- END Sign In Form -->
                         </div>
-                        <!-- END Main Section -->
-
-                        <!-- Meta Info Section -->
-                        <div class="hero-static col-md-6 d-none d-md-flex align-items-md-center justify-content-md-center text-md-center">
-                            <div class="p-3">
-                                <p class="display-4 font-w700 text-white mb-3">
-                                    Recency Data Management
-                                </p>
-                                <p class="font-size-lg font-w600 text-white-75 mb-0">
-                                    &copy; <span class="js-year-copy"><?php echo date('Y'); ?></span>
-                                </p>
-                            </div>
-                        </div>
-                        <!-- END Meta Info Section -->
                     </div>
+                    <!-- END Main Section -->
+
+                    <!-- Meta Info Section -->
+                    <div class="hero-static col-md-6 d-none d-md-flex align-items-md-center justify-content-md-center text-md-center">
+                        <div class="p-3">
+                            <p class="display-4 font-w700 text-white mb-3">
+                                Recency Data Management
+                            </p>
+                            <p class="font-size-lg font-w600 text-white-75 mb-0">
+                                &copy; <span class="js-year-copy"><?php echo date('Y'); ?></span>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- END Meta Info Section -->
                 </div>
-                <!-- END Page Content -->
+            </div>
+            <!-- END Page Content -->
 
-            </main>
-            <!-- END Main Container -->
-        </div>
-        <!-- END Page Container -->
+        </main>
+        <!-- END Main Container -->
+    </div>
+    <!-- END Page Container -->
 
-        <script src="<?php echo $this->basePath() . '/assets/js/dashmix.core.min.js'; ?>"></script>
-        <script src="<?php echo $this->basePath() . '/assets/js/deforayValidation.js'; ?>"></script>
-        <script src="<?php echo $this->basePath() . '/assets/js/plugins/jquery-validation/jquery.validate.min.js'; ?>"></script>
-        
+    <script src="<?php echo $this->basePath() . '/assets/js/dashmix.core.min.js'; ?>"></script>
+    <script src="<?php echo $this->basePath() . '/assets/js/deforayValidation.js'; ?>"></script>
+    <script src="<?php echo $this->basePath() . '/assets/js/plugins/jquery-validation/jquery.validate.min.js'; ?>"></script>
 
-        <script type="text/javascript">
-            duplicateName = true;
-            $(document).ready(function() {
-                <?php
-                if (isset($container->alertMsg) && $container->alertMsg != "") {
+
+    <script type="text/javascript">
+        duplicateName = true;
+        $(document).ready(function() {
+            <?php
+            if (isset($container->alertMsg) && $container->alertMsg != "") {
                 ?>
-                alert("<?php echo $container->alertMsg; ?>");
-                <?php
+            alert("<?php echo $container->alertMsg; ?>");
+            <?php
                 $container->alertMsg = "";
                 unset($container->alertMsg);
-                }
-                ?>
-            });
-            function doLogin(){
-                duplicateName = true;
-                flag = deforayValidator.init({
-                formId: 'adminLoginInformation'
-                });
-
-                if(flag){
-                    challenge_field = document.getElementById("challengeResponse").value;
-                    
-			if (challenge_field != "") {
-			$.post("<?php echo $this->url('checkcaptcha',array('action' => 'check-captcha')); ?>", {challenge_field: challenge_field},
-			function(data) {
-			    if (data == 'fail') {
-                document.getElementById("challengeResponse").value = "";
-				alert("Text you entered from the image is incorrect. Please try again","err");
-				getCaptcha('capDiv');
-				return false;
-			    } else{
-                    document.getElementById('adminLoginInformation').submit();
-			    }
-			});
-			}else {
-			alert("Please enter the text from the image to proceed.","err");
-			}
-
-                }
             }
-            function getCaptcha(captchaDivId) {
-		var d = new Date();
-		var randstr = 'r-' + d.getFullYear() + d.getSeconds() + d.getMilliseconds() + Math.random();
-		$("#" + captchaDivId).attr("src", '/captcha/' + randstr);
-		$("#" + captchaDivId).load(function() {
-		    
-		});
-	}
+            ?>
+        });
 
-        </script>
-    </body>
+        function doLogin() {
+            duplicateName = true;
+            flag = deforayValidator.init({
+                formId: 'adminLoginInformation'
+            });
+
+            if (flag) {
+                challenge_field = document.getElementById("challengeResponse").value;
+
+                if (challenge_field != "") {
+                    $.post("<?php echo $this->url('checkcaptcha', array('action' => 'check-captcha')); ?>", {
+                            challenge_field: challenge_field
+                        },
+                        function(data) {
+                            if (data == 'fail') {
+                                document.getElementById("challengeResponse").value = "";
+                                alert("Text you entered from the image is incorrect. Please try again", "err");
+                                getCaptcha('capDiv');
+                                return false;
+                            } else {
+                                document.getElementById('adminLoginInformation').submit();
+                            }
+                        });
+                } else {
+                    alert("Please enter the text from the image to proceed.", "err");
+                }
+
+            }
+        }
+
+        function getCaptcha(captchaDivId) {
+            var d = new Date();
+            var randstr = 'r-' + d.getFullYear() + d.getSeconds() + d.getMilliseconds() + Math.random();
+            $("#" + captchaDivId).attr("src", '/captcha/' + randstr);
+            $("#" + captchaDivId).load(function() {
+
+            });
+        }
+    </script>
+</body>
+
 </html>

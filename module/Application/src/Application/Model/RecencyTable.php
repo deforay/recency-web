@@ -191,7 +191,7 @@ class RecencyTable extends AbstractTableGateway
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
-
+        $actionBtn = "";
         foreach ($rResult as $aRow) {
 
             $row = array();
@@ -248,11 +248,15 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $formInitiationDate;
             $row[] = $formTransferDate;
 
-            $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
-                         <a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>
-                         <a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
+            $actionBtn .='<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
+            if ($roleCode != 'manager') {
+                $actionBtn.='<a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>';
+            }
+            
+            $actionBtn.='<a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
                          <a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>
                          </div>';
+            $row[] = $actionBtn;
 
             $output['aaData'][] = $row;
         }

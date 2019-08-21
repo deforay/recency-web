@@ -307,3 +307,7 @@ ALTER TABLE `recency` ADD `vl_lab` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_requ
 
 -- Amit 26 June 2019
 UPDATE `recency` SET `term_outcome` = 'Invalid' where `term_outcome` like 'Invalid%'
+
+-- Thanaseelan 21-Aug-2019
+INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `role_status`) VALUES (NULL, 'Manager', 'manager', 'active');
+INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Recency to VLSM sync', 'recency_to_vlsm_sync', 'no');

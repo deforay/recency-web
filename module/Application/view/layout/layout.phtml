@@ -1,56 +1,58 @@
 <?php
+
 use Zend\Session\Container;
+
 $alertContainer = new Container('alert');
 $sessionLogin = new Container('credo');
 $role = $sessionLogin->roleId;
 $roleCode = $sessionLogin->roleCode;
 $userName = $sessionLogin->userName;
 $GlobalConfigRes = $this->GlobalConfigHelper();
- //\Zend\Debug\Debug::dump($GlobalConfigRes);die;
-$dashboardMenu="";
-$dashboardMenu.="<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
-$dashboardMenu.="<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=". $this->url('analysis-dashboard')."><span class='nav-main-link-name'>Analysis</span></a></li>";
-$dashboardMenu.="<li id='nav-main-item'><a id='quality-control-dashboard' class='nav-main-link' href=". $this->url('quality-control-dashboard')."><span class='nav-main-link-name'>Quality Control</span></a></li>";
+//\Zend\Debug\Debug::dump($GlobalConfigRes);die;
+$dashboardMenu = "";
+$dashboardMenu .= "<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
+$dashboardMenu .= "<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=" . $this->url('analysis-dashboard') . "><span class='nav-main-link-name'>Analysis</span></a></li>";
+$dashboardMenu .= "<li id='nav-main-item'><a id='quality-control-dashboard' class='nav-main-link' href=" . $this->url('quality-control-dashboard') . "><span class='nav-main-link-name'>Quality Control</span></a></li>";
 
 $userMenu = "";
-$userMenu.="<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=". $this->url('global-config', array('action' => 'index')) ."><span class='nav-main-link-name'>Global Config</span></a></li>";
-$userMenu.="<li id='nav-main-item'><a id='user' class='nav-main-link' href=". $this->url('user', array('action' => 'index')) ."><span class='nav-main-link-name'>User</span></a></li>";
-$userMenu.="<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=". $this->url('facilities', array('action' => 'index')) ."><span class='nav-main-link-name'>Facilities</span></a></li>";
-$userMenu.="<li id='nav-main-item'><a id='province' class='nav-main-link' href=". $this->url('province', array('action' => 'index')) ."><span class='nav-main-link-name'>".$GlobalConfigRes[0]['global_value']."</span></a></li>";
-$userMenu.="<li id='nav-main-item'><a id='district' class='nav-main-link' href=". $this->url('district', array('action' => 'index')) ."><span class='nav-main-link-name'>".$GlobalConfigRes[1]['global_value']."</span></a></li>";
-$userMenu.="<li id='nav-main-item'><a id='city' class='nav-main-link' href=". $this->url('city', array('action' => 'index')) ."><span class='nav-main-link-name'>".$GlobalConfigRes[2]['global_value']."</span></a></li>";
+$userMenu .= "<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=" . $this->url('global-config', array('action' => 'index')) . "><span class='nav-main-link-name'>Global Config</span></a></li>";
+$userMenu .= "<li id='nav-main-item'><a id='user' class='nav-main-link' href=" . $this->url('user', array('action' => 'index')) . "><span class='nav-main-link-name'>User</span></a></li>";
+$userMenu .= "<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=" . $this->url('facilities', array('action' => 'index')) . "><span class='nav-main-link-name'>Facilities</span></a></li>";
+$userMenu .= "<li id='nav-main-item'><a id='province' class='nav-main-link' href=" . $this->url('province', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[0]['global_value'] . "</span></a></li>";
+$userMenu .= "<li id='nav-main-item'><a id='district' class='nav-main-link' href=" . $this->url('district', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[1]['global_value'] . "</span></a></li>";
+$userMenu .= "<li id='nav-main-item'><a id='city' class='nav-main-link' href=" . $this->url('city', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[2]['global_value'] . "</span></a></li>";
 
 $recencyMenu = "";
-$recencyMenu.="<li id='nav-main-item'><a id='recency' class='nav-main-link' href=". $this->url('recency', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
+$recencyMenu .= "<li id='nav-main-item'><a id='recency' class='nav-main-link' href=" . $this->url('recency', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
 
 $settingsMenu = "";
-$settingsMenu.="<li id='nav-main-item'><a id='settings' class='nav-main-link' href=". $this->url('settings', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
+$settingsMenu .= "<li id='nav-main-item'><a id='settings' class='nav-main-link' href=" . $this->url('settings', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
 
 
 $qcMenu = "";
-$qcMenu="<li id='nav-main-item'><a id='quality-check' class='nav-main-link' href=". $this->url('quality-check', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-settings'></i> Quality Check Testing</span></a></li>";
+$qcMenu = "<li id='nav-main-item'><a id='quality-check' class='nav-main-link' href=" . $this->url('quality-check', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-settings'></i> Quality Check Testing</span></a></li>";
 
 $vlDataMenu = "";
-$vlDataMenu="<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'index')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Pending Results</span></a></li>";
+$vlDataMenu = "<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Pending Results</span></a></li>";
 
 $recentMenu = "";
-$recentMenu="<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'recent-infection')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Recent Infections</span></a></li>";
+$recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Recent Infections</span></a></li>";
 
 $longTermMenu = "";
-$longTermMenu="<li id='nav-main-item'><a id='lt-infection' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'lt-infection')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Long Term Infections</span></a></li>";
+$longTermMenu = "<li id='nav-main-item'><a id='lt-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'lt-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Long Term Infections</span></a></li>";
 
 $tatMenu = "";
-$tatMenu="<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'tat-report')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> TAT Report</span></a></li>";
+$tatMenu = "<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'tat-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> TAT Report</span></a></li>";
 
 $weeklyReportMenu = "";
-$weeklyReportMenu="<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'weekly-report')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
+$weeklyReportMenu = "<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'weekly-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
 
 $qcReportMenu = "";
-$qcReportMenu="<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'qc-report')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
+$qcReportMenu = "<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'qc-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
 
 
 $emailMenu = "";
-$emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'email-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
+$emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'email-result')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
 
 // $uploadResultMenu = "";
 // $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'upload-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Upload Results</span></a></li>";
@@ -59,6 +61,7 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
 
 <!doctype html>
 <html lang="en">
+
 <head>
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -66,20 +69,21 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
 
      <title>Recency Management</title>
 
-     <link rel="shortcut icon" href="<?php echo $this->basePath().'/assets/media/favicons/favicon.png';?>">
+     <link rel="shortcut icon" href="<?php echo $this->basePath() . '/assets/media/favicons/favicon.png'; ?>">
 
 
 
-     <link rel="icon" type="image/png" sizes="192x192" href="<?php echo $this->basePath().'/assets/media/favicons/favicon-192x192.png';?>">
-     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $this->basePath().'/assets/media/favicons/apple-touch-icon-180x180.png';?>">
+     <link rel="icon" type="image/png" sizes="192x192" href="<?php echo $this->basePath() . '/assets/media/favicons/favicon-192x192.png'; ?>">
+     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $this->basePath() . '/assets/media/favicons/apple-touch-icon-180x180.png'; ?>">
 
      <style>
-     .mandatory{
-          color:red;
-     }
-     .not-mandatory{
-          color:#FFFFFF;
-     }
+          .mandatory {
+               color: red;
+          }
+
+          .not-mandatory {
+               color: #FFFFFF;
+          }
      </style>
      <!-- Stylesheets -->
      <!-- Fonts and Dashmix framework -->
@@ -91,33 +95,34 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700">
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/dashmix.min.css'?>" rel="stylesheet">
-     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/alert.css'?>" rel="stylesheet">
-     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css'?>" rel="stylesheet">
-     
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/dashmix.min.css' ?>" rel="stylesheet">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/alert.css' ?>" rel="stylesheet">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css' ?>" rel="stylesheet">
+
 
      <!-- vivek -->
      <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/select2/css/select2.min.css' ?>">
      <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/select2.css' ?>">
 
-     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/datatables/dataTables.bootstrap4.css'?>" rel="stylesheet">
-     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css'?>" rel="stylesheet">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/datatables/dataTables.bootstrap4.css' ?>" rel="stylesheet">
+     <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css' ?>" rel="stylesheet">
 </head>
+
 <body>
      <!-- Page Container -->
      <div id="page-container" class="sidebar-o sidebar-mini enable-page-overlay side-scroll page-header-fixed page-header-dark main-content-narrow">
 
-     <!-- sidebar-o enable-page-overlay side-scroll page-header-fixed page-header-dark main-content-narrow -->
-     
+          <!-- sidebar-o enable-page-overlay side-scroll page-header-fixed page-header-dark main-content-narrow -->
+
           <!-- Side Overlay-->
           <aside id="side-overlay">
                <!-- Side Header -->
-               <div class="bg-image" style="background-image: url('<?php echo $this->basePath().'/assets/media/various/bg_side_overlay_header.jpg';?>');">
+               <div class="bg-image" style="background-image: url('<?php echo $this->basePath() . '/assets/media/various/bg_side_overlay_header.jpg'; ?>');">
                     <div class="bg-primary-op">
                          <div class="content-header">
                               <!-- User Avatar -->
                               <a class="img-link mr-1" href="be_pages_generic_profile.html">
-                                   <img class="img-avatar img-avatar48" src="<?php echo $this->basePath().'/assets/media/avatars/avatar10.jpg';?>" alt="">
+                                   <img class="img-avatar img-avatar48" src="<?php echo $this->basePath() . '/assets/media/avatars/avatar10.jpg'; ?>" alt="">
                               </a>
                               <!-- END User Avatar -->
 
@@ -141,109 +146,115 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
           </aside>
           <!-- END Side Overlay -->
 
-          
+
 
           <nav id="sidebar" aria-label="Main Navigation" data-simplebar="init">
-          <div class="simplebar-track vertical" style="visibility: hidden;">
-            <div class="simplebar-scrollbar" style="visibility: visible; top: 0px; height: 358px;">
-            </div>
-          </div>
-          <div class="simplebar-track horizontal" style="visibility: hidden;">
-            <div class="simplebar-scrollbar" style="visibility: visible; left: 0px; width: 138px;">
-            </div>
-          </div>
-          <div class="simplebar-scroll-content" style="padding-right: 15px; margin-bottom: -30px;">
-          <div class="simplebar-content" style="padding-bottom: 15px; margin-right: -15px;">
-  
-               <!-- Side Header -->
-               <div class="bg-header-dark">
-                    <div class="content-header bg-white-10">
-                         <!-- Logo -->
-                         <a class="link-fx font-w600 font-size-md text-white" href="" style=" font-size: 25px; ">
-                              <span class="text-white">Recency</span>&nbsp;<span class="text-white-75">Web</span>
-                         </a>
-                         <!-- END Logo -->
+               <div class="simplebar-track vertical" style="visibility: hidden;">
+                    <div class="simplebar-scrollbar" style="visibility: visible; top: 0px; height: 358px;">
                     </div>
                </div>
+               <div class="simplebar-track horizontal" style="visibility: hidden;">
+                    <div class="simplebar-scrollbar" style="visibility: visible; left: 0px; width: 138px;">
+                    </div>
+               </div>
+               <div class="simplebar-scroll-content" style="padding-right: 15px; margin-bottom: -30px;">
+                    <div class="simplebar-content" style="padding-bottom: 15px; margin-right: -15px;">
 
-               <!-- END Side Header -->
+                         <!-- Side Header -->
+                         <div class="bg-header-dark">
+                              <div class="content-header bg-white-10">
+                                   <!-- Logo -->
+                                   <a class="link-fx font-w600 font-size-md text-white" href="" style=" font-size: 25px; ">
+                                        <span class="text-white">Recency</span>&nbsp;<span class="text-white-75">Web</span>
+                                   </a>
+                                   <!-- END Logo -->
+                              </div>
+                         </div>
 
-               <!-- Side Navigation -->
-               <div class="content-side content-side-full">
-                    <ul class="nav-main">
-                         <li class="nav-main-heading"></li>
-                              <li class="nav-main-item " id="dashboard">
-                                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                                        <i class="nav-main-link-icon si si-cursor"></i>
-                                        <span class="nav-main-link-name ">Dashboard</span>
-                                   </a>
-                                   <ul class="nav-main-submenu">
-                                        <?php echo $dashboardMenu;?>
-                                   </ul>
-                         </li>
-                         <?php if($roleCode == 'admin'){ ?>
-                              <li class="nav-main-heading"></li>
-                              <li class="nav-main-item " id="manage">
-                                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                                        <i class="nav-main-link-icon si si-grid"></i>
-                                        <span class="nav-main-link-name ">Manage</span>
-                                   </a>
-                                   <ul class="nav-main-submenu">
-                                        <?php echo $userMenu;?>
-                                   </ul>
-                              </li>
-                            
-                         <?php } ?> 
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $settingsMenu;?>
-                         <?php
-                            if($roleCode != 'MGMT'){ 
-                         ?>
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $recencyMenu;?>
-                       
-                         
-                         <?php if($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user'){ ?>
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $qcMenu;?>
-                         <?php } if($roleCode=='VLTS' || $roleCode == 'admin'){ ?>
-                         <li class="nav-main-heading" style="padding:3px;"></li>
-                         <?php echo $vlDataMenu; 
-                         }
-                    }
-                         if($roleCode=='VLTS' || $roleCode == 'admin'){
-                          ?>
-                          <li class="nav-main-heading" style="padding:3px;"></li>
-                          <?php echo $emailMenu; ?>
-                          <li class="nav-main-heading" style="padding:3px;"></li>
-                          <?php //echo $uploadResultMenu; -->
-                          }
-                        if($roleCode=='VLTS' || $roleCode == 'admin' || $roleCode == 'user'){ ?>
-                              <li class="nav-main-heading"></li>
-                              <li class="nav-main-item " id="reports">
-                                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                                        <i class="nav-main-link-icon si si-grid"></i>
-                                        <span class="nav-main-link-name ">Reports</span>
-                                   </a>
-                                   <ul class="nav-main-submenu">
-                                    <li class="nav-main-heading" style="padding:3px;"></li>
-                                    <?php echo $recentMenu; ?>
-                                    <li class="nav-main-heading" style="padding:3px;"></li>
-                                    <?php echo $longTermMenu; ?>
-                                    <li class="nav-main-heading" style="padding:3px;"></li>
-                                    <?php echo $tatMenu;?>
-                                    <li class="nav-main-heading" style="padding:3px;"></li>
-                                    <?php echo $weeklyReportMenu; ?>
-                                    <li class="nav-main-heading" style="padding:3px;"></li>
-                                    <?php echo $qcReportMenu; ?>
-                                   </ul>
-                              </li>
-                         <?php }
-                          ?>
-                         
+                         <!-- END Side Header -->
 
-                    </ul>
-                    </div></div> </div>
+                         <!-- Side Navigation -->
+                         <div class="content-side content-side-full">
+                              <ul class="nav-main">
+                                   <li class="nav-main-heading"></li>
+                                   <?php if($roleCode != 'manager'){ ?>
+                                        <li class="nav-main-item " id="dashboard">
+                                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                                                  <i class="nav-main-link-icon si si-cursor"></i>
+                                                  <span class="nav-main-link-name ">Dashboard</span>
+                                             </a>
+                                             <ul class="nav-main-submenu">
+                                                  <?php echo $dashboardMenu; ?>
+                                             </ul>
+                                        </li>
+                                   <?php }?>
+                                   <?php if ($roleCode == 'admin') { ?>
+                                   <li class="nav-main-heading"></li>
+                                   <li class="nav-main-item " id="manage">
+                                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                                             <i class="nav-main-link-icon si si-grid"></i>
+                                             <span class="nav-main-link-name ">Manage</span>
+                                        </a>
+                                        <ul class="nav-main-submenu">
+                                             <?php echo $userMenu; ?>
+                                        </ul>
+                                   </li>
+
+                                   <?php }
+                                   if($roleCode != 'manager'){ ?>
+                                   <li class="nav-main-heading" style="padding:3px;"></li>
+                                   <?php echo $settingsMenu; 
+                                   }
+                                   if ($roleCode != 'MGMT') {
+                                        ?>
+                                   <li class="nav-main-heading" style="padding:3px;"></li>
+                                   <?php echo $recencyMenu; ?>
+
+
+                                   <?php if ($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user' || $roleCode == 'manager') { ?>
+                                   <li class="nav-main-heading" style="padding:3px;"></li>
+                                   <?php echo $qcMenu; ?>
+                                   <?php }
+                                        if ($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'manager') { ?>
+                                   <li class="nav-main-heading" style="padding:3px;"></li>
+                                   <?php echo $vlDataMenu;
+                                        }
+                                   }
+                                   if ($roleCode == 'VLTS' || $roleCode == 'admin') {
+                                        ?>
+                                   <li class="nav-main-heading" style="padding:3px;"></li>
+                                   <?php echo $emailMenu; ?>
+                                   <li class="nav-main-heading" style="padding:3px;"></li>
+                                   <?php //echo $uploadResultMenu; -->
+                                   }
+                                   if ($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'user' || $roleCode == 'manager') { ?>
+                                   <li class="nav-main-heading"></li>
+                                   <li class="nav-main-item " id="reports">
+                                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                                             <i class="nav-main-link-icon si si-grid"></i>
+                                             <span class="nav-main-link-name ">Reports</span>
+                                        </a>
+                                        <ul class="nav-main-submenu">
+                                             <li class="nav-main-heading" style="padding:3px;"></li>
+                                             <?php echo $recentMenu; ?>
+                                             <li class="nav-main-heading" style="padding:3px;"></li>
+                                             <?php echo $longTermMenu; ?>
+                                             <li class="nav-main-heading" style="padding:3px;"></li>
+                                             <?php echo $tatMenu; ?>
+                                             <li class="nav-main-heading" style="padding:3px;"></li>
+                                             <?php echo $weeklyReportMenu; ?>
+                                             <li class="nav-main-heading" style="padding:3px;"></li>
+                                             <?php echo $qcReportMenu; ?>
+                                        </ul>
+                                   </li>
+                                   <?php }
+                                   ?>
+
+
+                              </ul>
+                         </div>
+                    </div>
+               </div>
                <!-- END Side Navigation -->
           </nav>
           <!-- END Sidebar -->
@@ -272,11 +283,11 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
                               </button>
                               <div class="dropdown-menu dropdown-menu-right p-0" aria-labelledby="page-header-user-dropdown">
                                    <div class="p-2">
-                                        <a class="dropdown-item"  href="/user/edit-profile/<?php echo base64_encode($sessionLogin->userId);?>">
+                                        <a class="dropdown-item" href="/user/edit-profile/<?php echo base64_encode($sessionLogin->userId); ?>">
                                              <i class="far fa-fw fa-user mr-1"></i> Edit Profile
                                         </a>
                                         <div role="separator" class="dropdown-divider"></div>
-                                        <a class="dropdown-item"  href="/logout">
+                                        <a class="dropdown-item" href="/logout">
                                              <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> Sign Out
                                         </a>
 
@@ -312,7 +323,7 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
                <div class="content py-0">
                     <div class="row font-size-sm">
                          <div class="col-sm-6 order-sm-1 text-center text-sm-left">
-                              <strong>Copyright &copy; <?php echo date('Y');?> <a href="#"></a></strong> All rights reserved.
+                              <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="#"></a></strong> All rights reserved.
                          </div>
                          <div class="col-sm-6 order-sm-1 text-center text-sm-right">
                               <strong>Version 0.1</strong>
@@ -343,17 +354,21 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
      <script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/buttons.flash.min.js'; ?>"></script>
      <script src="<?php echo $this->basePath() . '/assets/js/plugins/datatables/buttons/buttons.colVis.min.js'; ?>"></script>
      <script src="<?php echo $this->basePath() . '/assets/js/pages/be_tables_datatables.min.js'; ?>"></script>
-     
 
-          <script src="<?php echo $this->basePath() . '/assets/plugins/datepicker/moment.min.js'; ?>"></script>
-          <script src="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.js'; ?>"></script>
+
+     <script src="<?php echo $this->basePath() . '/assets/plugins/datepicker/moment.min.js'; ?>"></script>
+     <script src="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.js'; ?>"></script>
 
 
      <!-- vivek -->
      <script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
      <script src="<?php echo $this->basePath() . '/assets/js/select2.full.js'; ?>"></script>
 
-     <script>jQuery(function(){ Dashmix.helpers(['datepicker', 'colorpicker', 'maxlength', 'select2', 'rangeslider']); });</script>
+     <script>
+          jQuery(function() {
+               Dashmix.helpers(['datepicker', 'colorpicker', 'maxlength', 'select2', 'rangeslider']);
+          });
+     </script>
      <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 
      <!-- vivek -->
@@ -364,91 +379,74 @@ $emailMenu="<li id='nav-main-item'><a id='email-result' class='nav-main-link' hr
      <script src="<?php echo $this->basePath() . '/assets/js/pages/be_forms_wizard.min.js'; ?>"></script>
 
      <script type="text/javascript">
-
-     $(document).ready(function() {
-          <?php
-          if (isset($alertContainer->alertMsg) && $alertContainer->alertMsg != "") {
-               ?>
-               alert("<?php echo $alertContainer->alertMsg; ?>"); <?php
-               $alertContainer->alertMsg = "";
-               unset($alertContainer->alertMsg);
-          }
-          ?>
-     });
-     $(function () {
-          str=$(location).attr('pathname');
-          splitsUrl=str.split("/",4);
-          if(splitsUrl[1]=='facilities' || splitsUrl[1]=='user' || splitsUrl[1]=='recency' || splitsUrl[1]=='global-config'|| splitsUrl[1]=='province' || splitsUrl[1]=='district' || splitsUrl[1]=='city' )
-          {
-               if(splitsUrl[1] != 'recency'){
-                    $('#manage').addClass('open');
-                    $('#'+splitsUrl[1]).addClass('active');
-               }else if(splitsUrl[1] == 'recency'){
-                    $('#manage').removeClass('open');
-                    $('#recency-menu').addClass('open');
-                    $('#'+splitsUrl[1]).addClass('active');
+          $(document).ready(function() {
+               <?php
+               if (isset($alertContainer->alertMsg) && $alertContainer->alertMsg != "") {
+                    ?>
+               alert("<?php echo $alertContainer->alertMsg; ?>");
+               <?php
+                    $alertContainer->alertMsg = "";
+                    unset($alertContainer->alertMsg);
                }
-          }
-          else if(splitsUrl[1]=='analysis-dashboard' || splitsUrl[1]=='')
-          {
-            $('#dashboard').addClass('open');
-            if(splitsUrl[1]==''){
-               $('#lab-dashboard').addClass('active');
-            }else{
-               $('#'+splitsUrl[1]).addClass('active');
-            }
-          }
-          else if(splitsUrl[1]=='quality-control-dashboard' || splitsUrl[1]=='')
-          {
-            $('#dashboard').addClass('open');
-            if(splitsUrl[1]==''){
-               $('#quality-contrl-dashboard').addClass('active');
-            }else{
-               $('#'+splitsUrl[1]).addClass('active');
-            }
-          }
-          else if(splitsUrl[1]=='quality-check')
-          {
-            $('#manage').removeClass('open');
-            $('#'+splitsUrl[1]).addClass('active');
-          }
-          else if(splitsUrl[1]=='settings')
-          {
-            $('#settings').removeClass('open');
-            $('#'+splitsUrl[1]).addClass('active');
-          }
-          else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='recent-infection')
-          {
-            $('#manage').removeClass('open');
-            $('#reports').addClass('open');
-            $('#'+splitsUrl[2]).addClass('active');
-          }
-          else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='lt-infection')
-          {
-            $('#manage').removeClass('open');
-            $('#reports').addClass('open');
-            $('#'+splitsUrl[2]).addClass('active');
-          }else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='tat-report')
-          {
-            $('#manage').removeClass('open');
-            $('#reports').addClass('open');
-            $('#'+splitsUrl[2]).addClass('active');
-          }else if(splitsUrl[1]=='vl-data' && (splitsUrl[2]=='weekly-report' || splitsUrl[2]=='qc-report'))
-          {
-            $('#manage').removeClass('open');
-            $('#reports').addClass('open');
-            $('#'+splitsUrl[2]).addClass('active');
-          }else if(splitsUrl[1]=='vl-data' && splitsUrl[2]=='email-result')
-          {
-            $('#email-result').removeClass('open');
-            $('#'+splitsUrl[2]).addClass('active');
-          }
-          else if(splitsUrl[1]=='vl-data')
-          {
-            $('#manage').removeClass('open');
-            $('#'+splitsUrl[1]).addClass('active');
-          }
-     });
+               ?>
+          });
+          $(function() {
+               str = $(location).attr('pathname');
+               splitsUrl = str.split("/", 4);
+               if (splitsUrl[1] == 'facilities' || splitsUrl[1] == 'user' || splitsUrl[1] == 'recency' || splitsUrl[1] == 'global-config' || splitsUrl[1] == 'province' || splitsUrl[1] == 'district' || splitsUrl[1] == 'city') {
+                    if (splitsUrl[1] != 'recency') {
+                         $('#manage').addClass('open');
+                         $('#' + splitsUrl[1]).addClass('active');
+                    } else if (splitsUrl[1] == 'recency') {
+                         $('#manage').removeClass('open');
+                         $('#recency-menu').addClass('open');
+                         $('#' + splitsUrl[1]).addClass('active');
+                    }
+               } else if (splitsUrl[1] == 'analysis-dashboard' || splitsUrl[1] == '') {
+                    $('#dashboard').addClass('open');
+                    if (splitsUrl[1] == '') {
+                         $('#lab-dashboard').addClass('active');
+                    } else {
+                         $('#' + splitsUrl[1]).addClass('active');
+                    }
+               } else if (splitsUrl[1] == 'quality-control-dashboard' || splitsUrl[1] == '') {
+                    $('#dashboard').addClass('open');
+                    if (splitsUrl[1] == '') {
+                         $('#quality-contrl-dashboard').addClass('active');
+                    } else {
+                         $('#' + splitsUrl[1]).addClass('active');
+                    }
+               } else if (splitsUrl[1] == 'quality-check') {
+                    $('#manage').removeClass('open');
+                    $('#' + splitsUrl[1]).addClass('active');
+               } else if (splitsUrl[1] == 'settings') {
+                    $('#settings').removeClass('open');
+                    $('#' + splitsUrl[1]).addClass('active');
+               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'recent-infection') {
+                    $('#manage').removeClass('open');
+                    $('#reports').addClass('open');
+                    $('#' + splitsUrl[2]).addClass('active');
+               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'lt-infection') {
+                    $('#manage').removeClass('open');
+                    $('#reports').addClass('open');
+                    $('#' + splitsUrl[2]).addClass('active');
+               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'tat-report') {
+                    $('#manage').removeClass('open');
+                    $('#reports').addClass('open');
+                    $('#' + splitsUrl[2]).addClass('active');
+               } else if (splitsUrl[1] == 'vl-data' && (splitsUrl[2] == 'weekly-report' || splitsUrl[2] == 'qc-report')) {
+                    $('#manage').removeClass('open');
+                    $('#reports').addClass('open');
+                    $('#' + splitsUrl[2]).addClass('active');
+               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'email-result') {
+                    $('#email-result').removeClass('open');
+                    $('#' + splitsUrl[2]).addClass('active');
+               } else if (splitsUrl[1] == 'vl-data') {
+                    $('#manage').removeClass('open');
+                    $('#' + splitsUrl[1]).addClass('active');
+               }
+          });
      </script>
 </body>
+
 </html>

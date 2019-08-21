@@ -52,6 +52,8 @@ class UserTable extends AbstractTableGateway {
                 }
                 else if($rResult->role_code != 'admin'){
                     return 'recency';
+                }else if($rResult->role_code == 'manager'){
+                    return 'recency';
                 }else{
                     return 'facilities';
                 }
