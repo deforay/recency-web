@@ -4274,7 +4274,7 @@ class RecencyTable extends AbstractTableGateway
     public function fetchKitInfo($kitNo){
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $sQuery = $sql->select()->from('test_kit_information')->columns(array('test_id','kit_lot_no','kit_expiry_date' => new Expression("DATE_FORMAT(kit_expiry_date,'%d-%b-%Y')")))->where(array('status'=>'active'));
+        $sQuery = $sql->select()->from('test_kit_information')->columns(array('test_id','reference_result','kit_lot_no','kit_expiry_date' => new Expression("DATE_FORMAT(kit_expiry_date,'%d-%b-%Y')"),'status','added_on'))->where(array('status'=>'active'));
         if(isset($kitNo) && $kitNo != ""){
             $sQuery= $sQuery->where(array('kit_lot_no'=>$kitNo));
         }
