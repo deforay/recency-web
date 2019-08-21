@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Service;
 
 use Exception;
@@ -10,9 +11,9 @@ use GuzzleHttp;
 
 class RecencyService
 {
-    
+
     public $sm = null;
-    
+
     public function __construct($sm)
     {
         $this->sm = $sm;
@@ -28,7 +29,7 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyDetails($params);
     }
-    
+
     public function getReqVlTestOnVlsmDetails($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
@@ -52,7 +53,6 @@ class RecencyService
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Recency details added successfully';
             }
-
         } catch (Exception $exc) {
             $adapter->rollBack();
             error_log($exc->getMessage());
@@ -190,9 +190,9 @@ class RecencyService
                     $row[] = $common->humanDateFormat($aRow['sample_receipt_date']);
                     $row[] = ucwords(str_replace("_", " ", $aRow['received_specimen_type']));
                     $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
-                    $row[] = (isset($aRow['recency_test_performed']) && !empty($aRow['recency_test_performed']) && ($aRow['recency_test_performed'] == 1)) ? 'Not Performed' : '' ;
+                    $row[] = (isset($aRow['recency_test_performed']) && !empty($aRow['recency_test_performed']) && ($aRow['recency_test_performed'] == 1)) ? 'Not Performed' : '';
                     $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
-                    
+
                     $row[] = ucwords($aRow['control_line']);
                     $row[] = ucwords($aRow['positive_verification_line']);
                     $row[] = ucwords($aRow['long_term_verification_line']);
@@ -933,7 +933,7 @@ class RecencyService
             $row[] = $result[0]['Long Term Final'];
             $row[] = $result[0]['Inconclusive'];
             $output[] = $row;
-                
+
             //}
 
             $styleArray = array(
@@ -979,10 +979,10 @@ class RecencyService
             $this->cellColor('I1:K1', '11aa06', $excel);
             //$this->cellColor('E2:F2', 'edda95',$excel);
             $this->cellColor('I2:K2', 'dce5ed', $excel);
-                
-                // cellColor('A7:I7', 'F28A8C');
-                // cellColor('A17:I17', 'F28A8C');
-                // cellColor('A30:Z30', 'F28A8C');
+
+            // cellColor('A7:I7', 'F28A8C');
+            // cellColor('A17:I17', 'F28A8C');
+            // cellColor('A30:Z30', 'F28A8C');
 
 
 
@@ -1048,7 +1048,7 @@ class RecencyService
                 $sheet->setCellValue('D4', html_entity_decode(($result[0]['Assay Recent'] != '' && $result[0]['Assay Recent'] != 0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue('E4', html_entity_decode(($result[0]['Long Term'] != '' && $result[0]['Long Term'] != 0) ? round(($result[0]['Long Term'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue('F4', html_entity_decode(($result[0]['Assay Negative'] != '' && $result[0]['Assay Negative'] != 0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('G4', html_entity_decode(($result[0]['VL Done'] != '' && $result[0]['VL Done'] != 0) ? round(($result[0]['VL Done'] / $vlResult) * 100,2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('G4', html_entity_decode(($result[0]['VL Done'] != '' && $result[0]['VL Done'] != 0) ? round(($result[0]['VL Done'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue('H4', html_entity_decode(($result[0]['VL Pending'] != '' && $result[0]['VL Pending'] != 0) ? round(($result[0]['VL Pending'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue('I4', html_entity_decode(($result[0]['RITA Recent'] != '' && $result[0]['RITA Recent'] != 0) ? round(($result[0]['RITA Recent'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue('J4', html_entity_decode(($result[0]['Long Term Final'] != '' && $result[0]['Long Term Final'] != 0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -1090,7 +1090,6 @@ class RecencyService
         } else {
             return $recencyDb->fetchAllRecencyResult($params);
         }
-
     }
 
     public function fetchExportRecencyData($params)
@@ -1181,7 +1180,7 @@ class RecencyService
             $sheet->setCellValue('L1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('M1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('N1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            
+
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
             $sheet->getStyle('A1')->applyFromArray($styleArray);
@@ -1396,7 +1395,7 @@ class RecencyService
             $sheet->setCellValue('K1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('L1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('M1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            
+
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
             $sheet->getStyle('A1')->applyFromArray($styleArray);
@@ -1463,8 +1462,9 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchDistrictWiseMissingViralLoadChart($params);
     }
-    
-    public function getModalityWiseMissingViralLoadChart($params){
+
+    public function getModalityWiseMissingViralLoadChart($params)
+    {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchModalityWiseMissingViralLoadChart($params);
     }
@@ -1475,7 +1475,7 @@ class RecencyService
         return $recencyDb->fetchRecentInfectionByMonthSexChart($params);
     }
 
-    
+
     public function getRecentDetailsForPDF($recenyId)
     {
         $recencyDb = $this->sm->get('RecencyTable');
@@ -1487,39 +1487,41 @@ class RecencyService
         return $recencyDb->fetchLTermDetailsForPDF($recenyId);
     }
 
-    
+
     public function UpdatePdfUpdatedDate($recencyId)
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->UpdatePdfUpdatedDateDetails($recencyId);
     }
-    
+
     public function UpdateMultiplePdfUpdatedDate($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->UpdateMultiplePdfUpdatedDateDetails($params);
     }
-    
+
     public function addVlTestResultApi($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->saveVlTestResultApi($params);
     }
 
-    public function postReqVlTestOnVlsmDetails($params){
-        try{
+    public function postReqVlTestOnVlsmDetails($params)
+    {
+        try {
             // \Zend\Debug\Debug::dump($params);die;
             $sessionLogin = new Container('credo');
-            $data = array();$check = false;
+            $data = array();
+            $check = false;
             $recencyDb = $this->sm->get('RecencyTable');
             $client = new GuzzleHttp\Client();
             $config = new \Zend\Config\Reader\Ini();
             $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-            $urlVlsm = $configResult['vlsm']['domain'].'recency/requestVlTest.php';
-            if(isset($params['rvlsm']) && count($params['rvlsm']) > 0){
-                foreach($params['rvlsm'] as $sample){
+            $urlVlsm = $configResult['vlsm']['domain'] . 'recency/requestVlTest.php';
+            if (isset($params['rvlsm']) && count($params['rvlsm']) > 0) {
+                foreach ($params['rvlsm'] as $sample) {
                     $data =  $recencyDb->getDataBySampleId($sample);
-                    if(isset($data['sample_id']) && $data['sample_id'] != ""){
+                    if (isset($data['sample_id']) && $data['sample_id'] != "") {
                         $resultCart = $client->post($urlVlsm, [
                             'form_params' => [
                                 'sampleId'              => $data['sample_id'],
@@ -1534,20 +1536,24 @@ class RecencyService
                             ]
                         ]);
                         $responseCart = $resultCart->getBody()->getContents();
-                        if($responseCart == 'Viral Load Test Request has been send successfully'){
+                        if ($responseCart == 'Viral Load Test Request has been send successfully') {
                             $recencyDb->saveRequestFlag($data['recency_id']);
                             $check = true;
                         }
                     }
                 }
-                if($check){
+                if ($check) {
                     $alertContainer = new Container('alert');
                     $alertContainer->alertMsg = 'VL Test request was send successfully';
                 }
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             error_log('Error :' . $e->getMessage());
         }
     }
-}
 
+    public function getKitInfo($kitNo=""){
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchKitInfo($kitNo);
+    }
+}

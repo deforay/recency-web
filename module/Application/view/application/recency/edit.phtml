@@ -329,7 +329,12 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>" for="">Test Kit Lot Number <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 												<div class="col-sm-4 <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>">
-													<input type="text" value="<?php echo $result['kit_lot_no'];?>" class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" value="" placeholder="Enter kit lot no." title="Please enter the kit lot no.">
+													<select  class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no">
+														<option value="">--Select--</option>
+														<?php foreach ($kitInfo as $info) { ?>
+															<option value="<?php echo $info['kit_lot_no'];?>" <?php echo ($info['kit_lot_no'] == $result['kit_lot_no'])?'selected="selected"':'';?>><?php echo $info['kit_lot_no'];?></option>
+														<?php } ?>
+													</select>
 												</div>
 												<br>
 												<br>
@@ -1202,4 +1207,20 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
         });
         }
      }
+
+	$( "#testKitLotNo" ).change(function() {
+        if(this.value != ""){
+            $.post('/recency/get-kit-lot-info',{kitNo:this.value},
+            function(data){
+                if( data != ""){
+                    var objects = JSON.parse(data) 
+                    objects.forEach(function(key, index){
+                        $('#testKitExpDate').val(key.kit_expiry_date);
+                    });
+                }
+            });
+        }else{
+			$('#testKitExpDate').val('');
+		}
+    });
 </script>

@@ -4270,4 +4270,15 @@ class RecencyTable extends AbstractTableGateway
             'vl_request_sent_date_time' => $common->getDateTime()
         ),array('recency_id'=>$rId));
     }
+    
+    public function fetchKitInfo($kitNo){
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery = $sql->select()->from('test_kit_information')->columns(array('test_id','kit_lot_no','kit_expiry_date' => new Expression("DATE_FORMAT(kit_expiry_date,'%d-%b-%Y')")));
+        if(isset($kitNo) && $kitNo != 0){
+            $sQuery= $sQuery->where(array('kit_lot_no'=>$kitNo));
+        }
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 use Zend\Session\Container;
 
 $config = new \Zend\Config\Reader\Ini();
@@ -145,10 +146,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                             <?php
                             if (isset($arr['admin_message']) && $arr['admin_message'] != '') {
                                 ?>
-                                <h4><?php echo ucwords($arr['admin_message']); ?></h4>
+                            <h4><?php echo ucwords($arr['admin_message']); ?></h4>
                             <?php
-                        }
-                        ?>
+                            }
+                            ?>
                             <div class="tab-pane active" id="wizard-progress-step1" role="tabpanel">
 
                                 <div class="form-group row form-horizontal">
@@ -207,7 +208,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 <select class="form-control <?php echo $facility; ?> select2" id="facilityId" name="facilityId" title="Please select the facility name" onchange="getLocationDataByFacility()">
                                                     <option value="">--Select--</option>
                                                     <?php foreach ($facilityResult['facility'] as $facility) { ?>
-                                                        <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
+                                                    <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
                                                     <?php } ?>
                                                     <!-- <option value="other">Other</option> -->
                                                 </select>
@@ -301,7 +302,12 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Test Kit Lot No. <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <input type="text" class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" placeholder="Enter kit lot no." title="Please enter the kit lot no.">
+                                                <select  class="form-control <?php echo (in_array("Test Kit Lot No", $resultArr) ? "isRequired" : "");echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no">
+                                                    <option value="">--Select--</option>
+                                                    <?php foreach ($kitInfo as $info) {
+                                                        echo '<option value="' . $info['kit_lot_no'] . '">' . $info['kit_lot_no'] . '</option>';
+                                                    } ?>
+                                                </select>
                                             </div>
 
                                             <br>
@@ -319,7 +325,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                     <option value="">--Select--</option>
 
                                                     <?php foreach ($testFacilityTypeResult as $testingFacilityType) { ?>
-                                                        <option value="<?php echo $testingFacilityType['testing_facility_type_id']; ?>"><?php echo $testingFacilityType['testing_facility_type_name']; ?></option>
+                                                    <option value="<?php echo $testingFacilityType['testing_facility_type_id']; ?>"><?php echo $testingFacilityType['testing_facility_type_name']; ?></option>
                                                     <?php } ?>
                                                     <option value="other">Other</option>
                                                 </select>
@@ -371,7 +377,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 <select class="form-control disbaledResult<?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
                                                     <option value="">--Select--</option>
                                                     <?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
-                                                        <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
+                                                    <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
                                                     <?php } ?>
                                                     <!-- <option value="other">Other</option> -->
                                                 </select>
@@ -564,7 +570,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                             <select class="form-control section2" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
                                                 <option value="">--Select--</option>
                                                 <?php foreach ($facilityResult['riskPopulations'] as $riskPo) { ?>
-                                                    <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo $riskPo['name']; ?></option>
+                                                <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo $riskPo['name']; ?></option>
                                                 <?php } ?>
                                                 <option value="Other">Other</option>
                                             </select>&nbsp;
@@ -794,10 +800,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             if (fieldValue == 'Assay Recent') {
                 $(".vlResultFields").prop('disabled', false);
                 <?php if (in_array("Viral Load Test Date", $resultArr2)) { ?>
-                    $("#vlTestDate").addClass('<?php echo $vlTestDate; ?>');
+                $("#vlTestDate").addClass('<?php echo $vlTestDate; ?>');
                 <?php  }
-            if (in_array("Viral Load Result", $resultArr2)) { ?>
-                    $("#vlLoadResult").addClass('<?php echo $vlLoadResult; ?>');
+                if (in_array("Viral Load Result", $resultArr2)) { ?>
+                $("#vlLoadResult").addClass('<?php echo $vlLoadResult; ?>');
                 <?php } ?>
                 if ((vlDataResult > 1000 && vlDataResult != '')) {
                     $("#vlResultoutcome").html('RITA Recent').css({
@@ -990,8 +996,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         });
 
         <?php foreach ($globalConfigResult as $config) { ?>
-            getLocationDeatils('<?php echo $config["global_name"]; ?>');
-            <?php break;
+        getLocationDeatils('<?php echo $config["global_name"]; ?>');
+        <?php break;
         } ?>
     });
 
@@ -1225,4 +1231,20 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             $('.rm-lab-req').css('padding-top', '35px')
         }
     }
+    
+    $( "#testKitLotNo" ).change(function() {
+        if(this.value != ""){
+            $.post('/recency/get-kit-lot-info',{kitNo:this.value},
+            function(data){
+                if( data != ""){
+                    var objects = JSON.parse(data) 
+                    objects.forEach(function(key, index){
+                        $('#testKitExpDate').val(key.kit_expiry_date);
+                    });
+                }
+            });
+        }else{
+			$('#testKitExpDate').val('');
+		}
+    });
 </script>

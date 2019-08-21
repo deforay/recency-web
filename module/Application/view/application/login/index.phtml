@@ -150,7 +150,7 @@ $loginContainer = new Container('credo');
                             challenge_field: challenge_field
                         },
                         function(data) {
-                            if (data == 'fail') {
+                            if (data == 'fail' && data != 'success') {
                                 document.getElementById("challengeResponse").value = "";
                                 alert("Text you entered from the image is incorrect. Please try again", "err");
                                 getCaptcha('capDiv');
