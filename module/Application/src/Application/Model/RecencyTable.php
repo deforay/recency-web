@@ -4275,7 +4275,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('test_kit_information')->columns(array('test_id','kit_lot_no','kit_expiry_date' => new Expression("DATE_FORMAT(kit_expiry_date,'%d-%b-%Y')")))->where(array('status'=>'active'));
-        if(isset($kitNo) && $kitNo != 0){
+        if(isset($kitNo) && $kitNo != ""){
             $sQuery= $sQuery->where(array('kit_lot_no'=>$kitNo));
         }
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
