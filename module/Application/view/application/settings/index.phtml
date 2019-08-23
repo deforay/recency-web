@@ -1,6 +1,7 @@
 <?php
     use Zend\Session\Container;
     $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+    $editSampleAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
 <div class="bg-body-light">
      <div class="content content-full">
@@ -9,47 +10,76 @@
                     <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                          <ol class="breadcrumb">
                               <li class="breadcrumb-item">
-                              <a href="<?php echo $this->url('settings',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Data</a>
+                              <a href="<?php echo $this->url('settings',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add Kit Data</a>
+                              <a href="<?php echo $this->url('settings',array('action' => 'add-sample'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add Sample Data</a>
                               </li>
+                             <br> 
                          </ol>
                     </nav>
                </div>
           </div>
      </div>
-     <div class="content">
-          <div class="block block-rounded block-bordered">
-               <div class="block-header block-header-default">
+    <div class="content">
+        <div class="block block-rounded block-bordered">
+        <ul class="nav nav-tabs nav-tabs-block nav-justified">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#pendingVlResult">Kit Data Information</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#pedingFromVlsm">Sample Data Information</a>
+            </li>
+        </ul>
+            <div class="tab-content">
+                <div id="pendingVlResult" class="container tab-pane active"><br>
+                    <table id="settingsKitDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Manufacturer</th>
+                                <th>Kit Lot No</th>
+                                <th>Kit Expiry Date</th>
+                                <th>Status</th>
+                                <th>Added On</th>
+                                <th>Added By</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="dataTables_empty">Loading data from server</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-               </div>
-               <div class="block-content block-content-full">
-                    <table id="settingsDataTable" class="table table-bordered table-striped table-vcenter">
-                         <thead>
-                              <tr>
-                                    <th>Manufacturer</th>
-                                    <th>Kit Lot No</th>
-                                    <th>Kit Expiry Date</th>
-                                    <th>Status</th>
-                                    <th>Added On</th>
-                                    <th>Added By</th>
-                                    <th>Action</th>
-                              </tr>
-                         </thead>
-                         <tbody>
-                              <tr>
-                                   <td colspan="5" class="dataTables_empty">Loading data from server</td>
-                              </tr>
-                              <tr>
-                              </tbody>
-                         </table>
-                    </div>
-               </div>
-          </div>
+                <div id="pedingFromVlsm" class="block-content block-content-full tab-pane"><br>
+                    <table id="settingsSampleDataTable" class="table table-bordered table-striped table-vcenter">
+                        <thead>
+                            <tr>
+                                <th>Sample No</th>
+                                <th>Added On</th>
+                                <th>Added By</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="dataTables_empty">Loading data from server</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
-          <script type="text/javascript">
-          /* Table initialisation */
-          oTable = null;
-          $(document).ready(function() {
-            oTable = $('#settingsDataTable').dataTable( {
+    <script type="text/javascript">
+        /* Table initialisation */
+        oTable = null;
+        iTable = null;
+        $(document).ready(function() {
+
+            oTable = $('#settingsKitDataTable').dataTable( {
                 "bAutoWidth": false,
                 "bProcessing": true,
                 "bServerSide": true,
@@ -68,6 +98,24 @@
                 }
             } );
 
-          } );
+            iTable = $('#settingsSampleDataTable').dataTable( {
+                "bAutoWidth": false,
+                "bProcessing": true,
+                "bServerSide": true,
+                "aoColumns": [
+                        <?php echo $editSampleAction;?>
+                ],
+                "sAjaxSource": "<?php echo $this->url('settings',array('action' => 'sampleDataIndex')); ?>",
+                "fnServerData": function ( sSource, aoData, fnCallback ) {
+                    $.ajax({
+                        "dataType": 'json',
+                        "type": "POST",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": fnCallback
+                    });
+                }
+            });
+        });
 
-     </script>
+    </script>

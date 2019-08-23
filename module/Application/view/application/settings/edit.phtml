@@ -36,7 +36,7 @@ if($result['kit_expiry_date']!= '' && $result['kit_expiry_date']!= null && $resu
                     <form name="settingsInformation" id="settingsInformation"  class="mb-5" action="<?php echo $this->url('settings', array('action' => 'edit')); ?>" method="post">
                          <div class="form-group row">
 
-                           <label class="col-sm-2 col-form-label" for="">Test Kit Manufacturers<span class="mandatory">*</span></label>
+                           <label class="col-sm-2 col-form-label" for="testKitName">Test Kit Manufacturers<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control isRequired" id="testKitName" name="testKitName" title="Please select the Test Kit Manufacturers">
                                    <option value="">-- Select --</option>
@@ -47,16 +47,16 @@ if($result['kit_expiry_date']!= '' && $result['kit_expiry_date']!= null && $resu
 
                               </div>
 
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot Number<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="testKitNumber">Test Kit Lot Number<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <input type="text" class="form-control isRequired" id="testKitNumber" name="testKitNumber" value="<?php echo $result['kit_lot_no']; ?>"  placeholder="Enter the facility Test Kit Lot Number" title="Please enter the Test Kit Lot Number" onblur="checkNameValidation('test_kit_information', 'kit_lot_no', this,'<?php echo "kit_lot_no##".$result['kit_lot_no'];?>', 'The kit number that you entered already exists . Please try another number..');">
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Expire Date<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="testKitDate">Test Kit Expire Date<span class="mandatory">*</span></label>
                               <div class="col-sm-4">               
                               <input type="text" class="js-datepicker form-control isRequired"  value="<?php echo $testKitExpiryDate; ?>" id="testKitDate" name="testKitDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Test Kit Expire Date" title="Please enter Test Kit Expire Date"  readonly="readonly">
                                         </div>
 
-                                         <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
+                                         <label class="col-sm-2 col-form-label" for="status">Status<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control isRequired" id="status" name="status" title="Please select the status">
                                         <option value="active"<?php echo($result['status'] == 'active' )?'selected="selected"':''; ?>>Active</option>
@@ -89,13 +89,13 @@ if($result['kit_expiry_date']!= '' && $result['kit_expiry_date']!= null && $resu
      function validateNow() {
           var selVal = [];
           flag = deforayValidator.init({
-               formId: 'facilityInformation'
+               formId: 'settingsInformation'
           });
           if (flag) {
                if (duplicateName) {
                     $.blockUI();
 
-                    document.getElementById('facilityInformation').submit();
+                    document.getElementById('settingsInformation').submit();
                }
           }
      }

@@ -218,6 +218,19 @@ return array(
                     ),
                 ),
 
+                'api-sample' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/sample[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\SampleData',
+                         ),
+                    ),
+               ),
+
           ),
      ),
      'controllers' => array(
@@ -240,6 +253,8 @@ return array(
                'Api\Controller\TechnicalSupport'       => 'Api\Controller\TechnicalSupportController',
                'Api\Controller\VlTestResult'           => 'Api\Controller\VlTestResultController',
                'Api\Controller\TestKitInfo'            => 'Api\Controller\TestKitInfoController',
+               'Api\Controller\SampleData'             => 'Api\Controller\SampleDataController',
+               
                
           ),
      ),

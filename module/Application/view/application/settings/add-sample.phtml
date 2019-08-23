@@ -1,0 +1,98 @@
+    <?php
+    use Zend\Session\Container;
+    $sessionLogin = new Container('credo');
+    ?>
+    <style type="text/css">
+
+    </style>
+    <div class="bg-body-light">
+        <div class="content content-full">
+            <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Settings Sample Data</h1>
+                <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <a href="<?php echo $this->url('settings', array('action' => 'index')); ?>"><li class="breadcrumb-item">Settings Details</li></a>
+                            <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
+                        </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="block block-rounded block-bordered">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Add Settings Sample Details</h3>
+            </div>
+            <div class="block-content">
+                <div class="col-md-12 table-responsive" id="hide">
+                        <form name="settingsSampleInformation" id="settingsSampleInformation"  class="mb-5" action="<?php echo $this->url('settings', array('action' => 'add-sample')); ?>" method="post">
+                            <div class="form-group row">
+
+                                <label class="col-sm-2 col-form-label" for="sampleNo">Sample Number<span class="mandatory">*</span></label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control isRequired" id="sampleNo" name="sampleNo" placeholder="Enter the Sample Number" title="Please enter the Sample Number" onblur="checkNameValidation('qc_samples', 'qc_sample_no', this,null, 'The sample number that you entered already exists . Please try another number..');">
+                                </div>
+
+                                <label class="col-sm-2 col-form-label" for="status">Sample Status<span class="mandatory">*</span></label>
+                                <div class="col-sm-4">
+                                    <select class="form-control isRequired" id="status" name="status" title="Please select the status">
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                           <br>
+
+                            <div class="row items-push">
+                                <div class="col-lg-7 offset-lg-4">
+                                    <a href="<?php echo $this->url('settings', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                    <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+    <script type="text/javascript">
+
+        jQuery(document).ready(function($) {
+        
+        });
+        duplicateName = true;
+        function validateNow() {
+            var selVal = [];
+            flag = deforayValidator.init({
+                formId: 'settingsSampleInformation'
+            });
+            if (flag) {
+                if (duplicateName) {
+                        $.blockUI();
+
+                        document.getElementById('settingsSampleInformation').submit();
+                }
+            }
+        }
+        function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+            checkValue = document.getElementById(obj.id).value;
+            if($.trim(checkValue)!= ''){
+                $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
+                function(data) {
+                    if (data > 0)
+                    {
+                            alert(msg);
+                            duplicateName = false;
+                            document.getElementById(obj.id).value = "";
+                    }
+                    else {
+                            duplicateName = true;
+                    }
+                });
+            }
+        }
+
+
+    </script>

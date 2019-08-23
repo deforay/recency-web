@@ -17,6 +17,7 @@ use Application\Model\GlobalConfigTable;
 use Application\Model\UserFacilityMapTable;
 use Application\Model\TempMailTable;
 use Application\Model\SettingsTable;
+use Application\Model\SettingsQcSampleTable;
 
 use Application\Model\ProvinceTable;
 use Application\Model\DistrictTable;
@@ -172,10 +173,13 @@ class Module{
                         $table = new SettingsTable($dbAdapter);
                         return $table;
                     },
+                    'SettingsQcSampleTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new SettingsQcSampleTable($dbAdapter);
+                        return $table;
+                    },
                    
                     
-                    
-
 
                     //service
 
@@ -215,9 +219,6 @@ class Module{
                         return new CityService($sm);
                     },
                     
-                    
-                    
-
                )
           );
      }
