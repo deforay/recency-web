@@ -210,7 +210,7 @@ class SettingsQcSampleTable extends AbstractTableGateway
 
         if($rResult) {
             $response['status']='success';
-            $response['Data'] = $rResult;
+            $response['data'] = $rResult;
         }
 
         else {
