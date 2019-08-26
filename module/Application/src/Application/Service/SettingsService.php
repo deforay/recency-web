@@ -54,6 +54,12 @@ class SettingsService {
         $settingsDb = $this->sm->get('SettingsTable');
         return $settingsDb->fetchSettingsDetailsById($testId);
     }
+    
+    public function getKitLotDetails()
+    {
+        $settingsDb = $this->sm->get('SettingsTable');
+        return $settingsDb->fetchKitLotDetails();
+    }
 
     public function updateSettingsDetails($params){
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
@@ -88,6 +94,12 @@ class SettingsService {
     {
         $settingsQcSampleDb = $this->sm->get('SettingsQcSampleTable');
         return $settingsQcSampleDb->fetchSettingsSampleDetailsById($sampleId);
+    }
+    
+    public function getSamplesDetails()
+    {
+        $settingsQcSampleDb = $this->sm->get('SettingsQcSampleTable');
+        return $settingsQcSampleDb->fetchSamples();
     }
 
     public function addSampleSettingsDetails($params)
@@ -137,5 +149,3 @@ class SettingsService {
          return $settingsQcSampleDb->fetchAllSampleListApi($params);
      }
 }
-
-?>

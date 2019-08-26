@@ -32,14 +32,18 @@ class QualityCheckController extends AbstractActionController
           if ($request->isPost()) {
                $params = $request->getPost();
                $qcService = $this->getServiceLocator()->get('QualityCheckService');
-               $result = $qcService->addQcTestDetails($params);
+               $qcService->addQcTestDetails($params);
                return $this->_redirect()->toRoute('quality-check');
           } else {
                $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+               $settingService = $this->getServiceLocator()->get('SettingsService');
                $facilityResult = $facilityService->getFacilitiesAllDetails();
-
+               $kitInfo = $settingService->getKitLotDetails();
+               $sampleInfo = $settingService->getSamplesDetails();
                return new ViewModel(array(
                     'facilityResult' => $facilityResult,
+                    'kitInfo' => $kitInfo,
+                    'sampleInfo' => $sampleInfo
                ));
           }
      }
@@ -56,10 +60,15 @@ class QualityCheckController extends AbstractActionController
                $qualityCheckId = base64_decode($this->params()->fromRoute('id'));
                $result = $qcService->getQualityCheckDetailsById($qualityCheckId);
                $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+               $settingService = $this->getServiceLocator()->get('SettingsService');
                $facilityResult = $facilityService->getFacilitiesAllDetails();
+               $kitInfo = $settingService->getKitLotDetails();
+               $sampleInfo = $settingService->getSamplesDetails();
                return new ViewModel(array(
                     'result' => $result,
                     'facilityResult' => $facilityResult,
+                    'kitInfo' => $kitInfo,
+                    'sampleInfo' => $sampleInfo
                ));
           }
      }

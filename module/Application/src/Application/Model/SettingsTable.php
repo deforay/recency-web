@@ -203,5 +203,7 @@ class SettingsTable extends AbstractTableGateway
         return  $params['testId'];
     }
 
-   
+    public function fetchKitLotDetails(){
+        return $this->select(array('status'=>'active'))->toArray();
+    }
 }
