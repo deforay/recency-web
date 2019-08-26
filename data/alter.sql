@@ -313,6 +313,6 @@ INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `role_status`) VALUES 
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Recency to VLSM sync', 'recency_to_vlsm_sync', 'no');
 
 -- vivek 22nd june
-CREATE TABLE `recency_app`.`qc_samples` ( `qc_sample_id` INT(11) NOT NULL AUTO_INCREMENT , `qc_sample_no` VARCHAR(255) NULL DEFAULT NULL , `qc_sample_status` VARCHAR(255) NULL DEFAULT NULL , PRIMARY KEY (`qc_sample_id`)) ENGINE = InnoDB;
+CREATE TABLE `qc_samples` ( `qc_sample_id` INT(11) NOT NULL AUTO_INCREMENT , `qc_sample_no` VARCHAR(255) NULL DEFAULT NULL , `qc_sample_status` VARCHAR(255) NULL DEFAULT NULL , PRIMARY KEY (`qc_sample_id`)) ENGINE = InnoDB;
 ALTER TABLE `qc_samples` ADD `added_on` DATETIME NULL DEFAULT NULL AFTER `qc_sample_status`, ADD `added_by` INT NULL DEFAULT NULL AFTER `added_on`;
 

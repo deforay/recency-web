@@ -10,10 +10,10 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Settings Sample Data</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">QC Settings</h1>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <a href="<?php echo $this->url('settings', array('action' => 'index')); ?>"><li class="breadcrumb-item">Settings Details</li></a>
+                            <a href="<?php echo $this->url('settings', array('action' => 'index')); ?>"><li class="breadcrumb-item">Settings </li></a>
                             <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Edit</li>
                         </ol>
                 </nav>
@@ -24,18 +24,18 @@
     <div class="content">
         <div class="block block-rounded block-bordered">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Edit Settings Sample Details</h3>
+                <h3 class="block-title">Edit QC Sample ID</h3>
             </div>
             <div class="block-content">
                 <div class="col-md-12 table-responsive" id="hide">
                     <form name="settingsSampleInformation" id="settingsSampleInformation"  class="mb-5" action="<?php echo $this->url('settings', array('action' => 'edit-sample')); ?>" method="post">
                         <div class="form-group row">
 
-                            <label class="col-sm-2 col-form-label" for="sampleNo">Sample Number<span class="mandatory">*</span></label>
+                            <label class="col-sm-2 col-form-label" for="sampleNo">QC Sample ID<span class="mandatory">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control isRequired" id="sampleNo" name="sampleNo" value="<?php echo $result['qc_sample_no']; ?>"  placeholder="Enter the Sample Number" title="Please enter the Sample Number" onblur="checkNameValidation('qc_samples', 'qc_sample_no', this,'<?php echo "qc_sample_no##".$result['qc_sample_no'];?>', 'The sample number that you entered already exists . Please try another number..');">
+                                <input type="text" class="form-control isRequired" id="sampleNo" name="sampleNo" value="<?php echo $result['qc_sample_no']; ?>"  placeholder="Enter the QC Sample ID" title="Please enter the Sample ID" onblur="checkNameValidation('qc_samples', 'qc_sample_no', this,'<?php echo "qc_sample_no##".$result['qc_sample_no'];?>', 'The QC Sample ID already exists . Please try another Sample ID');">
                             </div>
-                            <label class="col-sm-2 col-form-label" for="status">Sample Status<span class="mandatory">*</span></label>
+                            <label class="col-sm-2 col-form-label" for="status">QC Sample Status<span class="mandatory">*</span></label>
                             <div class="col-sm-4">
                                 <select class="form-control isRequired" id="status" name="status" title="Please select the status">
                                         <option value="active"<?php echo($result['qc_sample_status'] == 'active' )?'selected="selected"':''; ?>>Active</option>

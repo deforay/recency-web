@@ -29,16 +29,16 @@ if($result['kit_expiry_date']!= '' && $result['kit_expiry_date']!= null && $resu
 <div class="content">
      <div class="block block-rounded block-bordered">
           <div class="block-header block-header-default">
-               <h3 class="block-title">Add Settings Details</h3>
+               <h3 class="block-title">Edit Testkit</h3>
           </div>
           <div class="block-content">
                <div class="col-md-12 table-responsive" id="hide">
                     <form name="settingsInformation" id="settingsInformation"  class="mb-5" action="<?php echo $this->url('settings', array('action' => 'edit')); ?>" method="post">
                          <div class="form-group row">
 
-                           <label class="col-sm-2 col-form-label" for="testKitName">Test Kit Manufacturers<span class="mandatory">*</span></label>
+                           <label class="col-sm-2 col-form-label" for="testKitName">Test Kit Manufacturer<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <select class="form-control isRequired" id="testKitName" name="testKitName" title="Please select the Test Kit Manufacturers">
+                                   <select class="form-control isRequired" id="testKitName" name="testKitName" title="Please select the Test Kit Manufacturer">
                                    <option value="">-- Select --</option>
                                         <option value="SED"<?php echo($result['reference_result'] == 'SED' )?'selected="selected"':''; ?>>SEDIA Bioscience (SED)</option>
                                         <option value="MAX"<?php echo($result['reference_result'] == 'MAX' )?'selected="selected"':''; ?>>Maxim Biomedical (MAX)</option>
