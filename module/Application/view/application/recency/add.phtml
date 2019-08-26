@@ -5,12 +5,13 @@ use Zend\Session\Container;
 $config = new \Zend\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 $sessionLogin = new Container('credo');
-$arr = array();$syn = false;
+$arr = array();
+$syn = false;
 
 //\Zend\Debug\Debug::dump($facilityResult);die;
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
     $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
-    if($globalConfigResult[$i]['global_name'] == 'recency_to_vlsm_sync' && $globalConfigResult[$i]['global_value'] == 'yes'){
+    if ($globalConfigResult[$i]['global_name'] == 'recency_to_vlsm_sync' && $globalConfigResult[$i]['global_value'] == 'yes') {
         $syn = true;
     }
 }
@@ -158,8 +159,12 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                 <div class="form-group row form-horizontal">
                                     <label class="col-sm-2 col-form-label <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Sample ID<?php echo (in_array("Sample Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                     <div class="col-sm-4 <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                        <input type="text" class="form-control <?php echo $sample;
-                                                                                echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
+                                        <select class="form-control <?php echo $sample; echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" title="Please select the sample id">
+                                            <option value="">--Select--</option>
+                                            <?php foreach($sampleInfo as $sample){?>
+                                                <option value="<?php echo $sample['qc_sample_no'];?>"><?php echo $sample['qc_sample_no'];?></option>
+                                            <?php }?>
+                                        </select>
                                     </div>
 
                                     <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Patient ID <?php echo (in_array("Patient Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
@@ -300,7 +305,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testKitLotNo">Test Kit Lot No. <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <select  class="form-control <?php echo (in_array("Test Kit Lot No", $resultArr) ? "isRequired" : "");echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no">
+                                                <select class="form-control <?php echo (in_array("Test Kit Lot No", $resultArr) ? "isRequired" : "");
+                                                                            echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no">
                                                     <option value="">--Select--</option>
                                                     <?php foreach ($kitInfo as $info) {
                                                         echo '<option value="' . $info['kit_lot_no'] . '">' . $info['kit_lot_no'] . '</option>';
@@ -458,30 +464,30 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                     <option value="&lt; 40"> &lt; 40</option>
                                                 </select>
                                             </div>
-                                            <?php if($syn){?>
-                                                <div class="is-vl-lab col-sm-12 col-lg-12 col-md-12" style="display:none;clear:both;">
-                                                    <label class="col-sm-2 form-check-label rm-lab-req" for="sendVlsm" style=" padding-top: 35px; ">Send a Viral Load Test Request to VLSM</label>
-                                                    <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
-                                                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);" value="yes">&nbsp;Yes
-                                                    </div>
+                                            <?php if ($syn) { ?>
+                                            <div class="is-vl-lab col-sm-12 col-lg-12 col-md-12" style="display:none;clear:both;">
+                                                <label class="col-sm-2 form-check-label rm-lab-req" for="sendVlsm" style=" padding-top: 35px; ">Send a Viral Load Test Request to VLSM</label>
+                                                <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);" value="yes">&nbsp;Yes
                                                 </div>
-                                                <div class="is-vl-lab col-md-12 col-lg-12" style="display:none;">
-                                                    <div class="col-sm-2">
-                                                        <label class="col-form-label" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
-                                                        <label class="col-form-label" for="isVlLab" style=" padding-top: 35px; ">Viral Load Lab <span class='mandatory'>*</span></label>
-                                                    </div>
-    
-                                                    <div class="col-sm-4">
-                                                        <select class="select2 form-control isVlLabRequired is-facility" name="isFacilityLab" id="isFacilityLab" title="Please select facility lab">
-                                                            <option value="">-- Select -- </option>
-                                                        </select>
-                                                        <select class="select2 form-control isVlLabRequired is-viral-lab" name="isVlLab" id="isVlLab" title="Please select viral load lab" style=" margin-top: 35px; ">
-                                                            <option value="">-- Select -- </option>
-                                                        </select>
-                                                    </div>
-                                                    <input type="hidden" name="isViralLabText" id="isViralLabText" />
+                                            </div>
+                                            <div class="is-vl-lab col-md-12 col-lg-12" style="display:none;">
+                                                <div class="col-sm-2">
+                                                    <label class="col-form-label" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
+                                                    <label class="col-form-label" for="isVlLab" style=" padding-top: 35px; ">Viral Load Lab <span class='mandatory'>*</span></label>
                                                 </div>
-                                            <?php }?>
+
+                                                <div class="col-sm-4">
+                                                    <select class="select2 form-control isVlLabRequired is-facility" name="isFacilityLab" id="isFacilityLab" title="Please select facility lab">
+                                                        <option value="">-- Select -- </option>
+                                                    </select>
+                                                    <select class="select2 form-control isVlLabRequired is-viral-lab" name="isVlLab" id="isVlLab" title="Please select viral load lab" style=" margin-top: 35px; ">
+                                                        <option value="">-- Select -- </option>
+                                                    </select>
+                                                </div>
+                                                <input type="hidden" name="isViralLabText" id="isViralLabText" />
+                                            </div>
+                                            <?php } ?>
 
                                             <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
                                             <div class="col-sm-4  vlResultoutcome" style="visibility:hidden">
@@ -1234,20 +1240,22 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             $('.rm-lab-req').css('padding-top', '35px')
         }
     }
-    
-    $( "#testKitLotNo" ).change(function() {
-        if(this.value != ""){
-            $.post('/recency/get-kit-lot-info',{kitNo:this.value},
-            function(data){
-                if( data != ""){
-                    var objects = JSON.parse(data) 
-                    objects.forEach(function(key, index){
-                        $('#testKitExpDate').val(key.kit_expiry_date);
-                    });
-                }
-            });
-        }else{
-			$('#testKitExpDate').val('');
-		}
+
+    $("#testKitLotNo").change(function() {
+        if (this.value != "") {
+            $.post('/recency/get-kit-lot-info', {
+                    kitNo: this.value
+                },
+                function(data) {
+                    if (data != "") {
+                        var objects = JSON.parse(data)
+                        objects.forEach(function(key, index) {
+                            $('#testKitExpDate').val(key.kit_expiry_date);
+                        });
+                    }
+                });
+        } else {
+            $('#testKitExpDate').val('');
+        }
     });
 </script>

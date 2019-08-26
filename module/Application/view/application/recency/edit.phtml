@@ -190,7 +190,12 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label <?php echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>" for="">Sample ID<?php echo(in_array("Sample Id",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 									<div class="col-sm-4 <?php echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>">
-											<input type="text" value="<?php echo $result['sample_id']; ?>" class="form-control <?php echo $sample; echo in_array("Sample Id",$resultArr2)?"showFields":"hideFields";?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id">
+										<select class="form-control <?php echo $sample; echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" title="Please select the sample id">
+                                            <option value="">--Select--</option>
+                                            <?php foreach($sampleInfo as $sample){?>
+                                                <option value="<?php echo $sample['qc_sample_no'];?>" <?php echo ($result['sample_id'] == $sample['qc_sample_no'])?'selected="selected"':''; ?>><?php echo $sample['qc_sample_no'];?></option>
+                                            <?php }?>
+                                        </select>
 									</div>
 									<label class="col-sm-2 col-form-label <?php echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>" for="">Patient ID<?php echo(in_array("Patient Id",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 									<div class="col-sm-4 <?php echo in_array("Patient Id",$resultArr2)?"showFields":"hideFields";?>">

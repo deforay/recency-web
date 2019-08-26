@@ -1,4 +1,5 @@
 <?php
+
 use Zend\Session\Container;
 use Application\Service\CommonService;
 
@@ -27,10 +28,10 @@ $lineOutComeColor2 = "#000000";
 <style>
      <?php if ($result['term_outcome'] == '') {
           ?>.outcome {
-                    display: none;
-               }
+          display: none;
+     }
 
-          <?php
+     <?php
      }
 
      ?>.btnHide {
@@ -68,9 +69,14 @@ $lineOutComeColor2 = "#000000";
                     <form name="qcEditInformation" id="qcEditInformation" class="mb-5" action="<?php echo $this->url('quality-check', array('action' => 'edit')); ?>" method="post">
 
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">QC Sample ID <span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="qcSampleId">QC Sample ID <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $result['qc_sample_id']; ?>" class="form-control isRequired" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC Sample ID" title="Please enter the QC Sample ID">
+                                   <select class="form-control isRequired" id="qcSampleId" name="qcSampleId" title="Please select the QC Sample ID">
+                                        <option value="">--Select--</option>
+                                        <?php foreach ($sampleInfo as $sample) { ?>
+                                        <option value="<?php echo $sample['qc_sample_no']; ?>" <?php echo ($sample['qc_sample_no'] == $result['qc_sample_id']) ? 'selected="selected"' : ''; ?>><?php echo $sample['qc_sample_no']; ?></option>
+                                        <?php } ?>
+                                   </select>
                               </div>
                               <label class="col-sm-2 col-form-label" for="">Qc Test Date<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
@@ -88,9 +94,14 @@ $lineOutComeColor2 = "#000000";
                                         <option value="hiv_negative_sample" <?php echo ($result['reference_result'] == 'hiv_negative_sample') ? 'selected="selected"' : ''; ?>>HIV Negative Sample</option>
                                    </select>
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Test Kit Lot No.<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="testKitLotNo">Test Kit Lot No.<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $result['kit_lot_no']; ?>" class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" placeholder="Enter the test Kit Lot No" title="Please enter the test Kit Lot No">
+                                   <select class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" title="Please select the test Kit Lot No">
+                                        <option value="">--Select--</option>
+                                        <?php foreach ($kitInfo as $info) { ?>
+                                        <option value="<?php echo $info['kit_lot_no']; ?>" <?php echo ($info['kit_lot_no'] == $result['kit_lot_no']) ? 'selected="selected"' : ''; ?>><?php echo $info['kit_lot_no']; ?></option>
+                                        <?php } ?>
+                                   </select>
                               </div>
 
                          </div>
@@ -150,11 +161,11 @@ $lineOutComeColor2 = "#000000";
                                    <input type="text" value="<?php echo $result['tester_name']; ?>" class="form-control isRequired" id="testerName" name="testerName" placeholder="Enter the tester name" title="Please enter the tester name">
                               </div>
                               <label class="col-sm-2 col-form-label " for="">Testing Facility<span class="mandatory">*</span></label>
-                              <div class="col-sm-4 <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                              <div class="col-sm-4">
                                    <select class="form-control isRequired" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
                                         <option value="">--Select--</option>
                                         <?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
-                                             <option value="<?php echo $testingFacility['facility_id']; ?>" <?php echo ($testingFacility['facility_id'] == $result['testing_facility_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($testingFacility['facility_name']); ?></option>
+                                        <option value="<?php echo $testingFacility['facility_id']; ?>" <?php echo ($testingFacility['facility_id'] == $result['testing_facility_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($testingFacility['facility_name']); ?></option>
                                         <?php } ?>
                                         <!-- <option value="other">Other</option> -->
                                    </select>

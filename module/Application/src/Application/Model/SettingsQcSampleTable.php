@@ -219,5 +219,8 @@ class SettingsQcSampleTable extends AbstractTableGateway
         }
         return $response;
     }
-   
+    
+    public function fetchSamples(){
+        return $this->select(array('qc_sample_status'=>'active'))->toArray();
+    }
 }

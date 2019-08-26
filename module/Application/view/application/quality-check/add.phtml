@@ -45,7 +45,12 @@ $lineOutComeColor2 = "#000000";
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">QC Sample ID <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control isRequired" id="qcSampleId" name="qcSampleId" placeholder="Enter the QC Sample ID" title="Please enter the QC Sample ID">
+                                   <select class="form-control isRequired" id="qcSampleId" name="qcSampleId" title="Please select the QC Sample ID">
+                                        <option value="">--Select--</option>
+                                        <?php foreach($sampleInfo as $sample){?>
+                                             <option value="<?php echo $sample['qc_sample_no'];?>"><?php echo $sample['qc_sample_no'];?></option>
+                                        <?php }?>
+                                   </select>
                               </div>
 
                               <label class="col-sm-2 col-form-label" for="">Qc Test Date <span class="mandatory">*</span></label>
@@ -67,7 +72,12 @@ $lineOutComeColor2 = "#000000";
 
                               <label class="col-sm-2 col-form-label" for="">Test Kit Lot No <span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" placeholder="Enter the test Kit Lot No" title="Please enter the test Kit Lot No">
+                                   <select class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" title="Please select the test Kit Lot No">
+                                        <option value="">--Select--</option>
+                                        <?php foreach ($kitInfo as $info) {
+                                             echo '<option value="' . $info['kit_lot_no'] . '">' . $info['kit_lot_no'] . '</option>';
+                                        } ?>
+                                   </select>
                               </div>
                          </div>
 

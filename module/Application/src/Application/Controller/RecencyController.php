@@ -53,13 +53,17 @@ class RecencyController extends AbstractActionController
          $facilityResult = $facilityService->getFacilitiesAllDetails();
          $testFacilityTypeResult = $facilityService->getTestingFacilitiesTypeDetails();
          $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+         $settingService = $this->getServiceLocator()->get('SettingsService');
+         
          $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-         $kitInfo = $recencyService->getKitInfo();
+         $kitInfo = $settingService->getKitLotDetails();
+         $sampleInfo = $settingService->getSamplesDetails();
          return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
             'facilityResult' => $facilityResult,
             'testFacilityTypeResult' => $testFacilityTypeResult,
-            'kitInfo' => $kitInfo
+            'kitInfo' => $kitInfo,
+            'sampleInfo' => $sampleInfo
          ));
       }
    }
@@ -74,19 +78,21 @@ class RecencyController extends AbstractActionController
       } else {
          $recencyId = base64_decode($this->params()->fromRoute('id'));
          $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-
-         $facilityResult = $facilityService->getFacilitiesAllDetails();
-
-         $result = $recencyService->getRecencyDetailsById($recencyId);
+         $settingService = $this->getServiceLocator()->get('SettingsService');
          $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+         
+         $facilityResult = $facilityService->getFacilitiesAllDetails();
+         $result = $recencyService->getRecencyDetailsById($recencyId);
          $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
          $testFacilityTypeResult = $facilityService->getTestingFacilitiesTypeDetails();
-         $kitInfo = $recencyService->getKitInfo();
+         $kitInfo = $settingService->getKitLotDetails();
+         $sampleInfo = $settingService->getSamplesDetails();
          return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
             'facilityResult' => $facilityResult,
             'testFacilityTypeResult' => $testFacilityTypeResult,
             'kitInfo' => $kitInfo,
+            'sampleInfo' => $sampleInfo,
             'result' => $result
          ));
       }
