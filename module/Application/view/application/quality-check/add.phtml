@@ -340,4 +340,22 @@ $lineOutComeColor2 = "#000000";
           //      }
           // });
      });
+
+     $("#testKitLotNo").change(function() {
+        if (this.value != "") {
+            $.post('/recency/get-kit-lot-info', {
+                    kitNo: this.value
+                },
+                function(data) {
+                    if (data != "") {
+                        var objects = JSON.parse(data)
+                        objects.forEach(function(key, index) {
+                            $('#testKitExpDate').val(key.kit_expiry_date);
+                        });
+                    }
+                });
+        } else {
+            $('#testKitExpDate').val('');
+        }
+    });
 </script>
