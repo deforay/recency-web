@@ -174,8 +174,7 @@ class QualityCheckTable extends AbstractTableGateway
                $row[] = ucwords($aRow['tester_name']);
 
                // $row[] = '<a href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
-
-               $actionBtn .='<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
+               $actionBtn ='<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
                if ($roleCode != 'manager') {
                     $actionBtn.='<a class="btn btn-danger" href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-pencil"></i> Edit</a>';
                }
