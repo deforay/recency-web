@@ -144,7 +144,7 @@ $loginContainer = new Container('credo');
             
             if (flag) {
                 challenge_field = document.getElementById("challengeResponse").value;
-
+                document.getElementById('adminLoginInformation').submit();
                 if (challenge_field != "") {
                     $.post("<?php echo $this->url('checkcaptcha', array('action' => 'check-captcha')); ?>", {
                             challenge_field: challenge_field

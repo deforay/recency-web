@@ -165,6 +165,31 @@ $currentDate = date('d-M-Y');
 	/* Table initialisation */
 	oTable = null;
 	$(document).ready(function() {
+		$("#location_one").select2({
+			placeholder: "Choose Province",
+			width: "290px",
+			allowClear: true,
+		});
+		$("#location_two").select2({
+			placeholder: "Choose District",
+			width: "290px",
+			allowClear: true,
+		});
+		$("#location_three").select2({
+			placeholder: "Choose City",
+			width: "290px",
+			allowClear: true,
+		});
+		$("#facilityId").select2({
+			placeholder: "Choose Facility",
+			width: "290px",
+			allowClear: true,
+		});
+		$("#testingFacility").select2({
+			placeholder: "Choose Testing Site",
+			width: "290px",
+			allowClear: true,
+		});
 		getFinalOutcomeChart();
 		getInfectionByDistrictChart();
 		getInfectionByAgeChart();

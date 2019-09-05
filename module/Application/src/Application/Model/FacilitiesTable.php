@@ -299,9 +299,16 @@ class FacilitiesTable extends AbstractTableGateway
     }
     public function fetchFacilityByLocation($params)
     {
+        $sessionLogin = new Container('credo');
+        $roleCode = $sessionLogin->roleCode;
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id', 'facility_name'));
+        if($roleCode != 'admin'){
+            $sQuery = $sQuery->join(array('ufm'=>'user_facility_map'),'f.facility_id=ufm.facility_id',array());
+            $sQuery = $sQuery->join(array('u'=>'users'),'ufm.user_id=u.user_id',array());
+            $sQuery = $sQuery->where(array('u.user_id'=>$sessionLogin->userId));
+        }
         if ($params['locationOne'] != '') {
             $sQuery = $sQuery->where(array('province' => $params['locationOne']));
             if ($params['locationTwo'] != '') {
@@ -317,7 +324,7 @@ class FacilitiesTable extends AbstractTableGateway
                 $sQuery = $sQuery->where('facility_id NOT IN(' . implode(",", $fDeocde) . ')');
             }
         }
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $fResult;
     }

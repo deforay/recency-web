@@ -156,7 +156,7 @@
 								</select>
 							</div>
 						<?php }
-				} ?>
+					} ?>
 					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
 					<div class="col-sm-4">
 						<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
@@ -168,17 +168,12 @@
 					<div class="col-sm-4">
 						<select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
 							<option value=""> -- Select -- </option>
-							<?php
-							foreach ($facilityResult['facilityTest'] as $facilityRow) {
+							<?php foreach ($facilityResult['facilityTest'] as $facilityRow) {
 								//if (2 != (int)$facilityRow['facility_type_id']) {
 									//continue;
-								//}
-
-								?>
+								//} ?>
 								<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
-							<?php
-						}
-						?>
+							<?php }?>
 						</select>
 					</div>
 					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Assay Outcome</label>
@@ -210,11 +205,6 @@
 				</div>
 			</div>
 		</div>
-
-
-
-
-
 		<h2 class="content-heading">
 			<i class="fa fa-angle-right text-muted mr-1"></i> RITA Result Weekly Summary
 
@@ -224,7 +214,7 @@
 				<tr>
 					<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
 					<td>
-						<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
+						<select class="form-control"id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
 							<option value="hivRecencyTestDate" selected>Recency Test Date (DESC)</option>
 							<option value="ritaRecent">RITA Recent (DESC)</option>
 							<option value="longTerm">Long Term (DESC)</option>
@@ -404,10 +394,11 @@
 		</div>
 
 	</div>
+	<script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
+	<script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
 	<script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/exporting.js'; ?>"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/export-data.js'; ?>"></script>
-
 
 	<script type="text/javascript">
 		$(document).ajaxStart($.blockUI).ajaxComplete($.unblockUI);
@@ -416,6 +407,31 @@
 		oTable = null;
 		dTable = null;
 		$(document).ready(function() {
+			$("#location_one").select2({
+				placeholder: "Choose Province",
+				width: "290px",
+				allowClear: true,
+			});
+			$("#location_two").select2({
+				placeholder: "Choose District",
+				width: "290px",
+				allowClear: true,
+			});
+			$("#location_three").select2({
+				placeholder: "Choose City",
+				width: "290px",
+				allowClear: true,
+			});
+			$("#facilityId").select2({
+				placeholder: "Choose Facility",
+				width: "290px",
+				allowClear: true,
+			});
+			$("#testingFacility").select2({
+				placeholder: "Choose Testing Site",
+				width: "290px",
+				allowClear: true,
+			});
 
 			getRecencyAllDataCount();
 			getFinalOutcomeChart();
@@ -616,7 +632,8 @@
 
 
 		function getLocationDeatils(globalName, nxtGlobalName) {
-			var selectValue = document.getElementById(globalName).value;
+			
+			var selectValue = $('#'+globalName).val();
 			var innerId = '';
 			var path = '';
 			if (globalName == 'location_one' && selectValue == '') {
