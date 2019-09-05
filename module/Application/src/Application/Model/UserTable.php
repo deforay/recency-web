@@ -54,7 +54,7 @@ class UserTable extends AbstractTableGateway {
                 $alertQueryStr = $sql->getSqlStringForSqlObject($alertQuery);
                 $alertResult = $dbAdapter->query($alertQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                 if(isset($alertResult['count']) && $alertResult['count'] > 0){
-                    $alertContainer->alertMsg = 'Yow are having the '.$alertResult['count'].' VL pending results';
+                    $alertContainer->alertMsg = 'There are '.$alertResult['count'].' recent result(s) without Viral Load result recorded';
                 }
                 if($rResult->role_code == 'VLTS'){
                     return 'vl-data';
