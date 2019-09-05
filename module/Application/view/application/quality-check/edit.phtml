@@ -74,7 +74,7 @@ $lineOutComeColor2 = "#000000";
                                    <select class="form-control isRequired" id="qcSampleId" name="qcSampleId" title="Please select the QC Sample ID">
                                         <option value="">--Select--</option>
                                         <?php foreach ($sampleInfo as $sample) { ?>
-                                        <option value="<?php echo $sample['qc_sample_no']; ?>" <?php echo ($sample['qc_sample_no'] == $result['qc_sample_id']) ? 'selected="selected"' : ''; ?>><?php echo $sample['qc_sample_no']; ?></option>
+                                             <option value="<?php echo $sample['qc_sample_no']; ?>" <?php echo ($sample['qc_sample_no'] == $result['qc_sample_id']) ? 'selected="selected"' : ''; ?>><?php echo $sample['qc_sample_no']; ?></option>
                                         <?php } ?>
                                    </select>
                               </div>
@@ -99,7 +99,7 @@ $lineOutComeColor2 = "#000000";
                                    <select class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" title="Please select the test Kit Lot No">
                                         <option value="">--Select--</option>
                                         <?php foreach ($kitInfo as $info) { ?>
-                                        <option value="<?php echo $info['kit_lot_no']; ?>" <?php echo ($info['kit_lot_no'] == $result['kit_lot_no']) ? 'selected="selected"' : ''; ?>><?php echo $info['kit_lot_no']; ?></option>
+                                             <option value="<?php echo $info['kit_lot_no']; ?>" <?php echo ($info['kit_lot_no'] == $result['kit_lot_no']) ? 'selected="selected"' : ''; ?>><?php echo $info['kit_lot_no']; ?></option>
                                         <?php } ?>
                                    </select>
                               </div>
@@ -165,7 +165,7 @@ $lineOutComeColor2 = "#000000";
                                    <select class="form-control isRequired" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
                                         <option value="">--Select--</option>
                                         <?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
-                                        <option value="<?php echo $testingFacility['facility_id']; ?>" <?php echo ($testingFacility['facility_id'] == $result['testing_facility_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($testingFacility['facility_name']); ?></option>
+                                             <option value="<?php echo $testingFacility['facility_id']; ?>" <?php echo ($testingFacility['facility_id'] == $result['testing_facility_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($testingFacility['facility_name']); ?></option>
                                         <?php } ?>
                                         <!-- <option value="other">Other</option> -->
                                    </select>
@@ -368,20 +368,33 @@ $lineOutComeColor2 = "#000000";
      });
 
      $("#testKitLotNo").change(function() {
-        if (this.value != "") {
-            $.post('/recency/get-kit-lot-info', {
-                    kitNo: this.value
-                },
-                function(data) {
-                    if (data != "") {
-                        var objects = JSON.parse(data)
-                        objects.forEach(function(key, index) {
-                            $('#testKitExpDate').val(key.kit_expiry_date);
-                        });
-                    }
-                });
-        } else {
-            $('#testKitExpDate').val('');
-        }
-    });
+          if (this.value != "") {
+               $.post('/recency/get-kit-lot-info', {
+                         kitNo: this.value
+                    },
+                    function(data) {
+                         if (data != "") {
+                              var objects = JSON.parse(data)
+                              objects.forEach(function(key, index) {
+                                   $('#testKitExpDate').val(key.kit_expiry_date);
+                              });
+                         }
+                    });
+          } else {
+               $('#testKitExpDate').val('');
+          }
+     });
+
+     $(document).ready(function() {
+          $("#testingFacilityId").select2({
+               placeholder: "Choose Testing Site",
+               width: "280px",
+               allowClear: true,
+          });
+          $("#testKitLotNo").select2({
+               placeholder: "Choose Test Kit Lot No",
+               width: "280px",
+               allowClear: true,
+          });
+     });
 </script>

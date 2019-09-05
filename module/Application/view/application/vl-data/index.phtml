@@ -123,6 +123,26 @@ $roleCode = $sessionLogin->roleCode;
     }
 
     $(document).ready(function() {
+        $("#location_one").select2({
+            placeholder: "Choose Province",
+            width: "290px",
+            allowClear: true,
+        });
+        $("#location_two").select2({
+            placeholder: "Choose District",
+            width: "290px",
+            allowClear: true,
+        });
+        $("#location_three").select2({
+            placeholder: "Choose City",
+            width: "290px",
+            allowClear: true,
+        });
+        $("#facilityId").select2({
+            placeholder: "Choose Facility",
+            width: "290px",
+            allowClear: true,
+        });
         <?php foreach ($globalConfigResult as $config) {?>
             getLocationDeatils('<?php echo $config["global_name"]; ?>');
             <?php break;

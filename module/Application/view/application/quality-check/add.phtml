@@ -1,4 +1,5 @@
 <?php
+
 use Zend\Session\Container;
 
 namespace Application\Controller;
@@ -47,9 +48,9 @@ $lineOutComeColor2 = "#000000";
                               <div class="col-sm-4">
                                    <select class="form-control isRequired" id="qcSampleId" name="qcSampleId" title="Please select the QC Sample ID">
                                         <option value="">--Select--</option>
-                                        <?php foreach($sampleInfo as $sample){?>
-                                             <option value="<?php echo $sample['qc_sample_no'];?>"><?php echo $sample['qc_sample_no'];?></option>
-                                        <?php }?>
+                                        <?php foreach ($sampleInfo as $sample) { ?>
+                                             <option value="<?php echo $sample['qc_sample_no']; ?>"><?php echo $sample['qc_sample_no']; ?></option>
+                                        <?php } ?>
                                    </select>
                               </div>
 
@@ -342,20 +343,33 @@ $lineOutComeColor2 = "#000000";
      });
 
      $("#testKitLotNo").change(function() {
-        if (this.value != "") {
-            $.post('/recency/get-kit-lot-info', {
-                    kitNo: this.value
-                },
-                function(data) {
-                    if (data != "") {
-                        var objects = JSON.parse(data)
-                        objects.forEach(function(key, index) {
-                            $('#testKitExpDate').val(key.kit_expiry_date);
-                        });
-                    }
-                });
-        } else {
-            $('#testKitExpDate').val('');
-        }
+          if (this.value != "") {
+               $.post('/recency/get-kit-lot-info', {
+                         kitNo: this.value
+                    },
+                    function(data) {
+                         if (data != "") {
+                              var objects = JSON.parse(data)
+                              objects.forEach(function(key, index) {
+                                   $('#testKitExpDate').val(key.kit_expiry_date);
+                              });
+                         }
+                    });
+          } else {
+               $('#testKitExpDate').val('');
+          }
+     });
+
+     $(document).ready(function() {
+          $("#testingFacilityId").select2({
+            placeholder: "Choose Testing Site",
+            width: "280px",
+            allowClear: true,
+        });
+        $("#testKitLotNo").select2({
+            placeholder: "Choose Test Kit Lot No",
+            width: "280px",
+            allowClear: true,
+        });
     });
 </script>

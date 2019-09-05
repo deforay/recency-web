@@ -1,128 +1,142 @@
 <?php
 
 use Zend\Session\Container;
+
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center","bSortable":false}';
 
 ?>
 <div class="bg-body-light">
-     <div class="content content-full">
-          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">TAT Report</h1>
-               </div>
-          </div>
-     </div>
-     <div class="content">
-          <div class="block block-rounded block-bordered">
-               <div class="block-header block-header-default"></div>
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">TAT Report</h1>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default"></div>
 
-               <div class="block-content block-content-full">
-               <div class="form-group row">
-                        
-                        <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
-                        <div class="col-sm-4">
-                                <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
-                                <option value=""> -- Select -- </option>
-                                    <?php
-                                    foreach($facilityResult['facilityTest'] as $facilityRow){
-                                       // if(2 != (int)$facilityRow['facility_type_id']) continue;
-                                    ?>
-                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                    </div>
-                    <div class="row items-push">
-                        <div class="col-lg-7 ">
-                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                            <?php if($roleCode=='admin'){ ?>
-                              <a href="javascript:void(0);" class="btn btn-success"  onclick="exportTatData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-                            <?php } ?>
-                        </div>
-                    </div>
-                    <code>Note:TAT (in days) = Viral Load Result entered date - Recency Test Date</code>
-                    <table id="tatTable" class="table table-bordered table-striped table-vcenter">
-                         <thead>
-                              <tr>
-                                    <th>Sample ID</th>
-                                    <th>Testing Site</th>
-                                    <th>Final Result</th>
-                                    <th>Recency Testing Date</th>
-                                    <th>VL Tested Date</th>
-                                    <th>VL Entered Date</th>
-                                    <th>Difference(TAT)</th>
-                              </tr>
-                         </thead>
-                         <tbody>
-                              <tr>
-                                    <td colspan='6' class='dataTables_empty'>Loading data from server</td>
-                              </tr>
-                              </tbody>
-                              <tfoot>
-                              <tr>
-                                    <th>Sample ID</th>
-                                    <th>Testing Site</th>
-                                    <th>Final Result</th>
-                                    <th>Recency Testing Date</th>
-                                    <th>VL Tested Date</th>
-                                    <th>VL Entered Date</th>
-                                    <th>Difference(TAT)</th>
-                              </tr>
-                         </tfoot>
-                         </table>
-                    </div>
-               </div>
-          </div>
+        <div class="block-content block-content-full">
+            <div class="form-group row">
 
-          <script type="text/javascript">
-          /* Table initialisation */
-          oTable = null;
-          $(document).ready(function() {
-            oTable = $('#tatTable').dataTable({
-                "bAutoWidth": false,
-                "bProcessing": true,
-                "bServerSide": true,
-                "aoColumns": [
-                        <?php echo $editAction;?>
-                ],
-                "sAjaxSource": "<?php echo $this->url('vl-data',array('action' => 'tat-report')); ?>",
-                "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
+                        <option value=""> -- Select -- </option>
+                        <?php
+                        foreach ($facilityResult['facilityTest'] as $facilityRow) {
+                            // if(2 != (int)$facilityRow['facility_type_id']) continue;
+                            ?>
+                            <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row items-push">
+                <div class="col-lg-7 ">
+                    <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
+                    <?php if ($roleCode == 'admin') { ?>
+                        <a href="javascript:void(0);" class="btn btn-success" onclick="exportTatData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                    <?php } ?>
+                </div>
+            </div>
+            <code>Note:TAT (in days) = Viral Load Result entered date - Recency Test Date</code>
+            <table id="tatTable" class="table table-bordered table-striped table-vcenter">
+                <thead>
+                    <tr>
+                        <th>Sample ID</th>
+                        <th>Testing Site</th>
+                        <th>Final Result</th>
+                        <th>Recency Testing Date</th>
+                        <th>VL Tested Date</th>
+                        <th>VL Entered Date</th>
+                        <th>Difference(TAT)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan='6' class='dataTables_empty'>Loading data from server</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Sample ID</th>
+                        <th>Testing Site</th>
+                        <th>Final Result</th>
+                        <th>Recency Testing Date</th>
+                        <th>VL Tested Date</th>
+                        <th>VL Entered Date</th>
+                        <th>Difference(TAT)</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
 
-                    $.ajax({
-                        "dataType": 'json',
-                        "type": "POST",
-                        "url": sSource,
-                        "data": aoData,
-                        "success": fnCallback
-                    });
-                }
-            } );
+<script type="text/javascript">
+    /* Table initialisation */
+    oTable = null;
+    $(document).ready(function() {
 
-            } );
+        $("#facilityId").select2({
+            placeholder: "Choose Facility",
+            width: "290px",
+            allowClear: true,
+        });
+        $("#testingFacility").select2({
+            placeholder: "Choose Testing Site",
+            width: "290px",
+            allowClear: true,
+        });
+        
+        oTable = $('#tatTable').dataTable({
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bServerSide": true,
+            "aoColumns": [
+                <?php echo $editAction; ?>
+            ],
+            "sAjaxSource": "<?php echo $this->url('vl-data', array('action' => 'tat-report')); ?>",
+            "fnServerData": function(sSource, aoData, fnCallback) {
+                aoData.push({
+                    "name": "testingFacility",
+                    "value": $("#testingFacility").val()
+                });
 
-          function searchData(){
-            $.blockUI();
-            oTable.fnDraw();
-            $.unblockUI();
-        }
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }
+        });
 
-        function exportTatData()
-        {
-            $.blockUI();
-            $.post("<?php echo $this->url('vl-data',array('action'=>'export-tat-report')); ?>",
-                function(data){
-                if(data == "" || data == null || data == undefined){
-                $.unblockUI();
-                alert('Unable to generate download');
-                }else{
-                $.unblockUI();
-                document.location.href = '/temporary/'+data;
+    });
+
+    function searchData() {
+        $.blockUI();
+        oTable.fnDraw();
+        $.unblockUI();
+    }
+
+    function exportTatData() {
+        $.blockUI();
+        $.post("<?php echo $this->url('vl-data', array('action' => 'export-tat-report')); ?>",
+            function(data) {
+                if (data == "" || data == null || data == undefined) {
+                    $.unblockUI();
+                    alert('Unable to generate download');
+                } else {
+                    $.unblockUI();
+                    document.location.href = '/temporary/' + data;
                 }
             });
-        }
-    
-     </script>
+    }
+</script>

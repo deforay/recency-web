@@ -1,150 +1,166 @@
 <?php
+
 use Zend\Session\Container;
+
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
-    $startDate = date('d-M-Y', strtotime('today - 365 days'));
-    $currentDate = date('d-M-Y');
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+$startDate = date('d-M-Y', strtotime('today - 365 days'));
+$currentDate = date('d-M-Y');
 ?>
-<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css'?>" rel="stylesheet">
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
-     <div class="content content-full">
-          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Quality Check Test Report</h1>
-               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                      
-                    </ol>
-               </nav>
-          </div>
-     </div>
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Quality Check Test Report</h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+
+                </ol>
+            </nav>
+        </div>
+    </div>
 </div>
-     <div class="content">
-          <div class="block block-rounded block-bordered">
-               <div class="block-header block-header-default">
-               </div>
-               <div class="block-content block-content-full">
-               <div class="form-group row">
-               <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
-                        <div class="col-sm-4">
-                        <input type="text" id="testDate" name="testDate" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
-                           </div>
+<div class="content">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+        </div>
+        <div class="block-content block-content-full">
+            <div class="form-group row">
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
+                <div class="col-sm-4">
+                    <input type="text" id="testDate" name="testDate" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
+                </div>
 
-                        <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
-                        <div class="col-sm-4">
-                                <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
-                                <option value=""> -- Select -- </option>
-                                    <?php
-                                    foreach($facilityResult['facilityTest'] as $facilityRow){
-                                       // if(2 != (int)$facilityRow['facility_type_id']) continue;
-                                    ?>
-                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Quality Check</label>
-                        <div class="col-sm-4">
-                        <select class="form-control" id="qualityCheck" name="qualityCheck"  title="Please select quality check field" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <option value="qc_not_performed">Qc Not Performed</option>
-                                    <option value="qc_performed">Qc Performed</option>
-                                    <option value="all">All</option>
-                        </select>
-                            </div>
-                    </div>
-                    <div class="row items-push">
-                        <div class="col-lg-7 ">
-                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                          
-                        </div>
-                    </div>
-                    <table id="qcDataTable" class="table table-bordered table-striped table-vcenter">
-                         <thead>
-                              <tr>
-                                    <th>Tester Name</th>
-                                    <th>Total</th>
-                                    <th>Facility Name</th>
-                              </tr>
-                         </thead>
-                         <tbody>
-                              <tr>
-                                <?php 
-                                   echo "<td colspan='3' class='dataTables_empty'>Loading data from server</td>";
-                                ?>
-                              </tr>
-                              </tbody>
-                              <tfoot>
-                              <tr>
-                                    <th>Tester Name</th>
-                                    <th>Total</th>
-                                    <th>Facility Name</th>
-                              </tr>
-                         </tfoot>
-                         </table>
-                    </div>
-               </div>
-          </div>
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
+                        <option value=""> -- Select -- </option>
+                        <?php
+                        foreach ($facilityResult['facilityTest'] as $facilityRow) {
+                            // if(2 != (int)$facilityRow['facility_type_id']) continue;
+                            ?>
+                            <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Quality Check</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="qualityCheck" name="qualityCheck" title="Please select quality check field" style="width:100%;">
+                        <option value=""> -- Select -- </option>
+                        <option value="qc_not_performed">Qc Not Performed</option>
+                        <option value="qc_performed">Qc Performed</option>
+                        <option value="all">All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row items-push">
+                <div class="col-lg-7 ">
+                    <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
 
-          <script type="text/javascript">
-          /* Table initialisation */
-          oTable = null;
-          $(document).ready(function() {
-            oTable = $('#qcDataTable').dataTable( {
-                "bAutoWidth": false,
-                "bProcessing": true,
-                "bServerSide": true,
-                "aoColumns": [
-                        <?php echo $editAction;?>
-                ],
-                "sAjaxSource": "<?php echo $this->url('vl-data',array('action' => 'qc-report')); ?>",
-                "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    aoData.push({"name": "testDate", "value": $("#testDate").val()});
-                    aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
-                    aoData.push({"name": "qualityCheck", "value": $("#qualityCheck").val()});
-                    $.ajax({
-                        "dataType": 'json',
-                        "type": "POST",
-                        "url": sSource,
-                        "data": aoData,
-                        "success": fnCallback
-                    });
-                }
-            } );
+                </div>
+            </div>
+            <table id="qcDataTable" class="table table-bordered table-striped table-vcenter">
+                <thead>
+                    <tr>
+                        <th>Tester Name</th>
+                        <th>Total</th>
+                        <th>Facility Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <?php
+                        echo "<td colspan='3' class='dataTables_empty'>Loading data from server</td>";
+                        ?>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Tester Name</th>
+                        <th>Total</th>
+                        <th>Facility Name</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
 
-                $('#testDate').daterangepicker({
-				format: 'DD-MMM-YYYY',
-				autoUpdateInput: false,
-				separator: ' to ',
-				startDate: moment().subtract('days', 29),
-				endDate: moment(),
-				maxDate: moment(),
-				ranges: {
-					'Today': [moment(), moment()],
-					'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-					'Last 7 Days': [moment().subtract('days', 6), moment()],
-					'Last 30 Days': [moment().subtract('days', 29), moment()],
-					'Last 60 Days': [moment().subtract('days', 59), moment()],
-					'Last 180 Days': [moment().subtract('days', 179), moment()],
-					'This Month': [moment().startOf('month'), moment().endOf('month')],
-					'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-				}
-			},
-			function(start, end) {
-				startDate = start.format('YYYY-MM-DD');
-				endDate = end.format('YYYY-MM-DD');
-				$('input[name="testDate"]').on('apply.daterangepicker', function(ev, picker) {
-					$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
-				});
+<script type="text/javascript">
+    /* Table initialisation */
+    oTable = null;
+    $(document).ready(function() {
 
-			});
+        $("#testingFacility").select2({
+            placeholder: "Choose Testing Site",
+            width: "290px",
+            allowClear: true,
+        });
 
-        } );
+        oTable = $('#qcDataTable').dataTable({
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bServerSide": true,
+            "aoColumns": [
+                <?php echo $editAction; ?>
+            ],
+            "sAjaxSource": "<?php echo $this->url('vl-data', array('action' => 'qc-report')); ?>",
+            "fnServerData": function(sSource, aoData, fnCallback) {
+                aoData.push({
+                    "name": "testDate",
+                    "value": $("#testDate").val()
+                });
+                aoData.push({
+                    "name": "testingFacility",
+                    "value": $("#testingFacility").val()
+                });
+                aoData.push({
+                    "name": "qualityCheck",
+                    "value": $("#qualityCheck").val()
+                });
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }
+        });
 
+        $('#testDate').daterangepicker({
+            format: 'DD-MMM-YYYY',
+            autoUpdateInput: false,
+            separator: ' to ',
+            startDate: moment().subtract('days', 29),
+            endDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'Last 60 Days': [moment().subtract('days', 59), moment()],
+                'Last 180 Days': [moment().subtract('days', 179), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
+        },
+        function(start, end) {
+            startDate = start.format('YYYY-MM-DD');
+            endDate = end.format('YYYY-MM-DD');
+            $('input[name="testDate"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+            });
 
-		function searchData() {
-			oTable.fnDraw();
-		}
+        });
 
-     </script>
+    });
+
+    function searchData() {
+        oTable.fnDraw();
+    }
+</script>

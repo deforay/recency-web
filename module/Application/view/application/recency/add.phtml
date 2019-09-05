@@ -96,7 +96,7 @@ $lineOutComeColor2 = "#000000";
 
     /* Search Start*/
     /*
-.typeahead { border: 1px solid #d4d4d4;border-radius: 4px;background: #ffff;padding: 8px 12px;max-width: 300px;min-width: 290px;
+.typeahead { border: 1px solid #d4d4d4;border-radius: 4px;background: #ffff;padding: 8px 12px;max-width: 300px;min-width: 260px;
 color: #495057;}
 input.typeahead {min-width: 265px;}
 .tt-menu { width:300px; }
@@ -150,7 +150,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                             <?php
                             if (isset($arr['admin_message']) && $arr['admin_message'] != '') {
                                 ?>
-                            <h4><?php echo ucwords($arr['admin_message']); ?></h4>
+                                <h4><?php echo ucwords($arr['admin_message']); ?></h4>
                             <?php
                             }
                             ?>
@@ -159,7 +159,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                 <div class="form-group row form-horizontal">
                                     <label class="col-sm-2 col-form-label <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Sample ID<?php echo (in_array("Sample Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                     <div class="col-sm-4 <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                        <input type="text" class="form-control <?php echo $sample; echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id"/>
+                                        <input type="text" class="form-control <?php echo $sample;
+                                                                                echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" placeholder="Enter the sample id" title="Please enter the sample id" />
                                     </div>
 
                                     <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Patient ID <?php echo (in_array("Patient Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
@@ -211,7 +212,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 <select class="form-control <?php echo $facility; ?> select2" id="facilityId" name="facilityId" title="Please select the facility name" onchange="getLocationDataByFacility()">
                                                     <option value="">--Select--</option>
                                                     <?php foreach ($facilityResult['facility'] as $facility) { ?>
-                                                    <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
+                                                        <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo $facility['facility_name']; ?></option>
                                                     <?php } ?>
                                                     <!-- <option value="other">Other</option> -->
                                                 </select>
@@ -328,7 +329,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                     <option value="">--Select--</option>
 
                                                     <?php foreach ($testFacilityTypeResult as $testingFacilityType) { ?>
-                                                    <option value="<?php echo $testingFacilityType['testing_facility_type_id']; ?>"><?php echo $testingFacilityType['testing_facility_type_name']; ?></option>
+                                                        <option value="<?php echo $testingFacilityType['testing_facility_type_id']; ?>"><?php echo $testingFacilityType['testing_facility_type_name']; ?></option>
                                                     <?php } ?>
                                                     <option value="other">Other</option>
                                                 </select>
@@ -380,7 +381,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 <select class="form-control disbaledResult<?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
                                                     <option value="">--Select--</option>
                                                     <?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
-                                                    <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
+                                                        <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
                                                     <?php } ?>
                                                     <!-- <option value="other">Other</option> -->
                                                 </select>
@@ -460,28 +461,28 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 </select>
                                             </div>
                                             <?php if ($syn) { ?>
-                                            <div class="is-vl-lab col-sm-12 col-lg-12 col-md-12" style="display:none;clear:both;">
-                                                <label class="col-sm-2 form-check-label rm-lab-req" for="sendVlsm" style=" padding-top: 35px; ">Send a Viral Load Test Request to VLSM</label>
-                                                <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);" value="yes">&nbsp;Yes
+                                                <div class="is-vl-lab col-sm-12 col-lg-12 col-md-12" style="display:none;clear:both;">
+                                                    <label class="col-sm-2 form-check-label rm-lab-req" for="sendVlsm" style=" padding-top: 35px; ">Send a Viral Load Test Request to VLSM</label>
+                                                    <div class="col-sm-4 rm-lab-req" style=" padding-top: 35px; ">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="isVlLabRequired form-check-input" name="sendVlsm" id="sendVlsm" onchange="sendViralLoadTestRequest(this);" value="yes">&nbsp;Yes
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="is-vl-lab col-md-12 col-lg-12" style="display:none;">
-                                                <div class="col-sm-2">
-                                                    <label class="col-form-label" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
-                                                    <label class="col-form-label" for="isVlLab" style=" padding-top: 35px; ">Viral Load Lab <span class='mandatory'>*</span></label>
-                                                </div>
+                                                <div class="is-vl-lab col-md-12 col-lg-12" style="display:none;">
+                                                    <div class="col-sm-2">
+                                                        <label class="col-form-label" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
+                                                        <label class="col-form-label" for="isVlLab" style=" padding-top: 35px; ">Viral Load Lab <span class='mandatory'>*</span></label>
+                                                    </div>
 
-                                                <div class="col-sm-4">
-                                                    <select class="select2 form-control isVlLabRequired is-facility" name="isFacilityLab" id="isFacilityLab" title="Please select facility lab">
-                                                        <option value="">-- Select -- </option>
-                                                    </select>
-                                                    <select class="select2 form-control isVlLabRequired is-viral-lab" name="isVlLab" id="isVlLab" title="Please select viral load lab" style=" margin-top: 35px; ">
-                                                        <option value="">-- Select -- </option>
-                                                    </select>
+                                                    <div class="col-sm-4">
+                                                        <select class="select2 form-control isVlLabRequired is-facility" name="isFacilityLab" id="isFacilityLab" title="Please select facility lab">
+                                                            <option value="">-- Select -- </option>
+                                                        </select>
+                                                        <select class="select2 form-control isVlLabRequired is-viral-lab" name="isVlLab" id="isVlLab" title="Please select viral load lab" style=" margin-top: 35px; ">
+                                                            <option value="">-- Select -- </option>
+                                                        </select>
+                                                    </div>
+                                                    <input type="hidden" name="isViralLabText" id="isViralLabText" />
                                                 </div>
-                                                <input type="hidden" name="isViralLabText" id="isViralLabText" />
-                                            </div>
                                             <?php } ?>
 
                                             <label class="col-sm-2 col-form-label vlResultoutcome " style="visibility:hidden" for="">Final Outcome</label>
@@ -574,7 +575,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                             <select class="form-control section2" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
                                                 <option value="">--Select--</option>
                                                 <?php foreach ($facilityResult['riskPopulations'] as $riskPo) { ?>
-                                                <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo $riskPo['name']; ?></option>
+                                                    <option value="<?php echo base64_encode($riskPo['rp_id']); ?>"><?php echo $riskPo['name']; ?></option>
                                                 <?php } ?>
                                                 <option value="Other">Other</option>
                                             </select>&nbsp;
@@ -804,10 +805,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             if (fieldValue == 'Assay Recent') {
                 $(".vlResultFields").prop('disabled', false);
                 <?php if (in_array("Viral Load Test Date", $resultArr2)) { ?>
-                $("#vlTestDate").addClass('<?php echo $vlTestDate; ?>');
+                    $("#vlTestDate").addClass('<?php echo $vlTestDate; ?>');
                 <?php  }
                 if (in_array("Viral Load Result", $resultArr2)) { ?>
-                $("#vlLoadResult").addClass('<?php echo $vlLoadResult; ?>');
+                    $("#vlLoadResult").addClass('<?php echo $vlLoadResult; ?>');
                 <?php } ?>
                 if ((vlDataResult > 1000 && vlDataResult != '')) {
                     $("#vlResultoutcome").html('RITA Recent').css({
@@ -1000,7 +1001,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         });
 
         <?php foreach ($globalConfigResult as $config) { ?>
-        getLocationDeatils('<?php echo $config["global_name"]; ?>');
+            getLocationDeatils('<?php echo $config["global_name"]; ?>');
         <?php break;
         } ?>
     });
@@ -1252,5 +1253,23 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         } else {
             $('#testKitExpDate').val('');
         }
+    });
+
+    $(document).ready(function() {
+        $("#testingFacilityId").select2({
+            placeholder: "Choose Testing Site",
+            width: "260px",
+            allowClear: true,
+        });
+        $("#testKitLotNo").select2({
+            placeholder: "Choose Test Kit Lot No",
+            width: "260px",
+            allowClear: true,
+        });
+        $("#testingModality").select2({
+            placeholder: "Choose Testing Modality",
+            width: "260px",
+            allowClear: true,
+        });
     });
 </script>

@@ -17,6 +17,7 @@ class UserTable extends AbstractTableGateway {
     }
 
     public function loginProcessDetails($params){
+        $recencyDb = new \Application\Model\RecencyTable($this->adapter);
 		$alertContainer = new Container('alert');
         $logincontainer = new Container('credo');
         $config = new \Zend\Config\Reader\Ini();
@@ -45,6 +46,16 @@ class UserTable extends AbstractTableGateway {
                 $logincontainer->roleCode = $rResult->role_code;
                 $logincontainer->userName = ucwords($rResult->user_name);
                 $logincontainer->userEmail = ucwords($rResult->email);
+                // VL Pending result alert
+                $alertQuery = $sql->select()->from(array('r'=>'recency'))->columns(array('count'=>new Expression('COUNT(*)')))
+                ->join(array('ufm'=>'user_facility_map'),'r.facility_id=ufm.facility_id',array())
+                ->join(array('u'=>'users'),'ufm.user_id=u.user_id',array())
+                ->where(array('term_outcome' => 'Assay Recent','vl_result IS NULL','u.user_id'=>$logincontainer->userId));
+                $alertQueryStr = $sql->getSqlStringForSqlObject($alertQuery);
+                $alertResult = $dbAdapter->query($alertQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                if(isset($alertResult['count']) && $alertResult['count'] > 0){
+                    $alertContainer->alertMsg = 'Yow are having the '.$alertResult['count'].' VL pending results';
+                }
                 if($rResult->role_code == 'VLTS'){
                     return 'vl-data';
                 }else if($rResult->role_code == 'MGMT'){

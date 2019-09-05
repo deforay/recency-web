@@ -1066,7 +1066,21 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 		  }
 	 }
 	 $(document).ready(function(){
-
+		$("#testingFacilityId").select2({
+            placeholder: "Choose Testing Site",
+            width: "260px",
+            allowClear: true,
+        });
+        $("#testKitLotNo").select2({
+            placeholder: "Choose Test Kit Lot No",
+            width: "260px",
+            allowClear: true,
+        });
+        $("#testingModality").select2({
+            placeholder: "Choose Testing Modality",
+            width: "260px",
+            allowClear: true,
+        });
 		  <?php if($result['gender'] == 'male') { ?>
 			   $(".hidePregnancyResult").css('display','none');
 			   $("#pregnancyStatus").removeClass('isRequired');
@@ -1223,4 +1237,5 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 			$('#testKitExpDate').val('');
 		}
     });
+
 </script>

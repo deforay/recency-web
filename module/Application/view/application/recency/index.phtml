@@ -1,386 +1,417 @@
 <?php
 
 use Zend\Session\Container;
+
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 // $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 // {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 // {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 
-$formFields = array('sample_id','facility_name','hiv_recency_test_date','vl_test_date','control_line','positive_verification_line','long_term_verification_line','term_outcome','vl_result','final_outcome','gender','age','patient_id','sample_collection_date','sample_receipt_date','received_specimen_type','testing_facility_type','testing_facility_type_name','hiv_diagnosis_date',
-'kit_lot_no','kit_expiry_date','tester_name','dob','marital_status','residence','education_level','name','pregnancy_status','current_sexual_partner','past_hiv_testing','last_hiv_status','patient_on_art','test_last_12_month','exp_violence_last_12_month',
-'form_initiation_datetime','form_transfer_datetime');
-$arrFields = explode(", ",$manageColumnsResult['manage_columns']);
-$arrnum = array("0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11", "12", "13", "14", "15", "16", "17", "18", "19","20","21","22", "23" ,"24" ,"25", "26", "27", "28", "29", "30", "31" ,"32" ,"33" ,"34" ,"35");
+$formFields = array(
+    'sample_id', 'facility_name', 'hiv_recency_test_date', 'vl_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'term_outcome', 'vl_result', 'final_outcome', 'gender', 'age', 'patient_id', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type', 'testing_facility_type', 'testing_facility_type_name', 'hiv_diagnosis_date',
+    'kit_lot_no', 'kit_expiry_date', 'tester_name', 'dob', 'marital_status', 'residence', 'education_level', 'name', 'pregnancy_status', 'current_sexual_partner', 'past_hiv_testing', 'last_hiv_status', 'patient_on_art', 'test_last_12_month', 'exp_violence_last_12_month',
+    'form_initiation_datetime', 'form_transfer_datetime'
+);
+$arrFields = explode(", ", $manageColumnsResult['manage_columns']);
+$arrnum = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35");
 $acti = $manageColumnsResult['manage_columns'];
-$resultArr =array_diff($arrnum,$arrFields);
+$resultArr = array_diff($arrnum, $arrFields);
 $HideVal = implode(',', $resultArr);
 
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
     $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
 }
 $resultArr2 = array();
-if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
-    $resultArr2 = explode(",",$arr['display_fields']);
+if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
+    $resultArr2 = explode(",", $arr['display_fields']);
 }
 //\Zend\Debug\Debug::dump($resultArr2);die;
 ?>
 <div class="bg-body-light">
-     <div class="content content-full">
-          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency Data</h1>
-                    <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
-                         <ol class="breadcrumb">
-                              <li class="breadcrumb-item">
-                                   <?php if($roleCode != "manager"){ ?>
-                                   <a href="<?php echo $this->url('recency',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Recency</a>
-                                   <?php } if($roleCode=='admin' || $roleCode =='manager'){ ?>
-                                   <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportRecencyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-                                   <?php } ?>
-                              <?php 
-                                  //}
-                              ?>
-                              </li>
-                         </ol>
-                    </nav>
-               </div>
-          </div>
-     </div>
-     <div class="content">
-          <div class="block block-rounded block-bordered">
-               <div class="block-header block-header-default">
-               </div>
-               <div class="block-content block-content-full">
-                    <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-                        <tr>
-                            <td><b>Facility Name :</b></td>
-                            <td>
-                                <select class="form-control" id="facilityName" name="facilityName"  title="Please select facility name" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <?php
-                                    foreach($facilityResult['facility'] as $facilityRow){
-                                       // if(2 == (int)$facilityRow['facility_type_id']) continue;
-                                    ?>
-                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ($facilityRow['facility_name']);?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </td>
-                            
-                            <td><b>Assay Outcome :</b></td>
-                            <td>
-                                <select class="form-control" id="termOut" name="termOut" title="Please select assay outcome" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <option value="Assay Negative">Assay Negative</option>
-                                    <option value="Assay Recent">Assay Recent</option>
-                                    <option value="Long Term">Long Term</option>
-                                    <option value="Invalid">Invalid</option>
-                                </select>
-                            </td>
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency Data</h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <?php if ($roleCode != "manager") { ?>
+                            <a href="<?php echo $this->url('recency', array('action' => 'add')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Recency</a>
+                        <?php }
+                        if ($roleCode == 'admin' || $roleCode == 'manager') { ?>
+                            <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportRecencyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                        <?php } ?>
+                        <?php
+                        //}
+                        ?>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+        </div>
+        <div class="block-content block-content-full">
+            <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+                <tr>
+                    <td><b>Facility Name :</b></td>
+                    <td>
+                        <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:100%;">
+                            <option value=""> -- Select -- </option>
+                            <?php
+                            foreach ($facilityResult['facility'] as $facilityRow) {
+                                // if(2 == (int)$facilityRow['facility_type_id']) continue;
+                                ?>
+                                <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ($facilityRow['facility_name']); ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </td>
 
-                        </tr>
-                        <tr>
-                            <td><b>Gender :</b></td>
-                            <td>
-                                <select class="form-control" id="gender" name="gender"  title="Please select gender" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="not_reported">Gender Missing</option>
-                                </select>
-                            </td>
-                            <td><b>Final Outcome :</b></td>
-                            <td>
-                                <select class="form-control" id="finalOutcome" name="finalOutcome" title="Please select fianl outcome" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <option value="RITA Recent">RITA Recent</option>
-                                    <option value="Long Term">Long Term</option>
-                                    <option value="inconclusive">Inconclusive</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>Testing Site :</b></td>
-                            <td>
-                                <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <?php
-                                    foreach($facilityResult['facilityTest'] as $facilityRow){
-                                        //if(2 != (int)$facilityRow['facility_type_id']) continue;
-                                    ?>
-                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>                                
-                            </td>
+                    <td><b>Assay Outcome :</b></td>
+                    <td>
+                        <select class="form-control" id="termOut" name="termOut" title="Please select assay outcome" style="width:100%;">
+                            <option value=""> -- Select -- </option>
+                            <option value="Assay Negative">Assay Negative</option>
+                            <option value="Assay Recent">Assay Recent</option>
+                            <option value="Long Term">Long Term</option>
+                            <option value="Invalid">Invalid</option>
+                        </select>
+                    </td>
 
-                            <td><b>Viral Load :</b></td>
-                            <td>
-                                <select class="form-control" id="vlResult" name="vlResult"  title="Please select Viral Load Results" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <option value="panding">Pending</option>
-                                    <option value="vl_load_tested">Viral Load Tested</option>
-                                    <option value="all">All</option>
-                                
-                                </select>                                
-                            </td>
-                            
-                        </tr>
-                        <tr>
-                            <td colspan="4"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
-                                &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-                                &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
-                            </td>
-                        </tr>
-                    </table>
-                    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;width:70%;" id="showhide">
-                    
-			<div class="row" style="background:#eee;padding: 15px;border-radius:20px;font-size:13px;">
-            <div class="col-sm-12 " style=""><a href="javascript:void(0);" style="float:right;font-size:20px;color:red;font-weight:bold" onclick="closeDiv()" title="Close">X</a></div>
-					
-                                <?php $i=0;
-                    foreach ($formFields as  $chk) 
-                    { 
-                       $v = str_replace("_"," ",$chk);
+                </tr>
+                <tr>
+                    <td><b>Gender :</b></td>
+                    <td>
+                        <select class="form-control" id="gender" name="gender" title="Please select gender" style="width:100%;">
+                            <option value=""> -- Select -- </option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="not_reported">Gender Missing</option>
+                        </select>
+                    </td>
+                    <td><b>Final Outcome :</b></td>
+                    <td>
+                        <select class="form-control" id="finalOutcome" name="finalOutcome" title="Please select fianl outcome" style="width:100%;">
+                            <option value=""> -- Select -- </option>
+                            <option value="RITA Recent">RITA Recent</option>
+                            <option value="Long Term">Long Term</option>
+                            <option value="inconclusive">Inconclusive</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Testing Site :</b></td>
+                    <td>
+                        <select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
+                            <option value=""> -- Select -- </option>
+                            <?php
+                            foreach ($facilityResult['facilityTest'] as $facilityRow) {
+                                //if(2 != (int)$facilityRow['facility_type_id']) continue;
+                                ?>
+                                <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </td>
+
+                    <td><b>Viral Load :</b></td>
+                    <td>
+                        <select class="form-control" id="vlResult" name="vlResult" title="Please select Viral Load Results" style="width:100%;">
+                            <option value=""> -- Select -- </option>
+                            <option value="panding">Pending</option>
+                            <option value="vl_load_tested">Viral Load Tested</option>
+                            <option value="all">All</option>
+
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="4"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
+                        &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+                        &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
+                    </td>
+                </tr>
+            </table>
+            <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;width:70%;" id="showhide">
+
+                <div class="row" style="background:#eee;padding: 15px;border-radius:20px;font-size:13px;">
+                    <div class="col-sm-12 " style=""><a href="javascript:void(0);" style="float:right;font-size:20px;color:red;font-weight:bold" onclick="closeDiv()" title="Close">X</a></div>
+
+                    <?php $i = 0;
+                    foreach ($formFields as  $chk) {
+                        $v = str_replace("_", " ", $chk);
                         ?>
                         <div class="col-sm-3">
-                        <?php if(isset($manageColumnsResult['user_id']) && $manageColumnsResult['user_id']!=''){ ?>
-                        <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i;?>);" value="<?php echo $i;?>" <?php if(in_array($i, $arrFields)){ echo " checked=\"checked\""; } ?> name="recencyCheckbox[]" id="iCol<?php echo $i;?>"  class="showhideCheckBox" />&nbsp;&nbsp;<label><?php echo ucwords($v) ; ?></label>
-                        <?php } else{  ?> 
+                            <?php if (isset($manageColumnsResult['user_id']) && $manageColumnsResult['user_id'] != '') { ?>
+                                <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i; ?>);" value="<?php echo $i; ?>" <?php if (in_array($i, $arrFields)) {
+                                                                                                                                                echo " checked=\"checked\"";
+                                                                                                                                            } ?> name="recencyCheckbox[]" id="iCol<?php echo $i; ?>" class="showhideCheckBox" />&nbsp;&nbsp;<label><?php echo ucwords($v); ?></label>
+                            <?php } else {  ?>
 
-                             <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i;?>);" value="<?php echo $i;?>" checked="checked" name="recencyCheckbox[]" id="iCol<?php echo $i;?>"  class="showhideCheckBox" />&nbsp;&nbsp;<label><?php echo ucwords($v) ; ?></label>
-                       
-                      <?php  } ?>
-                    </div>                                          
-                    <?php $i++;} 
+                                <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i; ?>);" value="<?php echo $i; ?>" checked="checked" name="recencyCheckbox[]" id="iCol<?php echo $i; ?>" class="showhideCheckBox" />&nbsp;&nbsp;<label><?php echo ucwords($v); ?></label>
+
+                            <?php  } ?>
+                        </div>
+                    <?php $i++;
+                    }
                     ?>
 
                     <input type="button" onclick="getCheckBoxVal();" value="Submit" class="btn btn-info btn-sm">
-                   
-			    </div>
-			</span>
-                    <table id="facilityDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
-                         <thead>
-                              <tr>
-                                    <th>Sample ID</th>
-                                    <th>Facility Name</th>
-                                    <th>HIV Recency Test Date</th>
-                                    <th>Viral Test Date</th>
-                                    <th>Control Line</th>
-                                    <th>Positive Verification</th>
-                                    <th>Long Term Verification</th>
-                                    <th>Assay Outcome</th>
-                                    <th>VL Result</th>
-                                    <th>Final Outcome</th>
-                                    <th>Gender</th>
-                                    <th>Age</th>
-                                    <th>Patient ID</th>
-                                    <th>Sample Collection Date	</th>
-                                    <th>Sample Receipt Date</th>
-                                    <th>Received Specimen Type</th>
-                                    <th>Testing Site</th>
-                                    <th>Testing Modality</th>
-                                    <th>HIV Diagnosis Date</th>
-                                    <th>Kit Lot Number</th>
-                                    <th>Kit Expiry Date</th>
-                                    <th>Tester Name</th>
-                                    <th>DOB</th>
-                                    <th>Martial Status</th>
-                                     <th>Residence</th>
-                                    <th>Edication Level</th>
-                                    <th>Risk Population</th>
-                                    <th>Pregnancy Status</th>
-                                    <th>Current Sexual Partner</th>
-                                    <th>Past HIV Testing</th>
-                                    <th>Last HIV Status</th>
-                                    <th>Patient On Art</th>
-                                    <th>Last 12 Month</th>
-                                    <th>Experienced Violence Last 12 Month</th>
-                                    <th>Form Initiation Datetime</th>
-                                    <th>Form Transfer Datetime</th>
-                                    <th>Action</th>
-                              </tr>
-                         </thead>
-                         <tbody>
-                              <tr>
-                                <?php if($roleCode == "user"){
-                                   echo "<td colspan='36' class='dataTables_empty'>Loading data from server</td>";
-                                }else{
-                                    echo "<td colspan='37' class='dataTables_empty'>Loading data from server</td>";
-                                }?>
-                              </tr>
-                              </tbody>
-                              <tfoot>
-                              <tr>
-                              <th>Sample ID</th>
-                                    <th>Facility Name</th>
-                                    <th>HIV Recency Test Date</th>
-                                    <th>Viral Test Date</th>
-                                    <th>Control Line</th>
-                                    <th>Positive Verification</th>
-                                    <th>Long Term Verification</th>
-                                    <th>Assay Outcome</th>
-                                    <th>VL Result</th>
-                                    <th>Final Outcome</th>
-                                    <th>Gender</th>
-                                    <th>Age</th>
-                                    <th>Patient ID</th>
-                                    <th>Sample Collection Date	</th>
-                                    <th>Sample Receipt Date</th>
-                                    <th>Received Specimen Type</th>
-                                    <th>Testing Site</th>
-                                    <th>Testing Modality</th>
-                                    <th>HIV Diagnosis Date</th>
-                                    <th>Kit Lot Number</th>
-                                    <th>Kit Expiry Date</th>
-                                    <th>Tester Name</th>
-                                    <th>DOB</th>
-                                    <th>Martial Status</th>
-                                     <th>Residence</th>
-                                    <th>Edication Level</th>
-                                    <th>Risk Population</th>
-                                    <th>Pregnancy Status</th>
-                                    <th>Current Sexual Partner</th>
-                                    <th>Past HIV Testing</th>
-                                    <th>Last HIV Status</th>
-                                    <th>Patient On Art</th>
-                                    <th>Last 12 Month</th>
-                                    <th>Experienced Violence Last 12 Month</th>
-                                    <th>Form Initiation Datetime</th>
-                                    <th>Form Transfer Datetime</th>
-                                    <th>Action</th>
-                              </tr>
-                         </tfoot>
-                         </table>
-                    </div>
-               </div>
-          </div>
 
-          <script type="text/javascript">
-          /* Table initialisation */
-        
-          oTable = null;
-          $(document).ready(function() {
+                </div>
+            </span>
+            <table id="facilityDataTable" class="table-responsive table table-bordered table-striped table-vcenter table-responsive">
+                <thead>
+                    <tr>
+                        <th>Sample ID</th>
+                        <th>Facility Name</th>
+                        <th>HIV Recency Test Date</th>
+                        <th>Viral Test Date</th>
+                        <th>Control Line</th>
+                        <th>Positive Verification</th>
+                        <th>Long Term Verification</th>
+                        <th>Assay Outcome</th>
+                        <th>VL Result</th>
+                        <th>Final Outcome</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Patient ID</th>
+                        <th>Sample Collection Date </th>
+                        <th>Sample Receipt Date</th>
+                        <th>Received Specimen Type</th>
+                        <th>Testing Site</th>
+                        <th>Testing Modality</th>
+                        <th>HIV Diagnosis Date</th>
+                        <th>Kit Lot Number</th>
+                        <th>Kit Expiry Date</th>
+                        <th>Tester Name</th>
+                        <th>DOB</th>
+                        <th>Martial Status</th>
+                        <th>Residence</th>
+                        <th>Edication Level</th>
+                        <th>Risk Population</th>
+                        <th>Pregnancy Status</th>
+                        <th>Current Sexual Partner</th>
+                        <th>Past HIV Testing</th>
+                        <th>Last HIV Status</th>
+                        <th>Patient On Art</th>
+                        <th>Last 12 Month</th>
+                        <th>Experienced Violence Last 12 Month</th>
+                        <th>Form Initiation Datetime</th>
+                        <th>Form Transfer Datetime</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <?php if ($roleCode == "user") {
+                            echo "<td colspan='36' class='dataTables_empty'>Loading data from server</td>";
+                        } else {
+                            echo "<td colspan='37' class='dataTables_empty'>Loading data from server</td>";
+                        } ?>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Sample ID</th>
+                        <th>Facility Name</th>
+                        <th>HIV Recency Test Date</th>
+                        <th>Viral Test Date</th>
+                        <th>Control Line</th>
+                        <th>Positive Verification</th>
+                        <th>Long Term Verification</th>
+                        <th>Assay Outcome</th>
+                        <th>VL Result</th>
+                        <th>Final Outcome</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Patient ID</th>
+                        <th>Sample Collection Date </th>
+                        <th>Sample Receipt Date</th>
+                        <th>Received Specimen Type</th>
+                        <th>Testing Site</th>
+                        <th>Testing Modality</th>
+                        <th>HIV Diagnosis Date</th>
+                        <th>Kit Lot Number</th>
+                        <th>Kit Expiry Date</th>
+                        <th>Tester Name</th>
+                        <th>DOB</th>
+                        <th>Martial Status</th>
+                        <th>Residence</th>
+                        <th>Edication Level</th>
+                        <th>Risk Population</th>
+                        <th>Pregnancy Status</th>
+                        <th>Current Sexual Partner</th>
+                        <th>Past HIV Testing</th>
+                        <th>Last HIV Status</th>
+                        <th>Patient On Art</th>
+                        <th>Last 12 Month</th>
+                        <th>Experienced Violence Last 12 Month</th>
+                        <th>Form Initiation Datetime</th>
+                        <th>Form Transfer Datetime</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
 
-oTable = $('#facilityDataTable').dataTable( {
-                "bAutoWidth": false,
-                "bProcessing": true,
-                "bServerSide": true,
-                <?php if(isset($manageColumnsResult['user_id']) && $manageColumnsResult['user_id']!=''){ ?>
-                     "columnDefs": [
-                        {
-                          "targets": [ <?php echo $HideVal;?>  ],
-                          "visible": false,
-                        }
-                   ],
-              <?php  } ?>
-              "aaSorting": [[35, "desc" ]],
-                "sAjaxSource": "<?php echo $this->url('recency',array('action' => 'index')); ?>",
-                "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    aoData.push({"name": "fName", "value": $("#facilityName").val()});
-                    aoData.push({"name": "tOutcome", "value": $("#termOut").val()});
-                    aoData.push({"name": "gender", "value": $("#gender").val()});
-                    aoData.push({"name": "finalOutcome", "value": $("#finalOutcome").val()});
-                    aoData.push({"name": "testingFacility", "value": $("#testingFacility").val()});
-                    aoData.push({"name": "vlResult", "value": $("#vlResult").val()});
-                    $.ajax({
-                        "dataType": 'json',
-                        "type": "POST",
-                        "url": sSource,
-                        "data": aoData,
-                        "success": fnCallback
-                    });
-                }
-            } );
+<script type="text/javascript">
+    /* Table initialisation */
+
+    oTable = null;
+    $(document).ready(function() {
+        $("#testingFacility").select2({
+            placeholder: "Choose Testing Site..",
+            width: "410px",
+            allowClear: true,
+        });
+        $("#facilityName").select2({
+            placeholder: "Choose Facility Name..",
+            width: "410px",
+            allowClear: true,
+        });
+        oTable = $('#facilityDataTable').dataTable({
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bServerSide": true,
+            <?php if (isset($manageColumnsResult['user_id']) && $manageColumnsResult['user_id'] != '') { ?> "columnDefs": [{
+                    "targets": [<?php echo $HideVal; ?>],
+                    "visible": false,
+                }],
+            <?php  } ?> "aaSorting": [
+                [35, "desc"]
+            ],
+            "sAjaxSource": "<?php echo $this->url('recency', array('action' => 'index')); ?>",
+            "fnServerData": function(sSource, aoData, fnCallback) {
+                aoData.push({
+                    "name": "fName",
+                    "value": $("#facilityName").val()
+                });
+                aoData.push({
+                    "name": "tOutcome",
+                    "value": $("#termOut").val()
+                });
+                aoData.push({
+                    "name": "gender",
+                    "value": $("#gender").val()
+                });
+                aoData.push({
+                    "name": "finalOutcome",
+                    "value": $("#finalOutcome").val()
+                });
+                aoData.push({
+                    "name": "testingFacility",
+                    "value": $("#testingFacility").val()
+                });
+                aoData.push({
+                    "name": "vlResult",
+                    "value": $("#vlResult").val()
+                });
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }
+        });
 
 
-            $(".showhideCheckBox").change(function(){
-                if($(this).attr('checked')){
-                    idpart = $(this).attr('data-showhide');
-                  
-                    $("#"+idpart+"-sort").show();
-                }else{
-                    idpart = $(this).attr('data-showhide');
-                    $("#"+idpart+"-sort").hide();
+        $(".showhideCheckBox").change(function() {
+            if ($(this).attr('checked')) {
+                idpart = $(this).attr('data-showhide');
+
+                $("#" + idpart + "-sort").show();
+            } else {
+                idpart = $(this).attr('data-showhide');
+                $("#" + idpart + "-sort").hide();
+            }
+        });
+        //count($arrFields)
+        // var i = <?php //echo count($arrFields); 
+                    ?>;
+        // for(colNo=0;colNo <i;colNo++){
+        //     $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
+        //     console.log("#iCol"+colNo);
+        //     if(oTable.fnSettings().aoColumns[colNo].bVisible){
+        //          $("#iCol"+colNo+"-sort").show();    
+        //     }else{
+        //          $("#iCol"+colNo+"-sort").hide();    
+        //     }
+        // }
+
+
+
+
+    });
+
+    function closeDiv() {
+        $("#showhide").fadeOut('slow');
+    }
+
+    function fnShowHide(iCol) {
+        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+        oTable.fnSetColumnVis(iCol, bVis ? false : true);
+    }
+
+    function searchVlRequestData() {
+        $.blockUI();
+        oTable.fnDraw();
+        $.unblockUI();
+    }
+
+    function exportRecencyData() {
+        $.blockUI();
+        $.post("<?php echo $this->url('recency', array('action' => 'export-recency')); ?>",
+            function(data) {
+                if (data == "" || data == null || data == undefined) {
+                    $.unblockUI();
+                    alert('Unable to generate download');
+                } else {
+                    $.unblockUI();
+                    document.location.href = '/temporary/' + data;
                 }
             });
-            //count($arrFields)
-            // var i = <?php //echo count($arrFields); ?>;
-            // for(colNo=0;colNo <i;colNo++){
-            //     $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
-            //     console.log("#iCol"+colNo);
-            //     if(oTable.fnSettings().aoColumns[colNo].bVisible){
-            //          $("#iCol"+colNo+"-sort").show();    
-            //     }else{
-            //          $("#iCol"+colNo+"-sort").hide();    
-            //     }
-            // }
+    }
 
-                      
-            
-
-            } );
-            
-            function closeDiv()
-        {
-             $("#showhide").fadeOut('slow');
-        }
-
-        function fnShowHide(iCol)
-        {
-            var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
-                oTable.fnSetColumnVis( iCol, bVis ? false : true );
-        }
-        
-          function searchVlRequestData(){
-            $.blockUI();
-            oTable.fnDraw();
-            $.unblockUI();
-        }
-        
-        function exportRecencyData()
-        {
-            $.blockUI();
-            $.post("<?php echo $this->url('recency',array('action'=>'export-recency')); ?>",
-                function(data){
-                if(data == "" || data == null || data == undefined){
-                $.unblockUI();
-                alert('Unable to generate download');
-                }else{
-                $.unblockUI();
-                document.location.href = '/temporary/'+data;
+    function generatePdf(recencyId) {
+        $.blockUI();
+        $.post("<?php echo $this->url('recency', array('action' => 'generate-pdf')); ?>", {
+                recencyId: recencyId
+            },
+            function(data) {
+                if (data == "" || data == null || data == undefined) {
+                    $.unblockUI();
+                    alert('Unable to generate download');
+                } else {
+                    $.unblockUI();
+                    window.open('/temporary/' + data, 'blank');
+                    //document.location.href = '/temporary/'+data;
                 }
             });
-        }
+    }
 
-        function generatePdf(recencyId)
-        {
-            $.blockUI();
-            $.post("<?php echo $this->url('recency',array('action'=>'generate-pdf')); ?>",{recencyId:recencyId},
-                function(data){
-                if(data == "" || data == null || data == undefined){
-                $.unblockUI();
-                alert('Unable to generate download');
-                }else{
-                $.unblockUI();
-                window.open('/temporary/'+data,'blank');
-                //document.location.href = '/temporary/'+data;
-                }
+    function getCheckBoxVal() {
+        var recen = $("input[name='recencyCheckbox[]']:checked").map(function() {
+            return $(this).val();
+        }).get();
+
+        $.post("<?php echo $this->url('recency', array('action' => 'map-manage-columns')); ?>", {
+                recencyManageColumns: recen
+            },
+            function(data) {
+                oTable.fnDraw();
+                alert('Manage Columns Successfully Updated');
             });
-        }
-        
-        function getCheckBoxVal()
-        {
-            var recen = $("input[name='recencyCheckbox[]']:checked") .map(function(){return $(this).val();}).get();
-           
-            $.post("<?php echo $this->url('recency',array('action'=>'map-manage-columns')); ?>",{recencyManageColumns:recen},
-                function(data){
-                    oTable.fnDraw();
-                    alert('Manage Columns Successfully Updated');
-            });
-        }
-
-
-     </script>
+    }
+</script>

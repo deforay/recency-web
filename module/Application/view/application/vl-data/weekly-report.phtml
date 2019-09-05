@@ -1,124 +1,134 @@
 <?php
 
 use Zend\Session\Container;
+
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 //$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center","bSortable":false}';
 ?>
 <style>
-.thCenter{
-    text-align:center;
-    vertical-align:middle;
-}
+    .thCenter {
+        text-align: center;
+        vertical-align: middle;
+    }
 </style>
-<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css'?>" rel="stylesheet">
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
-     <div class="content content-full">
-          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Weekly Report</h1>
-               </div>
-          </div>
-     </div>
-     <div class="content">
-          <div class="block block-rounded block-bordered">
-               <div class="block-header block-header-default"></div>
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Weekly Report</h1>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default"></div>
 
-               <div class="block-content block-content-full">
-               <div class="form-group row">
-               <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
-                        <div class="col-sm-4">
-                        <input type="text" id="samplesCollectionDate" name="samplesCollectionDate" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;"/>
-                            </div>
+        <div class="block-content block-content-full">
+            <div class="form-group row">
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
+                <div class="col-sm-4">
+                    <input type="text" id="samplesCollectionDate" name="samplesCollectionDate" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" />
+                </div>
 
-                        <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
-                        <div class="col-sm-4">
-                                <select class="form-control" id="testingFacility" name="testingFacility"  title="Please select testing facility name" style="width:100%;">
-                                <option value=""> -- Select -- </option>
-                                    <?php
-                                    foreach($facilityResult['facilityTest'] as $facilityRow){
-                                        //if(2 != (int)$facilityRow['facility_type_id']) continue;
-                                    ?>
-                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ucwords($facilityRow['facility_name']);?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility Name</label>
-                        <div class="col-sm-4">
-                        <select class="form-control" id="facilityName" name="facilityName"  title="Please select facility name" style="width:100%;">
-                                    <option value=""> -- Select -- </option>
-                                    <?php
-                                    foreach($facilityResult['facility'] as $facilityRow){
-                                       // if(2 == (int)$facilityRow['facility_type_id']) continue;
-                                    ?>
-                                    <option value="<?php echo $facilityRow['facility_id'];?>"><?php echo ($facilityRow['facility_name']);?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                    </div>
-                    <div class="row items-push">
-                        <div class="col-lg-7 ">
-                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                            <?php if($roleCode=='admin'){ ?>
-                              <a href="javascript:void(0);" class="btn btn-success"  onclick="exportWeeklyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-                            <?php } ?>
-                        </div>
-                    </div>
-                    <table id="tatTable" class="table table-bordered table-striped table-vcenter">
-                            <thead>
-                              <tr>
-                                    <th rowspan="2" class="thCenter">Samples Received</th>
-                                    <th rowspan="2" class="thCenter">Samples Pending to be Tested</th>
-                                    <th rowspan="2" class="thCenter">Samples Tested</th>
-                                    <th colspan="3" class="thCenter" style="background-color:#9cc2e5;">Recency Testing Results(Asante)</th>
-                                    <th colspan="2" class="thCenter" style="background-color:#ebed89;">Assay Recent VL Results </th>
-                                    <th colspan="3" class="thCenter" style="background-color:#11aa06;">Final Results</th>
-                              </tr>
-                              <tr>
-                                    <th class="thCenter testingResult">Assay Recent</th>
-                                    <th class="thCenter testingResult">Long Term</th>
-                                    <th class="thCenter testingResult">Assay Negative</th>
-                                    <th class="thCenter vlResult">Done</th>
-                                    <th class="thCenter vlResult">Pending</th>
-                                    <th class="thCenter finalResult">RITA Recent</th>
-                                    <th class="thCenter finalResult">Long Term</th>
-                                    <th class="thCenter finalResult">Inconclusive</th>
-                              </tr>
-                            </thead>
-                            <tbody id="weeklyData">
-                                <tr>
-                                    <td colspan='6' class='dataTables_empty'>Loading data from server</td>
-                                </tr>
-                            </tbody>
-                         </table>
-                    </div>
-               </div>
-          </div>
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
+                        <option value=""> -- Select -- </option>
+                        <?php
+                        foreach ($facilityResult['facilityTest'] as $facilityRow) {
+                            //if(2 != (int)$facilityRow['facility_type_id']) continue;
+                            ?>
+                            <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility Name</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:100%;">
+                        <option value=""> -- Select -- </option>
+                        <?php
+                        foreach ($facilityResult['facility'] as $facilityRow) {
+                            // if(2 == (int)$facilityRow['facility_type_id']) continue;
+                            ?>
+                            <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ($facilityRow['facility_name']); ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row items-push">
+                <div class="col-lg-7 ">
+                    <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
+                    <?php if ($roleCode == 'admin') { ?>
+                        <a href="javascript:void(0);" class="btn btn-success" onclick="exportWeeklyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                    <?php } ?>
+                </div>
+            </div>
+            <table id="tatTable" class="table table-bordered table-striped table-vcenter">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="thCenter">Samples Received</th>
+                        <th rowspan="2" class="thCenter">Samples Pending to be Tested</th>
+                        <th rowspan="2" class="thCenter">Samples Tested</th>
+                        <th colspan="3" class="thCenter" style="background-color:#9cc2e5;">Recency Testing Results(Asante)</th>
+                        <th colspan="2" class="thCenter" style="background-color:#ebed89;">Assay Recent VL Results </th>
+                        <th colspan="3" class="thCenter" style="background-color:#11aa06;">Final Results</th>
+                    </tr>
+                    <tr>
+                        <th class="thCenter testingResult">Assay Recent</th>
+                        <th class="thCenter testingResult">Long Term</th>
+                        <th class="thCenter testingResult">Assay Negative</th>
+                        <th class="thCenter vlResult">Done</th>
+                        <th class="thCenter vlResult">Pending</th>
+                        <th class="thCenter finalResult">RITA Recent</th>
+                        <th class="thCenter finalResult">Long Term</th>
+                        <th class="thCenter finalResult">Inconclusive</th>
+                    </tr>
+                </thead>
+                <tbody id="weeklyData">
+                    <tr>
+                        <td colspan='6' class='dataTables_empty'>Loading data from server</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-          <script type="text/javascript">
-          /* Table initialisation */
-          oTable = null;
-          $(document).ready(function() {
-            
+<script type="text/javascript">
+    /* Table initialisation */
+    oTable = null;
+    $(document).ready(function() {
+        $("#facilityName").select2({
+            placeholder: "Choose Facility",
+            width: "290px",
+            allowClear: true,
+        });
+        $("#testingFacility").select2({
+            placeholder: "Choose Testing Site",
+            width: "290px",
+            allowClear: true,
+        });
 
-            $('#samplesCollectionDate').daterangepicker({
-            format: 'DD-MMM-YYYY',
-						separator: ' to ',
-            startDate: moment().subtract('days', 30),
-            endDate: moment(),
-            maxDate: moment(),
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                'Last 7 Days': [moment().subtract('days', 6), moment()],
-                'Last 30 Days': [moment().subtract('days', 29), moment()],
-                'Last 60 Days': [moment().subtract('days', 59), moment()],
-                'Last 180 Days': [moment().subtract('days', 179), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+        $('#samplesCollectionDate').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                separator: ' to ',
+                startDate: moment().subtract('days', 30),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
                 }
             },
             function(start, end) {
@@ -126,36 +136,38 @@ $roleCode = $sessionLogin->roleCode;
                 endDate = end.format('YYYY-MM-DD');
             });
 
-      getWeeklyData();
-            } );
+        getWeeklyData();
+    });
 
-          function searchData(){
-            getWeeklyData();
-        }
+    function searchData() {
+        getWeeklyData();
+    }
 
-        function getWeeklyData()
-        {
-            var samplesCollectionDate = $("#samplesCollectionDate").val();
-            $.blockUI();
-            $.post("<?php echo $this->url('vl-data',array('action'=>'get-weekly-report')); ?>",{samplesCollectionDate:samplesCollectionDate,testingFacility:$("#testingFacility").val(),facilityName:$("#facilityName").val()},
-                function(data){
-                    $("#weeklyData").html(data);
-                    $.unblockUI();
-                });
-        }
-    
-        function exportWeeklyData()
-        {
-            $.blockUI();
-            $.post("<?php echo $this->url('vl-data',array('action'=>'export-weekly-report')); ?>",
-                function(data){
-                if(data == "" || data == null || data == undefined){
+    function getWeeklyData() {
+        var samplesCollectionDate = $("#samplesCollectionDate").val();
+        $.blockUI();
+        $.post("<?php echo $this->url('vl-data', array('action' => 'get-weekly-report')); ?>", {
+                samplesCollectionDate: samplesCollectionDate,
+                testingFacility: $("#testingFacility").val(),
+                facilityName: $("#facilityName").val()
+            },
+            function(data) {
+                $("#weeklyData").html(data);
+                $.unblockUI();
+            });
+    }
+
+    function exportWeeklyData() {
+        $.blockUI();
+        $.post("<?php echo $this->url('vl-data', array('action' => 'export-weekly-report')); ?>",
+        function(data) {
+            if (data == "" || data == null || data == undefined) {
                 $.unblockUI();
                 alert('Unable to generate download');
-                }else{
+            } else {
                 $.unblockUI();
-                document.location.href = '/temporary/'+data;
-                }
-            });
-        }
-     </script>
+                document.location.href = '/temporary/' + data;
+            }
+        });
+    }
+</script>
