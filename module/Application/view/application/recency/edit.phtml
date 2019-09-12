@@ -200,12 +200,12 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 								<div class="form-group row form-horizontal">
 								<label class="col-sm-2 col-form-label <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Collection Date from the Client <?php echo(in_array("Sample Collection Date from the Client",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
                                         <div class="col-sm-4 <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="js-datepicker form-control <?php echo $sampleCollectionDateMandatory; ?> <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>" value="<?php echo $sampleCollectionDate; ?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample collection date">
+                                            <input type="text" class="form-control <?php echo $sampleCollectionDateMandatory; ?> <?php echo in_array("Sample Collection Date from the Client",$resultArr2)?"showFields":"hideFields";?>" value="<?php echo $sampleCollectionDate; ?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" readonly="readonly" title="Please enter the sample collection date">
                                         </div>
 
                                            <label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>" for="">Sample Receipt Date at the Recency Testing Site <?php echo(in_array("Sample Receipt Date at the Recency Testing Site",$resultArr)?"<span class='mandatory'>*</span>":""); ?> </label>
                                         <div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>">
-                                            <input type="text" class="js-datepicker form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>" value="<?php echo $sampleReceiptDate; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample receipt date">
+                                            <input type="text" class="form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site",$resultArr2)?"showFields":"hideFields";?>" value="<?php echo $sampleReceiptDate; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" readonly="readonly" title="Please enter the sample receipt date">
                                         </div>
                                     </div>
                                     <div class="form-group row form-horizontal">
@@ -329,7 +329,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>" for="testKitLotNo">Test Kit Lot Number <?php echo(in_array("Test Kit Lot No",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 												<div class="col-sm-4 <?php echo in_array("Test Kit Lot No",$resultArr2)?"showFields":"hideFields";?>">
-													<select  class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no">
+													<select  class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no" onchange="testKitLotNoChange(this);">
 														<option value="">--Select--</option>
 														<?php foreach ($kitInfo as $info) { ?>
 															<option value="<?php echo $info['kit_lot_no'];?>" <?php echo ($info['kit_lot_no'] == $result['kit_lot_no'])?'selected="selected"':'';?>><?php echo $info['kit_lot_no'];?></option>
@@ -1081,13 +1081,36 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
             width: "260px",
             allowClear: true,
         });
-		  <?php if($result['gender'] == 'male') { ?>
-			   $(".hidePregnancyResult").css('display','none');
-			   $("#pregnancyStatus").removeClass('isRequired');
-		  <?php }else if($result['gender'] == 'female'){ ?>
-			   $(".hidePregnancyResult").css('display','block');
-			   $("#pregnancyStatus").addClass('isRequired');
-		  <?php }?>
+		<?php if($result['gender'] == 'male') { ?>
+			$(".hidePregnancyResult").css('display','none');
+			$("#pregnancyStatus").removeClass('isRequired');
+		<?php }else if($result['gender'] == 'female'){ ?>
+			$(".hidePregnancyResult").css('display','block');
+			$("#pregnancyStatus").addClass('isRequired');
+		<?php }?>
+		var start = new Date();
+		start.setFullYear(start.getFullYear() - 1);
+		
+		$('#sampleReceiptDate').datepicker({
+            format: 'dd-M-yyyy',
+            clearBtn: true,
+            todayHighlight: true,
+            autoclose:true,
+            startDate: start,
+            endDate: "0"
+        });
+        $('#sampleCollectionDate').datepicker({
+            format: 'dd-M-yyyy',
+            clearBtn: true,
+            todayHighlight: true,
+            autoclose:true,
+            startDate: start,
+            endDate: "0"
+        }).on('changeDate', function(e) {
+			$('#sampleReceiptDate').val('');
+            var _satrt = new Date(e.date.valueOf());
+            $('#sampleReceiptDate').datepicker('setStartDate',_satrt);
+        });
 	 });
 
 	 function ageCalculate(){
@@ -1222,9 +1245,9 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
         }
      }
 
-	$( "#testKitLotNo" ).change(function() {
-        if(this.value != ""){
-            $.post('/recency/get-kit-lot-info',{kitNo:this.value},
+	function testKitLotNoChange(obj){
+        if($('#testKitLotNo').val() != ""){
+            $.post('/recency/get-kit-lot-info',{kitNo:$('#testKitLotNo').val()},
             function(data){
                 if( data != ""){
                     var objects = JSON.parse(data) 
@@ -1236,6 +1259,6 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
         }else{
 			$('#testKitExpDate').val('');
 		}
-    });
+    }
 
 </script>
