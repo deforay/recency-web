@@ -51,6 +51,16 @@ return array(
                          ),
                     ),
                ),
+               'dashbaord' => array(
+                    'type'    => 'Literal',
+                    'options' => array(
+                         'route'    => '/set-sample-first-chart',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Index',
+                              'action' => 'set-sample-first-chart',
+                         ),
+                    ),
+               ),
                'login' => array(
                     'type' => 'segment',
                     'options' => array(

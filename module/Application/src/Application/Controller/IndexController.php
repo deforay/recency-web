@@ -112,4 +112,13 @@ class IndexController extends AbstractActionController
             ));
         }
     }
+
+    public function setSampleFirstChartAction(){
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $viewModel = new ViewModel($params);
+            return $viewModel->setVariables(array('result' => $params))->setTerminal(true);
+        }
+    }
 }

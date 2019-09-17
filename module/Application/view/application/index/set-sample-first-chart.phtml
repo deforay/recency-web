@@ -1,0 +1,70 @@
+<?php
+// \Zend\Debug\Debug::dump($result);die;
+$per = (($result['samplesFinalOutcome'] * 100) / $result['totalSamples']);
+$remaining = (100 - $per);
+?>
+<script>
+    var gaugeOptions = {
+
+        chart: {
+            type: 'solidgauge'
+        },
+
+        title: null,
+
+        pane: {
+            center: ['50%', '35%'],
+            size: '70%',
+            startAngle: -90,
+            endAngle: 90,
+            background: {
+                backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
+            }
+        },
+
+        tooltip: {
+            enabled: false
+        },
+
+        plotOptions: {
+            solidgauge: {
+                dataLabels: {
+                    borderWidth: 0,
+                }
+            }
+        }
+    };
+
+    // The speed gauge
+    var chartSpeed = Highcharts.chart('samplesFinalOutcomeLT', Highcharts.merge(gaugeOptions, {
+        yAxis: {
+            visible: false
+        },
+
+        credits: {
+            enabled: false
+        },
+
+        navigation: {
+            buttonOptions: {
+                enabled: false
+            }
+        },
+
+        series: [{
+            // name: 'Speed',
+            data: [<?php echo (isset($per) && $per > 0)?round(number_format($per,2)):0;?>],
+            dataLabels: {
+                format: '<div style="text-align:center">' +
+                    '<span style="font-size:25px">{y} %</span><br/>' +
+                    // '<span style="font-size:12px;">Samples classified as Long Term</span>' +
+                    '</div>'
+            },
+            color:'#55BF3B'
+        }]
+
+    }));
+</script>

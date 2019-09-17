@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Model;
 
 use Application\Service\CommonService;
@@ -248,12 +249,12 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $formInitiationDate;
             $row[] = $formTransferDate;
 
-            $actionBtn ='<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
+            $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
             if ($roleCode != 'manager') {
-                $actionBtn.='<a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>';
+                $actionBtn .= '<a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>';
             }
-            
-            $actionBtn.='<a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
+
+            $actionBtn .= '<a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
                          <a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>
                          </div>';
             $row[] = $actionBtn;
@@ -494,7 +495,7 @@ class RecencyTable extends AbstractTableGateway
                 $data['vl_result'] = htmlentities($params['vlResultOption']);
                 $data['vl_result_entry_date'] = date("Y-m-d H:i:s");
             }
-            
+
             //  if (strpos($params['outcomeData'], 'Long Term') !== false){
             //       $data['final_outcome'] = 'Long Term';
             //  }else if (strpos($params['outcomeData'], 'Invalid') !== false){
@@ -4223,14 +4224,15 @@ class RecencyTable extends AbstractTableGateway
         return $responseStatus;
     }
 
-    public function fetchReqVlTestOnVlsmDetails($params){
+    public function fetchReqVlTestOnVlsmDetails($params)
+    {
         $common = new CommonService();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id','sample_id'))
-        ->where("vl_result IS NULL")
-        ->where(array('vl_request_sent' => 'no'));
+
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'sample_id'))
+            ->where("vl_result IS NULL")
+            ->where(array('vl_request_sent' => 'no'));
         $start_date = $end_date = date('Y-m-d');
         if (isset($params['sampleTestedDates']) && trim($params['sampleTestedDates']) != '') {
             $s_c_date = explode("to", $_POST['sampleTestedDates']);
@@ -4253,30 +4255,33 @@ class RecencyTable extends AbstractTableGateway
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
-    public function getDataBySampleId($sId){
+    public function getDataBySampleId($sId)
+    {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array(
-            'recency_id','facility_id','sample_id','patient_id','sample_collection_date','vl_result','received_specimen_type'
-        ))->where(array('sample_id'=>$sId));
+            'recency_id', 'facility_id', 'sample_id', 'patient_id', 'sample_collection_date', 'vl_result', 'received_specimen_type'
+        ))->where(array('sample_id' => $sId));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
-    
-    public function saveRequestFlag($rId){
+
+    public function saveRequestFlag($rId)
+    {
         $common = new CommonService();
         $this->update(array(
             'vl_request_sent'           => 'yes',
             'vl_request_sent_date_time' => $common->getDateTime()
-        ),array('recency_id'=>$rId));
+        ), array('recency_id' => $rId));
     }
-    
-    public function fetchKitInfo($kitNo){
+
+    public function fetchKitInfo($kitNo)
+    {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $sQuery = $sql->select()->from('test_kit_information')->columns(array('test_id','reference_result','kit_lot_no','kit_expiry_date' => new Expression("DATE_FORMAT(kit_expiry_date,'%d-%b-%Y')"),'status','added_on'))->where(array('status'=>'active'));
-        if(isset($kitNo) && $kitNo != ""){
-            $sQuery= $sQuery->where(array('kit_lot_no'=>$kitNo));
+        $sQuery = $sql->select()->from('test_kit_information')->columns(array('test_id', 'reference_result', 'kit_lot_no', 'kit_expiry_date' => new Expression("DATE_FORMAT(kit_expiry_date,'%d-%b-%Y')"), 'status', 'added_on'))->where(array('status' => 'active'));
+        if (isset($kitNo) && $kitNo != "") {
+            $sQuery = $sQuery->where(array('kit_lot_no' => $kitNo));
         }
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();

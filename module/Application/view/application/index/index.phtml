@@ -1,4 +1,5 @@
 	<?php
+
 	use Zend\Session\Container;
 
 	$sessionLogin = new Container('credo');
@@ -9,7 +10,14 @@
 	$startDate = date('d-M-Y', strtotime('today - 365 days'));
 	$currentDate = date('d-M-Y');
 	?>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/highcharts-more.js"></script>
+	<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 	<style>
+		.highcharts-container{
+			height: 160px !important;
+			overflow: initial !important;
+		}
 	</style>
 	<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 	<div class="bg-body-light">
@@ -20,45 +28,71 @@
 		</div>
 	</div>
 	<div class="content">
-		<h2 class="content-heading">
-			<i class="fa fa-angle-right text-muted mr-1"></i> Quick Overview
+		<h2 class="content-heading block block-rounded block-bordered" style=" padding-top: 10px !important;margin-bottom: 0px;">
+			<span style=" padding: 30px !important; ">
+				<i class="fa fa-angle-right text-muted mr-1"></i> Quick Overview
+			</span>
+			<i class="fa fa-question-circle text-muted mr-1 pull-right" style=" float: right; padding: 7px 7px; "  data-toggle="tooltip" data-placement="left" title="Summary of number of individuals who were newly diagnosed with HIV and number and percentage tested at HIV Testing Services (HTS) by RTRI"></i>
 		</h2>
+
+		<div class="block block-rounded block-bordered" style="margin-top:10px;">
+			<div class="block-content block-content-full row">
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4 font-w700" id="totalSamples" style=" padding: 45px 0px; "></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Samples Registered</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4 font-w700" id="samplesFinalOutcome" style=" padding: 45px 0px; "></div>
+						<!-- <div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Samples classified as RITA Recent</div> -->
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">RITA Recent</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4 font-w700" id="samplesFinalOutcomeLT" style="padding: 45px 0px; overflow: initial !important;padding: 0px;margin: 0px;"></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">RITA Recent</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<div class="block block-rounded block-bordered">
 			<div class="block-content block-content-full">
 				<div style="margin-top: 27px;margin-bottom: 10px;" class="row row-deck __web-inspector-hide-shortcut__">
-					<div class="col-sm-4 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear">
+					<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear">
 						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
 							<div class="block-content block-content-full">
 								<div class="item item-circle bg-xwork-lighter mx-auto my-3">
 									<i class="fa fa-eye"></i>
 								</div>
-								<div class="text-black display-4 font-w700 " id="totalSamples"></div>
+								<div class="text-black display-4 font-w700 " id="totalSamples1"></div>
 								<div class="text-muted mt-1">Samples Registered</div>
-
 							</div>
 						</a>
 					</div>
 
-					<div class="col-sm-4 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
 						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
 							<div class="block-content block-content-full">
 								<div class="item item-circle bg-gd-sea-op mx-auto my-3">
 									<i class="fa fa-eye text-xplay"></i>
 								</div>
-								<div class="text-black display-4 font-w700" id="samplesFinalOutcome"></div>
+								<div class="text-black display-4 font-w700" id="samplesFinalOutcome1"></div>
 								<div class="text-muted mt-1">Samples classified as RITA Recent</div>
 
 							</div>
 						</a>
 					</div>
-					<div class="col-sm-4 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
 						<a class="block block-rounded block-fx-pop text-center" href="javascript:void(0)">
 							<div class="block-content block-content-full">
 								<div class="item item-circle bg-gd-sea-op mx-auto my-3">
 									<i class="fa fa-eye text-xplay"></i>
 								</div>
-								<div class="text-black display-4 font-w700" id="samplesFinalOutcomeLT"></div>
+								<div class="text-black display-4 font-w700" id="samplesFinalOutcomeLT1"></div>
 								<div class="text-muted mt-1">Samples classified as Long Term</div>
 
 							</div>
@@ -155,7 +189,7 @@
 									<option value="">-- Select --</option>
 								</select>
 							</div>
-						<?php }
+					<?php }
 					} ?>
 					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
 					<div class="col-sm-4">
@@ -170,10 +204,11 @@
 							<option value=""> -- Select -- </option>
 							<?php foreach ($facilityResult['facilityTest'] as $facilityRow) {
 								//if (2 != (int)$facilityRow['facility_type_id']) {
-									//continue;
-								//} ?>
+								//continue;
+								//} 
+								?>
 								<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
-							<?php }?>
+							<?php } ?>
 						</select>
 					</div>
 					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Assay Outcome</label>
@@ -214,7 +249,7 @@
 				<tr>
 					<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
 					<td>
-						<select class="form-control"id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
+						<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
 							<option value="hivRecencyTestDate" selected>Recency Test Date (DESC)</option>
 							<option value="ritaRecent">RITA Recent (DESC)</option>
 							<option value="longTerm">Long Term (DESC)</option>
@@ -354,38 +389,38 @@
 		<h2 class="content-heading">
 			<i class="fa fa-angle-right text-muted mr-1"></i> Recent by Month and Sex
 			&nbsp;&nbsp;&nbsp;&nbsp;
-					<small class="custom-control custom-switch custom-control-inline">
-						<input type="checkbox" class="custom-control-input" id="recent-infection-by-sex" name="recent-infection-by-sex" checked  onchange="getInfectionBySexChart();">
-						<label class="custom-control-label" for="recent-infection-by-sex">Percentage</label>
-					</small>
+			<small class="custom-control custom-switch custom-control-inline">
+				<input type="checkbox" class="custom-control-input" id="recent-infection-by-sex" name="recent-infection-by-sex" checked onchange="getInfectionBySexChart();">
+				<label class="custom-control-label" for="recent-infection-by-sex">Percentage</label>
+			</small>
 		</h2>
 		<div class="block block-rounded block-bordered">
 			<div class="block-content block-content-full">
 				<div id="recentInfectionBySex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 			</div>
 		</div>
-		
+
 		<h2 class="content-heading">
 			<i class="fa fa-angle-right text-muted mr-1"></i> Missing Viral Load Results by District
 			&nbsp;&nbsp;&nbsp;&nbsp;
-					<small class="custom-control custom-switch custom-control-inline">
-						<input type="checkbox" class="custom-control-input" id="missing-viralload-district" name="missing-viralload-district" checked  onchange="getMissingVlByDistrict();">
-						<label class="custom-control-label" for="missing-viralload-district">Percentage</label>
-					</small>
+			<small class="custom-control custom-switch custom-control-inline">
+				<input type="checkbox" class="custom-control-input" id="missing-viralload-district" name="missing-viralload-district" checked onchange="getMissingVlByDistrict();">
+				<label class="custom-control-label" for="missing-viralload-district">Percentage</label>
+			</small>
 		</h2>
 		<div class="block block-rounded block-bordered">
 			<div class="block-content block-content-full">
 				<div id="missingViralLoadByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 			</div>
 		</div>
-		
+
 		<h2 class="content-heading">
 			<i class="fa fa-angle-right text-muted mr-1"></i> Missing Viral Load Results by Point-of-Testing
 			&nbsp;&nbsp;&nbsp;&nbsp;
-					<small class="custom-control custom-switch custom-control-inline">
-						<input type="checkbox" class="custom-control-input" id="missing-viralload-modality" name="missing-viralload-modality" checked  onchange="getMissingVlByModality();">
-						<label class="custom-control-label" for="missing-viralload-modality">Percentage</label>
-					</small>
+			<small class="custom-control custom-switch custom-control-inline">
+				<input type="checkbox" class="custom-control-input" id="missing-viralload-modality" name="missing-viralload-modality" checked onchange="getMissingVlByModality();">
+				<label class="custom-control-label" for="missing-viralload-modality">Percentage</label>
+			</small>
 		</h2>
 		<div class="block block-rounded block-bordered">
 			<div class="block-content block-content-full">
@@ -402,11 +437,11 @@
 
 	<script type="text/javascript">
 		$(document).ajaxStart($.blockUI).ajaxComplete($.unblockUI);
-
 		/* Table initialisation */
 		oTable = null;
 		dTable = null;
 		$(document).ready(function() {
+			$('#page-container').removeClass('sidebar-o');
 			$("#location_one").select2({
 				placeholder: "Choose Province",
 				width: "290px",
@@ -593,7 +628,7 @@
 			<?php foreach ($globalConfigResult as $config) {
 				?>
 				getLocationDeatils('<?php echo $config["global_name"]; ?>');
-				<?php
+			<?php
 				break;
 			} ?>
 
@@ -632,8 +667,8 @@
 
 
 		function getLocationDeatils(globalName, nxtGlobalName) {
-			
-			var selectValue = $('#'+globalName).val();
+
+			var selectValue = $('#' + globalName).val();
 			var innerId = '';
 			var path = '';
 			if (globalName == 'location_one' && selectValue == '') {
@@ -696,18 +731,28 @@
 				},
 				function(data) {
 					var obj = JSON.parse(data);
-					$("#totalSamples").html(obj.totalSamples);
+					$("#totalSamples,#totalSamples1").html(obj.totalSamples);
 					$("#samplesTestedRecency").html(obj.samplesTestedRecency);
 					$("#samplesTestedViralLoad").html(obj.samplesTestedViralLoad);
-					$("#samplesFinalOutcome").html(obj.samplesFinalOutcome);
+					$("#samplesFinalOutcome,#samplesFinalOutcome1").html(obj.samplesFinalOutcome);
 					$("#totalSamplesRejected").html(obj.samplesTestRejected);
 					$("#totalSamplesPosVerificationAbsent").html(obj.samplesPosVerificationAbsent);
 					$("#totalSamplesBacklog").html(obj.samplesTestBacklog);
 					$("#totalSamplesNotTested").html(obj.samplesNotTestedViralLoad);
-					$("#samplesFinalOutcomeLT").html(obj.samplesFinalOutcomeLT);
-
+					$("#samplesFinalOutcomeLT,#samplesFinalOutcomeLT1").html(obj.samplesFinalOutcomeLT);
+					updateSampleFirstChart();
 				});
 
+		}
+
+		function updateSampleFirstChart() {
+			$.post("<?php echo $this->url('dashbaord'); ?>", {
+					totalSamples: $('#totalSamples').html(),
+					samplesFinalOutcome: $('#samplesFinalOutcome').html()
+				},
+				function(data) {
+					$('#samplesFinalOutcomeLT').html(data);
+				});
 		}
 
 		function getFinalOutcomeChart() {
@@ -800,43 +845,79 @@
 
 		function getInfectionBySexChart() {
 			var format = null;
-			if($('#recent-infection-by-sex').prop('checked')){
+			if ($('#recent-infection-by-sex').prop('checked')) {
 				format = 'percentage';
-			}else{
+			} else {
 				format = 'number';
 			}
-			$.post("<?php echo $this->url('recency',array('action'=>'get-recent-infection-by-sex')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
-			function(data){
-				$("#recentInfectionBySex").html(data);
-			});
+			$.post("<?php echo $this->url('recency', array('action' => 'get-recent-infection-by-sex')); ?>", {
+					format: format,
+					format: format,
+					sampleTestedDates: $("#sampleTestedDates").val(),
+					locationOne: $("#location_one").val(),
+					locationTwo: $("#location_two").val(),
+					locationThree: $("#location_three").val(),
+					fName: $("#facilityId").val(),
+					testingFacility: $("#testingFacility").val(),
+					tOutcome: $("#termOut").val(),
+					finalOutcome: $("#finalOutcome").val(),
+					ritaFilter: $("#ritaFilter").val()
+				},
+				function(data) {
+					$("#recentInfectionBySex").html(data);
+				});
 		}
-		
+
 		function getMissingVlByDistrict() {
 			var format = null;
-			if($('#missing-viralload-district').prop('checked')){
+			if ($('#missing-viralload-district').prop('checked')) {
 				format = 'percentage';
-			}else{
+			} else {
 				format = 'number';
 			}
-			$.post("<?php echo $this->url('recency',array('action'=>'get-district-wise-missing-viralload')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
-			function(data){
-				$("#missingViralLoadByDistrict").html(data);
-			});
+			$.post("<?php echo $this->url('recency', array('action' => 'get-district-wise-missing-viralload')); ?>", {
+					format: format,
+					format: format,
+					sampleTestedDates: $("#sampleTestedDates").val(),
+					locationOne: $("#location_one").val(),
+					locationTwo: $("#location_two").val(),
+					locationThree: $("#location_three").val(),
+					fName: $("#facilityId").val(),
+					testingFacility: $("#testingFacility").val(),
+					tOutcome: $("#termOut").val(),
+					finalOutcome: $("#finalOutcome").val(),
+					ritaFilter: $("#ritaFilter").val()
+				},
+				function(data) {
+					$("#missingViralLoadByDistrict").html(data);
+				});
 		}
 
 		function getMissingVlByModality() {
 			var format = null;
-			if($('#missing-viralload-modality').prop('checked')){
+			if ($('#missing-viralload-modality').prop('checked')) {
 				format = 'percentage';
-			}else{
+			} else {
 				format = 'number';
 			}
-			$.post("<?php echo $this->url('recency',array('action'=>'get-modality-wise-missing-viralload')); ?>",{format:format,format:format,sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),ritaFilter:$("#ritaFilter").val()},
-			function(data){
-				$("#missingViralLoadByModality").html(data);
-			});
+			$.post("<?php echo $this->url('recency', array('action' => 'get-modality-wise-missing-viralload')); ?>", {
+					format: format,
+					format: format,
+					sampleTestedDates: $("#sampleTestedDates").val(),
+					locationOne: $("#location_one").val(),
+					locationTwo: $("#location_two").val(),
+					locationThree: $("#location_three").val(),
+					fName: $("#facilityId").val(),
+					testingFacility: $("#testingFacility").val(),
+					tOutcome: $("#termOut").val(),
+					finalOutcome: $("#finalOutcome").val(),
+					ritaFilter: $("#ritaFilter").val()
+				},
+				function(data) {
+					$("#missingViralLoadByModality").html(data);
+				});
 		}
-		
+
 		// function getTesterwiseFinalOutcomeChart() {
 		// 	$.post("< ?php echo $this->url('recency', array('action' => 'get-tester-wise-final-outcome-chart')); ?>",{sampleTestedDates:$("#sampleTestedDates").val(),locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),fName:$("#facilityId").val(),testingFacility:$("#testingFacility").val(),tOutcome:$("#termOut").val(),finalOutcome:$("#finalOutcome").val(),recencyTesterFilter:$("#recencyTesterFilter").val()},
 		// 	function(data){
