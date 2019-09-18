@@ -18,6 +18,17 @@
 			height: 160px !important;
 			overflow: initial !important;
 		}
+		.display-4 {
+			color: #fb885f !important;
+			font-weight: 400px  !important;
+			padding: 45px 0px;
+			font-stretch: expanded;
+			transform: scale(1, 1.5);
+			-webkit-transform: scale(1, 1.2);
+			-moz-transform: scale(1, 1.5);
+			-ms-transform: scale(1, 1.5);
+			-o-transform: scale(1, 1.5);
+		}
 	</style>
 	<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 	<div class="bg-body-light">
@@ -39,21 +50,110 @@
 			<div class="block-content block-content-full row">
 				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
 					<div class="text-center">
-						<div class="text-black display-4 font-w700" id="totalSamples" style=" padding: 45px 0px; "></div>
-						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Samples Registered</div>
+						<div class="text-black display-4" id="totalSamples1" style=" padding: 45px 0px; "></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Total sample registered</div>
 					</div>
 				</div>
 				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
 					<div class="text-center">
-						<div class="text-black display-4 font-w700" id="samplesFinalOutcome" style=" padding: 45px 0px; "></div>
-						<!-- <div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Samples classified as RITA Recent</div> -->
-						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">RITA Recent</div>
+						<div class="text-black display-4" id="samplesTestedViralLoad1" style=" padding: 45px 0px; "></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Tested By Viral Load</div>
 					</div>
 				</div>
 				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
 					<div class="text-center">
-						<div class="text-black display-4 font-w700" id="samplesFinalOutcomeLT" style="padding: 45px 0px; overflow: initial !important;padding: 0px;margin: 0px;"></div>
-						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">RITA Recent</div>
+						<div class="text-black display-4" id="totalSamplesTested" style="padding: 45px 0px; overflow: initial !important;padding: 0px;margin: 0px;"></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Tested By Viral Load</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<h2 class="content-heading block block-rounded block-bordered" style=" padding-top: 10px !important;margin-bottom: 0px;">
+			<span style=" padding: 30px !important; ">
+				<i class="fa fa-angle-right text-muted mr-1"></i> Rapid Test for Recent Infection (RTRI) Results
+			</span>
+			<i class="fa fa-question-circle text-muted mr-1 pull-right" style=" float: right; padding: 7px 7px; "  data-toggle="tooltip" data-placement="left" title="Summary of number of HIV Testing Services (HTS) clients with probable recent HIV infection on RTRI, number of long-term HIV infections, and percentage with a RTRI recent result [ note: denominator excludes individuals with invalid or negative results]"></i>
+		</h2>
+
+		<div class="block block-rounded block-bordered" style="margin-top:10px;">
+			<div class="block-content block-content-full row">
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4" id="samplesTestedRecency1" style=" padding: 45px 0px; "></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Assay Recent</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4" id="assLongTerm" style=" padding: 45px 0px; "></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Long Term</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4" id="totalRecentPercent" style="padding: 45px 0px; overflow: initial !important;padding: 0px;margin: 0px;"></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Assay Recent</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<h2 class="content-heading block block-rounded block-bordered" style=" padding-top: 10px !important;margin-bottom: 0px;">
+			<span style=" padding: 30px !important; ">
+				<i class="fa fa-angle-right text-muted mr-1"></i> Missing Viral Load Results
+			</span>
+			<i class="fa fa-question-circle text-muted mr-1 pull-right" style=" float: right; padding: 7px 7px; "  data-toggle="tooltip" data-placement="left" title="Summary of issing viral load results out of HIV Testing Services (HTS) clients with recent HIV infection by RTRI"></i>
+		</h2>
+
+		<div class="block block-rounded block-bordered" style="margin-top:10px;">
+			<div class="block-content block-content-full row">
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4" id="samplesTestedRecency2" style=" padding: 45px 0px; "></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Recent</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4" id="totalSamplesNotTested1" style=" padding: 45px 0px; "></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Missing Viral Load</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4" id="totalMissingPercent" style="padding: 45px 0px; overflow: initial !important;padding: 0px;margin: 0px;"></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Missing Viral Load</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<h2 class="content-heading block block-rounded block-bordered" style=" padding-top: 10px !important;margin-bottom: 0px;">
+			<span style=" padding: 30px !important; ">
+				<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection Testing Algorithm (RITA) Results
+			</span>
+			<i class="fa fa-question-circle text-muted mr-1 pull-right" style=" float: right; padding: 7px 7px; "  data-toggle="tooltip" data-placement="left" title="Summary of number of HIV Testing Services (HTS) clients with confirmed recent HIV infection on RITA, number of confirmed long-term HIV infections on RITA and percentage with a RITA recent result [denominator excludes individusals without VL results]"></i>
+		</h2>
+
+		<div class="block block-rounded block-bordered" style="margin-top:10px;">
+			<div class="block-content block-content-full row">
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4" id="samplesFinalOutcome1" style=" padding: 45px 0px; "></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Recent</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4" id="totalLongTerm" style=" padding: 45px 0px; "></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Long Term</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+					<div class="text-center">
+						<div class="text-black display-4" id="totalRITAPercent" style="padding: 45px 0px; overflow: initial !important;padding: 0px;margin: 0px;"></div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Recent</div>
 					</div>
 				</div>
 			</div>
@@ -68,7 +168,7 @@
 								<div class="item item-circle bg-xwork-lighter mx-auto my-3">
 									<i class="fa fa-eye"></i>
 								</div>
-								<div class="text-black display-4 font-w700 " id="totalSamples1"></div>
+								<div class="text-black display-4 " id="totalSamples"></div>
 								<div class="text-muted mt-1">Samples Registered</div>
 							</div>
 						</a>
@@ -80,7 +180,7 @@
 								<div class="item item-circle bg-gd-sea-op mx-auto my-3">
 									<i class="fa fa-eye text-xplay"></i>
 								</div>
-								<div class="text-black display-4 font-w700" id="samplesFinalOutcome1"></div>
+								<div class="text-black display-4" id="samplesFinalOutcome"></div>
 								<div class="text-muted mt-1">Samples classified as RITA Recent</div>
 
 							</div>
@@ -92,7 +192,7 @@
 								<div class="item item-circle bg-gd-sea-op mx-auto my-3">
 									<i class="fa fa-eye text-xplay"></i>
 								</div>
-								<div class="text-black display-4 font-w700" id="samplesFinalOutcomeLT1"></div>
+								<div class="text-black display-4" id="samplesFinalOutcomeLT"></div>
 								<div class="text-muted mt-1">Samples classified as Long Term</div>
 
 							</div>
@@ -104,7 +204,7 @@
 								<div style="background-color:#fdb489" class="item item-circle mx-auto my-3">
 									<i class="fa fa-eye"></i>
 								</div>
-								<div class="text-black display-4 font-w700 " id="totalSamplesBacklog"></div>
+								<div class="text-black display-4 " id="totalSamplesBacklog"></div>
 								<div class="text-muted mt-1">Samples Waiting For Testing</div>
 
 							</div>
@@ -116,7 +216,7 @@
 								<div style="background-color:#ece8f5;" class="item item-circle mx-auto my-3">
 									<i class="fa fa-eye"></i>
 								</div>
-								<div class="text-black display-4 font-w700 " id="totalSamplesRejected"></div>
+								<div class="text-black display-4 " id="totalSamplesRejected"></div>
 								<div class="text-muted mt-1">Recency Test Not Performed</div>
 							</div>
 						</a>
@@ -127,7 +227,7 @@
 								<div style="background-color:#b2e7fb;" class="item item-circle mx-auto my-3">
 									<i class="fa fa-eye "></i>
 								</div>
-								<div class="text-black display-4 font-w700 " id="totalSamplesPosVerificationAbsent"></div>
+								<div class="text-black display-4 " id="totalSamplesPosVerificationAbsent"></div>
 								<div class="text-muted mt-1">Positive Verification Line Absent</div>
 							</div>
 						</a>
@@ -138,7 +238,7 @@
 								<div class="item item-circle bg-xmodern-lighter mx-auto my-3">
 									<i class="fa fa-eye text-xmodern"></i>
 								</div>
-								<div class="text-black display-4 font-w700" id="samplesTestedRecency"></div>
+								<div class="text-black display-4" id="samplesTestedRecency"></div>
 								<div class="text-muted mt-1">Samples Classified as Assay Recent</div>
 
 							</div>
@@ -150,7 +250,7 @@
 								<div class="item item-circle bg-xsmooth-lighter mx-auto my-3">
 									<i class="fa fa-eye text-xsmooth"></i>
 								</div>
-								<div class="text-black display-4 font-w700" id="samplesTestedViralLoad"></div>
+								<div class="text-black display-4" id="samplesTestedViralLoad"></div>
 								<div class="text-muted mt-1">Samples Tested with Viral Load</div>
 
 							</div>
@@ -162,7 +262,7 @@
 								<div style="background-color:#e8cb96;" class="item item-circle mx-auto my-3">
 									<i class="fa fa-eye"></i>
 								</div>
-								<div class="text-black display-4 font-w700 " id="totalSamplesNotTested"></div>
+								<div class="text-black display-4 " id="totalSamplesNotTested"></div>
 								<div class="text-muted mt-1">Samples with VL Test Pending</div>
 							</div>
 						</a>
@@ -175,259 +275,269 @@
 
 		<div class="block block-rounded block-bordered">
 			<div class="block-content block-content-full">
-				<div class="form-group row">
-					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
-					<div class="col-sm-4">
+				<div class="form-group row" style="border: 1px solid #80808069;padding: 5px;margin: 1px !important;">
+					<span style=" position: absolute;padding: 5px;background: white;font-size: large;margin-top: -25px;"><i class="fa fa-filter text-muted mr-1"></i>Use Filter</span>
+					<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label> -->
+					<div class="col-sm-4" style=" margin-top:10px;">
 						<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
 					</div>
 					<?php
 					foreach ($globalConfigResult as $config) { ?>
 						<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
-							<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
-							<div class="col-sm-4">
+							<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label> -->
+							<div class="col-sm-2" style=" margin-top: 10px; ">
 								<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
 									<option value="">-- Select --</option>
 								</select>
 							</div>
 					<?php }
 					} ?>
-					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
-					<div class="col-sm-4">
+					<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label> -->
+					<div class="col-sm-2" style=" margin-top: 10px; ">
 						<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
 							<option value="">-- Select --</option>
 						</select>
 					</div>
 
-					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
-					<div class="col-sm-4">
+					<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label> -->
+					<div class="col-sm-2" style=" margin-top: 10px; ">
 						<select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
-							<option value=""> -- Select -- </option>
+							<option value=""> -- Select-- </option>
 							<?php foreach ($facilityResult['facilityTest'] as $facilityRow) {
 								//if (2 != (int)$facilityRow['facility_type_id']) {
 								//continue;
-								//} 
-								?>
+								//} ?>
 								<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
 							<?php } ?>
 						</select>
 					</div>
-					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Assay Outcome</label>
-					<div class="col-sm-4">
+					<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Assay Outcome</label> -->
+					<div class="col-sm-2" style=" margin-top: 10px; ">
 						<select class="form-control" id="termOut" name="termOut" title="Please select assay outcome" style="width:100%;">
-							<option value=""> -- Select -- </option>
+							<option value=""> -- Assay outcome-- </option>
 							<option value="Assay Negative">Assay Negative</option>
 							<option value="Assay Recent">Assay Recent</option>
 							<option value="Long Term">Long Term</option>
 							<option value="Invalid">Invalid</option>
 						</select>
 					</div>
-					<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Final Outcome</label>
-					<div class="col-sm-4">
+					<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Final Outcome</label> -->
+					<div class="col-sm-2" style=" margin-top: 10px; ">
 						<select class="form-control" id="finalOutcome" name="finalOutcome" title="Please select fianl outcome" style="width:100%;">
-							<option value=""> -- Select -- </option>
+							<option value=""> -- Final outcome-- </option>
 							<option value="RITA Recent">RITA Recent</option>
 							<option value="Long Term">Long Term</option>
 							<option value="inconclusive">Inconclusive</option>
 						</select>
 					</div>
 
-					<div class="row items-push">
-						<div class="col-lg-7 ">
-							<a href="javascript:void(0);" class="btn btn-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getInfectionByModalityChart();getInfectionBySexChart();getMissingVlByDistrict();getMissingVlByModality();"><i class="fa fa-fw fa-check"></i> Search</a>
-
+					<div class="items-push" style=" margin-top: 10px; ">
+						<div class="col-lg-2">
+							<a href="javascript:void(0);" class="btn btn-hero-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getInfectionByModalityChart();getInfectionBySexChart();getMissingVlByDistrict();getMissingVlByModality();"><i class="fa fa-fw fa-check"></i> Search</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<h2 class="content-heading">
-			<i class="fa fa-angle-right text-muted mr-1"></i> RITA Result Weekly Summary
-
-		</h2>
-		<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 80%;margin-bottom: 0px;">
-			<tbody>
-				<tr>
-					<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
-					<td>
-						<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
-							<option value="hivRecencyTestDate" selected>Recency Test Date (DESC)</option>
-							<option value="ritaRecent">RITA Recent (DESC)</option>
-							<option value="longTerm">Long Term (DESC)</option>
-							<option value="inconclusive">Inconclusive (DESC)</option>
-						</select>
-					</td>
-					<td>
-						<div class="custom-control custom-switch custom-control-inline">
-							<input type="checkbox" class="custom-control-input" id="rita-recent-weekly-percentage" name="rita-recent-weekly-percentage" checked onchange="getFinalOutcomeChart();">
-							<label class="custom-control-label" for="rita-recent-weekly-percentage">Percentage</label>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-
-				<div id="container" style="height: 450px; min-width: 320px; margin: 0 auto"></div>
-			</div>
-		</div>
-		<h2 class="content-heading">
-			<i class="fa fa-angle-right text-muted mr-1"></i> Recency Testing Site Activity
-		</h2>
-		<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3" style="margin-left:1%;width: 80%;margin-bottom: 0px;">
-			<tbody>
-				<tr>
-					<td style="width:10%;padding:0;text-align:right;"><b>Sort By:</b></td>
-					<td>
-						<select class="form-control" id="activityFilter" name="activityFilter" title="Please select activity filter" onchange="getRecencyLabActivityChart();">
-							<option value="">Samples Collected (DESC)</option>
-							<option value="recencyDone">Recency Tests Done (DESC)</option>
-							<option value="vlDone">VL Tests Done (DESC)</option>
-							<option value="vlPending">VL Tests Pending (DESC)</option>
-						</select>
-					</td>
-
-					<td>
-						<div class="custom-control custom-switch custom-control-inline">
-							<input type="checkbox" class="custom-control-input" id="recency-testing-site-activity-percentage" name="recency-testing-site-activity-percentage" checked onchange="getRecencyLabActivityChart();">
-							<label class="custom-control-label" for="recency-testing-site-activity-percentage">Percentage</label>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-				<div id="recencyLabActivity" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-			</div>
-		</div>
-
-
-
-		<h2 class="content-heading ">
-			<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
-			<a href="javascript:void(0);" class="btn btn-success float-right" onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-		</h2>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-				<table id="facilityDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
-					<thead>
-						<tr>
-							<th>Facility Name</th>
-							<th>Testing Site Name</th>
-							<th>No. of Samples Registered</th>
-							<th>No. of Samples Received at Hub</th>
-							<th>No. of Samples Rejected</th>
-							<th>No. of Samples Waiting For Testing</th>
-							<th>No. of Samples VL Pending</th>
-							<th>No. of Samples classified as Assay Recent</th>
-							<th>No. of Samples Tested With Viral Load</th>
-							<th>No. of Samples With Final Outcome</th>
-							<th>Long Term</th>
-							<th>Long Term (%)</th>
-							<th>RITA Recent</th>
-							<th>RITA Recent (%)</th>
-						</tr>
-					</thead>
+		<div class="row" style=" border: 1px solid #8080806b; background: aliceblue; ">
+			<div class="col-md-6">
+				<h4 class="content-heading" style=" margin-bottom: 0px; ">
+					<i class="fa fa-angle-right text-muted mr-1"></i> RITA Result Weekly Summary
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="rita-recent-weekly-percentage" name="rita-recent-weekly-percentage" checked onchange="getFinalOutcomeChart();">
+						<label class="custom-control-label" for="rita-recent-weekly-percentage">Percentage</label>
+					</small>
+				</h4>
+				<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3">
 					<tbody>
 						<tr>
-							<td colspan="8" class="dataTables_empty">Loading data from server</td>
+							<td>
+								<select class="form-control" id="ritaFilter" name="ritaFilter" title="Please select RITA filter" onchange="getFinalOutcomeChart();">
+									<option value="hivRecencyTestDate" selected>Recency Test Date (DESC)</option>
+									<option value="ritaRecent">RITA Recent (DESC)</option>
+									<option value="longTerm">Long Term (DESC)</option>
+									<option value="inconclusive">Inconclusive (DESC)</option>
+								</select>
+							</td>
 						</tr>
-						<tr>
 					</tbody>
 				</table>
+				<div class="block block-rounded block-bordered">
+					<div class="block-content block-content-full">
+		
+						<div id="container" style="height: 450px; min-width: 320px; margin: 0 auto"></div>
+					</div>
+				</div>
 			</div>
-		</div>
-
-		<h2 class="content-heading ">
-			<i class="fa fa-angle-right text-muted mr-1"></i> District Wise Recency Results
-			<a href="javascript:void(0);" class="btn btn-success float-right" onclick="exportDistrictRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-		</h2>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-				<table id="districtwiseDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
-					<thead>
-						<tr>
-							<th>District Name</th>
-							<th>No. of Samples Registered</th>
-							<th>No. of Samples Received at Hub</th>
-							<th>No. of Samples Rejected</th>
-							<th>No. of Samples Waiting For Testing</th>
-							<th>No. of Samples VL Pending</th>
-							<th>No. of Samples classified as Assay Recent</th>
-							<th>No. of Samples Tested With Viral Load</th>
-							<th>No. of Samples With Final Outcome</th>
-							<th>Long Term</th>
-							<th>Long Term (%)</th>
-							<th>RITA Recent</th>
-							<th>RITA Recent (%)</th>
-						</tr>
-					</thead>
+			<div class="col-md-6">
+				<h2 class="content-heading" style=" margin-bottom: 0px; ">
+					<i class="fa fa-angle-right text-muted mr-1"></i> Recency Testing Site Activity
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="recency-testing-site-activity-percentage" name="recency-testing-site-activity-percentage" checked onchange="getRecencyLabActivityChart();">
+						<label class="custom-control-label" for="recency-testing-site-activity-percentage">Percentage</label>
+					</small>
+				</h2>
+				<table class="table table-borderless table-vcenter" cellpadding="1" cellspacing="3">
 					<tbody>
 						<tr>
-							<td colspan="8" class="dataTables_empty">Loading data from server</td>
+							<td>
+								<select class="form-control" id="activityFilter" name="activityFilter" title="Please select activity filter" onchange="getRecencyLabActivityChart();">
+									<option value="">Samples Collected (DESC)</option>
+									<option value="recencyDone">Recency Tests Done (DESC)</option>
+									<option value="vlDone">VL Tests Done (DESC)</option>
+									<option value="vlPending">VL Tests Pending (DESC)</option>
+								</select>
+							</td>
 						</tr>
-						<tr>
 					</tbody>
 				</table>
+				<div class="block block-rounded block-bordered">
+					<div class="block-content block-content-full">
+						<div id="recencyLabActivity" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+					</div>
+				</div>
 			</div>
 		</div>
-
-		<h2 class="content-heading">
-			<i class="fa fa-angle-right text-muted mr-1"></i> Recent and Long-Term by Testing Modality
-			&nbsp;&nbsp;&nbsp;&nbsp;
-			<small class="custom-control custom-switch custom-control-inline">
-				<input type="checkbox" class="custom-control-input" id="recent-infection-by-modality-percentage" name="recent-infection-by-modality-percentage" checked onchange="getInfectionByModalityChart();">
-				<label class="custom-control-label" for="recent-infection-by-modality-percentage">Percentage</label>
-			</small>
-		</h2>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-				<div id="modalityFinalOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div class="row" style=" border: 1px solid #8080806b; background: aliceblue; ">
+			<div class="col-md-6">
+				<h2 class="content-heading ">
+					<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
+					<a href="javascript:void(0);" class="btn btn-success float-right" onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+				</h2>
+				<div class="block block-rounded block-bordered">
+					<div class="block-content block-content-full">
+						<table id="facilityDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
+							<thead>
+								<tr>
+									<th>Facility Name</th>
+									<th>Testing Site Name</th>
+									<th>No. of Samples Registered</th>
+									<th>No. of Samples Received at Hub</th>
+									<th>No. of Samples Rejected</th>
+									<th>No. of Samples Waiting For Testing</th>
+									<th>No. of Samples VL Pending</th>
+									<th>No. of Samples classified as Assay Recent</th>
+									<th>No. of Samples Tested With Viral Load</th>
+									<th>No. of Samples With Final Outcome</th>
+									<th>Long Term</th>
+									<th>Long Term (%)</th>
+									<th>RITA Recent</th>
+									<th>RITA Recent (%)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td colspan="8" class="dataTables_empty">Loading data from server</td>
+								</tr>
+								<tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h2 class="content-heading ">
+					<i class="fa fa-angle-right text-muted mr-1"></i> District Wise Recency Results
+					<a href="javascript:void(0);" class="btn btn-success float-right" onclick="exportDistrictRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+				</h2>
+				<div class="block block-rounded block-bordered">
+					<div class="block-content block-content-full">
+						<table id="districtwiseDataTable" class="table table-bordered table-striped table-vcenter table-responsive">
+							<thead>
+								<tr>
+									<th>District Name</th>
+									<th>No. of Samples Registered</th>
+									<th>No. of Samples Received at Hub</th>
+									<th>No. of Samples Rejected</th>
+									<th>No. of Samples Waiting For Testing</th>
+									<th>No. of Samples VL Pending</th>
+									<th>No. of Samples classified as Assay Recent</th>
+									<th>No. of Samples Tested With Viral Load</th>
+									<th>No. of Samples With Final Outcome</th>
+									<th>Long Term</th>
+									<th>Long Term (%)</th>
+									<th>RITA Recent</th>
+									<th>RITA Recent (%)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td colspan="8" class="dataTables_empty">Loading data from server</td>
+								</tr>
+								<tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
-		<h2 class="content-heading">
-			<i class="fa fa-angle-right text-muted mr-1"></i> Recent by Month and Sex
-			&nbsp;&nbsp;&nbsp;&nbsp;
-			<small class="custom-control custom-switch custom-control-inline">
-				<input type="checkbox" class="custom-control-input" id="recent-infection-by-sex" name="recent-infection-by-sex" checked onchange="getInfectionBySexChart();">
-				<label class="custom-control-label" for="recent-infection-by-sex">Percentage</label>
-			</small>
-		</h2>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-				<div id="recentInfectionBySex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div class="row" style=" border: 1px solid #8080806b; background: aliceblue; ">
+			<div class="col-md-6">
+				<h2 class="content-heading">
+					<i class="fa fa-angle-right text-muted mr-1"></i> Recent and Long-Term by Testing Modality
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="recent-infection-by-modality-percentage" name="recent-infection-by-modality-percentage" checked onchange="getInfectionByModalityChart();">
+						<label class="custom-control-label" for="recent-infection-by-modality-percentage">Percentage</label>
+					</small>
+				</h2>
+				<div class="block block-rounded block-bordered">
+					<div class="block-content block-content-full">
+						<div id="modalityFinalOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h2 class="content-heading">
+					<i class="fa fa-angle-right text-muted mr-1"></i> Recent by Month and Sex
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="recent-infection-by-sex" name="recent-infection-by-sex" checked onchange="getInfectionBySexChart();">
+						<label class="custom-control-label" for="recent-infection-by-sex">Percentage</label>
+					</small>
+				</h2>
+				<div class="block block-rounded block-bordered">
+					<div class="block-content block-content-full">
+						<div id="recentInfectionBySex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+					</div>
+				</div>
 			</div>
 		</div>
-
-		<h2 class="content-heading">
-			<i class="fa fa-angle-right text-muted mr-1"></i> Missing Viral Load Results by District
-			&nbsp;&nbsp;&nbsp;&nbsp;
-			<small class="custom-control custom-switch custom-control-inline">
-				<input type="checkbox" class="custom-control-input" id="missing-viralload-district" name="missing-viralload-district" checked onchange="getMissingVlByDistrict();">
-				<label class="custom-control-label" for="missing-viralload-district">Percentage</label>
-			</small>
-		</h2>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-				<div id="missingViralLoadByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div class="row" style=" border: 1px solid #8080806b; background: aliceblue; ">
+			<span style=" position: absolute; padding: 10px; background: aliceblue; font-size: large; margin-top: -25px; margin-left: 30px; "><i class="fa fa-filter text-muted mr-1"></i>Missing Viral Load Results</span>
+			<div class="col-md-6">
+				<h2 class="content-heading">
+					<i class="fa fa-angle-right text-muted mr-1"></i>By District
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="missing-viralload-district" name="missing-viralload-district" checked onchange="getMissingVlByDistrict();">
+						<label class="custom-control-label" for="missing-viralload-district">Percentage</label>
+					</small>
+				</h2>
+				<div class="block block-rounded block-bordered">
+					<div class="block-content block-content-full">
+						<div id="missingViralLoadByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h2 class="content-heading">
+					<i class="fa fa-angle-right text-muted mr-1"></i>By Point-of-Testing
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<small class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" class="custom-control-input" id="missing-viralload-modality" name="missing-viralload-modality" checked onchange="getMissingVlByModality();">
+						<label class="custom-control-label" for="missing-viralload-modality">Percentage</label>
+					</small>
+				</h2>
+				<div class="block block-rounded block-bordered">
+					<div class="block-content block-content-full">
+						<div id="missingViralLoadByModality" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+					</div>
+				</div>
 			</div>
 		</div>
-
-		<h2 class="content-heading">
-			<i class="fa fa-angle-right text-muted mr-1"></i> Missing Viral Load Results by Point-of-Testing
-			&nbsp;&nbsp;&nbsp;&nbsp;
-			<small class="custom-control custom-switch custom-control-inline">
-				<input type="checkbox" class="custom-control-input" id="missing-viralload-modality" name="missing-viralload-modality" checked onchange="getMissingVlByModality();">
-				<label class="custom-control-label" for="missing-viralload-modality">Percentage</label>
-			</small>
-		</h2>
-		<div class="block block-rounded block-bordered">
-			<div class="block-content block-content-full">
-				<div id="missingViralLoadByModality" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-			</div>
-		</div>
-
 	</div>
 	<script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
 	<script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
@@ -444,27 +554,27 @@
 			$('#page-container').removeClass('sidebar-o');
 			$("#location_one").select2({
 				placeholder: "Choose Province",
-				width: "290px",
+				// width: "290px",
 				allowClear: true,
 			});
 			$("#location_two").select2({
 				placeholder: "Choose District",
-				width: "290px",
+				// width: "290px",
 				allowClear: true,
 			});
 			$("#location_three").select2({
 				placeholder: "Choose City",
-				width: "290px",
+				// width: "290px",
 				allowClear: true,
 			});
 			$("#facilityId").select2({
 				placeholder: "Choose Facility",
-				width: "290px",
+				// width: "290px",
 				allowClear: true,
 			});
 			$("#testingFacility").select2({
 				placeholder: "Choose Testing Site",
-				width: "290px",
+				// width: "290px",
 				allowClear: true,
 			});
 
@@ -732,14 +842,15 @@
 				function(data) {
 					var obj = JSON.parse(data);
 					$("#totalSamples,#totalSamples1").html(obj.totalSamples);
-					$("#samplesTestedRecency").html(obj.samplesTestedRecency);
-					$("#samplesTestedViralLoad").html(obj.samplesTestedViralLoad);
+					$("#samplesTestedRecency,#samplesTestedRecency1,#samplesTestedRecency2").html(obj.samplesTestedRecency);
+					$("#samplesTestedViralLoad,#samplesTestedViralLoad1").html(obj.samplesTestedViralLoad);
 					$("#samplesFinalOutcome,#samplesFinalOutcome1").html(obj.samplesFinalOutcome);
 					$("#totalSamplesRejected").html(obj.samplesTestRejected);
 					$("#totalSamplesPosVerificationAbsent").html(obj.samplesPosVerificationAbsent);
 					$("#totalSamplesBacklog").html(obj.samplesTestBacklog);
-					$("#totalSamplesNotTested").html(obj.samplesNotTestedViralLoad);
-					$("#samplesFinalOutcomeLT,#samplesFinalOutcomeLT1").html(obj.samplesFinalOutcomeLT);
+					$("#totalSamplesNotTested,#totalSamplesNotTested1").html(obj.samplesNotTestedViralLoad);
+					$("#samplesFinalOutcomeLT,#samplesFinalOutcomeLT1,#totalLongTerm").html(obj.samplesFinalOutcomeLT);
+					$("#assLongTerm").html(obj.assayLongTerm);
 					updateSampleFirstChart();
 				});
 
@@ -747,12 +858,40 @@
 
 		function updateSampleFirstChart() {
 			$.post("<?php echo $this->url('dashbaord'); ?>", {
-					totalSamples: $('#totalSamples').html(),
-					samplesFinalOutcome: $('#samplesFinalOutcome').html()
-				},
-				function(data) {
-					$('#samplesFinalOutcomeLT').html(data);
-				});
+				total: $('#totalSamples1').html(),
+				minimum: $('#samplesTestedViralLoad').html(),
+				bind: 'totalSamplesTested'
+			},
+			function(data) {
+				$('#totalSamplesTested').html(data);
+			});
+			
+			$.post("<?php echo $this->url('dashbaord'); ?>", {
+				total: $('#assLongTerm').html(),
+				minimum: $('#samplesTestedRecency1').html(),
+				bind: 'totalRecentPercent'
+			},
+			function(data) {
+				$('#totalRecentPercent').html(data);
+			});
+			
+			$.post("<?php echo $this->url('dashbaord'); ?>", {
+				total: $('#samplesTestedRecency2').html(),
+				minimum: $('#totalSamplesNotTested1').html(),
+				bind: 'totalMissingPercent'
+			},
+			function(data) {
+				$('#totalMissingPercent').html(data);
+			});
+			
+			$.post("<?php echo $this->url('dashbaord'); ?>", {
+				total: $('#totalLongTerm').html(),
+				minimum: $('#samplesFinalOutcome1').html(),
+				bind: 'totalRITAPercent'
+			},
+			function(data) {
+				$('#totalRITAPercent').html(data);
+			});
 		}
 
 		function getFinalOutcomeChart() {

@@ -188,9 +188,7 @@ class RecencyController extends AbstractActionController
          $result = $recencyService->getRecencyAllDataCount($params);
       }
       $viewModel = new ViewModel();
-      $viewModel->setVariables(array('result' => $result))
-         ->setTerminal(true);
-      return $viewModel;
+      return $viewModel->setVariables(array('result' => json::encode($result)))->setTerminal(true);
    }
 
    public function getFinalOutcomeChartAction()

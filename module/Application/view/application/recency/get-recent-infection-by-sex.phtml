@@ -43,6 +43,11 @@ Highcharts.chart('recentInfectionBySex', {
             }
         }
     },
+
+    credits: {
+        enabled: false
+    },
+
     series: [
         <?php 
         if (isset($result['finalOutComeTotal'])) {

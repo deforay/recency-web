@@ -2380,6 +2380,10 @@ class RecencyTable extends AbstractTableGateway
                                                            WHEN (((r.term_outcome='Assay Recent' AND (vl_result is null or vl_result ='')) )) THEN 1
                                                            ELSE 0
                                                            END)"),
+                    "assayLongTerm" => new Expression("SUM(CASE
+                                                           WHEN (r.term_outcome = 'Long Term') THEN 1
+                                                           ELSE 0
+                                                           END)"),
                 )
             )
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
@@ -2425,8 +2429,7 @@ class RecencyTable extends AbstractTableGateway
         //         }
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     public function fetchFinalOutcomeChart($parameters)

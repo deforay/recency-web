@@ -1,11 +1,8 @@
 <?php
-// \Zend\Debug\Debug::dump($result);die;
-$per = (($result['samplesFinalOutcome'] * 100) / $result['totalSamples']);
-$remaining = (100 - $per);
+$per = (($result['minimum'] * 100) / $result['total']);
 ?>
 <script>
     var gaugeOptions = {
-
         chart: {
             type: 'solidgauge'
         },
@@ -21,7 +18,7 @@ $remaining = (100 - $per);
                 backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
                 innerRadius: '60%',
                 outerRadius: '100%',
-                shape: 'arc'
+                shape: 'arc',
             }
         },
 
@@ -34,14 +31,19 @@ $remaining = (100 - $per);
                 dataLabels: {
                     borderWidth: 0,
                 }
-            }
+            },
         }
     };
 
     // The speed gauge
-    var chartSpeed = Highcharts.chart('samplesFinalOutcomeLT', Highcharts.merge(gaugeOptions, {
+    var chartSpeed = Highcharts.chart('<?php echo $result['bind'];?>', Highcharts.merge(gaugeOptions, {
         yAxis: {
-            visible: false
+            min: 0,
+            max: 100,
+            tickInterval: 0,
+            labels: {
+                enabled: false
+            },
         },
 
         credits: {
@@ -55,16 +57,12 @@ $remaining = (100 - $per);
         },
 
         series: [{
-            // name: 'Speed',
             data: [<?php echo (isset($per) && $per > 0)?round(number_format($per,2)):0;?>],
             dataLabels: {
                 format: '<div style="text-align:center">' +
-                    '<span style="font-size:25px">{y} %</span><br/>' +
-                    // '<span style="font-size:12px;">Samples classified as Long Term</span>' +
-                    '</div>'
-            },
-            color:'#55BF3B'
-        }]
-
+                    '<span style="font-weight: 400px !important;font-size:2.5rem;color: #fb885f !important;transform: scale(1, 1.5); -webkit-transform: scale(1, 1.2); -moz-transform: scale(1, 1.5); -ms-transform: scale(1, 1.5); -o-transform: scale(1, 1.5);">{y} %</span><br/>' +
+                    '</div>',
+            }
+        }],
     }));
 </script>
