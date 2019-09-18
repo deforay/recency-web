@@ -279,14 +279,12 @@
 
 		<div class="row" style=" position: sticky; top: 60px; z-index: 3;background: #f0f8ffbf;margin-bottom: -1px; ">
 			<div class="form-group row" style="border: 1px solid #80808069;margin: 0px !important;">
-				<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label> -->
 				<div class="col-sm-4" style=" margin-top:10px;">
 					<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
 				</div>
 				<?php
 				foreach ($globalConfigResult as $config) { ?>
 					<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
-						<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label> -->
 						<div class="col-sm-2" style=" margin-top: 10px; ">
 							<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
 								<option value="">-- Select --</option>
@@ -294,26 +292,20 @@
 						</div>
 				<?php }
 				} ?>
-				<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label> -->
 				<div class="col-sm-2" style=" margin-top: 10px; ">
 					<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
 						<option value="">-- Select --</option>
 					</select>
 				</div>
 
-				<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label> -->
 				<div class="col-sm-2" style=" margin-top: 10px; ">
 					<select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
 						<option value=""> -- Select-- </option>
-						<?php foreach ($facilityResult['facilityTest'] as $facilityRow) {
-							//if (2 != (int)$facilityRow['facility_type_id']) {
-							//continue;
-							//} ?>
+						<?php foreach ($facilityResult['facilityTest'] as $facilityRow) {?>
 							<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
 						<?php } ?>
 					</select>
 				</div>
-				<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Assay Outcome</label> -->
 				<div class="col-sm-2" style=" margin-top: 10px; ">
 					<select class="form-control" id="termOut" name="termOut" title="Please select assay outcome" style="width:100%;">
 						<option value=""> -- Assay outcome-- </option>
@@ -323,7 +315,6 @@
 						<option value="Invalid">Invalid</option>
 					</select>
 				</div>
-				<!-- <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Final Outcome</label> -->
 				<div class="col-sm-2" style=" margin-top: 10px; ">
 					<select class="form-control" id="finalOutcome" name="finalOutcome" title="Please select fianl outcome" style="width:100%;">
 						<option value=""> -- Final outcome-- </option>
@@ -555,37 +546,30 @@
 			$('#page-container').removeClass('sidebar-o');
 			$("#location_one").select2({
 				placeholder: "Province",
-				// width: "290px",
 				allowClear: true,
 			});
 			$("#location_two").select2({
 				placeholder: "District",
-				// width: "290px",
 				allowClear: true,
 			});
 			$("#location_three").select2({
 				placeholder: "City",
-				// width: "290px",
 				allowClear: true,
 			});
 			$("#facilityId").select2({
 				placeholder: "Facility",
-				// width: "290px",
 				allowClear: true,
 			});
 			$("#testingFacility").select2({
 				placeholder: "Testing Site",
-				// width: "290px",
 				allowClear: true,
 			});
 			$("#finalOutcome").select2({
 				placeholder: "Final Outcome",
-				// width: "290px",
 				allowClear: true,
 			});
 			$("#termOut").select2({
 				placeholder: "Assay Outcome",
-				// width: "290px",
 				allowClear: true,
 			});
 

@@ -12,7 +12,29 @@ $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sC
 $startDate = date('d-M-Y', strtotime('today - 365 days'));
 $currentDate = date('d-M-Y');
 ?>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 <style>
+	.btn-secondary,.btn-hero-secondary{
+		background-color: cadetblue !important;
+		border: none !important;
+	}
+	.highcharts-container{
+		height: 160px !important;
+		overflow: initial !important;
+	}
+	.display-4 {
+		color: #fb885f !important;
+		font-weight: 400px  !important;
+		padding: 45px 0px;
+		font-stretch: expanded;
+		transform: scale(1, 1.5);
+		-webkit-transform: scale(1, 1.2);
+		-moz-transform: scale(1, 1.5);
+		-ms-transform: scale(1, 1.5);
+		-o-transform: scale(1, 1.5);
+	}
 </style>
 <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
@@ -23,113 +45,105 @@ $currentDate = date('d-M-Y');
 	</div>
 </div>
 <div class="content">
-	<div class="block block-rounded block-bordered">
-		<div class="block-content block-content-full">
-			<div class="form-group row">
-				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
-				<div class="col-sm-4">
-					<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
-				</div>
-				<?php
-				foreach ($globalConfigResult as $config) { ?>
-					<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
-						<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
-						<div class="col-sm-4">
-							<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
-								<option value="">-- Select --</option>
-							</select>
-						</div>
-					<?php }
-			} ?>
-				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
-				<div class="col-sm-4">
-					<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
-						<option value="">-- Select --</option>
-					</select>
-				</div>
-
-				<label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
-				<div class="col-sm-4">
-					<select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
-						<option value=""> -- Select -- </option>
-						<?php
-						foreach ($facilityResult['facilityTest'] as $facilityRow) {
-							//if (2 != (int)$facilityRow['facility_type_id']) continue;
-							?>
-							<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
-						<?php
-					}
-					?>
-					</select>
-				</div>
-
-
-				<div class="row items-push">
-					<div class="col-lg-7 ">
-						<a href="javascript:void(0);" class="btn btn-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getRecentInfectionByMonthSexChart();"><i class="fa fa-fw fa-check"></i> Search</a>
-
+	<div class="row" style=" position: sticky; top: 70px; z-index: 2000;background: #f0f8ffbf;margin-bottom: -1px; ">
+		<div class="form-group row" style="border: 1px solid #80808069;margin: 0px !important;">
+			<div class="col-sm-4" style=" margin-top:10px;">
+				<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
+			</div>
+			<?php
+			foreach ($globalConfigResult as $config) { ?>
+				<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
+					<div class="col-sm-2" style=" margin-top: 10px; ">
+						<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
+							<option value="">-- Select --</option>
+						</select>
 					</div>
+			<?php }
+			} ?>
+			<div class="col-sm-2" style=" margin-top: 10px; ">
+				<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+					<option value="">-- Select --</option>
+				</select>
+			</div>
+
+			<div class="col-sm-2" style=" margin-top: 10px; ">
+				<select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
+					<option value=""> -- Select-- </option>
+					<?php foreach ($facilityResult['facilityTest'] as $facilityRow) { ?>
+						<option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="items-push" style=" margin-top: 10px; ">
+				<div class="col-lg-2">
+					<a href="javascript:void(0);" class="btn btn-hero-secondary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getRecentInfectionByMonthSexChart();"><i class="fa fa-fw fa-search"></i> Search</a>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Gender &nbsp;&nbsp;&nbsp;&nbsp;
-		<small class="custom-control custom-switch custom-control-inline">
-			<input type="checkbox" class="custom-control-input" id="recent-infection-by-gender-percentage" name="recent-infection-by-gender-percentage" checked onchange="getFinalOutcomeChart();">
-			<label class="custom-control-label" for="recent-infection-by-gender-percentage">Percentage</label>
-		</small>
-	</h2>
-	<div class="block block-rounded block-bordered">
-		<div class="block-content block-content-full">
-			<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	<div class="row" style=" border: 1px solid #8080806b; background: aliceblue;margin-bottom: -1px; ">
+		<div class="col-md-6">
+			<h2 class="content-heading">
+				<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Gender &nbsp;&nbsp;&nbsp;&nbsp;
+				<small class="custom-control custom-switch custom-control-inline">
+					<input type="checkbox" class="custom-control-input" id="recent-infection-by-gender-percentage" name="recent-infection-by-gender-percentage" checked onchange="getFinalOutcomeChart();">
+					<label class="custom-control-label" for="recent-infection-by-gender-percentage">Percentage</label>
+				</small>
+			</h2>
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<h2 class="content-heading">
+				<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by District
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<small class="custom-control custom-switch custom-control-inline">
+					<input type="checkbox" class="custom-control-input" id="recent-infection-by-district-percentage" name="recent-infection-by-district-percentage" checked onchange="getInfectionByDistrictChart();">
+					<label class="custom-control-label" for="recent-infection-by-district-percentage">Percentage</label>
+				</small>
+			</h2>
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="infectionByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
 		</div>
 	</div>
-
-	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by District
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<small class="custom-control custom-switch custom-control-inline">
-			<input type="checkbox" class="custom-control-input" id="recent-infection-by-district-percentage" name="recent-infection-by-district-percentage" checked onchange="getInfectionByDistrictChart();">
-			<label class="custom-control-label" for="recent-infection-by-district-percentage">Percentage</label>
-		</small>
-	</h2>
-	<div class="block block-rounded block-bordered">
-		<div class="block-content block-content-full">
-			<div id="infectionByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	<div class="row" style=" border: 1px solid #8080806b; background: aliceblue;margin-bottom: -1px; ">
+		<div class="col-md-6">
+			<h2 class="content-heading">
+				<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Age
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<small class="custom-control custom-switch custom-control-inline">
+					<input type="checkbox" class="custom-control-input" id="recent-infection-by-age-percentage" name="recent-infection-by-age-percentage" checked onchange="getInfectionByAgeChart();">
+					<label class="custom-control-label" for="recent-infection-by-age-percentage">Percentage</label>
+				</small>
+			</h2>
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="infectionByAge" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<h2 class="content-heading">
+				<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Month and Sex
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<small class="custom-control custom-switch custom-control-inline">
+					<input type="checkbox" class="custom-control-input" id="recent-infection-by-month-sex" name="recent-infection-by-month-sex" checked onchange="getRecentInfectionByMonthSexChart();">
+					<label class="custom-control-label" for="recent-infection-by-month-sex">Percentage</label>
+				</small>
+			</h2>
+			<div class="block block-rounded block-bordered">
+				<div class="block-content block-content-full">
+					<div id="infectionByMonthSex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+			</div>
 		</div>
 	</div>
-
-	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Age
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<small class="custom-control custom-switch custom-control-inline">
-			<input type="checkbox" class="custom-control-input" id="recent-infection-by-age-percentage" name="recent-infection-by-age-percentage" checked onchange="getInfectionByAgeChart();">
-			<label class="custom-control-label" for="recent-infection-by-age-percentage">Percentage</label>
-		</small>
-	</h2>
-	<div class="block block-rounded block-bordered">
-		<div class="block-content block-content-full">
-			<div id="infectionByAge" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		</div>
-	</div>
-	
-
-	<h2 class="content-heading">
-		<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Month and Sex
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<small class="custom-control custom-switch custom-control-inline">
-			<input type="checkbox" class="custom-control-input" id="recent-infection-by-month-sex" name="recent-infection-by-month-sex" checked onchange="getRecentInfectionByMonthSexChart();">
-			<label class="custom-control-label" for="recent-infection-by-month-sex">Percentage</label>
-		</small>
-	</h2>
-	<div class="block block-rounded block-bordered">
-		<div class="block-content block-content-full">
-			<div id="infectionByMonthSex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		</div>
-	</div>
-
 	<h2 class="content-heading">
 		<i class="fa fa-angle-right text-muted mr-1"></i> Map (feature is under development)
 	</h2>
@@ -165,29 +179,25 @@ $currentDate = date('d-M-Y');
 	/* Table initialisation */
 	oTable = null;
 	$(document).ready(function() {
+		$('#page-container').removeClass('sidebar-o');
 		$("#location_one").select2({
 			placeholder: "Choose Province",
-			width: "290px",
 			allowClear: true,
 		});
 		$("#location_two").select2({
 			placeholder: "Choose District",
-			width: "290px",
 			allowClear: true,
 		});
 		$("#location_three").select2({
 			placeholder: "Choose City",
-			width: "290px",
 			allowClear: true,
 		});
 		$("#facilityId").select2({
 			placeholder: "Choose Facility",
-			width: "290px",
 			allowClear: true,
 		});
 		$("#testingFacility").select2({
 			placeholder: "Choose Testing Site",
-			width: "290px",
 			allowClear: true,
 		});
 		getFinalOutcomeChart();
