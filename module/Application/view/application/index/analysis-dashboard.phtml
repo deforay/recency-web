@@ -45,8 +45,8 @@ $currentDate = date('d-M-Y');
 	</div>
 </div>
 <div class="content">
-	<div class="row" style=" position: sticky; top: 70px; z-index: 2000;background: #f0f8ffbf;margin-bottom: -1px; ">
-		<div class="form-group row" style="border: 1px solid #80808069;margin: 0px !important;">
+	<div class="row sticky-div" style=" position: sticky; top: 70px; z-index: 2000;background: #f0f8ffbf;margin-bottom: -1px; ">
+		<div class="form-group row" style="border: 1px solid #80808069;margin: 0px !important;padding: 15px 0px;">
 			<div class="col-sm-4" style=" margin-top:10px;">
 				<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
 			</div>
@@ -74,10 +74,13 @@ $currentDate = date('d-M-Y');
 					<?php } ?>
 				</select>
 			</div>
-			<div class="items-push" style=" margin-top: 10px; ">
-				<div class="col-lg-2">
-					<a href="javascript:void(0);" class="btn btn-hero-secondary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getRecentInfectionByMonthSexChart();"><i class="fa fa-fw fa-search"></i> Search</a>
-				</div>
+			<div class="items-push col-lg-2" style=" margin-top: 10px; ">
+				<a href="javascript:void(0);" class="btn btn-hero-secondary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getRecentInfectionByMonthSexChart();"><i class="fa fa-fw fa-search"></i> Search</a>
+			</div>
+			<div class="col-lg-8 hide-div" style=" margin-top: 10px;display:none; ">
+				<a class="float-right" href="javascript:void(0);" onclick="onhide('sticky-div');" style="padding: 5px; color: #5f9ea0c2;">
+					<i class="fa fa-arrow-up"></i> Hide
+				</a>
 			</div>
 		</div>
 	</div>
@@ -161,6 +164,7 @@ $currentDate = date('d-M-Y');
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
 
 <script type="text/javascript">
+	var flag = true; 
 	var mymap = L.map('mapid').setView([-1.9565912, 30.0595336], 14);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -367,4 +371,20 @@ $currentDate = date('d-M-Y');
 				$("#infectionByMonthSex").html(data);
 			});
 	}
+
+	function onhide(_class){
+		$('.'+_class).css('position','inherit');
+		$('.hide-div').hide(500);
+		flag = false;
+	}
+
+	$(document).scroll(function() {
+		if(flag){
+			if($(window).scrollTop() > 159){
+				$('.hide-div').show(500);
+			}else{
+				$('.hide-div').hide(500);
+			}
+		}
+	});
 </script>
