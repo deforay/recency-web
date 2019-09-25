@@ -178,31 +178,34 @@ $currentDate = date('d-M-Y');
 	var mymap = L.map('mapid').setView([-1.9565912, 30.0595336], 14);
 	var citymap = {
         Butare: {
-          center: {lat: 2.1609, lng: 30.5437},
-          population: 278000
+          center: {lat: -2.608007, lng: 29.735934},
+          population: 27800
         },
         Kibungo: {
-          center: {lat: 26.9124, lng: 75.7873},
-          population: 578000
+          center: {lat: -2.161069, lng: 30.544063},
+          population: 57800
         },
         Ruhengeri: {
-          center: {lat: 1.5035, lng: 29.6325},
-          population: 078000
+          center: {lat: -1.503175, lng: 29.631295},
+          population: 07800
         },
         Gitarama: {
-          center: {lat: 2.0804, lng: 29.7600},
-          population: 478000
+          center: {lat: -2.082385, lng: 29.717131},
+          population: 47800
+        },
+        Kigarama: {
+          center: {lat: -1.980945, lng: 30.071184},
+          population: 25800
         },
         Musasa: {
-          center: {lat: 1.8191, lng: 29.8511},
-          population: 378000
+          center: {lat: -1.819176, lng: 29.850755},
+          population: 37800
         }
 	};
 	function initMapMarkers() {
 		var map = new google.maps.Map(document.getElementById('circleMap'), {
           zoom: 8,
-        //   center: {lat: 1.9432848, lng: 28.7590534},
-          center: {lat: 1.9405357, lng: 28.7561466},
+          center: {lat: -1.986817, lng: 29.952009},
           mapTypeId: 'roadmap'
         });
 
