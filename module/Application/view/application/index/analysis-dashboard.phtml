@@ -16,10 +16,6 @@ $currentDate = date('d-M-Y');
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 <style>
-	.btn-secondary,.btn-hero-secondary{
-		background-color: cadetblue !important;
-		border: none !important;
-	}
 	.highcharts-container{
 		height: 160px !important;
 		overflow: initial !important;
@@ -70,7 +66,7 @@ $currentDate = date('d-M-Y');
 				</select>
 			</div>
 			<div class="items-push col-lg-2" style=" margin-top: 10px; ">
-				<a href="javascript:void(0);" class="btn btn-hero-secondary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getRecentInfectionByMonthSexChart();"><i class="fa fa-fw fa-search"></i> Search</a>
+				<a href="javascript:void(0);" class="btn btn-hero-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getRecentInfectionByMonthSexChart();"><i class="fa fa-fw fa-search"></i> Search</a>
 			</div>
 			<div class="col-lg-8 hide-div" style=" margin-top: 10px;display:none; ">
 				<a class="float-right" href="javascript:void(0);" onclick="onhide('sticky-div');" style="padding: 5px; color: #5f9ea0c2;">
@@ -161,7 +157,7 @@ $currentDate = date('d-M-Y');
 			</h2>
 			<div class="block block-rounded block-bordered">
 				<div class="block-content block-content-full">
-					<div id="js-map-markers1" style="height: 600px;z-index:1;"></div>
+					<div id="circleMap" style="height: 600px;z-index:1;"></div>
 				</div>
 			</div>
 		</div>
@@ -181,31 +177,32 @@ $currentDate = date('d-M-Y');
 	var flag = true; 
 	var mymap = L.map('mapid').setView([-1.9565912, 30.0595336], 14);
 	var citymap = {
-        Tirunelveli: {
-          center: {lat: 8.7139, lng: 77.7567},
-          population: 2714856
+        Butare: {
+          center: {lat: 2.1609, lng: 30.5437},
+          population: 278000
         },
-        Jaipur: {
+        Kibungo: {
           center: {lat: 26.9124, lng: 75.7873},
-          population: 8405837
+          population: 578000
         },
-        Mumbai: {
-          center: {lat: 19.0760, lng: 72.8777},
-          population: 8405837
+        Ruhengeri: {
+          center: {lat: 1.5035, lng: 29.6325},
+          population: 078000
         },
-        Bengaluru: {
-          center: {lat: 12.9716, lng: 77.5946},
-          population: 3857799
+        Gitarama: {
+          center: {lat: 2.0804, lng: 29.7600},
+          population: 478000
         },
-        Thandayarpettai: {
-          center: {lat: 13.1302, lng: 80.2792},
-          population: 603502
+        Musasa: {
+          center: {lat: 1.8191, lng: 29.8511},
+          population: 378000
         }
 	};
 	function initMapMarkers() {
-		var map = new google.maps.Map(document.getElementById('js-map-markers1'), {
-          zoom: 4,
-          center: {lat: 20.5937, lng: 78.9629},
+		var map = new google.maps.Map(document.getElementById('circleMap'), {
+          zoom: 8,
+        //   center: {lat: 1.9432848, lng: 28.7590534},
+          center: {lat: 1.9405357, lng: 28.7561466},
           mapTypeId: 'roadmap'
         });
 
@@ -221,9 +218,9 @@ $currentDate = date('d-M-Y');
             radius: Math.sqrt(citymap[city].population) * 100
           });
         }
-        /* if (jQuery('#js-map-markers1').length) {
+        /* if (jQuery('#circleMap').length) {
             new GMaps({
-                div: '#js-map-markers1',
+                div: '#circleMap',
                 lat: 48.8566,
                 lng: 2.3522,
                 zoom: 11,
