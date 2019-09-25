@@ -14,12 +14,6 @@
 	<script src="https://code.highcharts.com/highcharts-more.js"></script>
 	<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 	<style>
-		.btn-secondary,
-		.btn-hero-secondary {
-			background-color: cadetblue !important;
-			border: none !important;
-		}
-
 		.highcharts-container {
 			height: 160px !important;
 			overflow: initial !important;
@@ -30,11 +24,6 @@
 			font-weight: 400px !important;
 			padding: 45px 0px;
 			font-stretch: expanded;
-			transform: scale(1, 1.5);
-			-webkit-transform: scale(1, 1.2);
-			-moz-transform: scale(1, 1.5);
-			-ms-transform: scale(1, 1.5);
-			-o-transform: scale(1, 1.5);
 		}
 	</style>
 	<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
@@ -328,7 +317,7 @@
 				</div>
 
 				<div class="items-push col-lg-2" style=" margin-top: 10px; ">
-					<a href="javascript:void(0);" class="btn btn-hero-secondary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getInfectionByModalityChart();getInfectionBySexChart();getMissingVlByDistrict();getMissingVlByModality();"><i class="fa fa-fw fa-search"></i> Search</a>
+					<a href="javascript:void(0);" class="btn btn-hero-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getInfectionByModalityChart();getInfectionBySexChart();getMissingVlByDistrict();getMissingVlByModality();"><i class="fa fa-fw fa-search"></i> Search</a>
 				</div>
 				<div class="col-lg-4 hide-div" style=" margin-top: 10px;display:none; ">
 					<a class="float-right" href="javascript:void(0);" onclick="onhide('sticky-div');" style="padding: 5px; color: #5f9ea0c2;">
@@ -362,7 +351,7 @@
 					</tbody>
 				</table>
 				<div class="block block-rounded block-bordered">
-					<div class="block-content block-content-full">
+					<div class="block-content block-content-full" style=" height: 490px !important; overflow: auto; ">
 
 						<div id="container" style="height: 450px; min-width: 320px; margin: 0 auto"></div>
 					</div>
@@ -392,17 +381,17 @@
 					</tbody>
 				</table>
 				<div class="block block-rounded block-bordered">
-					<div class="block-content block-content-full">
+					<div class="block-content block-content-full" style=" height: 490px !important; overflow: auto; ">
 						<div id="recencyLabActivity" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row" style=" border: 1px solid #8080806b; background: aliceblue;margin-bottom: -1px; ">
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<h2 class="content-heading ">
 					<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
-					<a href="javascript:void(0);" class="btn btn-hero-secondary float-right" onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+					<a href="javascript:void(0);" class="btn btn-hero-primary float-right" onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
 				</h2>
 				<div class="block block-rounded block-bordered" style="height:440px; overflow:auto;">
 					<div class="block-content block-content-full">
@@ -435,10 +424,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<h2 class="content-heading ">
 					<i class="fa fa-angle-right text-muted mr-1"></i> District Wise Recency Results
-					<a href="javascript:void(0);" class="btn btn-hero-secondary float-right" onclick="exportDistrictRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+					<a href="javascript:void(0);" class="btn btn-hero-primary float-right" onclick="exportDistrictRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
 				</h2>
 				<div class="block block-rounded block-bordered" style="height:440px; overflow:auto;">
 					<div class="block-content block-content-full">
@@ -482,7 +471,7 @@
 					</small>
 				</h2>
 				<div class="block block-rounded block-bordered">
-					<div class="block-content block-content-full">
+					<div class="block-content block-content-full" style=" height: 490px !important; overflow: auto; ">
 						<div id="modalityFinalOutcomeChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 					</div>
 				</div>
@@ -497,7 +486,7 @@
 					</small>
 				</h2>
 				<div class="block block-rounded block-bordered">
-					<div class="block-content block-content-full">
+					<div class="block-content block-content-full" style=" height: 490px !important; overflow: auto; ">
 						<div id="recentInfectionBySex" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 					</div>
 				</div>
@@ -515,7 +504,7 @@
 					</small>
 				</h2>
 				<div class="block block-rounded block-bordered">
-					<div class="block-content block-content-full">
+					<div class="block-content block-content-full" style=" height: 490px !important; overflow: auto; ">
 						<div id="missingViralLoadByDistrict" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 					</div>
 				</div>
@@ -530,7 +519,7 @@
 					</small>
 				</h2>
 				<div class="block block-rounded block-bordered">
-					<div class="block-content block-content-full">
+					<div class="block-content block-content-full" style=" height: 490px !important; overflow: auto; ">
 						<div id="missingViralLoadByModality" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 					</div>
 				</div>
