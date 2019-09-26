@@ -152,10 +152,10 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                             <?php if (isset($manageColumnsResult['user_id']) && $manageColumnsResult['user_id'] != '') { ?>
                                 <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i; ?>);" value="<?php echo $i; ?>" <?php if (in_array($i, $arrFields)) {
                                                                                                                                                 echo " checked=\"checked\"";
-                                                                                                                                            } ?> name="recencyCheckbox[]" id="iCol<?php echo $i; ?>" class="showhideCheckBox" />&nbsp;&nbsp;<label><?php echo ucwords($v); ?></label>
+                                                                                                                                            } ?> name="recencyCheckbox[]" id="iCol<?php echo $i; ?>" class="showhideCheckBox" />&nbsp;&nbsp;<label for="iCol<?php echo $i; ?>"><?php echo ucwords($v); ?></label>
                             <?php } else {  ?>
 
-                                <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i; ?>);" value="<?php echo $i; ?>" checked="checked" name="recencyCheckbox[]" id="iCol<?php echo $i; ?>" class="showhideCheckBox" />&nbsp;&nbsp;<label><?php echo ucwords($v); ?></label>
+                                <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i; ?>);" value="<?php echo $i; ?>" checked="checked" name="recencyCheckbox[]" id="iCol<?php echo $i; ?>" class="showhideCheckBox" />&nbsp;&nbsp;<label for="iCol<?php echo $i; ?>"><?php echo ucwords($v); ?></label>
 
                             <?php  } ?>
                         </div>

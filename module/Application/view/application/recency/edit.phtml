@@ -529,19 +529,19 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 									<div class="tab-pane" id="wizard-progress-step2" role="tabpanel">
 											<div name="recencySectionForm2" id="recencySectionForm2"  class="mb-5">
 												<div class="form-group row">
-													<label class="col-sm-2 col-form-label <?php echo in_array("Dob",$resultArr2)?"showFields":"hideFields";?>" for="">DOB<?php echo(in_array("Dob",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+													<label class="col-sm-2 col-form-label <?php echo in_array("Dob",$resultArr2)?"showFields":"hideFields";?>" for="dob">DOB<?php echo(in_array("Dob",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 													<div class="col-sm-4 <?php echo in_array("Dob",$resultArr2)?"showFields":"hideFields";?>">
-														<input type="text" value="<?php echo $dob;?>" class="form-control section2" id="dob" name="dob" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();"  readonly="readonly">
+														<input type="text" value="<?php echo $dob;?>" class="form-control section2" id="dob" name="dob" value="" placeholder="Enter the dob" title="Please enter the dob" onchange="ageCalculate();" readonly="readonly" <?php echo ($result['age_not_reported'] == 'yes')?'disabled':"";?>>
 													</div>
 
-													<label class="col-sm-2 col-form-label <?php echo in_array("Age",$resultArr2)?"showFields":"hideFields";?>" for="">Age in Years <?php echo(in_array("Age",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+													<label class="col-sm-2 col-form-label <?php echo in_array("Age",$resultArr2)?"showFields":"hideFields";?>" for="age">Age in Years <?php echo(in_array("Age",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 													<div class="col-sm-4 <?php echo in_array("Age",$resultArr2)?"showFields":"hideFields";?>">
-														<input type="text" value="<?php echo $result['age'];?>" class="form-control section2" id="age" name="age" value="" onchange="this.value = minmax(this.value, 13, 120)" placeholder="Enter the age" title="Please enter the age">
+														<input type="text" value="<?php echo $result['age'];?>" class="form-control section2" id="age" name="age" value="" onchange="this.value = minmax(this.value, 13, 120)" placeholder="Enter the age" title="Please enter the age" <?php echo ($result['age_not_reported'] == 'yes')?'disabled':"";?>>
 													</div>
 												</div>
 												<br>
 												<div class="form-group row">
-													<label class="col-sm-2 col-form-label <?php echo in_array("Gender",$resultArr2)?"showFields":"hideFields";?>" for="">Gender<?php echo(in_array("Gender",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
+													<label class="col-sm-2 col-form-label <?php echo in_array("Gender",$resultArr2)?"showFields":"hideFields";?>" for="gender">Gender<?php echo(in_array("Gender",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 													<div class="col-sm-4 <?php echo in_array("Gender",$resultArr2)?"showFields":"hideFields";?>">
 														<select class="form-control section2" id="gender" name="gender" title="Please select the gender" onchange="genderCheck(this);">
 																<option value="">--Select--</option>
@@ -549,6 +549,11 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 																<option value="female" <?php echo($result['gender'] == 'female' )?'selected="selected"':''; ?>>Female</option>
 																<option value="not_reported" <?php echo($result['gender'] == 'not_reported' )?'selected="selected"':''; ?>>Not Reported</option>
 														</select>
+													</div>
+
+													<label class="col-sm-2 form-check-label" for="ageNotReported">Age Not Reported</label>
+													<div class="col-sm-4">
+														&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" style="border:none;" name="ageNotReported" id="ageNotReported" value="yes" onchange="ageNotReport(this);" <?php echo ($result['age_not_reported'] == 'yes')?'checked="checked"':"";?>/>&nbsp;Yes
 													</div>
 
 													<label class="col-sm-2 col-form-label hidePregnancyResult <?php echo in_array("Pregnancy Status",$resultArr2)?"showFields":"hideFields";?>" for="pregnancyStatus">Pregnancy Status<?php echo(in_array("Pregnancy Status",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
@@ -586,7 +591,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 												<br>
 												<div class="form-group row">
 													<label class="col-sm-2 col-form-label <?php echo in_array("Risk Population",$resultArr2)?"showFields":"hideFields";?>" for="riskPopulation">Risk Population<?php echo(in_array("Risk Population",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
-													<div id="riskPopulationSelect <?php echo in_array("Risk Population",$resultArr2)?"showFields":"hideFields";?>" <?php echo $riskDisplay; ?>>
+													<div id="riskPopulationSelect" class="<?php echo in_array("Risk Population",$resultArr2)?"showFields":"hideFields";?>" <?php echo $riskDisplay; ?>>
 														<select class="form-control section2 <?php echo in_array("Risk Population",$resultArr2)?"showFields":"hideFields";?>" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
 																<option value="">--Select--</option>
 																<?php foreach($facilityResult['riskPopulations'] as $riskPo){?>
@@ -607,7 +612,6 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 														</select>
 														<br>
 													</div>
-
 
 													<label class="col-sm-2 col-form-label  <?php echo in_array("Current Sexual Partner",$resultArr2)?"showFields":"hideFields";?>" for="currentSexualPartner">Current Sexual Partner<?php echo(in_array("Current Sexual Partner",$resultArr)?"<span class='mandatory'> *</span>":""); ?></label>
 													<div class="col-sm-4  <?php echo in_array("Current Sexual Partner",$resultArr2)?"showFields":"hideFields";?>">
@@ -648,7 +652,6 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
 												  <a href="<?php echo $this->url('recency', array('action' => 'index')); ?>" class="btn btn-danger d-none btnHide" data-wizard="finish" >Cancel</a>&nbsp;
 												  <button type="submit" class="btn btn-primary d-none btnHide" data-wizard="finish" onclick="validateNow();return false;"><i class="fa fa-check mr-1"></i> Submit</button>
-
 											 </div>
 											 <div class="col-6 text-right">
 												  <button type="button" class="btn btn-secondary nxtBtn" onclick="validateStep1();">
@@ -1035,7 +1038,7 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 
 	 function validateNow() {
 		  if( ( $("#sampleId").val() != "" ) || ( $("#patientId").val() != "" ) ){
-			   if( ( $("#dob").val() != "" ) || ( $("#age").val() != "" ) ){
+			//    if( ( $("#dob").val() != "" ) || ( $("#age").val() != "" ) ){
 					flag = deforayValidator.init({
 						 formId: 'recencyInformation'
 					});
@@ -1054,11 +1057,11 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 						 $.blockUI();
 						 document.getElementById('recencyInformation').submit();
 					}
-			   } else{
-					$("#age").focus();
-					$("#age").css("border","1px solid rgb(207, 51, 57)");
-					alert("Please enter either DOB or age  ",'err');
-			   }
+			//    } else{
+			// 		$("#age").focus();
+			// 		$("#age").css("border","1px solid rgb(207, 51, 57)");
+			// 		alert("Please enter either DOB or age  ",'err');
+			//    }
 		  } else{
 			   $("#sampleId").focus();
 			   $("#sampleId").css("border","1px solid rgb(207, 51, 57)");
@@ -1277,5 +1280,16 @@ if(isset($arr['admin_message']) && $arr['admin_message']!=''){
 		}else if(parseInt(value) > max) {
 			return max; 
 		}else return value;
+    }
+
+	function ageNotReport(obj) {
+        if($(obj).prop('checked') == true){
+            $('#dob,#age').val('');
+            $('#dob,#age').prop('disabled',true);
+            $('#dob,#age').removeClass('isRequired');
+        }else{
+            $('#age').addClass('isRequired');
+            $('#dob,#age').prop('disabled',false);
+        }
     }
 </script>
