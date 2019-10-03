@@ -96,7 +96,7 @@ $lineOutComeColor2 = "#000000";
                               </div>
                               <label class="col-sm-2 col-form-label" for="testKitLotNo">Test Kit Lot No.<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <select class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" title="Please select the test Kit Lot No">
+                                   <select class="form-control isRequired" id="testKitLotNo" name="testKitLotNo" onchange="testKitLotNoChange(this);" title="Please select the test Kit Lot No">
                                         <option value="">--Select--</option>
                                         <?php foreach ($kitInfo as $info) { ?>
                                              <option value="<?php echo $info['kit_lot_no']; ?>" <?php echo ($info['kit_lot_no'] == $result['kit_lot_no']) ? 'selected="selected"' : ''; ?>><?php echo $info['kit_lot_no']; ?></option>
@@ -367,10 +367,10 @@ $lineOutComeColor2 = "#000000";
           changeTermLine();
      });
 
-     $("#testKitLotNo").change(function() {
-          if (this.value != "") {
+     function testKitLotNoChange(obj){
+          if (obj.value != "") {
                $.post('/recency/get-kit-lot-info', {
-                         kitNo: this.value
+                         kitNo: obj.value
                     },
                     function(data) {
                          if (data != "") {
@@ -383,7 +383,7 @@ $lineOutComeColor2 = "#000000";
           } else {
                $('#testKitExpDate').val('');
           }
-     });
+     }
 
      $(document).ready(function() {
           $("#testingFacilityId").select2({
