@@ -544,6 +544,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $facilityDb = new FacilitiesTable($this->adapter);
+        $cloneDb = new RecencyChangeTrailsTable($this->adapter);
         $riskPopulationDb = new RiskPopulationsTable($this->adapter);
         $districtDb = new DistrictTable($this->adapter);
         $cityDb = new CityTable($this->adapter);
@@ -710,6 +711,17 @@ class RecencyTable extends AbstractTableGateway
             //             $data['final_outcome'] = 'Assay Negative';
             //            }
             $updateResult = $this->update($data, array('recency_id' => $params['recencyId']));
+        }
+        if($updateResult > 0){
+            $explode = explode(',',$params['oldRecords']);
+            $explodeInd = explode(',',$params['oldRecordsInd']);
+            $cloneData = array();
+            foreach($explodeInd as $key=>$val){
+                $cloneData[$val] = $explode[$key];
+            }
+            $cloneData['trail_created_on'] = $common->getDateTime();
+            $cloneData['trail_created_by'] = $logincontainer->userId;
+            $cloneDb->insert($cloneData);
         }
         return $updateResult;
     }
