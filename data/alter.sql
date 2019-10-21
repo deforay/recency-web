@@ -396,3 +396,5 @@ CREATE TABLE `recency_change_trails` (
  KEY `recency_id` (`recency_id`),
  CONSTRAINT `recency_change_trails_ibfk_1` FOREIGN KEY (`recency_id`) REFERENCES `recency` (`recency_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+-- Thanaseelan 21-Oct-2019 
+ALTER TABLE `recency` ADD `modified_on` DATETIME NULL DEFAULT NULL AFTER `kit_name`;
