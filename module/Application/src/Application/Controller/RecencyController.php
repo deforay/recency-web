@@ -168,6 +168,7 @@ class RecencyController extends AbstractActionController
          $recencyService = $this->getServiceLocator()->get('RecencyService');
          $recencyService->UpdatePdfUpdatedDate($params['recencyId']);
          $result = $recencyService->getRecencyDetailsForPDF($params['recencyId']);
+               // \Zend\Debug\Debug::dump($rResult); die;
          $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
          $globalConfigResult = $globalConfigService->fetchGlobalConfig();
          $viewModel = new ViewModel();
