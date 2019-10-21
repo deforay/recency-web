@@ -535,7 +535,9 @@ class RecencyTable extends AbstractTableGateway
             ->where(array('recency_id' => $recencyId));
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        // echo $sQueryStr; die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        // \Zend\Debug\Debug::dump($rResult); die;
         return $rResult;
     }
 
