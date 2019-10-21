@@ -1,4 +1,5 @@
 <?php
+// \Zend\Debug\Debug::dump($result);die;
 foreach ($result as $index => $val) {
 	$indexVal[] = $index;
 }
@@ -245,13 +246,13 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 									</div>
 									<!-- <label class="col-sm-2 col-form-label <?php //echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";
 																				?>" for="">Sample Received Date<?php //echo(in_array("Sample Received Date",$resultArr)?"<span class='mandatory'>*</span>":""); 
-																																																	?> </label>
+																												?> </label>
                                         <div class="col-sm-4 <?php //echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";
 																?>">
                                             <input type="text" class="js-datepicker form-control <?php //echo $sampleReceivedDateMandatory; 
 																									?> <?php // echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";
-																																				?>"  value="<?php //echo $sampleReceivedDate; 
-																																																												?>" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Enter the sample received date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample received date">
+																										?>"  value="<?php //echo $sampleReceivedDate; 
+																																							?>" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Enter the sample received date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample received date">
                                         </div> -->
 
 								</div>
@@ -459,7 +460,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<label class="col-sm-2 col-form-label <?php echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Control Line
 												<?php echo (in_array("Control Line", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control disbaledResult
+												<select class="form-control invalidctline disbaledResult
 													<?php echo $controlLineResult;
 													echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>" id="controlLine" name="controlLine" title="Please select the control line" onchange="changeTermLine()">
 													<option value="">--Select--</option>
@@ -471,7 +472,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<label class="col-sm-2 col-form-label <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Positive Verification
 												<?php echo (in_array("Positive Verification Line", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control disbaledResult <?php echo $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
+												<select class="form-control invalidctline disbaledResult <?php echo $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
 													<option value="">--Select--</option>
 													<option value="present" <?php echo ($result['positive_verification_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Positive/P)</option>
 													<option value="absent" <?php echo ($result['positive_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Negative/N)</option>
@@ -483,7 +484,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<label class="col-sm-2 col-form-label <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Long Term Verification
 												<?php echo (in_array("Long Term Verification Line", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control disbaledResult <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
+												<select class="form-control invalidctline disbaledResult <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
 													<option value="">--Select--</option>
 													<option value="present" <?php echo ($result['long_term_verification_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Long Term/LT)</option>
 													<option value="absent" <?php echo ($result['long_term_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Recent/R)</option>
@@ -503,8 +504,38 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 												<span class="form-control" style="border:none;" id="outcome"></span>
 												<input type="hidden" name="outcomeData" id="outcomeData" />
 											</div>
-
-
+											<br>
+											<div class="actualresult row" style="display: none;background-color: aliceblue;margin-left: 10px;margin-top: 20px;margin-bottom: 20px;padding: 20px;">
+												<label class="col-sm-2 col-form-label" for="controlLineActual">Control Line Actual <span class='mandatory'>*</span></label>
+												<div class="col-sm-4">
+													<select class="form-control actualresult-input" id="controlLineActual" name="controlLineActual" title="Please select the control line" onchange="changeTermLineActual()">
+														<option value="">--Select--</option>
+														<option value="present" <?php echo ($result['invalid_control_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present</option>
+														<option value="absent" <?php echo ($result['invalid_control_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent</option>
+													</select>
+												</div>
+												<label class="col-sm-2 col-form-label" for="positiveVerificationLineActual">Positive Verification Actual <span class='mandatory'>*</span></label>
+												<div class="col-sm-4">
+													<select class="form-control actualresult-input" id="positiveVerificationLineActual" name="positiveVerificationLineActual" title="Please select the long term verification line" onchange="changeTermLineActual()">
+														<option value="">--Select--</option>
+														<option value="present" <?php echo ($result['invalid_verification_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Positive/P)</option>
+														<option value="absent" <?php echo ($result['invalid_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Negative/N)</option>
+													</select>
+												</div>
+												<label class="col-sm-2 col-form-label" for="longTermVerificationLineActual">Long Term Verification Actual <span class='mandatory'>*</span></label>
+												<div class="col-sm-4">
+													<select class="form-control actualresult-input" id="longTermVerificationLineActual" name="longTermVerificationLineActual" title="Please select the long positive verification line" onchange="changeTermLineActual()">
+														<option value="">--Select--</option>
+														<option value="present" <?php echo ($result['invalid_longterm_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Long Term/LT)</option>
+														<option value="absent" <?php echo ($result['invalid_longterm_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Recent/R)</option>
+													</select>
+												</div>
+												<label class="col-sm-2 col-form-label outcomeActual" style="visibility:hidden" for="outcomeDataActual">Assay Outcome Actual </label>
+												<div class="col-sm-4">
+													<span class="form-control" style="border:none;background-color: transparent;" id="outcomeActual"><?php echo $result['term_outcome']; ?></span>
+													<input type="hidden" class="actualresult-input" name="outcomeDataActual" value="<?php echo $result['final_outcome']; ?>" id="outcomeDataActual" />
+												</div>
+											</div>
 											<label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Result", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Viral Load Result (cp/ml)<?php echo (in_array("Viral Load Result", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Viral Load Result", $resultArr2) ? "showFields" : "hideFields"; ?>">
 												<?php
@@ -710,6 +741,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 <script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
 <script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
 <script type="text/javascript">
+	
 	$(".hideFields").remove();
 	$(document).ready(function() {
 		$("#testingFacilityId").select2({
@@ -770,12 +802,13 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			$('#sampleReceiptDate').datepicker('setStartDate', _satrt);
 		});
 	});
-	function changeTermLine() {
-		var ctrlLine = $("#controlLine").val();
-		var postiveLine = $("#positiveVerificationLine").val();
-		var longTermLine = $("#longTermVerificationLine").val();
-		var vlDataResult = $("#vlLoadResult").val();
 
+	function changeTermLine() {
+		var ctrlLine = $("#controlLine").val(),
+			postiveLine = $("#positiveVerificationLine").val(),
+			longTermLine = $("#longTermVerificationLine").val(),
+			vlDataResult = $("#vlLoadResult").val();
+		$('.actualresult').css('display', 'none');
 
 		if (ctrlLine != '' && postiveLine != '' && longTermLine != '') {
 			if (ctrlLine == 'absent' && postiveLine == 'absent' && longTermLine == 'absent') {
@@ -785,7 +818,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 				$(".outcome").css({
 					"visibility": "visible"
 				});
-
+				$('.actualresult').css('display', 'inherit');
+				$('.actualresult-input').addClass('isRequired');
 				updateVlResultFields();
 
 			} else if (ctrlLine == 'absent' && postiveLine == 'absent' && longTermLine == 'present') {
@@ -795,7 +829,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 				$(".outcome").css({
 					"visibility": "visible"
 				});
-
+				$('.actualresult').css('display', 'inherit');
+				$('.actualresult-input').addClass('isRequired');
 				updateVlResultFields();
 
 			} else if (ctrlLine == 'absent' && postiveLine == 'present' && longTermLine == 'absent') {
@@ -805,7 +840,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 				$(".outcome").css({
 					"visibility": "visible"
 				});
-
+				$('.actualresult').css('display', 'inherit');
+				$('.actualresult-input').addClass('isRequired');
 				updateVlResultFields();
 
 			} else if (ctrlLine == 'absent' && postiveLine == 'present' && longTermLine == 'present') {
@@ -815,7 +851,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 				$(".outcome").css({
 					"visibility": "visible"
 				});
-
+				$('.actualresult').css('display', 'inherit');
+				$('.actualresult-input').addClass('isRequired');
 				updateVlResultFields();
 
 			} else if (ctrlLine == 'present' && postiveLine == 'absent' && longTermLine == 'absent') {
@@ -835,7 +872,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 				$(".outcome").css({
 					"visibility": "visible"
 				});
-
+				$('.actualresult').css('display', 'inherit');
+				$('.actualresult-input').addClass('isRequired');
 				updateVlResultFields();
 
 			} else if (ctrlLine == 'present' && postiveLine == 'present' && longTermLine == 'absent') {
@@ -870,6 +908,99 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 		}
 	}
 
+	function changeTermLineActual() {
+		var _ctrl = $("#controlLineActual"),
+			_postive = $("#positiveVerificationLineActual"),
+			_longTerm = $("#longTermVerificationLineActual"),
+			_outcome = $(".outcomeActual"),
+			_outcomeId = $("#outcomeActual"),
+			_outcomeData = $("#outcomeDataActual"),
+			_color = '<?php echo $lineOutComeColor; ?>';
+
+		if (_ctrl.val() != '' && _postive.val() != '' && _longTerm.val() != '') {
+			if (_ctrl.val() == 'absent' && _postive.val() == 'absent' && _longTerm.val() == 'absent') {
+				_outcomeId.html('Invalid – Please Verify').css({
+					"color": _color
+				});
+				_outcome.css({
+					"visibility": "visible"
+				});
+				_outcomeData.val('Invalid');
+				updateVlResultFields();
+			} else if (_ctrl.val() == 'absent' && _postive.val() == 'absent' && _longTerm.val() == 'present') {
+				_outcomeId.html('Invalid – Please Verify').css({
+					"color": _color
+				});
+				_outcome.css({
+					"visibility": "visible"
+				});
+				_outcomeData.val('Invalid');
+				updateVlResultFields();
+			} else if (_ctrl.val() == 'absent' && _postive.val() == 'present' && _longTerm.val() == 'absent') {
+				_outcomeId.html('Invalid – Please Verify').css({
+					"color": _color
+				});
+				_outcome.css({
+					"visibility": "visible"
+				});
+				_outcomeData.val('Invalid');
+				updateVlResultFields();
+			} else if (_ctrl.val() == 'absent' && _postive.val() == 'present' && _longTerm.val() == 'present') {
+				_outcomeId.html('Invalid – Please Verify').css({
+					"color": _color
+				});
+				_outcome.css({
+					"visibility": "visible"
+				});
+				_outcomeData.val('Invalid');
+				updateVlResultFields();
+			} else if (_ctrl.val() == 'present' && _postive.val() == 'absent' && _longTerm.val() == 'absent') {
+				_outcomeId.html('Assay Negative').css({
+					"color": _color
+				});
+				_outcome.css({
+					"visibility": "visible"
+				});
+				updateVlResultFields('Assay Negative');
+			} else if (_ctrl.val() == 'present' && _postive.val() == 'absent' && _longTerm.val() == 'present') {
+				_outcomeId.html('Invalid – Please Verify').css({
+					"color": _color
+				});
+				_outcome.css({
+					"visibility": "visible"
+				});
+				_outcomeData.val('Invalid');
+				updateVlResultFields();
+			} else if (_ctrl.val() == 'present' && _postive.val() == 'present' && _longTerm.val() == 'absent') {
+				_outcomeId.html('Assay Recent - Please ensure you add Viral Load Result').css({
+					"color": "<?php echo $lineOutComeColor2; ?>"
+				});
+				_outcome.css({
+					"visibility": "visible"
+				});
+				_outcomeData.val('Assay Recent');
+				updateVlResultFields('Assay Recent');
+			} else if (_ctrl.val() == 'present' && _postive.val() == 'present' && _longTerm.val() == 'present') {
+				_outcomeId.html('Long Term').css({
+					"color": "<?php echo $lineOutComeColor2; ?>"
+				});
+				_outcome.css({
+					"visibility": "visible"
+				});
+				updateVlResultFields('Long Term');
+			}
+		} else {
+			_outcomeId.html('');
+			$(".outcomeActual", "#outcomeActual").css({
+				"visibility": "hidden"
+			});
+			$("#vlResultoutcome").html('');
+			$(".vlResultoutcome").css({
+				"visibility": "hidden"
+			});
+		}
+	}
+
 	function updateVlResultFields(fieldValue = null) {
 		var vlDataResult = $("#vlLoadResult").val();
 		var vlResultOption = $("#vlResultOption").val();
@@ -880,7 +1011,11 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 		});
 
 		if (fieldValue == 'vlField') {
-			var fieldValue = $("#outcome").text();
+			if ($("#outcomeActual").text() != '') {
+				var fieldValue = $("#outcomeActual").text();
+			} else {
+				var fieldValue = $("#outcome").text();
+			}
 			if (fieldValue == 'Assay Recent - Please ensure you add Viral Load Result') {
 				fieldValue = 'Assay Recent';
 			}
@@ -1022,7 +1157,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			});
 		}
 
-		changeTermLine();
+		changeTermLine();changeTermLineActual();
 		$("#facilityId").select2({
 			placeholder: "Choose Facility",
 			width: "250px",
@@ -1040,7 +1175,11 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			$(".disbaledResult").attr("disabled", true).removeClass("isRequired");
 			$(".hideDiv").css('visibility', 'visible');
 		} else {
-			$(".disbaledResult").attr("disabled", false).addClass("isRequired");
+			if ($("#controlLineActual").val() == '') {
+					$(".disbaledResult").attr("disabled", false).addClass("isRequired");
+			}else{
+				$(".disbaledResult").attr("disabled", true).removeClass("isRequired");
+			}
 			$(".hideDiv").css('visibility', 'hidden');
 		}
 
@@ -1076,7 +1215,11 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 				$(".hideDiv").css('visibility', 'visible');
 				$("#recencyTestNotPerformed").addClass("isRequired");
 			} else {
-				$(".disbaledResult").attr("disabled", false);
+				if ($("#controlLineActual").val() == '') {
+					$(".disbaledResult").attr("disabled", false).addClass("isRequired");
+				}else{
+					$(".disbaledResult").attr("disabled", true).removeClass("isRequired");
+				}
 				$(".hideDiv").css('visibility', 'hidden');
 				$("#recencyTestNotPerformed").val("").removeClass("isRequired");
 				$("#otherRecencyTestNotPerformed").val("").removeClass("isRequired");
@@ -1146,7 +1289,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			$("#lastHivStatus", "#patientOnArt").addClass('isRequired');
 		<?php } else { ?>
 			$("#patientOnArt").attr("disabled", true).removeClass('isRequired');
-		<?php } ?>
+		<?php }?>
 	});
 
 	function validateStep1() {
@@ -1228,6 +1371,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			alert("Please enter eaither sample or patient id  ", 'err');
 		}
 	}
+
 	function ageCalculate() {
 		var agYrs = '';
 		var agMnths = '';
@@ -1391,5 +1535,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			$('#age').addClass('isRequired');
 			$('#dob,#age').prop('disabled', false);
 		}
+	}
+	if ($("#controlLineActual").val() == '') {
+		$(".disbaledResult").attr("disabled", false).addClass("isRequired");
+	}else{
+		$(".disbaledResult").attr("disabled", true).removeClass("isRequired");
 	}
 </script>
