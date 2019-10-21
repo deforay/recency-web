@@ -24,6 +24,7 @@ use Application\Model\DistrictTable;
 use Application\Model\CityTable;
 use Application\Model\QualityCheckTable;
 use Application\Model\TestingFacilityTypeTable;
+use Application\Model\RecencyChangeTrailsTable;
 use Application\Model\ManageColumnsMapTable;
 
 // Service
@@ -161,6 +162,11 @@ class Module{
                     'TestingFacilityTypeTable' => function($sm) {
                         $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                         $table = new TestingFacilityTypeTable($dbAdapter);
+                        return $table;
+                    },
+                    'RecencyChangeTrailsTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new RecencyChangeTrailsTable($dbAdapter);
                         return $table;
                     },
                     'ManageColumnsMapTable' => function($sm) {
