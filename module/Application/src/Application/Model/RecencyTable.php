@@ -2241,7 +2241,7 @@ class RecencyTable extends AbstractTableGateway
                                                                  ELSE 0
                                                                  END)"),
                     "samplesFinalOutcome" => new Expression("SUM(CASE
-                                                                 WHEN (((r.fisset(inal_outcome)) )) THEN 1
+                                                                 WHEN (((r.final_outcome is NOT NULL and r.final_outcome != '') )) THEN 1
                                                                  ELSE 0
                                                                  END)"),
                     "samplesTestBacklog" => new Expression("SUM(CASE
@@ -3528,7 +3528,7 @@ class RecencyTable extends AbstractTableGateway
                                                                  ELSE 0
                                                                  END)"),
                     "samplesFinalOutcome" => new Expression("SUM(CASE
-                                                                 WHEN (((r.fisset(inal_outcome)) )) THEN 1
+                                                                 WHEN (((r.final_outcome is NOT NULL and r.final_outcome != '') )) THEN 1
                                                                  ELSE 0
                                                                  END)"),
                     "samplesTestBacklog" => new Expression("SUM(CASE
