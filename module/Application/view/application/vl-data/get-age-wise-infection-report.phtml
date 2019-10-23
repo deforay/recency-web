@@ -1,0 +1,85 @@
+<?php 
+    $ageArray = array('15-19','20-24','25-29','30-34','35-39','40-44','45-49','50+');
+?>
+<div class="block-header block-header-default">
+    <span>RTRI Modality Reports</span>
+</div>
+<div class="block-content block-content-full">
+    <table id="modalityRTRI" class="table table-bordered table-striped table-vcenter table-responsive frezz">
+        <tr>
+            <th align="center">AGE
+            <?php foreach ($ageArray as $age) {
+                echo '<th colspan="2" align="center">'.$age;
+            } ?>
+        <tr>
+            <th align="center">Gender
+            <?php foreach (range(1, 16) as $x) {
+                if ($x % 2) {
+                    echo '<th align="center">Female';
+                } else {
+                    echo '<th align="center">Male';
+                }
+            } ?>
+        <tr>
+            <td align="center">Recent
+            <?php $index = 0;foreach (range(1, 16) as $x) {
+                if ($x % 2) {
+                    echo '<td align="right">'.$result['rtriRecent'.$ageArray[$index].'F'];
+                } else {
+                    echo '<td align="right">'.$result['rtriRecent'.$ageArray[$index].'M'];
+                    $index++;
+                }
+            } ?>
+        <tr>
+            <td align="center">Long Term
+            <?php $index = 0;foreach (range(1, 16) as $x) {
+                if ($x % 2) {
+                    echo '<td align="right">'.$result['rtriLT'.$ageArray[$index].'F'];
+                } else {
+                    echo '<td align="right">'.$result['rtriLT'.$ageArray[$index].'M'];
+                    $index++;
+                }
+            } ?>
+    </table>
+</div>
+<div class="block-header block-header-default">
+    <span>Confirmed Modality Reports</span>
+</div>
+<div class="block-content block-content-full">
+    <table id="modalityConfirm" class="table table-bordered table-striped table-vcenter table-responsive frezz">
+        <tr>
+            <th align="center">AGE
+            <?php foreach ($ageArray as $age) {
+                echo '<th colspan="2" align="center">'.$age;
+            } ?>
+        <tr>
+            <th align="center">Gender
+            <?php foreach (range(1, 16) as $x) {
+                if ($x % 2) {
+                    echo '<th align="center">Female';
+                } else {
+                    echo '<th align="center">Male';
+                }
+            } ?>
+        <tr>
+            <td align="center">Recent
+            <?php $index = 0;foreach (range(1, 16) as $x) {
+                if ($x % 2) {
+                    echo '<td align="right">'.$result['confirmedRecent'.$ageArray[$index].'F'];
+                } else {
+                    echo '<td align="right">'.$result['confirmedRecent'.$ageArray[$index].'M'];
+                    $index++;
+                }
+            } ?>
+        <tr>
+            <td align="center">Long Term
+            <?php $index = 0;foreach (range(1, 16) as $x) {
+                if ($x % 2) {
+                    echo '<td align="right">'.$result['confirmedLT'.$ageArray[$index].'F'];
+                } else {
+                    echo '<td align="right">'.$result['confirmedLT'.$ageArray[$index].'M'];
+                    $index++;
+                }
+            } ?>
+    </table>
+</div>

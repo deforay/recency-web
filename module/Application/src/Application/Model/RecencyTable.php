@@ -698,9 +698,7 @@ class RecencyTable extends AbstractTableGateway
                 'sample_collection_date'            => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate'] != '') ? $common->dbDateFormat($params['sampleCollectionDate']) : null,
                 'sample_receipt_date'               => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate'] != '') ? $common->dbDateFormat($params['sampleReceiptDate']) : null,
                 'received_specimen_type'            => $params['receivedSpecimenType'],
-                'testing_facility_type'             => $params['testingModality'],
-                'modified_on'                       => $common->getDateTime(),
-                'modified_by'                       => $logincontainer->userId
+                'testing_facility_type'             => $params['testingModality']
             );
 
             if($params['positiveVerificationLineActual'] != ''){
@@ -728,6 +726,11 @@ class RecencyTable extends AbstractTableGateway
             $updateResult = $this->update($data, array('recency_id' => $params['recencyId']));
         }
         if ($updateResult > 0) {
+            $modifyData = array(
+                'modified_on'   => $common->getDateTime(),
+                'modified_by'   => $logincontainer->userId
+            );
+            $this->update($modifyData, array('recency_id' => $params['recencyId']));
             $explode = explode(',', $params['oldRecords']);
             $explodeInd = explode(',', $params['oldRecordsInd']);
             $cloneData = array();
@@ -1052,7 +1055,11 @@ class RecencyTable extends AbstractTableGateway
                             // 'vl_result'=>$recency['vlLoadResult'],
 
                         );
-
+                        if(isset($recency['invalidControlLine']) && $recency['invalidControlLine'] != ''){
+                            $data['invalid_control_line']       = $recency['invalidControlLine'];
+                            $data['invalid_verification_line']  = $recency['invalidPositiveLine'];
+                            $data['invalid_longterm_line']      = $recency['invalidLongTermLine'];
+                        }
                         if ($recency['vlLoadResult'] != '') {
                             $data['vl_result'] = htmlentities($recency['vlLoadResult']);
                             $date['vl_result_entry_date'] = $recency['formSavedDateTime'];
@@ -1156,6 +1163,12 @@ class RecencyTable extends AbstractTableGateway
                         'testing_facility_type' => $params['testingModality'],
                     );
 
+                    if(isset($params['invalidControlLine']) && $params['invalidControlLine'] != ''){
+                        $data['invalid_control_line']       = $params['invalidControlLine'];
+                        $data['invalid_verification_line']  = $params['invalidPositiveLine'];
+                        $data['invalid_longterm_line']      = $params['invalidLongTermLine'];
+                    }
+
                     if (isset($params['vlTestDate']) && trim($params['vlTestDate']) != "") {
                         $data['vl_test_date'] = $common->dbDateFormat($params['vlTestDate']);
                     }
@@ -1193,6 +1206,7 @@ class RecencyTable extends AbstractTableGateway
         }
         return $response;
     }
+
     public function fetchRecencyOrderDetails($id)
     {
         $dbAdapter = $this->adapter;
@@ -2075,7 +2089,7 @@ class RecencyTable extends AbstractTableGateway
                                                                                 ELSE 0
                                                                                 END)"),
                     "Samples Tested" => new Expression("SUM(CASE
-                                                                                WHEN (((r.term_outcome is NOT NULL AND r.term_outcome !=''))) THEN 1
+                                                                                WHEN (((r.isset(term_outcome) && term_outcome !=''))) THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Assay Recent" => new Expression("SUM(CASE
@@ -2227,7 +2241,7 @@ class RecencyTable extends AbstractTableGateway
                                                                  ELSE 0
                                                                  END)"),
                     "samplesFinalOutcome" => new Expression("SUM(CASE
-                                                                 WHEN (((r.final_outcome is NOT NULL) )) THEN 1
+                                                                 WHEN (((r.fisset(inal_outcome)) )) THEN 1
                                                                  ELSE 0
                                                                  END)"),
                     "samplesTestBacklog" => new Expression("SUM(CASE
@@ -3240,9 +3254,9 @@ class RecencyTable extends AbstractTableGateway
                     array(
                         'gender',
                         "total" => new Expression('COUNT(*)'),
-                        "15T24" => new Expression("(SUM(CASE WHEN (r.age >= '15' AND r.age<=24) THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
-                        "25T34" => new Expression("(SUM(CASE WHEN (r.age >= '25' AND r.age<=34) THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
-                        "35T44" => new Expression("(SUM(CASE WHEN (r.age >= '35' AND r.age<=44) THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                        "15T24" => new Expression("(SUM(CASE WHEN (age >= '15 && r.age<=24) T&& ELSE 0 END) / COUNT(*)) * 100"),
+                        "25T34" => new Expression("(SUM(CASE WHEN (age >= '25 && r.age<=34) T&& ELSE 0 END) / COUNT(*)) * 100"),
+                        "35T44" => new Expression("(SUM(CASE WHEN (age >= '35 && r.age<=44) T&& ELSE 0 END) / COUNT(*)) * 100"),
                         "45+" => new Expression("(SUM(CASE WHEN (r.age>='45') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
                     )
                 );
@@ -3252,9 +3266,9 @@ class RecencyTable extends AbstractTableGateway
                     array(
                         'gender',
                         "total" => new Expression('COUNT(*)'),
-                        "15T24" => new Expression("(SUM(CASE WHEN (r.age >= '15' AND r.age<=24) THEN 1 ELSE 0 END))"),
-                        "25T34" => new Expression("(SUM(CASE WHEN (r.age >= '25' AND r.age<=34) THEN 1 ELSE 0 END))"),
-                        "35T44" => new Expression("(SUM(CASE WHEN (r.age >= '35' AND r.age<=44) THEN 1 ELSE 0 END))"),
+                        "15T24" => new Expression("(SUM(CASE WHEN (age >= '15 && r.age<=24) T&& ELSE 0 END))"),
+                        "25T34" => new Expression("(SUM(CASE WHEN (age >= '25 && r.age<=34) T&& ELSE 0 END))"),
+                        "35T44" => new Expression("(SUM(CASE WHEN (age >= '35 && r.age<=44) T&& ELSE 0 END))"),
                         "45+" => new Expression("(SUM(CASE WHEN (r.age>='45') THEN 1 ELSE 0 END))"),
                     )
                 );
@@ -3514,7 +3528,7 @@ class RecencyTable extends AbstractTableGateway
                                                                  ELSE 0
                                                                  END)"),
                     "samplesFinalOutcome" => new Expression("SUM(CASE
-                                                                 WHEN (((r.final_outcome is NOT NULL) )) THEN 1
+                                                                 WHEN (((r.fisset(inal_outcome)) )) THEN 1
                                                                  ELSE 0
                                                                  END)"),
                     "samplesTestBacklog" => new Expression("SUM(CASE
@@ -4318,5 +4332,116 @@ class RecencyTable extends AbstractTableGateway
         }
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+    }
+    
+    public function fetchModalityDetails($params){
+        $common = new CommonService();
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $data = array();
+        $sQuery = $sql->select()->from(array('r'=>$this->table))->columns(array(
+            'rtriRecent15-19M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent15-19F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent20-24M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="20" AND r.age <= "24" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent20-24F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="20" AND r.age <= "24" AND r.gender = "female" AND term_outcome IS NOT NULL AND term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent25-29M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="25" AND r.age <= "29" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent25-29F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="25" AND r.age <= "29" AND r.gender = "female" AND term_outcome IS NOT NULL AND term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent30-34M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="30" AND r.age <= "34" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent30-34F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="30" AND r.age <= "34" AND r.gender = "female" AND term_outcome IS NOT NULL AND term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent35-39M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="35" AND r.age <= "39" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent35-39F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="35" AND r.age <= "39" AND r.gender = "female" AND term_outcome IS NOT NULL AND term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent40-44M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="40" AND r.age <= "45" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent40-44F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="40" AND r.age <= "45" AND r.gender = "female" AND term_outcome IS NOT NULL AND term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent45-49M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="45" AND r.age <= "49" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent45-49F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="45" AND r.age <= "49" AND r.gender = "female" AND term_outcome IS NOT NULL AND term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent50+M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriRecent50+F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT15-19M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT15-19F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT20-24M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="20" AND r.age <= "24" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT20-24F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="20" AND r.age <= "24" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT25-29M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="25" AND r.age <= "29" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT25-29F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="25" AND r.age <= "29" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT30-34M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="30" AND r.age <= "34" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT30-34F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="30" AND r.age <= "34" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT35-39M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="35" AND r.age <= "39" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT35-39F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="35" AND r.age <= "39" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT40-44M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="40" AND r.age <= "45" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT40-44F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="40" AND r.age <= "45" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT45-49M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="45" AND r.age <= "49" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT45-49F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="45" AND r.age <= "49" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT50+M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'rtriLT50+F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent15-19M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent15-19F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent20-24M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="20" AND r.age <= "24" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent20-24F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="20" AND r.age <= "24" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent25-29M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="25" AND r.age <= "29" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent25-29F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="25" AND r.age <= "29" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent30-34M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="30" AND r.age <= "34" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent30-34F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="30" AND r.age <= "34" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent35-39M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="35" AND r.age <= "39" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent35-39F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="35" AND r.age <= "39" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent40-44M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="40" AND r.age <= "45" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent40-44F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="40" AND r.age <= "45" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent45-49M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="45" AND r.age <= "49" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent45-49F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="45" AND r.age <= "49" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent50+M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedRecent50+F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT15-19M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT15-19F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT20-24M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="20" AND r.age <= "24" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT20-24F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="20" AND r.age <= "24" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT25-29M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="25" AND r.age <= "29" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT25-29F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="25" AND r.age <= "29" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT30-34M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="30" AND r.age <= "34" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT30-34F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="30" AND r.age <= "34" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT35-39M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="35" AND r.age <= "39" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT35-39F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="35" AND r.age <= "39" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT40-44M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="40" AND r.age <= "45" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT40-44F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="40" AND r.age <= "45" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT45-49M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="45" AND r.age <= "49" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT45-49F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="45" AND r.age <= "49" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT50+M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+            'confirmedLT50+F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
+        ));
+        if (isset($params['fName']) && $params['fName'] != '') {
+            $sQuery = $sQuery->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
+            $sQuery->where(array('r.facility_id' => $params['fName']));
+        }
+        if (isset($params['testingFacility']) && $params['testingFacility'] != '') {
+            $sQuery->where(array('r.testing_facility_id' => $params['testingFacility']));
+        }
+        if (isset($params['locationOne']) && $params['locationOne'] != '') {
+            $sQuery = $sQuery->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'));
+            $sQuery = $sQuery->where(array('p.province_id' => $params['locationOne']));
+            
+            if (isset($params['locationTwo']) && $params['locationTwo'] != '') {
+                $sQuery = $sQuery->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'));
+                $sQuery = $sQuery->where(array('d.district_id' => $params['locationTwo']));
+            }
+            if (isset($params['locationThree']) && $params['locationThree'] != '') {
+                $sQuery = $sQuery->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'));
+                $sQuery = $sQuery->where(array('c.city_id' => $params['locationThree']));
+            }
+        }
+        if (isset($params['sampleTestedDates']) && trim($params['sampleTestedDates']) != '') {
+            $s_c_date = explode("to", $_POST['sampleTestedDates']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if (isset($params['sampleTestedDates']) && $params['sampleTestedDates'] != '') {
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+        }
+        if (isset($params['testingModality']) && $params['testingModality'] != '') {
+            $sQuery = $sQuery->where(array("r.testing_facility_type"=>$params['testingModality']));
+        }
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 }

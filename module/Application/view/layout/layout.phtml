@@ -50,6 +50,7 @@ $weeklyReportMenu = "<li id='nav-main-item'><a id='weekly-report' class='nav-mai
 $qcReportMenu = "";
 $qcReportMenu = "<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'qc-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
 
+$modality = "<li id='nav-main-item'><a id='age-wise-infection-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'age-wise-infection-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Age-wise Infection Report</span></a></li>";
 
 $emailMenu = "";
 $emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'email-result')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
@@ -245,6 +246,8 @@ $emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' 
                                              <?php echo $weeklyReportMenu; ?>
                                              <li class="nav-main-heading" style="padding:3px;"></li>
                                              <?php echo $qcReportMenu; ?>
+                                             <li class="nav-main-heading" style="padding:3px;"></li>
+                                             <?php echo $modality; ?>
                                         </ul>
                                    </li>
                                    <?php }
@@ -436,6 +439,10 @@ $emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' 
                     $('#reports').addClass('open');
                     $('#' + splitsUrl[2]).addClass('active');
                } else if (splitsUrl[1] == 'vl-data' && (splitsUrl[2] == 'weekly-report' || splitsUrl[2] == 'qc-report')) {
+                    $('#manage').removeClass('open');
+                    $('#reports').addClass('open');
+                    $('#' + splitsUrl[2]).addClass('active');
+               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'age-wise-infection-report') {
                     $('#manage').removeClass('open');
                     $('#reports').addClass('open');
                     $('#' + splitsUrl[2]).addClass('active');

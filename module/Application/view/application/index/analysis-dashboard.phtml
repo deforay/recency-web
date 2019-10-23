@@ -287,33 +287,31 @@ $currentDate = date('d-M-Y');
 		} ?>
 
 		$('#sampleTestedDates').daterangepicker({
-				format: 'DD-MMM-YYYY',
-				autoUpdateInput: false,
-				separator: ' to ',
-				startDate: moment().subtract('days', 29),
-				endDate: moment(),
-				maxDate: moment(),
-				ranges: {
-					'Today': [moment(), moment()],
-					'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-					'Last 7 Days': [moment().subtract('days', 6), moment()],
-					'Last 30 Days': [moment().subtract('days', 29), moment()],
-					'Last 60 Days': [moment().subtract('days', 59), moment()],
-					'Last 180 Days': [moment().subtract('days', 179), moment()],
-					'This Month': [moment().startOf('month'), moment().endOf('month')],
-					'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-				}
-			},
-			function(start, end) {
-				startDate = start.format('YYYY-MM-DD');
-				endDate = end.format('YYYY-MM-DD');
-				$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
-					$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
-				});
-
+			format: 'DD-MMM-YYYY',
+			autoUpdateInput: false,
+			separator: ' to ',
+			startDate: moment().subtract('days', 29),
+			endDate: moment(),
+			maxDate: moment(),
+			ranges: {
+				'Today': [moment(), moment()],
+				'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+				'Last 7 Days': [moment().subtract('days', 6), moment()],
+				'Last 30 Days': [moment().subtract('days', 29), moment()],
+				'Last 60 Days': [moment().subtract('days', 59), moment()],
+				'Last 180 Days': [moment().subtract('days', 179), moment()],
+				'This Month': [moment().startOf('month'), moment().endOf('month')],
+				'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+			}
+		},
+		function(start, end) {
+			startDate = start.format('YYYY-MM-DD');
+			endDate = end.format('YYYY-MM-DD');
+			$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
+				$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
 			});
 
-			
+		});
 	});
 
 

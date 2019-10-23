@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Controller;
 
 use Zend\View\Model\ViewModel;
@@ -55,7 +56,6 @@ class VlDataController extends AbstractActionController
             $result = $recencyService->getAllRecencyResultWithVlList($params);
 
             return $this->getResponse()->setContent(Json::encode($result));
-
         } else {
             $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
             $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
@@ -173,7 +173,7 @@ class VlDataController extends AbstractActionController
                 $recencyService->UpdateMultiplePdfUpdatedDate($params);
                 $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
                 $globalConfigResult = $globalConfigService->fetchGlobalConfig();
-                    //\Zend\Debug\Debug::dump(count($result));die;
+                //\Zend\Debug\Debug::dump(count($result));die;
                 return new ViewModel(array(
                     'result' => $result,
                     'globalConfigResult' => $globalConfigResult,
@@ -197,7 +197,7 @@ class VlDataController extends AbstractActionController
             $recencyService = $this->getServiceLocator()->get('RecencyService');
             $sampleResult = $recencyService->getSampleResult($params);
             $viewModel = new ViewModel();
-            $viewModel->setVariables(array('sampleResult' => $sampleResult, ));
+            $viewModel->setVariables(array('sampleResult' => $sampleResult,));
             $viewModel->setTerminal(true);
             return $viewModel;
         }
@@ -252,86 +252,129 @@ class VlDataController extends AbstractActionController
         }
     }
 
-    public function generateRecentPdfAction() {
+    public function generateRecentPdfAction()
+    {
         $request = $this->getRequest();
-        if($request->isPost())
-        {
+        if ($request->isPost()) {
             $params = $request->getPost();
             $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result=$recencyService->getRecentDetailsForPDF($params['recencyId']);
+            $result = $recencyService->getRecentDetailsForPDF($params['recencyId']);
             $viewModel = new ViewModel();
-            $viewModel->setVariables(array('result' =>$result));
+            $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
             return $viewModel;
         }
     }
-    public function generateLTermPdfAction() {
+    public function generateLTermPdfAction()
+    {
         $request = $this->getRequest();
-        if($request->isPost())
-        {
+        if ($request->isPost()) {
             $params = $request->getPost();
             $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result=$recencyService->getLTermDetailsForPDF($params['recencyId']);
+            $result = $recencyService->getLTermDetailsForPDF($params['recencyId']);
             $viewModel = new ViewModel();
-            $viewModel->setVariables(array('result' =>$result));
+            $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
             return $viewModel;
         }
     }
-    
+
     public function qcReportAction()
     {
-         $request = $this->getRequest();
-         if ($request->isPost()) {
-              $parameters = $request->getPost();
-              $qcService = $this->getServiceLocator()->get('QualityCheckService');
-              $result = $qcService->getQualityCheckReportDetails($parameters);
-              return $this->getResponse()->setContent(Json::encode($result));
-         }else{
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $parameters = $request->getPost();
+            $qcService = $this->getServiceLocator()->get('QualityCheckService');
+            $result = $qcService->getQualityCheckReportDetails($parameters);
+            return $this->getResponse()->setContent(Json::encode($result));
+        } else {
             $facilityService = $this->getServiceLocator()->get('FacilitiesService');
             $facilityResult = $facilityService->getFacilitiesAllDetails();
-    
+
             return new ViewModel(array(
                 'facilityResult' => $facilityResult
             ));
-         }
+        }
     }
-    
+
     public function requestVlTestOnVlsmAction()
     {
         $syn = false;
         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
         $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-        foreach($globalConfigResult as $result){
-            if($result['global_name'] == 'recency_to_vlsm_sync' && $result['global_value'] == 'no'){
+        foreach ($globalConfigResult as $result) {
+            if ($result['global_name'] == 'recency_to_vlsm_sync' && $result['global_value'] == 'no') {
                 return $this->_redirect()->toUrl('/vl-data');
             }
         }
         $request = $this->getRequest();
         if ($request->isPost()) {
-        $params = $request->getPost();
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
-        $recencyService->postReqVlTestOnVlsmDetails($params);
-        return $this->_redirect()->toUrl('/vl-data');
-        }else{
-        $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-        $facilityResult = $facilityService->getFacilitiesAllDetails();
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $recencyService->postReqVlTestOnVlsmDetails($params);
+            return $this->_redirect()->toUrl('/vl-data');
+        } else {
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $facilityResult = $facilityService->getFacilitiesAllDetails();
 
-        return new ViewModel(array(
-            'facilityResult' => $facilityResult
-        ));
+            return new ViewModel(array(
+                'facilityResult' => $facilityResult
+            ));
         }
     }
 
-    public function getVlOnVlsmSampleAction() {
+    public function getVlOnVlsmSampleAction()
+    {
         $request = $this->getRequest();
-        if($request->isPost())
-        {
+        if ($request->isPost()) {
             $params = $request->getPost();
             $recencyService = $this->getServiceLocator()->get('RecencyService');
             $result = $recencyService->getReqVlTestOnVlsmDetails($params);
             $viewModel = new ViewModel();
-            $viewModel->setVariables(array('result' =>$result))->setTerminal(true);
+            $viewModel->setVariables(array('result' => $result))->setTerminal(true);
+            return $viewModel;
+        }
+    }
+
+    public function ageWiseInfectionReportAction()
+    {
+        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+        $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
+        $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+        $facilityResult = $facilityService->getFacilitiesAllDetails();
+        $recencyService = $this->getServiceLocator()->get('RecencyService');
+        $result = $recencyService->getModalityDetails();
+        $testingFacilityService = $this->getServiceLocator()->get('FacilitiesService');
+        $testingFacility = $testingFacilityService->getTestingFacilitiesTypeDetails();
+
+        return new ViewModel(array(
+            'globalConfigResult' => $globalConfigResult,
+            'facilityResult' => $facilityResult,
+            'testingFacility' => $testingFacility,
+            'result' => $result
+        ));
+    }
+    
+    public function getAgeWiseInfectionReportAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' => $recencyService->getModalityDetails($params)))->setTerminal(true);
+            return $viewModel;
+        }
+    }
+
+    public function exportModalityAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('result' => $recencyService->exportModalityDetails($params)))->setTerminal(true);
             return $viewModel;
         }
     }

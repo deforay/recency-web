@@ -1229,7 +1229,7 @@ class RecencyService
             error_log($exc->getTraceAsString());
         }
     }
-
+    
     public function getRecencyAllDataCount($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
@@ -1555,5 +1555,142 @@ class RecencyService
     public function getKitInfo($kitNo=""){
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchKitInfo($kitNo);
+    }
+    
+    public function getModalityDetails($params=""){
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchModalityDetails($params);
+    }
+
+    public function exportModalityDetails($params)
+    {
+        try {
+            $excel = new PHPExcel();
+            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
+            $cacheSettings = array('memoryCacheSize' => '80MB');
+            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $output = array();
+            $sheet = $excel->getActiveSheet();
+
+            $recencyDb = $this->sm->get('RecencyTable');
+            $result = $recencyDb->fetchModalityDetails($params);
+
+            $styleArray = array(
+                'font' => array(
+                    'bold' => true,
+                    'size' => 12,
+                ),
+                'alignment' => array(
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+
+            $borderStyle = array(
+                'alignment' => array(
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                ),
+                'borders' => array(
+                    'outline' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+            $horizontal = array('B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+            $ageArray = array('15-19','20-24','25-29','30-34','35-39','40-44','45-49','50+');
+            $sheet->setCellValue('A1', html_entity_decode('RTRI Modality Reports', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A2', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A3', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A7', html_entity_decode('Confirmed Modality Reports', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A8', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A9', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            
+            $sheet->setCellValue('A4', html_entity_decode('Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A5', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A10', html_entity_decode('Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A11', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            /* Style and merge */
+            $sheet->getStyle('A2')->applyFromArray($borderStyle);
+            $sheet->getStyle('A3')->applyFromArray($borderStyle);
+            $sheet->getStyle('A4')->applyFromArray($borderStyle);
+            $sheet->getStyle('A5')->applyFromArray($borderStyle);
+            $sheet->getStyle('A7')->applyFromArray($borderStyle);
+            $sheet->getStyle('A8')->applyFromArray($borderStyle);
+            $sheet->getStyle('A9')->applyFromArray($borderStyle);
+            $sheet->getStyle('A10')->applyFromArray($borderStyle);
+            $sheet->getStyle('A11')->applyFromArray($borderStyle);
+            $sheet->getStyle('A1')->applyFromArray($styleArray);
+            $sheet->getStyle('A7')->applyFromArray($styleArray);
+            $sheet->mergeCells('A1:D1');
+            $sheet->mergeCells('A7:D7');
+
+            /* Age cell creation */
+            $rtrif = 2;$rtrim = 3;$index = 0;
+            foreach ($ageArray as $age) {
+                $sheet->setCellValue($horizontal[$index].'2', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue($horizontal[$index].'8', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->mergeCells($horizontal[$rtrif].'2:'.$horizontal[$rtrim].'2');
+                $sheet->mergeCells($horizontal[$rtrif].'8:'.$horizontal[$rtrim].'8');
+                $sheet->getStyle($horizontal[$index].'2')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[$index].'8')->applyFromArray($borderStyle);
+                $rtrif = ($rtrif+2);$rtrim = ($rtrim+2);$index = ($index +2);
+            }
+            /* Male Female cell creation */
+            $index = 0;
+            foreach (range(1, 16) as $x) {
+                if ($x % 2) {
+                    $sheet->setCellValue($horizontal[$index].'3', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index].'9', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                } else {
+                    $sheet->setCellValue($horizontal[$index].'3', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index].'9', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                }
+                $sheet->getStyle($horizontal[$index].'3')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[$index].'9')->applyFromArray($borderStyle);
+                $index++;
+            }
+            /* Value cell creation start */
+            $index = 0;
+            foreach (range(1, 16) as $x) {
+                $sheet->getStyle($horizontal[($x-1)].'4')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[($x-1)].'5')->applyFromArray($borderStyle);
+                if ($x % 2) {
+                    $sheet->setCellValue($horizontal[($x-1)].'4', html_entity_decode($result['rtriRecent'.$ageArray[$index].'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x-1)].'5', html_entity_decode($result['rtriLT'.$ageArray[$index].'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                } else {
+                    $sheet->setCellValue($horizontal[($x-1)].'4', html_entity_decode($result['rtriRecent'.$ageArray[$index].'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x-1)].'5', html_entity_decode($result['rtriLT'.$ageArray[$index].'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $index++;
+                }
+            }
+            
+            $index = 0;
+            foreach (range(1, 16) as $x) {
+                $sheet->getStyle($horizontal[($x-1)].'10')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[($x-1)].'11')->applyFromArray($borderStyle);
+                if ($x % 2) {
+                    $sheet->setCellValue($horizontal[($x-1)].'10', html_entity_decode($result['confirmedRecent'.$ageArray[$index].'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x-1)].'11', html_entity_decode($result['confirmedLT'.$ageArray[$index].'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                } else {
+                    $sheet->setCellValue($horizontal[($x-1)].'10', html_entity_decode($result['confirmedRecent'.$ageArray[$index].'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x-1)].'11', html_entity_decode($result['confirmedLT'.$ageArray[$index].'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $index++;
+                }
+            }
+            /* Value cell creation end */
+            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+            $filename = 'MODALITY-REPORTS-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            return $filename;
+        } catch (Exception $exc) {
+            return "";
+            error_log("MODALITY-REPORT-EXCEL--" . $exc->getMessage());
+            error_log($exc->getTraceAsString());
+        }
     }
 }
