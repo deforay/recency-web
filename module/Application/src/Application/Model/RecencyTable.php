@@ -1012,8 +1012,8 @@ class RecencyTable extends AbstractTableGateway
                             'gender' => $recency['gender'],
                             'latitude' => $recency['latitude'],
                             'longitude' => $recency['longitude'],
-                            'age_not_reported' => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : no,
-                            'age' => ($params['age'] != '') ? $params['age'] : null,
+                            'age_not_reported' => (isset($recency['ageNotReported']) && $recency['ageNotReported'] != '') ? $recency['ageNotReported'] : no,
+                            'age' => ($recency['age'] != '') ? $recency['age'] : null,
                             'marital_status' => $recency['maritalStatus'],
                             'residence' => $recency['residence'],
                             'education_level' => $recency['educationLevel'],
@@ -1094,7 +1094,6 @@ class RecencyTable extends AbstractTableGateway
                         //    {
                         //         $data['final_outcome'] = 'Assay Negative';
                         //    }
-
                         $this->insert($data);
                         $lastInsertedId = $this->lastInsertValue;
                         if ($lastInsertedId > 0) {
