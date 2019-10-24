@@ -2,14 +2,14 @@
     $ageArray = array('15-19','20-24','25-29','30-34','35-39','40-44','45-49','50+');
 ?>
 <div class="block-header block-header-default">
-    <span>RTRI Modality Reports</span>
+    <span>RTRI Results</span>
 </div>
 <div class="block-content block-content-full">
     <table id="modalityRTRI" class="table table-bordered table-striped table-vcenter table-responsive frezz">
         <tr>
             <th align="center">AGE
             <?php foreach ($ageArray as $age) {
-                echo '<th colspan="2" align="center">'.$age;
+                echo '<th colspan="2" style="text-align:center;">'.$age;
             } ?>
         <tr>
             <th align="center">Gender
@@ -43,14 +43,14 @@
     </table>
 </div>
 <div class="block-header block-header-default">
-    <span>Confirmed Modality Reports</span>
+    <span>Confirmed Results</span>
 </div>
 <div class="block-content block-content-full">
     <table id="modalityConfirm" class="table table-bordered table-striped table-vcenter table-responsive frezz">
         <tr>
             <th align="center">AGE
             <?php foreach ($ageArray as $age) {
-                echo '<th colspan="2" align="center">'.$age;
+                echo '<th colspan="2" style="text-align:center;">'.$age;
             } ?>
         <tr>
             <th align="center">Gender
