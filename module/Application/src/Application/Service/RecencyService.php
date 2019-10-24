@@ -1603,10 +1603,10 @@ class RecencyService
             );
             $horizontal = array('B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
             $ageArray = array('15-19','20-24','25-29','30-34','35-39','40-44','45-49','50+');
-            $sheet->setCellValue('A1', html_entity_decode('RTRI Modality Reports', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('RTRI Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A2', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A3', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('A7', html_entity_decode('Confirmed Modality Reports', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A7', html_entity_decode('Confirmed Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A8', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A9', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             
@@ -1626,20 +1626,24 @@ class RecencyService
             $sheet->getStyle('A11')->applyFromArray($borderStyle);
             $sheet->getStyle('A1')->applyFromArray($styleArray);
             $sheet->getStyle('A7')->applyFromArray($styleArray);
-            $sheet->mergeCells('A1:D1');
-            $sheet->mergeCells('A7:D7');
+            $sheet->mergeCells('A1:Q1');
+            $sheet->mergeCells('A7:Q7');
 
             /* Age cell creation */
             $rtrif = 2;$rtrim = 3;$index = 0;
             foreach ($ageArray as $age) {
                 $sheet->setCellValue($horizontal[$index].'2', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue($horizontal[$index].'8', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->mergeCells($horizontal[$rtrif].'2:'.$horizontal[$rtrim].'2');
-                $sheet->mergeCells($horizontal[$rtrif].'8:'.$horizontal[$rtrim].'8');
                 $sheet->getStyle($horizontal[$index].'2')->applyFromArray($borderStyle);
                 $sheet->getStyle($horizontal[$index].'8')->applyFromArray($borderStyle);
-                $rtrif = ($rtrif+2);$rtrim = ($rtrim+2);$index = ($index +2);
+                $index = ($index +2);
+                
+                $sheet->mergeCells($horizontal[$rtrif].'2:'.$horizontal[$rtrim].'2');
+                $sheet->mergeCells($horizontal[$rtrif].'8:'.$horizontal[$rtrim].'8');
+                $rtrim = ($rtrim+2);$rtrif = ($rtrif+2);
             }
+            $sheet->mergeCells('B2:C2');
+            $sheet->mergeCells('B8:C8');
             /* Male Female cell creation */
             $index = 0;
             foreach (range(1, 16) as $x) {
@@ -1684,12 +1688,12 @@ class RecencyService
             }
             /* Value cell creation end */
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'MODALITY-REPORTS-' . date('d-M-Y-H-i-s') . '.xls';
+            $filename = 'Age-wise Infection Report-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             return $filename;
         } catch (Exception $exc) {
             return "";
-            error_log("MODALITY-REPORT-EXCEL--" . $exc->getMessage());
+            error_log("Age-wise Infection Report-" . $exc->getMessage());
             error_log($exc->getTraceAsString());
         }
     }
