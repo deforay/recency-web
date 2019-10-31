@@ -879,12 +879,10 @@ class RecencyTable extends AbstractTableGateway
 
     public function addRecencyDetailsApi($params)
     {
-         echo "test2"; die;
+     
         $skey='secretkeyissecretphrasesecretphr';
-        $dvalue=$this->cryptoJsAesDecrypt($skey,$params['form']);
-        
-        // \Zend\Debug\Debug::dump($params['form']); die;
-        \Zend\Debug\Debug::dump($dvalue); die;
+     
+         $dvalue=$this->cryptoJsAesDecrypt($skey,$params['form']);
 
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
@@ -896,10 +894,12 @@ class RecencyTable extends AbstractTableGateway
         $cityDb = new CityTable($this->adapter);
         $TestingFacilityTypeDb = new TestingFacilityTypeTable($this->adapter);
         $common = new CommonService();
-        if (isset($params["form"])) {
-            //check user status active or not
+        //if (isset($params["form"])) {
+        if (isset($dvalue)) {
+
             $uQuery = $sql->select()->from('users')
-                ->where(array('user_id' => $params["form"][0]['syncedBy']));
+                //->where(array('user_id' => $params["form"][0]['syncedBy']));
+                ->where(array('user_id' =>$dvalue[0]['syncedBy']));
             $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
             $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
             if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
@@ -910,7 +910,10 @@ class RecencyTable extends AbstractTableGateway
                 return $response;
             }
             $i = 1;
-            foreach ($params["form"] as $key => $recency) {
+            //foreach ($params["form"] as $key => $recency) {
+            foreach ($dvalue as $key => $recency) {
+				 			 
+				 //	\Zend\Debug\Debug::dump($recency); die;			 
                 try {
                     if (isset($recency['sampleId']) && trim($recency['sampleId']) != "" || isset($recency['patientId']) && trim($recency['patientId']) != "") {
                         if ($recency['otherfacility'] != '') {
