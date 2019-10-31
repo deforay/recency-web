@@ -17,6 +17,7 @@ class RecencyController extends AbstractRestfulController
     }
 
     public function create($params) {
+        // echo "test"; die;
         $recencyService = $this->getServiceLocator()->get('RecencyService');
         $response = $recencyService->addRecencyDataApi($params);
         return new JsonModel($response);

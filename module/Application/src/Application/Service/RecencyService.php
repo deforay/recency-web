@@ -28,6 +28,7 @@ class RecencyService
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyDetails($params);
+        
     }
 
     public function getReqVlTestOnVlsmDetails($params)
