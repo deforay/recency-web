@@ -87,7 +87,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                 <tr>
                     <td><b>Gender :</b></td>
                     <td>
-                        <select class="form-control" id="gender" name="gender" title="Please select gender" style="width:100%;">
+                        <select class="form-control" id="gender" name="gender" title="Please select gender" style="width:210px;">
                             <option value=""> -- Select -- </option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
@@ -271,12 +271,12 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
     $(document).ready(function() {
         $("#testingFacility").select2({
             placeholder: "Choose Testing Site..",
-            width: "410px",
+            width: "210px",
             allowClear: true,
         });
         $("#facilityName").select2({
             placeholder: "Choose Facility Name..",
-            width: "410px",
+            width: "210px",
             allowClear: true,
         });
         oTable = $('#facilityDataTable').dataTable({

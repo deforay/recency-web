@@ -319,7 +319,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Hiv Diagnosis Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">HIV Diagnosis Date<?php echo (in_array("Hiv Diagnosis Date", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Hiv Diagnosis Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<input type="text" value="<?php echo $hivDiagnosisDate; ?>" class="js-datepicker form-control  <?php echo $hivDiagnosisRequiredDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date" readonly="readonly">
+												<input type="text" value="<?php echo $hivDiagnosisDate; ?>" class="form-control  <?php echo $hivDiagnosisRequiredDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date" readonly="readonly">
 											</div>
 											<br>
 
@@ -451,7 +451,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">HIV Recency Test Date<?php echo (in_array("Hiv Recency Test Date", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<input type="text" value="<?php echo $hivRecencyTestDate; ?>" class="js-datepicker form-control disbaledResult <?php echo $hivRecencyRequiredDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
+												<input type="text" value="<?php echo $hivRecencyTestDate; ?>" class="form-control disbaledResult <?php echo $hivRecencyRequiredDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
 											</div>
 											<br>
 											<br>
@@ -495,7 +495,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Viral Load Test Date <?php echo (in_array("Viral Load Test Date", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Viral Load Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<input type="text" value="<?php echo $vlTestDateRes; ?>" class=" js-datepicker vlResultFields form-control <?php echo $vlTestDate; ?>" id="vlTestDate" name="vlTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the Viral Load Test Date" title="Please enter Viral Load Test Date" readonly="readonly" disabled onblur="updateVlResultFields('vlField')">
+												<input type="text" value="<?php echo $vlTestDateRes; ?>" class="vlResultFields form-control <?php echo $vlTestDate; ?>" id="vlTestDate" name="vlTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" placeholder="Enter the Viral Load Test Date" title="Please enter Viral Load Test Date" readonly="readonly" disabled onblur="updateVlResultFields('vlField')">
 											</div>
 
 
@@ -789,6 +789,14 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			startDate: start,
 			endDate: "0"
 		});
+		$('#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker({
+            format: 'dd-M-yyyy',
+            clearBtn: true,
+            todayHighlight: true,
+            autoclose: true,
+            startDate: start,
+            endDate: "0"
+        });
 		$('#sampleCollectionDate').datepicker({
 			format: 'dd-M-yyyy',
 			clearBtn: true,
@@ -797,9 +805,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			startDate: start,
 			endDate: "0"
 		}).on('changeDate', function(e) {
-			$('#sampleReceiptDate').val('');
+			$('#sampleReceiptDate,#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').val('');
 			var _satrt = new Date(e.date.valueOf());
-			$('#sampleReceiptDate').datepicker('setStartDate', _satrt);
+			$('#sampleReceiptDate,#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker('setStartDate', _satrt);
 		});
 	});
 

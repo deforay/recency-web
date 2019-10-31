@@ -268,7 +268,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                         <div class="form-group row form-horizontal col-sm-12">
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Diagnosis Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="hivDiagnosisDate" style="margin-top:10px;">HIV Diagnosis Date <?php echo (in_array("Hiv Diagnosis Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Hiv Diagnosis Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <input type="text" class="js-datepicker form-control <?php echo $hivDiagnosisDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date" readonly="readonly">
+                                                <input type="text" class="form-control <?php echo $hivDiagnosisDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date" readonly="readonly">
                                             </div>
 
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Past Hiv Testing", $resultArr2) ? "showFields" : "hideFields"; ?>" for="pastHivTesting" style="margin-top:10px;">Past HIV Testing <?php echo (in_array("Past Hiv Testing", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
@@ -382,7 +382,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">HIV Recency Test Date<?php echo (in_array("Hiv Recency Test Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <input type="text" class="js-datepicker form-control disbaledResult <?php echo $hivRecencyTestDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
+                                                <input type="text" class="form-control disbaledResult <?php echo $hivRecencyTestDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
                                             </div>
 
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testKitLotNo" style="margin-top:10px;">Test Kit Lot No. <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
@@ -440,7 +440,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                             </div>
                                             <label class="hide-lab-req col-sm-2 col-form-label <?php echo in_array("Viral Load Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Viral Load Test Date<?php echo (in_array("Viral Load Test Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="hide-lab-req col-sm-4 <?php echo in_array("Viral Load Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <input type="text" name="vlTestDate" id="vlTestDate" class="js-datepicker vlResultFields form-control <?php echo $vlTestDate; ?>" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the Viral Load Test Date" title="Please enter the Viral Load Test Date" readonly="readonly" disabled onblur="updateVlResultFields('vlField')" />
+                                                <input type="text" name="vlTestDate" id="vlTestDate" class="vlResultFields form-control <?php echo $vlTestDate; ?>" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the Viral Load Test Date" title="Please enter the Viral Load Test Date" readonly="readonly" disabled onblur="updateVlResultFields('vlField')" />
                                             </div>
 
                                             <label class="col-sm-2 col-form-label outcome " style="visibility:hidden" for="">Assay Outcome</label>
@@ -1389,6 +1389,18 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             autoclose: true,
             startDate: start,
             endDate: "0"
+        }).on('changeDate', function(e) {
+            $('#hivRecencyTestDate').val('');
+			var _satrt = new Date(e.date.valueOf());
+			$('#hivRecencyTestDate').datepicker('setStartDate', _satrt);
+        });
+        $('#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker({
+            format: 'dd-M-yyyy',
+            clearBtn: true,
+            todayHighlight: true,
+            autoclose: true,
+            startDate: start,
+            endDate: "0"
         });
         $('#sampleCollectionDate').datepicker({
             format: 'dd-M-yyyy',
@@ -1398,9 +1410,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             startDate: start,
             endDate: "0"
         }).on('changeDate', function(e) {
-            $('#sampleReceiptDate').val('');
-            var _satrt = new Date(e.date.valueOf());
-            $('#sampleReceiptDate').datepicker('setStartDate', _satrt);
+            $('#sampleReceiptDate,#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').val('');
+			var _satrt = new Date(e.date.valueOf());
+			$('#sampleReceiptDate,#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker('setStartDate', _satrt);
         });
     });
 
