@@ -3259,9 +3259,9 @@ class RecencyTable extends AbstractTableGateway
                     array(
                         'gender',
                         "total" => new Expression('COUNT(*)'),
-                        "15T24" => new Expression("(SUM(CASE WHEN (age >= '15 && r.age<=24) T&& ELSE 0 END) / COUNT(*)) * 100"),
-                        "25T34" => new Expression("(SUM(CASE WHEN (age >= '25 && r.age<=34) T&& ELSE 0 END) / COUNT(*)) * 100"),
-                        "35T44" => new Expression("(SUM(CASE WHEN (age >= '35 && r.age<=44) T&& ELSE 0 END) / COUNT(*)) * 100"),
+                        "15T24" => new Expression("(SUM(CASE WHEN (age >= '15' AND r.age<='24') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                        "25T34" => new Expression("(SUM(CASE WHEN (age >= '25' AND r.age<='34') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
+                        "35T44" => new Expression("(SUM(CASE WHEN (age >= '35' AND r.age<='44') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
                         "45+" => new Expression("(SUM(CASE WHEN (r.age>='45') THEN 1 ELSE 0 END) / COUNT(*)) * 100"),
                     )
                 );
@@ -3271,9 +3271,9 @@ class RecencyTable extends AbstractTableGateway
                     array(
                         'gender',
                         "total" => new Expression('COUNT(*)'),
-                        "15T24" => new Expression("(SUM(CASE WHEN (age >= '15 && r.age<=24) T&& ELSE 0 END))"),
-                        "25T34" => new Expression("(SUM(CASE WHEN (age >= '25 && r.age<=34) T&& ELSE 0 END))"),
-                        "35T44" => new Expression("(SUM(CASE WHEN (age >= '35 && r.age<=44) T&& ELSE 0 END))"),
+                        "15T24" => new Expression("(SUM(CASE WHEN (age >= '15' AND r.age<='24') THEN 1 ELSE 0 END))"),
+                        "25T34" => new Expression("(SUM(CASE WHEN (age >= '25' AND r.age<='34') THEN 1 ELSE 0 END))"),
+                        "35T44" => new Expression("(SUM(CASE WHEN (age >= '35' AND r.age<='44') THEN 1 ELSE 0 END))"),
                         "45+" => new Expression("(SUM(CASE WHEN (r.age>='45') THEN 1 ELSE 0 END))"),
                     )
                 );
@@ -3320,7 +3320,7 @@ class RecencyTable extends AbstractTableGateway
         }
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-        //echo($sQueryStr);die;
+        // echo($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $j = 0;

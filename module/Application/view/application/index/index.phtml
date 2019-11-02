@@ -320,7 +320,7 @@
 					<a href="javascript:void(0);" class="btn btn-hero-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getInfectionByModalityChart();getInfectionBySexChart();getMissingVlByDistrict();getMissingVlByModality();"><i class="fa fa-fw fa-search"></i> Search</a>
 				</div>
 				<div class="col-lg-4 hide-div" style=" margin-top: 10px;display:none; ">
-					<a class="float-right" href="javascript:void(0);" onclick="onhide('sticky-div');" style="padding: 5px; color: #5f9ea0c2;">
+					<a class="float-right" href="javascript:void(0);" onclick="onhide();" style="padding: 5px; color: #5f9ea0c2;">
 						<i class="fa fa-arrow-up"></i> Hide
 					</a>
 				</div>
@@ -535,7 +535,7 @@
 	<script src="<?php echo $this->basePath() . '/assets/js/export-data.js'; ?>"></script>
 
 	<script type="text/javascript">
-		var flag = true; 
+		var hidebtn = true; 
 		$(document).ajaxStart($.blockUI).ajaxComplete($.unblockUI);
 		/* Table initialisation */
 		oTable = null;
@@ -736,31 +736,31 @@
 			} ?>
 
 			$('#sampleTestedDates').daterangepicker({
-					format: 'DD-MMM-YYYY',
-					autoUpdateInput: false,
-					separator: ' to ',
-					startDate: moment().subtract('days', 29),
-					endDate: moment(),
-					maxDate: moment(),
-					ranges: {
-						'Today': [moment(), moment()],
-						'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-						'Last 7 Days': [moment().subtract('days', 6), moment()],
-						'Last 30 Days': [moment().subtract('days', 29), moment()],
-						'Last 60 Days': [moment().subtract('days', 59), moment()],
-						'Last 180 Days': [moment().subtract('days', 179), moment()],
-						'This Month': [moment().startOf('month'), moment().endOf('month')],
-						'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-					}
-				},
-				function(start, end) {
-					startDate = start.format('YYYY-MM-DD');
-					endDate = end.format('YYYY-MM-DD');
-					$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
-						$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
-					});
-
+				format: 'DD-MMM-YYYY',
+				autoUpdateInput: false,
+				separator: ' to ',
+				startDate: moment().subtract('days', 29),
+				endDate: moment(),
+				maxDate: moment(),
+				ranges: {
+					'Today': [moment(), moment()],
+					'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+					'Last 7 Days': [moment().subtract('days', 6), moment()],
+					'Last 30 Days': [moment().subtract('days', 29), moment()],
+					'Last 60 Days': [moment().subtract('days', 59), moment()],
+					'Last 180 Days': [moment().subtract('days', 179), moment()],
+					'This Month': [moment().startOf('month'), moment().endOf('month')],
+					'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+				}
+			},
+			function(start, end) {
+				startDate = start.format('YYYY-MM-DD');
+				endDate = end.format('YYYY-MM-DD');
+				$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
+					$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
 				});
+
+			});
 		});
 
 		function searchData() {
@@ -1085,14 +1085,14 @@
 		// 	});
 		// }
 
-		function onhide(_class) {
-			$('.' + _class).css('position', 'inherit');
+		function onhide() {
+			$('.sticky-div').css('position', 'inherit');
 			$('.hide-div').hide(500);
-			flag = false;
+			hidebtn = false;
 		}
 
 		$(document).scroll(function() {
-			if (flag) {
+			if (hidebtn) {
 				if ($(window).scrollTop() > 2400) {
 					$('.hide-div').show(500);
 				} else {

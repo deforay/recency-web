@@ -208,7 +208,6 @@ $ageArray = array('15-19','20-24','25-29','30-34','35-39','40-44','45-49','50+')
 			$('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
 				$(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
 			});
-
 		});
         $("#location_one").select2({
 			placeholder: "Choose Province",
