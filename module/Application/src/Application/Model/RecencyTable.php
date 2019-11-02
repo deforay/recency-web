@@ -880,12 +880,8 @@ class RecencyTable extends AbstractTableGateway
     public function addRecencyDetailsApi($params)
     {
      
-        $skey='secretkeyissecretphrasesecretphr';     
-        $formData=$this->cryptoJsAesDecrypt($skey,$params['form']);
-
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-
         $facilityDb = new FacilitiesTable($this->adapter);
         $riskPopulationDb = new RiskPopulationsTable($this->adapter);
         $globalDb = new GlobalConfigTable($this->adapter);
@@ -893,11 +889,11 @@ class RecencyTable extends AbstractTableGateway
         $cityDb = new CityTable($this->adapter);
         $TestingFacilityTypeDb = new TestingFacilityTypeTable($this->adapter);
         $common = new CommonService();
-      
-        if (isset($formData)) {
+       
+            if (isset($params["form"])) {
 
-            $uQuery = $sql->select()->from('users')
-                ->where(array('user_id' =>$formData[0]['syncedBy']));
+            $uQuery = $sql->select()->from('users')               
+                 ->where(array('user_id' => $params["form"][0]['syncedBy']));
             $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
             $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
             if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
@@ -908,7 +904,8 @@ class RecencyTable extends AbstractTableGateway
                 return $response;
             }
             $i = 1;
-            foreach ($formData as $key => $recency) {		 
+        	 
+                foreach ($params["form"] as $key => $recency) {
                 try {
                     if (isset($recency['sampleId']) && trim($recency['sampleId']) != "" || isset($recency['patientId']) && trim($recency['patientId']) != "") {
                         if ($recency['otherfacility'] != '') {
