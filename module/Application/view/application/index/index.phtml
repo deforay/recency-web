@@ -1095,9 +1095,12 @@
 			if (hidebtn) {
 				if ($(window).scrollTop() > 2400) {
 					$('.hide-div').show(500);
+					$('.sticky-div').css('position', 'sticky');
 				} else {
 					$('.hide-div').hide(500);
 				}
+			}else{
+				$('.sticky-div').css('position', 'sticky');
 			}
 		});
 	</script>
