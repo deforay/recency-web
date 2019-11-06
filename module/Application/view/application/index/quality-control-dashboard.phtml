@@ -44,7 +44,7 @@ $currentDate = date('d-M-Y');
 			<?php
 			foreach ($globalConfigResult as $config) { ?>
 				<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
-					<div class="col-sm-2" style=" margin-top: 10px; ">
+					<div class="col-sm-2" style=" margin-top: 10px;width:100%; ">
 						<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
 							<option value="">-- Select --</option>
 						</select>
@@ -52,7 +52,7 @@ $currentDate = date('d-M-Y');
 			<?php }
 			} ?>
 			<div class="col-sm-2" style=" margin-top: 10px; ">
-				<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+				<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility" style="width:100%;">
 					<option value="">-- Select --</option>
 				</select>
 			</div>
@@ -65,7 +65,7 @@ $currentDate = date('d-M-Y');
 					<?php } ?>
 				</select>
 			</div>
-			<div class="items-push col-lg-2" style=" margin-top: 10px; ">
+			<div class="items-push col-lg-2" style=" margin-top: 10px;text-align:center;">
 				<a href="javascript:void(0);" class="btn btn-hero-primary" onclick="getQualityResultsChart();getQualitySampleLotChart();getQualityResultsLitLotNumberChart();getTestingQualityChart();getQualityControlByMonth();"><i class="fa fa-fw fa-search"></i> Search</a>
 			</div>
 			<div class="col-lg-8 hide-div" style=" margin-top: 10px;display:none; ">
@@ -473,11 +473,18 @@ $currentDate = date('d-M-Y');
 	}
 
 	$(document).scroll(function() {
-		if(hidebtn){
-			if($(window).scrollTop() > 159){
-				$('.hide-div').show(500);
-			}else{
+		if ($(window).width() < 768) {
+				$('.sticky-div').css('position', 'inherit');
 				$('.hide-div').hide(500);
+				hidebtn = false;
+		}else{
+			if(hidebtn){
+				if($(window).scrollTop() > 159){
+					$('.hide-div').show(500);
+					$('.sticky-div').css('position', 'sticky');
+				}else{
+					$('.hide-div').hide(500);
+				}
 			}
 		}
 	});

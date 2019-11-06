@@ -277,7 +277,7 @@
 				<?php
 				foreach ($globalConfigResult as $config) { ?>
 					<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
-						<div class="col-sm-2" style=" margin-top: 10px; ">
+						<div class="col-sm-2" style=" margin-top: 10px;width:100%; ">
 							<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
 								<option value="">-- Select --</option>
 							</select>
@@ -285,7 +285,7 @@
 				<?php }
 				} ?>
 				<div class="col-sm-2" style=" margin-top: 10px; ">
-					<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+					<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility" style="width:100%;">
 						<option value="">-- Select --</option>
 					</select>
 				</div>
@@ -316,7 +316,7 @@
 					</select>
 				</div>
 
-				<div class="items-push col-lg-2" style=" margin-top: 10px; ">
+				<div class="items-push col-lg-2" style=" margin-top: 10px;text-align:center; ">
 					<a href="javascript:void(0);" class="btn btn-hero-primary" onclick="searchData(); getRecencyAllDataCount();getFinalOutcomeChart();getRecencyLabActivityChart();getInfectionByModalityChart();getInfectionBySexChart();getMissingVlByDistrict();getMissingVlByModality();"><i class="fa fa-fw fa-search"></i> Search</a>
 				</div>
 				<div class="col-lg-4 hide-div" style=" margin-top: 10px;display:none; ">
@@ -1092,15 +1092,19 @@
 		}
 
 		$(document).scroll(function() {
-			if (hidebtn) {
-				if ($(window).scrollTop() > 2400) {
-					$('.hide-div').show(500);
-					$('.sticky-div').css('position', 'sticky');
-				} else {
-					$('.hide-div').hide(500);
-				}
+			if ($(window).width() < 768) {
+				$('.sticky-div').css('position', 'inherit');
+				$('.hide-div').hide(500);
+				hidebtn = false;
 			}else{
-				$('.sticky-div').css('position', 'sticky');
+				if (hidebtn) {
+					if ($(window).scrollTop() > 2400) {
+						$('.hide-div').show(500);
+						$('.sticky-div').css('position', 'sticky');
+					} else {
+						$('.hide-div').hide(500);
+					}
+				}
 			}
 		});
 	</script>

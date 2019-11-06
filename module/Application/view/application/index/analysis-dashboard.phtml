@@ -44,7 +44,7 @@ $currentDate = date('d-M-Y');
 			<?php
 			foreach ($globalConfigResult as $config) { ?>
 				<?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
-					<div class="col-sm-2" style=" margin-top: 10px; ">
+					<div class="col-sm-2" style=" margin-top: 10px;width:100%; ">
 						<select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
 							<option value="">-- Select --</option>
 						</select>
@@ -52,7 +52,7 @@ $currentDate = date('d-M-Y');
 			<?php }
 			} ?>
 			<div class="col-sm-2" style=" margin-top: 10px; ">
-				<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+				<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility" style="width:100%;">
 					<option value="">-- Select --</option>
 				</select>
 			</div>
@@ -65,7 +65,7 @@ $currentDate = date('d-M-Y');
 					<?php } ?>
 				</select>
 			</div>
-			<div class="items-push col-lg-2" style=" margin-top: 10px; ">
+			<div class="items-push col-lg-2" style=" margin-top: 10px;text-align:center;">
 				<a href="javascript:void(0);" class="btn btn-hero-primary" onclick="getFinalOutcomeChart();getInfectionByDistrictChart();getInfectionByAgeChart();getRecentInfectionByMonthSexChart();"><i class="fa fa-fw fa-search"></i> Search</a>
 			</div>
 			<div class="col-lg-8 hide-div" style=" margin-top: 10px;display:none; ">
@@ -76,7 +76,7 @@ $currentDate = date('d-M-Y');
 		</div>
 	</div>
 	<div class="row" style=" border: 1px solid #8080806b; background: aliceblue;margin-bottom: 20px; ">
-		<div class="col-md-6">
+		<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 			<h2 class="content-heading">
 				<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Gender &nbsp;&nbsp;&nbsp;&nbsp;
 				<small class="custom-control custom-switch custom-control-inline">
@@ -90,7 +90,7 @@ $currentDate = date('d-M-Y');
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 			<h2 class="content-heading">
 				<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by District
 				&nbsp;&nbsp;&nbsp;&nbsp;
@@ -107,7 +107,7 @@ $currentDate = date('d-M-Y');
 		</div>
 	</div>
 	<div class="row" style=" border: 1px solid #8080806b; background: aliceblue;margin-bottom: 20px; ">
-		<div class="col-md-6">
+		<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 			<h2 class="content-heading">
 				<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Age
 				&nbsp;&nbsp;&nbsp;&nbsp;
@@ -122,7 +122,7 @@ $currentDate = date('d-M-Y');
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 			<h2 class="content-heading">
 				<i class="fa fa-angle-right text-muted mr-1"></i> Recent Infection by Month and Sex
 				&nbsp;&nbsp;&nbsp;&nbsp;
@@ -446,11 +446,18 @@ $currentDate = date('d-M-Y');
 	}
 
 	$(document).scroll(function() {
-		if(hidebtn){
-			if($(window).scrollTop() > 159){
-				$('.hide-div').show(500);
-			}else{
+		if ($(window).width() < 768) {
+				$('.sticky-div').css('position', 'inherit');
 				$('.hide-div').hide(500);
+				hidebtn = false;
+		}else{
+			if(hidebtn){
+				if($(window).scrollTop() > 159){
+					$('.hide-div').show(500);
+					$('.sticky-div').css('position', 'sticky');
+				}else{
+					$('.hide-div').hide(500);
+				}
 			}
 		}
 	});
