@@ -6,11 +6,11 @@ if(count($result)>0){
     $format = $result['format'];
 
     $n=count($result['date']);
-    if($n>4){
+    /* if($n>4){
         $max='4';
-    }else{
+    }else{ */
         $max=$n-1;
-    }
+    // }
 ?>
 <script>
 Highcharts.chart('container', {
@@ -47,6 +47,18 @@ Highcharts.chart('container', {
     subtitle: {
         text: ''
     },
+    scrollbar: {
+        barBackgroundColor: 'gray',
+        barBorderRadius: 7,
+        barBorderWidth: 0,
+        buttonBackgroundColor: 'gray',
+        buttonBorderWidth: 0,
+        buttonBorderRadius: 7,
+        trackBackgroundColor: 'none',
+        trackBorderWidth: 1,
+        trackBorderRadius: 8,
+        trackBorderColor: '#CCC'
+    },
     xAxis: {
         categories: [
             <?php  foreach($result['date'] as $res){?>
@@ -72,7 +84,9 @@ Highcharts.chart('container', {
         <?php if($format =='percentage') { ?>
         max:100,
         <?php } ?>
-        
+        scrollbar: {
+            enabled: true
+        },
         title: {
             <?php if($format =='percentage') { ?>
             text: 'Percentage'
