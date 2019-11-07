@@ -10,7 +10,8 @@
 	$startDate = date('d-M-Y', strtotime('today - 365 days'));
 	$currentDate = date('d-M-Y');
 	?>
-	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+	<script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="https://code.highcharts.com/highcharts-more.js"></script>
 	<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 	<style>
@@ -24,24 +25,6 @@
 			font-weight: 400px !important;
 			padding: 45px 0px;
 			font-stretch: expanded;
-		}
-		#container {
-			max-width: 800px;
-			width: 800px;
-		}
-		/* Track */
-		::-webkit-scrollbar-track {
-			background: #f1f1f1; 
-		}
-		
-		/* Handle */
-		::-webkit-scrollbar-thumb {
-			background: #888; 
-		}
-
-		/* Handle on hover */
-		::-webkit-scrollbar-thumb:hover {
-			background: #555; 
 		}
 	</style>
 	<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
@@ -370,8 +353,7 @@
 				</table>
 				<div class="block block-rounded block-bordered">
 					<div class="block-content block-content-full" style=" height: 490px !important; overflow: auto; ">
-
-						<div id="container" style="height: 450px; min-width: 320px; margin: 0 auto"></div>
+						<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 					</div>
 				</div>
 			</div>

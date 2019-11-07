@@ -20,7 +20,6 @@ Highcharts.chart('container', {
     exporting: {
         filename : 'RITA Result Weekly Summary',
     buttons: {
-      
       contextButton: {
         menuItems: [
           'printChart',
@@ -47,18 +46,6 @@ Highcharts.chart('container', {
     subtitle: {
         text: ''
     },
-    scrollbar: {
-        barBackgroundColor: 'gray',
-        barBorderRadius: 7,
-        barBorderWidth: 0,
-        buttonBackgroundColor: 'gray',
-        buttonBorderWidth: 0,
-        buttonBorderRadius: 7,
-        trackBackgroundColor: 'none',
-        trackBorderWidth: 1,
-        trackBorderRadius: 8,
-        trackBorderColor: '#CCC'
-    },
     xAxis: {
         categories: [
             <?php  foreach($result['date'] as $res){?>
@@ -84,9 +71,7 @@ Highcharts.chart('container', {
         <?php if($format =='percentage') { ?>
         max:100,
         <?php } ?>
-        scrollbar: {
-            enabled: true
-        },
+        
         title: {
             <?php if($format =='percentage') { ?>
             text: 'Percentage'
@@ -103,8 +88,6 @@ Highcharts.chart('container', {
         shared: true,
         useHTML: true
     },
-  
-    
     plotOptions: {
         column: {
             pointPadding: 0.2,
