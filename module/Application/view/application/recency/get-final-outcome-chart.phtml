@@ -6,11 +6,11 @@ if(count($result)>0){
     $format = $result['format'];
 
     $n=count($result['date']);
-    /* if($n>4){
+    if($n>4){
         $max='4';
-    }else{ */
+    }else{
         $max=$n-1;
-    // }
+    }
 ?>
 <script>
 Highcharts.chart('container', {
