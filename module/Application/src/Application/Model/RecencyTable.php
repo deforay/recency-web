@@ -197,9 +197,12 @@ class RecencyTable extends AbstractTableGateway
         );
         $actionBtn = "";
         foreach ($rResult as $aRow) {
-
+            $pdfBtn = "";
             $row = array();
             $formInitiationDate = '';
+            if($aRow['final_outcome'] != ""){
+                $pdfBtn = '<a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>';
+            }
             if ($aRow['form_initiation_datetime'] != '' && $aRow['form_initiation_datetime'] != '0000-00-00 00:00:00' && $aRow['form_initiation_datetime'] != null) {
                 $formInitiationAry = explode(" ", $aRow['form_initiation_datetime']);
                 $formInitiationDate = $common->humanDateFormat($formInitiationAry[0]) . " " . $formInitiationAry[1];
@@ -258,7 +261,7 @@ class RecencyTable extends AbstractTableGateway
             }
 
             $actionBtn .= '<a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
-                         <a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>
+                         '.$pdfBtn.'
                          </div>';
             $row[] = $actionBtn;
 
