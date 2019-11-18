@@ -402,3 +402,6 @@ ALTER TABLE `recency` ADD `modified_by` INT(11) NULL DEFAULT NULL AFTER `modifie
 ALTER TABLE `recency` ADD `invalid_control_line` VARCHAR(255) NULL DEFAULT NULL AFTER `modified_by`, ADD `invalid_verification_line` VARCHAR(255) NULL DEFAULT NULL AFTER `invalid_control_line`, ADD `invalid_longterm_line` VARCHAR(255) NULL DEFAULT NULL AFTER `invalid_verification_line`;
 -- In Clone Table
 ALTER TABLE `recency_change_trails` ADD `modified_on` DATETIME NULL DEFAULT NULL AFTER `kit_name`, ADD `modified_by` INT(11) NULL DEFAULT NULL AFTER `modified_on`, ADD `invalid_control_line` VARCHAR(255) NULL DEFAULT NULL AFTER `modified_by`, ADD `invalid_verification_line` VARCHAR(255) NULL DEFAULT NULL AFTER `invalid_control_line`, ADD `invalid_longterm_line` VARCHAR(255) NULL DEFAULT NULL AFTER `invalid_verification_line`;
+-- Thanaseelan creating the new role name as remote user 18-Nov-2019
+INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `role_status`) VALUES (NULL, 'Remote Order User', 'remote_order_user', 'active');
+ALTER TABLE recency_change_trails DROP INDEX unique_id;

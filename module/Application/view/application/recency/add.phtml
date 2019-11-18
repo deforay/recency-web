@@ -5,8 +5,13 @@ use Zend\Session\Container;
 $config = new \Zend\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 $sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
 $arr = array();
 $syn = false;
+$recencyTestResults = '';
+if($roleCode == 'remote_order_user'){
+    $recencyTestResults = 'style="display:none;"';
+}
 
 //\Zend\Debug\Debug::dump($facilityResult);die;
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
@@ -333,7 +338,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
+                                <div class="col-md-12" <?php echo $recencyTestResults;?>>
+                                <?php if($recencyTestResults != ""){
+                                    $testNotPermform = "";$testingFacility="";$hivRecencyTestDate="";$KitExpiryDate="";$controlLineResult="";$positiveVerificationLine="";$longTermVerificationLine="";$vlTestDate="";$vlLoadResult="";
+                                }?>
                                     <div class="block block-rounded block-bordered">
                                         <div class="block-header block-header-default">
                                             <h3 class="block-title">Recency Test Results</h3>

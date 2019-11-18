@@ -24,6 +24,7 @@ $userMenu .= "<li id='nav-main-item'><a id='city' class='nav-main-link' href=" .
 
 $recencyMenu = "";
 $recencyMenu .= "<li id='nav-main-item'><a id='recency' class='nav-main-link' href=" . $this->url('recency', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
+$recencyMenu .= "<li id='nav-main-item'><a id='print-results' class='nav-main-link' href=" . $this->url('print-results', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Print Results</span></a></li>";
 
 $settingsMenu = "";
 $settingsMenu .= "<li id='nav-main-item'><a id='settings' class='nav-main-link' href=" . $this->url('settings', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
@@ -183,7 +184,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                          <div class="content-side content-side-full">
                               <ul class="nav-main">
                                    <li class="nav-main-heading"></li>
-                                   <?php if($roleCode != 'manager'){ ?>
+                                   <?php if($roleCode != 'manager' && $roleCode != 'remote_order_user'){ ?>
                                         <li class="nav-main-item " id="dashboard">
                                              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                                                   <i class="nav-main-link-icon si si-cursor"></i>
@@ -194,7 +195,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                                              </ul>
                                         </li>
                                    <?php }?>
-                                   <?php if ($roleCode == 'admin') { ?>
+                                   <?php if ($roleCode == 'admin' && $roleCode != 'remote_order_user') { ?>
                                    <li class="nav-main-heading"></li>
                                    <li class="nav-main-item " id="manage">
                                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -207,7 +208,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                                    </li>
 
                                    <?php }
-                                   if($roleCode != 'manager'){ ?>
+                                   if($roleCode != 'manager' && $roleCode != 'remote_order_user'){ ?>
                                    <li class="nav-main-heading" style="padding:3px;"></li>
                                    <?php echo $settingsMenu; 
                                    }
@@ -217,23 +218,23 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                                    <?php echo $recencyMenu; ?>
 
 
-                                   <?php if ($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user' || $roleCode == 'manager') { ?>
+                                   <?php if (($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
                                    <li class="nav-main-heading" style="padding:3px;"></li>
                                    <?php echo $qcMenu; ?>
                                    <?php }
-                                        if ($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'manager') { ?>
+                                        if (($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
                                    <li class="nav-main-heading" style="padding:3px;"></li>
                                    <?php echo $vlDataMenu;
                                         }
                                    }
-                                   if ($roleCode == 'VLTS' || $roleCode == 'admin') {
+                                   if (($roleCode == 'VLTS' || $roleCode == 'admin') && $roleCode != 'remote_order_user') {
                                         ?>
                                    <li class="nav-main-heading" style="padding:3px;"></li>
                                    <?php echo $emailMenu; ?>
                                    <li class="nav-main-heading" style="padding:3px;"></li>
                                    <?php //echo $uploadResultMenu; -->
                                    }
-                                   if ($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'user' || $roleCode == 'manager') { ?>
+                                   if (($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'user' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
                                    <li class="nav-main-heading"></li>
                                    <li class="nav-main-item " id="reports">
                                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -455,6 +456,9 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                     $('#email-result').removeClass('open');
                     $('#' + splitsUrl[2]).addClass('active');
                } else if (splitsUrl[1] == 'vl-data') {
+                    $('#manage').removeClass('open');
+                    $('#' + splitsUrl[1]).addClass('active');
+               }else if (splitsUrl[1] == 'print-results') {
                     $('#manage').removeClass('open');
                     $('#' + splitsUrl[1]).addClass('active');
                }

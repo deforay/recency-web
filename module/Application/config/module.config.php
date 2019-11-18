@@ -215,6 +215,16 @@ return array(
                          ),
                     ),
                ),
+               'print-results' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/print-results[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\PrintResults',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -286,6 +296,7 @@ return array(
                'Application\Controller\Province'            => 'Application\Controller\ProvinceController',
                'Application\Controller\District'            => 'Application\Controller\DistrictController',
                'Application\Controller\City'                => 'Application\Controller\CityController',
+               'Application\Controller\PrintResults'        => 'Application\Controller\PrintResultsController',
           ),
      ),
      'controller_plugins' => array(

@@ -10,6 +10,11 @@ use Zend\Session\Container;
 use Application\Service\CommonService;
 
 $sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
+$recencyTestResults = '';
+if($roleCode == 'remote_order_user'){
+    $recencyTestResults = 'style="display:none;"';
+}
 $common = new CommonService();
 $dob = '';
 $file_open_date = '';
@@ -404,7 +409,12 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 									</div>
 								</div>
 
-								<div class="col-md-12">
+								<div class="col-md-12" <?php echo $recencyTestResults;?>>
+								<?php if($recencyTestResults != ""){
+                                    $hivRecencyRequiredDate="";$disbaledResult = "";$testNotPermform = "";$testingFacility="";$hivRecencyTestDate="";$KitExpiryDate="";$controlLineResult="";$positiveVerificationLine="";$longTermVerificationLine="";$vlTestDate="";$vlLoadResult="";
+                                }else{
+									$disbaledResult = "disbaledResult ";
+								}?>
 									<div class="block block-rounded block-bordered">
 										<div class="block-header block-header-default">
 											<h3 class="block-title">Recency Test Results</h3>
@@ -435,7 +445,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Testing Facility<?php echo (in_array("Testing Facility", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control disbaledResult<?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+												<select class="form-control <?php echo $disbaledResult.$testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
 													<option value="">--Select--</option>
 													<?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
 														<option value="<?php echo base64_encode($testingFacility['facility_id']); ?>" <?php echo ($testingFacility['facility_id'] == $result['testing_facility_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($testingFacility['facility_name']); ?></option>
@@ -451,7 +461,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">HIV Recency Test Date<?php echo (in_array("Hiv Recency Test Date", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<input type="text" value="<?php echo $hivRecencyTestDate; ?>" class="form-control disbaledResult <?php echo $hivRecencyRequiredDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
+												<input type="text" value="<?php echo $hivRecencyTestDate; ?>" class="form-control <?php echo $disbaledResult.$hivRecencyRequiredDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
 											</div>
 											<br>
 											<br>
@@ -460,8 +470,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<label class="col-sm-2 col-form-label <?php echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Control Line
 												<?php echo (in_array("Control Line", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control invalidctline disbaledResult
-													<?php echo $controlLineResult;
+												<select class="form-control invalidctline
+													<?php echo $disbaledResult.$controlLineResult;
 													echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>" id="controlLine" name="controlLine" title="Please select the control line" onchange="changeTermLine()">
 													<option value="">--Select--</option>
 													<option value="present" <?php echo ($result['control_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present</option>
@@ -472,7 +482,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<label class="col-sm-2 col-form-label <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Positive Verification
 												<?php echo (in_array("Positive Verification Line", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control invalidctline disbaledResult <?php echo $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
+												<select class="form-control invalidctline <?php echo $disbaledResult.$positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
 													<option value="">--Select--</option>
 													<option value="present" <?php echo ($result['positive_verification_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Positive/P)</option>
 													<option value="absent" <?php echo ($result['positive_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Negative/N)</option>
@@ -484,7 +494,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<label class="col-sm-2 col-form-label <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Long Term Verification
 												<?php echo (in_array("Long Term Verification Line", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control invalidctline disbaledResult <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
+												<select class="form-control invalidctline <?php echo $disbaledResult.$longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
 													<option value="">--Select--</option>
 													<option value="present" <?php echo ($result['long_term_verification_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Long Term/LT)</option>
 													<option value="absent" <?php echo ($result['long_term_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Recent/R)</option>
@@ -741,7 +751,6 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 <script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
 <script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
 <script type="text/javascript">
-	
 	$(".hideFields").remove();
 	$(document).ready(function() {
 		$("#testingFacilityId").select2({
@@ -809,6 +818,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			var _satrt = new Date(e.date.valueOf());
 			$('#sampleReceiptDate,#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker('setStartDate', _satrt);
 		});
+		// Auto calling checkHivTesting function while edit
+		$('#pastHivTesting option[selected="selected"]').each(function() {checkHivTesting(this);});
 	});
 
 	function changeTermLine() {

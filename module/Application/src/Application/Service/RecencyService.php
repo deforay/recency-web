@@ -1698,4 +1698,9 @@ class RecencyService
             error_log($exc->getTraceAsString());
         }
     }
+
+    public function getPrintResultsDetails($parameters){
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchPrintResultsDetails($parameters);
+    }
 }

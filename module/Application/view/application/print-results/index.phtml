@@ -1,0 +1,132 @@
+<?php 
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+?>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Print Results</h1>
+          </div>
+     </div>
+</div>
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          <ul class="nav nav-tabs nav-tabs-block nav-justified" style=" margin-bottom: inherit; ">
+               <li class="nav-item">
+                    <a class="active nav-link" data-toggle="tab" href="#result_printed">Results yet to be printed</a>
+               </li>
+               <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#result_not_printed">Results already printed</a>
+               </li>
+          </ul>
+          <div class="tab-content">
+               <div class="container tab-pane active" id="result_printed">
+                    <div class="table-responsive">
+                         <table id="resultPrinted" class="table table-bordered table-striped table-vcenter">
+                              <thead>
+                                   <tr>
+                                        <th>Sample ID</th>
+                                        <th>Sample Colelction Date</th>
+                                        <th>Facility Name</th>
+                                        <th>Patient ID</th>
+                                        <th>Patient Gender</th>
+                                        <th>Patient Age</th>
+                                        <th>Testing Facility Name</th>
+                                        <th>Testing Modality</th>
+                                        <th>Result</th>
+                                        <th>Print</th>
+                                   </tr>
+                              </thead>
+                              <tbody>
+                                   <tr>
+                                        <td colspan="10" class="dataTables_empty">Loading data from server</td>
+                                   </tr>
+                              </tbody>
+                         </table>
+                    </div>
+               </div>
+               <div class="container tab-pane" id="result_not_printed">
+                    <div class="table-responsive">
+                         <table id="resultNotPrinted" class="table table-bordered table-striped table-vcenter">
+                              <thead>
+                                   <tr>
+                                        <th>Sample ID</th>
+                                        <th>Sample Colelction Date</th>
+                                        <th>Facility Name</th>
+                                        <th>Patient ID</th>
+                                        <th>Patient Gender</th>
+                                        <th>Patient Age</th>
+                                        <th>Testing Facility Name</th>
+                                        <th>Testing Modality</th>
+                                        <th>Result</th>
+                                        <th>Print</th>
+                                   </tr>
+                              </thead>
+                              <tbody>
+                                   <tr>
+                                        <td colspan="10" class="dataTables_empty">Loading data from server</td>
+                                   </tr>
+                              </tbody>
+                         </table>
+                    </div>
+               </div>
+          </div>
+     </div>
+</div>
+<script type="text/javascript">
+    /* Table initialisation */
+    printTable = null;notPrintTable = null;
+    $(document).ready(function() {
+        printTable = $('#resultPrinted').dataTable({
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bServerSide": true,
+            "aoColumns": [
+                <?php echo $editAction; ?>
+            ],
+            "sAjaxSource": "<?php echo $this->url('print-results', array('action' => 'index')); ?>",
+            "fnServerData": function(sSource, aoData, fnCallback) {
+            aoData.push({"name": "viewFlag","value": 'printed'});
+                $.ajax({
+                        "dataType": 'json',
+                        "type": "POST",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": fnCallback
+                });
+            }
+        });
+        notPrintTable = $('#resultNotPrinted').dataTable({
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bServerSide": true,
+            "aoColumns": [
+                <?php echo $editAction; ?>
+            ],
+            "sAjaxSource": "<?php echo $this->url('print-results', array('action' => 'index')); ?>",
+            "fnServerData": function(sSource, aoData, fnCallback) {
+            aoData.push({"name": "viewFlag","value": 'not-printed'});
+                $.ajax({
+                        "dataType": 'json',
+                        "type": "POST",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": fnCallback
+                });
+            }
+        });
+    });
+
+    function generatePdf(recencyId) {
+        $.blockUI();
+        $.post("<?php echo $this->url('recency', array('action' => 'generate-pdf')); ?>", {recencyId: recencyId},
+          function(data) {
+               if (data == "" || data == null || data == undefined) {
+                    $.unblockUI();
+                    alert('Unable to generate download');
+               } else {
+                    $.unblockUI();
+                    window.open('/temporary/' + data, 'blank');
+               }
+          });
+    }
+</script>

@@ -161,7 +161,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
-        if ($roleCode == 'user') {
+        if ($roleCode == 'user' || $roleCode == 'remote_order_user') {
             $sQuery = $sQuery->where('r.added_by=' . $sessionLogin->userId);
         }
 
@@ -182,7 +182,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('facility_name'), 'left')
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left');
 
-        if ($roleCode == 'user') {
+        if ($roleCode == 'user' || $roleCode == 'remote_order_user') {
             $iQuery = $iQuery->where('r.added_by=' . $sessionLogin->userId);
         }
 
@@ -200,7 +200,7 @@ class RecencyTable extends AbstractTableGateway
             $pdfBtn = "";
             $row = array();
             $formInitiationDate = '';
-            if($aRow['final_outcome'] != ""){
+            if ($aRow['final_outcome'] != "") {
                 $pdfBtn = '<a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>';
             }
             if ($aRow['form_initiation_datetime'] != '' && $aRow['form_initiation_datetime'] != '0000-00-00 00:00:00' && $aRow['form_initiation_datetime'] != null) {
@@ -261,7 +261,7 @@ class RecencyTable extends AbstractTableGateway
             }
 
             $actionBtn .= '<a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
-                         '.$pdfBtn.'
+                         ' . $pdfBtn . '
                          </div>';
             $row[] = $actionBtn;
 
@@ -454,7 +454,7 @@ class RecencyTable extends AbstractTableGateway
                 'control_line'                      => (isset($params['controlLine']) && $params['controlLine'] != '') ? $params['controlLine'] : null,
                 'positive_verification_line'        => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine'] != '') ? $params['positiveVerificationLine'] : null,
                 'long_term_verification_line'       => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine'] != '') ? $params['longTermVerificationLine'] : null,
-                'term_outcome'                      => (isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "")?$params['outcomeDataActual']:$params['outcomeData'],
+                'term_outcome'                      => (isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "") ? $params['outcomeDataActual'] : $params['outcomeData'],
                 'final_outcome'                     => $params['vlfinaloutcomeResult'],
                 'age_not_reported'                  => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : no,
                 'gender'                            => $params['gender'],
@@ -493,7 +493,7 @@ class RecencyTable extends AbstractTableGateway
                 'unique_id'                         => $this->randomizer(10),
                 'testing_facility_type'             => $params['testingModality']
             );
-            if($params['positiveVerificationLineActual'] != ''){
+            if ($params['positiveVerificationLineActual'] != '') {
                 $data['invalid_control_line']       = $params['controlLineActual'];
                 $data['invalid_verification_line']  = $params['positiveVerificationLineActual'];
                 $data['invalid_longterm_line']      = $params['longTermVerificationLineActual'];
@@ -674,10 +674,10 @@ class RecencyTable extends AbstractTableGateway
                 'control_line'                      => (isset($params['controlLine']) && $params['controlLine'] != '') ? $params['controlLine'] : null,
                 'positive_verification_line'        => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine'] != '') ? $params['positiveVerificationLine'] : null,
                 'long_term_verification_line'       => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine'] != '') ? $params['longTermVerificationLine'] : null,
-                'term_outcome'                      => (isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "")?$params['outcomeDataActual']:$params['outcomeData'],
+                'term_outcome'                      => (isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "") ? $params['outcomeDataActual'] : $params['outcomeData'],
                 'final_outcome'                     => $params['vlfinaloutcomeResult'],
                 'gender'                            => $params['gender'],
-                'age_not_reported'                  => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : no,
+                'age_not_reported'                  => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : 'no',
                 'age'                               => ($params['age'] != '') ? $params['age'] : null,
                 'marital_status'                    => $params['maritalStatus'],
                 'residence'                         => $params['residence'],
@@ -707,7 +707,7 @@ class RecencyTable extends AbstractTableGateway
                 'testing_facility_type'             => $params['testingModality']
             );
 
-            if($params['positiveVerificationLineActual'] != ''){
+            if ($params['positiveVerificationLineActual'] != '') {
                 $data['invalid_control_line']       = $params['controlLineActual'];
                 $data['invalid_verification_line']  = $params['positiveVerificationLineActual'];
                 $data['invalid_longterm_line']      = $params['longTermVerificationLineActual'];
@@ -752,7 +752,7 @@ class RecencyTable extends AbstractTableGateway
 
     public function fetchAllRecencyListApi($params)
     {
-        
+
         $common = new CommonService();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
@@ -882,7 +882,7 @@ class RecencyTable extends AbstractTableGateway
 
     public function addRecencyDetailsApi($params)
     {
-     
+
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $facilityDb = new FacilitiesTable($this->adapter);
@@ -892,11 +892,11 @@ class RecencyTable extends AbstractTableGateway
         $cityDb = new CityTable($this->adapter);
         $TestingFacilityTypeDb = new TestingFacilityTypeTable($this->adapter);
         $common = new CommonService();
-       
-            if (isset($params["form"])) {
 
-            $uQuery = $sql->select()->from('users')               
-                 ->where(array('user_id' => $params["form"][0]['syncedBy']));
+        if (isset($params["form"])) {
+
+            $uQuery = $sql->select()->from('users')
+                ->where(array('user_id' => $params["form"][0]['syncedBy']));
             $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
             $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
             if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
@@ -907,8 +907,8 @@ class RecencyTable extends AbstractTableGateway
                 return $response;
             }
             $i = 1;
-        	 
-                foreach ($params["form"] as $key => $recency) {
+
+            foreach ($params["form"] as $key => $recency) {
                 try {
                     if (isset($recency['sampleId']) && trim($recency['sampleId']) != "" || isset($recency['patientId']) && trim($recency['patientId']) != "") {
                         if ($recency['otherfacility'] != '') {
@@ -1064,7 +1064,7 @@ class RecencyTable extends AbstractTableGateway
                             // 'vl_result'=>$recency['vlLoadResult'],
 
                         );
-                        if(isset($recency['invalidControlLine']) && $recency['invalidControlLine'] != ''){
+                        if (isset($recency['invalidControlLine']) && $recency['invalidControlLine'] != '') {
                             $data['invalid_control_line']       = $recency['invalidControlLine'];
                             $data['invalid_verification_line']  = $recency['invalidPositiveLine'];
                             $data['invalid_longterm_line']      = $recency['invalidLongTermLine'];
@@ -1171,7 +1171,7 @@ class RecencyTable extends AbstractTableGateway
                         'testing_facility_type' => $params['testingModality'],
                     );
 
-                    if(isset($params['invalidControlLine']) && $params['invalidControlLine'] != ''){
+                    if (isset($params['invalidControlLine']) && $params['invalidControlLine'] != '') {
                         $data['invalid_control_line']       = $params['invalidControlLine'];
                         $data['invalid_verification_line']  = $params['invalidPositiveLine'];
                         $data['invalid_longterm_line']      = $params['invalidLongTermLine'];
@@ -4341,13 +4341,14 @@ class RecencyTable extends AbstractTableGateway
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
-    
-    public function fetchModalityDetails($params){
+
+    public function fetchModalityDetails($params)
+    {
         $common = new CommonService();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $data = array();
-        $sQuery = $sql->select()->from(array('r'=>$this->table))->columns(array(
+        $sQuery = $sql->select()->from(array('r' => $this->table))->columns(array(
             'rtriRecent15-19M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
             'rtriRecent15-19F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="15" AND r.age <= "19" AND r.gender = "female" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
             'rtriRecent20-24M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="20" AND r.age <= "24" AND r.gender = "male" AND r.term_outcome IS NOT NULL AND r.term_outcome LIKE "%Recent%" ) THEN 1 ELSE 0 END)'),
@@ -4423,7 +4424,7 @@ class RecencyTable extends AbstractTableGateway
         if (isset($params['locationOne']) && $params['locationOne'] != '') {
             $sQuery = $sQuery->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'));
             $sQuery = $sQuery->where(array('p.province_id' => $params['locationOne']));
-            
+
             if (isset($params['locationTwo']) && $params['locationTwo'] != '') {
                 $sQuery = $sQuery->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'));
                 $sQuery = $sQuery->where(array('d.district_id' => $params['locationTwo']));
@@ -4447,26 +4448,29 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
         if (isset($params['testingModality']) && $params['testingModality'] != '') {
-            $sQuery = $sQuery->where(array("r.testing_facility_type"=>$params['testingModality']));
+            $sQuery = $sQuery->where(array("r.testing_facility_type" => $params['testingModality']));
         }
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
 
-    public function cryptoJsAesDecrypt($passphrase, $jsonString){
+    public function cryptoJsAesDecrypt($passphrase, $jsonString)
+    {
         $jsondata = json_decode($jsonString, true);
         try {
             $salt = hex2bin($jsondata["s"]);
             $iv  = hex2bin($jsondata["iv"]);
-        } catch(Exception $e) { return null; }
+        } catch (Exception $e) {
+            return null;
+        }
         $ct = base64_decode($jsondata["ct"]);
-        $concatedPassphrase = $passphrase.$salt;
+        $concatedPassphrase = $passphrase . $salt;
         $md5 = array();
         $md5[0] = md5($concatedPassphrase, true);
         $result = $md5[0];
         for ($i = 1; $i < 3; $i++) {
-            $md5[$i] = md5($md5[$i - 1].$concatedPassphrase, true);
+            $md5[$i] = md5($md5[$i - 1] . $concatedPassphrase, true);
             $result .= $md5[$i];
         }
         $key = substr($result, 0, 32);
@@ -4474,20 +4478,202 @@ class RecencyTable extends AbstractTableGateway
         return json_decode($data, true);
     }
 
-  public function cryptoJsAesEncrypt($passphrase, $value){
+    public function cryptoJsAesEncrypt($passphrase, $value)
+    {
         $salt = openssl_random_pseudo_bytes(8);
         $salted = '';
         $dx = '';
         while (strlen($salted) < 48) {
-            $dx = md5($dx.$passphrase.$salt, true);
+            $dx = md5($dx . $passphrase . $salt, true);
             $salted .= $dx;
         }
         $key = substr($salted, 0, 32);
-        $iv  = substr($salted, 32,16);
+        $iv  = substr($salted, 32, 16);
         $encrypted_data = openssl_encrypt(json_encode($value), 'aes-256-cbc', $key, true, $iv);
         $data = array("ct" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "s" => bin2hex($salt));
         return json_encode($data);
     }
 
-    
+    public function fetchPrintResultsDetails($parameters)
+    {
+        $common = new CommonService();$sessionLogin = new Container('credo');
+        $aColumns = array('r.sample_id', 'DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'r.testing_facility_type','r.final_outcome');
+        $orderColumns = array('r.sample_id', 'r.sample_collection_date', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'r.testing_facility_type', 'ft.final_outcome');
+
+        /* Paging */
+        $sLimit = "";
+        if (isset($parameters['iDisplayStart']) && $parameters['iDisplayLength'] != '-1') {
+            $sOffset = $parameters['iDisplayStart'];
+            $sLimit = $parameters['iDisplayLength'];
+        }
+
+        /* Ordering */
+        $sOrder = "";
+        if (isset($parameters['iSortCol_0'])) {
+            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
+                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
+                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+                }
+            }
+            $sOrder = substr_replace($sOrder, "", -1);
+        }
+
+        /*
+         * Filtering
+         * NOTE this does not match the built-in DataTables filtering which does it
+         * word by word on any field. It's possible to do here, but concerned about efficiency
+         * on very large tables, and MySQL's regex functionality is very limited
+         */
+
+        $sWhere = "";
+        if (isset($parameters['sSearch']) && $parameters['sSearch'] != "") {
+            $searchArray = explode(" ", $parameters['sSearch']);
+            $sWhereSub = "";
+            foreach ($searchArray as $search) {
+                if ($sWhereSub == "") {
+                    $sWhereSub .= "(";
+                } else {
+                    $sWhereSub .= " AND (";
+                }
+                $colSize = count($aColumns);
+
+                for ($i = 0; $i < $colSize; $i++) {
+                    if ($i < $colSize - 1) {
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' OR ";
+                    } else {
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' ";
+                    }
+                }
+                $sWhereSub .= ")";
+            }
+            $sWhere .= $sWhereSub;
+        }
+
+        /* Individual column filtering */
+        for ($i = 0; $i < count($aColumns); $i++) {
+            if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
+                if ($sWhere == "") {
+                    $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                } else {
+                    $sWhere .= " AND " . $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                }
+            }
+        }
+
+        /*
+         * SQL queries
+         * Get data to display
+         */
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
+        ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left');
+
+        if (isset($sWhere) && $sWhere != "") {
+            $sQuery->where($sWhere);
+        }
+        if ($sessionLogin->roleCode == 'remote_order_user') {
+            $sQuery = $sQuery->join(array('ufm' => 'user_facility_map'),'ufm.facility_id = r.facility_id', array('user_id'));
+            $sQuery = $sQuery->where('ufm.user_id='.$sessionLogin->userId);
+        }
+        if ($parameters['fName'] != '') {
+            $sQuery->where(array('r.facility_id' => $parameters['fName']));
+        }
+        if ($parameters['testingFacility'] != '') {
+            $sQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
+        }
+        if ($parameters['viewFlag'] == 'printed') {
+            $sQuery->where('r.result_printed_on IS NOT NULL');
+        }else if($parameters['viewFlag'] == 'not-printed'){
+            $sQuery->where('r.result_printed_on IS NULL');
+        }
+        if ($parameters['locationOne'] != '') {
+            $sQuery = $sQuery->where(array('r.province' => $parameters['locationOne']));
+            if ($parameters['locationTwo'] != '') {
+                $sQuery = $sQuery->where(array('r.district' => $parameters['locationTwo']));
+            }
+            if ($parameters['locationThree'] != '') {
+                $sQuery = $sQuery->where(array('r.city' => $parameters['locationThree']));
+            }
+        }
+
+        if (isset($sOrder) && $sOrder != "") {
+            $sQuery->order($sOrder);
+        }
+
+        if (isset($sLimit) && isset($sOffset)) {
+            $sQuery->limit($sLimit);
+            $sQuery->offset($sOffset);
+        }
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+
+        /* Data set length after filtering */
+        $sQuery->reset('limit');
+        $sQuery->reset('offset');
+        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+        $iFilteredTotal = count($aResultFilterTotal);
+
+        /* Total data set length */
+        $iQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
+        ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left');
+        if ($parameters['fName'] != '') {
+            $iQuery->where(array('r.facility_id' => $parameters['fName']));
+        }
+        if ($sessionLogin->roleCode == 'remote_order_user') {
+            $iQuery = $iQuery->join(array('ufm' => 'user_facility_map'),'ufm.facility_id = r.facility_id', array('user_id'));
+            $iQuery = $iQuery->where('ufm.user_id='.$sessionLogin->userId);
+        }
+        if ($parameters['testingFacility'] != '') {
+            $iQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
+        }
+        if ($parameters['viewFlag'] == 'printed') {
+            $iQuery->where('r.result_printed_on IS NOT NULL');
+        }else if($parameters['viewFlag'] == 'not-printed'){
+            $iQuery->where('r.result_printed_on IS NULL');
+        }
+        if ($parameters['locationOne'] != '') {
+            $iQuery = $iQuery->where(array('r.province' => $parameters['locationOne']));
+            if ($parameters['locationTwo'] != '') {
+                $iQuery = $iQuery->where(array('r.district' => $parameters['locationTwo']));
+            }
+            if ($parameters['locationThree'] != '') {
+                $iQuery = $iQuery->where(array('r.city' => $parameters['locationThree']));
+            }
+        }
+        $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+
+        $output = array(
+            "sEcho" => intval($parameters['sEcho']),
+            "iTotalRecords" => count($iResult),
+            "iTotalDisplayRecords" => $iFilteredTotal,
+            "aaData" => array(),
+        );
+
+        foreach ($rResult as $aRow) {
+            $row = array();
+            $row[] = $aRow['sample_id'];
+            $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
+            $row[] = ucwords($aRow['facility_name']);
+            $row[] = $aRow['patient_id'];
+            $row[] = ucwords($aRow['gender']);
+            $row[] = $aRow['age'];
+            $row[] = ucwords($aRow['testing_facility_name']);
+            $row[] = ucwords($aRow['testing_facility_type']);
+            $row[] = $aRow['final_outcome'];
+            if($aRow['final_outcome'] != ""){
+                $row[] = '<a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>';
+            }else{
+                $row[] = '';
+            }
+            $output['aaData'][] = $row;
+        }
+        return $output;
+    }
 }
