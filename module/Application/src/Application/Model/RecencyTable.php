@@ -4575,9 +4575,8 @@ class RecencyTable extends AbstractTableGateway
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
-        if ($sessionLogin->roleCode == 'remote_order_user') {
-            $sQuery = $sQuery->join(array('ufm' => 'user_facility_map'),'ufm.facility_id = r.facility_id', array('user_id'));
-            $sQuery = $sQuery->where('ufm.user_id='.$sessionLogin->userId);
+        if ($sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('r.facility_id IN ('.$sessionLogin->facilityMap.')');
         }
         if ($parameters['fName'] != '') {
             $sQuery->where(array('r.facility_id' => $parameters['fName']));
@@ -4626,9 +4625,8 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['fName'] != '') {
             $iQuery->where(array('r.facility_id' => $parameters['fName']));
         }
-        if ($sessionLogin->roleCode == 'remote_order_user') {
-            $iQuery = $iQuery->join(array('ufm' => 'user_facility_map'),'ufm.facility_id = r.facility_id', array('user_id'));
-            $iQuery = $iQuery->where('ufm.user_id='.$sessionLogin->userId);
+        if ($sessionLogin->facilityMap != null) {
+            $iQuery = $iQuery->where('r.facility_id IN ('.$sessionLogin->facilityMap.')');
         }
         if ($parameters['testingFacility'] != '') {
             $iQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));

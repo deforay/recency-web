@@ -27,6 +27,7 @@ class UserTable extends AbstractTableGateway {
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
             $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
+            $userFacilityMapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
             $sQuery = $sql->select()->from(array('u' => 'users'))
                     ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
 				    ->where(array('u.email' => $params['userName'], 'u.server_password' => $password,'u.web_access'=>'yes' ));
@@ -39,13 +40,19 @@ class UserTable extends AbstractTableGateway {
                     $adminPhone = $globalDb->getGlobalValue('admin_phone');
 
                     $alertContainer->alertMsg = 'Your password has expired or has been locked, please contact your administrator('.$adminEmail.' or '.$adminPhone.')';
-                return 'login';
+                    return 'login';
+                }
+                $ufmResult = $userFacilityMapDb->select(array('user_id'=>$rResult->user_id))->toArray();
+                $ufmdata = array();
+                foreach($ufmResult as $val){
+                    array_push($ufmdata,$val['facility_id']);
                 }
                 $logincontainer->userId = $rResult->user_id;
                 $logincontainer->roleId = $rResult->role_id;
                 $logincontainer->roleCode = $rResult->role_code;
                 $logincontainer->userName = ucwords($rResult->user_name);
                 $logincontainer->userEmail = ucwords($rResult->email);
+                $logincontainer->facilityMap = implode(',',$ufmdata);
                 // VL Pending result alert
                 $alertQuery = $sql->select()->from(array('r'=>'recency'))->columns(array('count'=>new Expression('COUNT(*)')))
                 ->join(array('ufm'=>'user_facility_map'),'r.facility_id=ufm.facility_id',array())
