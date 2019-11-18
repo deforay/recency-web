@@ -4497,8 +4497,8 @@ class RecencyTable extends AbstractTableGateway
     public function fetchPrintResultsDetails($parameters)
     {
         $common = new CommonService();$sessionLogin = new Container('credo');
-        $aColumns = array('r.sample_id', 'DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'r.testing_facility_type','r.final_outcome');
-        $orderColumns = array('r.sample_id', 'r.sample_collection_date', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'r.testing_facility_type', 'ft.final_outcome');
+        $aColumns = array('r.sample_id', 'DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name','r.final_outcome');
+        $orderColumns = array('r.sample_id', 'r.sample_collection_date', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name', 'ft.final_outcome');
 
         /* Paging */
         $sLimit = "";
@@ -4569,7 +4569,8 @@ class RecencyTable extends AbstractTableGateway
         
         $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left');
+        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+        ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -4620,7 +4621,8 @@ class RecencyTable extends AbstractTableGateway
         /* Total data set length */
         $iQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left');
+        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+        ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
         if ($parameters['fName'] != '') {
             $iQuery->where(array('r.facility_id' => $parameters['fName']));
         }
@@ -4665,7 +4667,7 @@ class RecencyTable extends AbstractTableGateway
             $row[] = ucwords($aRow['gender']);
             $row[] = $aRow['age'];
             $row[] = ucwords($aRow['testing_facility_name']);
-            $row[] = ucwords($aRow['testing_facility_type']);
+            $row[] = ucwords($aRow['testing_facility_type_name']);
             $row[] = $aRow['final_outcome'];
             if($aRow['final_outcome'] != ""){
                 $row[] = '<a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>';
