@@ -22,7 +22,6 @@ class UserTable extends AbstractTableGateway {
     }
 
     public function loginProcessDetails($params){
-        $recencyDb = new \Application\Model\RecencyTable($this->adapter);
 		$alertContainer = new Container('alert');
         $logincontainer = new Container('credo');
         $config = new \Zend\Config\Reader\Ini();
@@ -30,8 +29,19 @@ class UserTable extends AbstractTableGateway {
         /* Cross login credential check */
         if((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "")){
             $params['userName'] = base64_decode($params['u']);
-            $params['loginPassword'] = base64_decode($params['t']);
-            $password = base64_decode($params['t']);
+            $check = $this->select(array('email'=>$params['userName']))->current();
+            if($check){
+                $passwordSalt = $check['server_password'].$configResult['vlsm-crosslogin-salt'];
+                $params['loginPassword'] = hash('sha256',$passwordSalt);
+                if($params['loginPassword'] == $params['t']){
+                    $password = $check['server_password'];
+                }else{
+                    $password = "";
+                    $params['loginPassword'] = "";
+                }
+            }else{
+                $params['loginPassword'] = "";
+            }
         }
         if(isset($params['userName']) && trim($params['userName'])!="" && trim($params['loginPassword'])!=""){
             /* Cross login credential check password */
