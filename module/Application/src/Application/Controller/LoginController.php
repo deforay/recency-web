@@ -9,16 +9,26 @@ class LoginController extends AbstractActionController{
 
     public function indexAction(){
         $logincontainer = new Container('credo');
-        $alertContainer = new Container('alert');
-
+        $userService = $this->getServiceLocator()->get('UserService');
         $request = $this->getRequest();
+
         if ($request->isPost()) {
             $params = $request->getPost();
-            // \Zend\Debug\Debug::dump($params);die;
-            $userService = $this->getServiceLocator()->get('UserService');
             $redirectUrl = $userService->loginProcess($params);
-            return $this->redirect()->toRoute($redirectUrl);
+        } 
+        /* Cross login credential check start*/
+        else if($request->getQuery() != ""){
+            $params=$this->getRequest()->getQuery();
+            if(!isset($params['user']) && $params['user'] == ""){
+                $viewModel = new ViewModel();
+                $viewModel->setTerminal(true);
+                return $viewModel;
+            }else{
+                $redirectUrl = $userService->loginProcess($params);
+                return $this->redirect()->toRoute($redirectUrl);
+            }
         }
+        /* Cross login credential check end*/
         if (isset($logincontainer->userId) && $logincontainer->userId != "") {
              $alertContainer = new Container('alert');
             return $this->redirect()->toRoute("home");

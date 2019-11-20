@@ -22,18 +22,27 @@ class UserTable extends AbstractTableGateway {
         $logincontainer = new Container('credo');
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+        /* Cross login credential check */
+        if((isset($params['user']) && $params['user'] != "") && (isset($params['token']) && $params['token'] != "")){
+            $params['userName'] = base64_decode($params['user']);
+            $params['loginPassword'] = base64_decode($params['token']);
+            $password = base64_decode($params['token']);
+        }
         if(isset($params['userName']) && trim($params['userName'])!="" && trim($params['loginPassword'])!=""){
-            $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
+            /* Cross login credential check password */
+            if((!isset($params['user']) && $params['user'] == "") && (!isset($params['token']) && $params['token'] == "")){
+                $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
+            }
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
             $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
             $userFacilityMapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
             $sQuery = $sql->select()->from(array('u' => 'users'))
-                    ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
-				    ->where(array('u.email' => $params['userName'], 'u.server_password' => $password,'u.web_access'=>'yes' ));
+            ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
+            ->where(array('u.email' => $params['userName'], 'u.server_password' => $password,'u.web_access'=>'yes' ));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
+            
             if($rResult) {
                 if($rResult->status=='inactive'){
                     $adminEmail = $globalDb->getGlobalValue('admin_email');
