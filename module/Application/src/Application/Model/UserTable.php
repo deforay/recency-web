@@ -16,6 +16,11 @@ class UserTable extends AbstractTableGateway {
           $this->adapter = $adapter;
     }
 
+    public function fetchLoginUserDetials(){
+        $logincontainer = new Container('credo');
+        return $this->select(array('user_id'=>$logincontainer->userId))->current();
+    }
+
     public function loginProcessDetails($params){
         $recencyDb = new \Application\Model\RecencyTable($this->adapter);
 		$alertContainer = new Container('alert');
@@ -23,14 +28,14 @@ class UserTable extends AbstractTableGateway {
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         /* Cross login credential check */
-        if((isset($params['user']) && $params['user'] != "") && (isset($params['token']) && $params['token'] != "")){
-            $params['userName'] = base64_decode($params['user']);
-            $params['loginPassword'] = base64_decode($params['token']);
-            $password = base64_decode($params['token']);
+        if((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "")){
+            $params['userName'] = base64_decode($params['u']);
+            $params['loginPassword'] = base64_decode($params['t']);
+            $password = base64_decode($params['t']);
         }
         if(isset($params['userName']) && trim($params['userName'])!="" && trim($params['loginPassword'])!=""){
             /* Cross login credential check password */
-            if((!isset($params['user']) && $params['user'] == "") && (!isset($params['token']) && $params['token'] == "")){
+            if((!isset($params['u']) && $params['u'] == "") && (!isset($params['t']) && $params['t'] == "")){
                 $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
             }
             $dbAdapter = $this->adapter;

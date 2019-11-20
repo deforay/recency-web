@@ -324,6 +324,7 @@ return array(
           'invokables' => array(
                'category_helper' => 'Application\View\Helper\CategoryHelper',
                'global_config_helper' => 'Application\View\Helper\GlobalConfigHelper',
+               'user_cross_login_helper' => 'Application\View\Helper\UserCrossLoginHelper',
 
           )
      ),

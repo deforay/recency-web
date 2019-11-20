@@ -19,7 +19,7 @@ class LoginController extends AbstractActionController{
         /* Cross login credential check start*/
         else if($request->getQuery() != ""){
             $params=$this->getRequest()->getQuery();
-            if(!isset($params['user']) && $params['user'] == ""){
+            if(!isset($params['u']) && $params['u'] == ""){
                 $viewModel = new ViewModel();
                 $viewModel->setTerminal(true);
                 return $viewModel;

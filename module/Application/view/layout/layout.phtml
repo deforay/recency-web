@@ -8,7 +8,11 @@ $role = $sessionLogin->roleId;
 $roleCode = $sessionLogin->roleCode;
 $userName = $sessionLogin->userName;
 $GlobalConfigRes = $this->GlobalConfigHelper();
-//\Zend\Debug\Debug::dump($GlobalConfigRes);die;
+/* Crosss Login Block Start */
+$userCrossLoginRes = $this->UserCrossLoginHelper();
+$config = new \Zend\Config\Reader\Ini();
+$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+/* Crosss Login Block End */
 $dashboardMenu = "";
 $dashboardMenu .= "<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
 $dashboardMenu .= "<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=" . $this->url('analysis-dashboard') . "><span class='nav-main-link-name'>Analysis</span></a></li>";
@@ -287,6 +291,13 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                     <div>
                          <!-- User Dropdown -->
                          <div class="dropdown d-inline-block">
+                              <!-- Crosss Login Block Start -->
+                              <?php if($configResult['vlsm-crosslogin']){?>
+                                   <a class="btn btn-dual" target="_blank" href="<?php echo $configResult['vlsm']['domain'].'loginProcess.php?u='.base64_encode($userCrossLoginRes['email']).'&t='.base64_encode($userCrossLoginRes['server_password']).'&name='.base64_encode($userCrossLoginRes['user_name']);?>">
+                                        <span class="d-none d-sm-inline-block"><i class="fa fa-external-link-alt" style=" font-size: 14px; "></i> VLSM</span>
+                                   </a>
+                              <?php }?>
+                              <!-- Crosss Login Block End -->
                               <button type="button" class="btn btn-dual" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                    <i class="fa fa-fw fa-user d-sm-none"></i>
                                    <span class="d-none d-sm-inline-block"><?php echo $userName; ?></span>
