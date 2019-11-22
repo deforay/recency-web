@@ -16,6 +16,18 @@ return array(
                          ),
                     ),
                ),
+               'api-password' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/update-password[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\UpdatePassword',
+                         ),
+                    ),
+               ),
 
                'api-facility' => array(
                     'type'    => 'segment',
@@ -236,6 +248,7 @@ return array(
      'controllers' => array(
           'invokables' => array(
                'Api\Controller\Login'                  => 'Api\Controller\LoginController',
+               'Api\Controller\UpdatePassword'         => 'Api\Controller\UpdatePasswordController',
                'Api\Controller\Facility'               => 'Api\Controller\FacilityController',
                'Api\Controller\Recency'                => 'Api\Controller\RecencyController',
                'Api\Controller\RecencyResultWithVl'    => 'Api\Controller\RecencyResultWithVlController',

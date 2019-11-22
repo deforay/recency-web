@@ -330,6 +330,20 @@ class UserTable extends AbstractTableGateway {
 
             );
             if($params['servPass']!=''){
+                if($configResult['vlsm-crosslogin']){
+                    $client = new \GuzzleHttp\Client();
+                    $url = $configResult['vlsm']['domain'];
+                    $result = $client->post($url.'users/editProfileHelper.php', [
+                        'form_params' => [
+                            'u' => $params['email'],
+                            't' => sha1($params['servPass'] . $configResult["password"]["salt"])
+                        ]
+                    ]);
+                    $response = json_decode($result->getBody()->getContents());
+                    if(isset($response->status) && $response->status != 'success'){
+                        error_log('VLSM profile not updated');
+                    }
+                }
                 $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
                 $data['server_password'] = $password;
             }
@@ -418,14 +432,49 @@ class UserTable extends AbstractTableGateway {
                 'comments' => $params['comments'],
             );
             if($params['servPass']!=''){
+                if($configResult['vlsm-crosslogin']){
+                    $client = new \GuzzleHttp\Client();
+                    $url = $configResult['vlsm']['domain'];
+                    $result = $client->post($url.'users/editProfileHelper.php', [
+                        'form_params' => [
+                            'u' => $params['email'],
+                            't' => sha1($params['servPass'] . $configResult["password"]["salt"])
+                        ]
+                    ]);
+                    $response = json_decode($result->getBody()->getContents());
+                    if(isset($response->status) && $response->status != 'success'){
+                        error_log('VLSM profile not updated for the user->'.$params['userName']);
+                    }
+                }
                 $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
                 $data['server_password'] = $password;
             }
-
             $updateResult = $this->update($data,array('user_id'=>base64_decode($params['userId'])));
-            $lastInsertedId = base64_decode($params['userId']);
         }
-        return $lastInsertedId;
+        return $updateResult;
+    }
+
+    public function updatePasswordFromVLSMAPI($params){
+        $upId = 0;$response = array();
+        $check = $this->select(array('email'=>$params['u']))->current();
+        if($check){
+            $data = array(
+                'email'=>$params['u'],
+                'server_password'=>$params['t']
+            );
+            $upId = $this->update($data,array('user_id'=>$check['user_id']));
+            if($upId > 0){
+                $response['status'] = "success";
+                $response['message'] = "Profile updated successfully!";
+            }else{
+                $response['status'] = "fail";
+                $response['message'] = "Profile not updated!";
+            }
+        }else{
+            $response['status'] = "fail";
+            $response['message'] = "Profile not updated!";
+        }
+        return $response;
     }
 }
 ?>
