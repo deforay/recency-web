@@ -42,7 +42,6 @@ class LoginController extends AbstractActionController{
     public function logoutAction()
     {
         $logincontainer = new Container('credo');
-        $alertContainer = new Container('alert');
         $logincontainer->roleId = "";
         $logincontainer->roleCode = ""; 
 

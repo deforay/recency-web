@@ -295,7 +295,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                               <?php if($configResult['vlsm-crosslogin']){
                                    $passwordSalt = $userCrossLoginRes['server_password'].$configResult['vlsm-crosslogin-salt'];
                                    $token = hash('sha256',$passwordSalt);?>
-                                   <a class="btn btn-dual" target="_blank" href="<?php echo $configResult['vlsm']['domain'].'loginProcess.php?u='.base64_encode($userCrossLoginRes['email']).'&t='.$token.'&name='.base64_encode($userCrossLoginRes['user_name']);?>">
+                                   <a class="btn btn-dual" target="_blank" onclick="setCrossLogin();" href="<?php echo $configResult['vlsm']['domain'].'loginProcess.php?u='.base64_encode($userCrossLoginRes['email']).'&t='.$token.'&name='.base64_encode($userCrossLoginRes['user_name']);?>">
                                         <span class="d-none d-sm-inline-block"><i class="fa fa-external-link-alt" style=" font-size: 14px; "></i> VLSM</span>
                                    </a>
                               <?php }?>
@@ -311,7 +311,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                                              <i class="far fa-fw fa-user mr-1"></i> Edit Profile
                                         </a>
                                         <div role="separator" class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="/logout">
+                                        <a class="dropdown-item" onclick="checkCrossLogin(this);" href="/logout">
                                              <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> Sign Out
                                         </a>
 
@@ -478,6 +478,23 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                     $('#' + splitsUrl[1]).addClass('active');
                }
           });
+          function setCrossLogin(){
+               if (typeof(Storage) !== "undefined") {
+                    sessionStorage.setItem("crosslogin", "true");
+               }else{
+                    alert("Your browser doesn't support the session!");
+                    sessionStorage.setItem("crosslogin", "false");
+               }
+          }
+          
+          function checkCrossLogin(obj){
+          <?php if($configResult['vlsm-crosslogin']){?>
+               if(sessionStorage.getItem("crosslogin") == "true"){
+                    window.open('<?php echo $configResult['vlsm']['domain'].'logout.php';?>', '_blank');
+				sessionStorage.setItem("crosslogin", "false");
+			}
+          <?php }?>
+          }
      </script>
 </body>
 
