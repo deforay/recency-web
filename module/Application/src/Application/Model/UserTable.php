@@ -16,36 +16,67 @@ class UserTable extends AbstractTableGateway {
           $this->adapter = $adapter;
     }
 
+    public function fetchLoginUserDetials(){
+        $logincontainer = new Container('credo');
+        return $this->select(array('user_id'=>$logincontainer->userId))->current();
+    }
+
     public function loginProcessDetails($params){
-        $recencyDb = new \Application\Model\RecencyTable($this->adapter);
 		$alertContainer = new Container('alert');
         $logincontainer = new Container('credo');
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+        /* Cross login credential check */
+        if((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "")){
+            $params['userName'] = base64_decode($params['u']);
+            $check = $this->select(array('email'=>$params['userName']))->current();
+            if($check){
+                $passwordSalt = $check['server_password'].$configResult['vlsm-crosslogin-salt'];
+                $params['loginPassword'] = hash('sha256',$passwordSalt);
+                if($params['loginPassword'] == $params['t']){
+                    $password = $check['server_password'];
+                }else{
+                    $password = "";
+                    $params['loginPassword'] = "";
+                }
+            }else{
+                $params['loginPassword'] = "";
+            }
+        }
         if(isset($params['userName']) && trim($params['userName'])!="" && trim($params['loginPassword'])!=""){
-            $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
+            /* Cross login credential check password */
+            if((!isset($params['u']) && $params['u'] == "") && (!isset($params['t']) && $params['t'] == "")){
+                $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
+            }
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
             $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
+            $userFacilityMapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
             $sQuery = $sql->select()->from(array('u' => 'users'))
-                    ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
-				    ->where(array('u.email' => $params['userName'], 'u.server_password' => $password,'u.web_access'=>'yes' ));
+            ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
+            ->where(array('u.email' => $params['userName'], 'u.server_password' => $password,'u.web_access'=>'yes' ));
             $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
+            
             if($rResult) {
                 if($rResult->status=='inactive'){
                     $adminEmail = $globalDb->getGlobalValue('admin_email');
                     $adminPhone = $globalDb->getGlobalValue('admin_phone');
 
                     $alertContainer->alertMsg = 'Your password has expired or has been locked, please contact your administrator('.$adminEmail.' or '.$adminPhone.')';
-                return 'login';
+                    return 'login';
+                }
+                $ufmResult = $userFacilityMapDb->select(array('user_id'=>$rResult->user_id))->toArray();
+                $ufmdata = array();
+                foreach($ufmResult as $val){
+                    array_push($ufmdata,$val['facility_id']);
                 }
                 $logincontainer->userId = $rResult->user_id;
                 $logincontainer->roleId = $rResult->role_id;
                 $logincontainer->roleCode = $rResult->role_code;
                 $logincontainer->userName = ucwords($rResult->user_name);
                 $logincontainer->userEmail = ucwords($rResult->email);
+                $logincontainer->facilityMap = implode(',',$ufmdata);
                 // VL Pending result alert
                 $alertQuery = $sql->select()->from(array('r'=>'recency'))->columns(array('count'=>new Expression('COUNT(*)')))
                 ->join(array('ufm'=>'user_facility_map'),'r.facility_id=ufm.facility_id',array())
@@ -299,6 +330,20 @@ class UserTable extends AbstractTableGateway {
 
             );
             if($params['servPass']!=''){
+                if($configResult['vlsm-crosslogin']){
+                    $client = new \GuzzleHttp\Client();
+                    $url = $configResult['vlsm']['domain'];
+                    $result = $client->post($url.'users/editProfileHelper.php', [
+                        'form_params' => [
+                            'u' => $params['email'],
+                            't' => sha1($params['servPass'] . $configResult["password"]["salt"])
+                        ]
+                    ]);
+                    $response = json_decode($result->getBody()->getContents());
+                    if(isset($response->status) && $response->status != 'success'){
+                        error_log('VLSM profile not updated');
+                    }
+                }
                 $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
                 $data['server_password'] = $password;
             }
@@ -387,14 +432,49 @@ class UserTable extends AbstractTableGateway {
                 'comments' => $params['comments'],
             );
             if($params['servPass']!=''){
+                if($configResult['vlsm-crosslogin']){
+                    $client = new \GuzzleHttp\Client();
+                    $url = $configResult['vlsm']['domain'];
+                    $result = $client->post($url.'users/editProfileHelper.php', [
+                        'form_params' => [
+                            'u' => $params['email'],
+                            't' => sha1($params['servPass'] . $configResult["password"]["salt"])
+                        ]
+                    ]);
+                    $response = json_decode($result->getBody()->getContents());
+                    if(isset($response->status) && $response->status != 'success'){
+                        error_log('VLSM profile not updated for the user->'.$params['userName']);
+                    }
+                }
                 $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
                 $data['server_password'] = $password;
             }
-
             $updateResult = $this->update($data,array('user_id'=>base64_decode($params['userId'])));
-            $lastInsertedId = base64_decode($params['userId']);
         }
-        return $lastInsertedId;
+        return $updateResult;
+    }
+
+    public function updatePasswordFromVLSMAPI($params){
+        $upId = 0;$response = array();
+        $check = $this->select(array('email'=>$params['u']))->current();
+        if($check){
+            $data = array(
+                'email'=>$params['u'],
+                'server_password'=>$params['t']
+            );
+            $upId = $this->update($data,array('user_id'=>$check['user_id']));
+            if($upId > 0){
+                $response['status'] = "success";
+                $response['message'] = "Profile updated successfully!";
+            }else{
+                $response['status'] = "fail";
+                $response['message'] = "Profile not updated!";
+            }
+        }else{
+            $response['status'] = "fail";
+            $response['message'] = "Profile not updated!";
+        }
+        return $response;
     }
 }
 ?>

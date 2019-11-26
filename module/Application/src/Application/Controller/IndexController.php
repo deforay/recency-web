@@ -25,6 +25,10 @@ class IndexController extends AbstractActionController
             $result = $recencyService->getAllRecencyResult($params);
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
+            $logincontainer = new Container('credo');
+            if (isset($logincontainer->roleCode) && $logincontainer->roleCode == "remote_order_user") {
+                return $this->redirect()->toRoute("recency");
+            }
             $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
             $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
             $facilityService = $this->getServiceLocator()->get('FacilitiesService');

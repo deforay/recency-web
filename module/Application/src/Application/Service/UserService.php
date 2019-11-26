@@ -98,6 +98,11 @@ class UserService {
         $userDb = $this->sm->get('UserTable');
         return $userDb->userLoginApi($params);
     }
+    public function updatePasswordAPI($params)
+    {
+        $userDb = $this->sm->get('UserTable');
+        return $userDb->updatePasswordFromVLSMAPI($params);
+    }
     public function updateProfile($params)
     {
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();

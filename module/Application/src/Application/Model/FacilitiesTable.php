@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Model;
 
 use Application\Service\CommonService;
@@ -245,20 +246,18 @@ class FacilitiesTable extends AbstractTableGateway
         $logincontainer = new Container('credo');
         $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
 
-        // if ($logincontainer->roleCode == 'user') {
-        //     $sQuery = $sql->select()->from(array('ufm' => 'user_facility_map'))
-        //         ->join(array('f' => 'facilities'), 'f.facility_id = ufm.facility_id', array('facility_name', 'facility_id'))
-        //         ->where(array('f.status' => 'active', 'ufm.user_id' => $logincontainer->userId));
-        //     $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-        //     $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        // }
-        // //admin
-        // else {
-        $sQuery = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
-            ->where(array('status' => 'active'));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-        $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        //}
+        if ($logincontainer->roleCode == 'remote_order_user') {
+            $sQuery = $sql->select()->from(array('ufm' => 'user_facility_map'))
+                ->join(array('f' => 'facilities'), 'f.facility_id = ufm.facility_id', array('facility_name', 'facility_id'))
+                ->where(array('f.status' => 'active', 'ufm.user_id' => $logincontainer->userId));
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        }else {
+            $sQuery = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
+                ->where(array('status' => 'active'));
+            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        }
         $sQueryTest = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
             ->where(array('f.status' => 'active', 'f.facility_name IS NOT NULL', 'facility_type_id="2"'));
         $sQueryStrTest = $sql->getSqlStringForSqlObject($sQueryTest);
@@ -268,7 +267,8 @@ class FacilitiesTable extends AbstractTableGateway
         return $result;
     }
 
-    public function fetchFacilitiesDetailsApi($params) {
+    public function fetchFacilitiesDetailsApi($params)
+    {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         if ($params['userId'] != '') {
@@ -304,10 +304,10 @@ class FacilitiesTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id', 'facility_name'));
-        if($roleCode != 'admin'){
-            $sQuery = $sQuery->join(array('ufm'=>'user_facility_map'),'f.facility_id=ufm.facility_id',array());
-            $sQuery = $sQuery->join(array('u'=>'users'),'ufm.user_id=u.user_id',array());
-            $sQuery = $sQuery->where(array('u.user_id'=>$sessionLogin->userId));
+        if ($roleCode != 'admin') {
+            $sQuery = $sQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id=ufm.facility_id', array());
+            $sQuery = $sQuery->join(array('u' => 'users'), 'ufm.user_id=u.user_id', array());
+            $sQuery = $sQuery->where(array('u.user_id' => $sessionLogin->userId));
         }
         if ($params['locationOne'] != '') {
             $sQuery = $sQuery->where(array('province' => $params['locationOne']));
