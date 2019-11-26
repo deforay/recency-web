@@ -1315,7 +1315,7 @@ class RecencyTable extends AbstractTableGateway
 
         $sQueryTerm = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'vl_lab', 'vl_request_sent_date_time', 'vl_test_date', 'vl_request_sent', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome'))
             ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
-            ->where('r.vl_result is null')
+            ->where('r.vl_result is null OR r.vl_result=""')
             ->where('r.vl_request_sent != "no"');
 
         if (isset($params['province']) && $params['province'] != '') {
@@ -1329,9 +1329,6 @@ class RecencyTable extends AbstractTableGateway
         }
         if (isset($params['facility']) && $params['facility'] != '') {
             $sQueryTerm = $sQueryTerm->where(array('r.vl_test_date' => $params['vlTestDate']));
-        }
-        if (isset($params['onloadData']) && $params['onloadData'] == 'yes') {
-            $sQueryTerm = $sQueryTerm->where(array('r.vl_result is null OR r.vl_result=""'));
         }
         $sQueryStrTerm = $sql->getSqlStringForSqlObject($sQueryTerm);
         // echo $sQueryStrTerm;die;
@@ -4273,8 +4270,6 @@ class RecencyTable extends AbstractTableGateway
         }
         if (isset($results) && $results > 0) {
             $responseStatus['status'] = 'success';
-        } else {
-            $responseStatus['status'] = 'fail';
         }
         return $responseStatus;
     }
