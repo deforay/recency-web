@@ -311,7 +311,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                                              <i class="far fa-fw fa-user mr-1"></i> Edit Profile
                                         </a>
                                         <div role="separator" class="dropdown-divider"></div>
-                                        <a class="dropdown-item" onclick="checkCrossLogin(this);" href="/logout">
+                                        <a class="dropdown-item" href="/logout">
                                              <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> Sign Out
                                         </a>
 
@@ -485,15 +485,6 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                     alert("Your browser doesn't support the session!");
                     sessionStorage.setItem("crosslogin", "false");
                }
-          }
-          
-          function checkCrossLogin(obj){
-          <?php if($configResult['vlsm-crosslogin']){?>
-               if(sessionStorage.getItem("crosslogin") == "true"){
-                    window.open('<?php echo $configResult['vlsm']['domain'].'logout.php';?>', '_blank');
-				sessionStorage.setItem("crosslogin", "false");
-			}
-          <?php }?>
           }
      </script>
 </body>
