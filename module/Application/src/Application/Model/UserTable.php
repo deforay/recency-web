@@ -97,7 +97,7 @@ class UserTable extends AbstractTableGateway {
                 }else if($rResult->role_code == 'manager'){
                     return 'recency';
                 }else{
-                    return 'facilities';
+                    return 'recency';
                 }
             }else {
                 $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
