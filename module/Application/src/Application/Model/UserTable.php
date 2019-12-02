@@ -27,7 +27,7 @@ class UserTable extends AbstractTableGateway {
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         /* Cross login credential check */
-        if((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "")){
+        if((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "") && $configResult['vlsm-crosslogin']){
             $params['userName'] = base64_decode($params['u']);
             $check = $this->select(array('email'=>$params['userName']))->current();
             if($check){
@@ -41,6 +41,11 @@ class UserTable extends AbstractTableGateway {
                 }
             }else{
                 $params['loginPassword'] = "";
+            }
+        }else{
+            if(!$configResult['vlsm-crosslogin']){
+                $alertContainer->alertMsg = 'Cross login not activated in recency!';
+                return 'login';
             }
         }
         if(isset($params['userName']) && trim($params['userName'])!="" && trim($params['loginPassword'])!=""){

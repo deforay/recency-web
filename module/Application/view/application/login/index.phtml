@@ -4,6 +4,8 @@ use Zend\Session\Container;
 
 $container = new Container('alert');
 $loginContainer = new Container('credo');
+$config = new \Zend\Config\Reader\Ini();
+$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 ?>
 <!doctype html>
 <html lang="en">
@@ -121,10 +123,15 @@ $loginContainer = new Container('credo');
     <script src="<?php echo $this->basePath() . '/assets/js/deforayValidation.js'; ?>"></script>
     <script src="<?php echo $this->basePath() . '/assets/js/plugins/jquery-validation/jquery.validate.min.js'; ?>"></script>
 
-
     <script type="text/javascript">
         duplicateName = true;
         $(document).ready(function() {
+            <?php if($configResult['vlsm-crosslogin']){?>
+                if(sessionStorage.getItem("crosslogin") == "true"){
+                    window.location.href = '<?php echo rtrim($configResult['vlsm']['domain'], "/") . '/logout.php';?>';
+                    sessionStorage.setItem("crosslogin", "false");
+                }
+            <?php }?>
             <?php
             if (isset($container->alertMsg) && $container->alertMsg != "") {
                 ?>
