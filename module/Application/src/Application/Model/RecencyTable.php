@@ -752,6 +752,7 @@ class RecencyTable extends AbstractTableGateway
             //            {
             //             $data['final_outcome'] = 'Assay Negative';
             //            }
+            
             $updateResult = $this->update($data, array('recency_id' => $params['recencyId']));
         }
         if ($updateResult > 0) {

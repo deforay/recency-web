@@ -408,3 +408,5 @@ ALTER TABLE recency_change_trails DROP INDEX unique_id;
 
 -- Thanaseelan traking final_outcome and term_outcome and remote_order 11-Dec-2019
 ALTER TABLE `recency` ADD `assay_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `invalid_longterm_line`, ADD `assay_outcome_updated_on` DATETIME NULL AFTER `assay_outcome_updated_by`, ADD `final_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `assay_outcome_updated_on`, ADD `final_outcome_updated_on` DATETIME NULL AFTER `final_outcome_updated_by`, ADD `remote_order` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `final_outcome_updated_on`;
+-- And recency_change_trails table
+ALTER TABLE `recency_change_trails` ADD `assay_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `invalid_longterm_line`, ADD `assay_outcome_updated_on` DATETIME NULL AFTER `assay_outcome_updated_by`, ADD `final_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `assay_outcome_updated_on`, ADD `final_outcome_updated_on` DATETIME NULL AFTER `final_outcome_updated_by`, ADD `remote_order` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `final_outcome_updated_on`;
