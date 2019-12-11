@@ -405,3 +405,6 @@ ALTER TABLE `recency_change_trails` ADD `modified_on` DATETIME NULL DEFAULT NULL
 -- Thanaseelan creating the new role name as remote user 18-Nov-2019
 INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `role_status`) VALUES (NULL, 'Remote Order User', 'remote_order_user', 'active');
 ALTER TABLE recency_change_trails DROP INDEX unique_id;
+
+-- Thanaseelan traking final_outcome and term_outcome and remote_order 11-Dec-2019
+ALTER TABLE `recency` ADD `assay_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `invalid_longterm_line`, ADD `assay_outcome_updated_on` DATETIME NULL AFTER `assay_outcome_updated_by`, ADD `final_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `assay_outcome_updated_on`, ADD `final_outcome_updated_on` DATETIME NULL AFTER `final_outcome_updated_by`, ADD `remote_order` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `final_outcome_updated_on`;

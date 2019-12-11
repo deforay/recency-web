@@ -506,6 +506,18 @@ class RecencyTable extends AbstractTableGateway
                 $data['vl_result_entry_date'] = date("Y-m-d H:i:s");
             }
 
+            if((isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "") || (isset($params['outcomeData']) && $params['outcomeData'] != "")){
+                $data['assay_outcome_updated_by']       = $logincontainer->userId;
+                $data['assay_outcome_updated_on']       = $common->getDateTime();
+            }
+            if(isset($params['vlfinaloutcomeResult']) && $params['vlfinaloutcomeResult'] != ""){
+                $data['final_outcome_updated_by']       = $logincontainer->userId;
+                $data['final_outcome_updated_on']       = $common->getDateTime();
+            }
+            if($logincontainer->roleCode == 'remote_order_user'){
+                $data['remote_order']       = 'yes';
+            }
+
             //  if (strpos($params['outcomeData'], 'Long Term') !== false){
             //       $data['final_outcome'] = 'Long Term';
             //  }else if (strpos($params['outcomeData'], 'Invalid') !== false){
@@ -717,6 +729,17 @@ class RecencyTable extends AbstractTableGateway
                 $data['vl_result'] = $params['vlLoadResult'];
             } else if ($params['vlResultOption']) {
                 $data['vl_result'] = htmlentities($params['vlResultOption']);
+            }
+            if((isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "") || (isset($params['outcomeData']) && $params['outcomeData'] != "")){
+                $data['assay_outcome_updated_by']       = $logincontainer->userId;
+                $data['assay_outcome_updated_on']       = $common->getDateTime();
+            }
+            if(isset($params['vlfinaloutcomeResult']) && $params['vlfinaloutcomeResult'] != ""){
+                $data['final_outcome_updated_by']       = $logincontainer->userId;
+                $data['final_outcome_updated_on']       = $common->getDateTime();
+            }
+            if($logincontainer->roleCode == 'remote_order_user'){
+                $data['remote_order']       = 'yes';
             }
             //  if (strpos($params['outcomeData'], 'Long Term') !== false)
             //            {
@@ -1075,6 +1098,8 @@ class RecencyTable extends AbstractTableGateway
                         }
                         if ($recency['finalOutcome'] != '') {
                             $data['final_outcome'] = $recency['finalOutcome'];
+                            $data['final_outcome_updated_by']       = $recency['addedBy'];
+                            $data['final_outcome_updated_on']       = $common->getDateTime();
                         }
 
                         if (isset($recency['vlTestDate']) && trim($recency['vlTestDate']) != "") {
@@ -1093,6 +1118,12 @@ class RecencyTable extends AbstractTableGateway
                         if (isset($recency['testKitExpDate']) && trim($recency['testKitExpDate']) != "") {
                             $data['kit_expiry_date'] = $common->dbDateFormat($recency['testKitExpDate']);
                         }
+
+                        if(isset($params['recencyOutcome']) && $params['recencyOutcome'] != ""){
+                            $data['assay_outcome_updated_by']       = $recency['addedBy'];
+                            $data['assay_outcome_updated_on']       = $common->getDateTime();
+                        }
+                       
                         //    if (strpos($recency['recencyOutcome'], 'Long Term') !== false)
                         //    {
                         //         $data['final_outcome'] = 'Long Term';
@@ -1193,7 +1224,15 @@ class RecencyTable extends AbstractTableGateway
                     if (isset($params['testKitExpDate']) && trim($params['testKitExpDate']) != "") {
                         $data['kit_expiry_date'] = $common->dbDateFormat($params['testKitExpDate']);
                     }
-
+                    if(isset($params['recencyOutcome']) && $params['recencyOutcome'] != ""){
+                        $data['assay_outcome_updated_by']       = $params['addedBy'];
+                        $data['assay_outcome_updated_on']       = $params['addedOn'];
+                    }
+                    if(isset($params['finalOutcome']) && $params['finalOutcome'] != ""){
+                        $data['final_outcome_updated_by']       = $params['addedBy'];
+                        $data['final_outcome_updated_on']       = $params['addedOn'];
+                    }
+                    
                     $this->insert($data);
                     $lastInsertedId = $this->lastInsertValue;
                     if ($lastInsertedId > 0) {
@@ -1340,7 +1379,7 @@ class RecencyTable extends AbstractTableGateway
     public function updateVlSampleResult($params)
     {
         //\Zend\Debug\Debug::dump($params);die;
-        $common = new CommonService();
+        $logincontainer = new Container('credo');
         $common = new CommonService();
         $sampleVlResult = explode(",", $params['vlResult']);
         $sampleVlResultId = explode(",", $params['vlResultRowId']);
@@ -1362,6 +1401,13 @@ class RecencyTable extends AbstractTableGateway
                 $data['final_outcome'] = 'RITA Recent';
             } else if ($result <= 1000) {
                 $data['final_outcome'] = 'Long Term';
+            }
+            if(isset($data['final_outcome']) && $data['final_outcome'] != ""){
+                $data['final_outcome_updated_by']       = $logincontainer->userId;
+                $data['final_outcome_updated_on']       = $common->getDateTime();
+            }
+            if($logincontainer->roleCode == 'remote_order_user'){
+                $data['remote_order']       = 'yes';
             }
 
             $this->update($data, array('recency_id' => str_replace('vlResultOption', '', $sampleVlResultId[$key])));
@@ -1995,7 +2041,7 @@ class RecencyTable extends AbstractTableGateway
     public function updateFinalOutcome($fOutCome)
     {
         $recencyId = $fOutCome['recency_id'];
-
+        $logincontainer = new Container('credo');
         if ((in_array(strtolower($fOutCome['vl_result']), $this->vlFailOptionArray))) {
             $data['final_outcome'] = 'Inconclusive';
         } else if ((in_array(strtolower($fOutCome['vl_result']), $this->vlResultOptionArray))) {
@@ -2005,12 +2051,21 @@ class RecencyTable extends AbstractTableGateway
         } else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
             $data['final_outcome'] = 'Long Term';
         }
+        if(isset($data['final_outcome']) && $data['final_outcome'] != ""){
+            $data['final_outcome_updated_by']       = $logincontainer->userId;
+            $data['final_outcome_updated_on']       = $common->getDateTime();
+        }
+        if($logincontainer->roleCode == 'remote_order_user'){
+            $data['remote_order']       = 'yes';
+        }
         $this->update($data, array('recency_id' => $recencyId));
     }
 
     //refer updateOutcome Function
     public function updateTermOutcome($outcome)
     {
+        $common = new CommonService();
+        $logincontainer = new Container('credo');
         $controlLine = $outcome['control_line'];
         $positiveControlLine = $outcome['positive_verification_line'];
         $longControlLine = $outcome['long_term_verification_line'];
@@ -2021,14 +2076,22 @@ class RecencyTable extends AbstractTableGateway
             || ($controlLine == 'absent' && $positiveControlLine == 'present' && $longControlLine == 'present')
             || ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'present')
         ) {
-            $this->update(array('term_outcome' => 'Invalid â€“ Please Verify'), array('recency_id' => $recencyId));
+            $data = array('term_outcome' => 'Invalid â€“ Please Verify');
         } else if ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'absent') {
-            $this->update(array('term_outcome' => 'Assay Negative'), array('recency_id' => $recencyId));
+            $data = array('term_outcome' => 'Assay Negative');
         } else if ($controlLine == 'present' && $positiveControlLine == 'present' && $longControlLine == 'absent') {
-            $this->update(array('term_outcome' => 'Assay Recent'), array('recency_id' => $recencyId));
+            $data = array('term_outcome' => 'Assay Recent');
         } else if ($controlLine == 'present' && $positiveControlLine == 'present' && $longControlLine == 'present') {
-            $this->update(array('term_outcome' => 'Long Term'), array('recency_id' => $recencyId));
+            $data = array('term_outcome' => 'Long Term');
         }
+        if(isset($data['term_outcome']) && $data['term_outcome'] != ""){
+            $data['assay_outcome_updated_by']       = $logincontainer->userId;
+            $data['assay_outcome_updated_on']       = $common->getDateTime();
+        }
+        if($logincontainer->roleCode == 'remote_order_user'){
+            $data['remote_order']       = 'yes';
+        }
+        $this->update($data,array('recency_id' => $recencyId));
     }
 
     public function vlsmSync($sm)
