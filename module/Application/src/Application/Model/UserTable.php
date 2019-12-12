@@ -24,10 +24,17 @@ class UserTable extends AbstractTableGateway {
     public function loginProcessDetails($params){
 		$alertContainer = new Container('alert');
         $logincontainer = new Container('credo');
+        $captchaSession = new Container('captcha');
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+        if(!isset($captchaSession->status) || empty($captchaSession->status) || $captchaSession->status == 'fail'){
+            $alertContainer->alertMsg = 'Please check if you entered the text from image correctly';
+            return 'login';
+        }
         /* Cross login credential check */
         if((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "") && $configResult['vlsm-crosslogin']){
+            $params['u'] = filter_var($params['u'], FILTER_SANITIZE_STRING);
+            $params['t'] = filter_var($params['t'], FILTER_SANITIZE_STRING);
             $params['userName'] = base64_decode($params['u']);
             $check = $this->select(array('email'=>$params['userName']))->current();
             if($check){

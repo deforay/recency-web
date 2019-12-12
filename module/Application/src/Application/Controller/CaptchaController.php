@@ -20,10 +20,13 @@ class CaptchaController extends AbstractActionController
         if ($request->isPost()) {
             $params = $request->getPost();
             $captchaSession = new Container('captcha');
+            $params['challenge_field'] = filter_var($params['challenge_field'], FILTER_SANITIZE_STRING);
             if ($captchaSession->code == $params['challenge_field']) {
                 $result = "success";
+                $captchaSession->status = 'success';
             } else {
                  $result = "fail";
+                 $captchaSession->status = 'fail';
             }
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result'=>$result));
