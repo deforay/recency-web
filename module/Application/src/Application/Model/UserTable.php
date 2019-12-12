@@ -50,7 +50,7 @@ class UserTable extends AbstractTableGateway {
                 $params['loginPassword'] = "";
             }
         }else{
-            if(!$configResult['vlsm-crosslogin']){
+            if(!$configResult['vlsm-crosslogin'] && !isset($params['userName']) && trim($params['userName']) ==""){
                 $alertContainer->alertMsg = 'Cross login not activated in recency!';
                 return 'login';
             }
