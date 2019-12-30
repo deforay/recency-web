@@ -246,23 +246,24 @@ class FacilitiesTable extends AbstractTableGateway
         $logincontainer = new Container('credo');
         $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
 
-        if ($logincontainer->roleCode == 'remote_order_user') {
-            $sQuery = $sql->select()->from(array('ufm' => 'user_facility_map'))
-                ->join(array('f' => 'facilities'), 'f.facility_id = ufm.facility_id', array('facility_name', 'facility_id'))
-                ->where(array('f.status' => 'active', 'ufm.user_id' => $logincontainer->userId));
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id','facility_name','facility_type_id'));
+        if (isset($logincontainer->facilityMap) && $logincontainer->facilityMap != null && $logincontainer->facilityMap != "") {
+            $sQuery = $sQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
+            ->where(array('f.status' => 'active', 'f.facility_id IN ('.$logincontainer->facilityMap.')'));
         }else {
-            $sQuery = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
-                ->where(array('status' => 'active'));
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-            $result['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+            $sQuery = $sQuery->where(array('status' => 'active'));
         }
-        $sQueryTest = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
-            ->where(array('f.status' => 'active', 'f.facility_name IS NOT NULL', 'facility_type_id="2"'));
-        $sQueryStrTest = $sql->getSqlStringForSqlObject($sQueryTest);
-        $result['facilityTest'] = $dbAdapter->query($sQueryStrTest, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $fetchResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
+        foreach($fetchResult as $key=>$row){
+            if(isset($row['facility_type_id']) && $row['facility_type_id'] == '2'){
+                $result['facilityTest'][$key]['facility_id'] = $row['facility_id'];
+                $result['facilityTest'][$key]['facility_name'] = $row['facility_name'];
+            }
+            $result['facility'][$key]['facility_id'] = $row['facility_id'];
+            $result['facility'][$key]['facility_name'] = $row['facility_name'];
+        }
         $result['riskPopulations'] = $riskPopulationsDb->select()->toArray();
         return $result;
     }

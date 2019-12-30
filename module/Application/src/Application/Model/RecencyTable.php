@@ -2150,15 +2150,15 @@ class RecencyTable extends AbstractTableGateway
                 array(
                     "Samples Received" => new Expression("COUNT(*)"),
                     "Samples Collected" => new Expression("SUM(CASE
-                                                                                WHEN (((r.sample_collection_date is NOT NULL AND r.sample_collection_date !=''))) THEN 1
+                                                                                WHEN (r.sample_collection_date is NOT NULL AND r.sample_collection_date !='') THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Samples Pending to be Tested" => new Expression("SUM(CASE
-                                                                                WHEN (((r.term_outcome is NULL OR r.term_outcome =''))) THEN 1
+                                                                                WHEN (r.term_outcome is NULL OR r.term_outcome ='') THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Samples Tested" => new Expression("SUM(CASE
-                                                                                WHEN (((r.isset(term_outcome) && term_outcome !=''))) THEN 1
+                                                                                WHEN (r.term_outcome IS NOT NULL && term_outcome !='') THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Assay Recent" => new Expression("SUM(CASE
@@ -2166,11 +2166,11 @@ class RecencyTable extends AbstractTableGateway
                                                                                     ELSE 0
                                                                                     END)"),
                     "Long Term" => new Expression("SUM(CASE
-                                                                                WHEN ((term_outcome='Long Term' OR term_outcome='long term')) THEN 1
+                                                                                WHEN (term_outcome='Long Term' OR term_outcome='long term') THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Assay Negative" => new Expression("SUM(CASE
-                                                                                WHEN ((term_outcome='Assay Negative' OR term_outcome='assay negative')) THEN 1
+                                                                                WHEN (term_outcome='Assay Negative' OR term_outcome='assay negative') THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "VL Done" => new Expression("SUM(CASE
@@ -2182,15 +2182,15 @@ class RecencyTable extends AbstractTableGateway
                                                                                 ELSE 0
                                                                                 END)"),
                     "RITA Recent" => new Expression("SUM(CASE
-                                                                                WHEN ((final_outcome='RITA Recent' OR final_outcome='RITA recent')) THEN 1
+                                                                                WHEN (final_outcome='RITA Recent' OR final_outcome='RITA recent') THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Long Term Final" => new Expression("SUM(CASE
-                                                                                WHEN ((final_outcome='Long Term' OR final_outcome='long term')) THEN 1
+                                                                                WHEN (final_outcome='Long Term' OR final_outcome='long term') THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Inconclusive" => new Expression("SUM(CASE
-                                                                                WHEN ((final_outcome='Inconclusive' OR final_outcome='inconclusive')) THEN 1
+                                                                                WHEN (final_outcome='Inconclusive' OR final_outcome='inconclusive') THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                 )

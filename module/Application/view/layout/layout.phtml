@@ -4,6 +4,7 @@ use Zend\Session\Container;
 
 $alertContainer = new Container('alert');
 $sessionLogin = new Container('credo');
+// \Zend\Debug\Debug::dump($sessionLogin->facilityMap);die;
 $role = $sessionLogin->roleId;
 $roleCode = $sessionLogin->roleCode;
 $userName = $sessionLogin->userName;
@@ -58,6 +59,7 @@ $weeklyReportMenu = "<li id='nav-main-item'><a id='weekly-report' class='nav-mai
 
 $qcReportMenu = "";
 $qcReportMenu = "<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'qc-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
+$modality = "";
 if($roleCode == 'admin' || $roleCode == 'manager'){
      $modality = "<li id='nav-main-item'><a id='age-wise-infection-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'age-wise-infection-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Age-wise Infection Report</span></a></li>";
 }
