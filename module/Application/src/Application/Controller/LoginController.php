@@ -19,6 +19,8 @@ class LoginController extends AbstractActionController{
         /* Cross login credential check start*/
         else if($request->getQuery() != ""){
             $params=$this->getRequest()->getQuery();
+            $captchaSession = new Container('captcha');
+            $captchaSession->status = 'success'; // bypassing captcha            
             if(!isset($params['u']) && $params['u'] == ""){
                 $viewModel = new ViewModel();
                 $viewModel->setTerminal(true);
@@ -30,7 +32,7 @@ class LoginController extends AbstractActionController{
         }
         /* Cross login credential check end*/
         if (isset($logincontainer->userId) && $logincontainer->userId != "") {
-             $alertContainer = new Container('alert');
+             //$alertContainer = new Container('alert');
             return $this->redirect()->toRoute("home");
         } else {
             $viewModel = new ViewModel();

@@ -27,7 +27,7 @@ class UserTable extends AbstractTableGateway {
         $captchaSession = new Container('captcha');
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-        if(!isset($captchaSession->status) || empty($captchaSession->status) || $captchaSession->status == 'fail'){
+        if(!isset($captchaSession) || empty($captchaSession->status) || $captchaSession->status == 'fail'){
             $alertContainer->alertMsg = 'Please check if you entered the text from image correctly';
             return 'login';
         }
