@@ -80,9 +80,11 @@ $ageArray = array('15-19','20-24','25-29','30-34','35-39','40-44','45-49','50+')
 					<?php } ?>
 				</select>
 			</div>
+            <?php if($roleCode == 'admin' || $roleCode == 'manager'){ ?>
 			<div class="items-push col-lg-2" style=" margin-top: 10px; ">
                 <a href="javascript:void(0);" class="btn btn-hero-success" onclick="exportReport();"><i class="fa fa-fw fa-download"></i> Export Excel</a>
             </div>
+            <?php }?>
             <div class="items-push col-lg-2" style=" margin-top: 10px; ">
                 <a href="javascript:void(0);" class="btn btn-hero-primary" onclick="getReport();"><i class="fa fa-fw fa-search"></i> Search</a>
             </div>
