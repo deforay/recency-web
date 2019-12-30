@@ -4,6 +4,8 @@ use Zend\Session\Container;
 
 $container = new Container('alert');
 $loginContainer = new Container('credo');
+$crossLoginSession = new Container('crossLogin');
+
 $config = new \Zend\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 ?>
@@ -128,11 +130,11 @@ $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $(document).ready(function() {
             <?php if($configResult['vlsm-crosslogin']){?>
                 if(sessionStorage.getItem("crosslogin") == "true"){
-                    window.location.href = '<?php echo rtrim($configResult['vlsm']['domain'], "/") . '/logout.php';?>';
                     sessionStorage.setItem("crosslogin", "false");
+                    <?php $crossLoginSession->logged = false;?>
+                    window.location.href = '<?php echo rtrim($configResult['vlsm']['domain'], "/") . '/logout.php';?>';
                 }
-            <?php }?>
-            <?php
+            <?php }
             if (isset($container->alertMsg) && $container->alertMsg != "") {
                 ?>
             alert("<?php echo $container->alertMsg; ?>");

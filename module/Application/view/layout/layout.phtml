@@ -4,7 +4,8 @@ use Zend\Session\Container;
 
 $alertContainer = new Container('alert');
 $sessionLogin = new Container('credo');
-// \Zend\Debug\Debug::dump($sessionLogin->facilityMap);die;
+$crossLoginSession = new Container('crossLogin');
+// \Zend\Debug\Debug::dump($crossLoginSession->logged);
 $role = $sessionLogin->roleId;
 $roleCode = $sessionLogin->roleCode;
 $userName = $sessionLogin->userName;
@@ -29,12 +30,12 @@ $userMenu .= "<li id='nav-main-item'><a id='city' class='nav-main-link' href=" .
 
 $recencyMenu = "";
 $recencyMenu .= "<li id='nav-main-item'><a id='recency' class='nav-main-link' href=" . $this->url('recency', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
-if($roleCode == 'remote_order_user'){
+if ($roleCode == 'remote_order_user') {
      $recencyMenu .= "<li id='nav-main-item'><a id='print-results' class='nav-main-link' href=" . $this->url('print-results', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-printer'></i> Print Results</span></a></li>";
 }
 
 $settingsMenu = "";
-if($roleCode == 'admin'){
+if ($roleCode == 'admin') {
      $settingsMenu .= "<li id='nav-main-item'><a id='settings' class='nav-main-link' href=" . $this->url('settings', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
 }
 
@@ -60,7 +61,7 @@ $weeklyReportMenu = "<li id='nav-main-item'><a id='weekly-report' class='nav-mai
 $qcReportMenu = "";
 $qcReportMenu = "<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'qc-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
 $modality = "";
-if($roleCode == 'admin' || $roleCode == 'manager'){
+if ($roleCode == 'admin' || $roleCode == 'manager') {
      $modality = "<li id='nav-main-item'><a id='age-wise-infection-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'age-wise-infection-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Age-wise Infection Report</span></a></li>";
 }
 
@@ -195,7 +196,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                          <div class="content-side content-side-full">
                               <ul class="nav-main">
                                    <li class="nav-main-heading"></li>
-                                   <?php if($roleCode != 'manager' && $roleCode != 'remote_order_user'){ ?>
+                                   <?php if ($roleCode != 'manager' && $roleCode != 'remote_order_user') { ?>
                                         <li class="nav-main-item " id="dashboard">
                                              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                                                   <i class="nav-main-link-icon si si-cursor"></i>
@@ -205,68 +206,68 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                                                   <?php echo $dashboardMenu; ?>
                                              </ul>
                                         </li>
-                                   <?php }?>
+                                   <?php } ?>
                                    <?php if ($roleCode == 'admin' && $roleCode != 'remote_order_user') { ?>
-                                   <li class="nav-main-heading"></li>
-                                   <li class="nav-main-item " id="manage">
-                                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                                             <i class="nav-main-link-icon si si-grid"></i>
-                                             <span class="nav-main-link-name ">Manage</span>
-                                        </a>
-                                        <ul class="nav-main-submenu">
-                                             <?php echo $userMenu; ?>
-                                        </ul>
-                                   </li>
+                                        <li class="nav-main-heading"></li>
+                                        <li class="nav-main-item " id="manage">
+                                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                                                  <i class="nav-main-link-icon si si-grid"></i>
+                                                  <span class="nav-main-link-name ">Manage</span>
+                                             </a>
+                                             <ul class="nav-main-submenu">
+                                                  <?php echo $userMenu; ?>
+                                             </ul>
+                                        </li>
 
                                    <?php }
-                                   if($roleCode != 'manager' && $roleCode != 'remote_order_user'){ ?>
-                                   <li class="nav-main-heading" style="padding:3px;"></li>
-                                   <?php echo $settingsMenu; 
+                                   if ($roleCode != 'manager' && $roleCode != 'remote_order_user') { ?>
+                                        <li class="nav-main-heading" style="padding:3px;"></li>
+                                   <?php echo $settingsMenu;
                                    }
                                    if ($roleCode != 'MGMT') {
-                                        ?>
-                                   <li class="nav-main-heading" style="padding:3px;"></li>
-                                   <?php echo $recencyMenu; ?>
+                                   ?>
+                                        <li class="nav-main-heading" style="padding:3px;"></li>
+                                        <?php echo $recencyMenu; ?>
 
 
-                                   <?php if (($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
-                                   <li class="nav-main-heading" style="padding:3px;"></li>
-                                   <?php echo $qcMenu; ?>
-                                   <?php }
+                                        <?php if (($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
+                                             <li class="nav-main-heading" style="padding:3px;"></li>
+                                             <?php echo $qcMenu; ?>
+                                        <?php }
                                         if (($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
-                                   <li class="nav-main-heading" style="padding:3px;"></li>
-                                   <?php echo $vlDataMenu;
+                                             <li class="nav-main-heading" style="padding:3px;"></li>
+                                        <?php echo $vlDataMenu;
                                         }
                                    }
                                    if (($roleCode == 'VLTS' || $roleCode == 'admin') && $roleCode != 'remote_order_user') {
                                         ?>
-                                   <li class="nav-main-heading" style="padding:3px;"></li>
-                                   <?php echo $emailMenu; ?>
-                                   <li class="nav-main-heading" style="padding:3px;"></li>
+                                        <li class="nav-main-heading" style="padding:3px;"></li>
+                                        <?php echo $emailMenu; ?>
+                                        <li class="nav-main-heading" style="padding:3px;"></li>
                                    <?php //echo $uploadResultMenu; -->
                                    }
                                    if (($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'user' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
-                                   <li class="nav-main-heading"></li>
-                                   <li class="nav-main-item " id="reports">
-                                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                                             <i class="nav-main-link-icon si si-grid"></i>
-                                             <span class="nav-main-link-name ">Reports</span>
-                                        </a>
-                                        <ul class="nav-main-submenu">
-                                             <li class="nav-main-heading" style="padding:3px;"></li>
-                                             <?php echo $recentMenu; ?>
-                                             <li class="nav-main-heading" style="padding:3px;"></li>
-                                             <?php echo $longTermMenu; ?>
-                                             <li class="nav-main-heading" style="padding:3px;"></li>
-                                             <?php echo $tatMenu; ?>
-                                             <li class="nav-main-heading" style="padding:3px;"></li>
-                                             <?php echo $weeklyReportMenu; ?>
-                                             <li class="nav-main-heading" style="padding:3px;"></li>
-                                             <?php echo $qcReportMenu; ?>
-                                             <li class="nav-main-heading" style="padding:3px;"></li>
-                                             <?php echo $modality; ?>
-                                        </ul>
-                                   </li>
+                                        <li class="nav-main-heading"></li>
+                                        <li class="nav-main-item " id="reports">
+                                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                                                  <i class="nav-main-link-icon si si-grid"></i>
+                                                  <span class="nav-main-link-name ">Reports</span>
+                                             </a>
+                                             <ul class="nav-main-submenu">
+                                                  <li class="nav-main-heading" style="padding:3px;"></li>
+                                                  <?php echo $recentMenu; ?>
+                                                  <li class="nav-main-heading" style="padding:3px;"></li>
+                                                  <?php echo $longTermMenu; ?>
+                                                  <li class="nav-main-heading" style="padding:3px;"></li>
+                                                  <?php echo $tatMenu; ?>
+                                                  <li class="nav-main-heading" style="padding:3px;"></li>
+                                                  <?php echo $weeklyReportMenu; ?>
+                                                  <li class="nav-main-heading" style="padding:3px;"></li>
+                                                  <?php echo $qcReportMenu; ?>
+                                                  <li class="nav-main-heading" style="padding:3px;"></li>
+                                                  <?php echo $modality; ?>
+                                             </ul>
+                                        </li>
                                    <?php }
                                    ?>
 
@@ -297,14 +298,14 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                          <!-- User Dropdown -->
                          <div class="dropdown d-inline-block">
                               <!-- Crosss Login Block Start -->
-                              <?php if($configResult['vlsm-crosslogin']){
-                                   $passwordSalt = $userCrossLoginRes['server_password'].$configResult['vlsm-crosslogin-salt'];
-                                   $token = hash('sha256',$passwordSalt);?>
-                                   
-                                   <a class="btn btn-dual" onclick="setCrossLogin();" href="<?php echo rtrim($configResult['vlsm']['domain'], "/").'/loginProcess.php?u='.base64_encode($userCrossLoginRes['email']).'&t='.$token.'&name='.base64_encode($userCrossLoginRes['user_name']);?>">
+                              <?php if ($configResult['vlsm-crosslogin']) {
+                                   $passwordSalt = $userCrossLoginRes['server_password'] . $configResult['vlsm-crosslogin-salt'];
+                                   $token = hash('sha256', $passwordSalt); ?>
+
+                                   <a class="btn btn-dual" onclick="setCrossLogin();" href="<?php echo rtrim($configResult['vlsm']['domain'], "/") . '/loginProcess.php?u=' . base64_encode($userCrossLoginRes['email']) . '&t=' . $token . '&name=' . base64_encode($userCrossLoginRes['user_name']); ?>">
                                         <span class="d-none d-sm-inline-block"><i class="fa fa-external-link-alt" style=" font-size: 14px; "></i> VLSM</span>
                                    </a>
-                              <?php }?>
+                              <?php } ?>
                               <!-- Crosss Login Block End -->
                               <button type="button" class="btn btn-dual" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                    <i class="fa fa-fw fa-user d-sm-none"></i>
@@ -392,7 +393,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
 
      <!-- vivek -->
      <script src="<?php echo $this->basePath() . '/assets/js/select2.full.min.js'; ?>"></script>
-	<script src="<?php echo $this->basePath() . '/assets/js/plugins/select2/js/select2.full.min.js'; ?>"></script>
+     <script src="<?php echo $this->basePath() . '/assets/js/plugins/select2/js/select2.full.min.js'; ?>"></script>
      <script src="<?php echo $this->basePath() . '/assets/js/select2.full.js'; ?>"></script>
 
      <script>
@@ -411,15 +412,14 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
 
      <script type="text/javascript">
           $(document).ready(function() {
-               <?php
-               if (isset($alertContainer->alertMsg) && $alertContainer->alertMsg != "") {
-                    ?>
-               alert("<?php echo $alertContainer->alertMsg; ?>");
-               <?php
-                    $alertContainer->alertMsg = "";
+               <?php if (isset($alertContainer->alertMsg) && $alertContainer->alertMsg != "") { ?>
+                    alert("<?php echo $alertContainer->alertMsg; ?>");
+               <?php $alertContainer->alertMsg = "";
                     unset($alertContainer->alertMsg);
                }
-               ?>
+               if ($crossLoginSession->logged) { ?>
+                    setCrossLogin();
+               <?php } ?>
           });
           $(function() {
                str = $(location).attr('pathname');
@@ -479,15 +479,16 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                } else if (splitsUrl[1] == 'vl-data') {
                     $('#manage').removeClass('open');
                     $('#' + splitsUrl[1]).addClass('active');
-               }else if (splitsUrl[1] == 'print-results') {
+               } else if (splitsUrl[1] == 'print-results') {
                     $('#manage').removeClass('open');
                     $('#' + splitsUrl[1]).addClass('active');
                }
           });
-          function setCrossLogin(){
+
+          function setCrossLogin() {
                if (typeof(Storage) !== "undefined") {
                     sessionStorage.setItem("crosslogin", "true");
-               }else{
+               } else {
                     alert("Your browser doesn't support the session!");
                     sessionStorage.setItem("crosslogin", "false");
                }

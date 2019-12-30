@@ -25,6 +25,8 @@ class UserTable extends AbstractTableGateway {
 		$alertContainer = new Container('alert');
         $logincontainer = new Container('credo');
         $captchaSession = new Container('captcha');
+        $crossLoginSession = new Container('crossLogin');
+        $crossLoginSession->logged = false;
         $config = new \Zend\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         if(!isset($captchaSession) || empty($captchaSession->status) || $captchaSession->status == 'fail'){
@@ -42,6 +44,7 @@ class UserTable extends AbstractTableGateway {
                 $params['loginPassword'] = hash('sha256',$passwordSalt);
                 if($params['loginPassword'] == $params['t']){
                     $password = $check['server_password'];
+                    $crossLoginSession->logged = true;
                 }else{
                     $password = "";
                     $params['loginPassword'] = "";
@@ -55,6 +58,7 @@ class UserTable extends AbstractTableGateway {
                 return 'login';
             }
         }
+        
         if(isset($params['userName']) && trim($params['userName'])!="" && trim($params['loginPassword'])!=""){
             /* Cross login credential check password */
             if((!isset($params['u']) && $params['u'] == "") && (!isset($params['t']) && $params['t'] == "")){
