@@ -1518,7 +1518,7 @@ class RecencyService
             $client = new GuzzleHttp\Client();
             $config = new \Zend\Config\Reader\Ini();
             $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-            $urlVlsm = $configResult['vlsm']['domain'] . 'recency/requestVlTest.php';
+            $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/recency/requestVlTest.php';
             if (isset($params['rvlsm']) && count($params['rvlsm']) > 0) {
                 foreach ($params['rvlsm'] as $sample) {
                     $data =  $recencyDb->getDataBySampleId($sample);

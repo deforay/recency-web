@@ -344,8 +344,8 @@ class UserTable extends AbstractTableGateway {
             if($params['servPass']!=''){
                 if($configResult['vlsm-crosslogin']){
                     $client = new \GuzzleHttp\Client();
-                    $url = $configResult['vlsm']['domain'];
-                    $result = $client->post($url.'users/editProfileHelper.php', [
+                    $url = rtrim($configResult['vlsm']['domain'], "/");
+                    $result = $client->post($url.'/users/editProfileHelper.php', [
                         'form_params' => [
                             'u' => $params['email'],
                             't' => sha1($params['servPass'] . $configResult["password"]["salt"])
@@ -446,8 +446,8 @@ class UserTable extends AbstractTableGateway {
             if($params['servPass']!=''){
                 if($configResult['vlsm-crosslogin']){
                     $client = new \GuzzleHttp\Client();
-                    $url = $configResult['vlsm']['domain'];
-                    $result = $client->post($url.'users/editProfileHelper.php', [
+                    $url = rtrim($configResult['vlsm']['domain'], "/");
+                    $result = $client->post($url.'/users/editProfileHelper.php', [
                         'form_params' => [
                             'u' => $params['email'],
                             't' => sha1($params['servPass'] . $configResult["password"]["salt"])
