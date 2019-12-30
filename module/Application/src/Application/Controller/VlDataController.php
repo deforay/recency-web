@@ -338,6 +338,10 @@ class VlDataController extends AbstractActionController
 
     public function ageWiseInfectionReportAction()
     {
+        $sessionLogin = new Container('credo');
+        if($sessionLogin->roleCode != 'admin' || $sessionLogin->roleCode != 'manager'){
+            return $this->_redirect()->toRoute('home');
+        }
         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
         $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
         $facilityService = $this->getServiceLocator()->get('FacilitiesService');

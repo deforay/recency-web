@@ -11,14 +11,17 @@ class SettingsController extends AbstractActionController
 
     public function indexAction()
     {
-        $session = new Container('credo');
-            $request = $this->getRequest();
-            if ($request->isPost()) {
-                $params = $request->getPost();
-                $settingsService = $this->getServiceLocator()->get('SettingsService');
-                $result = $settingsService->getSettingsDetails($params);
-                return $this->getResponse()->setContent(Json::encode($result));
-            }
+        $sessionLogin = new Container('credo');
+        if($sessionLogin->roleCode != 'admin'){
+            return $this->_redirect()->toRoute('home');
+        }
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $settingsService = $this->getServiceLocator()->get('SettingsService');
+            $result = $settingsService->getSettingsDetails($params);
+            return $this->getResponse()->setContent(Json::encode($result));
+        }
     }
     public function sampleDataIndexAction()
     {
