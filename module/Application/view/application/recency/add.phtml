@@ -18,8 +18,7 @@ if($roleCode == 'remote_order_user'){
     $section = 'Section 1/1';
 }
 
-
-// \Zend\Debug\Debug::dump($sampleId);die;
+//\Zend\Debug\Debug::dump($facilityResult);die;
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
     $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
     if ($globalConfigResult[$i]['global_name'] == 'recency_to_vlsm_sync' && $globalConfigResult[$i]['global_value'] == 'yes') {
@@ -168,7 +167,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                         <div class="block-content block-content-full tab-content" style="min-height: 300px;">
                             <?php
                             if (isset($arr['admin_message']) && $arr['admin_message'] != '') {
-                                ?>
+                            ?>
                                 <h4><?php echo ucwords($arr['admin_message']); ?></h4>
                             <?php
                             }
@@ -195,11 +194,12 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                     <div class="col-sm-4 <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                         <input type="text" class="form-control <?php echo $sampleCollectionDateMandatory; ?> <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" readonly="readonly" title="Please enter the sample collection date">
                                     </div>
-
-                                    <label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" for="sampleReceiptDate">Sample Receipt Date at the Recency Testing Site <?php echo (in_array("Sample Receipt Date at the Recency Testing Site", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
-                                    <div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                        <input type="text" class="form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" readonly="readonly" title="Please enter the sample receipt date">
-                                    </div>
+                                    <?php if ($roleCode != 'remote_order_user') { ?>
+                                        <label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" for="sampleReceiptDate">Sample Receipt Date at the Recency Testing Site <?php echo (in_array("Sample Receipt Date at the Recency Testing Site", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
+                                        <div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <input type="text" class="form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" readonly="readonly" title="Please enter the sample receipt date">
+                                        </div>
+                                    <?php } ?>
                                 </div>
                                 <div class="form-group row form-horizontal">
                                     <label class="col-sm-2 col-form-label <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" for="receivedSpecimenType">Received Specimen Type <?php echo (in_array("Received Specimen Type", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
@@ -318,7 +318,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 </select>
                                             </div>
 
-                                            
+
 
 
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testerName" style="margin-top:10px;">Tester Name <?php echo (in_array("Tester Name", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
@@ -697,7 +697,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         var postiveLine = $("#positiveVerificationLine").val();
         var longTermLine = $("#longTermVerificationLine").val();
         $('.actualresult').css('display', 'none');
-        $('.actualresult-input').val('');$('.actualresult-input').removeClass('isRequired');
+        $('.actualresult-input').val('');
+        $('.actualresult-input').removeClass('isRequired');
         $('.isVlLabRequired').removeClass('isRequired');
         if (ctrlLine != '' && postiveLine != '' && longTermLine != '') {
             if (ctrlLine == 'absent' && postiveLine == 'absent' && longTermLine == 'absent') {
@@ -794,48 +795,95 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         var _ctrl = $("#controlLineActual");
         var _postive = $("#positiveVerificationLineActual");
         var _longTerm = $("#longTermVerificationLineActual");
-        var _outcome = $(".outcomeActual"), _outcomeId = $("#outcomeActual"), _outcomeData = $("#outcomeDataActual"), _color = '<?php echo $lineOutComeColor; ?>';
+        var _outcome = $(".outcomeActual"),
+            _outcomeId = $("#outcomeActual"),
+            _outcomeData = $("#outcomeDataActual"),
+            _color = '<?php echo $lineOutComeColor; ?>';
 
         if (_ctrl.val() != '' && _postive.val() != '' && _longTerm.val() != '') {
             if (_ctrl.val() == 'absent' && _postive.val() == 'absent' && _longTerm.val() == 'absent') {
-                _outcomeId.html('Invalid – Please Verify').css({"color": _color});
-                _outcome.css({"visibility": "visible"});_outcomeData.val('Invalid');
+                _outcomeId.html('Invalid – Please Verify').css({
+                    "color": _color
+                });
+                _outcome.css({
+                    "visibility": "visible"
+                });
+                _outcomeData.val('Invalid');
                 updateVlResultFields();
             } else if (_ctrl.val() == 'absent' && _postive.val() == 'absent' && _longTerm.val() == 'present') {
-                _outcomeId.html('Invalid – Please Verify').css({"color": _color});
-                _outcome.css({"visibility": "visible"});_outcomeData.val('Invalid');
+                _outcomeId.html('Invalid – Please Verify').css({
+                    "color": _color
+                });
+                _outcome.css({
+                    "visibility": "visible"
+                });
+                _outcomeData.val('Invalid');
                 updateVlResultFields();
             } else if (_ctrl.val() == 'absent' && _postive.val() == 'present' && _longTerm.val() == 'absent') {
-                _outcomeId.html('Invalid – Please Verify').css({"color": _color});
-                _outcome.css({"visibility": "visible"});_outcomeData.val('Invalid');
+                _outcomeId.html('Invalid – Please Verify').css({
+                    "color": _color
+                });
+                _outcome.css({
+                    "visibility": "visible"
+                });
+                _outcomeData.val('Invalid');
                 updateVlResultFields();
             } else if (_ctrl.val() == 'absent' && _postive.val() == 'present' && _longTerm.val() == 'present') {
-                _outcomeId.html('Invalid – Please Verify').css({"color": _color});
-                _outcome.css({"visibility": "visible"});_outcomeData.val('Invalid');
+                _outcomeId.html('Invalid – Please Verify').css({
+                    "color": _color
+                });
+                _outcome.css({
+                    "visibility": "visible"
+                });
+                _outcomeData.val('Invalid');
                 updateVlResultFields();
             } else if (_ctrl.val() == 'present' && _postive.val() == 'absent' && _longTerm.val() == 'absent') {
-                _outcomeId.html('Assay Negative').css({"color": _color});
-                _outcome.css({"visibility": "visible"});
+                _outcomeId.html('Assay Negative').css({
+                    "color": _color
+                });
+                _outcome.css({
+                    "visibility": "visible"
+                });
                 updateVlResultFields('Assay Negative');
             } else if (_ctrl.val() == 'present' && _postive.val() == 'absent' && _longTerm.val() == 'present') {
-                _outcomeId.html('Invalid – Please Verify').css({"color": _color});
-                _outcome.css({"visibility": "visible"});_outcomeData.val('Invalid');
+                _outcomeId.html('Invalid – Please Verify').css({
+                    "color": _color
+                });
+                _outcome.css({
+                    "visibility": "visible"
+                });
+                _outcomeData.val('Invalid');
                 updateVlResultFields();
             } else if (_ctrl.val() == 'present' && _postive.val() == 'present' && _longTerm.val() == 'absent') {
                 $.blockUI();
-                _outcomeId.html('Assay Recent - Please ensure you add Viral Load Result').css({"color": "<?php echo $lineOutComeColor2; ?>"});
-                _outcome.css({"visibility": "visible"});_outcomeData.val('Assay Recent');
-                getFacilities();updateVlResultFields('Assay Recent');$.unblockUI();
+                _outcomeId.html('Assay Recent - Please ensure you add Viral Load Result').css({
+                    "color": "<?php echo $lineOutComeColor2; ?>"
+                });
+                _outcome.css({
+                    "visibility": "visible"
+                });
+                _outcomeData.val('Assay Recent');
+                getFacilities();
+                updateVlResultFields('Assay Recent');
+                $.unblockUI();
             } else if (_ctrl.val() == 'present' && _postive.val() == 'present' && _longTerm.val() == 'present') {
-                _outcomeId.html('Long Term').css({"color": "<?php echo $lineOutComeColor2; ?>"});
-                _outcome.css({"visibility": "visible"});
+                _outcomeId.html('Long Term').css({
+                    "color": "<?php echo $lineOutComeColor2; ?>"
+                });
+                _outcome.css({
+                    "visibility": "visible"
+                });
                 updateVlResultFields('Long Term');
             }
         } else {
             _outcomeId.html('');
-            $(".outcomeActual", "#outcomeActual").css({"visibility": "hidden"});
+            $(".outcomeActual", "#outcomeActual").css({
+                "visibility": "hidden"
+            });
             $("#vlResultoutcome").html('');
-            $(".vlResultoutcome").css({"visibility": "hidden"});
+            $(".vlResultoutcome").css({
+                "visibility": "hidden"
+            });
         }
     }
 
@@ -871,9 +919,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             "visibility": "hidden"
         });
         if (fieldValue == 'vlField') {
-            if($("#outcomeActual").text() != ''){
+            if ($("#outcomeActual").text() != '') {
                 var fieldValue = $("#outcomeActual").text();
-            }else{
+            } else {
                 var fieldValue = $("#outcome").text();
             }
             if (fieldValue == 'Assay Recent - Please ensure you add Viral Load Result') {
@@ -1399,8 +1447,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             endDate: "0"
         }).on('changeDate', function(e) {
             $('#hivRecencyTestDate').val('');
-			var _satrt = new Date(e.date.valueOf());
-			$('#hivRecencyTestDate').datepicker('setStartDate', _satrt);
+            var _satrt = new Date(e.date.valueOf());
+            $('#hivRecencyTestDate').datepicker('setStartDate', _satrt);
         });
         $('#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker({
             format: 'dd-M-yyyy',
@@ -1419,8 +1467,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             endDate: "0"
         }).on('changeDate', function(e) {
             $('#sampleReceiptDate,#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').val('');
-			var _satrt = new Date(e.date.valueOf());
-			$('#sampleReceiptDate,#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker('setStartDate', _satrt);
+            var _satrt = new Date(e.date.valueOf());
+            $('#sampleReceiptDate,#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker('setStartDate', _satrt);
         });
     });
 

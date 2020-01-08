@@ -134,7 +134,7 @@ $lineOutComeColor2 = "#000000";
 <style>
 	<?php
 	if ($result['term_outcome'] == '') {
-		?>.outcome {
+	?>.outcome {
 		visibility: hidden;
 	}
 
@@ -214,7 +214,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 						<div class="block-content block-content-full tab-content" style="min-height: 300px;">
 							<?php
 							if (isset($arr['admin_message']) && $arr['admin_message'] != '') {
-								?>
+							?>
 								<h4><?php echo ucwords($arr['admin_message']); ?></h4>
 							<?php
 							}
@@ -237,11 +237,12 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 									<div class="col-sm-4 <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>">
 										<input type="text" class="form-control <?php echo $sampleCollectionDateMandatory; ?> <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>" value="<?php echo $sampleCollectionDate; ?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" readonly="readonly" title="Please enter the sample collection date">
 									</div>
-
-									<label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Sample Receipt Date at the Recency Testing Site <?php echo (in_array("Sample Receipt Date at the Recency Testing Site", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
-									<div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>">
-										<input type="text" class="form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" value="<?php echo $sampleReceiptDate; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" readonly="readonly" title="Please enter the sample receipt date">
-									</div>
+									<?php if ($roleCode != 'remote_order_user') { ?>
+										<label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Sample Receipt Date at the Recency Testing Site <?php echo (in_array("Sample Receipt Date at the Recency Testing Site", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
+										<div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>">
+											<input type="text" class="form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" value="<?php echo $sampleReceiptDate; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" readonly="readonly" title="Please enter the sample receipt date">
+										</div>
+									<?php } ?>
 								</div>
 								<div class="form-group row form-horizontal">
 									<label class="col-sm-2 col-form-label <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Received Specimen Type <?php echo (in_array("Received Specimen Type", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
@@ -261,7 +262,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                             <input type="text" class="js-datepicker form-control <?php //echo $sampleReceivedDateMandatory; 
 																									?> <?php // echo in_array("Sample Received Date",$resultArr2)?"showFields":"hideFields";
 																										?>"  value="<?php //echo $sampleReceivedDate; 
-																																							?>" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Enter the sample received date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample received date">
+																													?>" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Enter the sample received date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample received date">
                                         </div> -->
 
 								</div>
@@ -583,7 +584,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Testing Facility<?php echo (in_array("Testing Facility", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control <?php echo $disbaledResult.$testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
+												<select class="form-control <?php echo $disbaledResult . $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
 													<option value="">--Select--</option>
 													<?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
 														<option value="<?php echo base64_encode($testingFacility['facility_id']); ?>" <?php echo ($testingFacility['facility_id'] == $result['testing_facility_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($testingFacility['facility_name']); ?></option>
@@ -599,7 +600,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 											<label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">HIV Recency Test Date<?php echo (in_array("Hiv Recency Test Date", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<input type="text" value="<?php echo $hivRecencyTestDate; ?>" class="form-control <?php echo $disbaledResult.$hivRecencyRequiredDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
+												<input type="text" value="<?php echo $hivRecencyTestDate; ?>" class="form-control <?php echo $disbaledResult . $hivRecencyRequiredDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
 											</div>
 											<br>
 											<br>
@@ -609,7 +610,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 												<?php echo (in_array("Control Line", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
 												<select class="form-control invalidctline
-													<?php echo $disbaledResult.$controlLineResult;
+													<?php echo $disbaledResult . $controlLineResult;
 													echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>" id="controlLine" name="controlLine" title="Please select the control line" onchange="changeTermLine()">
 													<option value="">--Select--</option>
 													<option value="present" <?php echo ($result['control_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present</option>
@@ -620,7 +621,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<label class="col-sm-2 col-form-label <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Positive Verification
 												<?php echo (in_array("Positive Verification Line", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control invalidctline <?php echo $disbaledResult.$positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
+												<select class="form-control invalidctline <?php echo $disbaledResult . $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
 													<option value="">--Select--</option>
 													<option value="present" <?php echo ($result['positive_verification_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Positive/P)</option>
 													<option value="absent" <?php echo ($result['positive_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Negative/N)</option>
@@ -632,7 +633,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<label class="col-sm-2 col-form-label <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Long Term Verification
 												<?php echo (in_array("Long Term Verification Line", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
-												<select class="form-control invalidctline <?php echo $disbaledResult.$longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
+												<select class="form-control invalidctline <?php echo $disbaledResult . $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
 													<option value="">--Select--</option>
 													<option value="present" <?php echo ($result['long_term_verification_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Long Term/LT)</option>
 													<option value="absent" <?php echo ($result['long_term_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Recent/R)</option>
@@ -814,13 +815,13 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			endDate: "0"
 		});
 		$('#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker({
-            format: 'dd-M-yyyy',
-            clearBtn: true,
-            todayHighlight: true,
-            autoclose: true,
-            startDate: start,
-            endDate: "0"
-        });
+			format: 'dd-M-yyyy',
+			clearBtn: true,
+			todayHighlight: true,
+			autoclose: true,
+			startDate: start,
+			endDate: "0"
+		});
 		$('#sampleCollectionDate').datepicker({
 			format: 'dd-M-yyyy',
 			clearBtn: true,
@@ -834,7 +835,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			$('#sampleReceiptDate,#hivRecencyTestDate,#hivDiagnosisDate,#vlTestDate').datepicker('setStartDate', _satrt);
 		});
 		// Auto calling checkHivTesting function while edit
-		$('#pastHivTesting option[selected="selected"]').each(function() {checkHivTesting(this);});
+		$('#pastHivTesting option[selected="selected"]').each(function() {
+			checkHivTesting(this);
+		});
 	});
 
 	function changeTermLine() {
@@ -1191,7 +1194,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			});
 		}
 
-		changeTermLine();changeTermLineActual();
+		changeTermLine();
+		changeTermLineActual();
 		$("#facilityId").select2({
 			placeholder: "Choose Facility",
 			width: "250px",
@@ -1210,8 +1214,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			$(".hideDiv").css('visibility', 'visible');
 		} else {
 			if ($("#controlLineActual").val() == '') {
-					$(".disbaledResult").attr("disabled", false).addClass("isRequired");
-			}else{
+				$(".disbaledResult").attr("disabled", false).addClass("isRequired");
+			} else {
 				$(".disbaledResult").attr("disabled", true).removeClass("isRequired");
 			}
 			$(".hideDiv").css('visibility', 'hidden');
@@ -1251,7 +1255,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			} else {
 				if ($("#controlLineActual").val() == '') {
 					$(".disbaledResult").attr("disabled", false).addClass("isRequired");
-				}else{
+				} else {
 					$(".disbaledResult").attr("disabled", true).removeClass("isRequired");
 				}
 				$(".hideDiv").css('visibility', 'hidden');
@@ -1267,15 +1271,15 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 		<?php
 		foreach ($globalConfigResult as $config) {
 			if ($config['global_name'] == 'location_one') {
-				?>
+		?>
 				getLocationDeatils('<?php echo $config["global_name"]; ?>', '<?php echo $result['location_one']; ?>', null, null, 'onload');
 			<?php
-				} else if ($config['global_name'] == 'location_two') {
-					?>
+			} else if ($config['global_name'] == 'location_two') {
+			?>
 				getLocationDeatils('<?php echo $config["global_name"]; ?>', '<?php echo $result['location_one']; ?>', '<?php echo $result['location_two']; ?>', null, 'onload');
 			<?php
-				} else if ($config['global_name'] == 'location_three') {
-					?>
+			} else if ($config['global_name'] == 'location_three') {
+			?>
 				getLocationDeatils('<?php echo $config["global_name"]; ?>', '<?php echo $result['location_one']; ?>', '<?php echo $result['location_two']; ?>', '<?php echo $result['location_three']; ?>', 'onload');
 		<?php
 			}
@@ -1323,7 +1327,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 			$("#lastHivStatus", "#patientOnArt").addClass('isRequired');
 		<?php } else { ?>
 			$("#patientOnArt").attr("disabled", true).removeClass('isRequired');
-		<?php }?>
+		<?php } ?>
 	});
 
 	function validateStep1() {
@@ -1572,7 +1576,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 	}
 	if ($("#controlLineActual").val() == '') {
 		$(".disbaledResult").attr("disabled", false).addClass("isRequired");
-	}else{
+	} else {
 		$(".disbaledResult").attr("disabled", true).removeClass("isRequired");
 	}
 </script>
