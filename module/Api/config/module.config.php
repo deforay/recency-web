@@ -156,7 +156,19 @@ return array(
                               'controller' => 'Api\Controller\RecencyMandatory',
                          ),
                     ),
-                ),
+               ),
+               'api-recency-sampleid' => array(
+                    'type'    => 'segment',
+                    'options' => array(
+                         'route'    => '/api/recency-sampleid[/:id]',
+                         'constraints' => array(
+                              'id'     => '[0-9]+',
+                         ),
+                         'defaults' => array(
+                              'controller' => 'Api\Controller\RecencySampleid',
+                         ),
+                    ),
+               ),
                'api-recency-hide' => array(
                     'type'    => 'segment',
                     'options' => array(
@@ -260,6 +272,7 @@ return array(
                'Api\Controller\District'               => 'Api\Controller\DistrictController',
                'Api\Controller\City'                   => 'Api\Controller\CityController',
                'Api\Controller\RecencyMandatory'       => 'Api\Controller\RecencyMandatoryController',
+               'Api\Controller\RecencySampleid'       => 'Api\Controller\RecencySampleidController',
                'Api\Controller\RecencyHide'            => 'Api\Controller\RecencyHideController',
                'Api\Controller\QualityCheck'           => 'Api\Controller\QualityCheckController',
                'Api\Controller\TatReport'              => 'Api\Controller\TatReportController',
