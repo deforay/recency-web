@@ -10,20 +10,16 @@ $arr = array();
 $syn = false;
 $recencyTestResults = '';
 $recencyTestResultsBlock = 'style="display:none;"';
-
+$recencySampleId = $sampleId['recencyId'];
 $section = 'Section 1/2';
 if($roleCode == 'remote_order_user'){
     $recencyTestResults = 'style="display:none;"';
     $recencyTestResultsBlock = '';
     $section = 'Section 1/1';
 }
-if($roleCode == 'remote_order_user'){
-    $recencyTestResults = 'style="display:none;"';
-    $recencyTestResultsBlock = '';
-    $section = 'Section 1/1';
-}
 
-//\Zend\Debug\Debug::dump($facilityResult);die;
+
+// \Zend\Debug\Debug::dump($sampleId);die;
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
     $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
     if ($globalConfigResult[$i]['global_name'] == 'recency_to_vlsm_sync' && $globalConfigResult[$i]['global_value'] == 'yes') {
@@ -183,7 +179,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                     <label class="col-sm-2 col-form-label <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="sampleId">Sample ID<?php echo (in_array("Sample Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                     <div class="col-sm-4 <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                         <input type="text" class="form-control <?php echo $sample;
-                                                                                echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" placeholder="Please enter the Sample ID" title="Please enter the sample id" />
+                                                                                echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" value="<?php echo $recencySampleId; ?>"  placeholder="Please enter the Sample ID" title="Please enter the sample id" disabled/>
                                     </div>
 
                                     <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="patientId">Patient ID <?php echo (in_array("Patient Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>

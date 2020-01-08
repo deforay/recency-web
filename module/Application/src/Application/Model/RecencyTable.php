@@ -439,9 +439,12 @@ class RecencyTable extends AbstractTableGateway
                     }
                 }
             }
-
+            $recencySampleId = $this->fetchSampleId();
             $data = array(
-                'sample_id' => $params['sampleId'],
+                'sample_id' => $recencySampleId['recencyId'],
+                'sample_prefix_id' => $recencySampleId['sample_prefix_id'],
+                'sample_id_string_prefix' => $recencySampleId['sample_id_string_prefix'],
+                'sample_id_year_prefix' => $recencySampleId['sample_id_year_prefix'],
                 'patient_id' => $params['patientId'],
                 'facility_id' => base64_decode($params['facilityId']),
                 'testing_facility_id' => ($params['testingFacilityId'] != '') ? base64_decode($params['testingFacilityId']) : null,
@@ -673,7 +676,6 @@ class RecencyTable extends AbstractTableGateway
             }
 
             $data = array(
-                'sample_id'                         => $params['sampleId'],
                 'patient_id'                        => $params['patientId'],
                 'facility_id'                       => base64_decode($params['facilityId']),
                 'testing_facility_id'               => ($params['testingFacilityId'] != '') ? base64_decode($params['testingFacilityId']) : null,
@@ -752,9 +754,9 @@ class RecencyTable extends AbstractTableGateway
             //            {
             //             $data['final_outcome'] = 'Assay Negative';
             //            }
-            
             $updateResult = $this->update($data, array('recency_id' => $params['recencyId']));
         }
+
         if ($updateResult > 0) {
             $modifyData = array(
                 'modified_on'   => $common->getDateTime(),
@@ -1031,8 +1033,12 @@ class RecencyTable extends AbstractTableGateway
                         }
 
                         $syncedBy = $recency['syncedBy'];
+                        $recencySampleId = $this->fetchSampleId();
                         $data = array(
-                            'sample_id' => $recency['sampleId'],
+                            'sample_id' => $recencySampleId['recencyId'],
+                            'sample_prefix_id' => $recencySampleId['sample_prefix_id'],
+                            'sample_id_string_prefix' => $recencySampleId['sample_id_string_prefix'],
+                            'sample_id_year_prefix' => $recencySampleId['sample_id_year_prefix'],
                             'patient_id' => $recency['patientId'],
                             'sample_collection_date' => (isset($recency['sampleCollectionDate']) && $recency['sampleCollectionDate'] != '') ? $common->dbDateFormat($recency['sampleCollectionDate']) : null,
                             'sample_receipt_date' => (isset($recency['sampleReceiptDate']) && $recency['sampleReceiptDate'] != '') ? $common->dbDateFormat($recency['sampleReceiptDate']) : null,
@@ -4734,5 +4740,42 @@ class RecencyTable extends AbstractTableGateway
             $output['aaData'][] = $row;
         }
         return $output;
+    }
+
+    public function fetchSampleId()
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $date = date("y");
+        $sQuery = $sql->select()->from('recency')
+        ->columns(array(
+            "recencyId"=>new Expression("MAX(recency_id)"),"sample_id_year_prefix","sample_id_string_prefix","sample_prefix_id"
+        ))
+        ->where(array('sample_id_year_prefix' => $date));
+        ;
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $recencyId = $rResult['recencyId'];
+        $sampleIdYearPrefix = $rResult['sample_id_year_prefix'];
+        $sampleIdStringPrefix = $rResult['sample_id_string_prefix'];
+        $samplePrefixId = $rResult['sample_prefix_id'];
+        if(isset($recencyId) && trim($recencyId)!="")
+        {
+            $samplePrefixId = (int)$samplePrefixId+1;
+            $samplePrefixId = str_pad($samplePrefixId,6,"0",STR_PAD_LEFT);  
+            $recencySampleId['sample_prefix_id'] = $samplePrefixId;
+            $recencySampleId['sample_id_year_prefix'] = $date;
+            $recencySampleId['sample_id_string_prefix'] = "RT";
+            $recencySampleId['recencyId'] = "RT".$date."".$samplePrefixId;
+        }
+        else
+        {
+            $samplePrefixId = "000001";
+            $recencySampleId['sample_prefix_id'] = $samplePrefixId;
+            $recencySampleId['sample_id_year_prefix'] = $date;
+            $recencySampleId['sample_id_string_prefix'] = "RT";
+            $recencySampleId['recencyId'] = "RT".$date."".$samplePrefixId;
+        }
+        return $recencySampleId;
     }
 }
