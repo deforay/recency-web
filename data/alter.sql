@@ -410,3 +410,20 @@ ALTER TABLE recency_change_trails DROP INDEX unique_id;
 ALTER TABLE `recency` ADD `assay_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `invalid_longterm_line`, ADD `assay_outcome_updated_on` DATETIME NULL AFTER `assay_outcome_updated_by`, ADD `final_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `assay_outcome_updated_on`, ADD `final_outcome_updated_on` DATETIME NULL AFTER `final_outcome_updated_by`, ADD `remote_order` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `final_outcome_updated_on`;
 -- And recency_change_trails table
 ALTER TABLE `recency_change_trails` ADD `assay_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `invalid_longterm_line`, ADD `assay_outcome_updated_on` DATETIME NULL AFTER `assay_outcome_updated_by`, ADD `final_outcome_updated_by` INT(11) NULL DEFAULT NULL AFTER `assay_outcome_updated_on`, ADD `final_outcome_updated_on` DATETIME NULL AFTER `final_outcome_updated_by`, ADD `remote_order` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `final_outcome_updated_on`;
+
+-- prasath
+
+ALTER TABLE `recency` ADD `sample_id_year_prefix` INT(11) NOT NULL AFTER `sample_id`;
+update recency SET sample_id_year_prefix=19;
+ALTER TABLE `recency` ADD `sample_id_string_prefix` varchar(11) NOT NULL AFTER `sample_id`;
+update recency SET sample_id_string_prefix='RT';
+ALTER TABLE `recency` ADD `sample_prefix_id` INT(6) UNSIGNED ZEROFILL NOT NULL AFTER `sample_id`;
+update recency set sample_prefix_id=recency_id;
+
+
+ALTER TABLE `recency_change_trails` ADD `sample_id_year_prefix` INT(11) NOT NULL AFTER `sample_id`;
+update recency_change_trails SET sample_id_year_prefix=19;
+ALTER TABLE `recency_change_trails` ADD `sample_id_string_prefix` varchar(11) NOT NULL AFTER `sample_id`;
+update recency_change_trails SET sample_id_string_prefix='RT';
+ALTER TABLE `recency_change_trails` ADD `sample_prefix_id` INT(6) UNSIGNED ZEROFILL NOT NULL AFTER `sample_id`;
+update recency_change_trails set sample_prefix_id=recency_id;

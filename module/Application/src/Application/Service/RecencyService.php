@@ -37,6 +37,12 @@ class RecencyService
         return $recencyDb->fetchReqVlTestOnVlsmDetails($params);
     }
 
+    public function getSampleId()
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchSampleId();
+    }
+
     public function addRecencyDetails($params)
     {
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();

@@ -54,7 +54,7 @@ class RecencyController extends AbstractActionController
          $testFacilityTypeResult = $facilityService->getTestingFacilitiesTypeDetails();
          $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
          $settingService = $this->getServiceLocator()->get('SettingsService');
-         
+         $sampleId = $recencyService->getSampleId();
          $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
          $kitInfo = $settingService->getKitLotDetails();
          $sampleInfo = $settingService->getSamplesDetails();
@@ -63,7 +63,8 @@ class RecencyController extends AbstractActionController
             'facilityResult' => $facilityResult,
             'testFacilityTypeResult' => $testFacilityTypeResult,
             'kitInfo' => $kitInfo,
-            'sampleInfo' => $sampleInfo
+            'sampleInfo' => $sampleInfo,
+            'sampleId' => $sampleId
          ));
       }
    }
