@@ -939,7 +939,7 @@ class RecencyTable extends AbstractTableGateway
                 $response['status'] = 'failed';
                 return $response;
             }
-            $i = 1;
+            $i = 0;
             if($userId!='' && $params["version"]>"2.8"){
                 $secretKey=$uResult['secret_key'];       
                 $arrayCount= count($params['form']);
@@ -1171,11 +1171,11 @@ class RecencyTable extends AbstractTableGateway
                         if ($lastInsertedId > 0) {
                             $adapter->commit();
                             $patient = $recency['patientId'];
-                            $response['syncData']['response'][$patient] = 'success';
+                            $response['syncData']['response'][$i] = 'success';
                             $response['syncCount']['response'] = $arrayCount;
                         } else {
                             $adapter->rollBack();
-                            $response['syncData']['response'][$patient] = 'failed';
+                            $response['syncData']['response'][$i] = 'failed';
                             $response['syncCount']['response'] = 0;
                         }
                         
