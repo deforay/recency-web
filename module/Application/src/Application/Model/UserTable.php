@@ -401,8 +401,13 @@ class UserTable extends AbstractTableGateway {
 
         if(isset($rResult['user_id']) && $rResult['user_id']!='' && $rResult['status']=='active') {
             $auth = $common->generateRandomString(15);
+            if($rResult->secret_key!=''){
+                $secretKey = $rResult->secret_key;
+            }else{
+                $secretKey = $common->generateRandomString(32);
+            }
             // \Zend\Debug\Debug::dump($rResult['user_id']);die;
-            $id = $this->update(array('auth_token'=>$auth),array('user_id'=>$rResult['user_id']));
+            $id = $this->update(array('auth_token'=>$auth,'secret_key'=>$secretKey),array('user_id'=>$rResult['user_id']));
             if($id>0){
                 $response['status']='success';
                 $response["userDetails"] = array(
@@ -410,7 +415,8 @@ class UserTable extends AbstractTableGateway {
                     'userName' => $rResult->user_name,
                     'userEmailAddress' => $rResult->email,
                     'noOfDays'=>$rResult->qc_sync_in_days,
-                    'authToken' => $auth
+                    'authToken' => $auth,
+                    'secretKey' => $secretKey
                 );
                 $response["message"] = "Logged in successfully";
             }else{

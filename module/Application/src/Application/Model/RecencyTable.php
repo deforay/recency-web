@@ -914,8 +914,9 @@ class RecencyTable extends AbstractTableGateway
 
     public function addRecencyDetailsApi($params)
     {
-
+        
         $dbAdapter = $this->adapter;
+        $adapter = $dbAdapter->getDriver()->getConnection();
         $sql = new Sql($dbAdapter);
         $facilityDb = new FacilitiesTable($this->adapter);
         $riskPopulationDb = new RiskPopulationsTable($this->adapter);
@@ -924,11 +925,11 @@ class RecencyTable extends AbstractTableGateway
         $cityDb = new CityTable($this->adapter);
         $TestingFacilityTypeDb = new TestingFacilityTypeTable($this->adapter);
         $common = new CommonService();
-
+        $userId=$params["userId"];
         if (isset($params["form"])) {
 
             $uQuery = $sql->select()->from('users')
-                ->where(array('user_id' => $params["form"][0]['syncedBy']));
+                ->where(array('user_id' => $userId));
             $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
             $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
             if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
@@ -939,10 +940,29 @@ class RecencyTable extends AbstractTableGateway
                 return $response;
             }
             $i = 1;
-
-            foreach ($params["form"] as $key => $recency) {
+            if($userId!='' && $params["version"]>"2.8"){
+                $secretKey=$uResult['secret_key'];       
+                $arrayCount= count($params['form']);
+                $formsVal=array();
+                for ($x = 0; $x < $arrayCount; $x++) {
+                    if($secretKey!="")
+                        $formsVal[]=json_decode($this->cryptoJsAesDecrypt($secretKey,$params['form'][$x]),true);
+                    else
+                        $formsVal[]=json_decode($params['form'][$x],true);
+                }
+                $formData=$formsVal;
+                
+            }else{
+                $arrayCount= count($params['form']);
+                $formsVal=array();
+                for ($x = 0; $x < $arrayCount; $x++) {
+                    $formsVal[]=json_decode($params['form'][$x],true);
+                }
+                $formData=$formsVal;
+            }
+            foreach ($formData as $key => $recency) {
                 try {
-                    if (isset($recency['sampleId']) && trim($recency['sampleId']) != "" || isset($recency['patientId']) && trim($recency['patientId']) != "") {
+                    if (isset($recency['patientId']) && trim($recency['patientId']) != "") {
                         if ($recency['otherfacility'] != '') {
                             $fResult = $facilityDb->checkFacilityName(strtolower($recency['otherfacility']), 1);
                             if (isset($fResult['facility_name']) && $fResult['facility_name'] != '') {
@@ -1037,8 +1057,7 @@ class RecencyTable extends AbstractTableGateway
                                 }
                             }
                         }
-
-                        $syncedBy = $recency['syncedBy'];
+                        $adapter->beginTransaction();
                         $recencySampleId = $this->fetchSampleId();
                         $data = array(
                             'sample_id' => $recencySampleId['recencyId'],
@@ -1079,7 +1098,7 @@ class RecencyTable extends AbstractTableGateway
                             'location_three' => $recency['location_three'],
                             'added_on' => date('Y-m-d H:i:s'),
                             'added_by' => $recency['addedBy'],
-                            'sync_by' => $recency['syncedBy'],
+                            'sync_by' => $userId,
                             'exp_violence_last_12_month' => $recency['violenceLast12Month'],
                             'mac_no' => $recency['macAddress'],
                             'cell_phone_number' => $recency['phoneNumber'],
@@ -1150,119 +1169,24 @@ class RecencyTable extends AbstractTableGateway
                         $this->insert($data);
                         $lastInsertedId = $this->lastInsertValue;
                         if ($lastInsertedId > 0) {
-                            $response['syncData']['response'][$key] = 'success';
+                            $adapter->commit();
+                            $patient = $recency['patientId'];
+                            $response['syncData']['response'][$patient] = 'success';
+                            $response['syncCount']['response'] = $arrayCount;
                         } else {
-                            $response['syncData']['response'][$key] = 'failed';
+                            $adapter->rollBack();
+                            $response['syncData']['response'][$patient] = 'failed';
+                            $response['syncCount']['response'] = 0;
                         }
+                        
                     }
                 } catch (Exception $exc) {
+                    $adapter->rollBack();
                     error_log($exc->getMessage());
                     error_log($exc->getTraceAsString());
                 }
                 $i++;
             }
-        } else {
-            try {
-                if (isset($params['sampleId']) && trim($params['sampleId']) != "") {
-                    $syncedBy = $recency['syncedBy'];
-                    $data = array(
-                        'sample_id' => $params['sampleId'],
-                        'patient_id' => $params['patientId'],
-                        'facility_id' => (isset($params['facilityId']) && !empty($params['facilityId'])) ? ($params['facilityId']) : null,
-                        'testing_facility_id' => (isset($params['testingFacility']) && !empty($params['testingFacility'])) ? ($params['testingFacility']) : null,
-                        'control_line' => $params['ctrlLine'],
-                        'positive_verification_line' => $params['positiveLine'],
-                        'long_term_verification_line' => $params['longTermLine'],
-                        'gender' => $params['gender'],
-                        'latitude' => $params['latitude'],
-                        'longitude' => $params['longitude'],
-                        'age_not_reported' => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : no,
-                        'age' => ($params['age'] != '') ? $params['age'] : null,
-                        'marital_status' => $params['maritalStatus'],
-                        'residence' => $params['residence'],
-                        'education_level' => $params['educationLevel'],
-                        'risk_population' => $params['riskPopulation'],
-                        'other_risk_population' => $params['otherriskPopulation'],
-                        'term_outcome' => $params['recencyOutcome'],
-                        'pregnancy_status' => $params['pregnancyStatus'],
-                        'current_sexual_partner' => $params['currentSexualPartner'],
-                        'past_hiv_testing' => $params['pastHivTesting'],
-                        'last_hiv_status' => $params['lastHivStatus'],
-                        'patient_on_art' => $params['patientOnArt'],
-                        'test_last_12_month' => $params['testLast12Month'],
-                        'location_one' => $params['locationOne'],
-                        'location_two' => $params['locationTwo'],
-                        'location_three' => $params['locationThree'],
-                        'added_on' => $params['addedOn'],
-                        'added_by' => $params['addedBy'],
-                        'sync_by' => $params['syncedBy'],
-                        'exp_violence_last_12_month' => $params['violenceLast12Month'],
-                        'mac_no' => $params['macAddress'],
-                        'cell_phone_number' => $params['phoneNumber'],
-                        'recency_test_performed' => $params['testNotPerformed'],
-                        'app_version' => $recency['appVersion'],
-                        //'ip_address'=>$recency[''],
-                        'form_initiation_datetime' => $params['formInitDateTime'],
-                        'form_transfer_datetime' => date("Y-m-d H:i:s"),
-                        //'kit_name' => $params['testKitName'],
-                        'kit_lot_no' => $params['testKitLotNo'],
-                        'tester_name' => $params['testerName'],
-                        'unique_id' => $this->randomizer(10),
-                        'vl_result' => $params['vlLoadResult'],
-                        'sample_collection_date' => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate'] != '') ? $common->dbDateFormat($params['sampleCollectionDate']) : null,
-                        'sample_receipt_date' => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate'] != '') ? $common->dbDateFormat($params['sampleReceiptDate']) : null,
-                        'received_specimen_type' => $params['receivedSpecimenType'],
-                        'testing_facility_type' => $params['testingModality'],
-                    );
-
-                    if (isset($params['invalidControlLine']) && $params['invalidControlLine'] != '') {
-                        $data['invalid_control_line']       = $params['invalidControlLine'];
-                        $data['invalid_verification_line']  = $params['invalidPositiveLine'];
-                        $data['invalid_longterm_line']      = $params['invalidLongTermLine'];
-                    }
-
-                    if (isset($params['vlTestDate']) && trim($params['vlTestDate']) != "") {
-                        $data['vl_test_date'] = $common->dbDateFormat($params['vlTestDate']);
-                    }
-
-                    if (isset($params['hivRecencyTestDate']) && trim($params['hivDiagnosisDate']) != "") {
-                        $data['hiv_diagnosis_date'] = $common->dbDateFormat($params['hivDiagnosisDate']);
-                    }
-                    if (isset($params['hivRecencyTestDate']) && trim($params['hivRecencyTestDate']) != "") {
-                        $data['hiv_recency_test_date'] = $common->dbDateFormat($params['hivRecencyTestDate']);
-                    }
-                    if (isset($params['dob']) && trim($params['dob']) != "") {
-                        $data['dob'] = $common->dbDateFormat($params['dob']);
-                    }
-                    if (isset($params['testKitExpDate']) && trim($params['testKitExpDate']) != "") {
-                        $data['kit_expiry_date'] = $common->dbDateFormat($params['testKitExpDate']);
-                    }
-                    if(isset($params['recencyOutcome']) && $params['recencyOutcome'] != ""){
-                        $data['assay_outcome_updated_by']       = $params['addedBy'];
-                        $data['assay_outcome_updated_on']       = $params['addedOn'];
-                    }
-                    if(isset($params['finalOutcome']) && $params['finalOutcome'] != ""){
-                        $data['final_outcome_updated_by']       = $params['addedBy'];
-                        $data['final_outcome_updated_on']       = $params['addedOn'];
-                    }
-                    
-                    $this->insert($data);
-                    $lastInsertedId = $this->lastInsertValue;
-                    if ($lastInsertedId > 0) {
-                        $response['syncData']['response'] = 'success';
-                    } else {
-                        $response['syncData']['response'] = 'failed';
-                    }
-                }
-            } catch (Exception $exc) {
-                error_log($exc->getMessage());
-                error_log($exc->getTraceAsString());
-            }
-        }
-        if ($syncedBy != '') {
-            $response['syncCount']['response'] = $this->getTotalSyncCount($syncedBy);
-        } else {
-            $response['syncCount']['response'] = 0;
         }
         return $response;
     }
@@ -4755,7 +4679,7 @@ class RecencyTable extends AbstractTableGateway
         $date = date("y");
         $sQuery = $sql->select()->from('recency')
         ->columns(array(
-            "recencyId"=>new Expression("MAX(recency_id)"),"sample_id_year_prefix","sample_id_string_prefix","sample_prefix_id"
+            "sample_prefix_id"=>new Expression("MAX(sample_prefix_id)"),"sample_id_year_prefix","sample_id_string_prefix"
         ))
         ->where(array('sample_id_year_prefix' => $date));
         ;
@@ -4765,7 +4689,7 @@ class RecencyTable extends AbstractTableGateway
         $sampleIdYearPrefix = $rResult['sample_id_year_prefix'];
         $sampleIdStringPrefix = $rResult['sample_id_string_prefix'];
         $samplePrefixId = $rResult['sample_prefix_id'];
-        if(isset($recencyId) && trim($recencyId)!="")
+        if(isset($samplePrefixId) && trim($samplePrefixId)!="")
         {
             $samplePrefixId = (int)$samplePrefixId+1;
             $samplePrefixId = str_pad($samplePrefixId,6,"0",STR_PAD_LEFT);  
