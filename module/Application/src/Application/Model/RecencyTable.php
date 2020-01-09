@@ -152,7 +152,9 @@ class RecencyTable extends AbstractTableGateway
                 $sQuery->where('term_outcome = "" OR  term_outcome = NULL ');
             }
         }
-
+        if ($parameters['RTest'] == 'pending') {
+            $sQuery = $sQuery->where(array('term_outcome = ""'));
+        }
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
@@ -167,7 +169,7 @@ class RecencyTable extends AbstractTableGateway
 
         $queryContainer->exportRecencyDataQuery = $sQuery;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-        //echo $sQueryStr;die;
+        // echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
@@ -184,6 +186,10 @@ class RecencyTable extends AbstractTableGateway
 
         if ($roleCode == 'user' || $roleCode == 'remote_order_user') {
             $iQuery = $iQuery->where('r.added_by=' . $sessionLogin->userId);
+        }
+
+        if ($parameters['RTest'] == 'pending') {
+            $iQuery = $iQuery->where(array('r.term_outcome = ""'));
         }
 
         $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
