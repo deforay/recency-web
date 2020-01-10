@@ -300,11 +300,47 @@ class QualityCheckTable extends AbstractTableGateway
           $riskPopulationDb = new RiskPopulationsTable($this->adapter);
           $globalDb = new GlobalConfigTable($this->adapter);
           $common = new CommonService();
-
-          if (isset($params["qc"])) {
+          $userId=$params["userId"];
+        
+               $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('auth_token', 'secret_key'))
+               ->where(array('user_id' => $userId));
+               $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
+               $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+               $secretKey=$uResult['secret_key'];              
+               if($userId!=''  && $params["version"]>"2.8"){
+                    $secretKey=$uResult['secret_key'];  
+                    
+                    $arrayCount= count($params['qc']);
+                    $formsVal=array();
+                    // \Zend\Debug\Debug::dump($params['qc'][0]);
+                    for ($x = 0; $x < $arrayCount; $x++) {
+                         if($secretKey)
+                              $return=$this->cryptoJsAesDecrypt($secretKey,$params['qc'][$x]); 
+                         else
+                              $return=json_decode($params['qc'][$x],true); 
+                         // $formsVal[$x]=$return[0];
+                         $formsVal[$x]=$return;
+                                           
+                    }
+                    
+               $formData=$formsVal;
+               // \Zend\Debug\Debug::dump($formData);
+           }else{
+          
+               $arrayCount= count($params['qc']);
+               $formsVal=array();
+               for ($x = 0; $x < $arrayCount; $x++) {
+                    $formsVal[$x]=json_decode($params['qc'][$x],true);
+               }
+               $formData=$formsVal;
+          }
+          // if (isset($params["qc"])) {   
+          if (isset($formData)) {
+      
                //check user status active or not
                $uQuery = $sql->select()->from('users')
-                    ->where(array('user_id' => $params["qc"][0]['syncedBy']));
+                    // ->where(array('user_id' => $params["qc"][0]['syncedBy']));
+                    ->where(array('user_id' => $userId));
                $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
                $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
@@ -314,12 +350,12 @@ class QualityCheckTable extends AbstractTableGateway
                     $response['status'] = 'failed';
                     return $response;
                }
-
                $i = 1;
-               foreach ($params["qc"] as $key => $qcTest) {
+         
+                    // foreach ($params["qc"] as $key => $qcTest) {
+                    foreach ($formsVal as $key => $qcTest) {
+                       
                     try {
-
-                         $syncedBy = $qcTest['syncedBy'];
                          $data = array(
                               'qc_sample_id' => $qcTest['qcsampleId'],
                               'qc_test_date' => ($qcTest['qcTestDate'] != '') ? $common->dbDateFormat($qcTest['qcTestDate']) : NULL,
@@ -339,14 +375,15 @@ class QualityCheckTable extends AbstractTableGateway
                               'app_version' => $qcTest['appVersion'],
                               'added_on' => date('Y-m-d H:i:s'),
                               'added_by' => $qcTest['addedBy'],
-                              'sync_by' => $qcTest['syncedBy'],
+                              'sync_by' => $userId,
                               'form_initiation_datetime' => $qcTest['formInitDateTime'],
                               'form_transfer_datetime' => $qcTest['formTransferDateTime'],
                               'form_saved_datetime' => $qcTest['formSavedDateTime'],
                               'testing_facility_id' => $qcTest['testingFacility'],
                               'unique_id' => isset($qcTest['unique_id']) ? $qcTest['unique_id'] : NULL,
                          );
-
+                    
+                     
                          $this->insert($data);
                          $lastInsertedId = $this->lastInsertValue;
                          if ($lastInsertedId > 0) {
@@ -354,6 +391,7 @@ class QualityCheckTable extends AbstractTableGateway
                          } else {
                               $response['syncData']['response'][$key] = 'failed';
                          }
+                       
                     } catch (Exception $exc) {
                          error_log($exc->getMessage());
                          error_log($exc->getTraceAsString());
@@ -361,8 +399,16 @@ class QualityCheckTable extends AbstractTableGateway
                     $i++;
                }
           }
-          $response['syncCount']['response'] = $this->getTotalSyncCount($syncedBy);
-          $response['syncCount']['tenRecord'] = $this->getQCSyncData($syncedBy);
+          $response['syncCount']['response'] = $arrayCount;
+
+          if($secretKey && $params["version"]>"2.8")
+          {
+               $syncedVal= $this->getQCSyncData($userId);
+               $syncedData=$this->cryptoJsAesEncrypt($secretKey,$syncedVal);
+          }
+          else
+               $syncedData=$this->getQCSyncData($userId);
+          $response['syncCount']['tenRecord'] = $syncedData;
           return $response;
      }
 
@@ -1157,4 +1203,38 @@ class QualityCheckTable extends AbstractTableGateway
           }
           return $output;
      }
+     public function cryptoJsAesDecrypt($passphrase, $jsonString){
+          $jsondata = json_decode($jsonString, true);
+          try {
+              $salt = hex2bin($jsondata["s"]);
+              $iv  = hex2bin($jsondata["iv"]);
+          } catch(Exception $e) { return null; }
+          $ct = base64_decode($jsondata["ct"]);
+          $concatedPassphrase = $passphrase.$salt;
+          $md5 = array();
+          $md5[0] = md5($concatedPassphrase, true);
+          $result = $md5[0];
+          for ($i = 1; $i < 3; $i++) {
+              $md5[$i] = md5($md5[$i - 1].$concatedPassphrase, true);
+              $result .= $md5[$i];
+          }
+          $key = substr($result, 0, 32);
+          $data = openssl_decrypt($ct, 'aes-256-cbc', $key, true, $iv);
+          return json_decode($data, true);
+      }
+  
+    public function cryptoJsAesEncrypt($passphrase, $value){
+          $salt = openssl_random_pseudo_bytes(8);
+          $salted = '';
+          $dx = '';
+          while (strlen($salted) < 48) {
+              $dx = md5($dx.$passphrase.$salt, true);
+              $salted .= $dx;
+          }
+          $key = substr($salted, 0, 32);
+          $iv  = substr($salted, 32,16);
+          $encrypted_data = openssl_encrypt(json_encode($value), 'aes-256-cbc', $key, true, $iv);
+          $data = array("ct" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "s" => bin2hex($salt));
+          return json_encode($data);
+      }
 }
