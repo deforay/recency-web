@@ -957,7 +957,7 @@ class RecencyTable extends AbstractTableGateway
                 return $response;
             }
             $i = 0;
-            if($userId!='' && $params["version"]>"2.8"){
+            if($userId!='' && $params["version"]>"2.8" && $params["version"]!=null){
                 $secretKey=$uResult['secret_key'];       
                 $arrayCount= count($params['form']);
                 $formsVal=array();
@@ -965,7 +965,7 @@ class RecencyTable extends AbstractTableGateway
                     if($secretKey!="")
                         $formsVal[]=json_decode($this->cryptoJsAesDecrypt($secretKey,$params['form'][$x]),true);
                     else
-                        $formsVal[]=json_decode($params['form'][$x],true);
+                        $formsVal[]=$params['form'][$x];
                 }
                 $formData=$formsVal;
                 
@@ -973,7 +973,7 @@ class RecencyTable extends AbstractTableGateway
                 $arrayCount= count($params['form']);
                 $formsVal=array();
                 for ($x = 0; $x < $arrayCount; $x++) {
-                    $formsVal[]=json_decode($params['form'][$x],true);
+                    $formsVal[]=$params['form'][$x];
                 }
                 $formData=$formsVal;
             }
