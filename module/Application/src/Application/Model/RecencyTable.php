@@ -1189,11 +1189,11 @@ class RecencyTable extends AbstractTableGateway
                             $adapter->commit();
                             $patient = $recency['patientId'];
                             $response['syncData']['response'][$i] = 'success';
-                            $response['syncCount']['response'] = $arrayCount;
+                            $response['syncCount']['response'][0]['Total'] = $arrayCount;
                         } else {
                             $adapter->rollBack();
                             $response['syncData']['response'][$i] = 'failed';
-                            $response['syncCount']['response'] = 0;
+                            $response['syncCount']['response'][0]['Total'] = 0;
                         }
                         
                     }

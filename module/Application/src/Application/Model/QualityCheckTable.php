@@ -396,7 +396,7 @@ class QualityCheckTable extends AbstractTableGateway
                     $i++;
                }
           }
-          $response['syncCount']['response'] = $arrayCount;
+          $response['syncCount']['response'][0]['Total'] = $arrayCount;
 
           if($secretKey && $params["version"]>"2.8")
           {
