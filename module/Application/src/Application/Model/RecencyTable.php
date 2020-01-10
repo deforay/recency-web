@@ -789,11 +789,12 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         //check the user is active or not
-        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status'))
+        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status','secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $secretKey = $uResult['secret_key'];
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
@@ -817,8 +818,13 @@ class RecencyTable extends AbstractTableGateway
             $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
-                -$response['status'] = 'success';
-                $response['recency'] = $recencyResult;
+                $response['status'] = 'success';
+                if($params['version']>2.8 && $secretKey!="")
+                {
+                    $response['recency'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
+                }
+                else
+                    $response['recency'] = $recencyResult;
             } else {
                 $response["status"] = "fail";
                 $response["message"] = "You don't have recency data!";
@@ -835,13 +841,13 @@ class RecencyTable extends AbstractTableGateway
         $common = new CommonService();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-
         //check the user is active or not
-        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status'))
+        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status','secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $secretKey = $uResult['secret_key'];
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
@@ -860,7 +866,12 @@ class RecencyTable extends AbstractTableGateway
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
-                $response['recency'] = $recencyResult;
+                if($params['version']>2.8 && $secretKey!="")
+                {
+                    $response['recency'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
+                }
+                else
+                    $response['recency'] = $recencyResult;
             } else {
                 $response["status"] = "fail";
                 $response["message"] = "You don't have recency data!";
@@ -880,11 +891,12 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
 
         //check the user is active or not
-        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status'))
+        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status','secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $secretKey = $uResult['secret_key'];
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
@@ -900,7 +912,12 @@ class RecencyTable extends AbstractTableGateway
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
-                $response['recency'] = $recencyResult;
+                if($params['version']>2.8 && $secretKey!="")
+                {
+                    $response['recency'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
+                }
+                else
+                    $response['recency'] = $recencyResult;
             } else {
                 $response["status"] = "fail";
                 $response["message"] = "You don't have recency data!";
@@ -1684,11 +1701,12 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         //check the user is active or not
-        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status'))
+        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status','secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $secretKey = $uResult['secret_key'];
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
@@ -1710,7 +1728,12 @@ class RecencyTable extends AbstractTableGateway
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($rResult) > 0) {
                 $response['status'] = 'success';
-                $response['tat'] = $rResult;
+                if($params['version']>2.8 && $secretKey!="")
+                {
+                    $response['tat'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
+                }
+                else
+                    $response['tat'] = $rResult;
             } else {
                 $response["status"] = "fail";
                 $response["message"] = "You don't have TAT data!";
