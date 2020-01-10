@@ -301,7 +301,6 @@ class QualityCheckTable extends AbstractTableGateway
           $globalDb = new GlobalConfigTable($this->adapter);
           $common = new CommonService();
           $userId=$params["userId"];
-        
                $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('auth_token', 'secret_key'))
                ->where(array('user_id' => $userId));
                $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
@@ -315,9 +314,9 @@ class QualityCheckTable extends AbstractTableGateway
                     // \Zend\Debug\Debug::dump($params['qc'][0]);
                     for ($x = 0; $x < $arrayCount; $x++) {
                          if($secretKey)
-                              $return=$this->cryptoJsAesDecrypt($secretKey,$params['qc'][$x]); 
+                              $return=json_decode($this->cryptoJsAesDecrypt($secretKey,$params['qc'][$x],true)); 
                          else
-                              $return=json_decode($params['qc'][$x],true); 
+                              $return=$params['qc'][$x]; 
                          // $formsVal[$x]=$return[0];
                          $formsVal[$x]=$return;
                                            
@@ -330,7 +329,7 @@ class QualityCheckTable extends AbstractTableGateway
                $arrayCount= count($params['qc']);
                $formsVal=array();
                for ($x = 0; $x < $arrayCount; $x++) {
-                    $formsVal[$x]=json_decode($params['qc'][$x],true);
+                    $formsVal[$x]=$params['qc'][$x];
                }
                $formData=$formsVal;
           }
@@ -353,8 +352,7 @@ class QualityCheckTable extends AbstractTableGateway
                $i = 1;
          
                     // foreach ($params["qc"] as $key => $qcTest) {
-                    foreach ($formsVal as $key => $qcTest) {
-                       
+                    foreach ($formData as $key => $qcTest) {
                     try {
                          $data = array(
                               'qc_sample_id' => $qcTest['qcsampleId'],
@@ -383,7 +381,6 @@ class QualityCheckTable extends AbstractTableGateway
                               'unique_id' => isset($qcTest['unique_id']) ? $qcTest['unique_id'] : NULL,
                          );
                     
-                     
                          $this->insert($data);
                          $lastInsertedId = $this->lastInsertValue;
                          if ($lastInsertedId > 0) {
