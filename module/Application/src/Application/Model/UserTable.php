@@ -88,11 +88,27 @@ class UserTable extends AbstractTableGateway {
                     array_push($ufmdata,$val['facility_id']);
                 }
                 $logincontainer->userId = $rResult->user_id;
-                $logincontainer->roleId = $rResult->role_id;
+                $logincontainer->
+                roleId = $rResult->role_id;
                 $logincontainer->roleCode = $rResult->role_code;
                 $logincontainer->userName = ucwords($rResult->user_name);
                 $logincontainer->userEmail = ucwords($rResult->email);
                 $logincontainer->facilityMap = implode(',',$ufmdata);
+                if(trim($rResult->role_code)!="remote_order_user")
+                {
+                    $nonRemoteUserQuery = $sql->select()->from(array('r'=>'recency'))
+                                        ->columns(array('count'=>new Expression('COUNT(*)')))
+                                        ->where(array('term_outcome = "" OR  term_outcome = NULL '));
+                    $alertNonRemoteUserQueryStr = $sql->getSqlStringForSqlObject($nonRemoteUserQuery);
+                    $alertNonRemoteUserQueryResult = $dbAdapter->query($alertNonRemoteUserQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                    if(isset($alertNonRemoteUserQueryResult['count']) && $alertNonRemoteUserQueryResult['count'] > 0){
+                        $logincontainer->nonRemoteUserMsg = 'There are '.$alertNonRemoteUserQueryResult['count'].' pending Recency Tests ';
+                    }
+                    else
+                    {
+                        $logincontainer->nonRemoteUserMsg = '';
+                    }
+                }
                 // VL Pending result alert
                 $alertQuery = $sql->select()->from(array('r'=>'recency'))->columns(array('count'=>new Expression('COUNT(*)')))
                 ->join(array('ufm'=>'user_facility_map'),'r.facility_id=ufm.facility_id',array())

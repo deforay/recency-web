@@ -8,7 +8,9 @@ $crossLoginSession = new Container('crossLogin');
 // \Zend\Debug\Debug::dump($crossLoginSession->logged);
 $role = $sessionLogin->roleId;
 $roleCode = $sessionLogin->roleCode;
+$roleCode = $sessionLogin->roleCode;
 $userName = $sessionLogin->userName;
+$nonRemoteUserMsg = $sessionLogin->nonRemoteUserMsg;
 $GlobalConfigRes = $this->GlobalConfigHelper();
 /* Crosss Login Block Start */
 $userCrossLoginRes = $this->UserCrossLoginHelper();
@@ -343,6 +345,12 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
           </header>
           <!-- END Header -->
           <!-- END Header -->
+          <div data-notify="container" class="col-11 col-sm-4 alert alert-danger animated fadeIn" role="alert" data-notify-position="top-center" id = "recencyAlert" style="display: none; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; left: 0px; right: 0px; animation-iteration-count: 1;">
+          <button type="button" aria-hidden="true" onclick="dismissAlert();" class="close" data-notify="dismiss" style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button>
+          <span data-notify="icon"></span> <span data-notify="title"></span> 
+          <span data-notify="message" id="nonRemoteUserMsg"></span>
+          <a href="#" target="_blank" data-notify="url"></a>
+     </div>
           <main id="main-container">
                <!-- Hero -->
                <?php echo $this->content; ?>
@@ -369,6 +377,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
      <script src="<?php echo $this->basePath() . '/assets/js/alert.js'; ?>"></script>
      <script src="<?php echo $this->basePath() . '/assets/js/dashmix.core.min.js'; ?>"></script>
      <script src="<?php echo $this->basePath() . '/assets/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'; ?>"></script>
+     <script src="<?php echo $this->basePath() . '/assets/js/plugins/bootstrap-notify/bootstrap-notify.min.js'; ?>"></script>
 
      <script src="<?php echo $this->basePath() . '/assets/js/dashmix.app.min.js'; ?>"></script>
      <script src="<?php echo $this->basePath() . '/assets/js/pages/be_forms_validation.min.js'; ?>"></script>
@@ -420,6 +429,12 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                if ($crossLoginSession->logged) { ?>
                     setCrossLogin();
                <?php } ?>
+               <?php if (isset($nonRemoteUserMsg) && $nonRemoteUserMsg != "") { ?>
+                    $("#nonRemoteUserMsg").text('<?php echo $nonRemoteUserMsg; ?>');
+                    $("#recencyAlert").css("display","inline-block")
+
+                <?php } ?>
+
           });
           $(function() {
                str = $(location).attr('pathname');
@@ -492,6 +507,10 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                     alert("Your browser doesn't support the session!");
                     sessionStorage.setItem("crosslogin", "false");
                }
+          }
+          function dismissAlert()
+          {
+               $("#recencyAlert").css("display","none");
           }
      </script>
 </body>

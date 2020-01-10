@@ -153,7 +153,7 @@ class RecencyTable extends AbstractTableGateway
             }
         }
         if ($parameters['RTest'] == 'pending') {
-            $sQuery = $sQuery->where(array('term_outcome = ""'));
+            $sQuery = $sQuery->where(array('term_outcome = "" OR  term_outcome = NULL '));
         }
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
