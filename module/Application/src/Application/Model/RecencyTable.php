@@ -963,12 +963,11 @@ class RecencyTable extends AbstractTableGateway
                 $formsVal=array();
                 for ($x = 0; $x < $arrayCount; $x++) {
                     if($secretKey!="")
-                        $formsVal[]=json_decode($this->cryptoJsAesDecrypt($secretKey,$params['form'][$x]),true);
+                        $formsVal[]=$this->cryptoJsAesDecrypt($secretKey,$params['form'][$x]);
                     else
                         $formsVal[]=$params['form'][$x];
                 }
                 $formData=$formsVal;
-                
             }else{
                 $arrayCount= count($params['form']);
                 $formsVal=array();
