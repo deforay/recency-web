@@ -314,7 +314,7 @@ class QualityCheckTable extends AbstractTableGateway
                     // \Zend\Debug\Debug::dump($params['qc'][0]);
                     for ($x = 0; $x < $arrayCount; $x++) {
                          if($secretKey)
-                              $return=json_decode($this->cryptoJsAesDecrypt($secretKey,$params['qc'][$x],true)); 
+                              $return=json_decode($this->cryptoJsAesDecrypt($secretKey,$params['qc'][$x]),true); 
                          else
                               $return=$params['qc'][$x]; 
                          // $formsVal[$x]=$return[0];
