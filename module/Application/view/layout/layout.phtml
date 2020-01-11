@@ -511,6 +511,11 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
           function dismissAlert()
           {
                $("#recencyAlert").css("display","none");
+               $.post("<?php echo $this->url('common', array('action' => 'set-session')); ?>", {
+                },
+                function(data) {
+                    window.location.reload(true);
+                });
           }
      </script>
 </body>

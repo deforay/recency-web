@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 class CommonController extends AbstractActionController
 {
@@ -91,6 +92,14 @@ class CommonController extends AbstractActionController
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))
                 ->setTerminal(true);
+        return $viewModel;
+    }
+
+    public function setSessionAction(){
+        $logincontainer = new Container('credo');
+        $logincontainer->nonRemoteUserMsg = '';
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal(true);
         return $viewModel;
     }
 
