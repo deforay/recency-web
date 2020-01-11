@@ -1730,7 +1730,7 @@ class RecencyTable extends AbstractTableGateway
                 $response['status'] = 'success';
                 if($params['version']>2.8 && $secretKey!="" && $params["version"]!=null)
                 {
-                    $response['tat'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
+                    $response['tat'] = $this->cryptoJsAesEncrypt($secretKey,$rResult);
                 }
                 else
                     $response['tat'] = $rResult;
