@@ -819,7 +819,7 @@ class RecencyTable extends AbstractTableGateway
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
-                if($params['version']>2.8 && $secretKey!="")
+                if($params['version']>2.8 && $secretKey!="" && $params["version"]!=null)
                 {
                     $response['recency'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
                 }
@@ -866,7 +866,7 @@ class RecencyTable extends AbstractTableGateway
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
-                if($params['version']>2.8 && $secretKey!="")
+                if($params['version']>2.8 && $secretKey!="" && $params["version"]!=null)
                 {
                     $response['recency'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
                 }
@@ -912,7 +912,7 @@ class RecencyTable extends AbstractTableGateway
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
-                if($params['version']>2.8 && $secretKey!="")
+                if($params['version']>2.8 && $secretKey!="" && $params["version"]!=null)
                 {
                     $response['recency'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
                 }
@@ -1728,7 +1728,7 @@ class RecencyTable extends AbstractTableGateway
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($rResult) > 0) {
                 $response['status'] = 'success';
-                if($params['version']>2.8 && $secretKey!="")
+                if($params['version']>2.8 && $secretKey!="" && $params["version"]!=null)
                 {
                     $response['tat'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
                 }
