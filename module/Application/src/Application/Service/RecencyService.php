@@ -52,13 +52,15 @@ class RecencyService
             $result = $recencyDb->addRecencyDetails($params);
             if ($result > 0) {
                 $adapter->commit();
-
-                // $eventAction = 'Added a new Role Detail with the name as - '.ucwords($params['roleName']);
-                // $resourceName = 'Roles';
-                // $eventLogDb = $this->sm->get('EventLogTable');
-                // $eventLogDb->addEventLog($eventAction, $resourceName);
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Recency details added successfully';
+                // Add event log
+                $subject                = $result;
+                $eventType              = 'Recency details-add';
+                $action                 = 'Added a new Recency details for patient id'.ucwords($params['patientId']);
+                $resourceName           = 'Recency Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             }
         } catch (Exception $exc) {
             $adapter->rollBack();
@@ -82,12 +84,14 @@ class RecencyService
             $result = $recencyDb->updateRecencyDetails($params);
             if ($result > 0) {
                 $adapter->commit();
-
-                // $eventAction = 'Updated Role Detail with the name as - '.ucwords($params['roleName']);
-                //  $resourceName = 'Roles';
-                //  $eventLogDb = $this->sm->get('EventLogTable');
-                //  $eventLogDb->addEventLog($eventAction, $resourceName);
-
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Recency details-edit';
+                $action                 = 'Edited  Recency details for patient id '.ucwords($params['patientId']);
+                $resourceName           = 'Recency Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Recency details updated successfully';
             }

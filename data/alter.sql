@@ -429,3 +429,16 @@ ALTER TABLE `recency_change_trails` ADD `sample_prefix_id` INT(6) UNSIGNED ZEROF
 update recency_change_trails set sample_prefix_id=recency_id;
 
 ALTER TABLE `users` ADD `secret_key` VARCHAR(255) NOT NULL AFTER `auth_token`;
+
+--prasath 14-Jan-2020
+
+CREATE TABLE `event_log` (
+ `event_id` int(11) NOT NULL AUTO_INCREMENT,
+ `actor` int(11) NOT NULL,
+ `subject` varchar(255) DEFAULT NULL,
+ `event_type` varchar(255) DEFAULT NULL,
+ `action` varchar(255) DEFAULT NULL,
+ `resource_name` varchar(255) DEFAULT NULL,
+ `added_on` datetime DEFAULT NULL,
+ PRIMARY KEY (`event_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;

@@ -762,8 +762,9 @@ class RecencyTable extends AbstractTableGateway
             //            }
             $updateResult = $this->update($data, array('recency_id' => $params['recencyId']));
         }
-
+        $recencyId = 0;
         if ($updateResult > 0) {
+            $recencyId = $params['recencyId'];
             $modifyData = array(
                 'modified_on'   => $common->getDateTime(),
                 'modified_by'   => $logincontainer->userId
@@ -779,7 +780,7 @@ class RecencyTable extends AbstractTableGateway
             $cloneData['trail_created_by'] = $logincontainer->userId;
             $cloneDb->insert($cloneData);
         }
-        return $updateResult;
+        return $recencyId;
     }
 
     public function fetchAllRecencyListApi($params)
@@ -4707,7 +4708,6 @@ class RecencyTable extends AbstractTableGateway
         ;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        $recencyId = $rResult['recencyId'];
         $sampleIdYearPrefix = $rResult['sample_id_year_prefix'];
         $sampleIdStringPrefix = $rResult['sample_id_string_prefix'];
         $samplePrefixId = $rResult['sample_prefix_id'];

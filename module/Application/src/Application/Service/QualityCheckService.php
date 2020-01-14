@@ -36,6 +36,14 @@ class QualityCheckService {
                     $adapter->commit();
                     $alertContainer = new Container('alert');
                     $alertContainer->alertMsg = 'Quality Check test details added successfully';
+                     // Add Event log
+                    $subject                = $result;
+                    $eventType              = 'Quality Check details-add';
+                    $action                 = 'Added  Quality Check details for sample id '.ucwords($params['qcSampleId']);
+                    $resourceName           = 'Quality Check Details ';
+                    $eventLogDb             = $this->sm->get('EventLogTable');
+                    $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                    // End Event log
                }
 
           }
@@ -63,6 +71,14 @@ class QualityCheckService {
 
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Quality Check test details updated successfully';
+                 // Add Event log
+                 $subject                = $result;
+                 $eventType              = 'Quality Check details-edit';
+                 $action                 = 'Edited  Quality Check details for sample id '.ucwords($params['qcSampleId']);
+                 $resourceName           = 'Quality Check Details ';
+                 $eventLogDb             = $this->sm->get('EventLogTable');
+                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                 // End Event log
             }
         }
         catch (Exception $exc) {

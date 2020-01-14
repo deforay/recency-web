@@ -26,6 +26,7 @@ use Application\Model\QualityCheckTable;
 use Application\Model\TestingFacilityTypeTable;
 use Application\Model\RecencyChangeTrailsTable;
 use Application\Model\ManageColumnsMapTable;
+use Application\Model\EventLogTable;
 
 // Service
 
@@ -182,6 +183,11 @@ class Module{
                     'SettingsQcSampleTable' => function($sm) {
                         $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                         $table = new SettingsQcSampleTable($dbAdapter);
+                        return $table;
+                    },
+                    'EventLogTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new EventLogTable($dbAdapter);
                         return $table;
                     },
                    
