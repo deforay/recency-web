@@ -385,6 +385,13 @@ class RecencyService
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $filename = 'Recency-Data-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            // Add event log
+            $subject                = $filename;
+            $eventType              = 'Recency data-export';
+            $action                 = 'Exported Recency data ';
+            $resourceName           = 'Recency data ';
+            $eventLogDb             = $this->sm->get('EventLogTable');
+            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             return $filename;
         } catch (Exception $exc) {
             return "";
@@ -536,6 +543,13 @@ class RecencyService
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $filename = 'Recent-Infections-Data-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            // Add event log
+            $subject                = $filename;
+            $eventType              = 'Recency Infections data-export';
+            $action                 = 'Exported Recency Infections data ';
+            $resourceName           = 'Recency  data ';
+            $eventLogDb             = $this->sm->get('EventLogTable');
+            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             return $filename;
         } catch (Exception $exc) {
             return "";
@@ -668,6 +682,13 @@ class RecencyService
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $filename = 'Long-term-Infection-Data-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            // Add event log
+            $subject                = $filename;
+            $eventType              = 'Long term Infections data-export';
+            $action                 = 'Exported Long term Infections data ';
+            $resourceName           = 'Long term  data ';
+            $eventLogDb             = $this->sm->get('EventLogTable');
+            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             return $filename;
         } catch (Exception $exc) {
             return "";
@@ -792,6 +813,13 @@ class RecencyService
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $filename = 'TAT-Report-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            // Add event log
+            $subject                = $filename;
+            $eventType              = 'TAT report data-export';
+            $action                 = 'Exported TAT report data ';
+            $resourceName           = 'TAT report  data ';
+            $eventLogDb             = $this->sm->get('EventLogTable');
+            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             return $filename;
         } catch (Exception $exc) {
             return "";
@@ -1069,6 +1097,13 @@ class RecencyService
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $filename = 'Weekly-Report-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            // Add event log
+            $subject                = $filename;
+            $eventType              = 'Weekly report data-export';
+            $action                 = 'Exported Weekly report data ';
+            $resourceName           = 'Weekly report  data ';
+            $eventLogDb             = $this->sm->get('EventLogTable');
+            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             return $filename;
         } catch (Exception $exc) {
             return "";
@@ -1233,6 +1268,13 @@ class RecencyService
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $filename = 'Facility-Recency-Results-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            // Add event log
+            $subject                = $filename;
+            $eventType              = 'Facility Recency report data-export';
+            $action                 = 'Exported Facility Recency report data ';
+            $resourceName           = 'Facility Recency report  data ';
+            $eventLogDb             = $this->sm->get('EventLogTable');
+            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             return $filename;
         } catch (Exception $exc) {
             return "";
@@ -1448,6 +1490,13 @@ class RecencyService
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $filename = 'District-Recency-Results-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            // Add event log
+            $subject                = $filename;
+            $eventType              = 'District Recency report data-export';
+            $action                 = 'Exported District Recency report data ';
+            $resourceName           = 'District Recency report  data ';
+            $eventLogDb             = $this->sm->get('EventLogTable');
+            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             return $filename;
         } catch (Exception $exc) {
             return "";
@@ -1701,6 +1750,13 @@ class RecencyService
             $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $filename = 'Age-wise Infection Report-' . date('d-M-Y-H-i-s') . '.xls';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+            // Add event log
+            $subject                = $filename;
+            $eventType              = 'Age-wise Infection report data-export';
+            $action                 = 'Exported Age-wise Infection report data ';
+            $resourceName           = 'Age-wise Infection report  data ';
+            $eventLogDb             = $this->sm->get('EventLogTable');
+            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             return $filename;
         } catch (Exception $exc) {
             return "";
