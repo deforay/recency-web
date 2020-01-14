@@ -39,6 +39,14 @@ class CityService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'City details added successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'City details-add';
+                $action                 = 'Added  City details for city id '.$result;
+                $resourceName           = 'City  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
 
         }
@@ -65,6 +73,14 @@ class CityService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'City details updated successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'City details-edit';
+                $action                 = 'Edited  City details for city id '.$result;
+                $resourceName           = 'City  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
         }
         catch (Exception $exc) {
