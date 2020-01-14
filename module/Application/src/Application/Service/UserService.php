@@ -52,6 +52,14 @@ class UserService {
 
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'User details added successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'User details-add';
+                $action                 = 'Added  User details for User id '.$result;
+                $resourceName           = 'User  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
 
         }
@@ -78,6 +86,14 @@ class UserService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'User details updated successfully';
+                 // Add Event log
+                 $subject                = $result;
+                 $eventType              = 'User details-edit';
+                 $action                 = 'Edited  User details for User id '.$result;
+                 $resourceName           = 'User  Details ';
+                 $eventLogDb             = $this->sm->get('EventLogTable');
+                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                 // End Event log
             }
         }
         catch (Exception $exc) {
@@ -114,6 +130,14 @@ class UserService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Profile details updated successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Profile details-edit';
+                $action                 = 'Edited  Profile details for Profile id '.base64_decode($params['userId']);
+                $resourceName           = 'Profile  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
         }
         catch (Exception $exc) {

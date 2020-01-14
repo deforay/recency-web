@@ -39,6 +39,14 @@ class ProvinceService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Province details added successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Province details-add';
+                $action                 = 'Added  Province details for Province id '.$result;
+                $resourceName           = 'Province  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
 
         }
@@ -65,6 +73,14 @@ class ProvinceService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Province details updated successfully';
+                 // Add Event log
+                 $subject                = $result;
+                 $eventType              = 'Province details-edit';
+                 $action                 = 'Edited  Province details for Province id '.$result;
+                 $resourceName           = 'Province  Details ';
+                 $eventLogDb             = $this->sm->get('EventLogTable');
+                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                 // End Event log
             }
         }
         catch (Exception $exc) {

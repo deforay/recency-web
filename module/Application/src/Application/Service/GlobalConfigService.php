@@ -56,6 +56,14 @@ class GlobalConfigService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Global Config details updated successfully';
+                 // Add Event log
+                 $subject                = $result;
+                 $eventType              = 'Global Config details-edit';
+                 $action                 = 'Edited  Global Config details';
+                 $resourceName           = 'Global Config  Details ';
+                 $eventLogDb             = $this->sm->get('EventLogTable');
+                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                 // End Event log
             }
         }
         catch (Exception $exc) {

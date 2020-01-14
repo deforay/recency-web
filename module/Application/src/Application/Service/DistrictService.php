@@ -39,6 +39,14 @@ class DistrictService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'District details added successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'District details-add';
+                $action                 = 'Added  District details for District id '.$result;
+                $resourceName           = 'District  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
 
         }
@@ -65,6 +73,14 @@ class DistrictService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'District details updated successfully';
+                 // Add Event log
+                 $subject                = $result;
+                 $eventType              = 'District details-edit';
+                 $action                 = 'Edited  District details for District id '.$result;
+                 $resourceName           = 'District  Details ';
+                 $eventLogDb             = $this->sm->get('EventLogTable');
+                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                 // End Event log
             }
         }
         catch (Exception $exc) {

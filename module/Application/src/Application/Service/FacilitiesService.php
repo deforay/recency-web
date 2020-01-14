@@ -39,6 +39,14 @@ class FacilitiesService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Facility details added successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Facility details-add';
+                $action                 = 'Added  Facility details for Facility id '.$result;
+                $resourceName           = 'Facility  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
 
         }
@@ -66,6 +74,14 @@ class FacilitiesService {
 
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Facility details updated successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Facility details-edit';
+                $action                 = 'Edited  Facility details for Facility id '.$result;
+                $resourceName           = 'Facility  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
         }
         catch (Exception $exc) {

@@ -39,6 +39,14 @@ class SettingsService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Settings details added successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Settings details-add';
+                $action                 = 'Added  Settings details for Settings id '.$result;
+                $resourceName           = 'Settings  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
 
         }
@@ -72,6 +80,14 @@ class SettingsService {
 
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Settings details updated successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Settings details-edit';
+                $action                 = 'Edited  Settings details for Settings id '.$result;
+                $resourceName           = 'Settings  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
         }
         catch (Exception $exc) {
@@ -113,6 +129,14 @@ class SettingsService {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Sample details added successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Sample details-add';
+                $action                 = 'Added  Sample details for Sample id '.$result;
+                $resourceName           = 'Sample  Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
 
         }
@@ -134,6 +158,14 @@ class SettingsService {
 
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Sample details updated successfully';
+                 // Add Event log
+                 $subject                = $result;
+                 $eventType              = 'Sample details-edit';
+                 $action                 = 'Edited  Sample details for Sample id '.$result;
+                 $resourceName           = 'Sample  Details ';
+                 $eventLogDb             = $this->sm->get('EventLogTable');
+                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                 // End Event log
             }
         }
         catch (Exception $exc) {
