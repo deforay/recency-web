@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
