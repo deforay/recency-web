@@ -442,3 +442,8 @@ CREATE TABLE `event_log` (
  `added_on` datetime DEFAULT NULL,
  PRIMARY KEY (`event_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+-- Thanaseelan 20 Feb 2020 For syn option from vlsm lis_vl_result and lis_vl_test_data
+
+ALTER TABLE `recency` ADD `lis_vl_result` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_test_date`, ADD `lis_vl_test_date` DATE NULL DEFAULT NULL AFTER `lis_vl_result`;
+ALTER TABLE `recency` ADD `lis_vl_result_entry_date` DATE NULL DEFAULT NULL AFTER `lis_vl_test_date`;
