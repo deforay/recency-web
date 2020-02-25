@@ -5,6 +5,16 @@ $common = new \Application\Service\CommonService();
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 ?>
+<style>
+    table tr th{
+        text-align:center;
+        font-weight:bold;
+        vertical-align: middle !important;
+    }
+    table tr td{
+        vertical-align: middle !important;
+    }
+</style>    
 <hr />
 <a href="javascript:void(0)" class="btn btn-info saveResult" onclick="updateVlResult();">Save Result</a>
 <br /><br />
@@ -20,15 +30,15 @@ $roleCode = $sessionLogin->roleCode;
 <div class="tab-content">
     <div id="pendingVlResult" class="container tab-pane active"><br>
 
-        <table class="table table-bordered table-striped table-vcenter table-responsive" id="sampleData">
+        <table class="table table-bordered table-striped table-vcenter table-responsive" style="width:100%" id="sampleData">
             <thead>
                 <th>Sample ID</th>
                 <th>Patient ID</th>
                 <th>Recency Date</th>
-                <th style="width:25%;">VL Result Date</th>
-                <th style="width:25%;">VL Result</th>
+                <th>Viral Load Result Date</th>
+                <th style="width:300px !important;">Viral Load Result</th>
                 <th>Recency Outcome</th>
-                <th>Final outcome</th>
+                <th>Final Outcome</th>
                 <th>Action</th>
                 </tr>
             </thead>
@@ -43,7 +53,7 @@ $roleCode = $sessionLogin->roleCode;
                         <td><?php echo $sample['sample_id']; ?></td>
                         <td><?php echo $sample['patient_id']; ?></td>
                         <td><?php echo $common->humanDateFormat($sample['hiv_recency_test_date']); ?></td>
-                        <td>
+                        <td style="width:300px !important;">
                             <?php if ($sample['final_outcome'] == '') {
                                 if ($sample['vl_test_date'] == '') { ?>
                                     <input type="text" class="js-datepicker form-control" id="vlTestDate<?php echo $sample['recency_id']; ?>" name="vlTestDate[]" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" title="Please enter the vl test date" readonly="readonly">
@@ -62,7 +72,7 @@ $roleCode = $sessionLogin->roleCode;
                             <?php if ($sample['final_outcome'] == '') {
                                 if ($sample['vl_result'] == '') { ?>
                                     <input type="number" class="form-control checkNum vlResultData" data-term-outcome="<?php echo $sample['term_outcome']; ?>" name="vlResult[]" id="<?php echo $sample['recency_id']; ?>" value="<?php echo $sample['vl_result']; ?>" onchange="getVlResult();" />
-                                    <div>----- OR -----</div>
+                                    <br>- OR -
                                     <select class="form-control vlResultFields vlResultOption" name="vlResultOption" id="vlResultOption<?php echo $sample['recency_id']; ?>" onchange="updateVlResultFields('<?php echo $sample['recency_id']; ?>')">
                                         <option value="">-- Select -- </option>
                                         <option value="TND">TND</option>

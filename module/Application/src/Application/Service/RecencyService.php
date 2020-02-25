@@ -1596,7 +1596,7 @@ class RecencyService
                             ]
                         ]);
                         $responseCart = $resultCart->getBody()->getContents();
-                        if ($responseCart == 'Viral Load Test Request has been send successfully') {
+                        if ($responseCart == 'success') {
                             $recencyDb->saveRequestFlag($data['recency_id']);
                             $check = true;
                         }
@@ -1604,7 +1604,7 @@ class RecencyService
                 }
                 if ($check) {
                     $alertContainer = new Container('alert');
-                    $alertContainer->alertMsg = 'VL Test request was send successfully';
+                    $alertContainer->alertMsg = 'VL Test requested successfully';
                 }
             }
         } catch (Exception $e) {
