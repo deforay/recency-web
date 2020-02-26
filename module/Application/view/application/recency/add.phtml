@@ -1224,7 +1224,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 http.onreadystatechange = function() {
                     if (http.readyState == 4 && http.status == 200) {
                         if (confirm(http.responseText));
-                        if (http.responseText != "Viral Load Test Request has been send successfully") {
+                        if (http.responseText != "Viral Load Test Request has been sent successfully") {
                             $("#sendVlsm").val('no');
                         } else {
                             $("#sendVlsm").val('yes');
