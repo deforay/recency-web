@@ -350,6 +350,7 @@ class RecencyTable extends AbstractTableGateway
         // $facilityTypeDb = new FacilitiesTypeTable($this->adapter);
         $riskPopulationDb = new RiskPopulationsTable($this->adapter);
         $common = new CommonService();
+        $lastInsertedId = null;
         if ((isset($params['sampleId']) && trim($params['sampleId']) != "") || (isset($params['patientId']) && trim($params['patientId']) != "")) {
             if ($params['facilityId'] == 'other') {
                 $fResult = $facilityDb->checkFacilityName(strtolower($params['otherFacilityName']), 1);
