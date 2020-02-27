@@ -719,8 +719,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 jsonArr['dob'] = $("#dob").val();
                 jsonArr['age'] = $("#age").val();
                 jsonArr['gender'] = $("#gender").val();
-                var params = '' + jsonArr['sampleId'] + '&' + jsonArr['patientId'] + '&' + jsonArr['facilityId'] + '&' + jsonArr['province'] + '&' + jsonArr['district'] + '&' + jsonArr['sampleCollectionDate'] + '&' + jsonArr['sampleType'] + '&' + jsonArr['viralLoad'] + '&' + jsonArr['request_created_by'] + '&' + jsonArr['dob'] + '&' + jsonArr['age'] + '&' + jsonArr['gender'] + '';
-                console.log(jsonArr);
+                var params = '' + jsonArr['sampleId'] + '&' + jsonArr['patientId'] + '&' + jsonArr['facilityId'] + '&' + jsonArr['province'] + '&' + jsonArr['district'] + '&' + jsonArr['sampleCollectionDate'] + '&' + jsonArr['sampleType'] + '&' + jsonArr['viralLoad'] + '&' + jsonArr['request_created_by'] + '&' + jsonArr['dob'] + '&' + jsonArr['age'] + '&' + jsonArr[''] + '';
+                
                 var http = new XMLHttpRequest();
 
                 var url = '<?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/requestVlTest.php';

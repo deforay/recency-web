@@ -4341,7 +4341,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array(
-            'recency_id', 'facility_id', 'sample_id', 'patient_id', 'sample_collection_date', 'vl_result', 'received_specimen_type'
+            'recency_id', 'facility_id', 'sample_id', 'patient_id', 'sample_collection_date', 'vl_result', 'received_specimen_type','dob','age','gender'
         ))->where(array('sample_id' => $sId));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
