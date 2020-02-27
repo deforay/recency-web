@@ -983,7 +983,6 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                     } else if (item.facility_type == '2') {
                         $('.is-viral-lab').append('<option value="' + item.facility_id + '">' + item.facility_name + '</option>');
                     }
-                    $('#isFacilityLab').val($('#facilityId').val());
                 });
             } else {
                 console.log('Facility API from VLSM is not working! Please check domain url of vlsm');
@@ -1414,6 +1413,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             $('.rm-lab-req').css('padding-top', '0px')
             $('.vlsyn').css('display','contents');
             $('.vlsync').addClass('isRequired');
+            $('#isFacilityLab').val(atob($('#facilityId').val())); //.trigger('change');
         } else if($(obj).val() == 'no'){
             $('.vlsyn').css('display','none');
             $('.vlsync').removeClass('isRequired');
