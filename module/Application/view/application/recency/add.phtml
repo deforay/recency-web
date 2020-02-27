@@ -1248,6 +1248,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
     });
 
     function validateStep1() {
+        $("html, body").animate({ scrollTop: 150 }, 2000);
         $("#wizard-progress-step1 .isRequired").each(function() {
             ($(this).val() == '') ? $('.stepOne').css('visibility', 'hidden'): $('.stepOne').css('visibility', 'visible')
         });
