@@ -102,7 +102,7 @@ class UserTable extends AbstractTableGateway {
                     $alertNonRemoteUserQueryStr = $sql->getSqlStringForSqlObject($nonRemoteUserQuery);
                     $alertNonRemoteUserQueryResult = $dbAdapter->query($alertNonRemoteUserQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                     if(isset($alertNonRemoteUserQueryResult['count']) && $alertNonRemoteUserQueryResult['count'] > 0){
-                        $logincontainer->nonRemoteUserMsg = 'There are '.$alertNonRemoteUserQueryResult['count'].' pending Recency Tests ';
+                        $logincontainer->nonRemoteUserMsg = 'There are '.$alertNonRemoteUserQueryResult['count'].' pending Recency Assay Tests ';
                     }
                     else
                     {

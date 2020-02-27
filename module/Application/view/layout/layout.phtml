@@ -348,7 +348,7 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
           <div data-notify="container" class="col-11 col-sm-4 alert alert-danger animated fadeIn" role="alert" data-notify-position="top-center" id = "recencyAlert" style="display: none; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; left: 0px; right: 0px; animation-iteration-count: 1;">
           <button type="button" aria-hidden="true" onclick="dismissAlert();" class="close" data-notify="dismiss" style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button>
           <span data-notify="icon"></span> <span data-notify="title"></span> 
-          <span data-notify="message" id="nonRemoteUserMsg"></span>
+          <a data-notify="message" id="nonRemoteUserMsg" href="/recency/index"></a>
           <a href="#" target="_blank" data-notify="url"></a>
      </div>
           <main id="main-container">
@@ -431,13 +431,14 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                <?php } ?>
                <?php if (isset($nonRemoteUserMsg) && $nonRemoteUserMsg != "") { ?>
                     $("#nonRemoteUserMsg").text('<?php echo $nonRemoteUserMsg; ?>');
-                    $("#recencyAlert").css("display","inline-block")
-
+                    $("#recencyAlert").css("display","inline-block");
+                    
                 <?php } ?>
 
           });
           $(function() {
                str = $(location).attr('pathname');
+               
                splitsUrl = str.split("/", 4);
                if (splitsUrl[1] == 'facilities' || splitsUrl[1] == 'user' || splitsUrl[1] == 'recency' || splitsUrl[1] == 'global-config' || splitsUrl[1] == 'province' || splitsUrl[1] == 'district' || splitsUrl[1] == 'city') {
                     if (splitsUrl[1] != 'recency') {

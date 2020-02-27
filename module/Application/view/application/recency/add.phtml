@@ -836,7 +836,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 $('.actualresult-input').addClass('isRequired');
                 updateVlResultFields();
             } else if (ctrlLine == 'present' && postiveLine == 'present' && longTermLine == 'absent') {
-                $.blockUI();
+                //$.blockUI();
                 $("#outcome").html('Assay Recent - Please ensure you add Viral Load Result').css({
                     "color": "<?php echo $lineOutComeColor2; ?>"
                 });
@@ -847,7 +847,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 $('.isVlLabRequired').addClass('isRequired');
                 // getFacilities();
                 updateVlResultFields('Assay Recent');
-                $.unblockUI();
+                //$.unblockUI();
             } else if (ctrlLine == 'present' && postiveLine == 'present' && longTermLine == 'present') {
                 $("#outcome").html('Long Term').css({
                     "color": "<?php echo $lineOutComeColor2; ?>"
@@ -933,7 +933,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 _outcomeData.val('Invalid');
                 updateVlResultFields();
             } else if (_ctrl.val() == 'present' && _postive.val() == 'present' && _longTerm.val() == 'absent') {
-                $.blockUI();
+                //$.blockUI();
                 _outcomeId.html('Assay Recent - Please ensure you add Viral Load Result').css({
                     "color": "<?php echo $lineOutComeColor2; ?>"
                 });
@@ -945,7 +945,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 $('.is-vl-lab').css('display', 'contents');
                 $('.isVlLabRequired').addClass('isRequired');
                 updateVlResultFields('Assay Recent');
-                $.unblockUI();
+                //$.unblockUI();
             } else if (_ctrl.val() == 'present' && _postive.val() == 'present' && _longTerm.val() == 'present') {
                 _outcomeId.html('Long Term').css({
                     "color": "<?php echo $lineOutComeColor2; ?>"
@@ -969,20 +969,21 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
     function getFacilities() {
         // read Facility List
-        console.log($('.is-facility').html());
+        //console.log($('.is-facility').html());
         if($('.is-facility').html() == ""){
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.open("GET", '<?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/fetchFacilities.php', false); // false for synchronous request
             xmlHttp.send(null);
             if (typeof xmlHttp.responseText != 'undefined' && xmlHttp.responseText != "") {
                 jsonData = JSON.parse(xmlHttp.responseText);
-                $('.vlsync').append('<option valus=""></option>');
+                $('.vlsync').append('<option value=""></option>');
                 jsonData.forEach(function(item) {
                     if (item.facility_type == '1') {
                         $('.is-facility').append('<option value="' + item.facility_id + '">' + item.facility_name + '</option>');
                     } else if (item.facility_type == '2') {
                         $('.is-viral-lab').append('<option value="' + item.facility_id + '">' + item.facility_name + '</option>');
                     }
+                    $('#isFacilityLab').val($('#facilityId').val());
                 });
             } else {
                 console.log('Facility API from VLSM is not working! Please check domain url of vlsm');
@@ -1271,7 +1272,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
         $(".btnHide").show();
         $(".nxtBtn").hide();
+        <?php if ($syn) { ?>
         getFacilities();
+        <?php } ?>
     }
 
     function validateStep2() {
