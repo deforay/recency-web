@@ -89,9 +89,9 @@ $lineOutComeColor2 = "#000000";
                               <div class="col-sm-4">
                                    <select class="form-control isRequired" id="referenceResult" name="referenceResult" title="Please select the Reference Result">
                                         <option value="">--select--</option>
-                                        <option value="preliminary_recent_sample" <?php echo ($result['reference_result'] == 'preliminary_recent_sample') ? 'selected="selected"' : ''; ?>>Preliminary Recent Sample</option>
-                                        <option value="long_term_sample" <?php echo ($result['reference_result'] == 'long_term_sample') ? 'selected="selected"' : ''; ?>>Long term Sample</option>
-                                        <option value="hiv_negative_sample" <?php echo ($result['reference_result'] == 'hiv_negative_sample') ? 'selected="selected"' : ''; ?>>HIV Negative Sample</option>
+                                        <option value="preliminary_recent_sample" <?php echo ($result['reference_result'] == 'preliminary_recent_sample') ? 'selected="selected"' : ''; ?>>Preliminary Recent QC</option>
+                                        <option value="long_term_sample" <?php echo ($result['reference_result'] == 'long_term_sample') ? 'selected="selected"' : ''; ?>>Long term QC</option>
+                                        <option value="hiv_negative_sample" <?php echo ($result['reference_result'] == 'hiv_negative_sample') ? 'selected="selected"' : ''; ?>>HIV Negative QC</option>
                                    </select>
                               </div>
                               <label class="col-sm-2 col-form-label" for="testKitLotNo">Test Kit Lot No.<span class="mandatory">*</span></label>
@@ -141,7 +141,7 @@ $lineOutComeColor2 = "#000000";
                          </div>
                          <div class="form-group row">
 
-                              <label class="col-sm-2 col-form-label" for="">Long Term Verification<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Long Term Verification Line<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
                                         <option value="">--Select--</option>

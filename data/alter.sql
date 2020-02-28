@@ -447,3 +447,10 @@ CREATE TABLE `event_log` (
 
 ALTER TABLE `recency` ADD `lis_vl_result` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_test_date`, ADD `lis_vl_test_date` DATE NULL DEFAULT NULL AFTER `lis_vl_result`;
 ALTER TABLE `recency` ADD `lis_vl_result_entry_date` DATE NULL DEFAULT NULL AFTER `lis_vl_test_date`;
+
+-- Amit 28 Feb 2020
+
+UPDATE `roles` SET `role_name` = 'System Admin' WHERE `roles`.`role_id` = 1;
+UPDATE `roles` SET `role_name` = 'Recency Testing Hub' WHERE `roles`.`role_id` = 2;
+UPDATE `roles` SET `role_name` = 'Manager (view only)' WHERE `roles`.`role_id` = 5;
+

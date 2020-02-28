@@ -18,7 +18,7 @@ class RoleTable extends AbstractTableGateway {
     }
 
     public function fetchRoleAllDetails(){
-        return $this->select()->toArray();
+        return $this->select("role_status='active'")->toArray();
     }
 
     public function fetchUserDetails($parameters) {
