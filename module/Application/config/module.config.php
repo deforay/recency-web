@@ -225,6 +225,16 @@ return array(
                          ),
                     ),
                ),
+               'manifests' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/manifests[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Manifests',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
@@ -297,6 +307,7 @@ return array(
                'Application\Controller\District'            => 'Application\Controller\DistrictController',
                'Application\Controller\City'                => 'Application\Controller\CityController',
                'Application\Controller\PrintResults'        => 'Application\Controller\PrintResultsController',
+               'Application\Controller\Manifests'        => 'Application\Controller\ManifestsController',
           ),
      ),
      'controller_plugins' => array(

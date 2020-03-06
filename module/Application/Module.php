@@ -27,6 +27,7 @@ use Application\Model\TestingFacilityTypeTable;
 use Application\Model\RecencyChangeTrailsTable;
 use Application\Model\ManageColumnsMapTable;
 use Application\Model\EventLogTable;
+use Application\Model\ManifestsTable;
 
 // Service
 
@@ -41,6 +42,7 @@ use Application\Service\SettingsService;
 use Application\Service\ProvinceService;
 use Application\Service\DistrictService;
 use Application\Service\CityService;
+use Application\Service\ManifestsService;
 
 class Module{
      public function onBootstrap(MvcEvent $e){
@@ -190,6 +192,11 @@ class Module{
                         $table = new EventLogTable($dbAdapter);
                         return $table;
                     },
+                    'ManifestsTable' => function($sm) {
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $table = new ManifestsTable($dbAdapter);
+                        return $table;
+                    },
                    
                     
 
@@ -229,6 +236,9 @@ class Module{
                     },
                     'CityService' => function($sm) {
                         return new CityService($sm);
+                    },
+                    'ManifestsService' => function($sm) {
+                        return new ManifestsService($sm);
                     },
                     
                )

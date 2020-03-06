@@ -245,7 +245,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 									<?php } ?>
 								</div>
 								<div class="form-group row form-horizontal">
-									<label class="col-sm-2 col-form-label <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Received Specimen Type <?php echo (in_array("Received Specimen Type", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+									<label class="col-sm-2 col-form-label <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" for=""> Specimen Type <?php echo (in_array("Received Specimen Type", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
 									<div class="col-sm-4 <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>">
 										<select class="form-control <?php echo $receivedSpecimenTypeMandatory; ?> <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" id="receivedSpecimenType" name="receivedSpecimenType" title="Enter the received specimen type">
 											<option value="">--Select--</option>
@@ -655,7 +655,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											</div>
 											<br>
 											<div class="actualresult row" style="display: none;background-color: aliceblue;margin-left: 10px;margin-top: 20px;margin-bottom: 20px;padding: 20px;">
-												<label class="col-sm-2 col-form-label" for="controlLineActual">Control Line Actual <span class='mandatory'>*</span></label>
+												<label class="col-sm-2 col-form-label" for="controlLineActual">Control Line  <span class='mandatory'>*</span></label>
 												<div class="col-sm-4">
 													<select class="form-control actualresult-input" id="controlLineActual" name="controlLineActual" title="Please select the control line" onchange="changeTermLineActual()">
 														<option value="">--Select--</option>
@@ -663,7 +663,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 														<option value="absent" <?php echo ($result['invalid_control_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent</option>
 													</select>
 												</div>
-												<label class="col-sm-2 col-form-label" for="positiveVerificationLineActual">Positive Verification Actual <span class='mandatory'>*</span></label>
+												<label class="col-sm-2 col-form-label" for="positiveVerificationLineActual">Positive Verification  <span class='mandatory'>*</span></label>
 												<div class="col-sm-4">
 													<select class="form-control actualresult-input" id="positiveVerificationLineActual" name="positiveVerificationLineActual" title="Please select the long term verification line" onchange="changeTermLineActual()">
 														<option value="">--Select--</option>
@@ -671,7 +671,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 														<option value="absent" <?php echo ($result['invalid_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Negative/N)</option>
 													</select>
 												</div>
-												<label class="col-sm-2 col-form-label" for="longTermVerificationLineActual">Long Term Verification Actual <span class='mandatory'>*</span></label>
+												<label class="col-sm-2 col-form-label" for="longTermVerificationLineActual">Long Term Verification Line <span class='mandatory'>*</span></label>
 												<div class="col-sm-4">
 													<select class="form-control actualresult-input" id="longTermVerificationLineActual" name="longTermVerificationLineActual" title="Please select the long positive verification line" onchange="changeTermLineActual()">
 														<option value="">--Select--</option>

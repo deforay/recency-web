@@ -454,3 +454,21 @@ UPDATE `roles` SET `role_name` = 'System Admin' WHERE `roles`.`role_id` = 1;
 UPDATE `roles` SET `role_name` = 'Recency Testing Hub' WHERE `roles`.`role_id` = 2;
 UPDATE `roles` SET `role_name` = 'Manager (view only)' WHERE `roles`.`role_id` = 5;
 
+-- Amit 4 Mar 2020
+
+ALTER TABLE `recency_change_trails` ADD `lis_vl_result` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_test_date`, ADD `lis_vl_test_date` DATE NULL DEFAULT NULL AFTER `lis_vl_result`;
+ALTER TABLE `recency_change_trails` ADD `lis_vl_result_entry_date` DATE NULL DEFAULT NULL AFTER `lis_vl_test_date`;
+
+
+-- Amit 7 Mar 2020
+
+CREATE TABLE `manifests` (
+ `manifest_id` int(11) NOT NULL AUTO_INCREMENT,
+ `manifest_code` varchar(255) NOT NULL,
+ `added_by` int(11) NOT NULL,
+ `added_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ PRIMARY KEY (`manifest_id`),
+ UNIQUE KEY `manifest_code` (`manifest_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `recency` ADD `manifest_id` INT NULL DEFAULT NULL AFTER `sample_collection_date`, ADD `manifest_code` VARCHAR(255) NULL DEFAULT NULL AFTER `manifest_id`;
