@@ -107,7 +107,8 @@ class ManifestsTable extends AbstractTableGateway
 
         $sQuery = $sql->select()->from(array('m' => 'manifests'))
             ->join(array('u' => 'users'), 'u.user_id = m.added_by', array('user_name'))
-            ->join(array('r' => 'recency'), 'r.manifest_id = m.manifest_id', array(), 'left');
+            ->join(array('r' => 'recency'), 'r.manifest_id = m.manifest_id', array(), 'left')
+            ->group(array('m.manifest_id'));
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -150,7 +151,7 @@ class ManifestsTable extends AbstractTableGateway
             $row[] = ucwords($aRow['user_name']);
             $row[] = '
                 <a href="/manifests/edit/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>
-                <a href="/manifests/genarate-manifets/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Genarate Manifest" target="_blank"><i class="fa fa-barcode"></i> Print Barcode</a>
+                <a href="/manifests/genarate-manifets/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Genarate Manifest"><i class="fa fa-barcode"></i> Print Barcode</a>
                 ';
             $output['aaData'][] = $row;
         }
@@ -240,7 +241,7 @@ class ManifestsTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('m'=>$this->table))->columns(array('manifest_id','manifest_code'))
-        ->join(array('r'=>'recency'),'m.manifest_code=r.manifest_code',array('recency_id','sample_id','patient_id','dob','age','sample_collection_date','gender','patient_on_art'))
+        ->join(array('r'=>'recency'),'m.manifest_code=r.manifest_code',array('recency_id','sample_id','patient_id','dob','age','sample_collection_date','gender','patient_on_art','received_specimen_type'))
         ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
         ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
         ->join(array('dd'=>'district_details'),'f.district=dd.district_id',array('district_name'),'left')

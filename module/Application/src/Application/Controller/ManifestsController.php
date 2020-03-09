@@ -81,6 +81,11 @@ class ManifestsController extends AbstractActionController
         $result=$manifestService->getManifestsPDF($id);
         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
         $globalConfigResult = $globalConfigService->fetchGlobalConfig();
+        if(count($result) == 0){
+            $alertContainer = new Container('alert');
+            $alertContainer->alertMsg = 'Manifest does not have the barcode';
+            return $this->_redirect()->toRoute('manifests');
+        }
         // \Zend\Debug\Debug::dump($result);die;
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' =>$result,'globalConfigResult'=>$globalConfigResult));
