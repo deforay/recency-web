@@ -13,6 +13,7 @@ class ManifestsTable extends AbstractTableGateway
 {
 
     protected $table = 'manifests';
+    protected $primary_id = 'manifest_id';
 
     public function __construct(Adapter $adapter)
     {
@@ -147,7 +148,10 @@ class ManifestsTable extends AbstractTableGateway
             $row[] = ucwords($aRow['manifest_code']);
             $row[] = ucwords($aRow['added_on']);
             $row[] = ucwords($aRow['user_name']);
-            $row[] = '<a href="/manifests/edit/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            $row[] = '
+                <a href="/manifests/edit/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>
+                <a href="/manifests/genarate-manifets/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Genarate Manifest" target="_blank"><i class="fa fa-barcode"></i> Print Barcode</a>
+                ';
             $output['aaData'][] = $row;
         }
 
@@ -230,5 +234,20 @@ class ManifestsTable extends AbstractTableGateway
 
 
         return $manifestCode;
+    }
+
+    public function fetchManifestsPDF($id){
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery = $sql->select()->from(array('m'=>$this->table))->columns(array('manifest_id','manifest_code'))
+        ->join(array('r'=>'recency'),'m.manifest_code=r.manifest_code',array('recency_id','sample_id','patient_id','dob','age','sample_collection_date','gender','patient_on_art'))
+        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+        ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
+        ->join(array('dd'=>'district_details'),'f.district=dd.district_id',array('district_name'),'left')
+        ->where(array('m.'.$this->primary_id => $id))
+        ;
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        // echo $sQueryStr;die;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 }

@@ -93,4 +93,9 @@ class ManifestsService {
         }
     }
 
+    public function getManifestsPDF($id){
+        $manifestDb = $this->sm->get('ManifestsTable');
+        return $manifestDb->fetchManifestsPDF($id);
+    }
+
 }

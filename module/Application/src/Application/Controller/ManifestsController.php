@@ -73,4 +73,18 @@ class ManifestsController extends AbstractActionController
             }
         }
     }
+
+    public function genarateManifetsAction(){
+        $request = $this->getRequest();
+        $id = base64_decode($this->params()->fromRoute('id'));
+        $manifestService = $this->getServiceLocator()->get('ManifestsService');
+        $result=$manifestService->getManifestsPDF($id);
+        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+        $globalConfigResult = $globalConfigService->fetchGlobalConfig();
+        // \Zend\Debug\Debug::dump($result);die;
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' =>$result,'globalConfigResult'=>$globalConfigResult));
+        
+        return $viewModel;
+    }
 }
