@@ -29,7 +29,6 @@ class ManifestsService {
         $manifestDb = $this->sm->get('ManifestsTable');
         return $manifestDb->fetchManifests($params);
     }
-    
 
     public function addManifest($params)
     {
@@ -46,7 +45,7 @@ class ManifestsService {
                 // Add Event log
                 $subject                = $result;
                 $eventType              = 'Manifest add';
-                $action                 = 'Added  Manifest for Manifest id '.$result;
+                $action                 = 'Added  Manifest '.$result;
                 $resourceName           = 'Manifests';
                 $eventLogDb             = $this->sm->get('EventLogTable');
                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);

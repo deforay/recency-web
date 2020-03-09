@@ -21,9 +21,18 @@ class ManifestsController extends AbstractActionController
             $result = $manifestsService->getManifests($params);
             return $this->getResponse()->setContent(Json::encode($result));
         }
+        
     }
     public function addAction()
     {
+
+        $commonService = $this->getServiceLocator()->get('CommonService');
+
+        $manifestCode = strtoupper('REC' . date('ymd') .  $commonService->generateRandomString(5));
+
+        return new ViewModel(array(
+            'manifestCode' => $manifestCode
+        ));
 
     }
     public function editAction()

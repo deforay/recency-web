@@ -154,9 +154,9 @@ class RecencyTable extends AbstractTableGateway
         }
         if ($parameters['RTest'] == 'pending') {
             $sQuery = $sQuery->where(array('term_outcome = "" OR  term_outcome IS NULL '));
-        }else if ($parameters['RTest'] == 'completed') {
+        } else if ($parameters['RTest'] == 'completed') {
             $sQuery = $sQuery->where(array('term_outcome != "" AND  term_outcome IS NOT NULL '));
-        }else{
+        } else {
             // all requests
         }
         if (isset($sOrder) && $sOrder != "") {
@@ -520,15 +520,15 @@ class RecencyTable extends AbstractTableGateway
                 $data['vl_result_entry_date'] = date("Y-m-d H:i:s");
             }
 
-            if((isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "") || (isset($params['outcomeData']) && $params['outcomeData'] != "")){
+            if ((isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "") || (isset($params['outcomeData']) && $params['outcomeData'] != "")) {
                 $data['assay_outcome_updated_by']       = $logincontainer->userId;
                 $data['assay_outcome_updated_on']       = $common->getDateTime();
             }
-            if(isset($params['vlfinaloutcomeResult']) && $params['vlfinaloutcomeResult'] != ""){
+            if (isset($params['vlfinaloutcomeResult']) && $params['vlfinaloutcomeResult'] != "") {
                 $data['final_outcome_updated_by']       = $logincontainer->userId;
                 $data['final_outcome_updated_on']       = $common->getDateTime();
             }
-            if($logincontainer->roleCode == 'remote_order_user'){
+            if ($logincontainer->roleCode == 'remote_order_user') {
                 $data['remote_order']       = 'yes';
             }
 
@@ -743,15 +743,15 @@ class RecencyTable extends AbstractTableGateway
             } else if ($params['vlResultOption']) {
                 $data['vl_result'] = htmlentities($params['vlResultOption']);
             }
-            if((isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "") || (isset($params['outcomeData']) && $params['outcomeData'] != "")){
+            if ((isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "") || (isset($params['outcomeData']) && $params['outcomeData'] != "")) {
                 $data['assay_outcome_updated_by']       = $logincontainer->userId;
                 $data['assay_outcome_updated_on']       = $common->getDateTime();
             }
-            if(isset($params['vlfinaloutcomeResult']) && $params['vlfinaloutcomeResult'] != ""){
+            if (isset($params['vlfinaloutcomeResult']) && $params['vlfinaloutcomeResult'] != "") {
                 $data['final_outcome_updated_by']       = $logincontainer->userId;
                 $data['final_outcome_updated_on']       = $common->getDateTime();
             }
-            if($logincontainer->roleCode == 'remote_order_user'){
+            if ($logincontainer->roleCode == 'remote_order_user') {
                 $data['remote_order']       = 'yes';
             }
             //  if (strpos($params['outcomeData'], 'Long Term') !== false)
@@ -795,7 +795,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         //check the user is active or not
-        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status','secret_key'))
+        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status', 'secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
@@ -825,11 +825,9 @@ class RecencyTable extends AbstractTableGateway
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
-                if($params['version']>2.8 && $secretKey!="" && $params["version"]!=null)
-                {
-                    $response['recency'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
-                }
-                else
+                if ($params['version'] > 2.8 && $secretKey != "" && $params["version"] != null) {
+                    $response['recency'] = $this->cryptoJsAesEncrypt($secretKey, $recencyResult);
+                } else
                     $response['recency'] = $recencyResult;
             } else {
                 $response["status"] = "fail";
@@ -848,7 +846,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         //check the user is active or not
-        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status','secret_key'))
+        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status', 'secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
@@ -872,11 +870,9 @@ class RecencyTable extends AbstractTableGateway
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
-                if($params['version']>2.8 && $secretKey!="" && $params["version"]!=null)
-                {
-                    $response['recency'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
-                }
-                else
+                if ($params['version'] > 2.8 && $secretKey != "" && $params["version"] != null) {
+                    $response['recency'] = $this->cryptoJsAesEncrypt($secretKey, $recencyResult);
+                } else
                     $response['recency'] = $recencyResult;
             } else {
                 $response["status"] = "fail";
@@ -897,7 +893,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
 
         //check the user is active or not
-        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status','secret_key'))
+        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status', 'secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
@@ -918,11 +914,9 @@ class RecencyTable extends AbstractTableGateway
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
-                if($params['version']>2.8 && $secretKey!="" && $params["version"]!=null)
-                {
-                    $response['recency'] = $this->cryptoJsAesEncrypt($secretKey,$recencyResult);
-                }
-                else
+                if ($params['version'] > 2.8 && $secretKey != "" && $params["version"] != null) {
+                    $response['recency'] = $this->cryptoJsAesEncrypt($secretKey, $recencyResult);
+                } else
                     $response['recency'] = $recencyResult;
             } else {
                 $response["status"] = "fail";
@@ -937,7 +931,7 @@ class RecencyTable extends AbstractTableGateway
 
     public function addRecencyDetailsApi($params)
     {
-        
+
         $dbAdapter = $this->adapter;
         $adapter = $dbAdapter->getDriver()->getConnection();
         $sql = new Sql($dbAdapter);
@@ -948,7 +942,7 @@ class RecencyTable extends AbstractTableGateway
         $cityDb = new CityTable($this->adapter);
         $TestingFacilityTypeDb = new TestingFacilityTypeTable($this->adapter);
         $common = new CommonService();
-        $userId=$params["userId"];
+        $userId = $params["userId"];
         if (isset($params["form"])) {
 
             $uQuery = $sql->select()->from('users')
@@ -963,24 +957,24 @@ class RecencyTable extends AbstractTableGateway
                 return $response;
             }
             $i = 0;
-            if($userId!='' && $params["version"]>"2.8" && $params["version"]!=null){
-                $secretKey=$uResult['secret_key'];       
-                $arrayCount= count($params['form']);
-                $formsVal=array();
+            if ($userId != '' && $params["version"] > "2.8" && $params["version"] != null) {
+                $secretKey = $uResult['secret_key'];
+                $arrayCount = count($params['form']);
+                $formsVal = array();
                 for ($x = 0; $x < $arrayCount; $x++) {
-                    if($secretKey!="")
-                        $formsVal[]=$this->cryptoJsAesDecrypt($secretKey,$params['form'][$x]);
+                    if ($secretKey != "")
+                        $formsVal[] = $this->cryptoJsAesDecrypt($secretKey, $params['form'][$x]);
                     else
-                        $formsVal[]=$params['form'][$x];
+                        $formsVal[] = $params['form'][$x];
                 }
-                $formData=$formsVal;
-            }else{
-                $arrayCount= count($params['form']);
-                $formsVal=array();
+                $formData = $formsVal;
+            } else {
+                $arrayCount = count($params['form']);
+                $formsVal = array();
                 for ($x = 0; $x < $arrayCount; $x++) {
-                    $formsVal[]=$params['form'][$x];
+                    $formsVal[] = $params['form'][$x];
                 }
-                $formData=$formsVal;
+                $formData = $formsVal;
             }
             foreach ($formData as $key => $recency) {
                 try {
@@ -1173,11 +1167,11 @@ class RecencyTable extends AbstractTableGateway
                             $data['kit_expiry_date'] = $common->dbDateFormat($recency['testKitExpDate']);
                         }
 
-                        if(isset($params['recencyOutcome']) && $params['recencyOutcome'] != ""){
+                        if (isset($params['recencyOutcome']) && $params['recencyOutcome'] != "") {
                             $data['assay_outcome_updated_by']       = $recency['addedBy'];
                             $data['assay_outcome_updated_on']       = $common->getDateTime();
                         }
-                       
+
                         //    if (strpos($recency['recencyOutcome'], 'Long Term') !== false)
                         //    {
                         //         $data['final_outcome'] = 'Long Term';
@@ -1200,7 +1194,6 @@ class RecencyTable extends AbstractTableGateway
                             $response['syncData']['response'][$i] = 'failed';
                             $response['syncCount']['response'][0]['Total'] = 0;
                         }
-                        
                     }
                 } catch (Exception $exc) {
                     $adapter->rollBack();
@@ -1361,11 +1354,11 @@ class RecencyTable extends AbstractTableGateway
             } else if ($result <= 1000) {
                 $data['final_outcome'] = 'Long Term';
             }
-            if(isset($data['final_outcome']) && $data['final_outcome'] != ""){
+            if (isset($data['final_outcome']) && $data['final_outcome'] != "") {
                 $data['final_outcome_updated_by']       = $logincontainer->userId;
                 $data['final_outcome_updated_on']       = $common->getDateTime();
             }
-            if($logincontainer->roleCode == 'remote_order_user'){
+            if ($logincontainer->roleCode == 'remote_order_user') {
                 $data['remote_order']       = 'yes';
             }
 
@@ -1706,7 +1699,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         //check the user is active or not
-        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status','secret_key'))
+        $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status', 'secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
         $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
@@ -1733,11 +1726,9 @@ class RecencyTable extends AbstractTableGateway
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($rResult) > 0) {
                 $response['status'] = 'success';
-                if($params['version']>2.8 && $secretKey!="" && $params["version"]!=null)
-                {
-                    $response['tat'] = $this->cryptoJsAesEncrypt($secretKey,$rResult);
-                }
-                else
+                if ($params['version'] > 2.8 && $secretKey != "" && $params["version"] != null) {
+                    $response['tat'] = $this->cryptoJsAesEncrypt($secretKey, $rResult);
+                } else
                     $response['tat'] = $rResult;
             } else {
                 $response["status"] = "fail";
@@ -2016,11 +2007,11 @@ class RecencyTable extends AbstractTableGateway
         } else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
             $data['final_outcome'] = 'Long Term';
         }
-        if(isset($data['final_outcome']) && $data['final_outcome'] != ""){
+        if (isset($data['final_outcome']) && $data['final_outcome'] != "") {
             $data['final_outcome_updated_by']       = $logincontainer->userId;
             $data['final_outcome_updated_on']       = $common->getDateTime();
         }
-        if($logincontainer->roleCode == 'remote_order_user'){
+        if ($logincontainer->roleCode == 'remote_order_user') {
             $data['remote_order']       = 'yes';
         }
         $this->update($data, array('recency_id' => $recencyId));
@@ -2049,14 +2040,14 @@ class RecencyTable extends AbstractTableGateway
         } else if ($controlLine == 'present' && $positiveControlLine == 'present' && $longControlLine == 'present') {
             $data = array('term_outcome' => 'Long Term');
         }
-        if(isset($data['term_outcome']) && $data['term_outcome'] != ""){
+        if (isset($data['term_outcome']) && $data['term_outcome'] != "") {
             $data['assay_outcome_updated_by']       = $logincontainer->userId;
             $data['assay_outcome_updated_on']       = $common->getDateTime();
         }
-        if($logincontainer->roleCode == 'remote_order_user'){
+        if ($logincontainer->roleCode == 'remote_order_user') {
             $data['remote_order']       = 'yes';
         }
-        $this->update($data,array('recency_id' => $recencyId));
+        $this->update($data, array('recency_id' => $recencyId));
     }
 
     public function vlsmSync($sm)
@@ -4341,7 +4332,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array(
-            'recency_id', 'facility_id', 'sample_id', 'patient_id', 'sample_collection_date', 'vl_result', 'received_specimen_type','dob','age','gender'
+            'recency_id', 'facility_id', 'sample_id', 'patient_id', 'sample_collection_date', 'vl_result', 'received_specimen_type', 'dob', 'age', 'gender'
         ))->where(array('sample_id' => $sId));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
@@ -4522,8 +4513,9 @@ class RecencyTable extends AbstractTableGateway
 
     public function fetchPrintResultsDetails($parameters)
     {
-        $common = new CommonService();$sessionLogin = new Container('credo');
-        $aColumns = array('r.sample_id', 'DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name','r.final_outcome');
+        $common = new CommonService();
+        $sessionLogin = new Container('credo');
+        $aColumns = array('r.sample_id', 'DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name', 'r.final_outcome');
         $orderColumns = array('r.sample_id', 'r.sample_collection_date', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name', 'ft.final_outcome');
 
         /* Paging */
@@ -4592,17 +4584,17 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        
+
         $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
-        ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-        ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
         if ($sessionLogin->facilityMap != null) {
-            $sQuery = $sQuery->where('r.facility_id IN ('.$sessionLogin->facilityMap.')');
+            $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
         }
         if ($parameters['fName'] != '') {
             $sQuery->where(array('r.facility_id' => $parameters['fName']));
@@ -4612,7 +4604,7 @@ class RecencyTable extends AbstractTableGateway
         }
         if ($parameters['viewFlag'] == 'printed') {
             $sQuery->where('r.result_printed_on IS NOT NULL');
-        }else if($parameters['viewFlag'] == 'not-printed'){
+        } else if ($parameters['viewFlag'] == 'not-printed') {
             $sQuery->where('r.result_printed_on IS NULL');
         }
         if ($parameters['locationOne'] != '') {
@@ -4645,21 +4637,21 @@ class RecencyTable extends AbstractTableGateway
 
         /* Total data set length */
         $iQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
-        ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-        ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
         if ($parameters['fName'] != '') {
             $iQuery->where(array('r.facility_id' => $parameters['fName']));
         }
         if ($sessionLogin->facilityMap != null) {
-            $iQuery = $iQuery->where('r.facility_id IN ('.$sessionLogin->facilityMap.')');
+            $iQuery = $iQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
         }
         if ($parameters['testingFacility'] != '') {
             $iQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
         }
         if ($parameters['viewFlag'] == 'printed') {
             $iQuery->where('r.result_printed_on IS NOT NULL');
-        }else if($parameters['viewFlag'] == 'not-printed'){
+        } else if ($parameters['viewFlag'] == 'not-printed') {
             $iQuery->where('r.result_printed_on IS NULL');
         }
         if ($parameters['locationOne'] != '') {
@@ -4693,9 +4685,9 @@ class RecencyTable extends AbstractTableGateway
             $row[] = ucwords($aRow['testing_facility_name']);
             $row[] = ucwords($aRow['testing_facility_type_name']);
             $row[] = $aRow['final_outcome'];
-            if($aRow['final_outcome'] != ""){
+            if ($aRow['final_outcome'] != "") {
                 $row[] = '<a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>';
-            }else{
+            } else {
                 $row[] = '';
             }
             $output['aaData'][] = $row;
@@ -4709,32 +4701,28 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $date = date("y");
         $sQuery = $sql->select()->from('recency')
-        ->columns(array(
-            "sample_prefix_id"=>new Expression("MAX(sample_prefix_id)"),"sample_id_year_prefix","sample_id_string_prefix"
-        ))
-        ->where(array('sample_id_year_prefix' => $date));
-        ;
+            ->columns(array(
+                "sample_prefix_id" => new Expression("MAX(sample_prefix_id)"), "sample_id_year_prefix", "sample_id_string_prefix"
+            ))
+            ->where(array('sample_id_year_prefix' => $date));;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         $sampleIdYearPrefix = $rResult['sample_id_year_prefix'];
         $sampleIdStringPrefix = $rResult['sample_id_string_prefix'];
         $samplePrefixId = $rResult['sample_prefix_id'];
-        if(isset($samplePrefixId) && trim($samplePrefixId)!="")
-        {
-            $samplePrefixId = (int)$samplePrefixId+1;
-            $samplePrefixId = str_pad($samplePrefixId,6,"0",STR_PAD_LEFT);  
+        if (isset($samplePrefixId) && trim($samplePrefixId) != "") {
+            $samplePrefixId = (int) $samplePrefixId + 1;
+            $samplePrefixId = str_pad($samplePrefixId, 6, "0", STR_PAD_LEFT);
             $recencySampleId['sample_prefix_id'] = $samplePrefixId;
             $recencySampleId['sample_id_year_prefix'] = $date;
             $recencySampleId['sample_id_string_prefix'] = "RT";
-            $recencySampleId['recencyId'] = "RT".$date."".$samplePrefixId;
-        }
-        else
-        {
+            $recencySampleId['recencyId'] = "RT" . $date . "" . $samplePrefixId;
+        } else {
             $samplePrefixId = "000001";
             $recencySampleId['sample_prefix_id'] = $samplePrefixId;
             $recencySampleId['sample_id_year_prefix'] = $date;
             $recencySampleId['sample_id_string_prefix'] = "RT";
-            $recencySampleId['recencyId'] = "RT".$date."".$samplePrefixId;
+            $recencySampleId['recencyId'] = "RT" . $date . "" . $samplePrefixId;
         }
         return $recencySampleId;
     }
