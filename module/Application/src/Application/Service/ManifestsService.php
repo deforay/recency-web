@@ -60,10 +60,10 @@ class ManifestsService {
         }
     }
 
-    public function getManifestById($manifestId)
+    public function fetchManifestById($manifestId)
     {
         $manifestDb = $this->sm->get('ManifestsTable');
-        return $manifestDb->fetchManifestsById($manifestId);
+        return $manifestDb->fetchManifestById($manifestId);
     }
 
     public function updateManifest($params){
@@ -72,7 +72,7 @@ class ManifestsService {
         try {
             $manifestDb = $this->sm->get('ManifestsTable');
             $result = $manifestDb->updateManifest($params);
-            if($result > 0){
+            if($result != false){
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Manifest updated successfully';

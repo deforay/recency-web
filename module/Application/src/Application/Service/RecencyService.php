@@ -80,6 +80,11 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->getSamplesWithoutManifestCode();
     }
+    public function fetchSamplesByManifestId($manifestId)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchSamplesByManifestId($manifestId);
+    }
 
     public function updateRecencyDetails($params)
     {

@@ -49,6 +49,18 @@ class RecencyTable extends AbstractTableGateway
         return $this->select($whereCondition)->toArray();
     }
 
+    public function fetchSamplesByManifestId($manifestId){
+
+        $sessionLogin = new Container('credo');
+        $whereCondition = "(manifest_id='$manifestId')";
+
+        if ($sessionLogin->facilityMap != null) {
+            $whereCondition .= ' AND  r.facility_id IN (' . $sessionLogin->facilityMap . ') ';
+        }        
+
+        return $this->select($whereCondition)->toArray();
+    }
+
     public function fetchRecencyDetails($parameters)
     {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where

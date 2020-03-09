@@ -19,6 +19,11 @@ class ManifestsTable extends AbstractTableGateway
         $this->adapter = $adapter;
     }
 
+    public function fetchManifestById($manifestId)
+    {
+        return $this->select(array('manifest_id' => $manifestId))->current();
+    }
+
     public function fetchManifests($parameters)
     {
 
@@ -178,6 +183,46 @@ class ManifestsTable extends AbstractTableGateway
                 }
             }
         }
+
+        return $manifestCode;
+    }
+
+    public function updateManifest($params)
+    {
+
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $recencyDb = new RecencyTable($this->adapter);
+        $manifestCode = $params['manifestCode'];
+        $manifestId = $params['manifestId'];
+
+
+        // making the id and code blank in recency table
+
+        $updateData = array(
+            'manifest_id' => null,
+            'manifest_code' => null,
+        );
+
+        $recencyDb->update($updateData, array('manifest_id' => $manifestId));
+
+        // loop through the selected samples and update Recency main table
+
+        if ($params['selectedRecencyId'] != '') {
+
+            $recencyList = explode(",", $params['selectedRecencyId']);
+            
+            foreach ($recencyList as $recencyId) {
+
+                $updateData = array(
+                    'manifest_id' => $manifestId,
+                    'manifest_code' => $manifestCode,
+                );
+
+                $recencyDb->update($updateData, array('recency_id' => $recencyId));
+            }
+        }
+
 
         return $manifestCode;
     }

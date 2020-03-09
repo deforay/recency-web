@@ -25,7 +25,7 @@ class ManifestsController extends AbstractActionController
     public function addAction()
     {
         $request = $this->getRequest();
-        
+
         if ($request->isPost()) {
             $manifestService = $this->getServiceLocator()->get('ManifestsService');
             $params = $request->getPost();
@@ -47,5 +47,30 @@ class ManifestsController extends AbstractActionController
     }
     public function editAction()
     {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $manifestService = $this->getServiceLocator()->get('ManifestsService');
+            $params = $request->getPost();
+            $result = $manifestService->updateManifest($params);
+            return $this->_redirect()->toRoute('manifests');
+        } else {
+
+            $manifestId = base64_decode($this->params()->fromRoute('id'));
+            if (isset($manifestId) && !empty($manifestId)) {
+                $recencyService = $this->getServiceLocator()->get('RecencyService');
+                $manifestService = $this->getServiceLocator()->get('ManifestsService');
+                $manifestData = $manifestService->fetchManifestById($manifestId);
+                $sampleList = $recencyService->getSamplesWithoutManifestCode();
+                $selectedSamples = $recencyService->fetchSamplesByManifestId($manifestId);
+                return new ViewModel(array(
+                    'manifestData' => $manifestData,
+                    'sampleList' => $sampleList,
+                    'selectedSamples' => $selectedSamples,
+                ));
+            } else {
+                return $this->_redirect()->toRoute('manifests');
+            }
+        }
     }
 }
