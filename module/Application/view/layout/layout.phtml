@@ -36,6 +36,8 @@ if ($roleCode == 'remote_order_user') {
      $recencyMenu .= "<li id='nav-main-item'><a id='print-results' class='nav-main-link' href=" . $this->url('print-results', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-printer'></i> Print Results</span></a></li>";
 }
 
+$recencyMenu .= "<li id='nav-main-item'><a id='manifests' class='nav-main-link' href=" . $this->url('manifests', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-film'></i> Manifests</span></a></li>";
+
 $settingsMenu = "";
 if ($roleCode == 'admin') {
      $settingsMenu .= "<li id='nav-main-item'><a id='settings' class='nav-main-link' href=" . $this->url('settings', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
@@ -345,12 +347,12 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
           </header>
           <!-- END Header -->
           <!-- END Header -->
-          <div data-notify="container" class="col-11 col-sm-4 alert alert-danger animated fadeIn" role="alert" data-notify-position="top-center" id = "recencyAlert" style="display: none; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; left: 0px; right: 0px; animation-iteration-count: 1;">
-          <button type="button" aria-hidden="true" onclick="dismissAlert();" class="close" data-notify="dismiss" style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button>
-          <span data-notify="icon"></span> <span data-notify="title"></span> 
-          <a data-notify="message" id="nonRemoteUserMsg" href="/recency/index"></a>
-          <a href="#" target="_blank" data-notify="url"></a>
-     </div>
+          <div data-notify="container" class="col-11 col-sm-4 alert alert-danger animated fadeIn" role="alert" data-notify-position="top-center" id="recencyAlert" style="display: none; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; left: 0px; right: 0px; animation-iteration-count: 1;">
+               <button type="button" aria-hidden="true" onclick="dismissAlert();" class="close" data-notify="dismiss" style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button>
+               <span data-notify="icon"></span> <span data-notify="title"></span>
+               <a data-notify="message" id="nonRemoteUserMsg" href="/recency/index"></a>
+               <a href="#" target="_blank" data-notify="url"></a>
+          </div>
           <main id="main-container">
                <!-- Hero -->
                <?php echo $this->content; ?>
@@ -431,14 +433,14 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                <?php } ?>
                <?php if (isset($nonRemoteUserMsg) && $nonRemoteUserMsg != "") { ?>
                     $("#nonRemoteUserMsg").text('<?php echo $nonRemoteUserMsg; ?>');
-                    $("#recencyAlert").css("display","inline-block");
-                    
-                <?php } ?>
+                    $("#recencyAlert").css("display", "inline-block");
+
+               <?php } ?>
 
           });
           $(function() {
                str = $(location).attr('pathname');
-               
+
                splitsUrl = str.split("/", 4);
                if (splitsUrl[1] == 'facilities' || splitsUrl[1] == 'user' || splitsUrl[1] == 'recency' || splitsUrl[1] == 'global-config' || splitsUrl[1] == 'province' || splitsUrl[1] == 'district' || splitsUrl[1] == 'city') {
                     if (splitsUrl[1] != 'recency') {
@@ -498,6 +500,9 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                } else if (splitsUrl[1] == 'print-results') {
                     $('#manage').removeClass('open');
                     $('#' + splitsUrl[1]).addClass('active');
+               } else if (splitsUrl[1] == 'manifests') {
+                    $('#manage').removeClass('open');
+                    $('#' + splitsUrl[1]).addClass('active');
                }
           });
 
@@ -509,14 +514,13 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                     sessionStorage.setItem("crosslogin", "false");
                }
           }
-          function dismissAlert()
-          {
-               $("#recencyAlert").css("display","none");
-               $.post("<?php echo $this->url('common', array('action' => 'set-session')); ?>", {
-                },
-                function(data) {
-                    window.location.reload(true);
-                });
+
+          function dismissAlert() {
+               $("#recencyAlert").css("display", "none");
+               $.post("<?php echo $this->url('common', array('action' => 'set-session')); ?>", {},
+                    function(data) {
+                         window.location.reload(true);
+                    });
           }
      </script>
 </body>

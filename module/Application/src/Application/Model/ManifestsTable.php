@@ -31,6 +31,7 @@ class ManifestsTable extends AbstractTableGateway
         * you want to insert a non-database field (for example a counter or static image)
         */
         $sessionLogin = new Container('credo');
+        
         $common = new CommonService();
         $aColumns = array('manifest_code', 'added_on', 'u.user_name');
         $orderColumns = array('manifest_code', 'added_on', 'u.user_name');
@@ -104,11 +105,15 @@ class ManifestsTable extends AbstractTableGateway
         $roleId = $sessionLogin->roleId;
 
         $sQuery = $sql->select()->from(array('m' => 'manifests'))
-            ->join(array('u' => 'users'), 'u.user_id = m.added_by', array('user_name'));
+            ->join(array('u' => 'users'), 'u.user_id = m.added_by', array('user_name'))
+            ->join(array('r' => 'recency'), 'r.manifest_id = m.manifest_id', array(), 'left');
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
+        if ($sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
+        }      
 
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
@@ -211,7 +216,7 @@ class ManifestsTable extends AbstractTableGateway
         if ($params['selectedRecencyId'] != '') {
 
             $recencyList = explode(",", $params['selectedRecencyId']);
-            
+
             foreach ($recencyList as $recencyId) {
 
                 $updateData = array(
