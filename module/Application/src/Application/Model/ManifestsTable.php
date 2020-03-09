@@ -149,8 +149,8 @@ class ManifestsTable extends AbstractTableGateway
             $row[] = ucwords($aRow['added_on']);
             $row[] = ucwords($aRow['user_name']);
             $row[] = '
-                <a href="/manifests/edit/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>
-                <a href="/manifests/genarate-manifets/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Genarate Manifest" target="_blank"><i class="fa fa-barcode"></i> Print Barcode</a>
+                <a href="/manifests/edit/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-block btn-sm btn-danger" style="" title="Edit"><i class="far fa-edit"></i>Edit</a>
+                <a href="/manifests/genarate-manifets/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-block btn-info btn-sm" style="" title="Genarate Manifest" target="_blank"><i class="fa fa-barcode"></i> Print Manifest</a>
                 ';
             $output['aaData'][] = $row;
         }

@@ -54,6 +54,9 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             "aoColumns": [
                 <?php echo $editAction; ?>
             ],
+            "aaSorting": [
+                [1, "desc"]
+            ],
             "sAjaxSource": "<?php echo $this->url('manifests', array('action' => 'index')); ?>",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 $.ajax({
