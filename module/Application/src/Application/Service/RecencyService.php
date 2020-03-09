@@ -75,6 +75,12 @@ class RecencyService
         return $recencyDb->fetchRecencyDetailsById($recencyId);
     }
 
+    public function getSamplesWithoutManifestCode()
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->getSamplesWithoutManifestCode();
+    }
+
     public function updateRecencyDetails($params)
     {
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();

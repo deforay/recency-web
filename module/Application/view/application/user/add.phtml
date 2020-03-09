@@ -1,33 +1,45 @@
 <?php
+
 use Zend\Session\Container;
+
 $sessionLogin = new Container('credo');
 ?>
 <style type="text/css">
-.select2-selection__choice{
-     color: black !important;
-}
-button#search_rightAll, button#search_rightSelected, button#search_leftSelected, button#search_leftAll {
-    background-color: #e1effe;
-    color: dimgray;
-}
-button#search_rightAll:hover, button#search_rightSelected:hover, button#search_leftSelected:hover, button#search_leftAll:hover {
-    background-color: #dbe4ef;
-    color: black;
-    font-weight : 700;
-}
+    .select2-selection__choice {
+        color: black !important;
+    }
+
+    button#search_rightAll,
+    button#search_rightSelected,
+    button#search_leftSelected,
+    button#search_leftAll {
+        background-color: #e1effe;
+        color: dimgray;
+    }
+
+    button#search_rightAll:hover,
+    button#search_rightSelected:hover,
+    button#search_leftSelected:hover,
+    button#search_leftAll:hover {
+        background-color: #dbe4ef;
+        color: black;
+        font-weight: 700;
+    }
 </style>
 <div class="bg-body-light">
-     <div class="content content-full">
-          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Users</h1>
-               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                         <a href="<?php echo $this->url('user', array('action' => 'index')); ?>"><li class="breadcrumb-item">Users Details</li></a>
-                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
-                    </ol>
-               </nav>
-          </div>
-     </div>
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Users</h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <a href="<?php echo $this->url('user', array('action' => 'index')); ?>">
+                        <li class="breadcrumb-item">Users Details</li>
+                    </a>
+                    <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
 </div>
 
 
@@ -38,7 +50,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
         </div>
         <div class="block-content">
             <div class="col-md-12 table-responsive" id="hide">
-                <form name="userInformation" id="userInformation"  class="mb-5" action="<?php echo $this->url('user', array('action' => 'add')); ?>" method="post">
+                <form name="userInformation" id="userInformation" class="mb-5" action="<?php echo $this->url('user', array('action' => 'add')); ?>" method="post">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">User Name<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
@@ -49,7 +61,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                         <div class="col-sm-4">
                             <select class="form-control isRequired" id="roleName" name="roleName" title="Please select the role name">
                                 <option value="">--Select--</option>
-                                <?php foreach($roleResult as $role){?>
+                                <?php foreach ($roleResult as $role) { ?>
                                     <option value="<?php echo base64_encode($role['role_id']); ?>"><?php echo $role['role_name']; ?></option>
                                 <?php } ?>
                             </select>
@@ -93,11 +105,11 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label" for="">Online Web Access<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                             <select class="form-control isRequired" id="webAccess" name="webAccess" title="Please select the web access status">
-                                  <option value="">Select</option>
-                                 <option value="yes">Yes</option>
-                                 <option value="no">No</option>
-                             </select>
+                            <select class="form-control isRequired" id="webAccess" name="webAccess" title="Please select the web access status">
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
                         </div>
 
                         <label class="col-sm-2 col-form-label" for="">Status<span class="mandatory">*</span></label>
@@ -109,7 +121,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                         </div>
                     </div>
                     <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" for="">QC Reminder Alert (in Days) </label>
+                        <label class="col-sm-2 col-form-label" for="">QC Reminder Alert (in Days) </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="noOfDays" name="noOfDays" placeholder="Days in number" title="Please enter the days in number">
                         </div>
@@ -122,39 +134,37 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                     <h3 class="block-title" style=" margin-bottom: 4%; ">Use Province, District, City filters for Facility list</h3>
                     <div class="form-group row">
                         <?php
-                         foreach($globalConfigResult as $config){ ?>
-                            <?php if($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three'){ ?>
+                        foreach ($globalConfigResult as $config) { ?>
+                            <?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
                                 <label style=" margin-bottom: 4%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"];?>');">
+                                    <select class="form-control" id="<?php echo $config['global_name']; ?>" name="<?php echo $config['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($config['global_value']); ?>" title="Please enter the <?php echo lcfirst($config['global_value']); ?>" onchange="getLocationDeatils('<?php echo $config["global_name"]; ?>');">
                                         <option value="">-- Select --</option>
                                     </select>
                                 </div>
-                            <?php }
-                        }?>
+                        <?php }
+                        } ?>
                     </div>
 
                     <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">User Facility Map</label>
-                              <div class="col-sm-4">
-                                   <select  id="search" class="form-control" size="8" multiple="multiple">
-                                   </select>
-                              </div>
+                        <label class="col-sm-2 col-form-label" for="">User Facility Map</label>
+                        <div class="col-sm-4">
+                            <select id="search" class="form-control" size="8" multiple="multiple">
+                            </select>
+                        </div>
 
-                              <div class="col-md-2">
-                                   <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
-                                   <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
-                                   <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> < </button>
-                                   <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> << </button>
-                              </div>
-
-                              <div class="col-sm-4">
-                                   <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
-                              </div>
-                         </div>
+                        <div class="col-md-2">
+                            <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
+                            <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
+                            <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i>
+                                < </button> <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i>
+                                    << </button> </div> <div class="col-sm-4">
+                                        <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
+                        </div>
+                    </div>
 
                     <div class="row items-push">
-                    <input type="hidden" name="selectedMapFacility" id="selectedMapFacility"/>
+                        <input type="hidden" name="selectedMapFacility" id="selectedMapFacility" />
                         <div class="col-lg-7 offset-lg-4">
                             <a href="<?php echo $this->url('user', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
                             <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
@@ -168,15 +178,16 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
 <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
     duplicateName = true;
+
     function validateNow() {
         flag = deforayValidator.init({
             formId: 'userInformation'
         });
         var selVal = [];
-          $('#search_to option').each(function(i, selected){
-               selVal[i] = $(selected).val();
-          });
-          $("#selectedMapFacility").val(selVal);
+        $('#search_to option').each(function(i, selected) {
+            selVal[i] = $(selected).val();
+        });
+        $("#selectedMapFacility").val(selVal);
 
         if (flag) {
             if (duplicateName) {
@@ -186,81 +197,90 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
             }
         }
     }
-    function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+
+    function checkNameValidation(tableName, fieldName, obj, fnct, msg) {
         checkValue = document.getElementById(obj.id).value;
-        if($.trim(checkValue)!= ''){
-            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
-            function(data) {
-                if (data > 0)
-                {
+        if ($.trim(checkValue) != '') {
+            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", {
+                    tableName: tableName,
+                    fieldName: fieldName,
+                    value: checkValue,
+                    fnct: fnct
+                },
+                function(data) {
+                    if (data > 0) {
                         alert(msg);
                         duplicateName = false;
                         document.getElementById(obj.id).value = "";
-                }
-                else {
+                    } else {
                         duplicateName = true;
-                }
-            });
+                    }
+                });
         }
     }
-    $(document).ready(function($){
+    $(document).ready(function($) {
         <?php
-         foreach($globalConfigResult as $config){
-             ?>
-             getLocationDeatils('<?php echo $config["global_name"];?>');
-             <?php
-             break;
-         }
-         ?>
+        foreach ($globalConfigResult as $config) {
+        ?>
+            getLocationDeatils('<?php echo $config["global_name"]; ?>');
+        <?php
+            break;
+        }
+        ?>
 
         $('#search').multiselect({
-               search: {
-                    left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
-                    right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
-               },
-               fireSearch: function(value) {
-                    return value.length > 3;
-               }
-          });
+            search: {
+                left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+                right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+            },
+            fireSearch: function(value) {
+                return value.length > 3;
+            }
+        });
 
     });
-    function getLocationDeatils(globalName,nxtGlobalName)
-     {
+
+    function getLocationDeatils(globalName, nxtGlobalName) {
         var selectValue = document.getElementById(globalName).value;
         var innerId = '';
         var path = '';
-            if(globalName=='location_one' && selectValue==''){
-                path = 'get-province';
-                innerId = 'location_one';
-            }else if(globalName=='location_one' && selectValue!=''){
-                path = 'get-district';
-                innerId = 'location_two';
-                $("#location_three").html("<option value=''>-- Select --</option>");
-            }else if(globalName=='location_two' && selectValue!=''){
-                path = 'get-city';
-                innerId = 'location_three';
-            }else if(globalName=='location_three' || globalName=='location_two'){
-                getFacilityListByLocation(globalName);
-            }
-            if(path!=''){
-                $.blockUI();
-                $.post("/common/"+path, {selectValue:selectValue},
+        if (globalName == 'location_one' && selectValue == '') {
+            path = 'get-province';
+            innerId = 'location_one';
+        } else if (globalName == 'location_one' && selectValue != '') {
+            path = 'get-district';
+            innerId = 'location_two';
+            $("#location_three").html("<option value=''>-- Select --</option>");
+        } else if (globalName == 'location_two' && selectValue != '') {
+            path = 'get-city';
+            innerId = 'location_three';
+        } else if (globalName == 'location_three' || globalName == 'location_two') {
+            getFacilityListByLocation(globalName);
+        }
+        if (path != '') {
+            $.blockUI();
+            $.post("/common/" + path, {
+                    selectValue: selectValue
+                },
                 function(data) {
-                    $("#"+innerId).html(data);
+                    $("#" + innerId).html(data);
                     getFacilityListByLocation(globalName);
                     $.unblockUI();
                 });
-            }
-     }
-     function getFacilityListByLocation(globalName)
-     {
+        }
+    }
+
+    function getFacilityListByLocation(globalName) {
         $.blockUI();
-        $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {locationOne:$("#location_one").val(),locationTwo:$("#location_two").val(),locationThree:$("#location_three").val(),globalName:globalName},
-        function(data) {
-            $("#search").html(data);
-            $.unblockUI();
-        });
-     }
-
-
+        $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {
+                locationOne: $("#location_one").val(),
+                locationTwo: $("#location_two").val(),
+                locationThree: $("#location_three").val(),
+                globalName: globalName
+            },
+            function(data) {
+                $("#search").html(data);
+                $.unblockUI();
+            });
+    }
 </script>

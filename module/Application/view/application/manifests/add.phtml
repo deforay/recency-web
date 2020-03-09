@@ -1,93 +1,144 @@
 <?php
+
 use Zend\Session\Container;
+
 $sessionLogin = new Container('credo');
 
 
 ?>
 <style type="text/css">
+    .select2-selection__choice {
+        color: black !important;
+    }
 
+    button#search_rightAll,
+    button#search_rightSelected,
+    button#search_leftSelected,
+    button#search_leftAll {
+        background-color: #e1effe;
+        color: dimgray;
+    }
+
+    button#search_rightAll:hover,
+    button#search_rightSelected:hover,
+    button#search_leftSelected:hover,
+    button#search_leftAll:hover {
+        background-color: #dbe4ef;
+        color: black;
+        font-weight: 700;
+    }
 </style>
 <div class="bg-body-light">
-     <div class="content content-full">
-          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Manifests</h1>
-               <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                         <a href="<?php echo $this->url('settings', array('action' => 'index')); ?>"><li class="breadcrumb-item">Settings Details</li></a>
-                         <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
-                    </ol>
-               </nav>
-          </div>
-     </div>
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Manifests</h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <a href="<?php echo $this->url('manifests', array('action' => 'index')); ?>">
+                        <li class="breadcrumb-item">Manifests</li>
+                    </a>
+                    <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
 </div>
 
 
 <div class="content">
-     <div class="block block-rounded block-bordered">
-          <div class="block-header block-header-default">
-               <h3 class="block-title">Create New Manifest</h3>
-          </div>
-          <div class="block-content">
-               <div class="col-md-12 table-responsive" id="hide">
-                    <form name="settingsInformation" id="settingsInformation"  class="mb-5" action="<?php echo $this->url('manifests', array('action' => 'add')); ?>" method="post">
-                         <div class="form-group row">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Create New Manifest</h3>
+        </div>
+        <div class="block-content">
+            <div class="col-md-12 table-responsive" id="hide">
+                <form name="manifestForm" id="manifestForm" class="mb-5" action="<?php echo $this->url('manifests', array('action' => 'add')); ?>" method="post">
+                    <div class="form-group row">
 
 
-                              <label class="col-sm-2 col-form-label" for="testKitNumber">Manifest Code<span class="mandatory">*</span></label>
-                              <div class="col-sm-7">
-                                   <input type="text" class="form-control isRequired" id="manifestCode" readonly="readonly" name="manifestCode" placeholder="Manifest Code" value="<?php echo $manifestCode; ?>" >
-                              </div>
+                        <label class="col-sm-2 col-form-label" for="testKitNumber">Manifest Code<span class="mandatory">*</span></label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control isRequired" id="manifestCode" readonly="readonly" name="manifestCode" placeholder="Manifest Code" value="<?php echo $manifestCode; ?>">
+                        </div>
 
-                             
-                         </div>
-                       
 
-                         <div class="row items-push">
-                              <div class="col-lg-7 offset-lg-4">
-                                   <a href="<?php echo $this->url('settings', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
-                                   <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
-                              </div>
-                         </div>
-                    </form>
-               </div>
-          </div>
-     </div>
+                    </div>
+                    <div class="form-group row">
+
+
+                        <label class="col-sm-6 col-form-label" for="">Select Samples for this Manifest</label>
+                        <div class="col-sm-12">
+                            <div class="row">
+
+
+                                <div class="col-sm-4">
+                                    <select id="search" class="form-control" size="8" multiple="multiple">
+                                        <?php foreach ($sampleList as $recencySample) {
+                                        ?>
+                                            <option value="<?php echo $recencySample['recency_id']; ?>"><?php echo $recencySample['sample_id']; ?></option>
+                                        <?php }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
+                                    <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
+                                    <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i>
+                                        < </button> <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i>
+                                            << </button> </div> <div class="col-sm-4">
+                                                <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="row items-push">
+                        <input type="hidden" name="selectedRecencyId" id="selectedRecencyId" />
+                        <div class="col-lg-7 offset-lg-4">
+                            <a href="<?php echo $this->url('manifests', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                            <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+<script type="text/javascript" src="/assets/js/multiselect.min.js"></script>
 <script type="text/javascript">
-     jQuery(document).ready(function($) {
-     
-     });
-     duplicateName = true;
-     function validateNow() {
-          var selVal = [];
-          flag = deforayValidator.init({
-               formId: 'settingsInformation'
-          });
-          if (flag) {
-               if (duplicateName) {
-                    $.blockUI();
+    jQuery(document).ready(function($) {
+        $('#search').multiselect({
+            search: {
+                left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+                right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+            },
+            fireSearch: function(value) {
+                return value.length > 3;
+            }
+        });
+    });
+    duplicateName = true;
 
-                    document.getElementById('settingsInformation').submit();
-               }
-          }
-     }
-     function checkNameValidation(tableName, fieldName, obj, fnct, msg){
-        checkValue = document.getElementById(obj.id).value;
-        if($.trim(checkValue)!= ''){
-            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
-            function(data) {
-                if (data > 0)
-                {
-                        alert(msg);
-                        duplicateName = false;
-                        document.getElementById(obj.id).value = "";
-                }
-                else {
-                        duplicateName = true;
-                }
-            });
+    function validateNow() {
+        var selVal = [];
+        $('#search_to option').each(function(i, selected) {
+            selVal[i] = $(selected).val();
+        });
+        $("#selectedRecencyId").val(selVal);
+        flag = deforayValidator.init({
+            formId: 'manifestForm'
+        });
+        if (flag) {
+            if (duplicateName) {
+                $.blockUI();
+
+                document.getElementById('manifestForm').submit();
+            }
         }
     }
 </script>

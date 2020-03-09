@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Local Configuration Override
  *
@@ -17,41 +18,40 @@ $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 $env = getenv('APP_ENV') ?: 'production';
 
 
-if($env == 'development'){
+if ($env == 'development') {
     $local['db'] = array(
-                    'username' => 'root',
-                    'password' => 'zaq12345',
-                );
+        'username' => 'root',
+        'password' => 'zaq12345',
+    );
     $local['db']['adapters']['db1'] = array(
         'username' => 'root',
         'password' => 'zaq12345',
     );
-
 }
 
 
 
-if($env == 'testing'){
+if ($env == 'testing') {
     $local['db'] = array(
-                    'username' => 'root',
-                    'password' => 'zaq12345',
-                );
-
-                $local['db']['adapters']['db1'] = array(
         'username' => 'root',
-                    'password' => 'zaq12345',
+        'password' => 'zaq12345',
+    );
+
+    $local['db']['adapters']['db1'] = array(
+        'username' => 'root',
+        'password' => 'zaq12345',
     );
 }
 
 
 
-if($env == 'production'){
+if ($env == 'production') {
     $local['db'] = array(
-                    'username' => 'root',
-                    'password' => 'zaq12345',
-                );
+        'username' => 'root',
+        'password' => 'zaq12345',
+    );
 
-                $local['db']['adapters']['db1'] = array(
+    $local['db']['adapters']['db1'] = array(
         'username' => 'root',
         'password' => 'zaq12345',
     );

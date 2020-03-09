@@ -37,7 +37,7 @@ class ManifestsService {
         try {
             $manifestDb = $this->sm->get('ManifestsTable');
             $result = $manifestDb->addManifest($params);
-            if($result > 0){
+            if($result != false){
                 $adapter->commit();
 
                 $alertContainer = new Container('alert');

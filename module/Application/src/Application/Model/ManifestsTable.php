@@ -154,29 +154,31 @@ class ManifestsTable extends AbstractTableGateway
         $manifestId = null;
 
         $data = array(
-            'manifest_code' => $params['manifestCode'],
-            'added_on' => date("Y-m-d H:i:s"),
-            'added_by' => $logincontainer->userId,
+            'manifest_code' => $manifestCode,
+            'added_by' => $logincontainer->userId
         );
+
         $this->insert($data);
         $manifestId = $this->lastInsertValue;
-        
+
 
         // loop through the selected samples and update Recency main table
-        if($manifestId){
-            foreach($params['samples'] as $recencyId){
+        if ($manifestId) {
+            if ($params['selectedRecencyId'] != '') {
+                $recencyDb = new RecencyTable($this->adapter);
+                $recencyList = explode(",", $params['selectedRecencyId']);
+                foreach ($recencyList as $recencyId) {
 
-                $data = array(
-                    'manifest_id' => $manifestId,
-                    'manifest_code' => $manifestCode,
+                    $updateData = array(
+                        'manifest_id' => $manifestId,
+                        'manifest_code' => $manifestCode,
                     );
 
-                $this->update($data, array('recency_id' => $recencyId));
-
+                    $recencyDb->update($updateData, array('recency_id' => $recencyId));
+                }
             }
         }
 
-
-        return $params['manifestCode'];
+        return $manifestCode;
     }
 }

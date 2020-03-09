@@ -21,22 +21,31 @@ class ManifestsController extends AbstractActionController
             $result = $manifestsService->getManifests($params);
             return $this->getResponse()->setContent(Json::encode($result));
         }
-        
     }
     public function addAction()
     {
+        $request = $this->getRequest();
+        
+        if ($request->isPost()) {
+            $manifestService = $this->getServiceLocator()->get('ManifestsService');
+            $params = $request->getPost();
+            $result = $manifestService->addManifest($params);
+            return $this->_redirect()->toRoute('manifests');
+        } else {
 
-        $commonService = $this->getServiceLocator()->get('CommonService');
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $commonService = $this->getServiceLocator()->get('CommonService');
 
-        $manifestCode = strtoupper('REC' . date('ymd') .  $commonService->generateRandomString(5));
+            $manifestCode = strtoupper('REC' . date('ymd') .  $commonService->generateRandomString(6));
+            $sampleList = $recencyService->getSamplesWithoutManifestCode();
 
-        return new ViewModel(array(
-            'manifestCode' => $manifestCode
-        ));
-
+            return new ViewModel(array(
+                'manifestCode' => $manifestCode,
+                'sampleList' => $sampleList
+            ));
+        }
     }
     public function editAction()
     {
-
     }
 }
