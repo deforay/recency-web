@@ -103,6 +103,7 @@ $roleCode = $sessionLogin->roleCode;
     /* Table initialisation */
     oTable = null;
     $(document).ready(function() {
+        $('#page-container').removeClass('sidebar-o');
         $("#facilityName").select2({
             placeholder: "Choose Facility",
             width: "290px",

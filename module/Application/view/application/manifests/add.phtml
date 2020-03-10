@@ -70,7 +70,7 @@ $sessionLogin = new Container('credo');
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row" id="sampleDiv" style="display:none;">
                         <label class="col-sm-6 col-form-label" for="">Select Samples for this Manifest</label>
                         <div class="col-sm-12">
                             <div class="row">
@@ -98,7 +98,7 @@ $sessionLogin = new Container('credo');
                         <input type="hidden" name="selectedRecencyId" id="selectedRecencyId" />
                         <div class="col-lg-7 offset-lg-4">
                             <a href="<?php echo $this->url('manifests', array('action' => 'index')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
-                            <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                            <button type="submit" id="submitBtn" style="display:none;" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
                         </div>
                     </div>
                 </form>
@@ -129,7 +129,12 @@ $sessionLogin = new Container('credo');
                 testingSite: $("#testingSite").val()
             },
             function(data) {
-                $("#search").html(data);
+                if(data){
+                    $("#search").html(data);
+                    $("#sampleDiv").show();
+                    $("#submitBtn").show();
+                }
+                
                 $.unblockUI();
             });        
 
@@ -140,6 +145,10 @@ $sessionLogin = new Container('credo');
         $('#search_to option').each(function(i, selected) {
             selVal[i] = $(selected).val();
         });
+        if(selVal.length == 0){
+            alert("Please select at least one sample to proceed", "err");
+            return;
+        }
         $("#selectedRecencyId").val(selVal);
         flag = deforayValidator.init({
             formId: 'manifestForm'

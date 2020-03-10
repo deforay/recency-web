@@ -162,6 +162,12 @@ $sessionLogin = new Container('credo');
         $('#search_to option').each(function(i, selected) {
             selVal[i] = $(selected).val();
         });
+
+        if(selVal.length == 0){
+            alert("Please select at least one sample to proceed", "err");
+            return;
+        }
+        
         $("#selectedRecencyId").val(selVal);
         flag = deforayValidator.init({
             formId: 'manifestForm'
