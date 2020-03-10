@@ -83,7 +83,7 @@ class ManifestsController extends AbstractActionController
         $globalConfigResult = $globalConfigService->fetchGlobalConfig();
         if(count($result) == 0){
             $alertContainer = new Container('alert');
-            $alertContainer->alertMsg = 'Manifest does not have the barcode';
+            $alertContainer->alertMsg = 'Unable to generate manifest. Please check if there are Samples added.';
             return $this->_redirect()->toRoute('manifests');
         }
         // \Zend\Debug\Debug::dump($result);die;
