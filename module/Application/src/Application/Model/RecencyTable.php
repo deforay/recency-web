@@ -4455,9 +4455,21 @@ class RecencyTable extends AbstractTableGateway
             'confirmedLT50+M' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "male" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
             'confirmedLT50+F' => new Expression('SUM(CASE WHEN ( r.age IS NOT NULL AND r.age >="50" AND r.gender = "female" AND r.final_outcome IS NOT NULL AND r.final_outcome LIKE "%Long Term%" ) THEN 1 ELSE 0 END)'),
         ));
+        $sessionLogin = new Container('credo');
+        $roleCode = $sessionLogin->roleCode;
         if (isset($params['fName']) && $params['fName'] != '') {
+            if ($roleCode != 'admin') {
+                $sQuery->where(array('r.facility_id' => $params['fName']));
+            }else{
+                $sQuery = $sQuery->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
+                $sQuery->where(array('r.facility_id' => $params['fName']));
+            }
+        }
+        if ($roleCode != 'admin') {
             $sQuery = $sQuery->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
-            $sQuery->where(array('r.facility_id' => $params['fName']));
+            $sQuery = $sQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id=ufm.facility_id', array());
+            $sQuery = $sQuery->join(array('u' => 'users'), 'ufm.user_id=u.user_id', array());
+            $sQuery = $sQuery->where(array('u.user_id' => $sessionLogin->userId));
         }
         if (isset($params['testingFacility']) && $params['testingFacility'] != '') {
             $sQuery->where(array('r.testing_facility_id' => $params['testingFacility']));
