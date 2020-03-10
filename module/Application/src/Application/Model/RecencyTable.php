@@ -43,7 +43,7 @@ class RecencyTable extends AbstractTableGateway
         $whereCondition = "(manifest_id='' OR manifest_id IS NULL) AND (sample_id not like '' AND sample_id IS NOT NULL)";
 
         if ($sessionLogin->facilityMap != null) {
-            $whereCondition .= ' AND  r.facility_id IN (' . $sessionLogin->facilityMap . ') ';
+            $whereCondition .= ' AND facility_id IN (' . $sessionLogin->facilityMap . ') ';
         }        
 
         return $this->select($whereCondition)->toArray();

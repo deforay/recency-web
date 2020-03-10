@@ -34,9 +34,10 @@ $recencyMenu = "";
 $recencyMenu .= "<li id='nav-main-item'><a id='recency' class='nav-main-link' href=" . $this->url('recency', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
 if ($roleCode == 'remote_order_user') {
      $recencyMenu .= "<li id='nav-main-item'><a id='print-results' class='nav-main-link' href=" . $this->url('print-results', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-printer'></i> Print Results</span></a></li>";
+     $recencyMenu .= "<li id='nav-main-item'><a id='manifests' class='nav-main-link' href=" . $this->url('manifests', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-film'></i> Specimen Manifests</span></a></li>";
 }
 
-$recencyMenu .= "<li id='nav-main-item'><a id='manifests' class='nav-main-link' href=" . $this->url('manifests', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-film'></i> Manifests</span></a></li>";
+
 
 $settingsMenu = "";
 if ($roleCode == 'admin') {

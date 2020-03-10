@@ -473,4 +473,4 @@ CREATE TABLE `manifests` (
 
 ALTER TABLE `recency` ADD `manifest_id` INT NULL DEFAULT NULL AFTER `sample_collection_date`, ADD `manifest_code` VARCHAR(255) NULL DEFAULT NULL AFTER `manifest_id`;
 -- 09-Mar-2020 Thanaseelan
-INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Header', 'header', 'MINISTRY OF HEALTH\r\nRWAMAGANA PROVINCIAL HOSPITAL');
+INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Header', 'header', '');
