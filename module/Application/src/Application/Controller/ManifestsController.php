@@ -80,7 +80,7 @@ class ManifestsController extends AbstractActionController
         }
     }
 
-    public function genarateManifetsAction()
+    public function genarateManifestAction()
     {
         $request = $this->getRequest();
         $id = base64_decode($this->params()->fromRoute('id'));

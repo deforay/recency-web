@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Service;
 
 use Exception;
@@ -10,19 +11,22 @@ use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 
-class ManifestsService {
+class ManifestsService
+{
 
     public $sm = null;
 
-    public function __construct($sm = null) {
+    public function __construct($sm = null)
+    {
         $this->sm = $sm;
     }
 
-    public function getServiceManager() {
+    public function getServiceManager()
+    {
         return $this->sm;
     }
 
-   
+
 
     public function getManifests($params)
     {
@@ -37,23 +41,21 @@ class ManifestsService {
         try {
             $manifestDb = $this->sm->get('ManifestsTable');
             $result = $manifestDb->addManifest($params);
-            if($result != false){
+            if ($result != false) {
                 $adapter->commit();
 
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Manifest added successfully';
                 // Add Event log
                 $subject                = $result;
-                $eventType              = 'Manifest add';
-                $action                 = 'Added  Manifest '.$result;
+                $eventType              = 'manifest-add';
+                $action                 = 'Added  Manifest ' . $result;
                 $resourceName           = 'Manifests';
                 $eventLogDb             = $this->sm->get('EventLogTable');
                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
                 // End Event log
             }
-
-        }
-        catch (Exception $exc) {
+        } catch (Exception $exc) {
             $adapter->rollBack();
             error_log($exc->getMessage());
             error_log($exc->getTraceAsString());
@@ -66,36 +68,44 @@ class ManifestsService {
         return $manifestDb->fetchManifestById($manifestId);
     }
 
-    public function updateManifest($params){
+    public function updateManifest($params)
+    {
         $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $manifestDb = $this->sm->get('ManifestsTable');
             $result = $manifestDb->updateManifest($params);
-            if($result != false){
+            if ($result != false) {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Manifest updated successfully';
-                 // Add Event log
-                 $subject                = $result;
-                 $eventType              = 'Manifest edit';
-                 $action                 = 'Manifest updated for Manifest id '.$result;
-                 $resourceName           = 'Manifests';
-                 $eventLogDb             = $this->sm->get('EventLogTable');
-                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
-                 // End Event log
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'manifest-edit';
+                $action                 = 'Manifest updated for Manifest id ' . $result;
+                $resourceName           = 'Manifests';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
-        }
-        catch (Exception $exc) {
+        } catch (Exception $exc) {
             $adapter->rollBack();
             error_log($exc->getMessage());
             error_log($exc->getTraceAsString());
         }
     }
 
-    public function getManifestsPDF($id){
+    public function getManifestsPDF($id)
+    {
         $manifestDb = $this->sm->get('ManifestsTable');
+        // Add Event log
+        $subject                = $id;
+        $eventType              = 'manifest-print';
+        $action                 = 'Manifest printed for Manifest id ' . $id;
+        $resourceName           = 'Manifests';
+        $eventLogDb             = $this->sm->get('EventLogTable');
+        $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+        // End Event log        
         return $manifestDb->fetchManifestsPDF($id);
     }
-
 }
