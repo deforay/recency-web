@@ -35,13 +35,17 @@ class ManifestsController extends AbstractActionController
 
             $recencyService = $this->getServiceLocator()->get('RecencyService');
             $commonService = $this->getServiceLocator()->get('CommonService');
+            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+
+            $testingHubs = $facilityService->fetchTestingHubs();
 
             $manifestCode = strtoupper('REC' . date('ymd') .  $commonService->generateRandomString(6));
-            $sampleList = $recencyService->getSamplesWithoutManifestCode();
+            //$sampleList = $recencyService->getSamplesWithoutManifestCode();
 
             return new ViewModel(array(
                 'manifestCode' => $manifestCode,
-                'sampleList' => $sampleList
+                //'sampleList' => $sampleList,
+                'testingHubs' => $testingHubs
             ));
         }
     }
@@ -60,12 +64,14 @@ class ManifestsController extends AbstractActionController
             if (isset($manifestId) && !empty($manifestId)) {
                 $recencyService = $this->getServiceLocator()->get('RecencyService');
                 $manifestService = $this->getServiceLocator()->get('ManifestsService');
+                $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+
+                $testingHubs = $facilityService->fetchTestingHubs();
                 $manifestData = $manifestService->fetchManifestById($manifestId);
-                $sampleList = $recencyService->getSamplesWithoutManifestCode();
                 $selectedSamples = $recencyService->fetchSamplesByManifestId($manifestId);
                 return new ViewModel(array(
                     'manifestData' => $manifestData,
-                    'sampleList' => $sampleList,
+                    'testingHubs' => $testingHubs,
                     'selectedSamples' => $selectedSamples,
                 ));
             } else {
@@ -74,22 +80,37 @@ class ManifestsController extends AbstractActionController
         }
     }
 
-    public function genarateManifetsAction(){
+    public function genarateManifetsAction()
+    {
         $request = $this->getRequest();
         $id = base64_decode($this->params()->fromRoute('id'));
         $manifestService = $this->getServiceLocator()->get('ManifestsService');
-        $result=$manifestService->getManifestsPDF($id);
+        $result = $manifestService->getManifestsPDF($id);
         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
         $globalConfigResult = $globalConfigService->fetchGlobalConfig();
-        if(count($result) == 0){
+        if (count($result) == 0) {
             $alertContainer = new Container('alert');
             $alertContainer->alertMsg = 'Unable to generate Specimen Manifest PDF. Please check if there are Samples added.';
             return $this->_redirect()->toRoute('manifests');
         }
         // \Zend\Debug\Debug::dump($result);die;
         $viewModel = new ViewModel();
-        $viewModel->setVariables(array('result' =>$result,'globalConfigResult'=>$globalConfigResult));
-        
+        $viewModel->setVariables(array('result' => $result, 'globalConfigResult' => $globalConfigResult));
+
+        return $viewModel;
+    }
+    public function getSamplesByTestingSiteAction()
+    {
+        $result = "";
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $recencyService = $this->getServiceLocator()->get('RecencyService');
+            $result = $recencyService->getSamplesWithoutManifestCode($params['testingSite']);
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array('result' => $result))
+            ->setTerminal(true);
         return $viewModel;
     }
 }

@@ -5,6 +5,8 @@ use Zend\Session\Container;
 $sessionLogin = new Container('credo');
 
 
+//var_dump($manifestData);die;
+
 ?>
 <style type="text/css">
     .select2-selection__choice {
@@ -58,12 +60,25 @@ $sessionLogin = new Container('credo');
 
                         <label class="col-sm-2 col-form-label" for="manifestCode">Manifest Code<span class="mandatory">*</span></label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control isRequired" id="manifestCode" readonly="readonly" name="manifestCode" placeholder="Manifest Code" value="<?php echo $manifestData['manifest_code']; ?>">
+                            <input type="text" class="form-control isRequired" id="manifestCode" disabled name="manifestCode" placeholder="Manifest Code" value="<?php echo $manifestData['manifest_code']; ?>">
                             <input type="hidden" class="form-control isRequired" id="manifestId" readonly="readonly" name="manifestId" placeholder="Manifest Code" value="<?php echo $manifestData['manifest_id']; ?>">
                         </div>
 
 
                     </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="testingFacility">Testing Site <span class="mandatory">*</span></label>
+                        <div class="col-sm-7">
+                            <select class="form-control isRequired" id="testingSite" name="testingSite" onchange="getSamplesByTestingSite();" disabled>
+                                <option>-- Select --</option>
+                                <?php foreach ($testingHubs as $site) { ?>
+                                    <option value="<?php echo $site['facility_id'] ?>" <?php echo (isset($manifestData['testing_site']) && $manifestData['testing_site'] == $site['facility_id']) ? "selected='selected'" : '' ?>><?php echo $site['facility_name'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
 
 
@@ -73,26 +88,18 @@ $sessionLogin = new Container('credo');
 
 
                                 <div class="col-sm-4">
-                                    <select id="search" class="form-control" size="8" multiple="multiple">
-                                        <?php foreach ($sampleList as $recencySample) {
-                                        ?>
-                                            <option value="<?php echo $recencySample['recency_id']; ?>"><?php echo $recencySample['sample_id']; ?></option>
-                                        <?php }
-                                        ?>
-                                    </select>
+                                    <select id="search" class="form-control" size="8" multiple="multiple"></select>
                                 </div>
 
                                 <div class="col-md-2">
-                                    <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> >> </button>
-                                    <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> > </i></button>
-                                    <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i>
-                                        < </button> 
-                                    <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i>
-                                            << </button> 
-                                </div> 
+                                    <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i> &gt;&gt; </button>
+                                    <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"> &gt; </i></button>
+                                    <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i> &lt; </button>
+                                    <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i> &lt;&lt; </button>
+                                </div>
                                 <div class="col-sm-4">
                                     <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
-                                    <?php foreach ($selectedSamples as $recencySample) {
+                                        <?php foreach ($selectedSamples as $recencySample) {
                                         ?>
                                             <option value="<?php echo $recencySample['recency_id']; ?>"><?php echo $recencySample['sample_id']; ?></option>
                                         <?php }
@@ -131,7 +138,23 @@ $sessionLogin = new Container('credo');
                 return value.length > 3;
             }
         });
+        getSamplesByTestingSite();
     });
+
+
+    function getSamplesByTestingSite() {
+
+        $.blockUI();
+        $.post("<?php echo $this->url('manifests', array('action' => 'get-samples-by-testing-site')); ?>", {
+                testingSite: $("#testingSite").val()
+            },
+            function(data) {
+                $("#search").html(data);
+                $.unblockUI();
+            });
+
+    }
+
     duplicateName = true;
 
     function validateNow() {

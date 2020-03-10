@@ -34,8 +34,8 @@ class ManifestsTable extends AbstractTableGateway
         $sessionLogin = new Container('credo');
 
         $common = new CommonService();
-        $aColumns = array('manifest_code', 'added_on', 'u.user_name');
-        $orderColumns = array('manifest_code', 'added_on', 'u.user_name');
+        $aColumns = array('manifest_code','manifest_code', 'added_on', 'u.user_name');
+        $orderColumns = array('manifest_code','manifest_code', 'added_on', 'u.user_name');
 
         /* Paging */
         $sLimit = "";
@@ -171,6 +171,7 @@ class ManifestsTable extends AbstractTableGateway
 
         $data = array(
             'manifest_code' => $manifestCode,
+            'testing_site' => $params['testingSite'],
             'added_by' => $logincontainer->userId
         );
 

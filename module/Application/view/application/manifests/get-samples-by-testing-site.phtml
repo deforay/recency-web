@@ -1,0 +1,9 @@
+<?php
+if (count($result) > 0) {
+    foreach ($result as $list) {
+?>
+        <option value="<?php echo $list['recency_id']; ?>"><?php echo ($list['sample_id']); ?></option>
+<?php
+    }
+}
+?>

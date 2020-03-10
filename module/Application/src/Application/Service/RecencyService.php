@@ -75,10 +75,10 @@ class RecencyService
         return $recencyDb->fetchRecencyDetailsById($recencyId);
     }
 
-    public function getSamplesWithoutManifestCode()
+    public function getSamplesWithoutManifestCode($testingSiteId)
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        return $recencyDb->getSamplesWithoutManifestCode();
+        return $recencyDb->getSamplesWithoutManifestCode($testingSiteId);
     }
     public function fetchSamplesByManifestId($manifestId)
     {

@@ -37,26 +37,32 @@ class RecencyTable extends AbstractTableGateway
         return implode('', $pieces);
     }
 
-    public function getSamplesWithoutManifestCode(){
+    public function getSamplesWithoutManifestCode($testingFacilityId)
+    {
 
         $sessionLogin = new Container('credo');
-        $whereCondition = "(manifest_id='' OR manifest_id IS NULL) AND (sample_id not like '' AND sample_id IS NOT NULL)";
+        // We only want samples which do not have Manifest generated (manifest_id is blank or null) AND are not yet tested (term_outcome is blank or null)
+        $whereCondition = "(manifest_id='' OR manifest_id IS NULL) AND (term_outcome='' OR term_outcome IS NULL) AND (sample_id not like '' AND sample_id IS NOT NULL)";
 
         if ($sessionLogin->facilityMap != null) {
             $whereCondition .= ' AND facility_id IN (' . $sessionLogin->facilityMap . ') ';
-        }        
+        }
+        if (!empty($testingFacilityId)) {
+            $whereCondition .= ' AND testing_facility_id = ' . $testingFacilityId;
+        }
 
         return $this->select($whereCondition)->toArray();
     }
 
-    public function fetchSamplesByManifestId($manifestId){
+    public function fetchSamplesByManifestId($manifestId)
+    {
 
         $sessionLogin = new Container('credo');
         $whereCondition = "(manifest_id='$manifestId')";
 
         if ($sessionLogin->facilityMap != null) {
             $whereCondition .= ' AND  r.facility_id IN (' . $sessionLogin->facilityMap . ') ';
-        }        
+        }
 
         return $this->select($whereCondition)->toArray();
     }
@@ -4460,7 +4466,7 @@ class RecencyTable extends AbstractTableGateway
         if (isset($params['fName']) && $params['fName'] != '') {
             if ($roleCode != 'admin') {
                 $sQuery->where(array('r.facility_id' => $params['fName']));
-            }else{
+            } else {
                 $sQuery = $sQuery->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
                 $sQuery->where(array('r.facility_id' => $params['fName']));
             }

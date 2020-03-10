@@ -239,6 +239,10 @@ class FacilitiesTable extends AbstractTableGateway
         return $lastId;
     }
 
+    public function fetchTestingHubs(){
+        return $this->select(array('facility_type_id' => 2))->toArray();
+    }
+
     public function fetchFacilitiesAllDetails()
     {
         $dbAdapter = $this->adapter;

@@ -96,6 +96,12 @@ class FacilitiesService {
         $facilityDb = $this->sm->get('FacilitiesTable');
         return $facilityDb->fetchFacilitiesAllDetails();
     }
+
+    public function fetchTestingHubs()
+    {
+        $facilityDb = $this->sm->get('FacilitiesTable');
+        return $facilityDb->fetchTestingHubs();
+    }
     
    
     public function getAllFacilityListApi($params)
