@@ -2,7 +2,7 @@
 
 use Zend\Session\Container;
 
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
 <div class="bg-body-light">
     <div class="content content-full">
@@ -28,6 +28,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 <thead>
                     <tr>
                         <th style="width:35%;">Manifest Code</th>
+                        <th style="width:10%;">No. of Samples</th>
                         <th style="width:35%;">Created On</th>
                         <th style="width:25%;">Created By</th>
                         <th style="width:25%;">Action</th>
@@ -55,7 +56,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 <?php echo $editAction; ?>
             ],
             "aaSorting": [
-                [1, "desc"]
+                [2, "desc"]
             ],
             "sAjaxSource": "<?php echo $this->url('manifests', array('action' => 'index')); ?>",
             "fnServerData": function(sSource, aoData, fnCallback) {

@@ -32,7 +32,7 @@ class ManifestsTable extends AbstractTableGateway
         * you want to insert a non-database field (for example a counter or static image)
         */
         $sessionLogin = new Container('credo');
-        
+
         $common = new CommonService();
         $aColumns = array('manifest_code', 'added_on', 'u.user_name');
         $orderColumns = array('manifest_code', 'added_on', 'u.user_name');
@@ -107,7 +107,7 @@ class ManifestsTable extends AbstractTableGateway
 
         $sQuery = $sql->select()->from(array('m' => 'manifests'))
             ->join(array('u' => 'users'), 'u.user_id = m.added_by', array('user_name'))
-            ->join(array('r' => 'recency'), 'r.manifest_id = m.manifest_id', array(), 'left')
+            ->join(array('r' => 'recency'), 'r.manifest_id = m.manifest_id', array('totalSamples' => new Expression('count(recency_id)')), 'left')
             ->group(array('m.manifest_id'));
 
         if (isset($sWhere) && $sWhere != "") {
@@ -115,7 +115,7 @@ class ManifestsTable extends AbstractTableGateway
         }
         if ($sessionLogin->facilityMap != null) {
             $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
-        }      
+        }
 
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
@@ -147,6 +147,7 @@ class ManifestsTable extends AbstractTableGateway
 
             $row = array();
             $row[] = ucwords($aRow['manifest_code']);
+            $row[] = $aRow['totalSamples'];
             $row[] = ucwords($aRow['added_on']);
             $row[] = ucwords($aRow['user_name']);
             $row[] = '
@@ -237,16 +238,16 @@ class ManifestsTable extends AbstractTableGateway
         return $manifestCode;
     }
 
-    public function fetchManifestsPDF($id){
+    public function fetchManifestsPDF($id)
+    {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $sQuery = $sql->select()->from(array('m'=>$this->table))->columns(array('manifest_id','manifest_code'))
-        ->join(array('r'=>'recency'),'m.manifest_code=r.manifest_code',array('recency_id','sample_id','patient_id','dob','age','sample_collection_date','gender','patient_on_art','received_specimen_type'))
-        ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-        ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
-        ->join(array('dd'=>'district_details'),'f.district=dd.district_id',array('district_name'),'left')
-        ->where(array('m.'.$this->primary_id => $id))
-        ;
+        $sQuery = $sql->select()->from(array('m' => $this->table))->columns(array('manifest_id', 'manifest_code'))
+            ->join(array('r' => 'recency'), 'm.manifest_code=r.manifest_code', array('recency_id', 'sample_id', 'patient_id', 'dob', 'age', 'sample_collection_date', 'gender', 'patient_on_art', 'received_specimen_type'))
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
+            ->join(array('dd' => 'district_details'), 'f.district=dd.district_id', array('district_name'), 'left')
+            ->where(array('m.' . $this->primary_id => $id));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         // echo $sQueryStr;die;
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();

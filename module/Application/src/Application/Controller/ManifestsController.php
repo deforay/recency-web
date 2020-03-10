@@ -83,7 +83,7 @@ class ManifestsController extends AbstractActionController
         $globalConfigResult = $globalConfigService->fetchGlobalConfig();
         if(count($result) == 0){
             $alertContainer = new Container('alert');
-            $alertContainer->alertMsg = 'Unable to generate manifest. Please check if there are Samples added.';
+            $alertContainer->alertMsg = 'Unable to generate Specimen Manifest PDF. Please check if there are Samples added.';
             return $this->_redirect()->toRoute('manifests');
         }
         // \Zend\Debug\Debug::dump($result);die;
