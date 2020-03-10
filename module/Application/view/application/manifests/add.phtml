@@ -133,6 +133,8 @@ $sessionLogin = new Container('credo');
                     $("#search").html(data);
                     $("#sampleDiv").show();
                     $("#submitBtn").show();
+                }else{
+                    alert("No samples found for this testing site")
                 }
                 
                 $.unblockUI();
