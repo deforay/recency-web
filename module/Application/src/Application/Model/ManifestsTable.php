@@ -245,7 +245,7 @@ class ManifestsTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('m' => $this->table))->columns(array('manifest_id', 'manifest_code'))
             ->join(array('r' => 'recency'), 'm.manifest_code=r.manifest_code', array('recency_id', 'sample_id', 'patient_id', 'dob', 'age', 'sample_collection_date', 'gender', 'patient_on_art', 'received_specimen_type'))
-            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
             ->join(array('dd' => 'district_details'), 'f.district=dd.district_id', array('district_name'), 'left')
             ->where(array('m.' . $this->primary_id => $id));

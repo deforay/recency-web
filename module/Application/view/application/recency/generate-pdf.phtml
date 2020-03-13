@@ -26,19 +26,30 @@ class MYPDF extends TCPDF {
         $this->writeHTMLCell(0,0,10,8,strtoupper($this->firstText), 0, 0, 0, true, 'C', true);
         $this->SetFont('helvetica', 'B', 8);
         $this->writeHTMLCell(0,0,10,14,strtoupper($this->title), 0, 0, 0, true, 'C', true);
-        $this->SetFont('helvetica', 'B', 7);
+        $this->SetFont('helvetica', 'B', 9);
         $this->writeHTMLCell(0,0,10,20,strtoupper($this->labName), 0, 0, 0, true, 'C', true);
         $this->SetFont('helvetica', 'B', 10);
         $this->writeHTMLCell(0,0,10,26,strtoupper($this->secondText), 0, 0, 0, true, 'C', true);
+    }
+
+    // Page footer
+    public function Footer()
+    {
+        // Position at 15 mm from bottom
+        $this->SetY(-15);
+        // Set font
+        $this->SetFont('helvetica', '', 8);
+        // Page number
+        $this->Cell(0, 10,  'Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages() .' | Printed on '.date("d-M-Y H:i:s"), 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 }
 
 // create new PDF document
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-$pdf->setHeading('MINISTRY OF HEALTH','MINISTRY OF HEALTH',$result['testFacilityName'],'HIV RECENCY TEST RESULT',$logo);
+$pdf->setHeading('MINISTRY OF HEALTH','',$result['testFacilityName'],'HIV RECENCY TEST RESULT',$logo);
 // set document information
 $pdf->SetCreator('HIV Recency Testing');
-$pdf->SetTitle('HIV Recency Testing');
+// $pdf->SetTitle('HIV Recency Testing');
 //$pdf->SetSubject('TCPDF Tutorial');
 //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
@@ -255,11 +266,11 @@ $html .='<tr>';
 $html .='<td colspan="3">';
 $html .='<table>';
 $html .='<tr>';
-$html .='<td colspan="2" style="font-size:9px;text-align:left;width:60%;"> *Test results are based on RITA and reported as RITA Recent, Long-term or Inconclusive</td>';
-$html .='<td style="font-size:9px;text-align:left;">Printed on : '.date('d-M-Y H:i:s').'</td>';
+$html .='<td colspan="3" style="font-size:9px;text-align:left;width:100%;"> *Test results are based on RITA and reported as RITA Recent, Long-term or Inconclusive</td>';
 $html .='</tr>';
 $html .='<tr>';
-$html .='<td style="font-size:9px;text-align:left;width:60%;">**VL result is only provided for “Recent’ HIV Recency test results</td>';
+// $html .='<td style="font-size:9px;text-align:left;width:60%;">**VL result is only provided for “Recent’ HIV Recency test results</td>';
+$html .='<td style="font-size:9px;text-align:left;width:100%;">**VL result is only provided for “Recent” HIV Recency test results (or RTRI result with Assay Recent and Confirmed result as Long term)</td>';
 $html .='</tr>';
 
 

@@ -475,7 +475,5 @@ ALTER TABLE `recency` ADD `manifest_id` INT NULL DEFAULT NULL AFTER `sample_coll
 -- 09-Mar-2020 Thanaseelan
 INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global_value`) VALUES (NULL, 'Header', 'header', '');
 
-
 -- Amit 10 mar 2020
-
 ALTER TABLE `manifests` ADD `testing_site` INT NOT NULL AFTER `manifest_code`;
