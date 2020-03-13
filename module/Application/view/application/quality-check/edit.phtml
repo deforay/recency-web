@@ -130,9 +130,9 @@ $lineOutComeColor2 = "#000000";
                                         <option value="absent" <?php echo ($result['control_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent</option>
                                    </select>
                               </div>
-                              <label class="col-sm-2 col-form-label" for="">Positive Verification<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Verification Line<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <select class="form-control disbaledResult isRequired" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
+                                   <select class="form-control disbaledResult isRequired" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the Verification Line" onchange="changeTermLine()">
                                         <option value="">--Select--</option>
                                         <option value="present" <?php echo ($result['positive_verification_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Positive/P)</option>
                                         <option value="absent" <?php echo ($result['positive_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Negative/N)</option>
@@ -141,9 +141,9 @@ $lineOutComeColor2 = "#000000";
                          </div>
                          <div class="form-group row">
 
-                              <label class="col-sm-2 col-form-label" for="">Long Term Verification Line<span class="mandatory">*</span></label>
+                              <label class="col-sm-2 col-form-label" for="">Long Term Line<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
+                                   <select class="form-control disbaledResult isRequired" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the Long Term Line" onchange="changeTermLine()">
                                         <option value="">--Select--</option>
                                         <option value="present" <?php echo ($result['long_term_verification_line'] == 'present') ? 'selected="selected"' : ''; ?>>Present(Long Term/LT)</option>
                                         <option value="absent" <?php echo ($result['long_term_verification_line'] == 'absent') ? 'selected="selected"' : ''; ?>>Absent(Recent/R)</option>

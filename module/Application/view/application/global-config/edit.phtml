@@ -17,7 +17,7 @@ if (isset($arr['mandatory_fields']) && trim($arr['mandatory_fields']) != '') {
 }
 $formFields = array(
     'Sample Id', 'Patient Id', 'Facility Name', 'Province', 'District', 'City', 'Hiv Diagnosis Date', 'Past Hiv Testing', 'Test Last 12 Month', 'Last HIV Status', 'Patient on ART', 'Hiv Recency Test Date', 'Control Line',
-    'Positive Verification Line', 'Long Term Verification Line', 'Test Kit Lot No', 'Kit Expiry Date', 'Tester Name', 'Dob', 'Age', 'Gender', 'Pregnancy Status', 'Marital Status', 'Education Level',
+    'Verification Line', 'Long Term Line', 'Test Kit Lot No', 'Kit Expiry Date', 'Tester Name', 'Dob', 'Age', 'Gender', 'Pregnancy Status', 'Marital Status', 'Education Level',
     'Risk Population', 'Residence', 'Current Sexual Partner', 'Experience Violence Last 12 Month', 'Comments',
     'Recency Test not performed', 'Viral Load Test Date', 'Viral Load Result', 'Testing Facility', 'Sample Collection Date from the Client',
     'Sample Receipt Date at the Recency Testing Site', 'Received Specimen Type', 'Testing Modality'
@@ -32,7 +32,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
 
 $formFields2 = array(
     'Sample Id', 'Patient Id', 'Facility Name', 'Province', 'District', 'City', 'Hiv Diagnosis Date', 'Past Hiv Testing', 'Test Last 12 Month', 'Last HIV Status', 'Patient on ART', 'Hiv Recency Test Date', 'Control Line',
-    'Positive Verification Line', 'Long Term Verification Line', 'Test Kit Lot No', 'Kit Expiry Date', 'Tester Name', 'Dob', 'Age', 'Gender', 'Pregnancy Status', 'Marital Status', 'Education Level',
+    'Verification Line', 'Long Term Line', 'Test Kit Lot No', 'Kit Expiry Date', 'Tester Name', 'Dob', 'Age', 'Gender', 'Pregnancy Status', 'Marital Status', 'Education Level',
     'Risk Population', 'Residence', 'Current Sexual Partner', 'Experience Violence Last 12 Month', 'Comments', 'Recency Test not performed',
     'Viral Load Test Date', 'Viral Load Result', 'Testing Facility', 'Sample Collection Date from the Client',
     'Sample Receipt Date at the Recency Testing Site', 'Received Specimen Type', 'Testing Modality'
@@ -169,8 +169,8 @@ $allFileds2 = json_encode($formFields2);
                                     <option value="Patient on ART" data-index='10' <?php echo (in_array("Patient on ART", $resultArr2) ? "selected='selected'" : ""); ?>>Patient on ART</option>
                                     <option value="Hiv Recency Test Date" data-index='11' <?php echo (in_array("Hiv Recency Test Date", $resultArr2) ? "selected='selected'" : ""); ?>>HIV Recency Test Date</option>
                                     <option value="Control Line" data-index='12' <?php echo (in_array("Control Line", $resultArr2) ? "selected='selected'" : ""); ?>>Control Line</option>
-                                    <option value="Positive Verification Line" data-index='13' <?php echo (in_array("Positive Verification Line", $resultArr2) ? "selected='selected'" : ""); ?>>Positive Verification Line</option>
-                                    <option value="Long Term Verification Line" data-index='14' <?php echo (in_array("Long Term Verification Line", $resultArr2) ? "selected='selected'" : ""); ?>>Long Term Verification Line</option>
+                                    <option value="Verification Line" data-index='13' <?php echo (in_array("Verification Line", $resultArr2) ? "selected='selected'" : ""); ?>>Verification Line</option>
+                                    <option value="Long Term Line" data-index='14' <?php echo (in_array("Long Term Line", $resultArr2) ? "selected='selected'" : ""); ?>>Long Term Line</option>
                                     <option value="Test Kit Lot No" data-index='15' <?php echo (in_array("Test Kit Lot No", $resultArr2) ? "selected='selected'" : ""); ?>>Test Kit Lot No</option>
                                     <option value="Kit Expiry Date" data-index='16' <?php echo (in_array("Kit Expiry Date", $resultArr2) ? "selected='selected'" : ""); ?>>Test Kit Expiry Date</option>
                                     <option value="Tester Name" data-index='17' <?php echo (in_array("Tester Name", $resultArr2) ? "selected='selected'" : ""); ?>>Tester Name</option>
@@ -230,8 +230,8 @@ $allFileds2 = json_encode($formFields2);
                                 <option value="Patient on ART" data-index='10' <?php echo (in_array("Patient on ART", $resultArr) ? "selected='selected'" : ""); ?>>Patient on ART</option>
                                 <option value="Hiv Recency Test Date" data-index='11' <?php echo (in_array("Hiv Recency Test Date", $resultArr) ? "selected='selected'" : ""); ?>>HIV Recency Test Date</option>
                                 <option value="Control Line" data-index='12' <?php echo (in_array("Control Line", $resultArr) ? "selected='selected'" : ""); ?>>Control Line</option>
-                                <option value="Positive Verification Line" data-index='13' <?php echo (in_array("Positive Verification Line", $resultArr) ? "selected='selected'" : ""); ?>>Positive Verification Line</option>
-                                <option value="Long Term Verification Line" data-index='14' <?php echo (in_array("Long Term Verification Line", $resultArr) ? "selected='selected'" : ""); ?>>Long Term Verification Line</option>
+                                <option value="Verification Line" data-index='13' <?php echo (in_array("Verification Line", $resultArr) ? "selected='selected'" : ""); ?>>Verification Line</option>
+                                <option value="Long Term Line" data-index='14' <?php echo (in_array("Long Term Line", $resultArr) ? "selected='selected'" : ""); ?>>Long Term Line</option>
                                 <option value="Test Kit Lot No" data-index='15' <?php echo (in_array("Test Kit Lot No", $resultArr) ? "selected='selected'" : ""); ?>>Test Kit Lot No</option>
                                 <option value="Kit Expiry Date" data-index='16' <?php echo (in_array("Kit Expiry Date", $resultArr) ? "selected='selected'" : ""); ?>>Test Kit Expiry Date</option>
                                 <option value="Tester Name" data-index='17' <?php echo (in_array("Tester Name", $resultArr) ? "selected='selected'" : ""); ?>>Tester Name</option>

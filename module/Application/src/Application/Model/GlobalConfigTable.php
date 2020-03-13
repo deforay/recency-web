@@ -269,8 +269,8 @@ class GlobalConfigTable extends AbstractTableGateway {
 
         $row[] = in_array("Hiv Recency Test Date",$explodField)?"hivRecencyTestDate":"";
         $row[] = in_array("Control Line",$explodField)?"ctrlLine":"";
-        $row[] = in_array("Positive Verification Line",$explodField)?"positiveLine":"";
-        $row[] = in_array("Long Term Verification Line",$explodField)?"longTermLine":"";
+        $row[] = in_array("Verification Line",$explodField)?"positiveLine":"";
+        $row[] = in_array("Long Term Line",$explodField)?"longTermLine":"";
               
        
         $row[] = in_array("Viral Load Test Date",$explodField)?"vlTestDate":"";
@@ -329,8 +329,8 @@ class GlobalConfigTable extends AbstractTableGateway {
        
         $row['hivRecencyTestDate'] = in_array("Hiv Recency Test Date",$explodField)?true:false;
         $row['ctrlLine'] = in_array("Control Line",$explodField)?true:false;
-        $row['positiveLine'] = in_array("Positive Verification Line",$explodField)?true:false;
-        $row['longTermLine'] = in_array("Long Term Verification Line",$explodField)?true:false;
+        $row['positiveLine'] = in_array("Verification Line",$explodField)?true:false;
+        $row['longTermLine'] = in_array("Long Term Line",$explodField)?true:false;
         $row['testKitLotNo'] = in_array("Test Kit Lot No",$explodField)?true:false;
         $row['testKitExpDate'] = in_array("Kit Expiry Date",$explodField)?true:false;
         $row['testerName'] = in_array("Tester Name",$explodField)?true:false;
