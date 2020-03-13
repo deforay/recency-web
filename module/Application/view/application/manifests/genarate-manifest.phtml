@@ -7,7 +7,7 @@ $sessionLogin = new Container('credo');
 $common = new CommonService();
 $config = new \Zend\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-// \Zend\Debug\Debug::dump($result['singagePdfData']);die;
+// \Zend\Debug\Debug::dump($result);die;
 // Extend the TCPDF class to create custom Header and Footer
 class MYPDF extends TCPDF
 {
@@ -75,7 +75,6 @@ if ($result) {
 
     // create new PDF document
     $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
     $pdf->setHeading($globalConfigResult['logo_image'], $globalConfigResult['header'], $result[0]['testing_facility_name']);
 
     // set document information
