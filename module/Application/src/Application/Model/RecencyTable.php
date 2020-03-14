@@ -197,9 +197,9 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
-        if ($roleCode == 'user' || $roleCode == 'remote_order_user') {
+        //if ($roleCode == 'user' || $roleCode == 'remote_order_user') {
            // $sQuery = $sQuery->where('r.added_by=' . $sessionLogin->userId);
-        }
+        //}
 
         $queryContainer->exportRecencyDataQuery = $sQuery;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
@@ -235,13 +235,14 @@ class RecencyTable extends AbstractTableGateway
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
-        $actionBtn = "";
+        
         foreach ($rResult as $aRow) {
             $pdfBtn = "";
+            $actionBtn = "";
             $row = array();
             $formInitiationDate = '';
             if ($aRow['final_outcome'] != "") {
-                $pdfBtn = '<a class="btn btn-primary" href="javascript:void(0)" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>';
+                $pdfBtn = '<a class="btn btn-success" href="javascript:void(0)" title="Generate Result PDF" onclick="generatePdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i></a>';
             }
             if ($aRow['form_initiation_datetime'] != '' && $aRow['form_initiation_datetime'] != '0000-00-00 00:00:00' && $aRow['form_initiation_datetime'] != null) {
                 $formInitiationAry = explode(" ", $aRow['form_initiation_datetime']);
@@ -252,7 +253,17 @@ class RecencyTable extends AbstractTableGateway
                 $formTransferAry = explode(" ", $aRow['form_transfer_datetime']);
                 $formTransferDate = $common->humanDateFormat($formTransferAry[0]) . " " . $formTransferAry[1];
             }
-            $row[] = $aRow['sample_id'];
+
+            $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
+            if ($roleCode != 'manager') {
+                $actionBtn .= '<a class="btn btn-danger" title="Edit Sample"  href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i></a>';
+            }
+
+            //$actionBtn .= '<a class="btn btn-primary" title="View Sample"  href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i></a>';
+            $actionBtn .= $pdfBtn;
+            $actionBtn .= '</div>';
+
+            $row[] = $aRow['sample_id'] . $actionBtn;
             $row[] = $aRow['facility_name'];
             $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
@@ -294,15 +305,6 @@ class RecencyTable extends AbstractTableGateway
 
             $row[] = $formInitiationDate;
             $row[] = $formTransferDate;
-
-            $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
-            if ($roleCode != 'manager') {
-                $actionBtn .= '<a class="btn btn-danger" href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i> Edit</a>';
-            }
-
-            $actionBtn .= '<a class="btn btn-primary" href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i> View</a>
-                         ' . $pdfBtn . '
-                         </div>';
             $row[] = $actionBtn;
 
             $output['aaData'][] = $row;
