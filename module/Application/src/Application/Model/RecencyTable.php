@@ -198,7 +198,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
         if ($roleCode == 'user' || $roleCode == 'remote_order_user') {
-            $sQuery = $sQuery->where('r.added_by=' . $sessionLogin->userId);
+           // $sQuery = $sQuery->where('r.added_by=' . $sessionLogin->userId);
         }
 
         $queryContainer->exportRecencyDataQuery = $sQuery;
@@ -218,8 +218,8 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('facility_name'), 'left')
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left');
 
-        if ($roleCode == 'user' || $roleCode == 'remote_order_user') {
-            $iQuery = $iQuery->where('r.added_by=' . $sessionLogin->userId);
+        if ($roleCode == 'remote_order_user') {
+            //$iQuery = $iQuery->where('r.added_by=' . $sessionLogin->userId);
         }
 
         if ($parameters['RTest'] == 'pending') {

@@ -177,50 +177,64 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                             }
                             ?>
                             <div class="tab-pane active" id="wizard-progress-step1" role="tabpanel">
-
-                                <div class="form-group row form-horizontal">
-                                    <label class="col-sm-2 col-form-label <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="sampleId">Sample ID<?php echo (in_array("Sample Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
-                                    <div class="col-sm-4 <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                        <input type="text" class="form-control <?php echo $sample;
-                                                                                echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" value="<?php echo $recencySampleId; ?>" placeholder="Please enter the Sample ID" title="Please enter the sample id" disabled />
-                                    </div>
-
-                                    <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="patientId">Patient ID <?php echo (in_array("Patient Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
-                                    <div class="col-sm-4 <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                        <input type="text" class="form-control <?php echo $patient;
-                                                                                echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="patientId" name="patientId" placeholder="Please enter the Patient ID" title="Please enter the patient id">
-                                    </div>
-
-
-                                </div>
-                                <div class="form-group row form-horizontal">
-                                    <label class="col-sm-2 col-form-label <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>" for="sampleCollectionDate">Sample Collection Date from the Client <?php echo (in_array("Sample Collection Date from the Client", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
-                                    <div class="col-sm-4 <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                        <input type="text" class="form-control <?php echo $sampleCollectionDateMandatory; ?> <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" readonly="readonly" title="Please enter the sample collection date">
-                                    </div>
-                                    <?php if ($roleCode != 'remote_order_user') { ?>
-                                        <label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" for="sampleReceiptDate">Sample Receipt Date at the Recency Testing Site <?php echo (in_array("Sample Receipt Date at the Recency Testing Site", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
-                                        <div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                            <input type="text" class="form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" readonly="readonly" title="Please enter the sample receipt date">
+                                <div class="col-md-12">
+                                    <div class="block block-rounded block-bordered">
+                                        <div class="block-header block-header-default">
+                                            <h3 class="block-title">Sample Information</h3>
                                         </div>
-                                    <?php } ?>
-                                </div>
-                                <div class="form-group row form-horizontal">
-                                    <label class="col-sm-2 col-form-label <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" for="receivedSpecimenType"> Specimen Type <?php echo (in_array("Received Specimen Type", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
-                                    <div class="col-sm-4 <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                        <br>
 
-                                        <select class="form-control <?php echo $receivedSpecimenTypeMandatory; ?> <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" id="receivedSpecimenType" name="receivedSpecimenType" title="Enter the received specimen type">
-                                            <option value="">--Select--</option>
-                                            <option value="whole_blood">Whole Blood</option>
-                                            <option value="plasma">Plasma</option>
-                                        </select>
+                                        <div class="form-group row form-horizontal col-sm-12 col-lg-12">
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="sampleId">Sample ID<?php echo (in_array("Sample Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" class="form-control <?php echo $sample;
+                                                                                        echo in_array("Sample Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleId" name="sampleId" value="<?php echo $recencySampleId; ?>" placeholder="Please enter the Sample ID" title="Please enter the sample id" disabled />
+                                            </div>
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="patientId">Patient ID <?php echo (in_array("Patient Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" class="form-control <?php echo $patient;
+                                                                                        echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="patientId" name="patientId" placeholder="Please enter the Patient ID" title="Please enter the patient id">
+                                                <small class="text-danger">&nbsp;Please do not enter Patient Name</small>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="form-group row form-horizontal col-sm-12 col-lg-12">
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>" for="sampleCollectionDate">Sample Collection Date from the Client <?php echo (in_array("Sample Collection Date from the Client", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
+                                            <div class="col-sm-4 <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" class="form-control <?php echo $sampleCollectionDateMandatory; ?> <?php echo in_array("Sample Collection Date from the Client", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter the sample collection date" readonly="readonly" title="Please enter the sample collection date">
+                                            </div>
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" for="receivedSpecimenType"> Specimen Type <?php echo (in_array("Received Specimen Type", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>">
+
+                                                <select class="form-control <?php echo $receivedSpecimenTypeMandatory; ?> <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" id="receivedSpecimenType" name="receivedSpecimenType" title="Enter the received specimen type">
+                                                    <option value="">--Select--</option>
+                                                    <option value="whole_blood">Whole Blood</option>
+                                                    <option value="plasma">Plasma</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group row form-horizontal col-sm-12 col-lg-12">
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Testing Facility <?php echo (in_array("Testing Facility", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control <?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility">
+                                                    <option value="">--Select--</option>
+                                                    <?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
+                                                        <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
+                                                    <?php } ?>
+                                                    <!-- <option value="other">Other</option> -->
+                                                </select>
+                                                &nbsp;
+                                                <input style="display:none;" type="text" class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please enter testing facility" value="" placeholder="Please enter testing facility name">
+                                                &nbsp;
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- <label class="col-sm-2 col-form-label <?php ?>" for="">Sample Received Date<?php ?> </label>
-                                    <div class="col-sm-4 <?php ?>">
-                                        <input type="text" class="js-datepicker form-control <?php ?> <?php ?>" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Enter the sample received date" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy"  readonly="readonly" title="Please enter the sample received date">
-                                    </div> -->
                                 </div>
-                                <br>
 
                                 <div class="col-md-12">
                                     <div class="block block-rounded block-bordered">
@@ -281,12 +295,12 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                         </div>
                                         <br>
                                         <div class="form-group row form-horizontal col-sm-12">
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Diagnosis Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="hivDiagnosisDate" style="margin-top:10px;">HIV Diagnosis Date <?php echo (in_array("Hiv Diagnosis Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Diagnosis Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="hivDiagnosisDate" style="margin-bottom:1%;">HIV Diagnosis Date <?php echo (in_array("Hiv Diagnosis Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Hiv Diagnosis Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <input type="text" class="form-control <?php echo $hivDiagnosisDate; ?>" id="hivDiagnosisDate" name="hivDiagnosisDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV diagnosis date" title="Please enter the HIV diagnosis date" readonly="readonly">
                                             </div>
 
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Past Hiv Testing", $resultArr2) ? "showFields" : "hideFields"; ?>" for="pastHivTesting" style="margin-top:10px;">Past HIV Testing <?php echo (in_array("Past Hiv Testing", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Past Hiv Testing", $resultArr2) ? "showFields" : "hideFields"; ?>" for="pastHivTesting" style="margin-bottom:1%;">Past HIV Testing <?php echo (in_array("Past Hiv Testing", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Past Hiv Testing", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control  <?php echo $testing; ?>" id="pastHivTesting" name="pastHivTesting" title="Please enter the past HIV testing" onchange="checkHivTesting(this);">
                                                     <option value="">--Select--</option>
@@ -296,7 +310,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 </select>
                                             </div>
 
-                                            <label class="col-sm-2 col-form-label hivResultStatusShow <?php echo in_array("Test Last 12 Month", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testLast12Month" style="margin-top:10px;">Test Last 12 Month <?php echo (in_array("Test Last 12 Month", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <label class="col-sm-2 col-form-label hivResultStatusShow <?php echo in_array("Test Last 12 Month", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testLast12Month" style="margin-bottom:1%;">Tested Last 12 Months ? <?php echo (in_array("Test Last 12 Month", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 hivResultStatusShow <?php echo in_array("Test Last 12 Month", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control  <?php echo $last; ?>" id="testLast12Month" name="testLast12Month" title="Please enter the test last 12 month">
                                                     <option value="">--Select--</option>
@@ -305,7 +319,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                     <option value="not_known">Not Known</option>
                                                 </select>
                                             </div>
-                                            <label class="col-sm-2 col-form-label hivResultStatusShow <?php echo in_array("Last HIV Status", $resultArr2) ? "showFields" : "hideFields"; ?>" for="lastHivStatus" style="margin-top:10px;">Last HIV Status <?php echo (in_array("Last HIV Status", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <label class="col-sm-2 col-form-label hivResultStatusShow <?php echo in_array("Last HIV Status", $resultArr2) ? "showFields" : "hideFields"; ?>" for="lastHivStatus" style="margin-bottom:1%;">Last HIV Status <?php echo (in_array("Last HIV Status", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 hivResultStatusShow <?php echo in_array("Last HIV Status", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control <?php echo $hivStatus; ?> " id="lastHivStatus" name="lastHivStatus" title="Please choose the last HIV Status" onchange="checkHivStatus(this);">
                                                     <option value="">--Select--</option>
@@ -313,7 +327,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                     <option value="positive">Positive</option>
                                                 </select>
                                             </div>
-                                            <label class="col-sm-2 col-form-label hivResultStatusShow" for="patientOnArt" style="margin-top:10px;">Is the Patient on ART? <?php echo (in_array("Patient on ART", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <label class="col-sm-2 col-form-label hivResultStatusShow" for="patientOnArt" style="margin-bottom:1%;">Is the Patient on ART? <?php echo (in_array("Patient on ART", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 hivResultStatusShow">
                                                 <select class="form-control <?php echo $patientArt; ?>" id="patientOnArt" name="patientOnArt" title="Please choose patient on ART or Not" disabled>
                                                     <option value="">--Select--</option>
@@ -325,12 +339,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 
 
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testerName" style="margin-top:10px;">Tester Name <?php echo (in_array("Tester Name", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
-                                            <div class="col-sm-4 <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <input type="text" name="testerName" id="testerName" class="typeahead form-control <?php echo $testerName; ?>" placeholder="Enter the tester name" title="Please enter the tester name" />
-                                            </div>
-
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Testing Modality", $resultArr2) ? "showFields" : "hideFields"; ?>" for="" style="margin-top:10px;">Testing Modality <?php echo (in_array("Testing Modality", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Testing Modality", $resultArr2) ? "showFields" : "hideFields"; ?>" for="" style="margin-bottom:1%;">Testing Modality <?php echo (in_array("Testing Modality", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Testing Modality", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control <?php echo $testingModality; ?>" id="testingModality" name="testingModality" title="Please select the testing modality type">
                                                     <option value="">--Select--</option>
@@ -354,19 +363,21 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                         <div class="block-header block-header-default">
                                             <h3 class="block-title">Patient Details</h3>
                                         </div>
-                                        <div class="form-group row form-horizontal">
+                                        <br>
+                                        <div class="form-group row form-horizontal col-sm-12">
+
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Dob", $resultArr2) ? "showFields" : "hideFields"; ?>" for="dob">DOB <?php echo (in_array("Dob", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Dob", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <input type="text" class="form-control section2" id="dob" name="dob" placeholder="Select the dob" title="Please enter the date of birth" onchange="ageCalculate();" readonly="readonly">
+                                                <input type="text" class="form-control section2" id="dob" name="dob" placeholder="Patient DOB" title="Please enter the date of birth" onchange="ageCalculate();" readonly="readonly">
                                             </div>
 
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Age", $resultArr2) ? "showFields" : "hideFields"; ?>" for="age"> Age in Years <?php echo (in_array("Age", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Age", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <input type="number" class="form-control section2" id="age" name="age" value="" maxlength="3" onchange="this.value = minmax(this.value, 13, 120);" placeholder="Enter the age" title="Please enter the age">
+                                                <input type="number" class="form-control section2" id="age" name="age" value="" maxlength="3" onchange="this.value = minmax(this.value, 13, 120);" placeholder="Patient age (min. 13 years)" title="Please enter the age">
                                             </div>
                                         </div>
                                         <br>
-                                        <div class="form-group row form-horizontal">
+                                        <div class="form-group row form-horizontal col-sm-12">
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Gender", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Gender <?php echo (in_array("Gender", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Gender", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control section2" id="gender" name="gender" title="Please select the gender" onchange="genderCheck(this);">
@@ -392,7 +403,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group row form-horizontal">
+                                        <div class="form-group row form-horizontal col-sm-12">
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Marital Status", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Marital Status <?php echo (in_array("Marital Status", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Marital Status", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control section2" id="maritalStatus" name="maritalStatus" title="Please select the marital status">
@@ -416,7 +427,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                             </div>
                                         </div>
                                         <br>
-                                        <div class="form-group row form-horizontal">
+                                        <div class="form-group row form-horizontal col-sm-12">
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Risk Population", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Risk Population <?php echo (in_array("Risk Population", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div id="riskPopulationSelect" class="col-sm-4 <?php echo in_array("Risk Population", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control section2" id="riskPopulation" name="riskPopulation" title="Please select the risk population" onchange="riskPopulationCheck(this);">
@@ -438,7 +449,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 <br>
                                             </div>
                                         </div>
-                                        <div class="form-group row form-horizontal">
+                                        <div class="form-group row form-horizontal col-sm-12">
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Current Sexual Partner", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Current Sexual Partner <?php echo (in_array("Current Sexual Partner", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Current Sexual Partner", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control section2" id="currentSexualPartner" name="currentSexualPartner" title="Please select the current sexual partner">
@@ -505,25 +516,28 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                 <input style="display:none;" type="text" class="form-control col-sm-12" id="otherRecencyTestNotPerformed" name="otherRecencyTestNotPerformed" title="Please Enter the Other other recency test not performed" value="" placeholder="Enter other recency test not performed">
                                                 <br>
                                             </div>
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Testing Facility <?php echo (in_array("Testing Facility", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
-                                            <div class="col-sm-4 <?php echo in_array("Testing Facility", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <select class="form-control disbaledResult<?php echo $testingFacility; ?>" id="testingFacilityId" name="testingFacilityId" title="Please select the testing facility name">
-                                                    <option value="">--Select--</option>
-                                                    <?php foreach ($facilityResult['facilityTest'] as $testingFacility) { ?>
-                                                        <option value="<?php echo base64_encode($testingFacility['facility_id']); ?>"><?php echo $testingFacility['facility_name']; ?></option>
-                                                    <?php } ?>
-                                                    <!-- <option value="other">Other</option> -->
-                                                </select>
-                                                &nbsp;
-                                                <input style="display:none;" type="text" class="form-control col-sm-12" id="otherTestingFacility" name="otherTestingFacility" title="Please Enter testing facility name" value="" placeholder="Enter testing facility name">
-                                                &nbsp;
+
+
+
+
+                                            <?php if ($roleCode != 'remote_order_user') { ?>
+                                                <label class="col-sm-2 col-form-label <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" for="sampleReceiptDate">Sample Receipt Date at the Recency Testing Site <?php echo (in_array("Sample Receipt Date at the Recency Testing Site", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?> </label>
+                                                <div class="col-sm-4 <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                    <input type="text" class="form-control <?php echo $sampleReceiptDateMandatory; ?> <?php echo in_array("Sample Receipt Date at the Recency Testing Site", $resultArr2) ? "showFields" : "hideFields"; ?>" id="sampleReceiptDate" name="sampleReceiptDate" placeholder="Enter the sample receipt date" readonly="readonly" title="Please enter the sample receipt date">
+                                                </div>
+                                            <?php } ?>
+
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testerName" style="margin-bottom:1%;">Tester Name <?php echo (in_array("Tester Name", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Tester Name", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <input type="text" name="testerName" id="testerName" class="typeahead form-control <?php echo $testerName; ?>" placeholder="Enter the tester name" title="Please enter the tester name" />
                                             </div>
+
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">HIV Recency Test Date<?php echo (in_array("Hiv Recency Test Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <input type="text" class="form-control disbaledResult <?php echo $hivRecencyTestDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
                                             </div>
 
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testKitLotNo" style="margin-top:10px;">Test Kit Lot No. <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testKitLotNo" style="margin-bottom:1%;">Test Kit Lot No. <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control <?php echo (in_array("Test Kit Lot No", $resultArr) ? "isRequired" : "");
                                                                             echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no" onchange="testkitLotChange();">
@@ -532,14 +546,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                         echo '<option value="' . $info['kit_lot_no'] . '">' . $info['kit_lot_no'] . '</option>';
                                                     } ?>
                                                 </select>
+                                                <input type="text" class="form-control hideFields" id="testKitExpDate" name="testKitExpDate" placeholder="Please select the kit lot no" title="Please select the kit lot no" readonly="readonly">
                                             </div>
 
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Kit Expiry Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testKitExpDate" style="margin-top:10px;">Test Kit Expiry Date <?php echo (in_array("Kit Expiry Date", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
-                                            <div class="col-sm-4 <?php echo in_array("Kit Expiry Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <input type="text" class="form-control <?php echo $KitExpiryDate; ?>" id="testKitExpDate" name="testKitExpDate" placeholder="Please select the kit lot no" title="Please select the kit lot no" readonly="readonly">
-                                            </div>
-                                            <br>
-                                            <br>
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Control Line
                                                 <?php echo (in_array("Control Line", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Control Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
@@ -1274,7 +1283,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
     function validateStep1() {
         $("html, body").animate({
             scrollTop: 150
-        }, 2000);
+        }, 300);
         $("#wizard-progress-step1 .isRequired").each(function() {
             ($(this).val() == '') ? $('.stepOne').css('visibility', 'hidden'): $('.stepOne').css('visibility', 'visible')
         });

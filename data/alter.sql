@@ -479,3 +479,4 @@ INSERT INTO `global_config` (`config_id`, `display_name`, `global_name`, `global
 -- Amit 10 mar 2020
 
 ALTER TABLE `manifests` ADD `testing_site` INT NOT NULL AFTER `manifest_code`;
+ALTER TABLE `recency_change_trails` ADD `manifest_id` INT NULL DEFAULT NULL AFTER `facility_id`, ADD `manifest_code` VARCHAR(255) NULL DEFAULT NULL AFTER `manifest_id`;
