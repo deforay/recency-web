@@ -18,7 +18,6 @@ if ($roleCode == 'remote_order_user') {
     $section = 'Section 1/1';
 }
 
-//\Zend\Debug\Debug::dump($facilityResult);die;
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
     $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
     if ($globalConfigResult[$i]['global_name'] == 'recency_to_vlsm_sync' && $globalConfigResult[$i]['global_value'] == 'yes') {
@@ -34,14 +33,16 @@ $resultArr2 = array();
 if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
     $resultArr2 = explode(",", $arr['display_fields']);
 }
+// \Zend\Debug\Debug::dump($resultArr2);die;
+
 $sample = in_array("Sample Id", $resultArr) ? "isRequired" : "isRequired";
 $patient = in_array("Patient Id", $resultArr) ? "isRequired" : "";
 $facility = in_array("Facility Name", $resultArr) ? "isRequired" : "";
 $hivDiagnosisDate = in_array("Hiv Diagnosis Date", $resultArr) ? "isRequired" : "";
 $hivRecencyTestDate = in_array("Hiv Test Recency Test Date", $resultArr) ? "isRequired" : "";
 $controlLineResult = in_array("Control Line", $resultArr) ? "isRequired" : "";
-$positiveVerificationLine = in_array("Positive Verification Line", $resultArr) ? "isRequired" : "";
-$longTermVerificationLine = in_array("Long Term Verification Line", $resultArr) ? "isRequired" : "";
+$positiveVerificationLine = in_array("Verification Line", $resultArr) ? "isRequired" : "";
+$longTermVerificationLine = in_array("Long Term Line", $resultArr) ? "isRequired" : "";
 $dob = in_array("Dob", $resultArr) ? "isRequired" : "";
 $comment = in_array("Comments", $resultArr) ? "isRequired" : "";
 $age = in_array("Age", $resultArr) ? "isRequired" : "";
@@ -539,11 +540,10 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testKitLotNo" style="margin-bottom:1%;">Test Kit Lot No. <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <select class="form-control <?php echo (in_array("Test Kit Lot No", $resultArr) ? "isRequired" : "");
-                                                                            echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no" onchange="testkitLotChange();">
+                                                <select class="form-control <?php echo (in_array("Test Kit Lot No", $resultArr) ? "isRequired" : ""); echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no" onchange="testkitLotChange();">
                                                     <option value="">--Select--</option>
                                                     <?php foreach ($kitInfo as $info) {
-                                                        echo '<option value="' . $info['kit_lot_no'] . '">' . $info['kit_lot_no'] . '</option>';
+                                                        echo '<option value="' . $info['kit_lot_no'] . '">' . $info['kit_lot_no'] .' (expiry dt. '.date('d/m/Y',strtotime($info['kit_expiry_date'])).')' . '</option>';
                                                     } ?>
                                                 </select>
                                                 <input type="text" class="form-control hideFields" id="testKitExpDate" name="testKitExpDate" placeholder="Please select the kit lot no" title="Please select the kit lot no" readonly="readonly">
@@ -562,20 +562,20 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                             <br>
                                             <br>
                                             <br>
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Positive Verification
-                                                <?php echo (in_array("Positive Verification Line", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
-                                            <div class="col-sm-4 <?php echo in_array("Positive Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Verification Line
+                                                <?php echo (in_array("Verification Line", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <select class="form-control disbaledResult
-                                                <?php echo $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the positive verification line" onchange="changeTermLine()">
+                                                <?php echo $positiveVerificationLine; ?>" id="positiveVerificationLine" name="positiveVerificationLine" title="Please select the Verification Line" onchange="changeTermLine()">
                                                     <option value="">--Select--</option>
                                                     <option value="present">Present(Positive/P)</option>
                                                     <option value="absent">Absent(Negative/N)</option>
                                                 </select>
                                             </div>
-                                            <label class="col-sm-2 col-form-label <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Long Term Verification Line
-                                                <?php echo (in_array("Long Term Verification Line", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
-                                            <div class="col-sm-4 <?php echo in_array("Long Term Verification Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
-                                                <select class="form-control disbaledResult <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the long term verification line" onchange="changeTermLine()">
+                                            <label class="col-sm-2 col-form-label <?php echo in_array("Long Term Line", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Long Term Line
+                                                <?php echo (in_array("Long Term Line", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
+                                            <div class="col-sm-4 <?php echo in_array("Long Term Line", $resultArr2) ? "showFields" : "hideFields"; ?>">
+                                                <select class="form-control disbaledResult <?php echo $longTermVerificationLine; ?>" id="longTermVerificationLine" name="longTermVerificationLine" title="Please select the Long Term Line" onchange="changeTermLine()">
                                                     <option value="">--Select--</option>
                                                     <option value="present">Present(Long Term/LT)</option>
                                                     <option value="absent">Absent(Recent/R)</option>
@@ -600,17 +600,17 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                                         <option value="absent">Absent</option>
                                                     </select>
                                                 </div>
-                                                <label class="col-sm-2 col-form-label" for="positiveVerificationLineActual">Positive Verification <span class='mandatory'>*</span></label>
+                                                <label class="col-sm-2 col-form-label" for="positiveVerificationLineActual">Verification Line <span class='mandatory'>*</span></label>
                                                 <div class="col-sm-4">
-                                                    <select class="form-control actualresult-input" id="positiveVerificationLineActual" name="positiveVerificationLineActual" title="Please select the long term verification line" onchange="changeTermLineActual()">
+                                                    <select class="form-control actualresult-input" id="positiveVerificationLineActual" name="positiveVerificationLineActual" title="Please select the Long Term Line" onchange="changeTermLineActual()">
                                                         <option value="">--Select--</option>
                                                         <option value="present">Present(Positive/P)</option>
                                                         <option value="absent">Absent(Negative/N)</option>
                                                     </select>
                                                 </div>
-                                                <label class="col-sm-2 col-form-label" for="longTermVerificationLineActual">Long Term Verification Line <span class='mandatory'>*</span></label>
+                                                <label class="col-sm-2 col-form-label" for="longTermVerificationLineActual">Long Term Line <span class='mandatory'>*</span></label>
                                                 <div class="col-sm-4">
-                                                    <select class="form-control actualresult-input" id="longTermVerificationLineActual" name="longTermVerificationLineActual" title="Please select the long positive verification line" onchange="changeTermLineActual()">
+                                                    <select class="form-control actualresult-input" id="longTermVerificationLineActual" name="longTermVerificationLineActual" title="Please select the long Verification Line" onchange="changeTermLineActual()">
                                                         <option value="">--Select--</option>
                                                         <option value="present">Present(Long Term/LT)</option>
                                                         <option value="absent">Absent(Recent/R)</option>
@@ -1494,7 +1494,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         var _dobend = new Date();
         start.setFullYear(start.getFullYear() - 1);
         _dobstart.setFullYear(_dobstart.getFullYear() - 120);
-        _dobend.setFullYear(_dobend.getFullYear() - 13);
+        _dobend.setFullYear(_dobend.getFullYear() - 15);
         $('#dob').datepicker({
             format: 'dd-M-yyyy',
             clearBtn: true,

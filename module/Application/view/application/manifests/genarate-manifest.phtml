@@ -7,7 +7,7 @@ $sessionLogin = new Container('credo');
 $common = new CommonService();
 $config = new \Zend\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-// \Zend\Debug\Debug::dump($result['singagePdfData']);die;
+// \Zend\Debug\Debug::dump($result);die;
 // Extend the TCPDF class to create custom Header and Footer
 class MYPDF extends TCPDF
 {
@@ -75,8 +75,7 @@ if ($result) {
 
     // create new PDF document
     $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-    $pdf->setHeading($globalConfigResult['logo_image'], $globalConfigResult['header'], $result[0]['facility_name']);
+    $pdf->setHeading($globalConfigResult['logo_image'], $globalConfigResult['header'], $result[0]['testing_facility_name']);
 
     // set document information
     $pdf->SetCreator('RECENCY APP');
@@ -162,7 +161,7 @@ if ($result) {
         $tbl .= '<tr nobr="true">';
         $tbl .= '<td style="font-size:11px;width:5%;" align="center"><br><br>' . $sampleCounter . '.</td>';
         $tbl .= '<td style="font-size:11px;width:15%;" align="center"><br><br>' . $sample['sample_id'] . '</td>';
-        $tbl .= '<td style="font-size:11px;width:15%;" align="center"><br><br>' . ($sample['testing_facility_name']) . ', ' . ($sample['district_name']) . '</td>';
+        $tbl .= '<td style="font-size:11px;width:15%;" align="center"><br><br>' . ($sample['facility_name']) . ', ' . ($sample['district_name']) . '</td>';
         $tbl .= '<td style="font-size:11px;width:15%;" align="center"><br><br>' . ucwords($sample['patient_id']) . '<br>' . $sample['patient_on_art'] . '</td>';
         $tbl .= '<td style="font-size:11px;width:5%;" align="center"><br><br>' . ucwords($sample['age']) . '</td>';
         // $tbl .= '<td style="font-size:11px;width:6%;" align="center"><br><br>' . $patientDOB . '</td>';

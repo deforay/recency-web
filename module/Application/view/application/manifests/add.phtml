@@ -63,7 +63,7 @@ $sessionLogin = new Container('credo');
                         <label class="col-sm-2 col-form-label" for="testingFacility">Testing Site <span class="mandatory">*</span></label>
                         <div class="col-sm-7">
                             <select class="form-control isRequired" id="testingSite" name="testingSite" onchange="getSamplesByTestingSite();">
-                                <option>-- Select --</option>
+                                <option value="">-- Select --</option>
                                 <?php foreach ($testingHubs as $site) { ?>
                                     <option value="<?php echo $site['facility_id'] ?>"><?php echo $site['facility_name'] ?></option>
                                 <?php } ?>

@@ -4627,7 +4627,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('result_printed_on','recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
@@ -4668,6 +4668,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        // die($sQueryStr);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
