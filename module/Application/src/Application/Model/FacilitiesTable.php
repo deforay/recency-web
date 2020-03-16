@@ -239,7 +239,8 @@ class FacilitiesTable extends AbstractTableGateway
         return $lastId;
     }
 
-    public function fetchTestingHubs(){
+    public function fetchTestingHubs()
+    {
         return $this->select(array('facility_type_id' => 2))->toArray();
     }
 
@@ -250,23 +251,34 @@ class FacilitiesTable extends AbstractTableGateway
         $logincontainer = new Container('credo');
         $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
 
-        $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id','facility_name','facility_type_id'));
+        $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id', 'facility_name', 'facility_type_id'));
         if (isset($logincontainer->facilityMap) && $logincontainer->facilityMap != null && $logincontainer->facilityMap != "") {
             $sQuery = $sQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
-            ->where(array('f.status' => 'active', 'f.facility_id IN ('.$logincontainer->facilityMap.')'));
-        }else {
+                ->where(array('f.status' => 'active', 'f.facility_id IN (' . $logincontainer->facilityMap . ')'));
+        } else {
             $sQuery = $sQuery->where(array('status' => 'active'));
         }
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $fetchResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-        foreach($fetchResult as $key=>$row){
-            if(isset($row['facility_type_id']) && $row['facility_type_id'] == '2'){
+        // Populating Collection/Client Sites
+        foreach ($fetchResult as $key => $row) {
+            if (isset($row['facility_type_id']) && $row['facility_type_id'] == '2') {
                 $result['facilityTest'][$key]['facility_id'] = $row['facility_id'];
                 $result['facilityTest'][$key]['facility_name'] = $row['facility_name'];
             }
             $result['facility'][$key]['facility_id'] = $row['facility_id'];
             $result['facility'][$key]['facility_name'] = $row['facility_name'];
+        }
+
+        // Populating Testing Sites
+        $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id', 'facility_name', 'facility_type_id'));
+        $sQuery = $sQuery->where(array('f.status' => 'active', 'f.facility_type_id = 2'));
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $fetchResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        foreach ($fetchResult as $key => $row) {
+            $result['facilityTest'][$key]['facility_id'] = $row['facility_id'];
+            $result['facilityTest'][$key]['facility_name'] = $row['facility_name'];
         }
         $result['riskPopulations'] = $riskPopulationsDb->select()->toArray();
         return $result;
