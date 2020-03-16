@@ -258,15 +258,12 @@ class FacilitiesTable extends AbstractTableGateway
         } else {
             $sQuery = $sQuery->where(array('status' => 'active'));
         }
+        $sQuery = $sQuery->order('facility_name ASC');
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $fetchResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         // Populating Collection/Client Sites
         foreach ($fetchResult as $key => $row) {
-            if (isset($row['facility_type_id']) && $row['facility_type_id'] == '2') {
-                $result['facilityTest'][$key]['facility_id'] = $row['facility_id'];
-                $result['facilityTest'][$key]['facility_name'] = $row['facility_name'];
-            }
             $result['facility'][$key]['facility_id'] = $row['facility_id'];
             $result['facility'][$key]['facility_name'] = $row['facility_name'];
         }
@@ -274,6 +271,7 @@ class FacilitiesTable extends AbstractTableGateway
         // Populating Testing Sites
         $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id', 'facility_name', 'facility_type_id'));
         $sQuery = $sQuery->where(array('f.status' => 'active', 'f.facility_type_id = 2'));
+        $sQuery = $sQuery->order('facility_name ASC');
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $fetchResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         foreach ($fetchResult as $key => $row) {
