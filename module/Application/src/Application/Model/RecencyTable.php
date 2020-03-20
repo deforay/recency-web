@@ -176,7 +176,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->where(array('testing_facility_id' => $parameters['testingFacility']));
         }
         if ($parameters['vlResult'] != '') {
-            if ($parameters['vlResult'] == 'panding') {
+            if ($parameters['vlResult'] == 'pending') {
                 $sQuery->where(array('term_outcome' => 'Assay Recent'));
             } else if ($parameters['vlResult'] == 'vl_load_tested') {
                 $sQuery->where('term_outcome = "" OR  term_outcome = NULL ');
@@ -189,6 +189,11 @@ class RecencyTable extends AbstractTableGateway
         } else {
             // all requests
         }
+
+        if ($sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
+        }
+                
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
@@ -225,6 +230,10 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['RTest'] == 'pending') {
             $iQuery = $iQuery->where(array('r.term_outcome = ""'));
         }
+
+        if ($sessionLogin->facilityMap != null) {
+            $iQuery = $iQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
+        }        
 
         $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -263,7 +272,7 @@ class RecencyTable extends AbstractTableGateway
             $actionBtn .= $pdfBtn;
             $actionBtn .= '</div>';
 
-            $row[] = $aRow['sample_id'] . $actionBtn;
+            $row[] = $aRow['sample_id'] .'<br>'. $actionBtn;
             $row[] = $aRow['facility_name'];
             $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);

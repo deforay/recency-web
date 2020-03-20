@@ -97,15 +97,25 @@ class UserTable extends AbstractTableGateway
                 $logincontainer->roleCode = $rResult->role_code;
                 $logincontainer->userName = ucwords($rResult->user_name);
                 $logincontainer->userEmail = ucwords($rResult->email);
-                $logincontainer->facilityMap = implode(',', $ufmdata);
+                if(!empty($ufmdata)){
+                    $logincontainer->facilityMap = implode(',', $ufmdata);
+                }else{
+                    $logincontainer->facilityMap = null;
+                }
+                
                 if (trim($rResult->role_code) != "remote_order_user") {
                     $nonRemoteUserQuery = $sql->select()->from(array('r' => 'recency'))
                         ->columns(array('count' => new Expression('COUNT(*)')))
                         ->where(array('term_outcome = "" OR  term_outcome = NULL '));
+
+                    if ($logincontainer->facilityMap != null) {
+                        $nonRemoteUserQuery = $nonRemoteUserQuery->where('r.facility_id IN (' . $logincontainer->facilityMap . ')');
+                    }    
                     $alertNonRemoteUserQueryStr = $sql->getSqlStringForSqlObject($nonRemoteUserQuery);
+                    
                     $alertNonRemoteUserQueryResult = $dbAdapter->query($alertNonRemoteUserQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                     if (isset($alertNonRemoteUserQueryResult['count']) && $alertNonRemoteUserQueryResult['count'] > 0) {
-                        $logincontainer->nonRemoteUserMsg = 'There are ' . $alertNonRemoteUserQueryResult['count'] . ' pending Recency Assay Tests ';
+                        //$logincontainer->nonRemoteUserMsg = 'There are ' . $alertNonRemoteUserQueryResult['count'] . ' pending Recency Assay Tests ';
                     } else {
                         $logincontainer->nonRemoteUserMsg = '';
                     }
@@ -122,8 +132,6 @@ class UserTable extends AbstractTableGateway
                 }
                 if ($rResult->role_code == 'VLTS') {
                     return 'vl-data';
-                } else if ($rResult->role_code == 'MGMT') {
-                    return 'home';
                 } else if ($rResult->role_code != 'admin') {
                     return 'recency';
                 } else if ($rResult->role_code == 'manager') {

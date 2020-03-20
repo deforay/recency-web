@@ -33,7 +33,7 @@ class LoginController extends AbstractActionController{
         /* Cross login credential check end*/
         if (isset($logincontainer->userId) && $logincontainer->userId != "") {
              //$alertContainer = new Container('alert');
-            return $this->redirect()->toRoute("home");
+            return $this->redirect()->toRoute("recency");
         } else {
             $viewModel = new ViewModel();
             $viewModel->setTerminal(true);
