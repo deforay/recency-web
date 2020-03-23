@@ -18,18 +18,21 @@ class MYPDF extends TCPDF {
     public function Header() {
         // Logo
         //$image_file = LOGO_PATH ;
-        $this->Image($this->logo, 10, 10, 25, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        if(isset($this->logo) && !empty($this->logo) && file_exists($this->logo)){
+            $this->Image($this->logo, 10, 10, 25, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        }
+        
         // Set font
-        $this->SetFont('helvetica', 'B', 20);
+        //$this->SetFont('helvetica', 'B', 20);
         // Title
-        $this->SetFont('helvetica', 'B', 10);
+        $this->SetFont('helvetica', 'B', 20);
         $this->writeHTMLCell(0,0,10,8,strtoupper($this->firstText), 0, 0, 0, true, 'C', true);
-        $this->SetFont('helvetica', 'B', 8);
-        $this->writeHTMLCell(0,0,10,14,strtoupper($this->title), 0, 0, 0, true, 'C', true);
-        $this->SetFont('helvetica', 'B', 9);
-        $this->writeHTMLCell(0,0,10,20,strtoupper($this->labName), 0, 0, 0, true, 'C', true);
+        //$this->SetFont('helvetica', 'B', 8);
+        //$this->writeHTMLCell(0,0,10,14,strtoupper($this->title), 0, 0, 0, true, 'C', true);
+        //$this->SetFont('helvetica', 'B', 9);
+        //$this->writeHTMLCell(0,0,10,20,strtoupper($this->labName), 0, 0, 0, true, 'C', true);
         $this->SetFont('helvetica', 'B', 10);
-        $this->writeHTMLCell(0,0,10,26,strtoupper($this->secondText), 0, 0, 0, true, 'C', true);
+        $this->writeHTMLCell(0,0,10,22,strtoupper($this->secondText), 0, 0, 0, true, 'C', true);
     }
 
     // Page footer
@@ -46,7 +49,8 @@ class MYPDF extends TCPDF {
 
 // create new PDF document
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-$pdf->setHeading('MINISTRY OF HEALTH','',$result['testFacilityName'],'HIV RECENCY TEST RESULT',$logo);
+//$pdf->setHeading('MINISTRY OF HEALTH','',$result['testFacilityName'],'HIV RECENCY TEST RESULT',$logo);
+$pdf->setHeading('MINISTRY OF HEALTH','','','HIV RECENCY TEST RESULT',$logo);
 // set document information
 $pdf->SetCreator('HIV Recency Testing');
 // $pdf->SetTitle('HIV Recency Testing');

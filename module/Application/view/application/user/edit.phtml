@@ -138,7 +138,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                         }?>
                     </div>
                     <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">User Facility Map</label>
+                              <label class="col-sm-2 col-form-label" for="">Facilities</label>
                               <div class="col-sm-4">
                                    <select  id="search" class="form-control" size="8" multiple="multiple">
                                    </select>
@@ -155,8 +155,9 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                                    <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
                                    <?php foreach($result['facilityMap'] as $facility){
                                        $facilityId[] = $facility['facility_id'];
+                                       $facilityType = ($facility['facility_type_id'] == 2) ? ' (Recency Testing Site)' : ' (Health Facility)';
                                         ?>
-                                        <option value="<?php echo $facility['facility_id']; ?>" selected='selected'><?php echo ucwords($facility['facility_name']); ?></option>
+                                        <option value="<?php echo $facility['facility_id']; ?>" selected='selected'><?php echo ($facility['facility_name']).$facilityType; ?></option>
                                    <?php } ?>
                                    </select>
                               </div>

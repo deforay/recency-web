@@ -258,6 +258,7 @@ class FacilitiesTable extends AbstractTableGateway
         } else {
             $sQuery = $sQuery->where(array('status' => 'active'));
         }
+        $sQuery = $sQuery->where(array('facility_type_id != 2'));
         $sQuery = $sQuery->order('facility_name ASC');
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $fetchResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -318,7 +319,8 @@ class FacilitiesTable extends AbstractTableGateway
         $roleCode = $sessionLogin->roleCode;
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id', 'facility_name'));
+        $sQuery = $sql->select()->from(array('f' => 'facilities'))
+            ->columns(array('facility_id', 'facility_name', 'facility_type_id'));
         if ($roleCode != 'admin') {
             $sQuery = $sQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id=ufm.facility_id', array());
             $sQuery = $sQuery->join(array('u' => 'users'), 'ufm.user_id=u.user_id', array());
@@ -339,6 +341,7 @@ class FacilitiesTable extends AbstractTableGateway
                 $sQuery = $sQuery->where('facility_id NOT IN(' . implode(",", $fDeocde) . ')');
             }
         }
+        //$sQuery = $sQuery->where(array('facility_type_id != 2'));
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $fResult;

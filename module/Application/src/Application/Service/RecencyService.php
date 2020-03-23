@@ -564,7 +564,7 @@ class RecencyService
             return $filename;
         } catch (Exception $exc) {
             return "";
-            error_log("GENERATE-PAYMENT-REPORT-EXCEL--" . $exc->getMessage());
+            error_log("Generate-R-Infected--" . $exc->getMessage());
             error_log($exc->getTraceAsString());
         }
     }

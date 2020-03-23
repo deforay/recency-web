@@ -235,7 +235,7 @@ class QualityCheckService {
         }
         catch (Exception $exc) {
             return "";
-            error_log("GENERATE-PAYMENT-REPORT-EXCEL--" . $exc->getMessage());
+            error_log("RECENCY-QC-REPORT-" . $exc->getMessage());
             error_log($exc->getTraceAsString());
         }
     }

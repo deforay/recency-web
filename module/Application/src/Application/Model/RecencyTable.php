@@ -191,7 +191,7 @@ class RecencyTable extends AbstractTableGateway
         }
 
         if ($sessionLogin->facilityMap != null) {
-            $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
+            $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $sessionLogin->facilityMap . ')');
         }
                 
         if (isset($sOrder) && $sOrder != "") {
