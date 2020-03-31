@@ -51,7 +51,7 @@ return array(
                          ),
                     ),
                ),
-               'dashbaord' => array(
+               'dashboard' => array(
                     'type'    => 'Literal',
                     'options' => array(
                          'route'    => '/set-sample-first-chart',

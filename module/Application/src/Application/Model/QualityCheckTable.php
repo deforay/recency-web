@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Model;
 
 use Zend\Db\Sql\Sql;
@@ -12,10 +13,12 @@ class QualityCheckTable extends AbstractTableGateway
 {
 
      protected $table = 'quality_check_test';
+     public $sessionLogin = null;
 
      public function __construct(Adapter $adapter)
      {
           $this->adapter = $adapter;
+          $this->sessionLogin = new Container('credo');
      }
 
      public function fetchQualityCheckDetails($parameters)
@@ -101,7 +104,7 @@ class QualityCheckTable extends AbstractTableGateway
           $roleId = $sessionLogin->roleId;
 
           $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
-                        ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
 
           if (isset($sWhere) && $sWhere != "") {
                $sQuery->where($sWhere);
@@ -125,9 +128,14 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery->offset($sOffset);
           }
 
-          if ($roleCode == 'user') {
-               $sQuery = $sQuery->where('qc.added_by=' . $sessionLogin->userId);
+          // if ($roleCode == 'user') {
+          //      $sQuery = $sQuery->where('qc.added_by=' . $sessionLogin->userId);
+          // }
+
+          if ($this->sessionLogin->facilityMap != null) {
+               $sQuery = $sQuery->where('qc.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
           }
+
           $queryContainer->exportQcDataQuery = $sQuery;
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           //   echo $sQueryStr;die;
@@ -145,6 +153,9 @@ class QualityCheckTable extends AbstractTableGateway
 
           if ($roleCode == 'user') {
                $iQuery = $iQuery->where('qc.added_by=' . $sessionLogin->userId);
+          }
+          if ($sessionLogin->facilityMap != null) {
+               $iQuery = $iQuery->where('qc.testing_facility_id IN (' . $sessionLogin->facilityMap . ')');
           }
 
 
@@ -174,13 +185,14 @@ class QualityCheckTable extends AbstractTableGateway
                $row[] = ucwords($aRow['tester_name']);
 
                // $row[] = '<a href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
-               $actionBtn ='<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
+               $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
                if ($roleCode != 'manager') {
-                    $actionBtn.='<a class="btn btn-danger" href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-pencil"></i> Edit</a>';
+                    $actionBtn .= '<a class="btn btn-danger" href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-pencil"></i> Edit</a>';
                }
-               $actionBtn.='<a class="btn btn-primary" href="/quality-check/view/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-eye"></i> View</a>
 
-                         </div>';
+               //$actionBtn.='<a class="btn btn-primary" href="/quality-check/view/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-eye"></i> View</a>';
+
+               $actionBtn .= '</div>';
                $row[] = $actionBtn;
 
                $output['aaData'][] = $row;
@@ -300,42 +312,41 @@ class QualityCheckTable extends AbstractTableGateway
           $riskPopulationDb = new RiskPopulationsTable($this->adapter);
           $globalDb = new GlobalConfigTable($this->adapter);
           $common = new CommonService();
-          $userId=$params["userId"];
-               $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('auth_token', 'secret_key'))
+          $userId = $params["userId"];
+          $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('auth_token', 'secret_key'))
                ->where(array('user_id' => $userId));
-               $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
-               $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-               $secretKey=$uResult['secret_key'];              
-               if($userId!=''  && $params["version"]>"2.8"){
-                    $secretKey=$uResult['secret_key'];  
-                    
-                    $arrayCount= count($params['qc']);
-                    $formsVal=array();
-                    // \Zend\Debug\Debug::dump($params['qc'][0]);
-                    for ($x = 0; $x < $arrayCount; $x++) {
-                         if($secretKey)
-                              $return=$this->cryptoJsAesDecrypt($secretKey,$params['qc'][$x]); 
-                         else
-                              $return=$params['qc'][$x]; 
-                         // $formsVal[$x]=$return[0];
-                         $formsVal[$x]=$return;
-                                           
-                    }
-                    
-               $formData=$formsVal;
-               // \Zend\Debug\Debug::dump($formData);
-           }else{
-          
-               $arrayCount= count($params['qc']);
-               $formsVal=array();
+          $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
+          $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+          $secretKey = $uResult['secret_key'];
+          if ($userId != ''  && $params["version"] > "2.8") {
+               $secretKey = $uResult['secret_key'];
+
+               $arrayCount = count($params['qc']);
+               $formsVal = array();
+               // \Zend\Debug\Debug::dump($params['qc'][0]);
                for ($x = 0; $x < $arrayCount; $x++) {
-                    $formsVal[$x]=$params['qc'][$x];
+                    if ($secretKey)
+                         $return = $this->cryptoJsAesDecrypt($secretKey, $params['qc'][$x]);
+                    else
+                         $return = $params['qc'][$x];
+                    // $formsVal[$x]=$return[0];
+                    $formsVal[$x] = $return;
                }
-               $formData=$formsVal;
+
+               $formData = $formsVal;
+               // \Zend\Debug\Debug::dump($formData);
+          } else {
+
+               $arrayCount = count($params['qc']);
+               $formsVal = array();
+               for ($x = 0; $x < $arrayCount; $x++) {
+                    $formsVal[$x] = $params['qc'][$x];
+               }
+               $formData = $formsVal;
           }
           // if (isset($params["qc"])) {   
           if (isset($formData)) {
-      
+
                //check user status active or not
                $uQuery = $sql->select()->from('users')
                     // ->where(array('user_id' => $params["qc"][0]['syncedBy']));
@@ -350,9 +361,9 @@ class QualityCheckTable extends AbstractTableGateway
                     return $response;
                }
                $i = 1;
-         
-                    // foreach ($params["qc"] as $key => $qcTest) {
-                    foreach ($formData as $key => $qcTest) {
+
+               // foreach ($params["qc"] as $key => $qcTest) {
+               foreach ($formData as $key => $qcTest) {
                     try {
                          $data = array(
                               'qc_sample_id' => $qcTest['qcsampleId'],
@@ -380,7 +391,7 @@ class QualityCheckTable extends AbstractTableGateway
                               'testing_facility_id' => $qcTest['testingFacility'],
                               'unique_id' => isset($qcTest['unique_id']) ? $qcTest['unique_id'] : NULL,
                          );
-                    
+
                          $this->insert($data);
                          $lastInsertedId = $this->lastInsertValue;
                          if ($lastInsertedId > 0) {
@@ -388,7 +399,6 @@ class QualityCheckTable extends AbstractTableGateway
                          } else {
                               $response['syncData']['response'][$key] = 'failed';
                          }
-                       
                     } catch (Exception $exc) {
                          error_log($exc->getMessage());
                          error_log($exc->getTraceAsString());
@@ -398,13 +408,11 @@ class QualityCheckTable extends AbstractTableGateway
           }
           $response['syncCount']['response'][0]['Total'] = $arrayCount;
 
-          if($secretKey && $params["version"]>"2.8")
-          {
-               $syncedVal= $this->getQCSyncData($userId);
-               $syncedData=$this->cryptoJsAesEncrypt($secretKey,$syncedVal);
-          }
-          else
-               $syncedData=$this->getQCSyncData($userId);
+          if ($secretKey && $params["version"] > "2.8") {
+               $syncedVal = $this->getQCSyncData($userId);
+               $syncedData = $this->cryptoJsAesEncrypt($secretKey, $syncedVal);
+          } else
+               $syncedData = $this->getQCSyncData($userId);
           $response['syncCount']['tenRecord'] = $syncedData;
           return $response;
      }
@@ -521,6 +529,11 @@ class QualityCheckTable extends AbstractTableGateway
           if ($parameters['sampleTestedDates'] != '') {
                $sQuery = $sQuery->where("(qc_test_date >='" . $start_date . "' AND qc_test_date<='" . $end_date . "')");
           }
+
+          if ($this->sessionLogin->facilityMap != null) {
+               $sQuery = $sQuery->where('testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+          }
+
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;
           $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
@@ -551,6 +564,10 @@ class QualityCheckTable extends AbstractTableGateway
           if ($parameters['sampleTestedDates'] != '') {
                $sQuery = $sQuery->where("(qc_test_date >='" . $start_date . "' AND qc_test_date<='" . $end_date . "')");
           }
+
+          if ($this->sessionLogin->facilityMap != null) {
+               $sQuery = $sQuery->where('testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+          }          
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;
           $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -598,6 +615,10 @@ class QualityCheckTable extends AbstractTableGateway
           if ($parameters['sampleTestedDates'] != '') {
                $sQuery = $sQuery->where("(qc_test_date >='" . $start_date . "' AND qc_test_date<='" . $end_date . "')");
           }
+
+          if ($this->sessionLogin->facilityMap != null) {
+               $sQuery = $sQuery->where('testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+          }          
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           // echo $sQueryStr;die;
           $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -678,6 +699,10 @@ class QualityCheckTable extends AbstractTableGateway
           if ($parameters['sampleTestedDates'] != '') {
                $sQuery = $sQuery->where("(hiv_recency_test_date >='" . $start_date . "' AND hiv_recency_test_date<='" . $end_date . "')");
           }
+
+          if ($this->sessionLogin->facilityMap != null) {
+               $sQuery = $sQuery->where('(facility_id IN (' . $this->sessionLogin->facilityMap . ') OR testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+          }
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           //echo $sQueryStr;die;
           $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
@@ -747,6 +772,11 @@ class QualityCheckTable extends AbstractTableGateway
           if ($parameters['sampleTestedDates'] != '') {
                $sQuery = $sQuery->where("(hiv_recency_test_date >='" . $start_date . "' AND hiv_recency_test_date<='" . $end_date . "')");
           }
+
+          if ($this->sessionLogin->facilityMap != null) {
+               $sQuery = $sQuery->where('(facility_id IN (' . $this->sessionLogin->facilityMap . ') OR testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+          }          
+
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           //echo $sQueryStr;die;
           $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
@@ -870,6 +900,10 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery->offset($sOffset);
           }
 
+          if ($this->sessionLogin->facilityMap != null) {
+               $sQuery = $sQuery->where('qc.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+          }
+
           $queryContainer = new Container('query');
           $queryContainer->exportQcDataQuery = $sQuery;
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
@@ -887,7 +921,9 @@ class QualityCheckTable extends AbstractTableGateway
           $iQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
                ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'))
                ->group(new Expression("qc.kit_lot_no,ft.facility_name"));
-
+          if ($this->sessionLogin->facilityMap != null) {
+               $iQuery = $iQuery->where('qc.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+          }
           $iQueryStr = $sql->getSqlStringForSqlObject($iQuery);
           $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -964,6 +1000,10 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery = $sQuery->where(array('qc.testing_facility_id' => $parameters['testingFacility']));
           }
 
+          if ($this->sessionLogin->facilityMap != null) {
+               $sQuery = $sQuery->where('qc.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+          }          
+
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           //echo $sQueryStr;die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -1027,6 +1067,11 @@ class QualityCheckTable extends AbstractTableGateway
           if (isset($parameters['locationThree']) && trim($parameters['locationThree']) != "") {
                $sQuery = $sQuery->where(array('d.district_id' => $parameters['locationThree']));
           }
+
+
+          if ($this->sessionLogin->facilityMap != null) {
+               $sQuery = $sQuery->where('(facility_id IN (' . $this->sessionLogin->facilityMap . ') OR testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+          }             
 
           $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
           //echo $sQueryStr;die;
@@ -1200,38 +1245,42 @@ class QualityCheckTable extends AbstractTableGateway
           }
           return $output;
      }
-     public function cryptoJsAesDecrypt($passphrase, $jsonString){
+     public function cryptoJsAesDecrypt($passphrase, $jsonString)
+     {
           $jsondata = json_decode($jsonString, true);
           try {
-              $salt = hex2bin($jsondata["s"]);
-              $iv  = hex2bin($jsondata["iv"]);
-          } catch(Exception $e) { return null; }
+               $salt = hex2bin($jsondata["s"]);
+               $iv  = hex2bin($jsondata["iv"]);
+          } catch (Exception $e) {
+               return null;
+          }
           $ct = base64_decode($jsondata["ct"]);
-          $concatedPassphrase = $passphrase.$salt;
+          $concatedPassphrase = $passphrase . $salt;
           $md5 = array();
           $md5[0] = md5($concatedPassphrase, true);
           $result = $md5[0];
           for ($i = 1; $i < 3; $i++) {
-              $md5[$i] = md5($md5[$i - 1].$concatedPassphrase, true);
-              $result .= $md5[$i];
+               $md5[$i] = md5($md5[$i - 1] . $concatedPassphrase, true);
+               $result .= $md5[$i];
           }
           $key = substr($result, 0, 32);
           $data = openssl_decrypt($ct, 'aes-256-cbc', $key, true, $iv);
           return json_decode($data, true);
-      }
-  
-    public function cryptoJsAesEncrypt($passphrase, $value){
+     }
+
+     public function cryptoJsAesEncrypt($passphrase, $value)
+     {
           $salt = openssl_random_pseudo_bytes(8);
           $salted = '';
           $dx = '';
           while (strlen($salted) < 48) {
-              $dx = md5($dx.$passphrase.$salt, true);
-              $salted .= $dx;
+               $dx = md5($dx . $passphrase . $salt, true);
+               $salted .= $dx;
           }
           $key = substr($salted, 0, 32);
-          $iv  = substr($salted, 32,16);
+          $iv  = substr($salted, 32, 16);
           $encrypted_data = openssl_encrypt(json_encode($value), 'aes-256-cbc', $key, true, $iv);
           $data = array("ct" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "s" => bin2hex($salt));
           return json_encode($data);
-      }
+     }
 }

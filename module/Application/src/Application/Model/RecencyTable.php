@@ -21,10 +21,12 @@ class RecencyTable extends AbstractTableGateway
     protected $table = 'recency';
     public $vlResultOptionArray = array('target not detected', 'below detection line', 'tnd', 'bdl', 'failed', '&lt; 20', '&lt; 40', '< 20', '< 40', '< 400', '< 800', '<20', '<40');
     public $vlFailOptionArray = array('fail', 'failed');
+    public $sessionLogin = null;
 
     public function __construct(Adapter $adapter)
     {
         $this->adapter = $adapter;
+        $this->sessionLogin = new Container('credo');
     }
 
     public function randomizer($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -193,7 +195,7 @@ class RecencyTable extends AbstractTableGateway
         if ($sessionLogin->facilityMap != null) {
             $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $sessionLogin->facilityMap . ')');
         }
-                
+
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
@@ -203,7 +205,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
         //if ($roleCode == 'user' || $roleCode == 'remote_order_user') {
-           // $sQuery = $sQuery->where('r.added_by=' . $sessionLogin->userId);
+        // $sQuery = $sQuery->where('r.added_by=' . $sessionLogin->userId);
         //}
 
         $queryContainer->exportRecencyDataQuery = $sQuery;
@@ -233,7 +235,7 @@ class RecencyTable extends AbstractTableGateway
 
         if ($sessionLogin->facilityMap != null) {
             $iQuery = $iQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
-        }        
+        }
 
         $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -244,7 +246,7 @@ class RecencyTable extends AbstractTableGateway
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
-        
+
         foreach ($rResult as $aRow) {
             $pdfBtn = "";
             $actionBtn = "";
@@ -272,7 +274,7 @@ class RecencyTable extends AbstractTableGateway
             $actionBtn .= $pdfBtn;
             $actionBtn .= '</div>';
 
-            $row[] = $aRow['sample_id'] .'<br>'. $actionBtn;
+            $row[] = $aRow['sample_id'] . '<br>' . $actionBtn;
             $row[] = $aRow['facility_name'];
             $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
@@ -2384,6 +2386,11 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+        }
+
         $queryContainer->exportRecencyDataResultDataQuery = $sQuery;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         //echo $sQueryStr;die;
@@ -2407,6 +2414,9 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->group('r.facility_id');
 
+        if ($this->sessionLogin->facilityMap != null) {
+            $iQuery = $iQuery->where('r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+        }
         $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -2537,6 +2547,12 @@ class RecencyTable extends AbstractTableGateway
         //             $sQuery->where(array('final_outcome'=>$parameters['finalOutcome']));
         //         }
 
+
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+        }
+                
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
@@ -2544,6 +2560,7 @@ class RecencyTable extends AbstractTableGateway
     public function fetchFinalOutcomeChart($parameters)
     {
         $dbAdapter = $this->adapter;
+        $sessionLogin = new Container('credo');
 
         $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
 
@@ -2632,6 +2649,10 @@ class RecencyTable extends AbstractTableGateway
             } else if ($parameters['ritaFilter'] == 'hivRecencyTestDate') {
                 $sQuery = $sQuery->order("hiv_recency_test_date DESC");
             }
+        }
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
@@ -2773,6 +2794,10 @@ class RecencyTable extends AbstractTableGateway
             }
         } else {
             $sQuery = $sQuery->order("samplesCollected DESC");
+        }
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
@@ -3182,6 +3207,10 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+        }
+
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -3243,10 +3272,10 @@ class RecencyTable extends AbstractTableGateway
         }
 
         $sQuery = $sQuery
-            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'))
-            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->where(array('r.final_outcome' => 'RITA Recent'))
             //->where("(r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date !='')")
@@ -3282,8 +3311,12 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+        }
+
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
-        //\Zend\Debug\Debug::dump($sQueryStr);die;
+        //echo($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
         $result = array();
@@ -3377,6 +3410,10 @@ class RecencyTable extends AbstractTableGateway
 
         if ($parameters['sampleTestedDates'] != '') {
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+        }
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
@@ -3670,6 +3707,11 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+        }
+
         $queryContainer->exportDistrictwiseRecencyResult = $sQuery;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         //echo $sQueryStr;die;
@@ -3691,7 +3733,9 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->group('r.location_two');
-
+        if ($this->sessionLogin->facilityMap != null) {
+            $iQuery = $iQuery->where('r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+        }
         $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -3826,6 +3870,10 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
         }
 
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+        }
+
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -3929,6 +3977,10 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+        }
+
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
@@ -4020,6 +4072,10 @@ class RecencyTable extends AbstractTableGateway
         }
         if ($parameters['finalOutcome'] != '') {
             $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
+        }
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
@@ -4114,6 +4170,10 @@ class RecencyTable extends AbstractTableGateway
         }
         if ($parameters['finalOutcome'] != '') {
             $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
+        }
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
@@ -4215,6 +4275,10 @@ class RecencyTable extends AbstractTableGateway
 
         if ($parameters['sampleTestedDates'] != '') {
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+        }
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
@@ -4638,7 +4702,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('result_printed_on','recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('result_printed_on', 'recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');

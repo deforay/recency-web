@@ -337,7 +337,7 @@ class UserTable extends AbstractTableGateway
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         //facility map
         $umQuery = $sql->select()->from(array('um' => 'user_facility_map'))
-            ->join(array('f' => 'facilities'), 'f.facility_id=um.facility_id', array('facility_name'))
+            ->join(array('f' => 'facilities'), 'f.facility_id=um.facility_id', array('facility_name','facility_type_id'))
             ->where(array('um.user_id' => $userId));
         $umQueryStr = $sql->getSqlStringForSqlObject($umQuery);
         $rResult['facilityMap'] = $dbAdapter->query($umQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();

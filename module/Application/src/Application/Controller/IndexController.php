@@ -26,9 +26,9 @@ class IndexController extends AbstractActionController
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
             $logincontainer = new Container('credo');
-            if (isset($logincontainer->roleCode) && $logincontainer->roleCode == "remote_order_user") {
-                return $this->redirect()->toRoute("recency");
-            }
+            // if (isset($logincontainer->roleCode) && $logincontainer->roleCode == "remote_order_user") {
+            //     return $this->redirect()->toRoute("recency");
+            // }
             $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
             $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
             $facilityService = $this->getServiceLocator()->get('FacilitiesService');

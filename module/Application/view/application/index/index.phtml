@@ -48,19 +48,19 @@
 				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
 					<div class="text-center">
 						<div class="text-black display-4" id="totalSamples1" style=" padding: 45px 0px; "></div>
-						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Total sample registered</div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Total samples registered</div>
 					</div>
 				</div>
 				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
 					<div class="text-center">
 						<div class="text-black display-4" id="samplesTestedViralLoad1" style=" padding: 45px 0px; "></div>
-						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Tested By Viral Load</div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Tested Viral Load</div>
 					</div>
 				</div>
 				<div class="col-sm-12 col-xl-4 js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
 					<div class="text-center">
 						<div class="text-black display-4" id="totalSamplesTested" style="padding: 45px 0px; overflow: initial !important;padding: 0px;margin: 0px;"></div>
-						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Tested By Viral Load</div>
+						<div class="font-size-h4 font-w600 pt-3 mb-0" style=" padding-top: 10px !important; padding-bottom: 20px !important; ">Tested Viral Load</div>
 					</div>
 				</div>
 			</div>
@@ -849,7 +849,7 @@
 		}
 
 		function updateSampleFirstChart() {
-			$.post("<?php echo $this->url('dashbaord'); ?>", {
+			$.post("<?php echo $this->url('dashboard'); ?>", {
 					total: $('#totalSamples1').html(),
 					minimum: $('#samplesTestedViralLoad').html(),
 					bind: 'totalSamplesTested'
@@ -858,7 +858,7 @@
 					$('#totalSamplesTested').html(data);
 				});
 
-			$.post("<?php echo $this->url('dashbaord'); ?>", {
+			$.post("<?php echo $this->url('dashboard'); ?>", {
 					total: $('#assLongTerm').html(),
 					minimum: $('#samplesTestedRecency1').html(),
 					bind: 'totalRecentPercent'
@@ -867,7 +867,7 @@
 					$('#totalRecentPercent').html(data);
 				});
 
-			$.post("<?php echo $this->url('dashbaord'); ?>", {
+			$.post("<?php echo $this->url('dashboard'); ?>", {
 					total: $('#samplesTestedRecency2').html(),
 					minimum: $('#totalSamplesNotTested1').html(),
 					bind: 'totalMissingPercent'
@@ -876,7 +876,7 @@
 					$('#totalMissingPercent').html(data);
 				});
 
-			$.post("<?php echo $this->url('dashbaord'); ?>", {
+			$.post("<?php echo $this->url('dashboard'); ?>", {
 					total: $('#totalLongTerm').html(),
 					minimum: $('#samplesFinalOutcome1').html(),
 					bind: 'totalRITAPercent'
