@@ -204,9 +204,6 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
-        //if ($roleCode == 'user' || $roleCode == 'remote_order_user') {
-        // $sQuery = $sQuery->where('r.added_by=' . $sessionLogin->userId);
-        //}
 
         $queryContainer->exportRecencyDataQuery = $sQuery;
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
@@ -2323,8 +2320,20 @@ class RecencyTable extends AbstractTableGateway
                                                                  WHEN ((r.final_outcome='Long Term')) THEN 1
                                                                  ELSE 0
                                                                  END)"),
+                    "samplesFinalInconclusive" => new Expression("SUM(CASE
+                                                                 WHEN ((r.final_outcome like 'Inconclusive')) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "samplesInvalid" => new Expression("SUM(CASE
+                                                                 WHEN ((r.control_line like 'absent')) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
                     "ritaRecent" => new Expression("SUM(CASE
                                                                  WHEN ((r.final_outcome='RITA Recent')) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "printedCount" => new Expression("SUM(CASE
+                                                                 WHEN ((r.result_printed_on !='' and r.result_printed_on is not null)) THEN 1
                                                                  ELSE 0
                                                                  END)"),
 
@@ -2428,13 +2437,18 @@ class RecencyTable extends AbstractTableGateway
         );
 
         foreach ($rResult as $aRow) {
-            $ltper = 0;
-            $arper = 0;
+            $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
             if (trim($aRow['samplesFinalLongTerm']) != "") {
-                $ltper = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+                $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
             if (trim($aRow['ritaRecent']) != "") {
-                $arper = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+                $recentPercentage = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+            }
+            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'])) {
+                $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+            }
+            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid'])) {
+                $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
             }
             $row = array();
 
@@ -2448,10 +2462,15 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['samplesTestedRecency'];
             $row[] = $aRow['samplesTestedViralLoad'];
             $row[] = $aRow['samplesFinalOutcome'];
+            $row[] = $aRow['printedCount'];
             $row[] = $aRow['samplesFinalLongTerm'];
-            $row[] = $ltper;
+            $row[] = $ltPercentage;
             $row[] = $aRow['ritaRecent'];
-            $row[] = $arper;
+            $row[] = $recentPercentage;
+            $row[] = $aRow['samplesFinalInconclusive'];
+            $row[] = $inconlusivePercentage;
+            $row[] = $aRow['samplesInvalid'];
+            $row[] = $invalidPercentage;
 
             $output['aaData'][] = $row;
         }
@@ -2552,7 +2571,7 @@ class RecencyTable extends AbstractTableGateway
         if ($this->sessionLogin->facilityMap != null) {
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
-                
+
         $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
@@ -3645,6 +3664,15 @@ class RecencyTable extends AbstractTableGateway
                                                                  WHEN ((r.final_outcome='Long Term')) THEN 1
                                                                  ELSE 0
                                                                  END)"),
+
+                    "samplesFinalInconclusive" => new Expression("SUM(CASE
+                                                                 WHEN ((r.final_outcome like 'Inconclusive')) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
+                    "samplesInvalid" => new Expression("SUM(CASE
+                                                                 WHEN ((r.control_line like 'absent')) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),
                     "ritaRecent" => new Expression("SUM(CASE
                                                                  WHEN ((r.final_outcome='RITA Recent')) THEN 1
                                                                  ELSE 0
@@ -3747,13 +3775,18 @@ class RecencyTable extends AbstractTableGateway
         );
 
         foreach ($rResult as $aRow) {
-            $ltper = 0;
-            $arper = 0;
+            $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
             if (trim($aRow['samplesFinalLongTerm']) != "") {
-                $ltper = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+                $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (trim($aRow['ritaRecent']) != "") {
-                $arper = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+            if (isset($aRow['ritaRecent']) && !empty($aRow['ritaRecent'])) {
+                $recentPercentage = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+            }
+            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'])) {
+                $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+            }
+            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid'])) {
+                $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
             }
             $row = array();
 
@@ -3767,9 +3800,14 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['samplesTestedViralLoad'];
             $row[] = $aRow['samplesFinalOutcome'];
             $row[] = $aRow['samplesFinalLongTerm'];
-            $row[] = $ltper;
+            $row[] = $ltPercentage;
             $row[] = $aRow['ritaRecent'];
-            $row[] = $arper;
+            $row[] = $recentPercentage;
+            $row[] = $aRow['samplesFinalInconclusive'];
+            $row[] = $inconlusivePercentage;
+            $row[] = $aRow['samplesInvalid'];
+            $row[] = $invalidPercentage;
+            $output[] = $row;
 
             $output['aaData'][] = $row;
         }

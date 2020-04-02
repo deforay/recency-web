@@ -28,7 +28,6 @@ class RecencyService
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyDetails($params);
-        
     }
 
     public function getReqVlTestOnVlsmDetails($params)
@@ -57,7 +56,7 @@ class RecencyService
                 // Add event log
                 $subject                = $result;
                 $eventType              = 'Recency details-add';
-                $action                 = 'Added a new Recency details for patient id'.ucwords($params['patientId']);
+                $action                 = 'Added a new Recency details for patient id' . ucwords($params['patientId']);
                 $resourceName           = 'Recency Details ';
                 $eventLogDb             = $this->sm->get('EventLogTable');
                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
@@ -98,7 +97,7 @@ class RecencyService
                 // Add Event log
                 $subject                = $result;
                 $eventType              = 'Recency details-edit';
-                $action                 = 'Edited  Recency details for patient id '.ucwords($params['patientId']);
+                $action                 = 'Edited  Recency details for patient id ' . ucwords($params['patientId']);
                 $resourceName           = 'Recency Details ';
                 $eventLogDb             = $this->sm->get('EventLogTable');
                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
@@ -1167,14 +1166,18 @@ class RecencyService
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
-                    $ltper = 0;
-                    $arper = 0;
-                    $row = array();
+                    $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
                     if (trim($aRow['samplesFinalLongTerm']) != "") {
-                        $ltper = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . "%";
+                        $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
                     }
                     if (trim($aRow['ritaRecent']) != "") {
-                        $arper = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . "%";
+                        $recentPercentage = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+                    }
+                    if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'])) {
+                        $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+                    }
+                    if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid'])) {
+                        $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
                     }
 
                     $row[] = $aRow['facility_name'];
@@ -1187,10 +1190,15 @@ class RecencyService
                     $row[] = $aRow['samplesTestedRecency'];
                     $row[] = $aRow['samplesTestedViralLoad'];
                     $row[] = $aRow['samplesFinalOutcome'];
+                    $row[] = $aRow['printedCount'];
                     $row[] = $aRow['samplesFinalLongTerm'];
-                    $row[] = $ltper;
+                    $row[] = $ltPercentage;
                     $row[] = $aRow['ritaRecent'];
-                    $row[] = $arper;
+                    $row[] = $recentPercentage;
+                    $row[] = $aRow['samplesFinalInconclusive'];
+                    $row[] = $inconlusivePercentage;
+                    $row[] = $aRow['samplesInvalid'];
+                    $row[] = $invalidPercentage;
                     $output[] = $row;
                 }
             }
@@ -1232,11 +1240,15 @@ class RecencyService
             $sheet->setCellValue('H1', html_entity_decode('No. of Samples With Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('I1', html_entity_decode('No. of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('J1', html_entity_decode('No. of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-
-            $sheet->setCellValue('K1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('L1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('M1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('N1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('No. of Results Printed', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('N1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('O1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('P1', html_entity_decode('No. of Inconclusive', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('Q1', html_entity_decode('Inconclusive (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('R1', html_entity_decode('No. of Invalid', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('S1', html_entity_decode('Invalid (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -1254,6 +1266,11 @@ class RecencyService
             $sheet->getStyle('L1')->applyFromArray($styleArray);
             $sheet->getStyle('M1')->applyFromArray($styleArray);
             $sheet->getStyle('N1')->applyFromArray($styleArray);
+            $sheet->getStyle('O1')->applyFromArray($styleArray);
+            $sheet->getStyle('P1')->applyFromArray($styleArray);
+            $sheet->getStyle('Q1')->applyFromArray($styleArray);
+            $sheet->getStyle('R1')->applyFromArray($styleArray);
+            $sheet->getStyle('S1')->applyFromArray($styleArray);
 
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;
@@ -1293,7 +1310,7 @@ class RecencyService
             error_log($exc->getTraceAsString());
         }
     }
-    
+
     public function getRecencyAllDataCount($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
@@ -1390,14 +1407,18 @@ class RecencyService
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
-                    $ltper = 0;
-                    $arper = 0;
-                    $row = array();
+                    $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
                     if (trim($aRow['samplesFinalLongTerm']) != "") {
-                        $ltper = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+                        $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
                     }
-                    if (trim($aRow['ritaRecent']) != "") {
-                        $arper = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+                    if (isset($aRow['ritaRecent']) && !empty($aRow['ritaRecent'])) {
+                        $recentPercentage = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+                    }
+                    if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'])) {
+                        $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
+                    }
+                    if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid'])) {
+                        $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
                     }
 
                     $row[] = $aRow['district_name'];
@@ -1410,9 +1431,13 @@ class RecencyService
                     $row[] = $aRow['samplesTestedViralLoad'];
                     $row[] = $aRow['samplesFinalOutcome'];
                     $row[] = $aRow['samplesFinalLongTerm'];
-                    $row[] = $ltper;
+                    $row[] = $ltPercentage;
                     $row[] = $aRow['ritaRecent'];
-                    $row[] = $arper;
+                    $row[] = $recentPercentage;
+                    $row[] = $aRow['samplesFinalInconclusive'];
+                    $row[] = $inconlusivePercentage;
+                    $row[] = $aRow['samplesInvalid'];
+                    $row[] = $invalidPercentage;
                     $output[] = $row;
                 }
             }
@@ -1459,6 +1484,10 @@ class RecencyService
             $sheet->setCellValue('K1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('L1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('M1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('N1', html_entity_decode('No. of Inconclusive', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('O1', html_entity_decode('Inconclusive (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('P1', html_entity_decode('No. of Invalid', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('Q1', html_entity_decode('Invalid (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -1475,6 +1504,10 @@ class RecencyService
             $sheet->getStyle('K1')->applyFromArray($styleArray);
             $sheet->getStyle('L1')->applyFromArray($styleArray);
             $sheet->getStyle('M1')->applyFromArray($styleArray);
+            $sheet->getStyle('N1')->applyFromArray($styleArray);
+            $sheet->getStyle('O1')->applyFromArray($styleArray);
+            $sheet->getStyle('P1')->applyFromArray($styleArray);
+            $sheet->getStyle('Q1')->applyFromArray($styleArray);
 
 
             foreach ($output as $rowNo => $rowData) {
@@ -1591,22 +1624,22 @@ class RecencyService
             if (isset($params['rvlsm']) && count($params['rvlsm']) > 0) {
                 foreach ($params['rvlsm'] as $sample) {
                     $data =  $recencyDb->getDataBySampleId($sample);
-                    
+
                     if (isset($data['sample_id']) && $data['sample_id'] != "") {
                         $resultCart = $client->post($urlVlsm, [
                             'form_params' => [
-                                'sampleId'              => (isset($data['sample_id']) && $data['sample_id'] != '')?$data['sample_id']:'',
-                                'patientId'             => (isset($data['patient_id']) && $data['patient_id'] != '')?$data['patient_id']:'',
-                                'isFacilityLab'         => (isset($params['isFacilityLab']) && $params['isFacilityLab'] != '')?$params['isFacilityLab']:'',
+                                'sampleId'              => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
+                                'patientId'             => (isset($data['patient_id']) && $data['patient_id'] != '') ? $data['patient_id'] : '',
+                                'isFacilityLab'         => (isset($params['isFacilityLab']) && $params['isFacilityLab'] != '') ? $params['isFacilityLab'] : '',
                                 // 'province'              => $data['province'],
                                 // 'district'              => $data['district'],
-                                'sCDate'                => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '')?$data['sample_collection_date']:'',
+                                'sCDate'                => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
                                 // 'sampleType'            => $data['received_specimen_type'],
-                                'isVlLab'               => (isset($params['isVlLab']) && $params['isVlLab'] != '')?$params['isVlLab']:'',
-                                'userId'                => (isset($sessionLogin->userId) && $sessionLogin->userId != '')?$sessionLogin->userId:'',
-                                'dob'                   => (isset($data['dob']) && $data['dob'] != '')?$data['dob']:'',
-                                'age'                   => (isset($data['age']) && $data['age'] != '')?$data['age']:'',
-                                'gender'                => (isset($data['gender']) && $data['gender'] != '')?$data['gender']:'',
+                                'isVlLab'               => (isset($params['isVlLab']) && $params['isVlLab'] != '') ? $params['isVlLab'] : '',
+                                'userId'                => (isset($sessionLogin->userId) && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
+                                'dob'                   => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
+                                'age'                   => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
+                                'gender'                => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
                                 'service'               => ''
                             ]
                         ]);
@@ -1617,7 +1650,7 @@ class RecencyService
                         }
                     }
                 }
-                
+
                 if ($check) {
                     $alertContainer = new Container('alert');
                     $alertContainer->alertMsg = 'VL Test requested successfully';
@@ -1628,12 +1661,14 @@ class RecencyService
         }
     }
 
-    public function getKitInfo($kitNo=""){
+    public function getKitInfo($kitNo = "")
+    {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchKitInfo($kitNo);
     }
-    
-    public function getModalityDetails($params=""){
+
+    public function getModalityDetails($params = "")
+    {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchModalityDetails($params);
     }
@@ -1677,15 +1712,15 @@ class RecencyService
                     ),
                 ),
             );
-            $horizontal = array('B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
-            $ageArray = array('15-19','20-24','25-29','30-34','35-39','40-44','45-49','50+');
+            $horizontal = array('B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+            $ageArray = array('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50+');
             $sheet->setCellValue('A1', html_entity_decode('RTRI Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A2', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A3', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A7', html_entity_decode('Confirmed Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A8', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A9', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            
+
             $sheet->setCellValue('A4', html_entity_decode('Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A5', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('A10', html_entity_decode('Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -1706,17 +1741,20 @@ class RecencyService
             $sheet->mergeCells('A7:Q7');
 
             /* Age cell creation */
-            $rtrif = 2;$rtrim = 3;$index = 0;
+            $rtrif = 2;
+            $rtrim = 3;
+            $index = 0;
             foreach ($ageArray as $age) {
-                $sheet->setCellValue($horizontal[$index].'2', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue($horizontal[$index].'8', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->getStyle($horizontal[$index].'2')->applyFromArray($borderStyle);
-                $sheet->getStyle($horizontal[$index].'8')->applyFromArray($borderStyle);
-                $index = ($index +2);
-                
-                $sheet->mergeCells($horizontal[$rtrif].'2:'.$horizontal[$rtrim].'2');
-                $sheet->mergeCells($horizontal[$rtrif].'8:'.$horizontal[$rtrim].'8');
-                $rtrim = ($rtrim+2);$rtrif = ($rtrif+2);
+                $sheet->setCellValue($horizontal[$index] . '2', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue($horizontal[$index] . '8', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->getStyle($horizontal[$index] . '2')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[$index] . '8')->applyFromArray($borderStyle);
+                $index = ($index + 2);
+
+                $sheet->mergeCells($horizontal[$rtrif] . '2:' . $horizontal[$rtrim] . '2');
+                $sheet->mergeCells($horizontal[$rtrif] . '8:' . $horizontal[$rtrim] . '8');
+                $rtrim = ($rtrim + 2);
+                $rtrif = ($rtrif + 2);
             }
             $sheet->mergeCells('B2:C2');
             $sheet->mergeCells('B8:C8');
@@ -1724,41 +1762,41 @@ class RecencyService
             $index = 0;
             foreach (range(1, 16) as $x) {
                 if ($x % 2) {
-                    $sheet->setCellValue($horizontal[$index].'3', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[$index].'9', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index] . '3', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index] . '9', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 } else {
-                    $sheet->setCellValue($horizontal[$index].'3', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[$index].'9', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index] . '3', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index] . '9', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 }
-                $sheet->getStyle($horizontal[$index].'3')->applyFromArray($borderStyle);
-                $sheet->getStyle($horizontal[$index].'9')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[$index] . '3')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[$index] . '9')->applyFromArray($borderStyle);
                 $index++;
             }
             /* Value cell creation start */
             $index = 0;
             foreach (range(1, 16) as $x) {
-                $sheet->getStyle($horizontal[($x-1)].'4')->applyFromArray($borderStyle);
-                $sheet->getStyle($horizontal[($x-1)].'5')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[($x - 1)] . '4')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[($x - 1)] . '5')->applyFromArray($borderStyle);
                 if ($x % 2) {
-                    $sheet->setCellValue($horizontal[($x-1)].'4', html_entity_decode($result['rtriRecent'.$ageArray[$index].'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[($x-1)].'5', html_entity_decode($result['rtriLT'.$ageArray[$index].'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '4', html_entity_decode($result['rtriRecent' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '5', html_entity_decode($result['rtriLT' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 } else {
-                    $sheet->setCellValue($horizontal[($x-1)].'4', html_entity_decode($result['rtriRecent'.$ageArray[$index].'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[($x-1)].'5', html_entity_decode($result['rtriLT'.$ageArray[$index].'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '4', html_entity_decode($result['rtriRecent' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '5', html_entity_decode($result['rtriLT' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                     $index++;
                 }
             }
-            
+
             $index = 0;
             foreach (range(1, 16) as $x) {
-                $sheet->getStyle($horizontal[($x-1)].'10')->applyFromArray($borderStyle);
-                $sheet->getStyle($horizontal[($x-1)].'11')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[($x - 1)] . '10')->applyFromArray($borderStyle);
+                $sheet->getStyle($horizontal[($x - 1)] . '11')->applyFromArray($borderStyle);
                 if ($x % 2) {
-                    $sheet->setCellValue($horizontal[($x-1)].'10', html_entity_decode($result['confirmedRecent'.$ageArray[$index].'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[($x-1)].'11', html_entity_decode($result['confirmedLT'.$ageArray[$index].'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '10', html_entity_decode($result['confirmedRecent' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '11', html_entity_decode($result['confirmedLT' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                 } else {
-                    $sheet->setCellValue($horizontal[($x-1)].'10', html_entity_decode($result['confirmedRecent'.$ageArray[$index].'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[($x-1)].'11', html_entity_decode($result['confirmedLT'.$ageArray[$index].'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '10', html_entity_decode($result['confirmedRecent' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '11', html_entity_decode($result['confirmedLT' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
                     $index++;
                 }
             }
@@ -1781,7 +1819,8 @@ class RecencyService
         }
     }
 
-    public function getPrintResultsDetails($parameters){
+    public function getPrintResultsDetails($parameters)
+    {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchPrintResultsDetails($parameters);
     }

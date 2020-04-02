@@ -6,7 +6,7 @@
 	$roleCode = $sessionLogin->roleCode;
 	//\Zend\Debug\Debug::dump($globalConfigResult);die;
 
-	$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+	$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
 	$startDate = date('d-M-Y', strtotime('today - 365 days'));
 	$currentDate = date('d-M-Y');
 	?>
@@ -408,15 +408,20 @@
 									<th>No. of Samples classified as Assay Recent</th>
 									<th>No. of Samples Tested With Viral Load</th>
 									<th>No. of Samples With Final Outcome</th>
+									<th>No. of Results Printed</th>
 									<th>Long Term</th>
 									<th>Long Term (%)</th>
 									<th>RITA Recent</th>
 									<th>RITA Recent (%)</th>
+									<th>No. of Inconclusive</th>
+									<th>Inconclusive (%)</th>
+									<th>No. of Invalid</th>
+									<th>Invalid (%)</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="8" class="dataTables_empty">Loading data from server</td>
+									<td colspan="19" class="dataTables_empty">Loading data from server</td>
 								</tr>
 								<tr>
 							</tbody>
@@ -449,11 +454,15 @@
 									<th>Long Term (%)</th>
 									<th>RITA Recent</th>
 									<th>RITA Recent (%)</th>
+									<th>No. of Inconclusive</th>
+									<th>Inconclusive (%)</th>
+									<th>No. of Invalid (%)</th>
+									<th>Invalid (%)</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="8" class="dataTables_empty">Loading data from server</td>
+									<td colspan="16" class="dataTables_empty">Loading data from server</td>
 								</tr>
 								<tr>
 							</tbody>
@@ -638,6 +647,18 @@
 				"bProcessing": true,
 				"bServerSide": true,
 				"aoColumns": [{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
+						"sClass": "center"
+					},
+					{
 						"sClass": "center"
 					},
 					{

@@ -104,7 +104,7 @@ class QualityCheckTable extends AbstractTableGateway
           $roleId = $sessionLogin->roleId;
 
           $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
-               ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
+                                  ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
 
           if (isset($sWhere) && $sWhere != "") {
                $sQuery->where($sWhere);
@@ -128,10 +128,6 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery->offset($sOffset);
           }
 
-          // if ($roleCode == 'user') {
-          //      $sQuery = $sQuery->where('qc.added_by=' . $sessionLogin->userId);
-          // }
-
           if ($this->sessionLogin->facilityMap != null) {
                $sQuery = $sQuery->where('qc.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
           }
@@ -149,15 +145,12 @@ class QualityCheckTable extends AbstractTableGateway
           $iFilteredTotal = count($aResultFilterTotal);
 
           /* Total data set length */
-          $iQuery = $sql->select()->from(array('qc' => 'quality_check_test'));
+          $iQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
+          ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
 
-          if ($roleCode == 'user') {
-               $iQuery = $iQuery->where('qc.added_by=' . $sessionLogin->userId);
-          }
-          if ($sessionLogin->facilityMap != null) {
+          if ($this->sessionLogin->facilityMap != null) {
                $iQuery = $iQuery->where('qc.testing_facility_id IN (' . $sessionLogin->facilityMap . ')');
           }
-
 
           $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
           $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
