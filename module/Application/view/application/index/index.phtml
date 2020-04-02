@@ -270,7 +270,7 @@
 		</div>
 
 
-		<div class="row sticky-div" style=" position: sticky; top: 60px; z-index: 3;background: #f0f8ffbf;margin-bottom: 20px; ">
+		<div class="row ssticky-div" style=" background: #f0f8ffbf;margin-bottom: 20px; ">
 			<div class="form-group row" style="border: 1px solid #80808069;margin: 0px !important;padding: 15px 0px;">
 				<div class="col-sm-4" style=" margin-top:10px;">
 					<input type="text" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" value="" />
@@ -603,6 +603,7 @@
 				"bAutoWidth": false,
 				"bProcessing": true,
 				"bServerSide": true,
+				"bDestroy": true,
 				"aoColumns": [
 					<?php echo $editAction; ?>
 				],
@@ -647,6 +648,7 @@
 						"data": aoData,
 						"success": function(data) {
 							if (data.footerData) {
+								$('#facilityFooter').html('');
 								data.footerData.forEach(function(item) {
 									$('#facilityFooter').append("<th>" + item + "</th>")
 								});
@@ -657,10 +659,11 @@
 				}
 			});
 
-			oTable = $('#districtwiseDataTable').dataTable({
+			dTable = $('#districtwiseDataTable').dataTable({
 				"bAutoWidth": false,
 				"bProcessing": true,
 				"bServerSide": true,
+				"bDestroy": true,
 				"aoColumns": [{
 						"sClass": "center"
 					},
@@ -763,6 +766,7 @@
 						"data": aoData,
 						"success": function(data) {
 							if (data.footerData) {
+								$('#districtFooter').html('');
 								data.footerData.forEach(function(item) {
 									$('#districtFooter').append("<th>" + item + "</th>")
 								});
@@ -810,6 +814,7 @@
 
 		function searchData() {
 			oTable.fnDraw();
+			dTable.fnDraw();
 		}
 
 

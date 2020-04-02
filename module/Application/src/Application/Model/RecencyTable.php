@@ -2373,9 +2373,7 @@ class RecencyTable extends AbstractTableGateway
             if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
                 $end_date = $general->dbDateFormat(trim($s_c_date[1]));
             }
-        }
-
-        if ($parameters['sampleTestedDates'] != '') {
+        
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
@@ -2409,7 +2407,9 @@ class RecencyTable extends AbstractTableGateway
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
+
         $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+
         $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -2694,10 +2694,8 @@ class RecencyTable extends AbstractTableGateway
             if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
                 $end_date = $general->dbDateFormat(trim($s_c_date[1]));
             }
-        }
-
-        if ($parameters['sampleTestedDates'] != '') {
-            $sQuery = $sQuery->where(array("r.added_on >='" . $start_date . "'", "r.added_on <='" . $end_date . "'"));
+        
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
         if ($parameters['tOutcome'] != '') {
             $sQuery->where(array('term_outcome' => $parameters['tOutcome']));
