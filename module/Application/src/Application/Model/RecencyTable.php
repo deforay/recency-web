@@ -2434,9 +2434,13 @@ class RecencyTable extends AbstractTableGateway
             "iTotalRecords" => count($iResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
+            "footerData" => array()
         );
 
+        $totalsRow = array();
+
         foreach ($rResult as $aRow) {
+
             $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
             if (trim($aRow['samplesFinalLongTerm']) != "") {
                 $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
@@ -2450,7 +2454,9 @@ class RecencyTable extends AbstractTableGateway
             if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid'])) {
                 $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
             }
+
             $row = array();
+
 
             $row[] = $aRow['facility_name'];
             $row[] = $aRow['testing_facility_name'];
@@ -2474,6 +2480,49 @@ class RecencyTable extends AbstractTableGateway
 
             $output['aaData'][] = $row;
         }
+
+        foreach ($aResultFilterTotal as $aRow) {
+
+            $row = array();
+
+            $output['footerData'][0] = "";
+            $output['footerData'][1] = "Overall Total";
+            $output['footerData'][2] += $aRow['totalSamples'];
+            $output['footerData'][3] += $aRow['samplesReceived'];
+            $output['footerData'][4] += $aRow['samplesRejected'];
+            $output['footerData'][5] += $aRow['samplesTestBacklog'];
+            $output['footerData'][6] += $aRow['samplesTestVlPending'];
+            $output['footerData'][7] += $aRow['samplesTestedRecency'];
+            $output['footerData'][8] += $aRow['samplesTestedViralLoad'];
+            $output['footerData'][9] += $aRow['samplesFinalOutcome'];
+            $output['footerData'][10] += $aRow['printedCount'];
+            $output['footerData'][11] += $aRow['samplesFinalLongTerm'];
+            $output['footerData'][12] = "";
+            $output['footerData'][13] += $aRow['ritaRecent'];
+            $output['footerData'][14] = "";
+            $output['footerData'][15] += $aRow['samplesFinalInconclusive'];
+            $output['footerData'][16] = "";
+            $output['footerData'][17] += $aRow['samplesInvalid'];
+            $output['footerData'][18] = "";
+        }
+
+        
+        if ($output['footerData'][9] > 0) {
+            $output['footerData'][12] = round(($output['footerData'][11] / $output['footerData'][9]) * 100 , 2) . "%";
+        }
+        
+        if ($output['footerData'][9] > 0) {
+            $output['footerData'][14] = round(($output['footerData'][13] / $output['footerData'][9]) * 100 , 2) . "%";
+        }
+        
+        if ($output['footerData'][9] > 0) {
+            $output['footerData'][16] = round(($output['footerData'][15] / $output['footerData'][9]) * 100 , 2) . "%";
+        }
+        
+        if (($output['footerData'][3]-$output['footerData'][5]) > 0) {
+            $output['footerData'][18] = round(($output['footerData'][17] / ($output['footerData'][3]-$output['footerData'][5])) * 100 , 2) . "%";
+        }
+
         return $output;
     }
 
@@ -3677,13 +3726,17 @@ class RecencyTable extends AbstractTableGateway
                                                                  WHEN ((r.final_outcome='RITA Recent')) THEN 1
                                                                  ELSE 0
                                                                  END)"),
+                    "printedCount" => new Expression("SUM(CASE
+                                                                 WHEN ((r.result_printed_on !='' and r.result_printed_on is not null)) THEN 1
+                                                                 ELSE 0
+                                                                 END)"),                                                                 
 
                 )
             )
-            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
             //->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
-            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
+            ->join(array('p' => 'province_details'), 'p.province_id = f.province', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = f.district', array('district_name'), 'left')
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->group('r.location_two');
 
@@ -3772,6 +3825,7 @@ class RecencyTable extends AbstractTableGateway
             "iTotalRecords" => count($iResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
+            "footerData" => array()
         );
 
         foreach ($rResult as $aRow) {
@@ -3799,6 +3853,7 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['samplesTestedRecency'];
             $row[] = $aRow['samplesTestedViralLoad'];
             $row[] = $aRow['samplesFinalOutcome'];
+            $row[] = $aRow['printedCount'];
             $row[] = $aRow['samplesFinalLongTerm'];
             $row[] = $ltPercentage;
             $row[] = $aRow['ritaRecent'];
@@ -3811,6 +3866,50 @@ class RecencyTable extends AbstractTableGateway
 
             $output['aaData'][] = $row;
         }
+
+
+
+        foreach ($aResultFilterTotal as $aRow) {
+
+            $row = array();
+
+            $output['footerData'][0] = 'Overall Total';
+            $output['footerData'][1] += $aRow['totalSamples'];
+            $output['footerData'][2] += $aRow['samplesReceived'];
+            $output['footerData'][3] += $aRow['samplesRejected'];
+            $output['footerData'][4] += $aRow['samplesTestBacklog'];
+            $output['footerData'][5] += $aRow['samplesTestVlPending'];
+            $output['footerData'][6] += $aRow['samplesTestedRecency'];
+            $output['footerData'][7] += $aRow['samplesTestedViralLoad'];
+            $output['footerData'][8] += $aRow['samplesFinalOutcome'];
+            $output['footerData'][9] += $aRow['printedCount'];
+            $output['footerData'][10] += $aRow['samplesFinalLongTerm'];
+            $output['footerData'][11] = "";
+            $output['footerData'][12] += $aRow['ritaRecent'];
+            $output['footerData'][13] = "";
+            $output['footerData'][14] += $aRow['samplesFinalInconclusive'];
+            $output['footerData'][15] = "";
+            $output['footerData'][16] += $aRow['samplesInvalid'];
+            $output['footerData'][17] = "";            
+
+        }
+
+        
+        if ($output['footerData'][8] > 0) {
+            $output['footerData'][11] = round(($output['footerData'][10] / $output['footerData'][8]) * 100 , 2) . "%";
+        }
+        
+        if ($output['footerData'][8] > 0) {
+            $output['footerData'][13] = round(($output['footerData'][12] / $output['footerData'][8]) * 100 , 2) . "%";
+        }
+        
+        if ($output['footerData'][8] > 0) {
+            $output['footerData'][15] = round(($output['footerData'][14] / $output['footerData'][8]) * 100 , 2) . "%";
+        }
+        
+        if (($output['footerData'][1]-$output['footerData'][4]) > 0) {
+            $output['footerData'][17] = round(($output['footerData'][16] / ($output['footerData'][1]-$output['footerData'][4])) * 100 , 2) . "%";
+        }        
         return $output;
     }
 

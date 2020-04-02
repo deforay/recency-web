@@ -1166,6 +1166,9 @@ class RecencyService
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
+
+                    $row =  array();
+
                     $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
                     if (trim($aRow['samplesFinalLongTerm']) != "") {
                         $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
@@ -1176,8 +1179,9 @@ class RecencyService
                     if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'])) {
                         $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
                     }
-                    if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid'])) {
-                        $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
+                    $totalAssayTested = $aRow['samplesReceived'] - $aRow['samplesTestBacklog'];
+                    if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid']) && $totalAssayTested > 0) {
+                        $invalidPercentage = round((($aRow['samplesInvalid'] / $totalAssayTested) * 100), 2) . '%';
                     }
 
                     $row[] = $aRow['facility_name'];
@@ -1407,6 +1411,7 @@ class RecencyService
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
+                    $row =  array();
                     $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
                     if (trim($aRow['samplesFinalLongTerm']) != "") {
                         $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
@@ -1430,6 +1435,7 @@ class RecencyService
                     $row[] = $aRow['samplesTestedRecency'];
                     $row[] = $aRow['samplesTestedViralLoad'];
                     $row[] = $aRow['samplesFinalOutcome'];
+                    $row[] = $aRow['printedCount'];
                     $row[] = $aRow['samplesFinalLongTerm'];
                     $row[] = $ltPercentage;
                     $row[] = $aRow['ritaRecent'];
@@ -1479,15 +1485,16 @@ class RecencyService
             $sheet->setCellValue('G1', html_entity_decode('No. of Samples With Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('H1', html_entity_decode('No. of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->setCellValue('I1', html_entity_decode('No. of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('J1', html_entity_decode('No. of Results Printed', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
-            $sheet->setCellValue('J1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('K1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('L1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('M1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('N1', html_entity_decode('No. of Inconclusive', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('O1', html_entity_decode('Inconclusive (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('P1', html_entity_decode('No. of Invalid', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('Q1', html_entity_decode('Invalid (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('N1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('O1', html_entity_decode('No. of Inconclusive', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('P1', html_entity_decode('Inconclusive (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('Q1', html_entity_decode('No. of Invalid', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('R1', html_entity_decode('Invalid (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -1508,6 +1515,7 @@ class RecencyService
             $sheet->getStyle('O1')->applyFromArray($styleArray);
             $sheet->getStyle('P1')->applyFromArray($styleArray);
             $sheet->getStyle('Q1')->applyFromArray($styleArray);
+            $sheet->getStyle('R1')->applyFromArray($styleArray);
 
 
             foreach ($output as $rowNo => $rowData) {
