@@ -181,7 +181,7 @@ class RecencyTable extends AbstractTableGateway
             if ($parameters['vlResult'] == 'pending') {
                 $sQuery->where(array('term_outcome' => 'Assay Recent'));
             } else if ($parameters['vlResult'] == 'vl_load_tested') {
-                $sQuery->where('term_outcome = "" OR  term_outcome = NULL ');
+                $sQuery->where('vl_result not like "" AND  vl_result is not NULL ');
             }
         }
         if ($parameters['RTest'] == 'pending') {
