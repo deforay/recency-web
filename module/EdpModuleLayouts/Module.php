@@ -6,7 +6,7 @@ class Module
     public function onBootstrap($e)
     {
         
-        $e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractController', 'dispatch', function($e) {
+        $e->getApplication()->getEventManager()->getSharedManager()->attach('Laminas\Mvc\Controller\AbstractController', 'dispatch', function($e) {
             $controller      = $e->getTarget();
             
             $controllerClass = get_class($controller);

@@ -12,7 +12,7 @@
  * credentials from accidentally being committed into version control.
  */
 
-$config = new \Zend\Config\Reader\Ini();
+$config = new \Laminas\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 
 $env = getenv('APP_ENV') ?: 'production';

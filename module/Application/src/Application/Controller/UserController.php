@@ -1,10 +1,10 @@
 <?php
 namespace Application\Controller;
 
-use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
+use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
 
 class UserController extends AbstractActionController
 {

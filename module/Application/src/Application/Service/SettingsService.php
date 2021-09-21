@@ -2,13 +2,13 @@
 namespace Application\Service;
 
 use Exception;
-use Zend\Mail;
-use Zend\Db\Sql\Sql;
-use Zend\Session\Container;
-use Zend\Mime\Part as MimePart;
-use Zend\Mail\Transport\SmtpOptions;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
+use Laminas\Mail;
+use Laminas\Db\Sql\Sql;
+use Laminas\Session\Container;
+use Laminas\Mime\Part as MimePart;
+use Laminas\Mail\Transport\SmtpOptions;
+use Laminas\Mime\Message as MimeMessage;
+use Laminas\Mail\Transport\Smtp as SmtpTransport;
 
 class SettingsService {
 
@@ -30,7 +30,7 @@ class SettingsService {
 
     public function addSettingsDetails($params)
     {
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $settingsDb = $this->sm->get('SettingsTable');
@@ -70,7 +70,7 @@ class SettingsService {
     }
 
     public function updateSettingsDetails($params){
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $settingsDb = $this->sm->get('SettingsTable');
@@ -120,7 +120,7 @@ class SettingsService {
 
     public function addSampleSettingsDetails($params)
     {
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $settingsQcSampleDb = $this->sm->get('SettingsQcSampleTable');
@@ -148,7 +148,7 @@ class SettingsService {
     }
 
     public function updateSampleSettingsDetails($params){
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $settingsQcSampleDb = $this->sm->get('SettingsQcSampleTable');

@@ -1,6 +1,6 @@
 <?php
 
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 $alertContainer = new Container('alert');
 $sessionLogin = new Container('credo');
@@ -14,7 +14,7 @@ $nonRemoteUserMsg = $sessionLogin->nonRemoteUserMsg;
 $GlobalConfigRes = $this->GlobalConfigHelper();
 /* Crosss Login Block Start */
 $userCrossLoginRes = $this->UserCrossLoginHelper();
-$config = new \Zend\Config\Reader\Ini();
+$config = new \Laminas\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 /* Crosss Login Block End */
 $dashboardMenu = "";

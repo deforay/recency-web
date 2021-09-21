@@ -2,9 +2,9 @@
 namespace Application\Service;
 
 use Exception;
-use Zend\Mail;
-use Zend\Db\Sql\Sql;
-use Zend\Session\Container;
+use Laminas\Mail;
+use Laminas\Db\Sql\Sql;
+use Laminas\Session\Container;
 use PHPExcel;
 
 class QualityCheckService {
@@ -27,7 +27,7 @@ class QualityCheckService {
 
      public function addQcTestDetails($params)
      {
-          $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+          $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
           $adapter->beginTransaction();
           try {
                $qcTestDb = $this->sm->get('QualityCheckTable');
@@ -61,7 +61,7 @@ class QualityCheckService {
     }
 
     public function updateQualityCheckDetails($params){
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $qcTestDb = $this->sm->get('QualityCheckTable');
@@ -111,7 +111,7 @@ class QualityCheckService {
             \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
             $output = array();
             $sheet = $excel->getActiveSheet();
-            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportQcDataQuery);

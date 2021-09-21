@@ -2,13 +2,13 @@
 
 namespace Application\Controller;
 
-use Zend\Db\Sql\Sql;
-use Zend\Db\Sql\Expression;
-use Zend\Session\Container;
+use Laminas\Db\Sql\Sql;
+use Laminas\Db\Sql\Expression;
+use Laminas\Session\Container;
 
-use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
 
 class RecencyController extends AbstractActionController
 {

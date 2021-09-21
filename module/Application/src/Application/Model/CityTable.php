@@ -1,11 +1,11 @@
 <?php
 namespace Application\Model;
 
-use Zend\Session\Container;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Sql;
-use Zend\Db\TableGateway\AbstractTableGateway;
-use Zend\Db\Sql\Expression;
+use Laminas\Session\Container;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Sql\Sql;
+use Laminas\Db\TableGateway\AbstractTableGateway;
+use Laminas\Db\Sql\Expression;
 use Application\Service\CommonService;
 
 class CityTable extends AbstractTableGateway {
@@ -19,7 +19,7 @@ class CityTable extends AbstractTableGateway {
           public function fetchAllCityListApi($params)
           {
                $common = new CommonService();
-               $config = new \Zend\Config\Reader\Ini();
+               $config = new \Laminas\Config\Reader\Ini();
                $dbAdapter = $this->adapter;
                $sql = new Sql($dbAdapter);
 

@@ -1,13 +1,13 @@
 <?php
 namespace Application\Model;
 
-use Zend\Session\Container;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Sql;
-use Zend\Db\TableGateway\AbstractTableGateway;
-use Zend\Db\Sql\Expression;
+use Laminas\Session\Container;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Sql\Sql;
+use Laminas\Db\TableGateway\AbstractTableGateway;
+use Laminas\Db\Sql\Expression;
 use Application\Service\CommonService;
-use Zend\Config\Writer\PhpArray;
+use Laminas\Config\Writer\PhpArray;
 
 class RoleTable extends AbstractTableGateway {
 

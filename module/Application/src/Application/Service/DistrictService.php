@@ -2,13 +2,13 @@
 namespace Application\Service;
 
 use Exception;
-use Zend\Mail;
-use Zend\Db\Sql\Sql;
-use Zend\Session\Container;
-use Zend\Mime\Part as MimePart;
-use Zend\Mail\Transport\SmtpOptions;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
+use Laminas\Mail;
+use Laminas\Db\Sql\Sql;
+use Laminas\Session\Container;
+use Laminas\Mime\Part as MimePart;
+use Laminas\Mail\Transport\SmtpOptions;
+use Laminas\Mime\Message as MimeMessage;
+use Laminas\Mail\Transport\Smtp as SmtpTransport;
 
 class DistrictService {
 
@@ -30,7 +30,7 @@ class DistrictService {
 
     public function addDistrictDetails($params)
     {
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $districteDb = $this->sm->get('DistrictTable');
@@ -64,7 +64,7 @@ class DistrictService {
     }
 
     public function updateDistrictDetails($params){
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $districteDb = $this->sm->get('DistrictTable');

@@ -3,17 +3,17 @@
 namespace Application\Model;
 
 use Application\Service\CommonService;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Expression;
-use Zend\Db\Sql\Sql;
-use Zend\Db\TableGateway\AbstractTableGateway;
-use Zend\Session\Container;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Sql\Expression;
+use Laminas\Db\Sql\Sql;
+use Laminas\Db\TableGateway\AbstractTableGateway;
+use Laminas\Session\Container;
 use \Application\Model\CityTable;
 use \Application\Model\DistrictTable;
 use \Application\Model\FacilitiesTable;
 
-use Zend\Crypt\BlockCipher;
-use Zend\Crypt\Symmetric\Mcrypt;
+use Laminas\Crypt\BlockCipher;
+use Laminas\Crypt\Symmetric\Mcrypt;
 
 class RecencyTable extends AbstractTableGateway
 {
@@ -899,7 +899,7 @@ class RecencyTable extends AbstractTableGateway
             $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
                 ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
-                ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
+                ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
             if ($uResult['role_code'] != 'admin') {
                 $rececnyQuery = $rececnyQuery->where(array('u.auth_token' => $params['authToken']));
             }
@@ -1487,7 +1487,7 @@ class RecencyTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
+            ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -1532,7 +1532,7 @@ class RecencyTable extends AbstractTableGateway
         $iQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
+            ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
 
         $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -1652,7 +1652,7 @@ class RecencyTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
+            ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -1698,7 +1698,7 @@ class RecencyTable extends AbstractTableGateway
         $iQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array(new \Zend\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
+            ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
 
         $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -1979,7 +1979,7 @@ class RecencyTable extends AbstractTableGateway
     {
         $tempDb = new \Application\Model\TempMailTable($this->adapter);
 
-        $config = new \Zend\Config\Reader\Ini();
+        $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 
         $emailFormField = json_decode($params['emailResultFields'], true);

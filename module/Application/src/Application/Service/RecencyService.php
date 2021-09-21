@@ -4,8 +4,8 @@ namespace Application\Service;
 
 use Exception;
 use PHPExcel;
-use Zend\Db\Sql\Sql;
-use Zend\Session\Container;
+use Laminas\Db\Sql\Sql;
+use Laminas\Session\Container;
 use TCPDF;
 use GuzzleHttp;
 
@@ -44,7 +44,7 @@ class RecencyService
 
     public function addRecencyDetails($params)
     {
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $recencyDb = $this->sm->get('RecencyTable');
@@ -87,7 +87,7 @@ class RecencyService
 
     public function updateRecencyDetails($params)
     {
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $recencyDb = $this->sm->get('RecencyTable');
@@ -170,7 +170,7 @@ class RecencyService
             \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
             $output = array();
             $sheet = $excel->getActiveSheet();
-            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportRecencyDataQuery);
@@ -436,7 +436,7 @@ class RecencyService
             \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
             $output = array();
             $sheet = $excel->getActiveSheet();
-            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportRecentResultDataQuery);
@@ -582,7 +582,7 @@ class RecencyService
             \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
             $output = array();
             $sheet = $excel->getActiveSheet();
-            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportLongtermDataQuery);
@@ -732,7 +732,7 @@ class RecencyService
             \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
             $output = array();
             $sheet = $excel->getActiveSheet();
-            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportTatQuery);
@@ -852,7 +852,7 @@ class RecencyService
 
     public function updateEmailSendResult($params)
     {
-        $adapter = $this->sm->get('Zend\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $recencyDb = $this->sm->get('RecencyTable');
@@ -878,7 +878,7 @@ class RecencyService
     public function uploadResult()
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+        $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
         $sql = new Sql($dbAdapter);
         $allowedExtensions = array('xls', 'xlsx', 'csv');
         $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['fileName']['name']);
@@ -954,7 +954,7 @@ class RecencyService
             \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
             $output = array();
             $sheet = $excel->getActiveSheet();
-            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportWeeklyDataQuery);
@@ -1159,7 +1159,7 @@ class RecencyService
             \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
             $output = array();
             $sheet = $excel->getActiveSheet();
-            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportRecencyDataResultDataQuery);
@@ -1404,7 +1404,7 @@ class RecencyService
             \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
             $output = array();
             $sheet = $excel->getActiveSheet();
-            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
             $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportDistrictwiseRecencyResult);
@@ -1626,7 +1626,7 @@ class RecencyService
             $check = false;
             $recencyDb = $this->sm->get('RecencyTable');
             $client = new GuzzleHttp\Client();
-            $config = new \Zend\Config\Reader\Ini();
+            $config = new \Laminas\Config\Reader\Ini();
             $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
             $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/recency/requestVlTest.php';
             if (isset($params['rvlsm']) && count($params['rvlsm']) > 0) {

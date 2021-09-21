@@ -1,8 +1,8 @@
 <?php
 
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
-$config = new \Zend\Config\Reader\Ini();
+$config = new \Laminas\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;

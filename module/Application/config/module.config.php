@@ -73,7 +73,7 @@ return array(
                ),
 
                'logout' => array(
-                    'type' => 'Zend\Mvc\Router\Http\Literal',
+                    'type' => 'Laminas\Mvc\Router\Http\Literal',
                     'options' => array(
                          'route'    => '/logout',
                          'defaults' => array(
@@ -269,8 +269,8 @@ return array(
      ),
      'service_manager' => array(
           'abstract_factories' => array(
-               'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-               'Zend\Log\LoggerAbstractServiceFactory',
+               'Laminas\Cache\Service\StorageCacheAbstractServiceFactory',
+               'Laminas\Log\LoggerAbstractServiceFactory',
           ),
           'aliases' => array(
                'translator' => 'MvcTranslator',
@@ -309,11 +309,6 @@ return array(
                'Application\Controller\PrintResults'        => 'Application\Controller\PrintResultsController',
                'Application\Controller\Manifests'        => 'Application\Controller\ManifestsController',
           ),
-     ),
-     'controller_plugins' => array(
-          'invokables' => array(
-               'HasParams' => 'Application\Controller\Plugin\HasParams'
-          )
      ),
      'view_manager' => array(
           'display_not_found_reason' => true,

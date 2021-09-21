@@ -2,8 +2,8 @@
 
 namespace Application\Model;
 
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\TableGateway\AbstractTableGateway;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\TableGateway\AbstractTableGateway;
 
 class RecencyChangeTrailsTable extends AbstractTableGateway {
     protected $table = 'recency_change_trails';

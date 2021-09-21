@@ -10,7 +10,7 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
-$config = new \Zend\Config\Reader\Ini();
+$config = new \Laminas\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 
 return array(
@@ -35,13 +35,13 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'Zend\Db\Adapter\Adapter'
-                    => 'Zend\Db\Adapter\AdapterServiceFactory',
+            'Laminas\Db\Adapter\Adapter'
+                    => 'Laminas\Db\Adapter\AdapterServiceFactory',
         ),
         // to allow other adapter to be called by
         // $sm->get('db1') or $sm->get('db2') based on the adapters config.
         'abstract_factories' => array(
-            'Zend\Db\Adapter\AdapterAbstractServiceFactory',
+            'Laminas\Db\Adapter\AdapterAbstractServiceFactory',
         ),
     ),
 );

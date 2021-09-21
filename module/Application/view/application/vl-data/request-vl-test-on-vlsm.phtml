@@ -1,7 +1,7 @@
 <?php
 // \Zend\Debug\Debug::dump($facilityResult);die;
-use Zend\Session\Container;
-$config = new \Zend\Config\Reader\Ini();
+use Laminas\Session\Container;
+$config = new \Laminas\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 $sessionLogin = new Container('credo');
 ?>

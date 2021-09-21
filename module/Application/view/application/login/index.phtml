@@ -1,12 +1,12 @@
 <?php
 
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 $container = new Container('alert');
 $loginContainer = new Container('credo');
 $crossLoginSession = new Container('crossLogin');
 
-$config = new \Zend\Config\Reader\Ini();
+$config = new \Laminas\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 ?>
 <!doctype html>

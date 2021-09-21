@@ -2,11 +2,11 @@
 
 namespace Application\Model;
 
-use Zend\Session\Container;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Sql;
-use Zend\Db\TableGateway\AbstractTableGateway;
-use Zend\Db\Sql\Expression;
+use Laminas\Session\Container;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Sql\Sql;
+use Laminas\Db\TableGateway\AbstractTableGateway;
+use Laminas\Db\Sql\Expression;
 use Application\Service\CommonService;
 
 class UserTable extends AbstractTableGateway
@@ -32,7 +32,7 @@ class UserTable extends AbstractTableGateway
         $captchaSession = new Container('captcha');
         $crossLoginSession = new Container('crossLogin');
         $crossLoginSession->logged = false;
-        $config = new \Zend\Config\Reader\Ini();
+        $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         if (!isset($captchaSession) || empty($captchaSession->status) || $captchaSession->status == 'fail') {
             $alertContainer->alertMsg = 'Please check if you entered the text from image correctly';
@@ -292,7 +292,7 @@ class UserTable extends AbstractTableGateway
     {
         $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
         if (isset($params['userName']) && trim($params['userName']) != "") {
-            $config = new \Zend\Config\Reader\Ini();
+            $config = new \Laminas\Config\Reader\Ini();
             $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
             $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
             $data = array(
@@ -346,7 +346,7 @@ class UserTable extends AbstractTableGateway
 
     public function updateUserDetails($params)
     {
-        $config = new \Zend\Config\Reader\Ini();
+        $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
 
@@ -405,7 +405,7 @@ class UserTable extends AbstractTableGateway
     public function userLoginApi($params)
     {
         $common = new CommonService();
-        $config = new \Zend\Config\Reader\Ini();
+        $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
@@ -457,7 +457,7 @@ class UserTable extends AbstractTableGateway
     {
 
 
-        $config = new \Zend\Config\Reader\Ini();
+        $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
 
