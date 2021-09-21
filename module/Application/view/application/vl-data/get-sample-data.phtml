@@ -44,7 +44,7 @@ $roleCode = $sessionLogin->roleCode;
             </thead>
             <?php
             if (count($result['withTermOutcome']) > 0) {
-                $vlResultOptionAry = array('TND', 'BDL', 'failed', '&lt; 20', '&lt; 40');
+                $vlResultOptionAry = array('TND', 'BDL', 'failed', '< 20', '< 40');
 
                 foreach ($result['withTermOutcome'] as $sample) {
                     $vlResultTextValue = '';
@@ -78,8 +78,8 @@ $roleCode = $sessionLogin->roleCode;
                                         <option value="TND">TND</option>
                                         <option value="BDL">BDL</option>
                                         <option value="failed">Failed</option>
-                                        <option value="&lt; 20"> &lt; 20</option>
-                                        <option value="&lt; 40"> &lt; 40</option>
+                                        <option value="< 20"> < 20</option>
+                                        <option value="< 40"> < 40</option>
                                     </select>
                                 <?php } else {
                                 $vlResultTextValue = (in_array($sample['vl_result'], $vlResultOptionAry)) ? '' : $sample['vl_result'];
@@ -92,8 +92,8 @@ $roleCode = $sessionLogin->roleCode;
                                         <option value="TND" <?php echo ($sample['vl_result'] == 'TND') ? 'selected="selected"' : ''; ?>>TND</option>
                                         <option value="BDL" <?php echo ($sample['vl_result'] == 'BDL') ? 'selected="selected"' : ''; ?>>BDL</option>
                                         <option value="failed" <?php echo ($sample['vl_result'] == 'failed') ? 'selected="selected"' : ''; ?>>Failed</option>
-                                        <option value="&lt; 20" <?php echo ($sample['vl_result'] == '&lt; 20') ? 'selected="selected"' : ''; ?>> &lt; 20</option>
-                                        <option value="&lt; 40" <?php echo ($sample['vl_result'] == '&lt; 40') ? 'selected="selected"' : ''; ?>> &lt; 40</option>
+                                        <option value="< 20" <?php echo ($sample['vl_result'] == '< 20') ? 'selected="selected"' : ''; ?>> < 20</option>
+                                        <option value="< 40" <?php echo ($sample['vl_result'] == '< 40') ? 'selected="selected"' : ''; ?>> < 40</option>
                                     </select>
                                 <?php }
                         } else {
@@ -108,8 +108,8 @@ $roleCode = $sessionLogin->roleCode;
                                         <option value="TND" <?php echo ($sample['vl_result'] == 'TND') ? 'selected="selected"' : ''; ?>>TND</option>
                                         <option value="BDL" <?php echo ($sample['vl_result'] == 'BDL') ? 'selected="selected"' : ''; ?>>BDL</option>
                                         <option value="failed" <?php echo ($sample['vl_result'] == 'failed') ? 'selected="selected"' : ''; ?>>Failed</option>
-                                        <option value="&lt; 20" <?php echo ($sample['vl_result'] == '&lt; 20') ? 'selected="selected"' : ''; ?>> &lt; 20</option>
-                                        <option value="&lt; 40" <?php echo ($sample['vl_result'] == '&lt; 40') ? 'selected="selected"' : ''; ?>> &lt; 40</option>
+                                        <option value="< 20" <?php echo ($sample['vl_result'] == '< 20') ? 'selected="selected"' : ''; ?>> < 20</option>
+                                        <option value="< 40" <?php echo ($sample['vl_result'] == '< 40') ? 'selected="selected"' : ''; ?>> < 40</option>
                                     </select>
                                 <?php }
                         } ?>

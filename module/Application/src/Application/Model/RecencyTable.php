@@ -19,7 +19,7 @@ class RecencyTable extends AbstractTableGateway
 {
 
     protected $table = 'recency';
-    public $vlResultOptionArray = array('target not detected', 'below detection line', 'tnd', 'bdl', 'failed', '&lt; 20', '&lt; 40', '< 20', '< 40', '< 400', '< 800', '<20', '<40');
+    public $vlResultOptionArray = array('target not detected', 'below detection line', 'tnd', 'bdl', 'failed', '<20', '<40', '< 20', '< 40', '< 400', '< 800', '<20', '<40');
     public $vlFailOptionArray = array('fail', 'failed');
     public $sessionLogin = null;
 

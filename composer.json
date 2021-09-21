@@ -12,6 +12,7 @@
         "zendframework/zendframework": "~2.5",
         "zendframework/zendservice-google-gcm": "^1.0",
         "google/apiclient": "^2.0",
-        "phpoffice/phpword": "^0.15.0"
+        "phpoffice/phpword": "^0.15.0",
+        "guzzlehttp/guzzle": "^7.3"
     }
 }

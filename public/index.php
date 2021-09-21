@@ -55,8 +55,6 @@ defined('CRON_PATH')
 
 // Setup autoloading
 require 'init_autoloader.php';
-// Define path to guzzle directory
-require 'guzzle/autoload.php';
 
 // Run the application!
 Zend\Mvc\Application::init(require 'config/application.config.php')->run();
