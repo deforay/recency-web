@@ -65,5 +65,10 @@
         "laminas/laminas-xmlrpc": "^2.5",
         "zendframework/zendservice-google-gcm": "^1.0",
         "zendframework/zendxml": "^1.0.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "laminas/laminas-dependency-plugin": true
+        }
     }
 }

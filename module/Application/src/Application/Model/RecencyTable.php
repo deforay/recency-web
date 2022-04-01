@@ -1754,7 +1754,7 @@ class RecencyTable extends AbstractTableGateway
                     'sample_id', 'final_outcome', "hiv_recency_test_date" => new Expression("DATE_FORMAT(DATE(hiv_recency_test_date), '%d-%b-%Y')"), 'vl_test_date' => new Expression("DATE_FORMAT(DATE(vl_test_date), '%d-%b-%Y')"), 'vl_result_entry_date' => new Expression("DATE_FORMAT(DATE(vl_result_entry_date), '%d-%b-%Y')"),
                     "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_test_date))) AS DECIMAL (10))"),
                 ))
-                ->where(array('vl_result_entry_date!="" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_test_date!="" AND vl_test_date!=""'))
+                ->where(array('vl_result_entry_date not like "" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_test_date not like "" AND vl_test_date not like ""'))
                 ->group('recency_id');
             if (isset($params['start']) && isset($params['end'])) {
                 $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . date("Y-m-d", strtotime($params['start'])) . "'", "r.hiv_recency_test_date <='" . date("Y-m-d", strtotime($params['end'])) . "'"));
@@ -1866,7 +1866,7 @@ class RecencyTable extends AbstractTableGateway
             ))
 
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array('vl_result_entry_date!="" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_test_date!="" AND vl_test_date!=""'))
+            ->where(array('vl_result_entry_date not like "" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_test_date not like "" AND vl_test_date not like ""'))
             ->group('recency_id');
         // if(isset($params['start']) && isset($params['end'])){
         //     $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_test_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
@@ -1907,7 +1907,7 @@ class RecencyTable extends AbstractTableGateway
                 "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_test_date))) AS DECIMAL (10))"),
             ))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array('vl_result_entry_date!="" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_test_date!="" AND vl_test_date!=""'))
+            ->where(array('vl_result_entry_date not like "" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_test_date not like "" AND vl_test_datenot like ""'))
             ->group('recency_id');
 
         $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
@@ -2145,7 +2145,7 @@ class RecencyTable extends AbstractTableGateway
                 array(
                     "Samples Received" => new Expression("COUNT(*)"),
                     "Samples Collected" => new Expression("SUM(CASE
-                                                                                WHEN (r.sample_collection_date is NOT NULL AND r.sample_collection_date !='') THEN 1
+                                                                                WHEN (r.sample_collection_date is NOT NULL AND r.sample_collection_date not like '') THEN 1
                                                                                 ELSE 0
                                                                                 END)"),
                     "Samples Pending to be Tested" => new Expression("SUM(CASE
@@ -2333,7 +2333,7 @@ class RecencyTable extends AbstractTableGateway
                                                                  ELSE 0
                                                                  END)"),
                     "printedCount" => new Expression("SUM(CASE
-                                                                 WHEN ((r.result_printed_on !='' and r.result_printed_on is not null)) THEN 1
+                                                                 WHEN ((r.result_printed_on not like '' and r.result_printed_on is not null)) THEN 1
                                                                  ELSE 0
                                                                  END)"),
 
@@ -2770,7 +2770,7 @@ class RecencyTable extends AbstractTableGateway
                     array(
                         "samplesCollected" => new Expression("COUNT(*)"),
                         "samplesTested" => new Expression("(SUM(CASE
-                                                                    WHEN (((r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date !=''))) THEN 1
+                                                                    WHEN (((r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date not like ''))) THEN 1
                                                                     ELSE 0
                                                                     END) / COUNT(*) )*100"),
                         "VLDone" => new Expression("(SUM(CASE
@@ -2789,11 +2789,11 @@ class RecencyTable extends AbstractTableGateway
                 ->columns(
                     array(
                         "samplesCollected" => new Expression("SUM(CASE
-                                                                            WHEN (((r.added_on is NOT NULL AND r.added_on !=''))) THEN 1
+                                                                            WHEN (((r.added_on is NOT NULL AND r.added_on not like ''))) THEN 1
                                                                             ELSE 0
                                                                         END)"),
                         "samplesTested" => new Expression("SUM(CASE
-                                                                        WHEN (((r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date !=''))) THEN 1
+                                                                        WHEN (((r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date not like  ''))) THEN 1
                                                                         ELSE 0
                                                                         END)"),
                         "VLDone" => new Expression("SUM(CASE
@@ -2866,7 +2866,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //echo($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
@@ -3539,7 +3539,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->where(array('r.final_outcome' => 'RITA Recent'))
-            ->where("(r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date !='')")
+            ->where("(r.hiv_recency_test_date is NOT NULL AND r.hiv_recency_test_date not like'')")
             ->group('r.vl_result');
 
         if ($parameters['fName'] != '') {
@@ -3725,7 +3725,7 @@ class RecencyTable extends AbstractTableGateway
                                                                  ELSE 0
                                                                  END)"),
                     "printedCount" => new Expression("SUM(CASE
-                                                                 WHEN ((r.result_printed_on !='' and r.result_printed_on is not null)) THEN 1
+                                                                 WHEN ((r.result_printed_on not like '' and r.result_printed_on is not null)) THEN 1
                                                                  ELSE 0
                                                                  END)"),                                                                 
 
