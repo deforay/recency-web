@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\Controller\Plugin;
 
 use Laminas\Http\Response;
@@ -35,8 +29,10 @@ class Redirect extends AbstractPlugin
     public function toRoute($route = null, $params = [], $options = [], $reuseMatchedParams = false)
     {
         $controller = $this->getController();
-        if (!$controller || !method_exists($controller, 'plugin')) {
-            throw new Exception\DomainException('Redirect plugin requires a controller that defines the plugin() method');
+        if (! $controller || ! method_exists($controller, 'plugin')) {
+            throw new Exception\DomainException(
+                'Redirect plugin requires a controller that defines the plugin() method'
+            );
         }
 
         $urlPlugin = $controller->plugin('url');
@@ -88,7 +84,7 @@ class Redirect extends AbstractPlugin
 
         $event    = $this->getEvent();
         $response = $event->getResponse();
-        if (!$response instanceof Response) {
+        if (! $response instanceof Response) {
             throw new Exception\DomainException('Redirect plugin requires event compose a response');
         }
         $this->response = $response;
@@ -108,12 +104,14 @@ class Redirect extends AbstractPlugin
         }
 
         $controller = $this->getController();
-        if (!$controller instanceof InjectApplicationEventInterface) {
-            throw new Exception\DomainException('Redirect plugin requires a controller that implements InjectApplicationEventInterface');
+        if (! $controller instanceof InjectApplicationEventInterface) {
+            throw new Exception\DomainException(
+                'Redirect plugin requires a controller that implements InjectApplicationEventInterface'
+            );
         }
 
         $event = $controller->getEvent();
-        if (!$event instanceof MvcEvent) {
+        if (! $event instanceof MvcEvent) {
             $params = $event->getParams();
             $event  = new MvcEvent();
             $event->setParams($params);

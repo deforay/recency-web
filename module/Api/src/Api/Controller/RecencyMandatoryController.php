@@ -8,11 +8,16 @@ use Laminas\Json\Json;
 
 class RecencyMandatoryController extends AbstractRestfulController
 {
+    private $globalConfigService = null;
+
+    public function __construct($globalConfigService)
+    {
+        $this->globalConfigService = $globalConfigService;
+    }
     public function getList()
     {
         $params=$this->getRequest()->getQuery();
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $response = $globalConfigService->getRecencyMandatoryDetailsApi();
+        $response = $this->globalConfigService->getRecencyMandatoryDetailsApi();
         return new JsonModel($response);
     }
 }

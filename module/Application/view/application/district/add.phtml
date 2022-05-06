@@ -1,5 +1,7 @@
 <?php
+
 use Laminas\Session\Container;
+
 $sessionLogin = new Container('credo');
 ?>
 <style type="text/css">
@@ -11,7 +13,9 @@ $sessionLogin = new Container('credo');
                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2"><?php echo $globalConfigResult[1]['global_value'] ?></h1>
                <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                         <a href="<?php echo $this->url('district', array('action' => 'index')); ?>"><li class="breadcrumb-item"><?php echo $globalConfigResult[1]['global_value'] ?> Details</li></a>
+                         <a href="<?php echo $this->url('district', array('action' => 'index')); ?>">
+                              <li class="breadcrumb-item"><?php echo $globalConfigResult[1]['global_value'] ?> Details</li>
+                         </a>
                          <li class="breadcrumb-item active" aria-current="page">&nbsp;/ Add</li>
                     </ol>
                </nav>
@@ -27,22 +31,22 @@ $sessionLogin = new Container('credo');
           </div>
           <div class="block-content">
                <div class="col-md-12 table-responsive" id="hide">
-                    <form name="districtInformation" id="districtInformation"  class="mb-5" action="<?php echo $this->url('district', array('action' => 'add')); ?>" method="post">
+                    <form name="districtInformation" id="districtInformation" class="mb-5" action="<?php echo $this->url('district', array('action' => 'add')); ?>" method="post">
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for=""><?php echo $globalConfigResult[1]['global_value'] ?> Name<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
                                    <input type="text" class="form-control isRequired" id="districtName" name="districtName" placeholder="Enter the <?php echo $globalConfigResult[1]['global_value'] ?> name" title="Please enter the <?php echo $globalConfigResult[1]['global_value'] ?> name" onblur="checkNameValidation('district_details', 'district_name', this,'NULL', 'The <?php echo $globalConfigResult[1]['global_value'] ?> name that you entered already exists . Please try another name..');">
                               </div>
 
-                                <label class="col-sm-2 col-form-label" for=""><?php echo $globalConfigResult[1]['global_value'] ?> Name</label>
+                              <label class="col-sm-2 col-form-label" for=""><?php echo $globalConfigResult[0]['global_value'] ?> Name</label>
                               <div class="col-sm-4">
-                                   <select  id="provinceName" class="form-control" name="provinceName" >
-                                   <option value="">--select--</option>
-                                        <?php foreach($provinceResult as $province){ ?>
+                                   <select id="provinceName" class="form-control" name="provinceName">
+                                        <option value="">--select--</option>
+                                        <?php foreach ($provinceResult as $province) { ?>
                                              <option value="<?php echo $province['province_id']; ?>"><?php echo ucwords($province['province_name']); ?></option>
                                         <?php } ?>
                                    </select>
-                         </div>
+                              </div>
                          </div>
                          <div class="row items-push">
                               <div class="col-lg-7 offset-lg-4">
@@ -58,15 +62,15 @@ $sessionLogin = new Container('credo');
 </div>
 
 <script type="text/javascript">
-
      jQuery(document).ready(function($) {
-         
+
      });
 
      duplicateName = true;
+
      function validateNow() {
           var selVal = [];
-        
+
 
           flag = deforayValidator.init({
                formId: 'districtInformation'
@@ -79,23 +83,25 @@ $sessionLogin = new Container('credo');
                }
           }
      }
-     function checkNameValidation(tableName, fieldName, obj, fnct, msg){
-        checkValue = document.getElementById(obj.id).value;
-        if($.trim(checkValue)!= ''){
-            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
-            function(data) {
-                if (data > 0)
-                {
-                        alert(msg);
-                        duplicateName = false;
-                        document.getElementById(obj.id).value = "";
-                }
-                else {
-                        duplicateName = true;
-                }
-            });
-        }
-    }
-    
 
+     function checkNameValidation(tableName, fieldName, obj, fnct, msg) {
+          checkValue = document.getElementById(obj.id).value;
+          if ($.trim(checkValue) != '') {
+               $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", {
+                         tableName: tableName,
+                         fieldName: fieldName,
+                         value: checkValue,
+                         fnct: fnct
+                    },
+                    function(data) {
+                         if (data > 0) {
+                              alert(msg);
+                              duplicateName = false;
+                              document.getElementById(obj.id).value = "";
+                         } else {
+                              duplicateName = true;
+                         }
+                    });
+          }
+     }
 </script>

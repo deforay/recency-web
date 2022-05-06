@@ -1,18 +1,10 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-db for the canonical source repository
- * @copyright https://github.com/laminas/laminas-db/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-db/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Db\Sql\Ddl\Column;
 
 abstract class AbstractPrecisionColumn extends AbstractLengthColumn
 {
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     protected $decimal;
 
     /**
@@ -36,8 +28,7 @@ abstract class AbstractPrecisionColumn extends AbstractLengthColumn
 
     /**
      * @param  int $digits
-     *
-     * @return self
+     * @return $this
      */
     public function setDigits($digits)
     {
@@ -54,7 +45,7 @@ abstract class AbstractPrecisionColumn extends AbstractLengthColumn
 
     /**
      * @param int|null $decimal
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setDecimal($decimal)
     {

@@ -8,13 +8,16 @@ use Laminas\Json\Json;
 
 class CityController extends AbstractRestfulController
 {
+    private $commonService = null;
+
+    public function __construct($commonService)
+    {
+        $this->commonService = $commonService;
+    }
     public function getList()
     {
-        $params=$this->getRequest()->getQuery();
-        $CityCommonService = $this->getServiceLocator()->get('CommonService');
-        $response = $CityCommonService->getAllCityListApi($params);
+        $params = $this->getRequest()->getQuery();
+        $response = $this->commonService->getAllCityListApi($params);
         return new JsonModel($response);
     }
-
-
 }

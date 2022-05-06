@@ -4,15 +4,20 @@ namespace Api\Controller;
 
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
-use Laminas\Json\Json;
 
 class GlobalConfigController extends AbstractRestfulController
 {
+
+    private $globalConfigService = null;
+
+    public function __construct($globalConfigService)
+    {
+        $this->globalConfigService = $globalConfigService;
+    }
     public function getList()
     {
         $params=$this->getRequest()->getQuery();
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $response = $globalConfigService->getGlobalConfigAllDetailsApi();
+        $response = $this->globalConfigService->getGlobalConfigAllDetailsApi();
         return new JsonModel($response);
     }
 }

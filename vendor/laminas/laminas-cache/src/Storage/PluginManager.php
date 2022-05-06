@@ -1,14 +1,9 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Cache\Storage;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\Plugin\PluginOptions;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
@@ -90,6 +85,17 @@ class PluginManager extends AbstractPluginManager
      * @var string
      */
     protected $instanceOf = Plugin\PluginInterface::class;
+
+    public function build($name, ?array $options = null)
+    {
+        $options = $options ?? [];
+        $plugin = parent::build($name);
+        if ($options !== []) {
+            $plugin->setOptions(new PluginOptions($options));
+        }
+
+        return $plugin;
+    }
 
     /**
      * {@inheritdoc}

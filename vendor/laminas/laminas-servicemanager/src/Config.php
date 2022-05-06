@@ -1,165 +1,102 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-servicemanager for the canonical source repository
- * @copyright https://github.com/laminas/laminas-servicemanager/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-servicemanager/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\ServiceManager;
 
+use Laminas\Stdlib\ArrayUtils;
+
+use function array_keys;
+
+/**
+ * Object for defining configuration and configuring an existing service manager instance.
+ *
+ * In order to provide configuration merging capabilities, this class implements
+ * the same functionality as `Laminas\Stdlib\ArrayUtils::merge()`. That routine
+ * allows developers to specifically shape how values are merged:
+ *
+ * - A value which is an instance of `MergeRemoveKey` indicates the value should
+ *   be removed during merge.
+ * - A value that is an instance of `MergeReplaceKeyInterface` indicates that the
+ *   value it contains should be used to replace any previous versions.
+ *
+ * These features are advanced, and not typically used. If you wish to use them,
+ * you will need to require the laminas-stdlib package in your application.
+ *
+ * @psalm-import-type ServiceManagerConfigurationType from ConfigInterface
+ */
 class Config implements ConfigInterface
 {
-    /**
-     * @var array
-     */
-    protected $config = [];
+    /** @var array<string,bool> */
+    private array $allowedKeys = [
+        'abstract_factories' => true,
+        'aliases'            => true,
+        'delegators'         => true,
+        'factories'          => true,
+        'initializers'       => true,
+        'invokables'         => true,
+        'lazy_services'      => true,
+        'services'           => true,
+        'shared'             => true,
+    ];
 
     /**
-     * Constructor
-     *
-     * @param array $config
+     * @var array<string,array>
+     * @psalm-var ServiceManagerConfigurationType
      */
-    public function __construct($config = [])
+    protected $config = [
+        'abstract_factories' => [],
+        'aliases'            => [],
+        'delegators'         => [],
+        'factories'          => [],
+        'initializers'       => [],
+        'invokables'         => [],
+        'lazy_services'      => [],
+        'services'           => [],
+        'shared'             => [],
+    ];
+
+    /**
+     * @psalm-param ServiceManagerConfigurationType $config
+     */
+    public function __construct(array $config = [])
     {
-        $this->config = $config;
+        // Only merge keys we're interested in
+        foreach (array_keys($config) as $key) {
+            if (! isset($this->allowedKeys[$key])) {
+                unset($config[$key]);
+            }
+        }
+
+        /** @psalm-suppress ArgumentTypeCoercion */
+        $this->config = $this->merge($this->config, $config);
     }
 
     /**
-     * Get allow override
-     *
-     * @return null|bool
-     */
-    public function getAllowOverride()
-    {
-        return (isset($this->config['allow_override'])) ? $this->config['allow_override'] : null;
-    }
-
-    /**
-     * Get factories
-     *
-     * @return array
-     */
-    public function getFactories()
-    {
-        return (isset($this->config['factories'])) ? $this->config['factories'] : [];
-    }
-
-    /**
-     * Get abstract factories
-     *
-     * @return array
-     */
-    public function getAbstractFactories()
-    {
-        return (isset($this->config['abstract_factories'])) ? $this->config['abstract_factories'] : [];
-    }
-
-    /**
-     * Get invokables
-     *
-     * @return array
-     */
-    public function getInvokables()
-    {
-        return (isset($this->config['invokables'])) ? $this->config['invokables'] : [];
-    }
-
-    /**
-     * Get services
-     *
-     * @return array
-     */
-    public function getServices()
-    {
-        return (isset($this->config['services'])) ? $this->config['services'] : [];
-    }
-
-    /**
-     * Get aliases
-     *
-     * @return array
-     */
-    public function getAliases()
-    {
-        return (isset($this->config['aliases'])) ? $this->config['aliases'] : [];
-    }
-
-    /**
-     * Get initializers
-     *
-     * @return array
-     */
-    public function getInitializers()
-    {
-        return (isset($this->config['initializers'])) ? $this->config['initializers'] : [];
-    }
-
-    /**
-     * Get shared
-     *
-     * @return array
-     */
-    public function getShared()
-    {
-        return (isset($this->config['shared'])) ? $this->config['shared'] : [];
-    }
-
-    /**
-     * Get the delegator services map, with keys being the services acting as delegates,
-     * and values being the delegator factories names
-     *
-     * @return array
-     */
-    public function getDelegators()
-    {
-        return (isset($this->config['delegators'])) ? $this->config['delegators'] : [];
-    }
-
-    /**
-     * Configure service manager
-     *
-     * @param ServiceManager $serviceManager
-     * @return void
+     * @inheritDoc
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
-        if (($allowOverride = $this->getAllowOverride()) !== null) {
-            $serviceManager->setAllowOverride($allowOverride);
-        }
+        return $serviceManager->configure($this->config);
+    }
 
-        foreach ($this->getFactories() as $name => $factory) {
-            $serviceManager->setFactory($name, $factory);
-        }
+    /**
+     * @inheritDoc
+     */
+    public function toArray()
+    {
+        return $this->config;
+    }
 
-        foreach ($this->getAbstractFactories() as $factory) {
-            $serviceManager->addAbstractFactory($factory);
-        }
-
-        foreach ($this->getInvokables() as $name => $invokable) {
-            $serviceManager->setInvokableClass($name, $invokable);
-        }
-
-        foreach ($this->getServices() as $name => $service) {
-            $serviceManager->setService($name, $service);
-        }
-
-        foreach ($this->getAliases() as $alias => $nameOrAlias) {
-            $serviceManager->setAlias($alias, $nameOrAlias);
-        }
-
-        foreach ($this->getInitializers() as $initializer) {
-            $serviceManager->addInitializer($initializer);
-        }
-
-        foreach ($this->getShared() as $name => $isShared) {
-            $serviceManager->setShared($name, $isShared);
-        }
-
-        foreach ($this->getDelegators() as $originalServiceName => $delegators) {
-            foreach ($delegators as $delegator) {
-                $serviceManager->addDelegator($originalServiceName, $delegator);
-            }
-        }
+    /**
+     * @psalm-param ServiceManagerConfigurationType $a
+     * @psalm-param ServiceManagerConfigurationType $b
+     * @psalm-return ServiceManagerConfigurationType
+     * @psalm-suppress MixedReturnTypeCoercion
+     */
+    private function merge(array $a, array $b)
+    {
+        /** @psalm-suppress MixedReturnTypeCoercion */
+        return ArrayUtils::merge($a, $b);
     }
 }

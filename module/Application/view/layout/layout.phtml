@@ -11,9 +11,9 @@ $roleCode = $sessionLogin->roleCode;
 $roleCode = $sessionLogin->roleCode;
 $userName = $sessionLogin->userName;
 $nonRemoteUserMsg = $sessionLogin->nonRemoteUserMsg;
-$GlobalConfigRes = $this->GlobalConfigHelper();
+$GlobalConfigRes = $this->GlobalConfig();
 /* Crosss Login Block Start */
-$userCrossLoginRes = $this->UserCrossLoginHelper();
+$userCrossLoginRes = $this->UserCrossLogin();
 $config = new \Laminas\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 /* Crosss Login Block End */

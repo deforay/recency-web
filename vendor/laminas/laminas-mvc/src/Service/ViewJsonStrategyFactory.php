@@ -1,16 +1,9 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\Service;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Strategy\JsonStrategy;
 
 class ViewJsonStrategyFactory implements FactoryInterface
@@ -33,18 +26,5 @@ class ViewJsonStrategyFactory implements FactoryInterface
         $jsonRenderer = $container->get('ViewJsonRenderer');
         $jsonStrategy = new JsonStrategy($jsonRenderer);
         return $jsonStrategy;
-    }
-
-    /**
-     * Create and return JsonStrategy instance
-     *
-     * For use with laminas-servicemanager v2; proxies to __invoke().
-     *
-     * @param ServiceLocatorInterface $container
-     * @return JsonStrategy
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, JsonStrategy::class);
     }
 }

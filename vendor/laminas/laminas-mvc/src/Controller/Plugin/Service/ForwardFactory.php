@@ -1,18 +1,11 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\Controller\Plugin\Service;
 
 use Interop\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\Forward;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ForwardFactory implements FactoryInterface
 {
@@ -34,19 +27,5 @@ class ForwardFactory implements FactoryInterface
         $controllers = $container->get('ControllerManager');
 
         return new Forward($controllers);
-    }
-
-    /**
-     * Create and return Forward instance
-     *
-     * For use with laminas-servicemanager v2; proxies to __invoke().
-     *
-     * @param ServiceLocatorInterface $container
-     * @return Forward
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        $parentContainer = $container->getServiceLocator() ?: $container;
-        return $this($parentContainer, Forward::class);
     }
 }

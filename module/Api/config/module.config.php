@@ -67,7 +67,7 @@ return array(
                          ),
                     ),
                ),
-               
+
                'api-pending-vl-result' => array(
                     'type'    => 'segment',
                     'options' => array(
@@ -180,8 +180,8 @@ return array(
                               'controller' => 'Api\Controller\RecencyHide',
                          ),
                     ),
-                ),
-                'api-quality-check' => array(
+               ),
+               'api-quality-check' => array(
                     'type'    => 'segment',
                     'options' => array(
                          'route'    => '/api/quality-check[/:id]',
@@ -192,8 +192,8 @@ return array(
                               'controller' => 'Api\Controller\QualityCheck',
                          ),
                     ),
-                ),
-                'api-tat-report' => array(
+               ),
+               'api-tat-report' => array(
                     'type'    => 'segment',
                     'options' => array(
                          'route'    => '/api/tat-report[/:id]',
@@ -204,8 +204,8 @@ return array(
                               'controller' => 'Api\Controller\TatReport',
                          ),
                     ),
-                ),
-                'api-technical-support' => array(
+               ),
+               'api-technical-support' => array(
                     'type'    => 'segment',
                     'options' => array(
                          'route'    => '/api/technical-support[/:id]',
@@ -216,8 +216,8 @@ return array(
                               'controller' => 'Api\Controller\TechnicalSupport',
                          ),
                     ),
-                ),
-                'api-vl-test-result' => array(
+               ),
+               'api-vl-test-result' => array(
                     'type'    => 'segment',
                     'options' => array(
                          'route'    => '/api/vl-test-result[/:id]',
@@ -228,8 +228,8 @@ return array(
                               'controller' => 'Api\Controller\VlTestResult',
                          ),
                     ),
-                ),
-                'api-test-kit-info' => array(
+               ),
+               'api-test-kit-info' => array(
                     'type'    => 'segment',
                     'options' => array(
                          'route'    => '/api/test-kit-info[/:id]',
@@ -240,9 +240,9 @@ return array(
                               'controller' => 'Api\Controller\TestKitInfo',
                          ),
                     ),
-                ),
+               ),
 
-                'api-sample' => array(
+               'api-sample' => array(
                     'type'    => 'segment',
                     'options' => array(
                          'route'    => '/api/sample[/:id]',
@@ -255,33 +255,6 @@ return array(
                     ),
                ),
 
-          ),
-     ),
-     'controllers' => array(
-          'invokables' => array(
-               'Api\Controller\Login'                  => 'Api\Controller\LoginController',
-               'Api\Controller\UpdatePassword'         => 'Api\Controller\UpdatePasswordController',
-               'Api\Controller\Facility'               => 'Api\Controller\FacilityController',
-               'Api\Controller\Recency'                => 'Api\Controller\RecencyController',
-               'Api\Controller\RecencyResultWithVl'    => 'Api\Controller\RecencyResultWithVlController',
-               'Api\Controller\PendingVlResult'        => 'Api\Controller\PendingVlResultController',
-               'Api\Controller\RiskPopulations'        => 'Api\Controller\RiskPopulationsController',
-               'Api\Controller\GlobalConfig'           => 'Api\Controller\GlobalConfigController',
-
-               'Api\Controller\Province'               => 'Api\Controller\ProvinceController',
-               'Api\Controller\District'               => 'Api\Controller\DistrictController',
-               'Api\Controller\City'                   => 'Api\Controller\CityController',
-               'Api\Controller\RecencyMandatory'       => 'Api\Controller\RecencyMandatoryController',
-               'Api\Controller\RecencySampleid'       => 'Api\Controller\RecencySampleidController',
-               'Api\Controller\RecencyHide'            => 'Api\Controller\RecencyHideController',
-               'Api\Controller\QualityCheck'           => 'Api\Controller\QualityCheckController',
-               'Api\Controller\TatReport'              => 'Api\Controller\TatReportController',
-               'Api\Controller\TechnicalSupport'       => 'Api\Controller\TechnicalSupportController',
-               'Api\Controller\VlTestResult'           => 'Api\Controller\VlTestResultController',
-               'Api\Controller\TestKitInfo'            => 'Api\Controller\TestKitInfoController',
-               'Api\Controller\SampleData'             => 'Api\Controller\SampleDataController',
-               
-               
           ),
      ),
      'view_manager' => array(

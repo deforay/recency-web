@@ -1,17 +1,18 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-session for the canonical source repository
- * @copyright https://github.com/laminas/laminas-session/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-session/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Session\SaveHandler;
 
 use Laminas\Db\TableGateway\TableGateway;
+use ReturnTypeWillChange;
+
+use function ini_get;
+use function sprintf;
+use function time;
 
 /**
  * DB Table Gateway session save handler
+ *
+ * @see ReturnTypeWillChange
  */
 class DbTableGateway implements SaveHandlerInterface
 {
@@ -31,27 +32,27 @@ class DbTableGateway implements SaveHandlerInterface
 
     /**
      * Lifetime
+     *
      * @var int
      */
     protected $lifetime;
 
     /**
      * Laminas Db Table Gateway
+     *
      * @var TableGateway
      */
     protected $tableGateway;
 
     /**
      * DbTableGateway Options
+     *
      * @var DbTableGatewayOptions
      */
     protected $options;
 
     /**
      * Constructor
-     *
-     * @param TableGateway $tableGateway
-     * @param DbTableGatewayOptions $options
      */
     public function __construct(TableGateway $tableGateway, DbTableGatewayOptions $options)
     {
@@ -66,6 +67,7 @@ class DbTableGateway implements SaveHandlerInterface
      * @param  string $name
      * @return bool
      */
+    #[ReturnTypeWillChange]
     public function open($savePath, $name)
     {
         $this->sessionSavePath = $savePath;
@@ -80,6 +82,7 @@ class DbTableGateway implements SaveHandlerInterface
      *
      * @return bool
      */
+    #[ReturnTypeWillChange]
     public function close()
     {
         return true;
@@ -92,6 +95,7 @@ class DbTableGateway implements SaveHandlerInterface
      * @param bool $destroyExpired Optional; true by default
      * @return string
      */
+    #[ReturnTypeWillChange]
     public function read($id, $destroyExpired = true)
     {
         $row = $this->tableGateway->select([
@@ -100,8 +104,10 @@ class DbTableGateway implements SaveHandlerInterface
         ])->current();
 
         if ($row) {
-            if ($row->{$this->options->getModifiedColumn()} +
-                $row->{$this->options->getLifetimeColumn()} > time()) {
+            if (
+                $row->{$this->options->getModifiedColumn()} +
+                $row->{$this->options->getLifetimeColumn()} > time()
+            ) {
                 return (string) $row->{$this->options->getDataColumn()};
             }
             if ($destroyExpired) {
@@ -118,6 +124,7 @@ class DbTableGateway implements SaveHandlerInterface
      * @param string $data
      * @return bool
      */
+    #[ReturnTypeWillChange]
     public function write($id, $data)
     {
         $data = [
@@ -149,16 +156,15 @@ class DbTableGateway implements SaveHandlerInterface
      * @param  string $id
      * @return bool
      */
+    #[ReturnTypeWillChange]
     public function destroy($id)
     {
-        if (! (bool) $this->read($id, false)) {
-            return true;
-        }
-
-        return (bool) $this->tableGateway->delete([
+        $this->tableGateway->delete([
             $this->options->getIdColumn()   => $id,
             $this->options->getNameColumn() => $this->sessionName,
         ]);
+
+        return true;
     }
 
     /**
@@ -167,6 +173,7 @@ class DbTableGateway implements SaveHandlerInterface
      * @param int $maxlifetime
      * @return true
      */
+    #[ReturnTypeWillChange]
     public function gc($maxlifetime)
     {
         $platform = $this->tableGateway->getAdapter()->getPlatform();
@@ -174,7 +181,7 @@ class DbTableGateway implements SaveHandlerInterface
             sprintf(
                 '%s < %d',
                 $platform->quoteIdentifier($this->options->getModifiedColumn()),
-                (time() - $this->lifetime)
+                time() - $this->lifetime
             )
         );
     }

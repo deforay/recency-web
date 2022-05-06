@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\Controller\Plugin;
 
 use Laminas\Http\Header\Accept\FieldValuePart\AbstractFieldValuePart;
@@ -86,11 +80,11 @@ class AcceptableViewModelSelector extends AbstractPlugin
     ) {
         $name = $this->getViewModelName($matchAgainst, $returnDefault, $resultReference);
 
-        if (!$name) {
+        if (! $name) {
             return;
         }
 
-        if (!class_exists($name)) {
+        if (! class_exists($name)) {
             throw new InvalidArgumentException('The supplied View Model could not be found');
         }
 
@@ -132,11 +126,11 @@ class AcceptableViewModelSelector extends AbstractPlugin
         $request        = $this->getRequest();
         $headers        = $request->getHeaders();
 
-        if ((!$matchAgainst && !$this->defaultMatchAgainst) || !$headers->has('accept')) {
+        if ((! $matchAgainst && ! $this->defaultMatchAgainst) || ! $headers->has('accept')) {
             return;
         }
 
-        if (!$matchAgainst) {
+        if (! $matchAgainst) {
             $matchAgainst = $this->defaultMatchAgainst;
         }
 
@@ -208,6 +202,9 @@ class AcceptableViewModelSelector extends AbstractPlugin
     protected function injectViewModelName($modelAcceptString, $modelName)
     {
         $modelName = str_replace('\\', '|', $modelName);
+        $modelAcceptString = (is_array($modelAcceptString))
+            ? $modelAcceptString[key($modelAcceptString)]
+            : $modelAcceptString;
         return $modelAcceptString . '; ' . self::INJECT_VIEWMODEL_NAME . '="' . $modelName . '", ';
     }
 
@@ -236,9 +233,9 @@ class AcceptableViewModelSelector extends AbstractPlugin
 
         $event = $this->getEvent();
         $request = $event->getRequest();
-        if (!$request instanceof Request) {
+        if (! $request instanceof Request) {
             throw new DomainException(
-                    'The event used does not contain a valid Request, but must.'
+                'The event used does not contain a valid Request, but must.'
             );
         }
 
@@ -259,15 +256,15 @@ class AcceptableViewModelSelector extends AbstractPlugin
         }
 
         $controller = $this->getController();
-        if (!$controller instanceof InjectApplicationEventInterface) {
+        if (! $controller instanceof InjectApplicationEventInterface) {
             throw new DomainException(
-                    'A controller that implements InjectApplicationEventInterface '
+                'A controller that implements InjectApplicationEventInterface '
                   . 'is required to use ' . __CLASS__
             );
         }
 
         $event = $controller->getEvent();
-        if (!$event instanceof MvcEvent) {
+        if (! $event instanceof MvcEvent) {
             $params = $event->getParams();
             $event = new MvcEvent();
             $event->setParams($params);

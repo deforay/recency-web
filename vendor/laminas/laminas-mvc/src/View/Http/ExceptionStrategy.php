@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\View\Http;
 
 use Laminas\EventManager\AbstractListenerAggregate;
@@ -126,7 +120,7 @@ class ExceptionStrategy extends AbstractListenerAggregate
                 $e->setResult($model);
 
                 $response = $e->getResponse();
-                if (!$response) {
+                if (! $response) {
                     $response = new HttpResponse();
                     $response->setStatusCode(500);
                     $e->setResponse($response);

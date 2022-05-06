@@ -1,27 +1,21 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-db for the canonical source repository
- * @copyright https://github.com/laminas/laminas-db/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-db/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Db\Sql\Platform\SqlServer\Ddl;
 
 use Laminas\Db\Adapter\Platform\PlatformInterface;
 use Laminas\Db\Sql\Ddl\CreateTable;
 use Laminas\Db\Sql\Platform\PlatformDecoratorInterface;
 
+use function ltrim;
+
 class CreateTableDecorator extends CreateTable implements PlatformDecoratorInterface
 {
-    /**
-     * @var CreateTable
-     */
+    /** @var CreateTable */
     protected $subject;
 
     /**
      * @param CreateTable $subject
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setSubject($subject)
     {
@@ -30,10 +24,9 @@ class CreateTableDecorator extends CreateTable implements PlatformDecoratorInter
     }
 
     /**
-     * @param PlatformInterface $adapterPlatform
      * @return array
      */
-    protected function processTable(PlatformInterface $adapterPlatform = null)
+    protected function processTable(?PlatformInterface $adapterPlatform = null)
     {
         $table = ($this->isTemporary ? '#' : '') . ltrim($this->table, '#');
         return [

@@ -247,6 +247,121 @@ class Module
             )
         );
     }
+    public function getViewHelperConfig()
+    {
+        return array(
+            'factories' => array(
+                'GlobalConfig'          => function ($sm) {
+                    $globalTable = $sm->getServiceLocator()->get('GlobalConfigTable');
+                    return new \Application\View\Helper\GlobalConfig($globalTable);
+                },
+                'UserCrossLogin' => function ($sm) {
+                    $userTable = $sm->getServiceLocator()->get('UserTable');
+                    return new \Application\View\Helper\UserCrossLogin($userTable);
+                }
+            ),
+        );
+    }
+
+    public function getControllerConfig()
+    {
+        return array(
+            'factories' => array(
+                'Application\Controller\Login' => function ($sm) {
+                    $userService = $sm->getServiceLocator()->get('UserService');
+                    return new \Application\Controller\LoginController($userService);
+                },
+                'Application\Controller\Common' => function ($sm) {
+                    $commonService = $sm->getServiceLocator()->get('CommonService');
+                    return new \Application\Controller\CommonController($commonService);
+                },
+                'Application\Controller\Captcha' => function ($sm) {
+                    $commonService = $sm->getServiceLocator()->get('CommonService');
+                    return new \Application\Controller\CaptchaController($commonService);
+                },
+                'Application\Controller\User' => function ($sm) {
+                    $userService = $sm->getServiceLocator()->get('UserService');
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    return new \Application\Controller\UserController($userService, $globalConfigService);
+                },
+                'Application\Controller\Facilities' => function ($sm) {
+                    $userService = $sm->getServiceLocator()->get('UserService');
+                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    return new \Application\Controller\FacilitiesController($facilitiesService, $userService, $globalConfigService);
+                },
+                'Application\Controller\GlobalConfig' => function ($sm) {
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    return new \Application\Controller\GlobalConfigController($globalConfigService);
+                },
+                'Application\Controller\Settings' => function ($sm) {
+                    $settingsService = $sm->getServiceLocator()->get('SettingsService');
+                    return new \Application\Controller\SettingsController($settingsService);
+                },
+                'Application\Controller\PrintResults' => function ($sm) {
+                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
+                    return new \Application\Controller\PrintResultsController($recencyService);
+                },
+                'Application\Controller\Cron' => function ($sm) {
+                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
+                    $commonService = $sm->getServiceLocator()->get('CommonService');
+                    return new \Application\Controller\CronController($recencyService, $commonService);
+                },
+                'Application\Controller\Province' => function ($sm) {
+
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    $provinceService = $sm->getServiceLocator()->get('ProvinceService');
+                    return new \Application\Controller\ProvinceController($provinceService, $globalConfigService);
+                },
+                'Application\Controller\District' => function ($sm) {
+
+                    $districtService = $sm->getServiceLocator()->get('DistrictService');
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    $provinceService = $sm->getServiceLocator()->get('ProvinceService');
+                    return new \Application\Controller\DistrictController($districtService, $provinceService, $globalConfigService);
+                },
+                'Application\Controller\City' => function ($sm) {
+                    $cityService = $sm->getServiceLocator()->get('CityService');
+                    $districtService = $sm->getServiceLocator()->get('DistrictService');
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    return new \Application\Controller\CityController($cityService, $districtService, $globalConfigService);
+                },
+                'Application\Controller\Recency' => function ($sm) {
+                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
+                    $settingsService = $sm->getServiceLocator()->get('SettingsService');
+                    return new \Application\Controller\RecencyController($recencyService, $facilitiesService, $globalConfigService, $settingsService);
+                },
+                'Application\Controller\QualityCheck' => function ($sm) {
+                    $qualityCheckService = $sm->getServiceLocator()->get('QualityCheckService');
+                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
+                    $settingsService = $sm->getServiceLocator()->get('SettingsService');
+                    return new \Application\Controller\QualityCheckController($qualityCheckService, $facilitiesService, $settingsService);
+                },
+                'Application\Controller\Manifests' => function ($sm) {
+                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
+                    $manifestsService = $sm->getServiceLocator()->get('ManifestsService');
+                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    return new \Application\Controller\ManifestsController($manifestsService,$recencyService, $facilitiesService, $globalConfigService);
+                },
+                'Application\Controller\Index' => function ($sm) {
+                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
+                    return new \Application\Controller\IndexController($recencyService, $facilitiesService, $globalConfigService);
+                },
+                'Application\Controller\VlData' => function ($sm) {
+                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
+                    $qualityCheckService = $sm->getServiceLocator()->get('QualityCheckService');
+                    return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
+                },
+            ),
+        );
+    }
 
     public function getConfig()
     {

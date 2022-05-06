@@ -1,14 +1,24 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-view for the canonical source repository
- * @copyright https://github.com/laminas/laminas-view/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-view/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\View;
 
+use ArrayIterator;
 use ArrayObject;
+use ReturnTypeWillChange; // phpcs:ignore
+
+use function call_user_func;
+use function gettype;
+use function is_array;
+use function is_callable;
+use function is_object;
+use function method_exists;
+use function sprintf;
+use function strtolower;
+use function trigger_error;
+
+use const E_USER_NOTICE;
 
 /**
  * Class for Laminas\View\Renderer\PhpRenderer to help enforce private constructs.
@@ -38,7 +48,7 @@ class Variables extends ArrayObject
         parent::__construct(
             $variables,
             ArrayObject::ARRAY_AS_PROPS,
-            'ArrayIterator'
+            ArrayIterator::class
         );
 
         $this->setOptions($options);
@@ -128,6 +138,7 @@ class Variables extends ArrayObject
      * @param  mixed $key
      * @return mixed
      */
+    #[ReturnTypeWillChange]
     public function offsetGet($key)
     {
         if (! $this->offsetExists($key)) {

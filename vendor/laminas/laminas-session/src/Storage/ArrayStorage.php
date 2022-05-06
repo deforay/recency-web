@@ -1,26 +1,33 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-session for the canonical source repository
- * @copyright https://github.com/laminas/laminas-session/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-session/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Session\Storage;
 
+use ArrayIterator;
 use Laminas\Session\Exception;
 use Laminas\Stdlib\ArrayObject;
+use ReturnTypeWillChange;
+
+use function array_flip;
+use function array_key_exists;
+use function array_keys;
+use function array_replace_recursive;
+use function is_array;
+use function microtime;
+use function sprintf;
 
 /**
  * Array session storage
  *
  * Defines an ArrayObject interface for accessing session storage, with options
  * for setting metadata, locking, and marking as isImmutable.
+ *
+ * @see ReturnTypeWillChange
  */
 class ArrayStorage extends ArrayObject implements StorageInterface
 {
     /**
      * Is storage marked isImmutable?
+     *
      * @var bool
      */
     protected $isImmutable = false;
@@ -38,7 +45,7 @@ class ArrayStorage extends ArrayObject implements StorageInterface
     public function __construct(
         $input = [],
         $flags = ArrayObject::ARRAY_AS_PROPS,
-        $iteratorClass = '\\ArrayIterator'
+        $iteratorClass = ArrayIterator::class
     ) {
         parent::__construct($input, $flags, $iteratorClass);
         $this->setRequestAccessTime(microtime(true));
@@ -83,6 +90,7 @@ class ArrayStorage extends ArrayObject implements StorageInterface
      * @param  mixed                      $value
      * @throws Exception\RuntimeException
      */
+    #[ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         if ($this->isImmutable()) {

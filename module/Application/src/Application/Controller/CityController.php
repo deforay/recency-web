@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Controller;
 
 use Laminas\Session\Container;
@@ -8,72 +9,74 @@ use Laminas\Mvc\Controller\AbstractActionController;
 
 class CityController extends AbstractActionController
 {
+    private $cityService = null;
+    private $globalConfigService = null;
+    private $districtService = null;
 
+    public function __construct($cityService, $districtService, $globalConfigService)
+    {
+        $this->cityService = $cityService;
+        $this->districtService = $districtService;
+        $this->globalConfigService = $globalConfigService;
+    }
     public function indexAction()
     {
         $session = new Container('credo');
-            $request = $this->getRequest();
-            if ($request->isPost()) {
-                $params = $request->getPost();
-                $cityService = $this->getServiceLocator()->get('CityService');
-                $result = $cityService->getCityDetails($params);
-                return $this->getResponse()->setContent(Json::encode($result));
-            }else{
-                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
-                return new ViewModel(array(
-                    'globalConfigResult' => $globalConfigResult,
-               ));
-              }
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            
+            $result = $this->cityService->getCityDetails($params);
+            return $this->getResponse()->setContent(Json::encode($result));
+        } else {
+            
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+            return new ViewModel(array(
+                'globalConfigResult' => $globalConfigResult,
+            ));
+        }
     }
 
     public function addAction()
     {
-            $request = $this->getRequest();
-            if ($request->isPost()) {
-                $params = $request->getPost();
-                $cityService = $this->getServiceLocator()->get('CityService');
-                $result = $cityService->addCityDetails($params);
-                // \Zend\Debug\Debug::dump($params);die;
-                return $this->_redirect()->toRoute('city');
-            }
-            else
-            {
-                $districtService = $this->getServiceLocator()->get('DistrictService');
-                $districtResult = $districtService->getCities();
-                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
-                return new ViewModel(array(
-                    'districtResult' => $districtResult,
-                    'globalConfigResult' => $globalConfigResult,
-                ));
-            }
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            
+            $result = $this->cityService->addCityDetails($params);
+            // \Zend\Debug\Debug::dump($params);die;
+            return $this->_redirect()->toRoute('city');
+        } else {
+            
+            $districtResult = $this->districtService->getCities();
+            
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+            return new ViewModel(array(
+                'districtResult' => $districtResult,
+                'globalConfigResult' => $globalConfigResult,
+            ));
+        }
     }
 
     public function editAction()
     {
-            $cityService = $this->getServiceLocator()->get('CityService');
-            if($this->getRequest()->isPost())
-            {
-                $params=$this->getRequest()->getPost();
-                $result=$cityService->updateCityDetails($params);
-                return $this->redirect()->toRoute('city');
-            }
-            else
-            {
-                $cityId=base64_decode( $this->params()->fromRoute('id') );
-                $result=$cityService->getCityDetailsById($cityId);
-                $districtService = $this->getServiceLocator()->get('DistrictService');
-                $districtResult = $districtService->getCities();
-                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
-                return new ViewModel(array(
-                    'result' => $result,
-                    'districtResult' => $districtResult,
-                    'globalConfigResult' => $globalConfigResult,
-                ));
+        
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getPost();
+            $result = $this->cityService->updateCityDetails($params);
+            return $this->redirect()->toRoute('city');
+        } else {
+            $cityId = base64_decode($this->params()->fromRoute('id'));
+            $result = $this->cityService->getCityDetailsById($cityId);
             
+            $districtResult = $this->districtService->getCities();
+            
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+            return new ViewModel(array(
+                'result' => $result,
+                'districtResult' => $districtResult,
+                'globalConfigResult' => $globalConfigResult,
+            ));
         }
     }
-  
 }

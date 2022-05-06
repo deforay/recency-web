@@ -8,11 +8,16 @@ use Laminas\Json\Json;
 
 class PendingVlResultController extends AbstractRestfulController
 {
+    private $recencyService = null;
+
+    public function __construct($recencyService)
+    {
+        $this->recencyService = $recencyService;
+    }
     public function getList()
     {
         $params=$this->getRequest()->getQuery();
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
-        $response = $recencyService->getAllPendingVlResultListApi($params);
+        $response = $this->recencyService->getAllPendingVlResultListApi($params);
         return new JsonModel($response);
     }
 }

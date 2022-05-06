@@ -7,6 +7,27 @@
  */
 return array(
     'modules' => array(
+        'Laminas\Serializer',
+        'Laminas\Mvc\Plugin\FilePrg',
+        'Laminas\Mvc\Plugin\FlashMessenger',
+        'Laminas\Mvc\Plugin\Identity',
+        'Laminas\Mvc\Plugin\Prg',
+        'Laminas\Session',
+        'Laminas\Mvc\Middleware',
+        'Laminas\Mvc\I18n',
+        'Laminas\Router',
+        'Laminas\Form',
+        'Laminas\I18n',
+        'Laminas\Log',
+        'Laminas\InputFilter',
+        'Laminas\Filter',
+        'Laminas\Validator',
+        'Laminas\Hydrator',
+        'Laminas\Di',
+        'Laminas\Db',
+        'Laminas\Cache',
+        'Laminas\ZendFrameworkBridge',
+        'Laminas\Diactoros',
         'Application',
         'Api',
         'EdpModuleLayouts'

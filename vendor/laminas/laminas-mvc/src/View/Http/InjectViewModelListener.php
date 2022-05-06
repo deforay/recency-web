@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\View\Http;
 
 use Laminas\EventManager\AbstractListenerAggregate;
@@ -39,7 +33,7 @@ class InjectViewModelListener extends AbstractListenerAggregate
     public function injectViewModel(MvcEvent $e)
     {
         $result = $e->getResult();
-        if (!$result instanceof ViewModel) {
+        if (! $result instanceof ViewModel) {
             return;
         }
 

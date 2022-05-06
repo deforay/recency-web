@@ -9,10 +9,22 @@ use Laminas\Mvc\Controller\AbstractActionController;
 
 class VlDataController extends AbstractActionController
 {
+    private $recencyService = null;
+    private $facilitiesService = null;
+    private $globalConfigService = null;
+    private $qualityCheckService = null;
+
+    public function __construct($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService)
+    {
+        $this->recencyService = $recencyService;
+        $this->facilitiesService = $facilitiesService;
+        $this->globalConfigService = $globalConfigService;
+        $this->qualityCheckService = $qualityCheckService;
+    }
+    
     public function indexAction()
     {
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
+        $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
         return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
         ));
@@ -24,8 +36,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getSampleData($params);
+            $result = $this->recencyService->getSampleData($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))
@@ -39,8 +50,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->updateVlSampleResult($params);
+            $result = $this->recencyService->updateVlSampleResult($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))
@@ -53,15 +63,13 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getAllRecencyResultWithVlList($params);
+            $result = $this->recencyService->getAllRecencyResultWithVlList($params);
 
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
-            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-            $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult = $facilityService->getFacilitiesAllDetails();
+            
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+            $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
                 'globalConfigResult' => $globalConfigResult,
@@ -75,14 +83,12 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getAllLtResult($params);
+            $result = $this->recencyService->getAllLtResult($params);
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
-            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-            $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult = $facilityService->getFacilitiesAllDetails();
+            
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+            $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
             return new ViewModel(array(
                 'globalConfigResult' => $globalConfigResult,
                 'facilityResult' => $facilityResult
@@ -95,8 +101,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->exportRInfectedData($params);
+            $result = $this->recencyService->exportRInfectedData($params);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
@@ -109,8 +114,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->exportLongTermInfected($params);
+            $result = $this->recencyService->exportLongTermInfected($params);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
@@ -123,12 +127,10 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getTatReport($params);
+            $result = $this->recencyService->getTatReport($params);
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult = $facilityService->getFacilitiesAllDetails();
+            $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
                 'facilityResult' => $facilityResult
@@ -141,8 +143,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->exportTatReport($params);
+            $result = $this->recencyService->exportTatReport($params);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
@@ -152,8 +153,8 @@ class VlDataController extends AbstractActionController
 
     public function emailResultAction()
     {
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
+        
+        $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
         return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
 
@@ -162,18 +163,17 @@ class VlDataController extends AbstractActionController
     public function emailResultPdfAction()
     {
         $request = $this->getRequest();
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
 
         if ($request->isPost()) {
             $params = $request->getPost();
             if (isset($params['pdfFile'])) {
-                $result = $recencyService->updateEmailSendResult($params);
+                $result = $this->recencyService->updateEmailSendResult($params);
                 return $this->_redirect()->toUrl('/vl-data/email-result');
             } else {
-                $result = $recencyService->getEmailSendResult($params);
-                $recencyService->UpdateMultiplePdfUpdatedDate($params);
-                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                $globalConfigResult = $globalConfigService->fetchGlobalConfig();
+                $result = $this->recencyService->getEmailSendResult($params);
+                $this->recencyService->UpdateMultiplePdfUpdatedDate($params);
+                
+                $globalConfigResult = $this->globalConfigService->fetchGlobalConfig();
                 //\Zend\Debug\Debug::dump(count($result));die;
                 return new ViewModel(array(
                     'result' => $result,
@@ -195,8 +195,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $sampleResult = $recencyService->getSampleResult($params);
+            $sampleResult = $this->recencyService->getSampleResult($params);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('sampleResult' => $sampleResult,));
             $viewModel->setTerminal(true);
@@ -209,16 +208,15 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $recencyService->uploadResult($params);
+            $this->recencyService->uploadResult($params);
             return $this->_redirect()->toUrl('/vl-data');
         }
     }
 
     public function WeeklyReportAction()
     {
-        $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-        $facilityResult = $facilityService->getFacilitiesAllDetails();
+        
+        $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
         return new ViewModel(array(
             'facilityResult' => $facilityResult
@@ -230,8 +228,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getWeeklyReport($params);
+            $result = $this->recencyService->getWeeklyReport($params);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
@@ -244,8 +241,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->exportWeeklyReport($params);
+            $result = $this->recencyService->exportWeeklyReport($params);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
@@ -258,8 +254,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getRecentDetailsForPDF($params['recencyId']);
+            $result = $this->recencyService->getRecentDetailsForPDF($params['recencyId']);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
@@ -271,8 +266,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getLTermDetailsForPDF($params['recencyId']);
+            $result = $this->recencyService->getLTermDetailsForPDF($params['recencyId']);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
@@ -285,12 +279,10 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $parameters = $request->getPost();
-            $qcService = $this->getServiceLocator()->get('QualityCheckService');
-            $result = $qcService->getQualityCheckReportDetails($parameters);
+            $result = $this->qualityCheckService->getQualityCheckReportDetails($parameters);
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult = $facilityService->getFacilitiesAllDetails();
+            $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
                 'facilityResult' => $facilityResult
@@ -301,8 +293,8 @@ class VlDataController extends AbstractActionController
     public function requestVlTestOnVlsmAction()
     {
         $syn = false;
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
+        
+        $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
         foreach ($globalConfigResult as $result) {
             if ($result['global_name'] == 'recency_to_vlsm_sync' && $result['global_value'] == 'no') {
                 return $this->_redirect()->toUrl('/vl-data');
@@ -311,12 +303,10 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $recencyService->postReqVlTestOnVlsmDetails($params);
+            $this->recencyService->postReqVlTestOnVlsmDetails($params);
             return $this->_redirect()->toUrl('/vl-data');
         } else {
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult = $facilityService->getFacilitiesAllDetails();
+            $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
                 'facilityResult' => $facilityResult
@@ -329,8 +319,7 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getReqVlTestOnVlsmDetails($params);
+            $result = $this->recencyService->getReqVlTestOnVlsmDetails($params);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result' => $result))->setTerminal(true);
             return $viewModel;
@@ -343,14 +332,11 @@ class VlDataController extends AbstractActionController
         /* if($sessionLogin->roleCode != 'admin' || $sessionLogin->roleCode != 'manager'){
             return $this->_redirect()->toRoute('home');
         } */
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-        $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-        $facilityResult = $facilityService->getFacilitiesAllDetails();
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
-        $result = $recencyService->getModalityDetails();
-        $testingFacilityService = $this->getServiceLocator()->get('FacilitiesService');
-        $testingFacility = $testingFacilityService->getTestingFacilitiesTypeDetails();
+
+        $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+        $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
+        $result = $this->recencyService->getModalityDetails();
+        $testingFacility = $this->facilitiesService->getTestingFacilitiesTypeDetails();
 
         return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
@@ -365,9 +351,8 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
             $viewModel = new ViewModel();
-            $viewModel->setVariables(array('result' => $recencyService->getModalityDetails($params)))->setTerminal(true);
+            $viewModel->setVariables(array('result' => $this->recencyService->getModalityDetails($params)))->setTerminal(true);
             return $viewModel;
         }
     }
@@ -377,9 +362,8 @@ class VlDataController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
             $viewModel = new ViewModel();
-            $viewModel->setVariables(array('result' => $recencyService->exportModalityDetails($params)))->setTerminal(true);
+            $viewModel->setVariables(array('result' => $this->recencyService->exportModalityDetails($params)))->setTerminal(true);
             return $viewModel;
         }
     }

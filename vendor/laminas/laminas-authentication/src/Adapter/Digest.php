@@ -12,6 +12,13 @@ use Laminas\Authentication\Result as AuthenticationResult;
 use Laminas\Crypt\Utils as CryptUtils;
 use Laminas\Stdlib\ErrorHandler;
 
+/**
+ * @deprecated Since 2.10.0; to be removed in 3.0.0. Digest authentication has
+*     known security issues due to the usage of MD5 for hash comparisons.
+*     We recommend usage of HTTP Basic, LDAP, DbTable, or a custom adapter that
+*     makes usage of strong hashing algorithms, preferably via usage of
+*     password_hash and password_verify.
+*/
 class Digest extends AbstractAdapter
 {
     /**
@@ -161,7 +168,6 @@ class Digest extends AbstractAdapter
         }
 
         $id       = "$this->identity:$this->realm";
-        $idLength = strlen($id);
 
         $result = [
             'code'  => AuthenticationResult::FAILURE,
@@ -177,7 +183,7 @@ class Digest extends AbstractAdapter
             if (empty($line)) {
                 break;
             }
-            if (substr($line, 0, $idLength) === $id) {
+            if (0 === strpos($line, $id)) {
                 if (CryptUtils::compareStrings(
                     substr($line, -32),
                     md5("$this->identity:$this->realm:$this->credential")

@@ -1,6 +1,6 @@
 {
     "name": "laminas/laminas-psr7bridge",
-    "description": "PSR-7 <-> Laminas\\Http bridge",
+    "description": "Bidirectional conversions between PSR-7 and laminas-http messages",
     "license": "BSD-3-Clause",
     "keywords": [
         "laminas",
@@ -21,21 +21,22 @@
         "sort-packages": true
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev",
-            "dev-develop": "1.1-dev"
-        }
     },
     "require": {
-        "php": ">=5.5",
-        "laminas/laminas-diactoros": "^1.1",
-        "laminas/laminas-http": "^2.5",
-        "laminas/laminas-zendframework-bridge": "^1.0",
+        "php": "^7.3 || ~8.0.0 || ~8.1.0",
+        "laminas/laminas-diactoros": "^1.7 || ^2.0",
+        "laminas/laminas-http": "^2.15",
         "psr/http-message": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.7",
-        "squizlabs/php_codesniffer": "^2.3"
+        "laminas/laminas-coding-standard": "~1.0.0",
+        "phpunit/phpunit": "^9.5.10",
+        "psalm/plugin-phpunit": "^0.16.1",
+        "vimeo/psalm": "^4.11"
+    },
+    "conflict": {
+        "laminas/laminas-stdlib": "< 3.2.1",
+        "zendframework/zend-psr7bridge": "*"
     },
     "autoload": {
         "psr-4": {
@@ -47,7 +48,15 @@
             "LaminasTest\\Psr7Bridge\\": "test/"
         }
     },
-    "replace": {
-        "zendframework/zend-psr7bridge": "self.version"
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "static-analysis": "psalm --shepherd --stats"
     }
 }

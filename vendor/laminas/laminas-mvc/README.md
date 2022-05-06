@@ -1,10 +1,8 @@
 # laminas-mvc
 
-[![Build Status](https://travis-ci.org/laminas/laminas-mvc.svg?branch=master)](https://travis-ci.org/laminas/laminas-mvc)
-[![Coverage Status](https://coveralls.io/repos/laminas/laminas-mvc/badge.svg?branch=master)](https://coveralls.io/r/laminas/laminas-mvc?branch=master)
+[![Build Status](https://github.com/laminas/laminas-mvc/workflows/Continuous%20Integration/badge.svg)](https://github.com/laminas/laminas-mvc/actions?query=workflow%3A"Continuous+Integration")
 
-`Laminas\Mvc` is a brand new MVC implementation designed from the ground up for
-Laminas, focusing on performance and flexibility.
+`Laminas\Mvc` is an MVC implementation focusing on performance and flexibility.
 
 The MVC layer is built on top of the following components:
 

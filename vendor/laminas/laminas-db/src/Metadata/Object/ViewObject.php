@@ -1,17 +1,16 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-db for the canonical source repository
- * @copyright https://github.com/laminas/laminas-db/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-db/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Db\Metadata\Object;
 
 class ViewObject extends AbstractTableObject
 {
+    /** @var null|string */
     protected $viewDefinition;
+
+    /** @var null|string */
     protected $checkOption;
+
+    /** @var null|bool */
     protected $isUpdatable;
 
     /**
@@ -24,7 +23,7 @@ class ViewObject extends AbstractTableObject
 
     /**
      * @param string $viewDefinition to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setViewDefinition($viewDefinition)
     {
@@ -42,7 +41,7 @@ class ViewObject extends AbstractTableObject
 
     /**
      * @param string $checkOption to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setCheckOption($checkOption)
     {
@@ -60,7 +59,7 @@ class ViewObject extends AbstractTableObject
 
     /**
      * @param bool $isUpdatable to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setIsUpdatable($isUpdatable)
     {
@@ -68,8 +67,9 @@ class ViewObject extends AbstractTableObject
         return $this;
     }
 
+    /** @return bool */
     public function isUpdatable()
     {
-        return $this->isUpdatable;
+        return (bool) $this->isUpdatable;
     }
 }

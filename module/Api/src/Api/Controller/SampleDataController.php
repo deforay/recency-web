@@ -8,11 +8,15 @@ use Laminas\Json\Json;
 
 class SampleDataController extends AbstractRestfulController
 {
+    private $settingsService = null;
+    public function __construct($settingsService)
+    {
+        $this->settingsService = $settingsService;
+    }
     public function getList()
     {
         $params=$this->getRequest()->getQuery();
-        $SettingsService = $this->getServiceLocator()->get('SettingsService');
-        $response = $SettingsService->getAllSampleListApi($params);
+        $response = $this->settingsService->getAllSampleListApi($params);
         return new JsonModel($response);
     }
 

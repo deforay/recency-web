@@ -1,16 +1,9 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\Service;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Resolver as ViewResolver;
 
 class ViewTemplatePathStackFactory implements FactoryInterface
@@ -46,18 +39,5 @@ class ViewTemplatePathStackFactory implements FactoryInterface
         }
 
         return $templatePathStack;
-    }
-
-    /**
-     * Create and return ViewResolver\TemplatePathStack instance
-     *
-     * For use with laminas-servicemanager v2; proxies to __invoke().
-     *
-     * @param ServiceLocatorInterface $container
-     * @return ViewResolver\TemplatePathStack
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, ViewResolver\TemplatePathStack::class);
     }
 }

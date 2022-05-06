@@ -12,25 +12,36 @@ use Laminas\Mvc\Controller\AbstractActionController;
 
 class RecencyController extends AbstractActionController
 {
+   private $recencyService = null;
+   private $facilitiesService = null;
+   private $globalConfigService = null;
+   private $settingsService = null;
 
+   public function __construct($recencyService, $facilitiesService, $globalConfigService, $settingsService)
+   {
+      $this->recencyService = $recencyService;
+      $this->facilitiesService = $facilitiesService;
+      $this->globalConfigService = $globalConfigService;
+      $this->settingsService = $settingsService;
+   }
    public function indexAction()
    {
       $logincontainer = new Container('credo');
       $userId = $logincontainer->userId;
       $request = $this->getRequest();
-      $recencyService = $this->getServiceLocator()->get('RecencyService');
+
       if ($request->isPost()) {
          $params = $request->getPost();
-         $result = $recencyService->getRecencyDetails($params);
+         $result = $this->recencyService->getRecencyDetails($params);
 
          return $this->getResponse()->setContent(Json::encode($result));
       } else {
-         $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+         
 
-         $facilityResult = $facilityService->getFacilitiesAllDetails();
-         $manageColumnsResult = $recencyService->getAllManagaColumnsDetails($userId);
-         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-         $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
+         $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
+         $manageColumnsResult = $this->recencyService->getAllManagaColumnsDetails($userId);
+         
+         $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
 
          return new ViewModel(array(
             'facilityResult' => $facilityResult,
@@ -43,21 +54,21 @@ class RecencyController extends AbstractActionController
    public function addAction()
    {
       $request = $this->getRequest();
-      $recencyService = $this->getServiceLocator()->get('RecencyService');
+
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService->addRecencyDetails($params);
+         $this->recencyService->addRecencyDetails($params);
          return $this->_redirect()->toRoute('recency');
       } else {
-         $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-         $facilityResult = $facilityService->getFacilitiesAllDetails();
-         $testFacilityTypeResult = $facilityService->getTestingFacilitiesTypeDetails();
-         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-         $settingService = $this->getServiceLocator()->get('SettingsService');
-         $sampleId = $recencyService->getSampleId();
-         $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-         $kitInfo = $settingService->getKitLotDetails();
-         $sampleInfo = $settingService->getSamplesDetails();
+         
+         $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
+         $testFacilityTypeResult = $this->facilitiesService->getTestingFacilitiesTypeDetails();
+         
+         
+         $sampleId = $this->recencyService->getSampleId();
+         $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+         $kitInfo = $this->settingsService->getKitLotDetails();
+         $sampleInfo = $this->settingsService->getSamplesDetails();
          return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
             'facilityResult' => $facilityResult,
@@ -71,24 +82,24 @@ class RecencyController extends AbstractActionController
 
    public function editAction()
    {
-      $recencyService = $this->getServiceLocator()->get('RecencyService');
+
       if ($this->getRequest()->isPost()) {
          $params = $this->getRequest()->getPost();
          //echo"<pre>";var_dump($params);die;
-         $result = $recencyService->updateRecencyDetails($params);
+         $result = $this->recencyService->updateRecencyDetails($params);
          return $this->redirect()->toRoute('recency');
       } else {
          $recencyId = base64_decode($this->params()->fromRoute('id'));
-         $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-         $settingService = $this->getServiceLocator()->get('SettingsService');
-         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
          
-         $facilityResult = $facilityService->getFacilitiesAllDetails();
-         $result = $recencyService->getRecencyDetailsById($recencyId);
-         $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-         $testFacilityTypeResult = $facilityService->getTestingFacilitiesTypeDetails();
-         $kitInfo = $settingService->getKitLotDetails();
-         $sampleInfo = $settingService->getSamplesDetails();
+         
+         
+
+         $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
+         $result = $this->recencyService->getRecencyDetailsById($recencyId);
+         $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+         $testFacilityTypeResult = $this->facilitiesService->getTestingFacilitiesTypeDetails();
+         $kitInfo = $this->settingsService->getKitLotDetails();
+         $sampleInfo = $this->settingsService->getSamplesDetails();
          return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
             'facilityResult' => $facilityResult,
@@ -102,15 +113,15 @@ class RecencyController extends AbstractActionController
 
    public function viewAction()
    {
-      $recencyService = $this->getServiceLocator()->get('RecencyService');
-      $recencyNo = base64_decode($this->params()->fromRoute('id'));
-      $result = $recencyService->getRecencyOrderDetails($recencyNo);
-      // \Zend\Debug\Debug::dump($result);die;
-      $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-      $facilityResult = $facilityService->getFacilitiesAllDetails();
 
-      $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-      $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
+      $recencyNo = base64_decode($this->params()->fromRoute('id'));
+      $result = $this->recencyService->getRecencyOrderDetails($recencyNo);
+      // \Zend\Debug\Debug::dump($result);die;
+      
+      $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
+
+      
+      $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
 
       if ($result) {
          return new ViewModel(array(
@@ -129,8 +140,8 @@ class RecencyController extends AbstractActionController
       if ($request->isPost()) {
          $params = $request->getPost();
          $val = $params['query'];
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getTesterData($val);
+
+         $result = $this->recencyService->getTesterData($val);
          return $this->getResponse()->setContent(Json::encode($result));
       }
    }
@@ -139,8 +150,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->exportRecencyData($params);
+
+         $result = $this->recencyService->exportRecencyData($params);
          $viewModel = new ViewModel();
          $viewModel->setVariables(array('result' => $result));
          $viewModel->setTerminal(true);
@@ -153,8 +164,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getLocationBasedFacility($params);
+
+         $result = $this->recencyService->getLocationBasedFacility($params);
          $viewModel = new ViewModel();
          $viewModel->setVariables(array('result' => $result));
          $viewModel->setTerminal(true);
@@ -167,11 +178,11 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $recencyService->UpdatePdfUpdatedDate($params['recencyId']);
-         $result = $recencyService->getRecencyDetailsForPDF($params['recencyId']);
-         $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-         $globalConfigResult = $globalConfigService->fetchGlobalConfig();
+
+         $this->recencyService->UpdatePdfUpdatedDate($params['recencyId']);
+         $result = $this->recencyService->getRecencyDetailsForPDF($params['recencyId']);
+         
+         $globalConfigResult = $this->globalConfigService->fetchGlobalConfig();
          $viewModel = new ViewModel();
          $viewModel->setVariables(array('result' => $result, 'globalConfigResult' => $globalConfigResult));
          $viewModel->setTerminal(true);
@@ -186,8 +197,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getRecencyAllDataCount($params);
+
+         $result = $this->recencyService->getRecencyAllDataCount($params);
       }
       $viewModel = new ViewModel();
       return $viewModel->setVariables(array('result' => json::encode($result)))->setTerminal(true);
@@ -199,8 +210,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getFinalOutcomeChart($params);
+
+         $result = $this->recencyService->getFinalOutcomeChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -213,8 +224,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->mapManageColumnsDetails($params);
+
+         $result = $this->recencyService->mapManageColumnsDetails($params);
          $viewModel = new ViewModel();
          $viewModel->setVariables(array('result' => $result));
          $viewModel->setTerminal(true);
@@ -228,8 +239,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getRecencyLabActivityChart($params);
+
+         $result = $this->recencyService->getRecencyLabActivityChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -243,8 +254,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getTesterWiseFinalOutcomeChart($params);
+
+         $result = $this->recencyService->getTesterWiseFinalOutcomeChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -258,8 +269,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getTesterWiseInvalidChart($params);
+
+         $result = $this->recencyService->getTesterWiseInvalidChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -273,8 +284,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getFacilityWiseInvalidChart($params);
+
+         $result = $this->recencyService->getFacilityWiseInvalidChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -288,8 +299,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getLotChart($params);
+
+         $result = $this->recencyService->getLotChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -303,8 +314,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getRecentInfectionByGenderChart($params);
+
+         $result = $this->recencyService->getRecentInfectionByGenderChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -318,8 +329,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getRecentInfectionByDistrictChart($params);
+
+         $result = $this->recencyService->getRecentInfectionByDistrictChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -333,8 +344,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getRecentInfectionByAgeChart($params);
+
+         $result = $this->recencyService->getRecentInfectionByAgeChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -348,8 +359,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getRecentViralLoadChart($params);
+
+         $result = $this->recencyService->getRecentViralLoadChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -363,8 +374,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getModalityWiseFinalOutcomeChart($params);
+
+         $result = $this->recencyService->getModalityWiseFinalOutcomeChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -378,8 +389,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getRecentInfectionBySexLineChart($params);
+
+         $result = $this->recencyService->getRecentInfectionBySexLineChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -393,8 +404,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getDistrictWiseMissingViralLoadChart($params);
+
+         $result = $this->recencyService->getDistrictWiseMissingViralLoadChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -408,8 +419,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getModalityWiseMissingViralLoadChart($params);
+
+         $result = $this->recencyService->getModalityWiseMissingViralLoadChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -423,8 +434,8 @@ class RecencyController extends AbstractActionController
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getRecentInfectionByMonthSexChart($params);
+
+         $result = $this->recencyService->getRecentInfectionByMonthSexChart($params);
       }
       $viewModel = new ViewModel();
       $viewModel->setVariables(array('result' => $result))
@@ -432,13 +443,14 @@ class RecencyController extends AbstractActionController
       return $viewModel;
    }
 
-   public function getKitLotInfoAction(){
+   public function getKitLotInfoAction()
+   {
       $result = "";
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
-         $recencyService = $this->getServiceLocator()->get('RecencyService');
-         $result = $recencyService->getKitInfo($params['kitNo']);
+
+         $result = $this->recencyService->getKitInfo($params['kitNo']);
          $viewModel = new ViewModel();
          $viewModel->setVariables(array('result' => Json::encode($result)))->setTerminal(true);
          return $viewModel;

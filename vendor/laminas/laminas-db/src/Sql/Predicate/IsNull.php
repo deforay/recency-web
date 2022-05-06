@@ -1,25 +1,15 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-db for the canonical source repository
- * @copyright https://github.com/laminas/laminas-db/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-db/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Db\Sql\Predicate;
 
 use Laminas\Db\Sql\AbstractExpression;
 
 class IsNull extends AbstractExpression implements PredicateInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $specification = '%1$s IS NULL';
 
-    /**
-     * @var
-     */
+    /** @var nuill|string */
     protected $identifier;
 
     /**
@@ -38,7 +28,7 @@ class IsNull extends AbstractExpression implements PredicateInterface
      * Set identifier for comparison
      *
      * @param  string $identifier
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setIdentifier($identifier)
     {
@@ -60,7 +50,7 @@ class IsNull extends AbstractExpression implements PredicateInterface
      * Set specification string to use in forming SQL predicate
      *
      * @param  string $specification
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setSpecification($specification)
     {
@@ -86,10 +76,12 @@ class IsNull extends AbstractExpression implements PredicateInterface
     public function getExpressionData()
     {
         $identifier = $this->normalizeArgument($this->identifier, self::TYPE_IDENTIFIER);
-        return [[
-            $this->getSpecification(),
-            [$identifier[0]],
-            [$identifier[1]],
-        ]];
+        return [
+            [
+                $this->getSpecification(),
+                [$identifier[0]],
+                [$identifier[1]],
+            ],
+        ];
     }
 }

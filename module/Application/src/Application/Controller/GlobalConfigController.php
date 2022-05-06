@@ -8,29 +8,35 @@ use Laminas\Mvc\Controller\AbstractActionController;
 class GlobalConfigController extends AbstractActionController
 {
 
+    private $globalConfigService = null;
+
+    public function __construct($globalConfigService)
+    {
+        $this->globalConfigService = $globalConfigService;
+    }
     public function indexAction()
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $parameters = $request->getPost();
-            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-            $result = $globalConfigService->getGlobalConfigDetails($parameters);
+            
+            $result = $this->globalConfigService->getGlobalConfigDetails($parameters);
             return $this->getResponse()->setContent(Json::encode($result));
         }
     }
 
     public function editAction()
     {
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
+        
         if($this->getRequest()->isPost())
         {
             $params=$this->getRequest()->getPost();
-            $result=$globalConfigService->updateGlobalConfigDetails($params);
+            $result=$this->globalConfigService->updateGlobalConfigDetails($params);
             return $this->redirect()->toRoute('global-config');
         }
         else
         {
-            $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+            $globalConfigResult=$this->globalConfigService->getGlobalConfigAllDetails();
             return new ViewModel(array(
                 'globalConfigResult' => $globalConfigResult,
             ));

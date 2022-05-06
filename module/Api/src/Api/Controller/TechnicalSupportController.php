@@ -8,11 +8,16 @@ use Laminas\Json\Json;
 
 class TechnicalSupportController extends AbstractRestfulController
 {
+    private $globalConfigService = null;
+
+    public function __construct($globalConfigService)
+    {
+        $this->globalConfigService = $globalConfigService;
+    }
     public function getList()
     {
         $params=$this->getRequest()->getQuery();
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $response = $globalConfigService->getTechnicalSupportDetailsApi();
+        $response = $this->globalConfigService->getTechnicalSupportDetailsApi();
         return new JsonModel($response);
     }
 }

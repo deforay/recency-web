@@ -16,34 +16,40 @@
         "forum": "https://discourse.laminas.dev"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/package-versions-deprecated": true
+        },
+        "platform": {
+            "php": "7.4.99"
+        }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "2.9.x-dev",
-            "dev-develop": "2.10.x-dev"
-        },
         "laminas": {
             "component": "Laminas\\Filter",
             "config-provider": "Laminas\\Filter\\ConfigProvider"
         }
     },
     "require": {
-        "php": "^5.6 || ^7.0",
-        "laminas/laminas-stdlib": "^2.7.7 || ^3.1",
-        "laminas/laminas-zendframework-bridge": "^1.0"
+        "php": "^7.4 || ~8.0.0 || ~8.1.0",
+        "laminas/laminas-stdlib": "^3.6.1"
     },
     "require-dev": {
-        "laminas/laminas-coding-standard": "~1.0.0",
-        "laminas/laminas-crypt": "^3.2.1",
-        "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
-        "laminas/laminas-uri": "^2.6",
-        "pear/archive_tar": "^1.4.3",
-        "phpunit/phpunit": "^5.7.23 || ^6.4.3",
-        "psr/http-factory": "^1.0"
+        "laminas/laminas-coding-standard": "^2.3.0",
+        "laminas/laminas-crypt": "^3.5.1",
+        "laminas/laminas-servicemanager": "^3.7.0",
+        "laminas/laminas-uri": "^2.9.1",
+        "pear/archive_tar": "^1.4.14",
+        "phpspec/prophecy-phpunit": "^2.0.1",
+        "phpunit/phpunit": "^9.5.10",
+        "psalm/plugin-phpunit": "^0.15.2",
+        "psr/http-factory": "^1.0.1",
+        "vimeo/psalm": "^4.13.1"
     },
     "conflict": {
-        "laminas/laminas-validator": "<2.10.1"
+        "laminas/laminas-validator": "<2.10.1",
+        "zendframework/zend-filter": "*"
     },
     "suggest": {
         "laminas/laminas-crypt": "Laminas\\Crypt component, for encryption filters",
@@ -70,9 +76,7 @@
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit --colors=always",
-        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
-    },
-    "replace": {
-        "zendframework/zend-filter": "^2.9.2"
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "static-analysis": "psalm --shepherd --stats"
     }
 }

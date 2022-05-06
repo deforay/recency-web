@@ -1,21 +1,15 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-view for the canonical source repository
- * @copyright https://github.com/laminas/laminas-view/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-view/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\View\Helper;
 
 /**
- * Helper for escaping values
+ * @final
  */
 class EscapeJs extends Escaper\AbstractHelper
 {
     /**
-     * Escape a value for current escaping strategy
-     *
      * @param  string $value
      * @return string
      */

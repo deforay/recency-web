@@ -4,22 +4,25 @@ namespace Api\Controller;
 
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
-use Laminas\Json\Json;
 
 class RecencyController extends AbstractRestfulController
 {
+    private $recencyService = null;
+
+    public function __construct($recencyService)
+    {
+        $this->recencyService = $recencyService;
+    }
     public function getList()
     {
-        $params=$this->getRequest()->getQuery();
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
-        $response = $recencyService->getAllRecencyListApi($params);
+        $params = $this->getRequest()->getQuery();
+        $response = $this->recencyService->getAllRecencyListApi($params);
         return new JsonModel($response);
     }
 
-    public function create($params) {
-        // echo "test"; die;
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
-        $response = $recencyService->addRecencyDataApi($params);
+    public function create($params)
+    {
+        $response = $this->recencyService->addRecencyDataApi($params);
         return new JsonModel($response);
     }
 }

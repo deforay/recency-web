@@ -1,91 +1,48 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-db for the canonical source repository
- * @copyright https://github.com/laminas/laminas-db/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-db/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Db\Metadata\Object;
+
+use function array_key_exists;
 
 class ColumnObject
 {
-    /**
-     *
-     * @var string
-     */
-    protected $name = null;
+    /** @var string */
+    protected $name;
 
-    /**
-     *
-     * @var string
-     */
-    protected $tableName = null;
+    /** @var string */
+    protected $tableName;
 
-    /**
-     *
-     * @var string
-     */
-    protected $schemaName = null;
+    /** @var string */
+    protected $schemaName;
 
-    /**
-     *
-     * @var
-     */
-    protected $ordinalPosition = null;
+    /** @var int */
+    protected $ordinalPosition;
 
-    /**
-     *
-     * @var string
-     */
-    protected $columnDefault = null;
+    /** @var string */
+    protected $columnDefault;
 
-    /**
-     *
-     * @var bool
-     */
-    protected $isNullable = null;
+    /** @var bool */
+    protected $isNullable;
 
-    /**
-     *
-     * @var string
-     */
-    protected $dataType = null;
+    /** @var string */
+    protected $dataType;
 
-    /**
-     *
-     * @var int
-     */
-    protected $characterMaximumLength = null;
+    /** @var int */
+    protected $characterMaximumLength;
 
-    /**
-     *
-     * @var int
-     */
-    protected $characterOctetLength = null;
+    /** @var int */
+    protected $characterOctetLength;
 
-    /**
-     *
-     * @var int
-     */
-    protected $numericPrecision = null;
+    /** @var int */
+    protected $numericPrecision;
 
-    /**
-     *
-     * @var int
-     */
-    protected $numericScale = null;
+    /** @var int */
+    protected $numericScale;
 
-    /**
-     *
-     * @var bool
-     */
-    protected $numericUnsigned = null;
+    /** @var bool */
+    protected $numericUnsigned;
 
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     protected $errata = [];
 
     /**
@@ -136,7 +93,7 @@ class ColumnObject
      * Set table name
      *
      * @param string $tableName
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setTableName($tableName)
     {
@@ -174,7 +131,7 @@ class ColumnObject
 
     /**
      * @param int $ordinalPosition to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setOrdinalPosition($ordinalPosition)
     {
@@ -192,7 +149,7 @@ class ColumnObject
 
     /**
      * @param mixed $columnDefault to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setColumnDefault($columnDefault)
     {
@@ -210,7 +167,7 @@ class ColumnObject
 
     /**
      * @param bool $isNullable to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setIsNullable($isNullable)
     {
@@ -236,7 +193,7 @@ class ColumnObject
 
     /**
      * @param string $dataType the $dataType to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setDataType($dataType)
     {
@@ -254,7 +211,7 @@ class ColumnObject
 
     /**
      * @param int $characterMaximumLength the $characterMaximumLength to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setCharacterMaximumLength($characterMaximumLength)
     {
@@ -272,7 +229,7 @@ class ColumnObject
 
     /**
      * @param int $characterOctetLength the $characterOctetLength to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setCharacterOctetLength($characterOctetLength)
     {
@@ -290,7 +247,7 @@ class ColumnObject
 
     /**
      * @param int $numericPrecision the $numericPrevision to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setNumericPrecision($numericPrecision)
     {
@@ -308,7 +265,7 @@ class ColumnObject
 
     /**
      * @param int $numericScale the $numericScale to set
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setNumericScale($numericScale)
     {
@@ -326,7 +283,7 @@ class ColumnObject
 
     /**
      * @param  bool $numericUnsigned
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setNumericUnsigned($numericUnsigned)
     {
@@ -352,7 +309,7 @@ class ColumnObject
 
     /**
      * @param array $erratas
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setErratas(array $erratas)
     {
@@ -371,13 +328,14 @@ class ColumnObject
         if (array_key_exists($errataName, $this->errata)) {
             return $this->errata[$errataName];
         }
-        return;
+
+        return null;
     }
 
     /**
      * @param string $errataName
      * @param mixed $errataValue
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setErrata($errataName, $errataValue)
     {

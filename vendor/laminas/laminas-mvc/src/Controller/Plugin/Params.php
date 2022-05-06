@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\Controller\Plugin;
 
 use Laminas\Mvc\Exception\RuntimeException;
@@ -104,7 +98,7 @@ class Params extends AbstractPlugin
     {
         $controller = $this->getController();
 
-        if (!$controller instanceof InjectApplicationEventInterface) {
+        if (! $controller instanceof InjectApplicationEventInterface) {
             throw new RuntimeException(
                 'Controllers must implement Laminas\Mvc\InjectApplicationEventInterface to use this plugin.'
             );

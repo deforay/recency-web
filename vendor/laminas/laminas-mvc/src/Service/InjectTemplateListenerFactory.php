@@ -1,17 +1,10 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\Service;
 
 use Interop\Container\ContainerInterface;
 use Laminas\Mvc\View\Http\InjectTemplateListener;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class InjectTemplateListenerFactory implements FactoryInterface
 {
@@ -34,18 +27,5 @@ class InjectTemplateListenerFactory implements FactoryInterface
         }
 
         return $listener;
-    }
-
-    /**
-     * Create and return InjectTemplateListener instance
-     *
-     * For use with laminas-servicemanager v2; proxies to __invoke().
-     *
-     * @param ServiceLocatorInterface $container
-     * @return InjectTemplateListener
-     */
-    public function createService(ServiceLocatorInterface $container)
-    {
-        return $this($container, InjectTemplateListener::class);
     }
 }

@@ -8,11 +8,16 @@ use Laminas\Json\Json;
 
 class DistrictController extends AbstractRestfulController
 {
+    private $commonService = null;
+
+    public function __construct($commonService)
+    {
+        $this->commonService = $commonService;
+    }
     public function getList()
     {
         $params=$this->getRequest()->getQuery();
-        $DistrictCommonService = $this->getServiceLocator()->get('CommonService');
-        $response = $DistrictCommonService->getAllDistrictListApi($params);
+        $response = $this->commonService->getAllDistrictListApi($params);
         return new JsonModel($response);
     }
 

@@ -8,11 +8,15 @@ use Laminas\Json\Json;
 
 class ProvinceController extends AbstractRestfulController
 {
+    private $commonService = null;
+    public function __construct($commonService)
+    {
+        $this->commonService = $commonService;
+    }
     public function getList()
     {
-        $params=$this->getRequest()->getQuery();
-        $ProvienceCommonService = $this->getServiceLocator()->get('CommonService');
-        $response = $ProvienceCommonService->getAllProvienceListApi();
+        //$params=$this->getRequest()->getQuery();
+        $response = $this->commonService->getAllProvienceListApi();
         return new JsonModel($response);
     }
 

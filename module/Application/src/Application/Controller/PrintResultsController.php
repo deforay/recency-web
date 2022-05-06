@@ -9,13 +9,19 @@ use Laminas\Mvc\Controller\AbstractActionController;
 class PrintResultsController extends AbstractActionController
 {
 
+    private $recencyService = null;
+
+    public function __construct($recencyService)
+    {
+        $this->recencyService = $recencyService;
+    }
+
     public function indexAction()
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $parameters = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getPrintResultsDetails($parameters);
+            $result = $this->recencyService->getPrintResultsDetails($parameters);
             return $this->getResponse()->setContent(Json::encode($result));
         }
         return new ViewModel();

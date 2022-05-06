@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -16,23 +17,30 @@ use Laminas\Session\Container;
 
 class IndexController extends AbstractActionController
 {
+
+    private $recencyService = null;
+    private $facilitiesService = null;
+    private $globalConfigService = null;
+
+    public function __construct($recencyService, $facilitiesService, $globalConfigService)
+    {
+        $this->recencyService = $recencyService;
+        $this->facilitiesService = $facilitiesService;
+        $this->globalConfigService = $globalConfigService;
+    }
     public function indexAction()
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getAllRecencyResult($params);
+
+            $result = $this->recencyService->getAllRecencyResult($params);
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
-            $logincontainer = new Container('credo');
-            // if (isset($logincontainer->roleCode) && $logincontainer->roleCode == "remote_order_user") {
-            //     return $this->redirect()->toRoute("recency");
-            // }
-            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-            $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult = $facilityService->getFacilitiesAllDetails();
+
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+
+            $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
                 'globalConfigResult' => $globalConfigResult,
@@ -45,11 +53,11 @@ class IndexController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
+
             if (isset($params['comingFrom']) && trim($params['comingFrom']) == 'district') {
-                $result = $recencyService->exportDistrictRecencyData($params);
+                $result = $this->recencyService->exportDistrictRecencyData($params);
             } else {
-                $result = $recencyService->fetchExportRecencyData($params);
+                $result = $this->recencyService->fetchExportRecencyData($params);
             }
 
             $viewModel = new ViewModel();
@@ -66,8 +74,8 @@ class IndexController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getRecencyAllDataCount($params);
+
+            $result = $this->recencyService->getRecencyAllDataCount($params);
             $viewModel = new ViewModel();
             $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
@@ -80,14 +88,14 @@ class IndexController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getAllRecencyResult($params);
+
+            $result = $this->recencyService->getAllRecencyResult($params);
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
-            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-            $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult = $facilityService->getFacilitiesAllDetails();
+
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+
+            $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
                 'globalConfigResult' => $globalConfigResult,
@@ -101,14 +109,14 @@ class IndexController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getAllRecencyResult($params);
+
+            $result = $this->recencyService->getAllRecencyResult($params);
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
-            $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-            $globalConfigResult = $globalConfigService->getGlobalConfigAllDetails();
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $facilityResult = $facilityService->getFacilitiesAllDetails();
+
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+
+            $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
                 'globalConfigResult' => $globalConfigResult,
@@ -117,7 +125,8 @@ class IndexController extends AbstractActionController
         }
     }
 
-    public function setSampleFirstChartAction(){
+    public function setSampleFirstChartAction()
+    {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

@@ -73,7 +73,7 @@ return array(
                ),
 
                'logout' => array(
-                    'type' => 'Laminas\Mvc\Router\Http\Literal',
+                    'type' => 'Literal',
                     'options' => array(
                          'route'    => '/logout',
                          'defaults' => array(
@@ -286,30 +286,6 @@ return array(
                ),
           ),
      ),
-
-
-     'controllers' => array(
-          'invokables' => array(
-               'Application\Controller\Index'               => 'Application\Controller\IndexController',
-               'Application\Controller\Common'              => 'Application\Controller\CommonController',
-               'Application\Controller\Login'               => 'Application\Controller\LoginController',
-               'Application\Controller\Facilities'          => 'Application\Controller\FacilitiesController',
-               'Application\Controller\User'                => 'Application\Controller\UserController',
-               'Application\Controller\Recency'             => 'Application\Controller\RecencyController',
-               'Application\Controller\GlobalConfig'        => 'Application\Controller\GlobalConfigController',
-               'Application\Controller\QualityCheck'        => 'Application\Controller\QualityCheckController',
-               'Application\Controller\Captcha'             => 'Application\Controller\CaptchaController',
-               'Application\Controller\VlData'              => 'Application\Controller\VlDataController',
-               'Application\Controller\RequestVlTestOnVlsm' => 'Application\Controller\RequestVlTestOnVlsmController',
-               'Application\Controller\Cron'                => 'Application\Controller\CronController',
-               'Application\Controller\Settings'            => 'Application\Controller\SettingsController',
-               'Application\Controller\Province'            => 'Application\Controller\ProvinceController',
-               'Application\Controller\District'            => 'Application\Controller\DistrictController',
-               'Application\Controller\City'                => 'Application\Controller\CityController',
-               'Application\Controller\PrintResults'        => 'Application\Controller\PrintResultsController',
-               'Application\Controller\Manifests'        => 'Application\Controller\ManifestsController',
-          ),
-     ),
      'view_manager' => array(
           'display_not_found_reason' => true,
           'display_exceptions'       => true,
@@ -325,14 +301,6 @@ return array(
           'template_path_stack' => array(
                __DIR__ . '/../view',
           ),
-     ),
-     'view_helpers' => array(
-          'invokables' => array(
-               'category_helper' => 'Application\View\Helper\CategoryHelper',
-               'global_config_helper' => 'Application\View\Helper\GlobalConfigHelper',
-               'user_cross_login_helper' => 'Application\View\Helper\UserCrossLoginHelper',
-
-          )
      ),
      // Placeholder for console routes
      'console' => array(

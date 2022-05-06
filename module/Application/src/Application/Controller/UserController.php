@@ -8,6 +8,14 @@ use Laminas\Mvc\Controller\AbstractActionController;
 
 class UserController extends AbstractActionController
 {
+    private $userService = null;
+    private $globalConfigService = null;
+
+    public function __construct($userService, $globalConfigService)
+    {
+        $this->userService = $userService;
+        $this->globalConfigService = $globalConfigService;
+    }
 
     public function indexAction()
     {
@@ -20,8 +28,8 @@ class UserController extends AbstractActionController
             if ($request->isPost()) {
                 $params = $request->getPost();
                 // \Zend\Debug\Debug::dump($params);die;
-                $userService = $this->getServiceLocator()->get('UserService');
-                $result = $userService->getuserDetails($params);
+                
+                $result = $this->userService->getuserDetails($params);
                 return $this->getResponse()->setContent(Json::encode($result));
             }
         }
@@ -34,15 +42,15 @@ class UserController extends AbstractActionController
             return $this->_redirect()->toRoute('recency');
         }else{
             $request = $this->getRequest();
-            $userService = $this->getServiceLocator()->get('UserService');
+            
             if ($request->isPost()) {
                 $params = $request->getPost();
-                $result = $userService->adduserDetails($params);
+                $result = $this->userService->adduserDetails($params);
                 return $this->_redirect()->toRoute('user');
             }else{
-                $roleResult=$userService->getRoleAllDetails();
-                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+                $roleResult=$this->userService->getRoleAllDetails();
+                
+                $globalConfigResult=$this->globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
                     'roleResult' => $roleResult,
                     'globalConfigResult' => $globalConfigResult,
@@ -58,21 +66,21 @@ class UserController extends AbstractActionController
             return $this->_redirect()->toRoute('recency');
         }else{
 
-            $userService = $this->getServiceLocator()->get('UserService');
+            
             if($this->getRequest()->isPost())
             {
                 $params=$this->getRequest()->getPost();
-                $result=$userService->updateUserDetails($params);
+                $result=$this->userService->updateUserDetails($params);
                 return $this->redirect()->toRoute('user');
             }
             else
             {
                 $userId=base64_decode( $this->params()->fromRoute('id') );
                 if($userId!=''){
-                $roleResult=$userService->getRoleAllDetails();
-                $result=$userService->getuserDetailsById($userId);
-                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+                $roleResult=$this->userService->getRoleAllDetails();
+                $result=$this->userService->getuserDetailsById($userId);
+                
+                $globalConfigResult=$this->globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
                     'result' => $result,
                     'roleResult' => $roleResult,
@@ -86,18 +94,18 @@ class UserController extends AbstractActionController
     }
     public function editProfileAction()
     {
-        $userService = $this->getServiceLocator()->get('UserService');
+        
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $userService->updateProfile($params);
+            $this->userService->updateProfile($params);
             return $this->redirect()->toRoute("home");
         }
         else
         {
             $userId=base64_decode( $this->params()->fromRoute('id'));
             if($userId!=''){
-            $result=$userService->getuserDetailsById($userId);
+            $result=$this->userService->getuserDetailsById($userId);
             return new ViewModel(array(
                 'result' => $result,
             ));

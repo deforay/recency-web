@@ -1,19 +1,16 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-modulemanager for the canonical source repository
- * @copyright https://github.com/laminas/laminas-modulemanager/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-modulemanager/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\ModuleManager\Listener;
 
 use Generator;
 use Laminas\ModuleManager\ModuleEvent;
 
-/**
- * Module resolver listener
- */
+use function class_exists;
+use function in_array;
+use function sprintf;
+
 class ModuleResolverListener extends AbstractListener
 {
     /**
@@ -26,7 +23,6 @@ class ModuleResolverListener extends AbstractListener
     ];
 
     /**
-     * @param  ModuleEvent $e
      * @return object|false False if module class does not exist
      */
     public function __invoke(ModuleEvent $e)
@@ -35,13 +31,14 @@ class ModuleResolverListener extends AbstractListener
 
         $class = sprintf('%s\Module', $moduleName);
         if (class_exists($class)) {
-            return new $class;
+            return new $class();
         }
 
-        if (class_exists($moduleName)
+        if (
+            class_exists($moduleName)
             && ! in_array($moduleName, $this->invalidClassNames, true)
         ) {
-            return new $moduleName;
+            return new $moduleName();
         }
 
         return false;

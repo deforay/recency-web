@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\View\Http;
 
 use Laminas\EventManager\AbstractListenerAggregate;
@@ -77,7 +71,7 @@ class DefaultRenderingStrategy extends AbstractListenerAggregate
      *
      * @param  MvcEvent $e
      * @return Response|null
-     * @throws \Exception
+     * @throws \Exception|\Throwable
      */
     public function render(MvcEvent $e)
     {
@@ -90,7 +84,7 @@ class DefaultRenderingStrategy extends AbstractListenerAggregate
         $request   = $e->getRequest();
         $response  = $e->getResponse();
         $viewModel = $e->getViewModel();
-        if (!$viewModel instanceof ViewModel) {
+        if (! $viewModel instanceof ViewModel) {
             return;
         }
 

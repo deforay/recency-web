@@ -9,14 +9,20 @@ use Laminas\Session\Container;
 class CommonController extends AbstractActionController
 {
 
+    private $commonService = null;
+
+    public function __construct($commonService)
+    {
+        $this->commonService = $commonService;
+    }
+
     public function indexAction()
     {
         $result = "";
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $common = $this->getServiceLocator()->get('CommonService');
-            $result = $common->checkFieldValidations($params);
+            $result = $this->commonService->checkFieldValidations($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))
@@ -29,8 +35,8 @@ class CommonController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $common = $this->getServiceLocator()->get('CommonService');
-            $result = $common->checkMultipleFieldValidations($params);
+            
+            $result = $this->commonService->checkMultipleFieldValidations($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))
@@ -43,8 +49,8 @@ class CommonController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $common = $this->getServiceLocator()->get('CommonService');
-            $result = $common->getProvinceDetails($params);
+            
+            $result = $this->commonService->getProvinceDetails($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))
@@ -58,8 +64,8 @@ class CommonController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $common = $this->getServiceLocator()->get('CommonService');
-            $result = $common->getDistrictDetails($params);
+            
+            $result = $this->commonService->getDistrictDetails($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))
@@ -72,8 +78,8 @@ class CommonController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $common = $this->getServiceLocator()->get('CommonService');
-            $result = $common->getCityDetails($params);
+            
+            $result = $this->commonService->getCityDetails($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))
@@ -86,8 +92,8 @@ class CommonController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $common = $this->getServiceLocator()->get('CommonService');
-            $result = $common->getFacilityDetails($params);
+            
+            $result = $this->commonService->getFacilityDetails($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))

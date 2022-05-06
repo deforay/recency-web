@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-modulemanager for the canonical source repository
- * @copyright https://github.com/laminas/laminas-modulemanager/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-modulemanager/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\ModuleManager\Listener;
 
@@ -13,35 +9,24 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Loader\ModuleAutoloader;
 use Laminas\ModuleManager\ModuleEvent;
 
-/**
- * Module loader listener
- */
+use function file_exists;
+
 class ModuleLoaderListener extends AbstractListener implements ListenerAggregateInterface
 {
-    /**
-     * @var ModuleAutoloader
-     */
+    /** @var ModuleAutoloader */
     protected $moduleLoader;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $generateCache;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $callbacks = [];
 
     /**
-     * Constructor.
-     *
      * Creates an instance of the ModuleAutoloader and injects the module paths
      * into it.
-     *
-     * @param  ListenerOptions $options
      */
-    public function __construct(ListenerOptions $options = null)
+    public function __construct(?ListenerOptions $options = null)
     {
         parent::__construct($options);
 
@@ -54,9 +39,7 @@ class ModuleLoaderListener extends AbstractListener implements ListenerAggregate
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->callbacks[] = $events->attach(
@@ -73,9 +56,7 @@ class ModuleLoaderListener extends AbstractListener implements ListenerAggregate
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public function detach(EventManagerInterface $events)
     {
         foreach ($this->callbacks as $index => $callback) {
@@ -85,12 +66,11 @@ class ModuleLoaderListener extends AbstractListener implements ListenerAggregate
         }
     }
 
-    /**
-     * @return bool
-     */
+    /** @return bool */
     protected function hasCachedClassMap()
     {
-        if ($this->options->getModuleMapCacheEnabled()
+        if (
+            $this->options->getModuleMapCacheEnabled()
             && file_exists($this->options->getModuleMapCacheFile())
         ) {
             return true;
@@ -99,20 +79,14 @@ class ModuleLoaderListener extends AbstractListener implements ListenerAggregate
         return false;
     }
 
-    /**
-     * @return array
-     */
+    /** @return array */
     protected function getCachedConfig()
     {
         return include $this->options->getModuleMapCacheFile();
     }
 
     /**
-     * loadModulesPost
-     *
      * Unregisters the ModuleLoader and generates the module class map cache.
-     *
-     * @param  ModuleEvent $event
      */
     public function onLoadModulesPost(ModuleEvent $event)
     {

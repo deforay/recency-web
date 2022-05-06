@@ -8,11 +8,15 @@ use Laminas\Json\Json;
 
 class TatReportController extends AbstractRestfulController
 {
+    private $recencyService = null;
+    public function __construct($recencyService)
+    {
+        $this->recencyService = $recencyService;
+    }
     public function getList()
     {
         $params=$this->getRequest()->getQuery();
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
-        $response = $recencyService->getTatReportAPI($params);
+        $response = $this->recencyService->getTatReportAPI($params);
         return new JsonModel($response);
     }
 }

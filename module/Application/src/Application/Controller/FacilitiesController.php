@@ -9,6 +9,17 @@ use Laminas\Mvc\Controller\AbstractActionController;
 class FacilitiesController extends AbstractActionController
 {
 
+    private $globalConfigService = null;
+    private $userService = null;
+    private $facilitiesService = null;
+
+    public function __construct($facilitiesService, $userService, $globalConfigService)
+    {
+        $this->globalConfigService = $globalConfigService;
+        $this->facilitiesService = $facilitiesService;
+        $this->userService = $userService;
+    }
+
     public function indexAction()
     {
         $session = new Container('credo');
@@ -19,8 +30,8 @@ class FacilitiesController extends AbstractActionController
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
-                $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-                $result = $facilityService->getFacilitiesDetails($params);
+                
+                $result = $this->facilitiesService->getFacilitiesDetails($params);
                 return $this->getResponse()->setContent(Json::encode($result));
             }
         }
@@ -36,15 +47,15 @@ class FacilitiesController extends AbstractActionController
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
-                $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-                $result = $facilityService->addFacilitiesDetails($params);
+                
+                $result = $this->facilitiesService->addFacilitiesDetails($params);
                 // \Zend\Debug\Debug::dump($params);die;
                 return $this->_redirect()->toRoute('facilities');
             }else{
-                $userService = $this->getServiceLocator()->get('UserService');
-                $userResult = $userService->getAllUserDetails();
-                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+                
+                $userResult = $this->userService->getAllUserDetails();
+                
+                $globalConfigResult=$this->globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
                     'userResult' => $userResult,
                     'globalConfigResult' => $globalConfigResult,
@@ -60,21 +71,21 @@ class FacilitiesController extends AbstractActionController
             return $this->_redirect()->toRoute('recency');
         }else{
 
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            
             if($this->getRequest()->isPost())
             {
                 $params=$this->getRequest()->getPost();
-                $result=$facilityService->updateFacilitiesDetails($params);
+                $result=$this->facilitiesService->updateFacilitiesDetails($params);
                 return $this->redirect()->toRoute('facilities');
             }
             else
             {
                 $facilityId=base64_decode( $this->params()->fromRoute('id') );
-                $result=$facilityService->getFacilitiesDetailsById($facilityId);
-                $userService = $this->getServiceLocator()->get('UserService');
-                $userResult = $userService->getAllUserDetails();
-                $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-                $globalConfigResult=$globalConfigService->getGlobalConfigAllDetails();
+                $result=$this->facilitiesService->getFacilitiesDetailsById($facilityId);
+                
+                $userResult = $this->userService->getAllUserDetails();
+                
+                $globalConfigResult=$this->globalConfigService->getGlobalConfigAllDetails();
                 return new ViewModel(array(
                     'userResult' => $userResult,
                     'result' => $result,
@@ -89,8 +100,8 @@ class FacilitiesController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
-            $result = $facilityService->getFacilityByLocation($params);
+            
+            $result = $this->facilitiesService->getFacilityByLocation($params);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))

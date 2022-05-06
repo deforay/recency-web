@@ -4,21 +4,22 @@ namespace Api\Controller;
 
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
-use Laminas\Json\Json;
-
 class RecencySampleidController extends AbstractRestfulController
 {
+    private $recencyService = null;
+
+    public function __construct($recencyService)
+    {
+        $this->recencyService = $recencyService;
+    }
     public function getList()
     {
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
-        $response = $recencyService->getSampleId();
-        if($response)
-        {
+        
+        $response = $this->recencyService->getSampleId();
+        if ($response) {
             $data['sample-data'] = $response;
             $data['status'] = "success";
-        }
-        else
-        {
+        } else {
             $data['sample-data'] = $response;
             $data['status'] = "fail";
         }

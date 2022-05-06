@@ -8,9 +8,16 @@ use Laminas\Json\Json;
 
 class VlTestResultController extends AbstractRestfulController
 {
-    public function create($params) {
-        $recencyService = $this->getServiceLocator()->get('RecencyService');
-        $response = $recencyService->addVlTestResultApi($params);
+
+    private $recencyService = null;
+
+    public function __construct($recencyService)
+    {
+        $this->recencyService = $recencyService;
+    }
+    public function create($params)
+    {
+        $response = $this->recencyService->addVlTestResultApi($params);
         return new JsonModel($response);
     }
 }

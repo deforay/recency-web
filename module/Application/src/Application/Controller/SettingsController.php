@@ -8,7 +8,12 @@ use Laminas\Mvc\Controller\AbstractActionController;
 
 class SettingsController extends AbstractActionController
 {
+    private $settingsService = null;
 
+    public function __construct($settingsService)
+    {
+        $this->settingsService = $settingsService;
+    }
     public function indexAction()
     {
         $sessionLogin = new Container('credo');
@@ -18,8 +23,8 @@ class SettingsController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $settingsService = $this->getServiceLocator()->get('SettingsService');
-            $result = $settingsService->getSettingsDetails($params);
+            
+            $result = $this->settingsService->getSettingsDetails($params);
             return $this->getResponse()->setContent(Json::encode($result));
         }
     }
@@ -29,8 +34,8 @@ class SettingsController extends AbstractActionController
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
-                $settingsService = $this->getServiceLocator()->get('SettingsService');
-                $result = $settingsService->getSettingsSampleDetails($params);
+                
+                $result = $this->settingsService->getSettingsSampleDetails($params);
                 return $this->getResponse()->setContent(Json::encode($result));
             }
     }
@@ -41,8 +46,8 @@ class SettingsController extends AbstractActionController
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
-                $settingsService = $this->getServiceLocator()->get('SettingsService');
-                $result = $settingsService->addSettingsDetails($params);
+                
+                $result = $this->settingsService->addSettingsDetails($params);
                 return $this->_redirect()->toRoute('settings');
             }
     }
@@ -50,17 +55,17 @@ class SettingsController extends AbstractActionController
     public function editAction()
     {
         $session = new Container('credo');
-        $settingsService = $this->getServiceLocator()->get('SettingsService');
+        
         if($this->getRequest()->isPost())
         {
             $params=$this->getRequest()->getPost();
-            $result=$settingsService->updateSettingsDetails($params);
+            $result=$this->settingsService->updateSettingsDetails($params);
             return $this->redirect()->toRoute('settings');
         }
         else
         {
             $testId=base64_decode( $this->params()->fromRoute('id') );
-            $result=$settingsService->getSettingsDetailsById($testId);
+            $result=$this->settingsService->getSettingsDetailsById($testId);
             return new ViewModel(array(
                 'result' => $result,
             ));
@@ -72,8 +77,8 @@ class SettingsController extends AbstractActionController
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
-                $settingsService = $this->getServiceLocator()->get('SettingsService');
-                $result = $settingsService->addSampleSettingsDetails($params);
+                
+                $result = $this->settingsService->addSampleSettingsDetails($params);
                 return $this->_redirect()->toRoute('settings');
             }
         
@@ -81,17 +86,17 @@ class SettingsController extends AbstractActionController
     public function editSampleAction()
     {
         $session = new Container('credo');
-        $settingsService = $this->getServiceLocator()->get('SettingsService');
+        
         if($this->getRequest()->isPost())
         {
             $params=$this->getRequest()->getPost();
-            $result=$settingsService->updateSampleSettingsDetails($params);
+            $result=$this->settingsService->updateSampleSettingsDetails($params);
             return $this->redirect()->toRoute('settings');
         }
         else
         {
             $sampleId=base64_decode( $this->params()->fromRoute('id') );
-            $result=$settingsService->getSettingsSampleDetailsById($sampleId);
+            $result=$this->settingsService->getSettingsSampleDetailsById($sampleId);
             return new ViewModel(array(
                 'result' => $result,
             ));

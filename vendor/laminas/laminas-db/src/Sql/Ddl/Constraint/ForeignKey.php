@@ -1,33 +1,25 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-db for the canonical source repository
- * @copyright https://github.com/laminas/laminas-db/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-db/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Db\Sql\Ddl\Constraint;
+
+use function array_fill;
+use function array_merge;
+use function count;
+use function implode;
+use function sprintf;
 
 class ForeignKey extends AbstractConstraint
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $onDeleteRule = 'NO ACTION';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $onUpdateRule = 'NO ACTION';
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected $referenceColumn = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $referenceTable = '';
 
     /**
@@ -35,12 +27,10 @@ class ForeignKey extends AbstractConstraint
      */
     protected $columnSpecification = 'FOREIGN KEY (%s) ';
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected $referenceSpecification = [
         'REFERENCES %s ',
-        'ON DELETE %s ON UPDATE %s'
+        'ON DELETE %s ON UPDATE %s',
     ];
 
     /**
@@ -75,7 +65,7 @@ class ForeignKey extends AbstractConstraint
 
     /**
      * @param  string $referenceTable
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setReferenceTable($referenceTable)
     {
@@ -93,7 +83,7 @@ class ForeignKey extends AbstractConstraint
 
     /**
      * @param  null|string|array $referenceColumn
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setReferenceColumn($referenceColumn)
     {
@@ -112,7 +102,7 @@ class ForeignKey extends AbstractConstraint
 
     /**
      * @param  string $onDeleteRule
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setOnDeleteRule($onDeleteRule)
     {
@@ -131,7 +121,7 @@ class ForeignKey extends AbstractConstraint
 
     /**
      * @param  string $onUpdateRule
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setOnUpdateRule($onUpdateRule)
     {

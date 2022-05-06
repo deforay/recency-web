@@ -8,9 +8,13 @@ use Laminas\Json\Json;
 
 class UpdatePasswordController extends AbstractRestfulController
 {
+    private $userService = null;
+    public function __construct($userService)
+    {
+        $this->userService = $userService;
+    }
     public function create($params)
     {
-        $userService = $this->getServiceLocator()->get('UserService');
-        return new JsonModel($userService->updatePasswordAPI($params));
+        return new JsonModel($this->userService->updatePasswordAPI($params));
     }
 }

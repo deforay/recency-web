@@ -1,14 +1,14 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-view for the canonical source repository
- * @copyright https://github.com/laminas/laminas-view/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-view/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\View\Resolver;
 
 use Laminas\View\Renderer\RendererInterface as Renderer;
+
+use function strlen;
+use function strpos;
+use function substr;
 
 final class PrefixPathStackResolver implements ResolverInterface
 {
@@ -17,7 +17,7 @@ final class PrefixPathStackResolver implements ResolverInterface
      *
      * @var string[]|string[][]|ResolverInterface[]
      */
-    private $prefixes = [];
+    private array $prefixes = [];
 
     /**
      * Constructor
@@ -36,10 +36,10 @@ final class PrefixPathStackResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve($name, Renderer $renderer = null)
+    public function resolve($name, ?Renderer $renderer = null)
     {
-        foreach ($this->prefixes as $prefix => & $resolver) {
-            if (strpos($name, $prefix) !== 0) {
+        foreach ($this->prefixes as $prefix => &$resolver) {
+            if (strpos($name, (string) $prefix) !== 0) {
                 continue;
             }
 
@@ -52,6 +52,6 @@ final class PrefixPathStackResolver implements ResolverInterface
             }
         }
 
-        return;
+        return; // phpcs:ignore
     }
 }

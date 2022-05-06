@@ -1,15 +1,11 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc\ResponseSender;
 
 use Laminas\EventManager\Event;
 use Laminas\Stdlib\ResponseInterface;
+
+use function spl_object_hash;
 
 class SendResponseEvent extends Event
 {
@@ -67,9 +63,10 @@ class SendResponseEvent extends Event
     {
         $response = $this->getResponse();
         $contentSent = $this->getParam('contentSent', []);
-        $contentSent[spl_object_hash($response)] = true;
+        $responseObjectHash = spl_object_hash($response);
+        $contentSent[$responseObjectHash] = true;
         $this->setParam('contentSent', $contentSent);
-        $this->contentSent[spl_object_hash($response)] = true;
+        $this->contentSent[$responseObjectHash] = true;
         return $this;
     }
 
@@ -94,9 +91,10 @@ class SendResponseEvent extends Event
     {
         $response = $this->getResponse();
         $headersSent = $this->getParam('headersSent', []);
-        $headersSent[spl_object_hash($response)] = true;
+        $responseObjectHash = spl_object_hash($response);
+        $headersSent[$responseObjectHash] = true;
         $this->setParam('headersSent', $headersSent);
-        $this->headersSent[spl_object_hash($response)] = true;
+        $this->headersSent[$responseObjectHash] = true;
         return $this;
     }
 

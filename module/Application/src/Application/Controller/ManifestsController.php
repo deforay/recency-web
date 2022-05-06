@@ -10,6 +10,19 @@ use Laminas\Mvc\Controller\AbstractActionController;
 class ManifestsController extends AbstractActionController
 {
 
+    private $manifestsService = null;
+    private $facilitiesService = null;
+    private $recencyService = null;
+    private $globalConfigService = null;
+
+    public function __construct($manifestsService, $recencyService, $facilitiesService, $globalConfigService)
+    {
+        $this->manifestsService = $manifestsService;
+        $this->facilitiesService = $facilitiesService;
+        $this->recencyService = $recencyService;
+        $this->globalConfigService = $globalConfigService;
+    }
+
     public function indexAction()
     {
         $session = new Container('credo');
@@ -17,8 +30,8 @@ class ManifestsController extends AbstractActionController
         if ($request->isPost()) {
             $params = $request->getPost();
             //\Zend\Debug\Debug::dump($params);die;
-            $manifestsService = $this->getServiceLocator()->get('ManifestsService');
-            $result = $manifestsService->getManifests($params);
+
+            $result = $this->manifestsService->getManifests($params);
             return $this->getResponse()->setContent(Json::encode($result));
         }
     }
@@ -27,20 +40,16 @@ class ManifestsController extends AbstractActionController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $manifestService = $this->getServiceLocator()->get('ManifestsService');
+
             $params = $request->getPost();
-            $result = $manifestService->addManifest($params);
+            $result = $this->manifestsService->addManifest($params);
             return $this->_redirect()->toRoute('manifests');
         } else {
 
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $commonService = $this->getServiceLocator()->get('CommonService');
-            $facilityService = $this->getServiceLocator()->get('FacilitiesService');
+            $testingHubs = $this->facilitiesService->fetchTestingHubs();
 
-            $testingHubs = $facilityService->fetchTestingHubs();
-
-            $manifestCode = strtoupper('R' . date('ymd') .  $commonService->generateRandomString(6));
-            //$sampleList = $recencyService->getSamplesWithoutManifestCode();
+            $manifestCode = strtoupper('R' . date('ymd') .  $this->commonService->generateRandomString(6));
+            //$sampleList = $this->recencyService->getSamplesWithoutManifestCode();
 
             return new ViewModel(array(
                 'manifestCode' => $manifestCode,
@@ -54,21 +63,18 @@ class ManifestsController extends AbstractActionController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $manifestService = $this->getServiceLocator()->get('ManifestsService');
+
             $params = $request->getPost();
-            $result = $manifestService->updateManifest($params);
+            $result = $this->manifestsService->updateManifest($params);
             return $this->_redirect()->toRoute('manifests');
         } else {
 
             $manifestId = base64_decode($this->params()->fromRoute('id'));
             if (isset($manifestId) && !empty($manifestId)) {
-                $recencyService = $this->getServiceLocator()->get('RecencyService');
-                $manifestService = $this->getServiceLocator()->get('ManifestsService');
-                $facilityService = $this->getServiceLocator()->get('FacilitiesService');
 
-                $testingHubs = $facilityService->fetchTestingHubs();
-                $manifestData = $manifestService->fetchManifestById($manifestId);
-                $selectedSamples = $recencyService->fetchSamplesByManifestId($manifestId);
+                $testingHubs = $this->facilitiesService->fetchTestingHubs();
+                $manifestData = $this->manifestsService->fetchManifestById($manifestId);
+                $selectedSamples = $this->recencyService->fetchSamplesByManifestId($manifestId);
                 return new ViewModel(array(
                     'manifestData' => $manifestData,
                     'testingHubs' => $testingHubs,
@@ -84,10 +90,9 @@ class ManifestsController extends AbstractActionController
     {
         $request = $this->getRequest();
         $id = base64_decode($this->params()->fromRoute('id'));
-        $manifestService = $this->getServiceLocator()->get('ManifestsService');
-        $result = $manifestService->getManifestsPDF($id);
-        $globalConfigService = $this->getServiceLocator()->get('GlobalConfigService');
-        $globalConfigResult = $globalConfigService->fetchGlobalConfig();
+
+        $result = $this->manifestsService->getManifestsPDF($id);
+        $globalConfigResult = $this->globalConfigService->fetchGlobalConfig();
         if (count($result) == 0) {
             $alertContainer = new Container('alert');
             $alertContainer->alertMsg = 'Unable to generate Specimen Manifest PDF. Please check if there are Samples added.';
@@ -105,8 +110,7 @@ class ManifestsController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
-            $recencyService = $this->getServiceLocator()->get('RecencyService');
-            $result = $recencyService->getSamplesWithoutManifestCode($params['testingSite']);
+            $result = $this->recencyService->getSamplesWithoutManifestCode($params['testingSite']);
         }
         $viewModel = new ViewModel();
         $viewModel->setVariables(array('result' => $result))

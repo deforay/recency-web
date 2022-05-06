@@ -1,94 +1,47 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-db for the canonical source repository
- * @copyright https://github.com/laminas/laminas-db/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-db/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Db\Metadata\Object;
 
 class ConstraintObject
 {
-    /**
-     *
-     * @var string
-     */
-    protected $name = null;
+    /** @var string */
+    protected $name;
 
-    /**
-     *
-     * @var string
-     */
-    protected $tableName = null;
+    /** @var string */
+    protected $tableName;
 
-    /**
-     *
-     * @var string
-     */
-    protected $schemaName = null;
+    /** @var string */
+    protected $schemaName;
 
     /**
      * One of "PRIMARY KEY", "UNIQUE", "FOREIGN KEY", or "CHECK"
      *
      * @var string
      */
-    protected $type = null;
+    protected $type;
 
-    /**
-     *
-     *
-     * @var string[]
-     */
+    /** @var string[] */
     protected $columns = [];
 
-    /**
-     *
-     *
-     * @var string
-     */
+    /** @var string */
     protected $referencedTableSchema;
 
-    /**
-     *
-     *
-     * @var string
-     */
+    /** @var string */
     protected $referencedTableName;
 
-    /**
-     *
-     *
-     * @var string[]
-     */
+    /** @var string[] */
     protected $referencedColumns;
 
-    /**
-     *
-     *
-     * @var string
-     */
+    /** @var string */
     protected $matchOption;
 
-    /**
-     *
-     *
-     * @var string
-     */
+    /** @var string */
     protected $updateRule;
 
-    /**
-     *
-     *
-     * @var string
-     */
+    /** @var string */
     protected $deleteRule;
 
-    /**
-     *
-     *
-     * @var string
-     */
+    /** @var string */
     protected $checkClause;
 
     /**
@@ -159,7 +112,7 @@ class ConstraintObject
      * Set table name
      *
      * @param  string $tableName
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setTableName($tableName)
     {
@@ -187,9 +140,10 @@ class ConstraintObject
         return $this->type;
     }
 
+    /** @return bool */
     public function hasColumns()
     {
-        return (! empty($this->columns));
+        return ! empty($this->columns);
     }
 
     /**
@@ -206,7 +160,7 @@ class ConstraintObject
      * Set Columns.
      *
      * @param string[] $columns
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setColumns(array $columns)
     {
@@ -228,7 +182,7 @@ class ConstraintObject
      * Set Referenced Table Schema.
      *
      * @param string $referencedTableSchema
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setReferencedTableSchema($referencedTableSchema)
     {
@@ -250,7 +204,7 @@ class ConstraintObject
      * Set Referenced Table Name.
      *
      * @param string $referencedTableName
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setReferencedTableName($referencedTableName)
     {
@@ -272,7 +226,7 @@ class ConstraintObject
      * Set Referenced Columns.
      *
      * @param string[] $referencedColumns
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setReferencedColumns(array $referencedColumns)
     {
@@ -294,7 +248,7 @@ class ConstraintObject
      * Set Match Option.
      *
      * @param string $matchOption
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setMatchOption($matchOption)
     {
@@ -316,7 +270,7 @@ class ConstraintObject
      * Set Update Rule.
      *
      * @param string $updateRule
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setUpdateRule($updateRule)
     {
@@ -338,7 +292,7 @@ class ConstraintObject
      * Set Delete Rule.
      *
      * @param string $deleteRule
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setDeleteRule($deleteRule)
     {
@@ -360,7 +314,7 @@ class ConstraintObject
      * Set Check Clause.
      *
      * @param string $checkClause
-     * @return self Provides a fluent interface
+     * @return $this Provides a fluent interface
      */
     public function setCheckClause($checkClause)
     {
@@ -375,7 +329,7 @@ class ConstraintObject
      */
     public function isPrimaryKey()
     {
-        return ('PRIMARY KEY' == $this->type);
+        return 'PRIMARY KEY' === $this->type;
     }
 
     /**
@@ -385,7 +339,7 @@ class ConstraintObject
      */
     public function isUnique()
     {
-        return ('UNIQUE' == $this->type);
+        return 'UNIQUE' === $this->type;
     }
 
     /**
@@ -395,7 +349,7 @@ class ConstraintObject
      */
     public function isForeignKey()
     {
-        return ('FOREIGN KEY' == $this->type);
+        return 'FOREIGN KEY' === $this->type;
     }
 
     /**
@@ -405,6 +359,6 @@ class ConstraintObject
      */
     public function isCheck()
     {
-        return ('CHECK' == $this->type);
+        return 'CHECK' === $this->type;
     }
 }

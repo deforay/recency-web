@@ -8,10 +8,15 @@ use Laminas\Session\Container;
 
 class CaptchaController extends AbstractActionController
 {
+    private $commonService = null;
+
+    public function __construct($commonService)
+    {
+        $this->commonService = $commonService;
+    }
     public function indexAction()
     {
-        $commonService=$this->getServiceLocator()->get('CommonService');
-        $result = $commonService->getCaptcha();
+        $result = $this->commonService->getCaptcha();
         return new ViewModel($result);
     }
     public function checkCaptchaAction()
@@ -25,14 +30,13 @@ class CaptchaController extends AbstractActionController
                 $result = "success";
                 $captchaSession->status = 'success';
             } else {
-                 $result = "fail";
-                 $captchaSession->status = 'fail';
+                $result = "fail";
+                $captchaSession->status = 'fail';
             }
             $viewModel = new ViewModel();
-            $viewModel->setVariables(array('result'=>$result));
+            $viewModel->setVariables(array('result' => $result));
             $viewModel->setTerminal(true);
             return $viewModel;
         }
     }
 }
-

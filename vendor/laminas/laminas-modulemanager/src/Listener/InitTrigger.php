@@ -1,29 +1,22 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-modulemanager for the canonical source repository
- * @copyright https://github.com/laminas/laminas-modulemanager/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-modulemanager/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\ModuleManager\Listener;
 
 use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleEvent;
 
-/**
- * Init trigger
- */
+use function method_exists;
+
 class InitTrigger extends AbstractListener
 {
-    /**
-     * @param ModuleEvent $e
-     * @return void
-     */
+    /** @return void */
     public function __invoke(ModuleEvent $e)
     {
         $module = $e->getModule();
-        if (! $module instanceof InitProviderInterface
+        if (
+            ! $module instanceof InitProviderInterface
             && ! method_exists($module, 'init')
         ) {
             return;

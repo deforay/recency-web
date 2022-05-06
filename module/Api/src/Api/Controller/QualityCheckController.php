@@ -8,9 +8,13 @@ use Laminas\Json\Json;
 
 class QualityCheckController extends AbstractRestfulController
 {
+    private $qualityCheckService = null;
+    public function __construct($qualityCheckService)
+    {
+        $this->qualityCheckService = $qualityCheckService;
+    }
     public function create($params) {
-        $qcService = $this->getServiceLocator()->get('QualityCheckService');
-        $response = $qcService->addQualityCheckDataApi($params);
+        $response = $this->qualityCheckService->addQualityCheckDataApi($params);
         return new JsonModel($response);
     }
 }

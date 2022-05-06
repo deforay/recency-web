@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-mvc for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Mvc;
 
 use Laminas\EventManager\EventManagerAwareInterface;
@@ -56,11 +50,6 @@ class Application implements
     const ERROR_MIDDLEWARE_CANNOT_DISPATCH = 'error-middleware-cannot-dispatch';
 
     /**
-     * @var array
-     */
-    protected $configuration = null;
-
-    /**
      * Default application event listeners
      *
      * @var array
@@ -98,25 +87,22 @@ class Application implements
     /**
      * @var ServiceManager
      */
-    protected $serviceManager = null;
+    protected $serviceManager;
 
     /**
      * Constructor
      *
-     * @param mixed $configuration
      * @param ServiceManager $serviceManager
      * @param null|EventManagerInterface $events
      * @param null|RequestInterface $request
      * @param null|ResponseInterface $response
      */
     public function __construct(
-        $configuration,
         ServiceManager $serviceManager,
         EventManagerInterface $events = null,
         RequestInterface $request = null,
         ResponseInterface $response = null
     ) {
-        $this->configuration  = $configuration;
         $this->serviceManager = $serviceManager;
         $this->setEventManager($events ?: $serviceManager->get('EventManager'));
         $this->request        = $request ?: $serviceManager->get('Request');
@@ -352,16 +338,7 @@ class Application implements
 
         $response = $this->response;
         $event->setResponse($response);
-        $this->completeRequest($event);
-
-        return $this;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function send()
-    {
+        return $this->completeRequest($event);
     }
 
     /**
