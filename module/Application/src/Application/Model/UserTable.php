@@ -361,11 +361,12 @@ class UserTable extends AbstractTableGateway
             if ($params['servPass'] != '') {
                 if ($configResult['vlsm-crosslogin']) {
                     $client = new \GuzzleHttp\Client();
+                    $newPass = CommonService::encrypt($params['servPass'], base64_decode($configResult['vlsm-crosslogin-salt']));
                     $url = rtrim($configResult['vlsm']['domain'], "/");
                     $result = $client->post($url . '/users/editProfileHelper.php', [
                         'form_params' => [
                             'u' => $params['email'],
-                            't' => sha1($params['servPass'] . $configResult["password"]["salt"])
+                            't' => $newPass
                         ]
                     ]);
                     $response = json_decode($result->getBody()->getContents());
@@ -491,11 +492,15 @@ class UserTable extends AbstractTableGateway
     {
         $upId = 0;
         $response = array();
+        $config = new \Laminas\Config\Reader\Ini();
+        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $check = $this->select(array('email' => $params['u']))->current();
         if ($check) {
+            $decryptedPassword = CommonService::decrypt($params['t'], base64_decode($configResult['vlsm-crosslogin-salt']));
+            $password = sha1($decryptedPassword . $configResult["password"]["salt"]);
             $data = array(
                 'email' => $params['u'],
-                'server_password' => $params['t']
+                'server_password' => $password
             );
             $upId = $this->update($data, array('user_id' => $check['user_id']));
             if ($upId > 0) {

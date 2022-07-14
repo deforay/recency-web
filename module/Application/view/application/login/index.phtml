@@ -132,7 +132,7 @@ $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
                 if (sessionStorage.getItem("crosslogin") == "true") {
                     sessionStorage.setItem("crosslogin", "false");
                     <?php $crossLoginSession->logged = false; ?>
-                    $('<iframe src="<?php echo rtrim($configResult['vlsm']['domain'], "/") . '/logout.php'; ?>" frameborder="0" scrolling="no" id="myFrame" style="display:none;"></iframe>').appendTo('body');
+                    $('<iframe src="<?php echo rtrim($configResult['vlsm']['domain'], "/") . '/login/logout.php'; ?>" frameborder="0" scrolling="no" id="myFrame" style="display:none;"></iframe>').appendTo('body');
         }
         <?php }
             if (isset($container->alertMsg) && $container->alertMsg != "") {
