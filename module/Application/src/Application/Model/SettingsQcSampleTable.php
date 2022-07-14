@@ -114,14 +114,14 @@ class SettingsQcSampleTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         //   echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($tResult);
         $output = array(
@@ -173,7 +173,7 @@ class SettingsQcSampleTable extends AbstractTableGateway
         $common = new CommonService();
         $sQuery = $sql->select()->from(array('qcs' => 'qc_samples'))
             ->where(array('qcs.qc_sample_id' => $sampleId));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
          return $rResult;
     }
@@ -205,7 +205,7 @@ class SettingsQcSampleTable extends AbstractTableGateway
         ->where(array('qc_sample_status'=>'active'))
         ;
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         if($rResult) {

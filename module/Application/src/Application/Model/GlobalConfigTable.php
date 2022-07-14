@@ -111,14 +111,14 @@ class GlobalConfigTable extends AbstractTableGateway {
                     $sQuery->offset($sOffset);
             }
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+            $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         //   echo $sQueryStr;die;
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
             /* Data set length after filtering */
             $sQuery->reset('limit');
             $sQuery->reset('offset');
-            $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+            $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
             $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
             $iFilteredTotal = count($tResult);
             $output = array(
@@ -368,7 +368,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('global_config')->where(array('global_name' => $globalName));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $configValues = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $configValues[0]['global_value'];
         
@@ -384,7 +384,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         $sQuery = $sql->select()->from('global_config')
                         ->where('global_name IN ("technical_support_name","admin_phone","admin_email")')
                         ->order("config_id DESC");
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if(count($rResult) > 0) {
                 $response['status']='success';
@@ -400,7 +400,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery =  $sql->select()->from('global_config');
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }

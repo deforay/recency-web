@@ -305,10 +305,8 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                          <div class="dropdown d-inline-block">
                               <!-- Crosss Login Block Start -->
                               <?php if ($configResult['vlsm-crosslogin']) {
-                                   $passwordSalt = $userCrossLoginRes['server_password'] . $configResult['vlsm-crosslogin-salt'];
-                                   $token = hash('sha256', $passwordSalt); ?>
-
-                                   <a class="btn btn-dual" onclick="setCrossLogin();" href="<?php echo rtrim($configResult['vlsm']['domain'], "/") . '/loginProcess.php?u=' . base64_encode($userCrossLoginRes['email']) . '&t=' . $token . '&name=' . base64_encode($userCrossLoginRes['user_name']); ?>">
+                              ?>
+                                   <a class="btn btn-dual" onclick="setCrossLogin();" href="<?php echo rtrim($configResult['vlsm']['domain'], "/") . '/login/loginProcess.php?u=' . base64_encode($sessionLogin->userEmail) . '&t=' . ($sessionLogin->crossLoginPass) . '&name=' . base64_encode($sessionLogin->userName); ?>">
                                         <span class="d-none d-sm-inline-block"><i class="fa fa-external-link-alt" style=" font-size: 14px; "></i> VLSM</span>
                                    </a>
                               <?php } ?>

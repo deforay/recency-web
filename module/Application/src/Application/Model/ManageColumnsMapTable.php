@@ -50,7 +50,7 @@ class ManageColumnsMapTable extends AbstractTableGateway {
         $fQuery = $sql->select()->from('manage_columns_map')
             ->where(array('user_id' => $id));
        
-        $fQueryStr = $sql->getSqlStringForSqlObject($fQuery); // Get the string of the Sql, instead of the Select-instance
+        $fQueryStr = $sql->buildSqlString($fQuery); // Get the string of the Sql, instead of the Select-instance
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
         return $fResult;
@@ -63,7 +63,7 @@ class ManageColumnsMapTable extends AbstractTableGateway {
         $fQuery = $sql->select()->from('manage_columns_map')
             ->where(array('user_id' => $userId));
        
-        $fQueryStr = $sql->getSqlStringForSqlObject($fQuery); // Get the string of the Sql, instead of the Select-instance
+        $fQueryStr = $sql->buildSqlString($fQuery); // Get the string of the Sql, instead of the Select-instance
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
         return $fResult;

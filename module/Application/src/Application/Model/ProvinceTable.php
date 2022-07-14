@@ -22,7 +22,7 @@ class ProvinceTable extends AbstractTableGateway {
 
             $sQuery = $sql->select()->from(array('pd' => 'province_details'))->columns(array('province_id','province_name'));
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $sQueryStr = $sql->buildSqlString($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
             if($rResult) {
@@ -43,7 +43,7 @@ class ProvinceTable extends AbstractTableGateway {
 
             $sQuery = $sql->select()->from(array('pd' => 'province_details'))->columns(array('province_id','province_name'));
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $sQueryStr = $sql->buildSqlString($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             return $rResult;
         }
@@ -144,14 +144,14 @@ class ProvinceTable extends AbstractTableGateway {
                 $sQuery->offset($sOffset);
             }
     
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+            $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
             //   echo $sQueryStr;die;
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
     
             /* Data set length after filtering */
             $sQuery->reset('limit');
             $sQuery->reset('offset');
-            $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+            $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
             $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
             $iFilteredTotal = count($tResult);
             $output = array(
@@ -195,7 +195,7 @@ class ProvinceTable extends AbstractTableGateway {
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('p' => 'province_details'))
             ->where(array('p.province_id' => $provinceId));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }
@@ -220,7 +220,7 @@ class ProvinceTable extends AbstractTableGateway {
 
         $sQuery = $sql->select()->from(array('pd' => 'province_details'))->columns(array('province_id','province_name'));
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }

@@ -115,14 +115,14 @@ class RoleTable extends AbstractTableGateway {
                   $sQuery->offset($sOffset);
           }
 
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+          $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         //   echo $sQueryStr;die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
           /* Data set length after filtering */
           $sQuery->reset('limit');
           $sQuery->reset('offset');
-          $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+          $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
           $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
           $output = array(
@@ -176,7 +176,7 @@ class RoleTable extends AbstractTableGateway {
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('users')
                                 ->where(array('user_id' => $userId));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }

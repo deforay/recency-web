@@ -28,12 +28,12 @@ class LoginController extends AbstractActionController
             $params = $this->getRequest()->getQuery();
             $captchaSession = new Container('captcha');
             $captchaSession->status = 'success'; // bypassing captcha            
-            if (!isset($params['u']) && $params['u'] == "") {
+            if (!isset($params['u']) || $params['u'] == "" || !isset($params['t']) || $params['t'] == "") {
                 $viewModel = new ViewModel();
                 $viewModel->setTerminal(true);
                 return $viewModel;
             } else {
-                $redirectUrl = $userService->loginProcess($params);
+                $redirectUrl = $this->userService->loginProcess($params);
                 return $this->redirect()->toRoute($redirectUrl);
             }
         }

@@ -25,7 +25,7 @@ class TestingFacilityTypeTable extends AbstractTableGateway {
      
         $sQueryTest = $sql->select()->from(array('f' => 'testing_facility_type'))
             ->where(array('f.testing_facility_type_status' => 'active'));
-        $sQueryStrTest = $sql->getSqlStringForSqlObject($sQueryTest);
+        $sQueryStrTest = $sql->buildSqlString($sQueryTest);
         $result = $dbAdapter->query($sQueryStrTest, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         return $result;
@@ -39,7 +39,7 @@ class TestingFacilityTypeTable extends AbstractTableGateway {
         $fQuery = $sql->select()->from('testing_facility_type')
             ->where(array('testing_facility_type_name' => trim($fName)));
        
-        $fQueryStr = $sql->getSqlStringForSqlObject($fQuery); // Get the string of the Sql, instead of the Select-instance
+        $fQueryStr = $sql->buildSqlString($fQuery); // Get the string of the Sql, instead of the Select-instance
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
         return $fResult;

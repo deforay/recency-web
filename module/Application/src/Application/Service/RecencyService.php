@@ -173,7 +173,7 @@ class RecencyService
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportRecencyDataQuery);
+            $sQueryStr = $sql->buildSqlString($queryContainer->exportRecencyDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
 
@@ -439,7 +439,7 @@ class RecencyService
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportRecentResultDataQuery);
+            $sQueryStr = $sql->buildSqlString($queryContainer->exportRecentResultDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
             if (count($sResult) > 0) {
@@ -585,7 +585,7 @@ class RecencyService
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportLongtermDataQuery);
+            $sQueryStr = $sql->buildSqlString($queryContainer->exportLongtermDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
             if (count($sResult) > 0) {
@@ -735,7 +735,7 @@ class RecencyService
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportTatQuery);
+            $sQueryStr = $sql->buildSqlString($queryContainer->exportTatQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
             if (count($sResult) > 0) {
@@ -903,7 +903,7 @@ class RecencyService
                         if (isset($sheetData[$i]['A']) && trim($sheetData[$i]['A']) != '') {
                             $cQuery = $sql->select()->from('recency')->columns(array('recency_id'))
                                 ->where(array('sample_id' => $sampleId));
-                            $fQuery = $sql->getSqlStringForSqlObject($cQuery);
+                            $fQuery = $sql->buildSqlString($cQuery);
                             $fResult = $dbAdapter->query($fQuery, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                             if (isset($fResult['recency_id'])) {
                                 $data = array(
@@ -957,7 +957,7 @@ class RecencyService
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportWeeklyDataQuery);
+            $sQueryStr = $sql->buildSqlString($queryContainer->exportWeeklyDataQuery);
             $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
             $termOutcome = 0;
@@ -1162,7 +1162,7 @@ class RecencyService
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportRecencyDataResultDataQuery);
+            $sQueryStr = $sql->buildSqlString($queryContainer->exportRecencyDataResultDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
@@ -1407,7 +1407,7 @@ class RecencyService
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportDistrictwiseRecencyResult);
+            $sQueryStr = $sql->buildSqlString($queryContainer->exportDistrictwiseRecencyResult);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {

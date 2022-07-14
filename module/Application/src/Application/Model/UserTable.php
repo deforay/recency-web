@@ -40,23 +40,11 @@ class UserTable extends AbstractTableGateway
         }
         /* Cross login credential check */
         if ((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "") && $configResult['vlsm-crosslogin']) {
-            $params['u'] = filter_var($params['u'], FILTER_SANITIZE_STRING);
-            $params['t'] = filter_var($params['t'], FILTER_SANITIZE_STRING);
+            $params['u'] = $params['u'];
+            $params['t'] = $params['t'];
+            $decryptedPassword = CommonService::decrypt($params['t'], base64_decode($configResult['vlsm-crosslogin-salt']));
+            $params['loginPassword'] = $decryptedPassword;
             $params['userName'] = base64_decode($params['u']);
-            $check = $this->select(array('email' => $params['userName']))->current();
-            if ($check) {
-                $passwordSalt = $check['server_password'] . $configResult['vlsm-crosslogin-salt'];
-                $params['loginPassword'] = hash('sha256', $passwordSalt);
-                if ($params['loginPassword'] == $params['t']) {
-                    $password = $check['server_password'];
-                    $crossLoginSession->logged = true;
-                } else {
-                    $password = "";
-                    $params['loginPassword'] = "";
-                }
-            } else {
-                $params['loginPassword'] = "";
-            }
         } else {
             if (!$configResult['vlsm-crosslogin'] && !isset($params['userName']) && trim($params['userName']) == "") {
                 $alertContainer->alertMsg = 'Cross login not activated in recency!';
@@ -65,10 +53,10 @@ class UserTable extends AbstractTableGateway
         }
 
         if (isset($params['userName']) && trim($params['userName']) != "" && trim($params['loginPassword']) != "") {
-            /* Cross login credential check password */
-            if ((!isset($params['u']) && $params['u'] == "") && (!isset($params['t']) && $params['t'] == "")) {
-                $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
-            }
+
+
+            $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
+
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
             $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
@@ -76,7 +64,7 @@ class UserTable extends AbstractTableGateway
             $sQuery = $sql->select()->from(array('u' => 'users'))
                 ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
                 ->where(array('u.email' => $params['userName'], 'u.server_password' => $password, 'u.web_access' => 'yes'));
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $sQueryStr = $sql->buildSqlString($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
             if ($rResult) {
@@ -97,12 +85,17 @@ class UserTable extends AbstractTableGateway
                 $logincontainer->roleCode = $rResult->role_code;
                 $logincontainer->userName = ucwords($rResult->user_name);
                 $logincontainer->userEmail = ucwords($rResult->email);
-                if(!empty($ufmdata)){
+                if (!empty($ufmdata)) {
                     $logincontainer->facilityMap = implode(',', $ufmdata);
-                }else{
+                } else {
                     $logincontainer->facilityMap = null;
                 }
-                
+
+                $logincontainer->crossLoginPass = null;
+                if ($configResult['vlsm-crosslogin']) {
+                    $logincontainer->crossLoginPass = CommonService::encrypt($params['loginPassword'], base64_decode($configResult['vlsm-crosslogin-salt']));
+                }
+
                 if (trim($rResult->role_code) != "remote_order_user") {
                     $nonRemoteUserQuery = $sql->select()->from(array('r' => 'recency'))
                         ->columns(array('count' => new Expression('COUNT(*)')))
@@ -110,9 +103,9 @@ class UserTable extends AbstractTableGateway
 
                     if ($logincontainer->facilityMap != null) {
                         $nonRemoteUserQuery = $nonRemoteUserQuery->where('r.facility_id IN (' . $logincontainer->facilityMap . ')');
-                    }    
-                    $alertNonRemoteUserQueryStr = $sql->getSqlStringForSqlObject($nonRemoteUserQuery);
-                    
+                    }
+                    $alertNonRemoteUserQueryStr = $sql->buildSqlString($nonRemoteUserQuery);
+
                     $alertNonRemoteUserQueryResult = $dbAdapter->query($alertNonRemoteUserQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                     if (isset($alertNonRemoteUserQueryResult['count']) && $alertNonRemoteUserQueryResult['count'] > 0) {
                         //$logincontainer->nonRemoteUserMsg = 'There are ' . $alertNonRemoteUserQueryResult['count'] . ' pending Recency Assay Tests ';
@@ -125,7 +118,7 @@ class UserTable extends AbstractTableGateway
                     ->join(array('ufm' => 'user_facility_map'), 'r.facility_id=ufm.facility_id', array())
                     ->join(array('u' => 'users'), 'ufm.user_id=u.user_id', array())
                     ->where(array('term_outcome' => 'Assay Recent', 'vl_result IS NULL', 'u.user_id' => $logincontainer->userId));
-                $alertQueryStr = $sql->getSqlStringForSqlObject($alertQuery);
+                $alertQueryStr = $sql->buildSqlString($alertQuery);
                 $alertResult = $dbAdapter->query($alertQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                 if (isset($alertResult['count']) && $alertResult['count'] > 0) {
                     $alertContainer->alertMsg = 'There are ' . $alertResult['count'] . ' recent result(s) without Viral Load result recorded';
@@ -244,14 +237,14 @@ class UserTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         //   echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($tResult);
         $output = array(
@@ -283,7 +276,7 @@ class UserTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $sQuery =  $sql->select()->from('users')
             ->where(array('status' => 'active'));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }
@@ -333,13 +326,13 @@ class UserTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('users')
             ->where(array('user_id' => $userId));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         //facility map
         $umQuery = $sql->select()->from(array('um' => 'user_facility_map'))
-            ->join(array('f' => 'facilities'), 'f.facility_id=um.facility_id', array('facility_name','facility_type_id'))
+            ->join(array('f' => 'facilities'), 'f.facility_id=um.facility_id', array('facility_name', 'facility_type_id'))
             ->where(array('um.user_id' => $userId));
-        $umQueryStr = $sql->getSqlStringForSqlObject($umQuery);
+        $umQueryStr = $sql->buildSqlString($umQuery);
         $rResult['facilityMap'] = $dbAdapter->query($umQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }
@@ -414,7 +407,7 @@ class UserTable extends AbstractTableGateway
 
         $sQuery = $sql->select()->from(array('u' => 'users'))
             ->where(array('email' => $params['email'], 'server_password' => $password));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
 
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 

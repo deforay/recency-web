@@ -133,14 +133,14 @@ class QualityCheckTable extends AbstractTableGateway
           }
 
           $queryContainer->exportQcDataQuery = $sQuery;
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           //   echo $sQueryStr;die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
           /* Data set length after filtering */
           $sQuery->reset('limit');
           $sQuery->reset('offset');
-          $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+          $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
           $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
           $iFilteredTotal = count($aResultFilterTotal);
 
@@ -152,7 +152,7 @@ class QualityCheckTable extends AbstractTableGateway
                $iQuery = $iQuery->where('qc.testing_facility_id IN (' . $sessionLogin->facilityMap . ')');
           }
 
-          $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+          $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
           $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
           $output = array(
@@ -240,7 +240,7 @@ class QualityCheckTable extends AbstractTableGateway
           $sQuery = $sql->select()->from('quality_check_test')
                ->where(array('qc_test_id' => $qualityCheckId));
 
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+          $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           return $rResult;
      }
@@ -289,7 +289,7 @@ class QualityCheckTable extends AbstractTableGateway
 
           $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
                ->where(array('qc_test_id' => $id));
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           return $rResult;
      }
@@ -308,7 +308,7 @@ class QualityCheckTable extends AbstractTableGateway
           $userId = $params["userId"];
           $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('auth_token', 'secret_key'))
                ->where(array('user_id' => $userId));
-          $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
+          $uQueryStr = $sql->buildSqlString($uQuery);
           $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           $secretKey = $uResult['secret_key'];
           if ($userId != ''  && $params["version"] > "2.8") {
@@ -344,7 +344,7 @@ class QualityCheckTable extends AbstractTableGateway
                $uQuery = $sql->select()->from('users')
                     // ->where(array('user_id' => $params["qc"][0]['syncedBy']));
                     ->where(array('user_id' => $userId));
-               $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
+               $uQueryStr = $sql->buildSqlString($uQuery); // Get the string of the Sql, instead of the Select-instance
                $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
                if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
                     $adminEmail = $globalDb->getGlobalValue('admin_email');
@@ -417,7 +417,7 @@ class QualityCheckTable extends AbstractTableGateway
           $query = $sql->select()->from(array('qc' => 'quality_check_test'))
                ->columns(array("Total" => new Expression('COUNT(*)'),))
                ->where(array('sync_by' => $syncedBy));
-          $queryStr = $sql->getSqlStringForSqlObject($query);
+          $queryStr = $sql->buildSqlString($query);
           $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
           //\Zend\Debug\Debug::dump($result);die;
           return $result;
@@ -431,7 +431,7 @@ class QualityCheckTable extends AbstractTableGateway
                ->where(array('sync_by' => $syncedBy))
                ->order("qc.qc_test_id DESC")
                ->limit(10);
-          $queryStr = $sql->getSqlStringForSqlObject($query);
+          $queryStr = $sql->buildSqlString($query);
           $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
           return $result;
      }
@@ -458,7 +458,7 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery = $sQuery->where("(qc.qc_test_date >='" . $start_date . "' AND qc.qc_test_date<='" . $end_date . "')");
           }
 
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           //\Zend\Debug\Debug::dump($sQueryStr);die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
           foreach ($rResult as $sRow) {
@@ -527,7 +527,7 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery = $sQuery->where('testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
           }
 
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           // echo $sQueryStr;die;
           $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           $rResult['format'] = $format;
@@ -561,7 +561,7 @@ class QualityCheckTable extends AbstractTableGateway
           if ($this->sessionLogin->facilityMap != null) {
                $sQuery = $sQuery->where('testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
           }          
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           // echo $sQueryStr;die;
           $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -612,7 +612,7 @@ class QualityCheckTable extends AbstractTableGateway
           if ($this->sessionLogin->facilityMap != null) {
                $sQuery = $sQuery->where('testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
           }          
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           // echo $sQueryStr;die;
           $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -696,7 +696,7 @@ class QualityCheckTable extends AbstractTableGateway
           if ($this->sessionLogin->facilityMap != null) {
                $sQuery = $sQuery->where('(facility_id IN (' . $this->sessionLogin->facilityMap . ') OR testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
           }
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           //echo $sQueryStr;die;
           $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           $rResult['format'] = $format;
@@ -705,7 +705,7 @@ class QualityCheckTable extends AbstractTableGateway
                ->columns(array(
                     "total" => new Expression('COUNT(*)')
                ));
-          $tQueryStr = $sql->getSqlStringForSqlObject($tQuery);
+          $tQueryStr = $sql->buildSqlString($tQuery);
           $total = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           $rResult['result']['total'] = $total['total'];
           return $rResult;
@@ -770,7 +770,7 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery = $sQuery->where('(facility_id IN (' . $this->sessionLogin->facilityMap . ') OR testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
           }          
 
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           //echo $sQueryStr;die;
           $rResult['result'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           $rResult['format'] = $format;
@@ -779,7 +779,7 @@ class QualityCheckTable extends AbstractTableGateway
                ->columns(array(
                     "total" => new Expression('COUNT(*)')
                ));
-          $tQueryStr = $sql->getSqlStringForSqlObject($tQuery);
+          $tQueryStr = $sql->buildSqlString($tQuery);
           $total = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
           $rResult['result']['total'] = $total['total'];
           return $rResult;
@@ -899,14 +899,14 @@ class QualityCheckTable extends AbstractTableGateway
 
           $queryContainer = new Container('query');
           $queryContainer->exportQcDataQuery = $sQuery;
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           //echo $sQueryStr;die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
           /* Data set length after filtering */
           $sQuery->reset('limit');
           $sQuery->reset('offset');
-          $tQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $tQueryStr = $sql->buildSqlString($sQuery);
           $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
           $iFilteredTotal = count($aResultFilterTotal);
 
@@ -917,7 +917,7 @@ class QualityCheckTable extends AbstractTableGateway
           if ($this->sessionLogin->facilityMap != null) {
                $iQuery = $iQuery->where('qc.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
           }
-          $iQueryStr = $sql->getSqlStringForSqlObject($iQuery);
+          $iQueryStr = $sql->buildSqlString($iQuery);
           $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
           $output = array(
@@ -997,7 +997,7 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery = $sQuery->where('qc.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
           }          
 
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           //echo $sQueryStr;die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -1066,7 +1066,7 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery = $sQuery->where('(facility_id IN (' . $this->sessionLogin->facilityMap . ') OR testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
           }             
 
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           //echo $sQueryStr;die;
           return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
      }
@@ -1201,14 +1201,14 @@ class QualityCheckTable extends AbstractTableGateway
 
           $queryContainer = new Container('query');
           $queryContainer->exportQcDataQuery = $sQuery;
-          $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $sQueryStr = $sql->buildSqlString($sQuery);
           //echo $sQueryStr;die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
           /* Data set length after filtering */
           $sQuery->reset('limit');
           $sQuery->reset('offset');
-          $tQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+          $tQueryStr = $sql->buildSqlString($sQuery);
           $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
           $iFilteredTotal = count($aResultFilterTotal);
 
@@ -1217,7 +1217,7 @@ class QualityCheckTable extends AbstractTableGateway
                ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'))
                ->group(new Expression("tester_name,facility_name"));
 
-          $iQueryStr = $sql->getSqlStringForSqlObject($iQuery);
+          $iQueryStr = $sql->buildSqlString($iQuery);
           $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
           $output = array(

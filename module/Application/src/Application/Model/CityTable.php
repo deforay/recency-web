@@ -34,7 +34,7 @@ class CityTable extends AbstractTableGateway {
                }
 
 
-               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               $sQueryStr = $sql->buildSqlString($sQuery);
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
                if($rResult) {
@@ -54,14 +54,14 @@ class CityTable extends AbstractTableGateway {
                $sql = new Sql($dbAdapter);
                 $sQuery = $sql->select()->from(array('cd' => 'city_details'))->columns(array('city_id','district_id','city_name'))
                                     ->where(array('district_id' => $params['selectValue']));
-               $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+               $sQueryStr = $sql->buildSqlString($sQuery);
                $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
                //fetch facility data
                 $fQuery = $sql->select()->from(array('f' => 'facilities'))
                             ->where(array('district' => $params['selectValue']))
                             ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
-                $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+                $fQueryStr = $sql->buildSqlString($fQuery);
                 $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
                 return array('city'=>$rResult,'facility'=>$fResult);
@@ -75,7 +75,7 @@ class CityTable extends AbstractTableGateway {
                 $fQuery = $sql->select()->from(array('f' => 'facilities'))
                             ->where(array('city' => $params['selectValue']))
                             ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
-                $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+                $fQueryStr = $sql->buildSqlString($fQuery);
                 $fResult['facility'] = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                 return $fResult;
           }
@@ -175,14 +175,14 @@ class CityTable extends AbstractTableGateway {
             $sQuery->offset($sOffset);
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         //   echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($tResult);
         $output = array(
@@ -226,7 +226,7 @@ class CityTable extends AbstractTableGateway {
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('c' => 'city_details'))
                                 ->where(array('c.city_id' => $cityId));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }

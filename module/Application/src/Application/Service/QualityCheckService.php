@@ -114,7 +114,7 @@ class QualityCheckService {
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
 
-            $sQueryStr = $sql->getSqlStringForSqlObject($queryContainer->exportQcDataQuery);
+            $sQueryStr = $sql->buildSqlString($queryContainer->exportQcDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
             if(count($sResult) > 0) {

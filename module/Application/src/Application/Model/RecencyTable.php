@@ -206,14 +206,14 @@ class RecencyTable extends AbstractTableGateway
         }
 
         $queryContainer->exportRecencyDataQuery = $sQuery;
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         // echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -234,7 +234,7 @@ class RecencyTable extends AbstractTableGateway
             $iQuery = $iQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
         }
 
-        $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $output = array(
@@ -593,7 +593,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('recency')
             ->where(array('recency_id' => $recencyId));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }
@@ -610,7 +610,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->where(array('recency_id' => $recencyId));
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         // echo $sQueryStr; die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         // \Zend\Debug\Debug::dump($rResult); die;
@@ -838,7 +838,7 @@ class RecencyTable extends AbstractTableGateway
         $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status', 'secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
-        $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
+        $uQueryStr = $sql->buildSqlString($uQuery);
         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         $secretKey = $uResult['secret_key'];
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
@@ -861,7 +861,7 @@ class RecencyTable extends AbstractTableGateway
                     )
                 );
             }
-            $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+            $recencyQueryStr = $sql->buildSqlString($rececnyQuery);
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
@@ -889,7 +889,7 @@ class RecencyTable extends AbstractTableGateway
         $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status', 'secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
-        $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
+        $uQueryStr = $sql->buildSqlString($uQuery);
         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         $secretKey = $uResult['secret_key'];
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
@@ -906,7 +906,7 @@ class RecencyTable extends AbstractTableGateway
             if (isset($params['start']) && isset($params['end'])) {
                 $rececnyQuery = $rececnyQuery->where(array("r.hiv_recency_test_date >='" . date("Y-m-d", strtotime($params['start'])) . "'", "r.hiv_recency_test_date <='" . date("Y-m-d", strtotime($params['end'])) . "'"));
             }
-            $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+            $recencyQueryStr = $sql->buildSqlString($rececnyQuery);
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
@@ -936,7 +936,7 @@ class RecencyTable extends AbstractTableGateway
         $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status', 'secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
-        $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
+        $uQueryStr = $sql->buildSqlString($uQuery);
         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         $secretKey = $uResult['secret_key'];
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
@@ -950,7 +950,7 @@ class RecencyTable extends AbstractTableGateway
             if ($uResult['role_code'] != 'admin') {
                 $rececnyQuery = $rececnyQuery->where(array('u.auth_token' => $params['authToken']));
             }
-            $recencyQueryStr = $sql->getSqlStringForSqlObject($rececnyQuery);
+            $recencyQueryStr = $sql->buildSqlString($rececnyQuery);
             $recencyResult = $dbAdapter->query($recencyQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($recencyResult) > 0) {
                 $response['status'] = 'success';
@@ -987,7 +987,7 @@ class RecencyTable extends AbstractTableGateway
 
             $uQuery = $sql->select()->from('users')
                 ->where(array('user_id' => $userId));
-            $uQueryStr = $sql->getSqlStringForSqlObject($uQuery); // Get the string of the Sql, instead of the Select-instance
+            $uQueryStr = $sql->buildSqlString($uQuery); // Get the string of the Sql, instead of the Select-instance
             $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
             if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
                 $adminEmail = $globalDb->getGlobalValue('admin_email');
@@ -1259,7 +1259,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('dt' => 'district_details'), 'dt.district_id = f.district', array('district_name'), 'left')
             ->join(array('cd' => 'city_details'), 'cd.city_id = f.city', array('city_name'), 'left')
             ->where(array('recency_id' => $id));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }
@@ -1270,7 +1270,7 @@ class RecencyTable extends AbstractTableGateway
         $query = $sql->select()->from(array('r' => 'recency'))
             ->columns(array("Total" => new Expression('COUNT(*)')))
             ->where(array('sync_by' => $syncedBy));
-        $queryStr = $sql->getSqlStringForSqlObject($query);
+        $queryStr = $sql->buildSqlString($query);
         $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $result;
     }
@@ -1285,7 +1285,7 @@ class RecencyTable extends AbstractTableGateway
             ->where('(tester_name like "%' . $strSearch . '%" OR tester_name like "%' . $strSearch . '%")')
             ->limit('100');
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         // \Zend\Debug\Debug::dump($result);die;
@@ -1340,7 +1340,7 @@ class RecencyTable extends AbstractTableGateway
         if (isset($params['onloadData']) && $params['onloadData'] == 'yes') {
             $sQuery = $sQuery->where(array('r.vl_result is null OR r.vl_result=""'));
         }
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
 
         $rResult['withTermOutcome'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -1361,7 +1361,7 @@ class RecencyTable extends AbstractTableGateway
         if (isset($params['facility']) && $params['facility'] != '') {
             $sQueryTerm = $sQueryTerm->where(array('r.vl_test_date' => $params['vlTestDate']));
         }
-        $sQueryStrTerm = $sql->getSqlStringForSqlObject($sQueryTerm);
+        $sQueryStrTerm = $sql->buildSqlString($sQueryTerm);
         // echo $sQueryStrTerm;die;
         $rResult['withOutTermOutcome'] = $dbAdapter->query($sQueryStrTerm, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -1517,14 +1517,14 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
         $queryContainer->exportRecentResultDataQuery = $sQuery;
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -1534,7 +1534,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
 
-        $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $output = array(
@@ -1682,7 +1682,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
         $queryContainer->exportLongtermDataQuery = $sQuery;
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
 
         // echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
@@ -1690,7 +1690,7 @@ class RecencyTable extends AbstractTableGateway
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -1700,7 +1700,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
 
-        $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $output = array(
@@ -1742,7 +1742,7 @@ class RecencyTable extends AbstractTableGateway
         $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status', 'secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
             ->where(array('auth_token' => $params['authToken']));
-        $uQueryStr = $sql->getSqlStringForSqlObject($uQuery);
+        $uQueryStr = $sql->buildSqlString($uQuery);
         $uResult = $dbAdapter->query($uQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         $secretKey = $uResult['secret_key'];
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
@@ -1762,7 +1762,7 @@ class RecencyTable extends AbstractTableGateway
             if ($uResult['role_code'] != 'admin') {
                 $sQuery = $sQuery->where(array('u.auth_token' => $params['authToken']));
             }
-            $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+            $sQueryStr = $sql->buildSqlString($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($rResult) > 0) {
                 $response['status'] = 'success';
@@ -1888,7 +1888,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
         $queryContainer->exportTatQuery = $sQuery;
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
 
         // echo $sQueryStr;die;data
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
@@ -1896,7 +1896,7 @@ class RecencyTable extends AbstractTableGateway
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -1910,7 +1910,7 @@ class RecencyTable extends AbstractTableGateway
             ->where(array('vl_result_entry_date not like "" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_test_date not like "" AND vl_test_datenot like ""'))
             ->group('recency_id');
 
-        $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $output = array(
@@ -1956,7 +1956,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array('r.facility_id' => $params['facilityId']));
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }
@@ -1970,7 +1970,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
             ->where("recency_id IN(" . $params['selectedSampleId'] . ")");
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }
@@ -2009,7 +2009,7 @@ class RecencyTable extends AbstractTableGateway
             ->columns(array('recency_id', 'control_line', 'positive_verification_line', 'long_term_verification_line'))
             ->where(array('control_line!="" AND positive_verification_line!="" AND long_term_verification_line!="" AND (term_outcome="" OR term_outcome IS NULL)'));
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         //update assay outcome
         if (count($rResult) > 0) {
@@ -2023,7 +2023,7 @@ class RecencyTable extends AbstractTableGateway
             ->columns(array('recency_id', 'term_outcome', 'vl_result'))
             ->where(array('vl_result!="" AND term_outcome="Assay Recent" AND (final_outcome="" OR final_outcome IS NULL)'));
 
-        $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+        $fQueryStr = $sql->buildSqlString($fQuery);
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         if (count($fResult) > 0) {
@@ -2102,7 +2102,7 @@ class RecencyTable extends AbstractTableGateway
             ->columns(array('recency_id', 'term_outcome', 'vl_result', 'sample_id'))
             ->where(array('(vl_result="" OR vl_result IS NULL)  AND term_outcome="Assay Recent"'));
 
-        $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+        $fQueryStr = $sql->buildSqlString($fQuery);
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         if (count($fResult) > 0) {
@@ -2111,7 +2111,7 @@ class RecencyTable extends AbstractTableGateway
                     ->columns(array('result', 'sample_code'))
                     ->where(array('sample_code' => $data['sample_id']));
 
-                $fQueryStr = $sql1->getSqlStringForSqlObject($fQuery);
+                $fQueryStr = $sql1->buildSqlString($fQuery);
                 $fResult = $dbTwoAdapter->query($fQueryStr, $dbTwoAdapter::QUERY_MODE_EXECUTE)->current();
 
                 if (isset($fResult['result']) && $fResult['result'] != '') {
@@ -2201,7 +2201,7 @@ class RecencyTable extends AbstractTableGateway
             $rQuery = $rQuery->where(array('r.facility_id' => $params['facilityName']));
         }
         $queryContainer->exportWeeklyDataQuery = $rQuery;
-        $rQueryStr = $sql->getSqlStringForSqlObject($rQuery);
+        $rQueryStr = $sql->buildSqlString($rQuery);
         $fResult = $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $fResult;
     }
@@ -2399,7 +2399,7 @@ class RecencyTable extends AbstractTableGateway
         }
 
         $queryContainer->exportRecencyDataResultDataQuery = $sQuery;
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //echo $sQueryStr;die;
 
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
@@ -2408,7 +2408,7 @@ class RecencyTable extends AbstractTableGateway
         $sQuery->reset('limit');
         $sQuery->reset('offset');
 
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
 
         $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
@@ -2426,7 +2426,7 @@ class RecencyTable extends AbstractTableGateway
         if ($this->sessionLogin->facilityMap != null) {
             $iQuery = $iQuery->where('r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
         }
-        $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $output = array(
@@ -2621,7 +2621,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
@@ -2721,7 +2721,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
@@ -2972,7 +2972,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->order("totalSamples DESC");
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
@@ -3051,7 +3051,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
@@ -3120,7 +3120,7 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['finalOutcome'] != '') {
             $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
         }
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
@@ -3184,7 +3184,7 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['finalOutcome'] != '') {
             $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
         }
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         foreach ($rResult as $sRow) {
@@ -3277,7 +3277,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
@@ -3381,7 +3381,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //echo($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
@@ -3482,7 +3482,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         // echo($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -3571,7 +3571,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -3792,7 +3792,7 @@ class RecencyTable extends AbstractTableGateway
         }
 
         $queryContainer->exportDistrictwiseRecencyResult = $sQuery;
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //echo $sQueryStr;die;
 
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
@@ -3800,7 +3800,7 @@ class RecencyTable extends AbstractTableGateway
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -3815,7 +3815,7 @@ class RecencyTable extends AbstractTableGateway
         if ($this->sessionLogin->facilityMap != null) {
             $iQuery = $iQuery->where('r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
         }
-        $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $output = array(
@@ -4009,7 +4009,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //\Zend\Debug\Debug::dump($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -4116,7 +4116,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $j = 0;
         $result = array();
@@ -4213,7 +4213,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -4311,7 +4311,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -4416,7 +4416,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         //echo($sQueryStr);die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -4456,7 +4456,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->where(array('recency_id' => $recencyId));
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }
@@ -4473,7 +4473,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->where(array('recency_id' => $recencyId));
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }
@@ -4486,7 +4486,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $fQuery = $sql->select()->from(array('r' => 'recency'))
             ->where(array('(recency_id="' . $recenyId . '" )'));
-        $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+        $fQueryStr = $sql->buildSqlString($fQuery);
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         if (!isset($fResult['result_printed_on']) && $fResult['result_printed_on'] == '') {
             $results =  $this->update(array('result_printed_on' => date("Y-m-d H:i:s")), array('recency_id' => $recenyId));
@@ -4503,7 +4503,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $fQuery = $sql->select()->from(array('r' => 'recency'))
             ->where("recency_id IN(" . $params['selectedSampleId'] . ")");
-        $fQueryStr = $sql->getSqlStringForSqlObject($fQuery);
+        $fQueryStr = $sql->buildSqlString($fQuery);
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         foreach ($fResult as $res) {
             if (!isset($res['result_printed_on']) && $res['result_printed_on'] == '') {
@@ -4562,7 +4562,7 @@ class RecencyTable extends AbstractTableGateway
         if ($params['facilityId'] != '') {
             $sQuery->where(array('r.facility_id' => base64_decode($params['facilityId'])));
         }
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         // die($sQueryStr);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
@@ -4574,7 +4574,7 @@ class RecencyTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array(
             'recency_id', 'facility_id', 'sample_id', 'patient_id', 'sample_collection_date', 'vl_result', 'received_specimen_type', 'dob', 'age', 'gender'
         ))->where(array('sample_id' => $sId));
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
@@ -4595,7 +4595,7 @@ class RecencyTable extends AbstractTableGateway
         if (isset($kitNo) && $kitNo != "") {
             $sQuery = $sQuery->where(array('kit_lot_no' => $kitNo));
         }
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
@@ -4719,7 +4719,7 @@ class RecencyTable extends AbstractTableGateway
         if (isset($params['testingModality']) && $params['testingModality'] != '') {
             $sQuery = $sQuery->where(array("r.testing_facility_type" => $params['testingModality']));
         }
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
@@ -4877,14 +4877,14 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery);
+        $sQueryStr = $sql->buildSqlString($sQuery);
         // die($sQueryStr);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -4916,7 +4916,7 @@ class RecencyTable extends AbstractTableGateway
                 $iQuery = $iQuery->where(array('r.city' => $parameters['locationThree']));
             }
         }
-        $iQueryStr = $sql->getSqlStringForSqlObject($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
 
@@ -4958,7 +4958,7 @@ class RecencyTable extends AbstractTableGateway
                 "sample_prefix_id" => new Expression("MAX(sample_prefix_id)"), "sample_id_year_prefix", "sample_id_string_prefix"
             ))
             ->where(array('sample_id_year_prefix' => $date));;
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         $sampleIdYearPrefix = $rResult['sample_id_year_prefix'];
         $sampleIdStringPrefix = $rResult['sample_id_string_prefix'];
