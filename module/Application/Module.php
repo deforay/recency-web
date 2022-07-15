@@ -344,7 +344,8 @@ class Module
                     $manifestsService = $sm->getServiceLocator()->get('ManifestsService');
                     $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    return new \Application\Controller\ManifestsController($manifestsService,$recencyService, $facilitiesService, $globalConfigService);
+                    $commonService = $sm->getServiceLocator()->get('CommonService');
+                    return new \Application\Controller\ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService);
                 },
                 'Application\Controller\Index' => function ($sm) {
                     $recencyService = $sm->getServiceLocator()->get('RecencyService');

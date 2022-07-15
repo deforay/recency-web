@@ -14,13 +14,15 @@ class ManifestsController extends AbstractActionController
     private $facilitiesService = null;
     private $recencyService = null;
     private $globalConfigService = null;
+    private $commonService = null;
 
-    public function __construct($manifestsService, $recencyService, $facilitiesService, $globalConfigService)
+    public function __construct($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService)
     {
         $this->manifestsService = $manifestsService;
         $this->facilitiesService = $facilitiesService;
         $this->recencyService = $recencyService;
         $this->globalConfigService = $globalConfigService;
+        $this->commonService = $commonService;
     }
 
     public function indexAction()
