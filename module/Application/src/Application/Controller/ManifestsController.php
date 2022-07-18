@@ -50,7 +50,7 @@ class ManifestsController extends AbstractActionController
 
             $testingHubs = $this->facilitiesService->fetchTestingHubs();
 
-            $manifestCode = strtoupper('R' . date('ymd') .  $this->commonService->generateRandomString(6));
+            $manifestCode = strtoupper('R' . date('ymd') .  $this->commonService->generateRandomString(8));
             //$sampleList = $this->recencyService->getSamplesWithoutManifestCode();
 
             return new ViewModel(array(

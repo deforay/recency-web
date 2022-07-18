@@ -413,7 +413,7 @@ class UserTable extends AbstractTableGateway
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
         if (isset($rResult['user_id']) && $rResult['user_id'] != '' && $rResult['status'] == 'active') {
-            $auth = $common->generateRandomString(15);
+            $auth = $common->generateRandomString(16);
             if ($rResult->secret_key != '') {
                 $secretKey = $rResult->secret_key;
             } else {

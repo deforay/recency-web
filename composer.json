@@ -30,7 +30,8 @@
         "laminas/laminas-serializer": "^2.10",
         "phpoffice/phpspreadsheet": "^1.18",
         "halaxa/json-machine": "^0.7.0",
-        "guzzlehttp/guzzle": "^7.4"
+        "guzzlehttp/guzzle": "^7.4",
+        "tecnickcom/tcpdf": "^6.4"
     },
     "autoload": {
         "psr-4": {
