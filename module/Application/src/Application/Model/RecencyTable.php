@@ -63,7 +63,7 @@ class RecencyTable extends AbstractTableGateway
         $whereCondition = "(manifest_id='$manifestId')";
 
         if ($sessionLogin->facilityMap != null) {
-            $whereCondition .= ' AND  r.facility_id IN (' . $sessionLogin->facilityMap . ') ';
+            $whereCondition .= ' AND  facility_id IN (' . $sessionLogin->facilityMap . ') ';
         }
 
         return $this->select($whereCondition)->toArray();
@@ -151,7 +151,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $roleId = $sessionLogin->roleId;
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))
+        $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
             ->join(array('tf' => 'testing_facility_type'), 'tf.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left')
@@ -210,36 +210,39 @@ class RecencyTable extends AbstractTableGateway
         // echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        /* Data set length after filtering */
-        $sQuery->reset('limit');
-        $sQuery->reset('offset');
-        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-        $iFilteredTotal = count($aResultFilterTotal);
+        // /* Data set length after filtering */
+        // $sQuery->reset('limit');
+        // $sQuery->reset('offset');
+        // $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
+        // $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+        // $iFilteredTotal = count($aResultFilterTotal);
 
-        /* Total data set length */
-        $iQuery = $sql->select()->from(array('r' => 'recency'))
-            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('facility_name'), 'left')
-            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left');
+        // /* Total data set length */
+        // $iQuery = $sql->select()->from(array('r' => 'recency'))
+        //     ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('facility_name'), 'left')
+        //     ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left');
 
-        if ($roleCode == 'remote_order_user') {
-            //$iQuery = $iQuery->where('r.added_by=' . $sessionLogin->userId);
-        }
+        // if ($roleCode == 'remote_order_user') {
+        //     //$iQuery = $iQuery->where('r.added_by=' . $sessionLogin->userId);
+        // }
 
-        if ($parameters['RTest'] == 'pending') {
-            $iQuery = $iQuery->where(array('r.term_outcome = ""'));
-        }
+        // if ($parameters['RTest'] == 'pending') {
+        //     $iQuery = $iQuery->where(array('r.term_outcome = ""'));
+        // }
 
-        if ($sessionLogin->facilityMap != null) {
-            $iQuery = $iQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
-        }
+        // if ($sessionLogin->facilityMap != null) {
+        //     $iQuery = $iQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
+        // }
 
-        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
-        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        //$iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
+        //$iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
-            "iTotalRecords" => count($iResult),
+            "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
