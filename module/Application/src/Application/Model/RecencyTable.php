@@ -210,34 +210,7 @@ class RecencyTable extends AbstractTableGateway
         // echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        // /* Data set length after filtering */
-        // $sQuery->reset('limit');
-        // $sQuery->reset('offset');
-        // $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        // $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-        // $iFilteredTotal = count($aResultFilterTotal);
-
-        // /* Total data set length */
-        // $iQuery = $sql->select()->from(array('r' => 'recency'))
-        //     ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('facility_name'), 'left')
-        //     ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left');
-
-        // if ($roleCode == 'remote_order_user') {
-        //     //$iQuery = $iQuery->where('r.added_by=' . $sessionLogin->userId);
-        // }
-
-        // if ($parameters['RTest'] == 'pending') {
-        //     $iQuery = $iQuery->where(array('r.term_outcome = ""'));
-        // }
-
-        // if ($sessionLogin->facilityMap != null) {
-        //     $iQuery = $iQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
-        // }
-
-        //$iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
-        //$iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
-        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->current();
         $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
@@ -1487,7 +1460,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
+        $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
@@ -1524,25 +1497,12 @@ class RecencyTable extends AbstractTableGateway
         //echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        /* Data set length after filtering */
-        $sQuery->reset('limit');
-        $sQuery->reset('offset');
-        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-        $iFilteredTotal = count($aResultFilterTotal);
-
-        /* Total data set length */
-        $iQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
-            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
-
-        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
-        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
-            "iTotalRecords" => count($iResult),
+            "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
@@ -1652,7 +1612,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
+        $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
@@ -1690,25 +1650,12 @@ class RecencyTable extends AbstractTableGateway
         // echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        /* Data set length after filtering */
-        $sQuery->reset('limit');
-        $sQuery->reset('offset');
-        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-        $iFilteredTotal = count($aResultFilterTotal);
-
-        /* Total data set length */
-        $iQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
-            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
-
-        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
-        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
-            "iTotalRecords" => count($iResult),
+            "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
@@ -1863,6 +1810,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
 
         $sQuery = $sql->select()->from(array('r' => 'recency'))
+            ->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))
             ->columns(array(
                 'sample_id', 'final_outcome', "hiv_recency_test_date", 'vl_test_date', 'vl_result_entry_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type',
                 "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_test_date))) AS DECIMAL (10))"),
@@ -1896,29 +1844,12 @@ class RecencyTable extends AbstractTableGateway
         // echo $sQueryStr;die;data
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        /* Data set length after filtering */
-        $sQuery->reset('limit');
-        $sQuery->reset('offset');
-        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-        $iFilteredTotal = count($aResultFilterTotal);
-
-        /* Total data set length */
-        $iQuery = $sql->select()->from(array('r' => 'recency'))
-            ->columns(array(
-                'sample_id', 'final_outcome', "hiv_recency_test_date", 'vl_test_date', 'vl_result_entry_date',
-                "diffInDays" => new Expression("CAST(ABS(AVG(TIMESTAMPDIFF(DAY,vl_result_entry_date,hiv_recency_test_date))) AS DECIMAL (10))"),
-            ))
-            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array('vl_result_entry_date not like "" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_test_date not like "" AND vl_test_datenot like ""'))
-            ->group('recency_id');
-
-        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
-        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
-            "iTotalRecords" => count($iResult),
+            "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
@@ -2288,6 +2219,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $totalSamples = array();
         $sQuery = $sql->select()->from(array('r' => 'recency'))
+            ->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))
             ->columns(
                 array(
                     "totalSamples" => new Expression('COUNT(*)'),
@@ -2376,7 +2308,7 @@ class RecencyTable extends AbstractTableGateway
             if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
                 $end_date = $general->dbDateFormat(trim($s_c_date[1]));
             }
-        
+
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
@@ -2407,34 +2339,11 @@ class RecencyTable extends AbstractTableGateway
 
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        /* Data set length after filtering */
-        $sQuery->reset('limit');
-        $sQuery->reset('offset');
-
-        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-
-        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-        $iFilteredTotal = count($aResultFilterTotal);
-
-        /* Total data set length */
-        $iQuery = $sql->select()->from(array('r' => 'recency'))
-
-            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
-            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
-            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
-            ->group('r.facility_id');
-
-        if ($this->sessionLogin->facilityMap != null) {
-            $iQuery = $iQuery->where('r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
-        }
-        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
-        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
+        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
-            "iTotalRecords" => count($iResult),
+            "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
             "footerData" => array()
@@ -2509,21 +2418,21 @@ class RecencyTable extends AbstractTableGateway
             $output['footerData'][18] = "";
         }
 
-        
+
         if ($output['footerData'][9] > 0) {
-            $output['footerData'][12] = round(($output['footerData'][11] / $output['footerData'][9]) * 100 , 2) . "%";
+            $output['footerData'][12] = round(($output['footerData'][11] / $output['footerData'][9]) * 100, 2) . "%";
         }
-        
+
         if ($output['footerData'][9] > 0) {
-            $output['footerData'][14] = round(($output['footerData'][13] / $output['footerData'][9]) * 100 , 2) . "%";
+            $output['footerData'][14] = round(($output['footerData'][13] / $output['footerData'][9]) * 100, 2) . "%";
         }
-        
+
         if ($output['footerData'][9] > 0) {
-            $output['footerData'][16] = round(($output['footerData'][15] / $output['footerData'][9]) * 100 , 2) . "%";
+            $output['footerData'][16] = round(($output['footerData'][15] / $output['footerData'][9]) * 100, 2) . "%";
         }
-        
-        if (($output['footerData'][3]-$output['footerData'][5]) > 0) {
-            $output['footerData'][18] = round(($output['footerData'][17] / ($output['footerData'][3]-$output['footerData'][5])) * 100 , 2) . "%";
+
+        if (($output['footerData'][3] - $output['footerData'][5]) > 0) {
+            $output['footerData'][18] = round(($output['footerData'][17] / ($output['footerData'][3] - $output['footerData'][5])) * 100, 2) . "%";
         }
 
         return $output;
@@ -2697,7 +2606,7 @@ class RecencyTable extends AbstractTableGateway
             if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
                 $end_date = $general->dbDateFormat(trim($s_c_date[1]));
             }
-        
+
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
         if ($parameters['tOutcome'] != '') {
@@ -3679,6 +3588,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $totalSamples = array();
         $sQuery = $sql->select()->from(array('r' => 'recency'))
+            ->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))
             ->columns(
                 array(
                     "totalSamples" => new Expression('COUNT(*)'),
@@ -3730,11 +3640,11 @@ class RecencyTable extends AbstractTableGateway
                     "printedCount" => new Expression("SUM(CASE
                                                                  WHEN ((r.result_printed_on not like '' and r.result_printed_on is not null)) THEN 1
                                                                  ELSE 0
-                                                                 END)"),                                                                 
+                                                                 END)"),
 
                 )
             )
-            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'),'left')
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
             //->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('p' => 'province_details'), 'p.province_id = f.province', array('province_name'), 'left')
             ->join(array('d' => 'district_details'), 'd.district_id = f.district', array('district_name'), 'left')
@@ -3800,30 +3710,11 @@ class RecencyTable extends AbstractTableGateway
 
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        /* Data set length after filtering */
-        $sQuery->reset('limit');
-        $sQuery->reset('offset');
-        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-        $iFilteredTotal = count($aResultFilterTotal);
-
-        /* Total data set length */
-        $iQuery = $sql->select()->from(array('r' => 'recency'))
-            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-            //->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
-            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
-            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
-            ->group('r.location_two');
-        if ($this->sessionLogin->facilityMap != null) {
-            $iQuery = $iQuery->where('r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
-        }
-        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
-        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
+        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
-            "iTotalRecords" => count($iResult),
+            "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
             "footerData" => array()
@@ -3891,26 +3782,25 @@ class RecencyTable extends AbstractTableGateway
             $output['footerData'][14] += $aRow['samplesFinalInconclusive'];
             $output['footerData'][15] = "";
             $output['footerData'][16] += $aRow['samplesInvalid'];
-            $output['footerData'][17] = "";            
-
+            $output['footerData'][17] = "";
         }
 
-        
+
         if ($output['footerData'][8] > 0) {
-            $output['footerData'][11] = round(($output['footerData'][10] / $output['footerData'][8]) * 100 , 2) . "%";
+            $output['footerData'][11] = round(($output['footerData'][10] / $output['footerData'][8]) * 100, 2) . "%";
         }
-        
+
         if ($output['footerData'][8] > 0) {
-            $output['footerData'][13] = round(($output['footerData'][12] / $output['footerData'][8]) * 100 , 2) . "%";
+            $output['footerData'][13] = round(($output['footerData'][12] / $output['footerData'][8]) * 100, 2) . "%";
         }
-        
+
         if ($output['footerData'][8] > 0) {
-            $output['footerData'][15] = round(($output['footerData'][14] / $output['footerData'][8]) * 100 , 2) . "%";
+            $output['footerData'][15] = round(($output['footerData'][14] / $output['footerData'][8]) * 100, 2) . "%";
         }
-        
-        if (($output['footerData'][1]-$output['footerData'][4]) > 0) {
-            $output['footerData'][17] = round(($output['footerData'][16] / ($output['footerData'][1]-$output['footerData'][4])) * 100 , 2) . "%";
-        }        
+
+        if (($output['footerData'][1] - $output['footerData'][4]) > 0) {
+            $output['footerData'][17] = round(($output['footerData'][16] / ($output['footerData'][1] - $output['footerData'][4])) * 100, 2) . "%";
+        }
         return $output;
     }
 
@@ -4840,7 +4730,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('result_printed_on', 'recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
+        $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('result_printed_on', 'recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
@@ -4884,48 +4774,12 @@ class RecencyTable extends AbstractTableGateway
         // die($sQueryStr);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        /* Data set length after filtering */
-        $sQuery->reset('limit');
-        $sQuery->reset('offset');
-        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
-        $iFilteredTotal = count($aResultFilterTotal);
-
-        /* Total data set length */
-        $iQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
-            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
-            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
-        if ($parameters['fName'] != '') {
-            $iQuery->where(array('r.facility_id' => $parameters['fName']));
-        }
-        if ($sessionLogin->facilityMap != null) {
-            $iQuery = $iQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
-        }
-        if ($parameters['testingFacility'] != '') {
-            $iQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
-        }
-        if ($parameters['viewFlag'] == 'printed') {
-            $iQuery->where('r.result_printed_on IS NOT NULL');
-        } else if ($parameters['viewFlag'] == 'not-printed') {
-            $iQuery->where('r.result_printed_on IS NULL');
-        }
-        if ($parameters['locationOne'] != '') {
-            $iQuery = $iQuery->where(array('r.province' => $parameters['locationOne']));
-            if ($parameters['locationTwo'] != '') {
-                $iQuery = $iQuery->where(array('r.district' => $parameters['locationTwo']));
-            }
-            if ($parameters['locationThree'] != '') {
-                $iQuery = $iQuery->where(array('r.city' => $parameters['locationThree']));
-            }
-        }
-        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
-        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
+        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
-            "iTotalRecords" => count($iResult),
+            "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
