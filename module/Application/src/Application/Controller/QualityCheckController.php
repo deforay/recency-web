@@ -45,7 +45,7 @@ class QualityCheckController extends AbstractActionController
                $params = $request->getPost();
                
                $this->qualityCheckService->addQcTestDetails($params);
-               return $this->_redirect()->toRoute('quality-check');
+               return $this->redirect()->toRoute('quality-check');
           } else {
                
                

@@ -47,7 +47,7 @@ class DistrictController extends AbstractActionController
             
             $result = $this->districtService->addDistrictDetails($params);
             // \Zend\Debug\Debug::dump($params);die;
-            return $this->_redirect()->toRoute('district');
+            return $this->redirect()->toRoute('district');
         } else {
             
             $provinceResult = $this->provinceService->getProvince();

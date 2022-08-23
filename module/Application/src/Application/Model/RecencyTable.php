@@ -486,7 +486,7 @@ class RecencyTable extends AbstractTableGateway
                 'long_term_verification_line'       => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine'] != '') ? $params['longTermVerificationLine'] : null,
                 'term_outcome'                      => (isset($params['outcomeData']) && $params['outcomeData'] != "") ? $params['outcomeData'] : $params['outcomeData'],
                 'final_outcome'                     => $params['vlfinaloutcomeResult'],
-                'age_not_reported'                  => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : no,
+                'age_not_reported'                  => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : 'no',
                 'gender'                            => $params['gender'],
                 'age'                               => ($params['age'] != '') ? $params['age'] : null,
                 'marital_status'                    => $params['maritalStatus'],
@@ -2339,11 +2339,31 @@ class RecencyTable extends AbstractTableGateway
 
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
+        /* Data set length after filtering */
+        $sQuery->reset('limit');
+        $sQuery->reset('offset');
+        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+        $iFilteredTotal = count($aResultFilterTotal);
+
+        /* Total data set length */
+        $iQuery = $sql->select()->from(array('r' => 'recency'))
+
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+            ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
+            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
+            ->group('r.facility_id');
+
+        if ($this->sessionLogin->facilityMap != null) {
+            $iQuery = $iQuery->where('r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+        }
+        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
-            "iTotalRecords" => $iTotal,
+            "iTotalRecords" => count($iResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
             "footerData" => array()
@@ -3710,11 +3730,30 @@ class RecencyTable extends AbstractTableGateway
 
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
-        $aResultFilterTotal = $dbAdapter->query("SELECT FOUND_ROWS() as `totalCount`", $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
+        /* Data set length after filtering */
+        $sQuery->reset('limit');
+        $sQuery->reset('offset');
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
+        $iFilteredTotal = count($aResultFilterTotal);
+
+        /* Total data set length */
+        $iQuery = $sql->select()->from(array('r' => 'recency'))
+            ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
+            //->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
+            ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
+            ->group('r.location_two');
+        if ($this->sessionLogin->facilityMap != null) {
+            $iQuery = $iQuery->where('r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+        }
+        $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
+        $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
         $output = array(
             "sEcho" => intval($parameters['sEcho']),
-            "iTotalRecords" => $iTotal,
+            "iTotalRecords" => count($iResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
             "footerData" => array()

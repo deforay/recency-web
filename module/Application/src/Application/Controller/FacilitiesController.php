@@ -24,7 +24,7 @@ class FacilitiesController extends AbstractActionController
     {
         $session = new Container('credo');
         if($session->roleCode == 'user'){
-            return $this->_redirect()->toRoute('recency');
+            return $this->redirect()->toRoute('recency');
         }else{
 
             $request = $this->getRequest();
@@ -41,7 +41,7 @@ class FacilitiesController extends AbstractActionController
     {
         $session = new Container('credo');
         if($session->roleCode == 'user'){
-            return $this->_redirect()->toRoute('recency');
+            return $this->redirect()->toRoute('recency');
         }else{
 
             $request = $this->getRequest();
@@ -50,7 +50,7 @@ class FacilitiesController extends AbstractActionController
                 
                 $result = $this->facilitiesService->addFacilitiesDetails($params);
                 // \Zend\Debug\Debug::dump($params);die;
-                return $this->_redirect()->toRoute('facilities');
+                return $this->redirect()->toRoute('facilities');
             }else{
                 
                 $userResult = $this->userService->getAllUserDetails();
@@ -68,7 +68,7 @@ class FacilitiesController extends AbstractActionController
     {
         $session = new Container('credo');
         if($session->roleCode == 'user'){
-            return $this->_redirect()->toRoute('recency');
+            return $this->redirect()->toRoute('recency');
         }else{
 
             

@@ -1,58 +1,59 @@
 <?php
+
 namespace Application\Service;
 
 use Exception;
 use Laminas\Mail;
 use Laminas\Db\Sql\Sql;
 use Laminas\Session\Container;
-use PHPExcel;
 
-class QualityCheckService {
+class QualityCheckService
+{
 
-     public $sm = null;
+    public $sm = null;
 
-     public function __construct($sm = null) {
-          $this->sm = $sm;
-     }
+    public function __construct($sm = null)
+    {
+        $this->sm = $sm;
+    }
 
-     public function getServiceManager() {
-          return $this->sm;
-     }
+    public function getServiceManager()
+    {
+        return $this->sm;
+    }
 
-     public function getQualityCheckDetails($params)
-     {
-          $qcTestDb = $this->sm->get('QualityCheckTable');
-          return $qcTestDb->fetchQualityCheckDetails($params);
-     }
+    public function getQualityCheckDetails($params)
+    {
+        $qcTestDb = $this->sm->get('QualityCheckTable');
+        return $qcTestDb->fetchQualityCheckDetails($params);
+    }
 
-     public function addQcTestDetails($params)
-     {
-          $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
-          $adapter->beginTransaction();
-          try {
-               $qcTestDb = $this->sm->get('QualityCheckTable');
-               $result = $qcTestDb->addQualityCheckTestResultDetails($params);
-               if($result > 0){
-                    $adapter->commit();
-                    $alertContainer = new Container('alert');
-                    $alertContainer->alertMsg = 'Quality Check test details added successfully';
-                     // Add Event log
-                    $subject                = $result;
-                    $eventType              = 'Quality Check details-add';
-                    $action                 = 'Added  Quality Check details for sample id '.ucwords($params['qcSampleId']);
-                    $resourceName           = 'Quality Check Details ';
-                    $eventLogDb             = $this->sm->get('EventLogTable');
-                    $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
-                    // End Event log
-               }
-
-          }
-          catch (Exception $exc) {
-               $adapter->rollBack();
-               error_log($exc->getMessage());
-               error_log($exc->getTraceAsString());
-          }
-     }
+    public function addQcTestDetails($params)
+    {
+        $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
+        $adapter->beginTransaction();
+        try {
+            $qcTestDb = $this->sm->get('QualityCheckTable');
+            $result = $qcTestDb->addQualityCheckTestResultDetails($params);
+            if ($result > 0) {
+                $adapter->commit();
+                $alertContainer = new Container('alert');
+                $alertContainer->alertMsg = 'Quality Check test details added successfully';
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Quality Check details-add';
+                $action                 = 'Added  Quality Check details for sample id ' . ucwords($params['qcSampleId']);
+                $resourceName           = 'Quality Check Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
+            }
+        } catch (Exception $exc) {
+            $adapter->rollBack();
+            error_log($exc->getMessage());
+            error_log($exc->getTraceAsString());
+        }
+    }
 
     public function getQualityCheckDetailsById($qualityCheckId)
     {
@@ -60,28 +61,28 @@ class QualityCheckService {
         return $qcTestDb->fetchQualityCheckTestDetailsById($qualityCheckId);
     }
 
-    public function updateQualityCheckDetails($params){
+    public function updateQualityCheckDetails($params)
+    {
         $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter')->getDriver()->getConnection();
         $adapter->beginTransaction();
         try {
             $qcTestDb = $this->sm->get('QualityCheckTable');
             $result = $qcTestDb->updateQualityCheckTestDetails($params);
-            if($result > 0){
+            if ($result > 0) {
                 $adapter->commit();
 
                 $alertContainer = new Container('alert');
                 $alertContainer->alertMsg = 'Quality Check test details updated successfully';
-                 // Add Event log
-                 $subject                = $result;
-                 $eventType              = 'Quality Check details-edit';
-                 $action                 = 'Edited  Quality Check details for sample id '.ucwords($params['qcSampleId']);
-                 $resourceName           = 'Quality Check Details ';
-                 $eventLogDb             = $this->sm->get('EventLogTable');
-                 $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
-                 // End Event log
+                // Add Event log
+                $subject                = $result;
+                $eventType              = 'Quality Check details-edit';
+                $action                 = 'Edited  Quality Check details for sample id ' . ucwords($params['qcSampleId']);
+                $resourceName           = 'Quality Check Details ';
+                $eventLogDb             = $this->sm->get('EventLogTable');
+                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+                // End Event log
             }
-        }
-        catch (Exception $exc) {
+        } catch (Exception $exc) {
             $adapter->rollBack();
             error_log($exc->getMessage());
             error_log($exc->getTraceAsString());
@@ -90,8 +91,8 @@ class QualityCheckService {
 
     public function getQcDetails($id)
     {
-         $qcTestDb = $this->sm->get('QualityCheckTable');
-         return $qcTestDb->fetchQcDetails($id);
+        $qcTestDb = $this->sm->get('QualityCheckTable');
+        return $qcTestDb->fetchQcDetails($id);
     }
 
     public function addQualityCheckDataApi($params)
@@ -101,14 +102,12 @@ class QualityCheckService {
     }
 
     public function exportQcData($params)
-     {
-        try{
+    {
+        try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
-            $excel = new PHPExcel();
-            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-            $cacheSettings = array('memoryCacheSize' => '80MB');
-            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
             $output = array();
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
@@ -117,13 +116,13 @@ class QualityCheckService {
             $sQueryStr = $sql->buildSqlString($queryContainer->exportQcDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-            if(count($sResult) > 0) {
-                foreach($sResult as $aRow) {
+            if (count($sResult) > 0) {
+                foreach ($sResult as $aRow) {
                     $row = array();
                     $row[] = ucwords($aRow['qc_sample_id']);
                     $row[] = $common->humanDateFormat($aRow['qc_test_date']);
                     $row[] = ($aRow['facility_name']);
-                    $row[] = str_replace("_"," ",ucwords($aRow['reference_result']));
+                    $row[] = str_replace("_", " ", ucwords($aRow['reference_result']));
                     $row[] = ucwords($aRow['kit_lot_no']);
                     $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
                     $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
@@ -133,32 +132,32 @@ class QualityCheckService {
                     $row[] = ucwords($aRow['term_outcome']);
                     $row[] = ucwords($aRow['tester_name']);
                     $output[] = $row;
-               }
+                }
             }
 
             $styleArray = array(
                 'font' => array(
                     'bold' => true,
-                    'size'=>12,
+                    'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 )
             );
 
-           $borderStyle = array(
+            $borderStyle = array(
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 )
             );
@@ -177,20 +176,20 @@ class QualityCheckService {
             $sheet->mergeCells('K3:K4');
             $sheet->mergeCells('L3:L4');
 
-            $sheet->setCellValue('A1', html_entity_decode('Quality Check Data', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Quality Check Data', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
-            $sheet->setCellValue('A3', html_entity_decode('Sample ID', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B3', html_entity_decode('QC Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C3', html_entity_decode('Testing Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D3', html_entity_decode('Reference Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E3', html_entity_decode('Kit Lot Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F3', html_entity_decode('Kit Expiry Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G3', html_entity_decode('HIV Recency Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H3', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I3', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('J3', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('K3', html_entity_decode('Assay Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('L3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A3', html_entity_decode('Sample ID', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('B3', html_entity_decode('QC Test Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('C3', html_entity_decode('Testing Facility Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D3', html_entity_decode('Reference Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('E3', html_entity_decode('Kit Lot Number', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('F3', html_entity_decode('Kit Expiry Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G3', html_entity_decode('HIV Recency Test Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('H3', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('I3', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('J3', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('K3', html_entity_decode('Assay Outcome', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('L3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
             $sheet->getStyle('A1:B1')->getFont()->setBold(TRUE)->setSize(16);
 
@@ -214,9 +213,9 @@ class QualityCheckService {
                         $value = "";
                     }
                     if (is_numeric($value)) {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
                     } else {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     }
                     $rRowCount = $rowNo + 5;
                     $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->getColumn();
@@ -228,12 +227,11 @@ class QualityCheckService {
                 }
             }
 
-            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'Recency-Quality-Check-Data-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $filename = 'Recency-Quality-Check-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             return $filename;
-        }
-        catch (Exception $exc) {
+        } catch (Exception $exc) {
             return "";
             error_log("RECENCY-QC-REPORT-" . $exc->getMessage());
             error_log($exc->getTraceAsString());
@@ -245,31 +243,31 @@ class QualityCheckService {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
         return $qualityCheckDb->fetchQualityCheckVolumeChart($params);
     }
-    
+
     public function getQualityResultTermOutcomeChart($params)
     {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
         return $qualityCheckDb->fetchQualityResultTermOutcomeChart($params);
     }
-    
+
     public function getKitLotNumberChart($params)
     {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
         return $qualityCheckDb->fetchKitLotNumberChart($params);
     }
-    
+
     public function getSampleLotChart($params)
     {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
         return $qualityCheckDb->fetchSampleLotChart($params);
     }
-    
+
     public function getTestingQualityNegativeChart($params)
     {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
         return $qualityCheckDb->fetchTestingQualityNegativeChart($params);
     }
-    
+
     public function getTestingQualityInvalidChart($params)
     {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
@@ -288,16 +286,16 @@ class QualityCheckService {
         return $qcTestDb->fetchMonthWiseQualityControlChart($params);
     }
 
-    public function getDistrictWiseQualityCheckInvalid($params){
+    public function getDistrictWiseQualityCheckInvalid($params)
+    {
         $qualityCheckDb = $this->sm->get('QualityCheckTable');
         return $qualityCheckDb->fetchDistrictWiseQualityCheckInvalid($params);
     }
 
-    
+
     public function getQualityCheckReportDetails($parameters)
     {
-         $qcTestDb = $this->sm->get('QualityCheckTable');
-         return $qcTestDb->fetchQualityCheckReportDetails($parameters);
+        $qcTestDb = $this->sm->get('QualityCheckTable');
+        return $qcTestDb->fetchQualityCheckReportDetails($parameters);
     }
 }
-?>

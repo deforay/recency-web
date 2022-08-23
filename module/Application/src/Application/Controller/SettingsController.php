@@ -18,7 +18,7 @@ class SettingsController extends AbstractActionController
     {
         $sessionLogin = new Container('credo');
         if($sessionLogin->roleCode != 'admin'){
-            return $this->_redirect()->toRoute('home');
+            return $this->redirect()->toRoute('home');
         }
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -48,7 +48,7 @@ class SettingsController extends AbstractActionController
                 $params = $request->getPost();
                 
                 $result = $this->settingsService->addSettingsDetails($params);
-                return $this->_redirect()->toRoute('settings');
+                return $this->redirect()->toRoute('settings');
             }
     }
 
@@ -79,7 +79,7 @@ class SettingsController extends AbstractActionController
                 $params = $request->getPost();
                 
                 $result = $this->settingsService->addSampleSettingsDetails($params);
-                return $this->_redirect()->toRoute('settings');
+                return $this->redirect()->toRoute('settings');
             }
         
     }

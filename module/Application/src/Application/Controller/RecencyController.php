@@ -58,7 +58,7 @@ class RecencyController extends AbstractActionController
       if ($request->isPost()) {
          $params = $request->getPost();
          $this->recencyService->addRecencyDetails($params);
-         return $this->_redirect()->toRoute('recency');
+         return $this->redirect()->toRoute('recency');
       } else {
          
          $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();

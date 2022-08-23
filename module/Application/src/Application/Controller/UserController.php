@@ -21,7 +21,7 @@ class UserController extends AbstractActionController
     {
         $session = new Container('credo');
         if($session->roleCode == 'user'){
-            return $this->_redirect()->toRoute('recency');
+            return $this->redirect()->toRoute('recency');
         }else{
 
             $request = $this->getRequest();
@@ -39,14 +39,14 @@ class UserController extends AbstractActionController
     {
         $session = new Container('credo');
         if($session->roleCode == 'user'){
-            return $this->_redirect()->toRoute('recency');
+            return $this->redirect()->toRoute('recency');
         }else{
             $request = $this->getRequest();
             
             if ($request->isPost()) {
                 $params = $request->getPost();
                 $result = $this->userService->adduserDetails($params);
-                return $this->_redirect()->toRoute('user');
+                return $this->redirect()->toRoute('user');
             }else{
                 $roleResult=$this->userService->getRoleAllDetails();
                 
@@ -63,7 +63,7 @@ class UserController extends AbstractActionController
     {
         $session = new Container('credo');
         if($session->roleCode == 'user'){
-            return $this->_redirect()->toRoute('recency');
+            return $this->redirect()->toRoute('recency');
         }else{
 
             

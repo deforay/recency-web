@@ -45,7 +45,7 @@ class CityController extends AbstractActionController
             
             $result = $this->cityService->addCityDetails($params);
             // \Zend\Debug\Debug::dump($params);die;
-            return $this->_redirect()->toRoute('city');
+            return $this->redirect()->toRoute('city');
         } else {
             
             $districtResult = $this->districtService->getCities();

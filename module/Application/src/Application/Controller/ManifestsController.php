@@ -45,7 +45,7 @@ class ManifestsController extends AbstractActionController
 
             $params = $request->getPost();
             $result = $this->manifestsService->addManifest($params);
-            return $this->_redirect()->toRoute('manifests');
+            return $this->redirect()->toRoute('manifests');
         } else {
 
             $testingHubs = $this->facilitiesService->fetchTestingHubs();
@@ -68,7 +68,7 @@ class ManifestsController extends AbstractActionController
 
             $params = $request->getPost();
             $result = $this->manifestsService->updateManifest($params);
-            return $this->_redirect()->toRoute('manifests');
+            return $this->redirect()->toRoute('manifests');
         } else {
 
             $manifestId = base64_decode($this->params()->fromRoute('id'));
@@ -83,7 +83,7 @@ class ManifestsController extends AbstractActionController
                     'selectedSamples' => $selectedSamples,
                 ));
             } else {
-                return $this->_redirect()->toRoute('manifests');
+                return $this->redirect()->toRoute('manifests');
             }
         }
     }
@@ -98,7 +98,7 @@ class ManifestsController extends AbstractActionController
         if (count($result) == 0) {
             $alertContainer = new Container('alert');
             $alertContainer->alertMsg = 'Unable to generate Specimen Manifest PDF. Please check if there are Samples added.';
-            return $this->_redirect()->toRoute('manifests');
+            return $this->redirect()->toRoute('manifests');
         }
         // \Zend\Debug\Debug::dump($result);die;
         $viewModel = new ViewModel();

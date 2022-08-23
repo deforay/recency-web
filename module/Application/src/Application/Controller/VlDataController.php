@@ -168,7 +168,7 @@ class VlDataController extends AbstractActionController
             $params = $request->getPost();
             if (isset($params['pdfFile'])) {
                 $result = $this->recencyService->updateEmailSendResult($params);
-                return $this->_redirect()->toUrl('/vl-data/email-result');
+                return $this->redirect()->toUrl('/vl-data/email-result');
             } else {
                 $result = $this->recencyService->getEmailSendResult($params);
                 $this->recencyService->UpdateMultiplePdfUpdatedDate($params);
@@ -209,7 +209,7 @@ class VlDataController extends AbstractActionController
         if ($request->isPost()) {
             $params = $request->getPost();
             $this->recencyService->uploadResult($params);
-            return $this->_redirect()->toUrl('/vl-data');
+            return $this->redirect()->toUrl('/vl-data');
         }
     }
 
@@ -297,14 +297,14 @@ class VlDataController extends AbstractActionController
         $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
         foreach ($globalConfigResult as $result) {
             if ($result['global_name'] == 'recency_to_vlsm_sync' && $result['global_value'] == 'no') {
-                return $this->_redirect()->toUrl('/vl-data');
+                return $this->redirect()->toUrl('/vl-data');
             }
         }
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
             $this->recencyService->postReqVlTestOnVlsmDetails($params);
-            return $this->_redirect()->toUrl('/vl-data');
+            return $this->redirect()->toUrl('/vl-data');
         } else {
             $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
@@ -330,7 +330,7 @@ class VlDataController extends AbstractActionController
     {
         $sessionLogin = new Container('credo');
         /* if($sessionLogin->roleCode != 'admin' || $sessionLogin->roleCode != 'manager'){
-            return $this->_redirect()->toRoute('home');
+            return $this->redirect()->toRoute('home');
         } */
 
         $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();

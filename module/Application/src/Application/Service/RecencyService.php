@@ -3,7 +3,6 @@
 namespace Application\Service;
 
 use Exception;
-use PHPExcel;
 use Laminas\Db\Sql\Sql;
 use Laminas\Session\Container;
 use TCPDF;
@@ -164,10 +163,8 @@ class RecencyService
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
-            $excel = new PHPExcel();
-            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-            $cacheSettings = array('memoryCacheSize' => '300MB');
-            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
             $output = array();
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
@@ -256,72 +253,72 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    //'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
-            $sheet->setCellValue('A1', html_entity_decode('Sample ID', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Patient ID', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('Province', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('District', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('Testing Modality', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H1', html_entity_decode('Sample Collection Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I1', html_entity_decode('Sample Receipt Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('J1', html_entity_decode('Received Specimen Type', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('K1', html_entity_decode('HIV Diagnosis Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('L1', html_entity_decode('Recent Test not performed', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('M1', html_entity_decode('HIV Recency Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('N1', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('O1', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('P1', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('Q1', html_entity_decode('Kit Lot Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('R1', html_entity_decode('Kit Expiry Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('S1', html_entity_decode('Assay Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('T1', html_entity_decode('Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('U1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('V1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('W1', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('X1', html_entity_decode('DOB', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('Y1', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('Z1', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AA1', html_entity_decode('Martial Status', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AB1', html_entity_decode('Residence', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AC1', html_entity_decode('Education Level', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AD1', html_entity_decode('Risk Population', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AE1', html_entity_decode('Pregnancy Status', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AF1', html_entity_decode('Current Sexual Partner', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AG1', html_entity_decode('Past HIV Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AH1', html_entity_decode('Last HIV Status', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AI1', html_entity_decode('Patient On ART', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AJ1', html_entity_decode('Last 12 Month', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AK1', html_entity_decode('Experienced Violence Last 12 Month', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AL1', html_entity_decode('Form Initiation Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AM1', html_entity_decode('Form Transfer Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AN1', html_entity_decode('Form Saved Datetime', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AO1', html_entity_decode('Device ID', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AP1', html_entity_decode('Device Phone Number', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AQ1', html_entity_decode('Data Added On', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AR1', html_entity_decode('Latitude', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('AS1', html_entity_decode('Longitude', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Sample ID', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Patient ID', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Province', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('District', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('Testing Modality', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('Sample Collection Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('Sample Receipt Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('J1', html_entity_decode('Received Specimen Type', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('HIV Diagnosis Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Recent Test not performed', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('HIV Recency Test Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('N1', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('O1', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('P1', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('Q1', html_entity_decode('Kit Lot Number', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('R1', html_entity_decode('Kit Expiry Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('S1', html_entity_decode('Assay Outcome', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('T1', html_entity_decode('Final Outcome', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('U1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('V1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('W1', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('X1', html_entity_decode('DOB', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('Y1', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('Z1', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AA1', html_entity_decode('Martial Status', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AB1', html_entity_decode('Residence', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AC1', html_entity_decode('Education Level', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AD1', html_entity_decode('Risk Population', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AE1', html_entity_decode('Pregnancy Status', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AF1', html_entity_decode('Current Sexual Partner', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AG1', html_entity_decode('Past HIV Testing', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AH1', html_entity_decode('Last HIV Status', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AI1', html_entity_decode('Patient On ART', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AJ1', html_entity_decode('Last 12 Month', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AK1', html_entity_decode('Experienced Violence Last 12 Month', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AL1', html_entity_decode('Form Initiation Datetime', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AM1', html_entity_decode('Form Transfer Datetime', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AN1', html_entity_decode('Form Saved Datetime', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AO1', html_entity_decode('Device ID', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AP1', html_entity_decode('Device Phone Number', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AQ1', html_entity_decode('Data Added On', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AR1', html_entity_decode('Latitude', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('AS1', html_entity_decode('Longitude', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
             $sheet->getStyle('A1')->applyFromArray($styleArray);
@@ -378,9 +375,9 @@ class RecencyService
                         $value = "";
                     }
                     if (is_numeric($value)) {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
                     } else {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     }
                     $rRowCount = $rowNo + 2;
                     $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->getColumn();
@@ -392,8 +389,8 @@ class RecencyService
                 }
             }
 
-            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'Recency-Data-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $filename = 'Recency-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
             $subject                = $filename;
@@ -430,10 +427,8 @@ class RecencyService
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
-            $excel = new PHPExcel();
-            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-            $cacheSettings = array('memoryCacheSize' => '80MB');
-            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
             $output = array();
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
@@ -471,43 +466,43 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    //'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
-            $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('Date Of Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('J1', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('K1', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('L1', html_entity_decode('Sample Collection Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('M1', html_entity_decode('Sample Receipt Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('N1', html_entity_decode('Received Specimen Type', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('O1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('P1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Date Of Testing', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('J1', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Sample Collection Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('Sample Receipt Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('N1', html_entity_decode('Received Specimen Type', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('O1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('P1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -536,9 +531,9 @@ class RecencyService
                         $value = "";
                     }
                     if (is_numeric($value)) {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
                     } else {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     }
                     $rRowCount = $rowNo + 2;
                     $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->getColumn();
@@ -550,8 +545,8 @@ class RecencyService
                 }
             }
 
-            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'Recent-Infections-Data-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $filename = 'Recent-Infections-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
             $subject                = $filename;
@@ -576,10 +571,8 @@ class RecencyService
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
-            $excel = new PHPExcel();
-            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-            $cacheSettings = array('memoryCacheSize' => '80MB');
-            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
             $output = array();
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
@@ -614,39 +607,39 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    //'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
-            $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('Date Of Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('J1', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('K1', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('L1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('M1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Date Of Testing', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('Assasy Test Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('VL Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('J1', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('VL Test Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
@@ -675,9 +668,9 @@ class RecencyService
                         $value = "";
                     }
                     if (is_numeric($value)) {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
                     } else {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     }
                     $rRowCount = $rowNo + 2;
                     $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->getColumn();
@@ -689,8 +682,8 @@ class RecencyService
                 }
             }
 
-            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'Long-term-Infection-Data-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $filename = 'Long-term-Infection-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
             $subject                = $filename;
@@ -726,10 +719,8 @@ class RecencyService
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
-            $excel = new PHPExcel();
-            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-            $cacheSettings = array('memoryCacheSize' => '80MB');
-            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
             $output = array();
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
@@ -758,35 +749,35 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    //'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
 
-            $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('Recency Testing Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('VL Tested Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('VL Entered Date', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('Difference(TAT)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Sample Id', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Testing Site', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Final Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('Recency Testing Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('VL Tested Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('VL Entered Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('Difference(TAT)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
@@ -806,9 +797,9 @@ class RecencyService
                         $value = "";
                     }
                     if (is_numeric($value)) {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
                     } else {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     }
                     $rRowCount = $rowNo + 2;
                     $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->getColumn();
@@ -820,8 +811,8 @@ class RecencyService
                 }
             }
 
-            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'TAT-Report-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $filename = 'TAT-Report-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
             $subject                = $filename;
@@ -894,7 +885,7 @@ class RecencyService
             if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName)) {
 
                 if (move_uploaded_file($_FILES['fileName']['tmp_name'], UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName)) {
-                    $objPHPExcel = \PHPExcel_IOFactory::load(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
+                    $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
                     $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                     $count = count($sheetData);
                     $common = new \Application\Service\CommonService();
@@ -948,10 +939,8 @@ class RecencyService
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
-            $excel = new PHPExcel();
-            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-            $cacheSettings = array('memoryCacheSize' => '80MB');
-            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
             $output = array();
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
@@ -991,23 +980,23 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THICK,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
                     ),
                 ),
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    //'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
                     ),
                 ),
             );
@@ -1035,20 +1024,20 @@ class RecencyService
 
 
 
-            $sheet->setCellValue('A1', html_entity_decode('Samples Received', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Samples Pending to be Tested', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('Samples Tested', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('Recency Testing Results(Asante)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('Assay Recent VL Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I1', html_entity_decode('Final Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D2', html_entity_decode('Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E2', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F2', html_entity_decode('Assay Negative', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G2', html_entity_decode('VL Done', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H2', html_entity_decode('VL Pending', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I2', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('J2', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('K2', html_entity_decode('Inconclusive', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Samples Received', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Samples Pending to be Tested', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('Samples Tested', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('Recency Testing Results(Asante)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('Assay Recent VL Results', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('Final Results', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D2', html_entity_decode('Assay Recent', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('E2', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('F2', html_entity_decode('Assay Negative', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G2', html_entity_decode('VL Done', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('H2', html_entity_decode('VL Pending', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('I2', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('J2', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('K2', html_entity_decode('Inconclusive', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
@@ -1077,9 +1066,9 @@ class RecencyService
                         $value = "";
                     }
                     if (is_numeric($value)) {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 3)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 3)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
                     } else {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 3)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 3)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     }
                     $rRowCount = $rowNo + 3;
                     $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 3)->getColumn();
@@ -1092,20 +1081,20 @@ class RecencyService
             }
             if (isset($result[0]['Samples Tested']) && $result[0]['Samples Tested'] != '') {
                 $totalSamples = $result[0]['Samples Received'];
-                $sheet->setCellValue('B4', html_entity_decode(($result[0]['Samples Pending to be Tested'] != '' && $result[0]['Samples Pending to be Tested'] != 0) ? round(($result[0]['Samples Pending to be Tested'] / $totalSamples) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('C4', html_entity_decode(($result[0]['Samples Tested'] != '' && $result[0]['Samples Tested'] != 0) ? round(($result[0]['Samples Tested'] / $totalSamples) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('D4', html_entity_decode(($result[0]['Assay Recent'] != '' && $result[0]['Assay Recent'] != 0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('E4', html_entity_decode(($result[0]['Long Term'] != '' && $result[0]['Long Term'] != 0) ? round(($result[0]['Long Term'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('F4', html_entity_decode(($result[0]['Assay Negative'] != '' && $result[0]['Assay Negative'] != 0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('G4', html_entity_decode(($result[0]['VL Done'] != '' && $result[0]['VL Done'] != 0) ? round(($result[0]['VL Done'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('H4', html_entity_decode(($result[0]['VL Pending'] != '' && $result[0]['VL Pending'] != 0) ? round(($result[0]['VL Pending'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('I4', html_entity_decode(($result[0]['RITA Recent'] != '' && $result[0]['RITA Recent'] != 0) ? round(($result[0]['RITA Recent'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('J4', html_entity_decode(($result[0]['Long Term Final'] != '' && $result[0]['Long Term Final'] != 0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue('K4', html_entity_decode(($result[0]['Inconclusive'] != '' && $result[0]['Inconclusive'] != 0) ? round(($result[0]['Inconclusive'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue('B4', html_entity_decode(($result[0]['Samples Pending to be Tested'] != '' && $result[0]['Samples Pending to be Tested'] != 0) ? round(($result[0]['Samples Pending to be Tested'] / $totalSamples) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('C4', html_entity_decode(($result[0]['Samples Tested'] != '' && $result[0]['Samples Tested'] != 0) ? round(($result[0]['Samples Tested'] / $totalSamples) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('D4', html_entity_decode(($result[0]['Assay Recent'] != '' && $result[0]['Assay Recent'] != 0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('E4', html_entity_decode(($result[0]['Long Term'] != '' && $result[0]['Long Term'] != 0) ? round(($result[0]['Long Term'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('F4', html_entity_decode(($result[0]['Assay Negative'] != '' && $result[0]['Assay Negative'] != 0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('G4', html_entity_decode(($result[0]['VL Done'] != '' && $result[0]['VL Done'] != 0) ? round(($result[0]['VL Done'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('H4', html_entity_decode(($result[0]['VL Pending'] != '' && $result[0]['VL Pending'] != 0) ? round(($result[0]['VL Pending'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('I4', html_entity_decode(($result[0]['RITA Recent'] != '' && $result[0]['RITA Recent'] != 0) ? round(($result[0]['RITA Recent'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('J4', html_entity_decode(($result[0]['Long Term Final'] != '' && $result[0]['Long Term Final'] != 0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('K4', html_entity_decode(($result[0]['Inconclusive'] != '' && $result[0]['Inconclusive'] != 0) ? round(($result[0]['Inconclusive'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             }
 
-            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'Weekly-Report-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $filename = 'Weekly-Report-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
             $subject                = $filename;
@@ -1125,7 +1114,7 @@ class RecencyService
     function cellColor($cells, $color, $excel)
     {
         $excel->getActiveSheet()->getStyle($cells)->getFill()->applyFromArray(array(
-            'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+            'type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startcolor' => array(
                 'rgb' => $color
             )
@@ -1153,10 +1142,8 @@ class RecencyService
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
-            $excel = new PHPExcel();
-            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-            $cacheSettings = array('memoryCacheSize' => '80MB');
-            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
             $output = array();
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
@@ -1213,46 +1200,46 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    //'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
-            $sheet->setCellValue('A1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('B1', html_entity_decode('Testing Facility Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('No. of Samples Registered', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('No. of Samples Received at Hub', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('No. of Samples Rejected', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('No. of Samples Waiting For Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('No. of Samples VL Pending', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H1', html_entity_decode('No. of Samples With Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I1', html_entity_decode('No. of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('J1', html_entity_decode('No. of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('K1', html_entity_decode('No. of Results Printed', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('L1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('M1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('N1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('O1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('P1', html_entity_decode('No. of Inconclusive', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('Q1', html_entity_decode('Inconclusive (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('R1', html_entity_decode('No. of Invalid', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('S1', html_entity_decode('Invalid (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('Testing Facility Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('No. of Samples Registered', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('No. of Samples Received at Hub', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('No. of Samples Rejected', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('No. of Samples Waiting For Testing', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('No. of Samples VL Pending', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('No. of Samples With Assay Recent', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('No. of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('J1', html_entity_decode('No. of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('No. of Results Printed', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('N1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('O1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('P1', html_entity_decode('No. of Inconclusive', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('Q1', html_entity_decode('Inconclusive (%)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('R1', html_entity_decode('No. of Invalid', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('S1', html_entity_decode('Invalid (%)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -1283,9 +1270,9 @@ class RecencyService
                         $value = "";
                     }
                     if (is_numeric($value)) {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
                     } else {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     }
                     $rRowCount = $rowNo + 2;
                     $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->getColumn();
@@ -1297,8 +1284,8 @@ class RecencyService
                 }
             }
 
-            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'Facility-Recency-Results-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $filename = 'Facility-Recency-Results-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
             $subject                = $filename;
@@ -1398,10 +1385,8 @@ class RecencyService
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
-            $excel = new PHPExcel();
-            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-            $cacheSettings = array('memoryCacheSize' => '80MB');
-            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
             $output = array();
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
@@ -1454,47 +1439,47 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    //'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    //'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
-            $sheet->setCellValue('A1', html_entity_decode('District Name', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('District Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
-            $sheet->setCellValue('B1', html_entity_decode('No. of Samples Registered', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('C1', html_entity_decode('No. of Samples Received at Hub', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('D1', html_entity_decode('No. of Samples Rejected', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('E1', html_entity_decode('No. of Samples Waiting For Testing', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('F1', html_entity_decode('No. of Samples VL Pending', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('G1', html_entity_decode('No. of Samples With Assay Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('H1', html_entity_decode('No. of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('I1', html_entity_decode('No. of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('J1', html_entity_decode('No. of Results Printed', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('B1', html_entity_decode('No. of Samples Registered', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('C1', html_entity_decode('No. of Samples Received at Hub', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D1', html_entity_decode('No. of Samples Rejected', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('E1', html_entity_decode('No. of Samples Waiting For Testing', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('F1', html_entity_decode('No. of Samples VL Pending', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G1', html_entity_decode('No. of Samples With Assay Recent', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('H1', html_entity_decode('No. of Samples Tested With Viral Load', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('I1', html_entity_decode('No. of Samples With Final Outcome', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('J1', html_entity_decode('No. of Results Printed', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
-            $sheet->setCellValue('K1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('L1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('M1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('N1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('O1', html_entity_decode('No. of Inconclusive', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('P1', html_entity_decode('Inconclusive (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('Q1', html_entity_decode('No. of Invalid', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('R1', html_entity_decode('Invalid (%)', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('K1', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('L1', html_entity_decode('Long Term (%)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('M1', html_entity_decode('RITA Recent', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('N1', html_entity_decode('RITA Recent (%)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('O1', html_entity_decode('No. of Inconclusive', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('P1', html_entity_decode('Inconclusive (%)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('Q1', html_entity_decode('No. of Invalid', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('R1', html_entity_decode('Invalid (%)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
             //$sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
@@ -1525,9 +1510,9 @@ class RecencyService
                         $value = "";
                     }
                     if (is_numeric($value)) {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
                     } else {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     }
                     $rRowCount = $rowNo + 2;
                     $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->getColumn();
@@ -1539,8 +1524,8 @@ class RecencyService
                 }
             }
 
-            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'District-Recency-Results-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $filename = 'District-Recency-Results-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
             $subject                = $filename;
@@ -1684,10 +1669,8 @@ class RecencyService
     public function exportModalityDetails($params)
     {
         try {
-            $excel = new PHPExcel();
-            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-            $cacheSettings = array('memoryCacheSize' => '80MB');
-            \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
             $output = array();
             $sheet = $excel->getActiveSheet();
 
@@ -1700,39 +1683,39 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     ),
                 ),
             );
             $horizontal = array('B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
             $ageArray = array('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50+');
-            $sheet->setCellValue('A1', html_entity_decode('RTRI Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('A2', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('A3', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('A7', html_entity_decode('Confirmed Results', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('A8', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('A9', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('RTRI Results', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A2', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A3', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A7', html_entity_decode('Confirmed Results', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A8', html_entity_decode('Age', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A9', html_entity_decode('Gender', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
-            $sheet->setCellValue('A4', html_entity_decode('Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('A5', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('A10', html_entity_decode('Recent', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-            $sheet->setCellValue('A11', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValue('A4', html_entity_decode('Recent', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A5', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A10', html_entity_decode('Recent', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A11', html_entity_decode('Long Term', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             /* Style and merge */
             $sheet->getStyle('A2')->applyFromArray($borderStyle);
             $sheet->getStyle('A3')->applyFromArray($borderStyle);
@@ -1753,8 +1736,8 @@ class RecencyService
             $rtrim = 3;
             $index = 0;
             foreach ($ageArray as $age) {
-                $sheet->setCellValue($horizontal[$index] . '2', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue($horizontal[$index] . '8', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue($horizontal[$index] . '2', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue($horizontal[$index] . '8', html_entity_decode($age, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                 $sheet->getStyle($horizontal[$index] . '2')->applyFromArray($borderStyle);
                 $sheet->getStyle($horizontal[$index] . '8')->applyFromArray($borderStyle);
                 $index = ($index + 2);
@@ -1770,11 +1753,11 @@ class RecencyService
             $index = 0;
             foreach (range(1, 16) as $x) {
                 if ($x % 2) {
-                    $sheet->setCellValue($horizontal[$index] . '3', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[$index] . '9', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index] . '3', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index] . '9', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                 } else {
-                    $sheet->setCellValue($horizontal[$index] . '3', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[$index] . '9', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index] . '3', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[$index] . '9', html_entity_decode('Male', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                 }
                 $sheet->getStyle($horizontal[$index] . '3')->applyFromArray($borderStyle);
                 $sheet->getStyle($horizontal[$index] . '9')->applyFromArray($borderStyle);
@@ -1786,11 +1769,11 @@ class RecencyService
                 $sheet->getStyle($horizontal[($x - 1)] . '4')->applyFromArray($borderStyle);
                 $sheet->getStyle($horizontal[($x - 1)] . '5')->applyFromArray($borderStyle);
                 if ($x % 2) {
-                    $sheet->setCellValue($horizontal[($x - 1)] . '4', html_entity_decode($result['rtriRecent' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[($x - 1)] . '5', html_entity_decode($result['rtriLT' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '4', html_entity_decode($result['rtriRecent' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '5', html_entity_decode($result['rtriLT' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                 } else {
-                    $sheet->setCellValue($horizontal[($x - 1)] . '4', html_entity_decode($result['rtriRecent' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[($x - 1)] . '5', html_entity_decode($result['rtriLT' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '4', html_entity_decode($result['rtriRecent' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '5', html_entity_decode($result['rtriLT' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     $index++;
                 }
             }
@@ -1800,17 +1783,17 @@ class RecencyService
                 $sheet->getStyle($horizontal[($x - 1)] . '10')->applyFromArray($borderStyle);
                 $sheet->getStyle($horizontal[($x - 1)] . '11')->applyFromArray($borderStyle);
                 if ($x % 2) {
-                    $sheet->setCellValue($horizontal[($x - 1)] . '10', html_entity_decode($result['confirmedRecent' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[($x - 1)] . '11', html_entity_decode($result['confirmedLT' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '10', html_entity_decode($result['confirmedRecent' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '11', html_entity_decode($result['confirmedLT' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                 } else {
-                    $sheet->setCellValue($horizontal[($x - 1)] . '10', html_entity_decode($result['confirmedRecent' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-                    $sheet->setCellValue($horizontal[($x - 1)] . '11', html_entity_decode($result['confirmedLT' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '10', html_entity_decode($result['confirmedRecent' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    $sheet->setCellValue($horizontal[($x - 1)] . '11', html_entity_decode($result['confirmedLT' . $ageArray[$index] . 'M'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     $index++;
                 }
             }
             /* Value cell creation end */
-            $writer = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $filename = 'Age-wise Infection Report-' . date('d-M-Y-H-i-s') . '.xls';
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $filename = 'Age-wise Infection Report-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
             $subject                = $filename;

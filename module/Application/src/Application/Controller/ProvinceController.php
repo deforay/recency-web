@@ -44,7 +44,7 @@ class ProvinceController extends AbstractActionController
             
             $result = $this->provinceService->addProvinceDetails($params);
             // \Zend\Debug\Debug::dump($params);die;
-            return $this->_redirect()->toRoute('province');
+            return $this->redirect()->toRoute('province');
         } else {
             
             $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();

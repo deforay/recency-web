@@ -301,12 +301,12 @@ class FacilitiesTable extends AbstractTableGateway
             $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
             $rResult['facility'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         }
-        $sQueryTest = $sql->select()->from(array('f' => 'facilities'), array('facility_name'))
+        $sQueryTest = $sql->select()->from(array('f' => 'facilities'))
             ->where(array('f.status' => 'active', 'f.facility_name IS NOT NULL', 'facility_type_id="2"'));
         $sQueryStrTest = $sql->buildSqlString($sQueryTest);
         $rResult['facilityTest'] = $dbAdapter->query($sQueryStrTest, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-        $sQueryTestFType = $sql->select()->from(array('f' => 'testing_facility_type'), array('testing_facility_type_name'))
+        $sQueryTestFType = $sql->select()->from(array('f' => 'testing_facility_type'))
             ->where(array('f.testing_facility_type_status' => 'active'));
         $sQueryStrTestFType = $sql->buildSqlString($sQueryTestFType);
         $rResult['testingFacilityType'] = $dbAdapter->query($sQueryStrTestFType, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
