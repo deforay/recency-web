@@ -368,6 +368,11 @@ class RecencyService
             $sheet->getStyle('AR1')->applyFromArray($styleArray);
             $sheet->getStyle('AS1')->applyFromArray($styleArray);
 
+            // var_dump($output);
+            // ob_start();
+            // var_dump($output);
+            // error_log(ob_get_clean());
+            // die;
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 0;
                 foreach ($rowData as $field => $value) {
@@ -384,7 +389,7 @@ class RecencyService
                     $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
                     $sheet->getDefaultRowDimension()->setRowHeight(18);
                     $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
-                    $sheet->getStyleByColumnAndRow($colNo, $rowNo + 5)->getAlignment()->setWrapText(true);
+                    //$sheet->getStyleByColumnAndRow($colNo, ($rowNo + 5))->getAlignment()->setWrapText(true);
                     $colNo++;
                 }
             }
@@ -392,6 +397,7 @@ class RecencyService
             $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'Recency-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+
             // Add event log
             $subject                = $filename;
             $eventType              = 'Recency data-export';
@@ -401,9 +407,9 @@ class RecencyService
             $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
             return $filename;
         } catch (Exception $exc) {
-            return "";
             error_log("RECENCY-DATA-EXPORT : " . $exc->getMessage());
             error_log($exc->getTraceAsString());
+            return "";
         }
     }
 

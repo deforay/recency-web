@@ -200,12 +200,15 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->order($sOrder);
         }
 
+
+        $queryContainer->exportRecencyDataQuery = $sQuery;
+
+
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
 
-        $queryContainer->exportRecencyDataQuery = $sQuery;
         $sQueryStr = $sql->buildSqlString($sQuery);
         // echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
@@ -1488,11 +1491,13 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->order($sOrder);
         }
 
+        $queryContainer->exportRecentResultDataQuery = $sQuery;
+
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
-        $queryContainer->exportRecentResultDataQuery = $sQuery;
+
         $sQueryStr = $sql->buildSqlString($sQuery);
         //echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
@@ -1640,11 +1645,13 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->order($sOrder);
         }
 
+        $queryContainer->exportLongtermDataQuery = $sQuery;
+
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
-        $queryContainer->exportLongtermDataQuery = $sQuery;
+
         $sQueryStr = $sql->buildSqlString($sQuery);
 
         // echo $sQueryStr;die;
@@ -1834,11 +1841,13 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->order($sOrder);
         }
 
+        $queryContainer->exportTatQuery = $sQuery;
+
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
-        $queryContainer->exportTatQuery = $sQuery;
+        
         $sQueryStr = $sql->buildSqlString($sQuery);
 
         // echo $sQueryStr;die;data
@@ -2324,16 +2333,19 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->order($sOrder);
         }
 
-        if (isset($sLimit) && isset($sOffset)) {
-            $sQuery->limit($sLimit);
-            $sQuery->offset($sOffset);
-        }
+        
 
         if ($this->sessionLogin->facilityMap != null) {
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
         $queryContainer->exportRecencyDataResultDataQuery = $sQuery;
+
+        if (isset($sLimit) && isset($sOffset)) {
+            $sQuery->limit($sLimit);
+            $sQuery->offset($sOffset);
+        }
+
         $sQueryStr = $sql->buildSqlString($sQuery);
         //echo $sQueryStr;die;
 
@@ -3715,16 +3727,19 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->order($sOrder);
         }
 
-        if (isset($sLimit) && isset($sOffset)) {
-            $sQuery->limit($sLimit);
-            $sQuery->offset($sOffset);
-        }
+
 
         if ($this->sessionLogin->facilityMap != null) {
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
 
         $queryContainer->exportDistrictwiseRecencyResult = $sQuery;
+
+        if (isset($sLimit) && isset($sOffset)) {
+            $sQuery->limit($sLimit);
+            $sQuery->offset($sOffset);
+        }
+                
         $sQueryStr = $sql->buildSqlString($sQuery);
         //echo $sQueryStr;die;
 
