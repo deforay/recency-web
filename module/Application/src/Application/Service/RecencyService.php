@@ -210,7 +210,6 @@ class RecencyService
                     $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
                     $row[] = (isset($aRow['recency_test_performed']) && !empty($aRow['recency_test_performed']) && ($aRow['recency_test_performed'] == 1)) ? 'Not Performed' : '';
                     $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
-
                     $row[] = ucwords($aRow['control_line']);
                     $row[] = ucwords($aRow['positive_verification_line']);
                     $row[] = ucwords($aRow['long_term_verification_line']);
@@ -246,7 +245,6 @@ class RecencyService
                     $output[] = $row;
                 }
             }
-
             $styleArray = array(
                 'font' => array(
                     'bold' => true,
@@ -374,7 +372,7 @@ class RecencyService
             // error_log(ob_get_clean());
             // die;
             foreach ($output as $rowNo => $rowData) {
-                $colNo = 0;
+                $colNo = 1;
                 foreach ($rowData as $field => $value) {
                     if (!isset($value)) {
                         $value = "";
