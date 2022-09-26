@@ -28,6 +28,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
 }
 //\Zend\Debug\Debug::dump($resultArr2);die;
 ?>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -133,13 +134,16 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
 
                 </tr>
                 <tr>
+                    <td><b>HIV Recency Test Dates:</b></td>
+                    <td>
+                        <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
+                    </td>
                     <td><b>Recency Tests :</b></td>
                     <td>
                         <select class="form-control" id="RTest" name="RTest" title="Please select Recency Tests" style="width:100%;">
                             <option value="">All</option>
                             <option value="completed">Completed</option>
                             <option value="pending">Pending</option>
-
                         </select>
                     </td>
                     <td></td>
@@ -273,7 +277,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
         </div>
     </div>
 </div>
-
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
 <script type="text/javascript">
     /* Table initialisation */
 
@@ -330,6 +334,10 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                     "name": "RTest",
                     "value": $("#RTest").val()
                 });
+                aoData.push({
+                    "name": "hivRecencyTest",
+                    "value": $("#hivRecencyTest").val()
+                });
                 $.ajax({
                     "dataType": 'json',
                     "type": "POST",
@@ -365,7 +373,33 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
         // }
 
 
+        $('#hivRecencyTest').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="hivRecencyTest"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
 
+            });
+        // $('#hivRecencyTest').val('');
 
     });
 

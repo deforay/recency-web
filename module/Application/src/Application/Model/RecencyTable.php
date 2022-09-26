@@ -150,6 +150,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $roleId = $sessionLogin->roleId;
+        $general = new CommonService();
 
         $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
@@ -190,6 +191,20 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array('term_outcome != "" AND  term_outcome IS NOT NULL '));
         } else {
             // all requests
+        }
+
+        if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($parameters['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
         if ($sessionLogin->facilityMap != null) {
@@ -1847,7 +1862,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
-        
+
         $sQueryStr = $sql->buildSqlString($sQuery);
 
         // echo $sQueryStr;die;data
@@ -2333,7 +2348,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->order($sOrder);
         }
 
-        
+
 
         if ($this->sessionLogin->facilityMap != null) {
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
@@ -3739,7 +3754,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->limit($sLimit);
             $sQuery->offset($sOffset);
         }
-                
+
         $sQueryStr = $sql->buildSqlString($sQuery);
         //echo $sQueryStr;die;
 
