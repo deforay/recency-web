@@ -6,6 +6,7 @@ $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -50,7 +51,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                             <?php
                             foreach ($facilityResult['facilityTest'] as $facilityRow) {
                                 // if(2 != (int)$facilityRow['facility_type_id']) continue;
-                                ?>
+                            ?>
                                 <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
                             <?php
                             }
@@ -59,14 +60,14 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     </td>
                 </tr>
                 <tr>
+                    <td><b>HIV Recency Test Dates:</b></td>
+                    <td>
+                        <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
+                    </td>
                     <td colspan="4"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
                         &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
                         &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
                     </td>
-
-                    </td>
-
-
                 </tr>
 
             </table>
@@ -163,6 +164,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
 </div>
 
 <script type="text/javascript">
+    let searchExecuted = false;
     /* Table initialisation */
     oTable = null;
     $(document).ready(function() {
@@ -187,6 +189,10 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 aoData.push({
                     "name": "testingFacility",
                     "value": $("#testingFacility").val()
+                });
+                aoData.push({
+                    "name": "hivRecencyTest",
+                    "value": $("#hivRecencyTest").val()
                 });
                 $.ajax({
                     "dataType": 'json',
@@ -219,7 +225,44 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             }
         }
 
+        $('#hivRecencyTest').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="hivRecencyTest"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
+
+            });
+
+        $("#advanceFilter input, #advanceFilter select").on("change", function() {
+            searchExecuted = false;
+        });
     });
+
+    function searchVlRequestData() {
+        searchExecuted = true;
+        $.blockUI();
+        oTable.fnDraw();
+        $.unblockUI();
+    }
 
     function closeDiv() {
         $("#showhide").fadeOut('slow');
@@ -237,6 +280,9 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
     }
 
     function exportQCData() {
+        if (searchExecuted === false) {
+            searchVlRequestData();
+        }
         $.blockUI();
         $.post("<?php echo $this->url('quality-check', array('action' => 'export-qc-data')); ?>",
             function(data) {

@@ -115,7 +115,6 @@ class QualityCheckService
             $queryContainer->exportQcDataQuery->reset('limit')->reset('offset');
             $sQueryStr = $sql->buildSqlString($queryContainer->exportQcDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-
             if (count($sResult) > 0) {
                 foreach ($sResult as $aRow) {
                     $row = array();
@@ -207,7 +206,7 @@ class QualityCheckService
             $sheet->getStyle('L3:L4')->applyFromArray($styleArray);
 
             foreach ($output as $rowNo => $rowData) {
-                $colNo = 0;
+                $colNo = 1;
                 foreach ($rowData as $field => $value) {
                     if (!isset($value)) {
                         $value = "";
@@ -222,11 +221,9 @@ class QualityCheckService
                     $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
                     $sheet->getDefaultRowDimension()->setRowHeight(18);
                     $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
-                    $sheet->getStyleByColumnAndRow($colNo, $rowNo + 5)->getAlignment()->setWrapText(true);
                     $colNo++;
                 }
             }
-
             $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'Recency-Quality-Check-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);

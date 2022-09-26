@@ -102,9 +102,10 @@ class QualityCheckTable extends AbstractTableGateway
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
           $roleId = $sessionLogin->roleId;
+          $general = new CommonService();
 
           $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
-                                  ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
 
           if (isset($sWhere) && $sWhere != "") {
                $sQuery->where($sWhere);
@@ -117,6 +118,18 @@ class QualityCheckTable extends AbstractTableGateway
           }
           if ($parameters['testingFacility'] != '') {
                $sQuery->where(array('testing_facility_id' => $parameters['testingFacility']));
+          }
+          if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
+               $s_c_date = explode("to", $_POST['hivRecencyTest']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
+          if ($parameters['hivRecencyTest'] != '') {
+               $sQuery = $sQuery->where(array("qc.hiv_recency_test_date >='" . $start_date . "'", "qc.hiv_recency_test_date <='" . $end_date . "'"));
           }
 
           if (isset($sOrder) && $sOrder != "") {
@@ -146,7 +159,7 @@ class QualityCheckTable extends AbstractTableGateway
 
           /* Total data set length */
           $iQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
-          ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
+               ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
 
           if ($this->sessionLogin->facilityMap != null) {
                $iQuery = $iQuery->where('qc.testing_facility_id IN (' . $sessionLogin->facilityMap . ')');
@@ -560,7 +573,7 @@ class QualityCheckTable extends AbstractTableGateway
 
           if ($this->sessionLogin->facilityMap != null) {
                $sQuery = $sQuery->where('testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
-          }          
+          }
           $sQueryStr = $sql->buildSqlString($sQuery);
           // echo $sQueryStr;die;
           $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -611,7 +624,7 @@ class QualityCheckTable extends AbstractTableGateway
 
           if ($this->sessionLogin->facilityMap != null) {
                $sQuery = $sQuery->where('testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
-          }          
+          }
           $sQueryStr = $sql->buildSqlString($sQuery);
           // echo $sQueryStr;die;
           $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -768,7 +781,7 @@ class QualityCheckTable extends AbstractTableGateway
 
           if ($this->sessionLogin->facilityMap != null) {
                $sQuery = $sQuery->where('(facility_id IN (' . $this->sessionLogin->facilityMap . ') OR testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
-          }          
+          }
 
           $sQueryStr = $sql->buildSqlString($sQuery);
           //echo $sQueryStr;die;
@@ -995,7 +1008,7 @@ class QualityCheckTable extends AbstractTableGateway
 
           if ($this->sessionLogin->facilityMap != null) {
                $sQuery = $sQuery->where('qc.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
-          }          
+          }
 
           $sQueryStr = $sql->buildSqlString($sQuery);
           //echo $sQueryStr;die;
@@ -1064,7 +1077,7 @@ class QualityCheckTable extends AbstractTableGateway
 
           if ($this->sessionLogin->facilityMap != null) {
                $sQuery = $sQuery->where('(facility_id IN (' . $this->sessionLogin->facilityMap . ') OR testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
-          }             
+          }
 
           $sQueryStr = $sql->buildSqlString($sQuery);
           //echo $sQueryStr;die;

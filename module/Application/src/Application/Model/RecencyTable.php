@@ -204,7 +204,7 @@ class RecencyTable extends AbstractTableGateway
         }
 
         if ($parameters['hivRecencyTest'] != '') {
-            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
 
         if ($sessionLogin->facilityMap != null) {
