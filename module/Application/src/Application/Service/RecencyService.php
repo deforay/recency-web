@@ -169,8 +169,12 @@ class RecencyService
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-
-            $sQueryStr = $sql->buildSqlString($queryContainer->exportRecencyDataQuery);
+            $sQuery = $queryContainer->exportRecencyDataQuery;
+            if (isset($sLimit) && isset($sOffset)) {
+                $sQuery->limit($sLimit);
+                $sQuery->offset($sOffset);
+            }
+            $sQueryStr = $sql->buildSqlString($sQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
 
