@@ -170,10 +170,8 @@ class RecencyService
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
             $sQuery = $queryContainer->exportRecencyDataQuery;
-            if (isset($sLimit) && isset($sOffset)) {
-                $sQuery->limit($sLimit);
-                $sQuery->offset($sOffset);
-            }
+            $sQuery->reset('limit');
+            $sQuery->reset('offset');
             $sQueryStr = $sql->buildSqlString($sQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
