@@ -112,7 +112,7 @@ class QualityCheckService
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-
+            $queryContainer->exportQcDataQuery->reset('limit')->reset('offset');
             $sQueryStr = $sql->buildSqlString($queryContainer->exportQcDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 

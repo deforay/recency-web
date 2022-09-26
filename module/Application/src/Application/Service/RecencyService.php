@@ -169,10 +169,8 @@ class RecencyService
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-            $sQuery = $queryContainer->exportRecencyDataQuery;
-            $sQuery->reset('limit');
-            $sQuery->reset('offset');
-            $sQueryStr = $sql->buildSqlString($sQuery);
+            $queryContainer->exportRecencyDataQuery->reset('limit')->reset('offset');
+            $sQueryStr = $sql->buildSqlString($queryContainer->exportRecencyDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
 
@@ -439,7 +437,7 @@ class RecencyService
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-
+            $queryContainer->exportRecentResultDataQuery->reset('limit')->reset('offset');
             $sQueryStr = $sql->buildSqlString($queryContainer->exportRecentResultDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -583,7 +581,7 @@ class RecencyService
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-
+            $queryContainer->exportLongtermDataQuery->reset('limit')->reset('offset');
             $sQueryStr = $sql->buildSqlString($queryContainer->exportLongtermDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -731,7 +729,7 @@ class RecencyService
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-
+            $queryContainer->exportTatQuery->reset('limit')->reset('offset');
             $sQueryStr = $sql->buildSqlString($queryContainer->exportTatQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -951,7 +949,7 @@ class RecencyService
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-
+            $queryContainer->exportWeeklyDataQuery->reset('limit')->reset('offset');
             $sQueryStr = $sql->buildSqlString($queryContainer->exportWeeklyDataQuery);
             $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
@@ -1154,7 +1152,7 @@ class RecencyService
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-
+            $queryContainer->exportRecencyDataResultDataQuery->reset('limit')->reset('offset');
             $sQueryStr = $sql->buildSqlString($queryContainer->exportRecencyDataResultDataQuery);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
@@ -1397,7 +1395,7 @@ class RecencyService
             $sheet = $excel->getActiveSheet();
             $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
             $sql = new Sql($dbAdapter);
-
+            $queryContainer->exportDistrictwiseRecencyResult->reset('limit')->reset('offset');
             $sQueryStr = $sql->buildSqlString($queryContainer->exportDistrictwiseRecencyResult);
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (count($sResult) > 0) {
