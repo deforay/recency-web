@@ -38,7 +38,7 @@ $roleCode = $sessionLogin->roleCode;
                         <?php
                         foreach ($facilityResult['facilityTest'] as $facilityRow) {
                             //if(2 != (int)$facilityRow['facility_type_id']) continue;
-                            ?>
+                        ?>
                             <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
                         <?php
                         }
@@ -52,12 +52,16 @@ $roleCode = $sessionLogin->roleCode;
                         <?php
                         foreach ($facilityResult['facility'] as $facilityRow) {
                             // if(2 == (int)$facilityRow['facility_type_id']) continue;
-                            ?>
+                        ?>
                             <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ($facilityRow['facility_name']); ?></option>
                         <?php
                         }
                         ?>
                     </select>
+                </div>
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="hivRecencyTest">HIV Recency Test Dates:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
                 </div>
             </div>
             <div class="row items-push">
@@ -100,6 +104,7 @@ $roleCode = $sessionLogin->roleCode;
 </div>
 
 <script type="text/javascript">
+    let searchExecuted = false;
     /* Table initialisation */
     oTable = null;
     $(document).ready(function() {
@@ -137,11 +142,45 @@ $roleCode = $sessionLogin->roleCode;
                 endDate = end.format('YYYY-MM-DD');
             });
 
+        $('#hivRecencyTest').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="hivRecencyTest"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
+
+            });
+
+        $("#advanceFilter input, #advanceFilter select").on("change", function() {
+            searchExecuted = false;
+        });
+
         getWeeklyData();
     });
 
     function searchData() {
+        searchExecuted = true;
+        $.blockUI();
         getWeeklyData();
+        $.unblockUI();
     }
 
     function getWeeklyData() {
@@ -150,7 +189,8 @@ $roleCode = $sessionLogin->roleCode;
         $.post("<?php echo $this->url('vl-data', array('action' => 'get-weekly-report')); ?>", {
                 samplesCollectionDate: samplesCollectionDate,
                 testingFacility: $("#testingFacility").val(),
-                facilityName: $("#facilityName").val()
+                facilityName: $("#facilityName").val(),
+                hivRecencyTest: $("#hivRecencyTest").val()
             },
             function(data) {
                 $("#weeklyData").html(data);
@@ -159,16 +199,19 @@ $roleCode = $sessionLogin->roleCode;
     }
 
     function exportWeeklyData() {
+        if (searchExecuted === false) {
+            getWeeklyData();
+        }
         $.blockUI();
         $.post("<?php echo $this->url('vl-data', array('action' => 'export-weekly-report')); ?>",
-        function(data) {
-            if (data == "" || data == null || data == undefined) {
-                $.unblockUI();
-                alert('Unable to generate download');
-            } else {
-                $.unblockUI();
-                document.location.href = '/temporary/' + data;
-            }
-        });
+            function(data) {
+                if (data == "" || data == null || data == undefined) {
+                    $.unblockUI();
+                    alert('Unable to generate download');
+                } else {
+                    $.unblockUI();
+                    document.location.href = '/temporary/' + data;
+                }
+            });
     }
 </script>

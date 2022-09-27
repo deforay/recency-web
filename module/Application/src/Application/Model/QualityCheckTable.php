@@ -1161,7 +1161,7 @@ class QualityCheckTable extends AbstractTableGateway
                */
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
-          $roleId = $sessionLogin->roleId;
+          $common = new CommonService();
 
           $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
                ->columns(
@@ -1197,7 +1197,19 @@ class QualityCheckTable extends AbstractTableGateway
                     $sQuery->where('recency_test_performed != ""');
                }
           }
+          if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
+               $s_c_date = explode("to", $_POST['hivRecencyTest']);
+               if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $common->dbDateFormat(trim($s_c_date[0]));
+               }
+               if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $common->dbDateFormat(trim($s_c_date[1]));
+               }
+          }
 
+          if ($parameters['hivRecencyTest'] != '') {
+               $sQuery = $sQuery->where(array("qc.hiv_recency_test_date >='" . $start_date . "'", "qc.hiv_recency_test_date <='" . $end_date . "'"));
+          }
 
           if (isset($sWhere) && $sWhere != "") {
                $sQuery->where($sWhere);

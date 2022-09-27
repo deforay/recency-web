@@ -6,6 +6,7 @@ $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -18,9 +19,8 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
         <div class="block-header block-header-default">
         </div>
         <div class="block-content block-content-full">
-            <div class="form-group row">
-                <?php
-                foreach ($globalConfigResult as $config) { ?>
+            <div id="advanceFilter" class="form-group row">
+                <?php foreach ($globalConfigResult as $config) { ?>
                     <?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
                         <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
                         <div class="col-sm-4">
@@ -41,17 +41,17 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 <div class="col-sm-4">
                     <select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
                         <option value=""> -- Select -- </option>
-                        <?php
-                        foreach ($facilityResult['facilityTest'] as $facilityRow) {
-                            // if(2 != (int)$facilityRow['facility_type_id']) continue;
-                            ?>
-                            <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
-                        <?php
-                        }
+                        <?php foreach ($facilityResult['facilityTest'] as $facilityRow) {
+                            // if(2 != (int)$facilityRow['facility_type_id']) continue; 
                         ?>
+                            <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+                        <?php } ?>
                     </select>
                 </div>
-
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="hivRecencyTest">HIV Recency Test Dates:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
+                </div>
             </div>
             <div class="row items-push">
                 <div class="col-lg-7 ">
@@ -116,6 +116,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
 </div>
 
 <script type="text/javascript">
+    let searchExecuted = false;
     /* Table initialisation */
     oTable = null;
     $(document).ready(function() {
@@ -130,7 +131,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             width: "290px",
             allowClear: true,
         });
-        
+
         oTable = $('#recentInfectionTable').dataTable({
             "bAutoWidth": false,
             "bProcessing": true,
@@ -160,7 +161,10 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     "name": "testingFacility",
                     "value": $("#testingFacility").val()
                 });
-
+                aoData.push({
+                    "name": "hivRecencyTest",
+                    "value": $("#hivRecencyTest").val()
+                });
                 $.ajax({
                     "dataType": 'json',
                     "type": "POST",
@@ -172,21 +176,55 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
         });
 
         <?php foreach ($globalConfigResult as $config) {
-            ?>
+        ?>
             getLocationDeatils('<?php echo $config["global_name"]; ?>');
         <?php
             break;
         } ?>
 
+        $('#hivRecencyTest').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="hivRecencyTest"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
+
+            });
+
+        $("#advanceFilter input, #advanceFilter select").on("change", function() {
+            searchExecuted = false;
+        });
     });
 
     function searchData() {
+        searchExecuted = true;
         $.blockUI();
         oTable.fnDraw();
         $.unblockUI();
     }
 
     function exportRecencyData() {
+        if (searchExecuted === false) {
+            searchData();
+        }
         $.blockUI();
         $.post("<?php echo $this->url('recency', array('action' => 'export-recency')); ?>",
             function(data) {

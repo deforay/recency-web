@@ -315,6 +315,7 @@ class FacilitiesTable extends AbstractTableGateway
     }
     public function fetchFacilityByLocation($params)
     {
+        $common = new CommonService();
         $sessionLogin = new Container('credo');
         $roleCode = $sessionLogin->roleCode;
         $dbAdapter = $this->adapter;
@@ -340,6 +341,19 @@ class FacilitiesTable extends AbstractTableGateway
             if (!empty($fDeocde)) {
                 $sQuery = $sQuery->where('facility_id NOT IN(' . implode(",", $fDeocde) . ')');
             }
+        }
+        if (isset($params['hivRecencyTest']) && trim($params['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($params['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
         //$sQuery = $sQuery->where(array('facility_type_id != 2'));
         $sQueryStr = $sql->buildSqlString($sQuery);

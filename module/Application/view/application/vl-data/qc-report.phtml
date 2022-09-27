@@ -39,7 +39,7 @@ $currentDate = date('d-M-Y');
                         <?php
                         foreach ($facilityResult['facilityTest'] as $facilityRow) {
                             // if(2 != (int)$facilityRow['facility_type_id']) continue;
-                            ?>
+                        ?>
                             <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
                         <?php
                         }
@@ -54,6 +54,10 @@ $currentDate = date('d-M-Y');
                         <option value="qc_performed">Qc Performed</option>
                         <option value="all">All</option>
                     </select>
+                </div>
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="hivRecencyTest">HIV Recency Test Dates:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
                 </div>
             </div>
             <div class="row items-push">
@@ -90,6 +94,7 @@ $currentDate = date('d-M-Y');
 </div>
 
 <script type="text/javascript">
+    let searchExecuted = false;
     /* Table initialisation */
     oTable = null;
     $(document).ready(function() {
@@ -121,6 +126,10 @@ $currentDate = date('d-M-Y');
                     "name": "qualityCheck",
                     "value": $("#qualityCheck").val()
                 });
+                aoData.push({
+                    "name": "hivRecencyTest",
+                    "value": $("#hivRecencyTest").val()
+                });
                 $.ajax({
                     "dataType": 'json',
                     "type": "POST",
@@ -132,35 +141,67 @@ $currentDate = date('d-M-Y');
         });
 
         $('#testDate').daterangepicker({
-            format: 'DD-MMM-YYYY',
-            autoUpdateInput: false,
-            separator: ' to ',
-            startDate: moment().subtract('days', 29),
-            endDate: moment(),
-            maxDate: moment(),
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                'Last 7 Days': [moment().subtract('days', 6), moment()],
-                'Last 30 Days': [moment().subtract('days', 29), moment()],
-                'Last 60 Days': [moment().subtract('days', 59), moment()],
-                'Last 180 Days': [moment().subtract('days', 179), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-            }
-        },
-        function(start, end) {
-            startDate = start.format('YYYY-MM-DD');
-            endDate = end.format('YYYY-MM-DD');
-            $('input[name="testDate"]').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="testDate"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
+
+            });
+        $('#hivRecencyTest').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="hivRecencyTest"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
+
             });
 
+        $("#advanceFilter input, #advanceFilter select").on("change", function() {
+            searchExecuted = false;
         });
-
     });
 
     function searchData() {
+        searchExecuted = true;
+        $.blockUI();
         oTable.fnDraw();
+        $.unblockUI();
     }
 </script>

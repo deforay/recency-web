@@ -1477,6 +1477,7 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
+        $general = new CommonService();
 
         $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
@@ -1501,7 +1502,19 @@ class RecencyTable extends AbstractTableGateway
                 $sQuery = $sQuery->where(array('city' => $parameters['locationThree']));
             }
         }
+        if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
 
+        if ($parameters['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
+        }
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
@@ -1631,7 +1644,7 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-
+        $general = new CommonService();
         $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
@@ -1655,7 +1668,19 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['testingFacility'] != '') {
             $sQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
         }
+        if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
 
+        if ($parameters['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
+        }
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
@@ -1710,6 +1735,8 @@ class RecencyTable extends AbstractTableGateway
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
+        $common = new CommonService();
+
         //check the user is active or not
         $uQuery = $sql->select()->from(array('u' => 'users'))->columns(array('user_id', 'status', 'secret_key'))
             ->join(array('rl' => 'roles'), 'u.role_id = rl.role_id', array('role_code'))
@@ -1733,6 +1760,19 @@ class RecencyTable extends AbstractTableGateway
             }
             if ($uResult['role_code'] != 'admin') {
                 $sQuery = $sQuery->where(array('u.auth_token' => $params['authToken']));
+            }
+            if (isset($params['hivRecencyTest']) && trim($params['hivRecencyTest']) != '') {
+                $s_c_date = explode("to", $_POST['hivRecencyTest']);
+                if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                    $start_date = $common->dbDateFormat(trim($s_c_date[0]));
+                }
+                if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                    $end_date = $common->dbDateFormat(trim($s_c_date[1]));
+                }
+            }
+
+            if ($params['hivRecencyTest'] != '') {
+                $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
             }
             $sQueryStr = $sql->buildSqlString($sQuery);
             $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -1851,7 +1891,19 @@ class RecencyTable extends AbstractTableGateway
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
+        if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
 
+        if ($parameters['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
+        }
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
@@ -1897,6 +1949,7 @@ class RecencyTable extends AbstractTableGateway
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
+        $common = new CommonService();
 
         $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome'))
             ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
@@ -1913,7 +1966,19 @@ class RecencyTable extends AbstractTableGateway
         if ($params['facilityId'] != '') {
             $sQuery = $sQuery->where(array('r.facility_id' => $params['facilityId']));
         }
+        if (isset($params['hivRecencyTest']) && trim($params['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
 
+        if ($params['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
+        }
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
@@ -2241,7 +2306,8 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $totalSamples = array();
+        $general = new CommonService();
+
         $sQuery = $sql->select()->from(array('r' => 'recency'))
             ->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))
             ->columns(
@@ -2343,7 +2409,19 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['finalOutcome'] != '') {
             $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
         }
+        if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
 
+        if ($parameters['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
+        }
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
@@ -2489,7 +2567,7 @@ class RecencyTable extends AbstractTableGateway
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $general = new CommonService();
+
         $sQuery = $sql->select()->from(array('r' => 'recency'))
             ->columns(
                 array(
@@ -3633,7 +3711,8 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $totalSamples = array();
+        $general = new CommonService();
+
         $sQuery = $sql->select()->from(array('r' => 'recency'))
             ->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))
             ->columns(
@@ -3737,12 +3816,22 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['finalOutcome'] != '') {
             $sQuery->where(array('final_outcome' => $parameters['finalOutcome']));
         }
+        if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
 
+        if ($parameters['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
+        }
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
-
-
 
         if ($this->sessionLogin->facilityMap != null) {
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
@@ -4665,6 +4754,19 @@ class RecencyTable extends AbstractTableGateway
                 $sQuery = $sQuery->where(array('c.city_id' => $params['locationThree']));
             }
         }
+        if (isset($params['hivRecencyTest']) && trim($params['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($params['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
+        }
         if (isset($params['sampleTestedDates']) && trim($params['sampleTestedDates']) != '') {
             $s_c_date = explode("to", $_POST['sampleTestedDates']);
             if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
@@ -4798,7 +4900,7 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-
+        $general = new CommonService();
         $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('result_printed_on', 'recency_id', 'age', 'gender', 'sample_id', 'patient_id', 'final_outcome', 'sample_collection_date', 'testing_facility_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
@@ -4830,7 +4932,19 @@ class RecencyTable extends AbstractTableGateway
                 $sQuery = $sQuery->where(array('r.city' => $parameters['locationThree']));
             }
         }
+        if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
+            $s_c_date = explode("to", $_POST['hivRecencyTest']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
 
+        if ($parameters['hivRecencyTest'] != '') {
+            $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
+        }
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
