@@ -571,4 +571,17 @@ class CommonService
           header("Content-type: image/png");
           imagepng($captcha);
      }
+
+     public function passwordHash($password)
+     {
+          if (empty($password)) {
+               return null;
+          }
+
+          $options = [
+               'cost' => 14
+          ];
+
+          return password_hash($password, PASSWORD_BCRYPT, $options);
+     }
 }

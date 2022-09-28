@@ -31,6 +31,7 @@ class UserTable extends AbstractTableGateway
         $logincontainer = new Container('credo');
         $captchaSession = new Container('captcha');
         $crossLoginSession = new Container('crossLogin');
+        $common = new CommonService();
         $crossLoginSession->logged = false;
         $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
@@ -53,38 +54,57 @@ class UserTable extends AbstractTableGateway
         }
 
         if (isset($params['userName']) && trim($params['userName']) != "" && trim($params['loginPassword']) != "") {
-
-
-            $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
-
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
             $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
             $userFacilityMapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
+
+            $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
+            /* Hash alg */
             $sQuery = $sql->select()->from(array('u' => 'users'))
                 ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
-                ->where(array('u.email' => $params['userName'], 'u.server_password' => $password, 'u.web_access' => 'yes'));
+                ->where(array('u.email' => $params['userName'], 'u.web_access' => 'yes'));
             $sQueryStr = $sql->buildSqlString($sQuery);
-            $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+            $userRow = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+            if ($userRow['hash_algorithm'] == 'sha1') {
+                if ($password == $userRow['server_password']) {
+                    $newPassword = $common->passwordHash($params['loginPassword']);
+                    $this->update(
+                        array(
+                            'hash_algorithm' => 'phb',
+                            'server_password' => $newPassword
+                        ),
+                        array('user_id' => $userRow['user_id'])
+                    );
+                } else {
+                    $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
+                    return 'login';
+                }
+            } else if ($userRow['hash_algorithm'] == 'phb') {
+                if (!password_verify($params['loginPassword'], $userRow['server_password'])) {
+                    $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
+                    return 'login';
+                }
+            }
 
-            if ($rResult) {
-                if ($rResult->status == 'inactive') {
+            if ($userRow) {
+                if ($userRow->status == 'inactive') {
                     $adminEmail = $globalDb->getGlobalValue('admin_email');
                     $adminPhone = $globalDb->getGlobalValue('admin_phone');
 
                     $alertContainer->alertMsg = 'Your password has expired or has been locked, please contact your administrator(' . $adminEmail . ' or ' . $adminPhone . ')';
                     return 'login';
                 }
-                $ufmResult = $userFacilityMapDb->select(array('user_id' => $rResult->user_id))->toArray();
+                $ufmResult = $userFacilityMapDb->select(array('user_id' => $userRow->user_id))->toArray();
                 $ufmdata = array();
                 foreach ($ufmResult as $val) {
                     array_push($ufmdata, $val['facility_id']);
                 }
-                $logincontainer->userId = $rResult->user_id;
-                $logincontainer->roleId = $rResult->role_id;
-                $logincontainer->roleCode = $rResult->role_code;
-                $logincontainer->userName = ucwords($rResult->user_name);
-                $logincontainer->userEmail = ucwords($rResult->email);
+                $logincontainer->userId = $userRow->user_id;
+                $logincontainer->roleId = $userRow->role_id;
+                $logincontainer->roleCode = $userRow->role_code;
+                $logincontainer->userName = ucwords($userRow->user_name);
+                $logincontainer->userEmail = ucwords($userRow->email);
                 if (!empty($ufmdata)) {
                     $logincontainer->facilityMap = implode(',', $ufmdata);
                 } else {
@@ -96,7 +116,7 @@ class UserTable extends AbstractTableGateway
                     $logincontainer->crossLoginPass = CommonService::encrypt($params['loginPassword'], base64_decode($configResult['vlsm-crosslogin-salt']));
                 }
 
-                if (trim($rResult->role_code) != "remote_order_user") {
+                if (trim($userRow->role_code) != "remote_order_user") {
                     $nonRemoteUserQuery = $sql->select()->from(array('r' => 'recency'))
                         ->columns(array('count' => new Expression('COUNT(*)')))
                         ->where(array('term_outcome = "" OR  term_outcome = NULL '));
@@ -123,11 +143,11 @@ class UserTable extends AbstractTableGateway
                 if (isset($alertResult['count']) && $alertResult['count'] > 0) {
                     $alertContainer->alertMsg = 'There are ' . $alertResult['count'] . ' recent result(s) without Viral Load result recorded';
                 }
-                if ($rResult->role_code == 'VLTS') {
+                if ($userRow->role_code == 'VLTS') {
                     return 'vl-data';
-                } else if ($rResult->role_code != 'admin') {
+                } else if ($userRow->role_code != 'admin') {
                     return 'recency';
-                } else if ($rResult->role_code == 'manager') {
+                } else if ($userRow->role_code == 'manager') {
                     return 'recency';
                 } else {
                     return 'recency';
@@ -149,7 +169,6 @@ class UserTable extends AbstractTableGateway
         * you want to insert a non-database field (for example a counter or static image)
         */
         $sessionLogin = new Container('credo');
-        $common = new CommonService();
         $aColumns = array('u.user_name', 'r.role_name', 'u.email', 'u.server_password', 'u.alt_email', 'u.mobile', 'u.alt_mobile', 'u.job_responsibility', 'u.comments', 'u.status');
         $orderColumns = array('u.user_name', 'r.role_name', 'u.email', 'u.server_password', 'u.alt_email', 'u.mobile', 'u.alt_mobile', 'u.job_responsibility', 'u.comments', 'u.status');
 
@@ -283,11 +302,10 @@ class UserTable extends AbstractTableGateway
 
     public function addUserDetails($params)
     {
+        $common = new CommonService();
         $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
         if (isset($params['userName']) && trim($params['userName']) != "") {
-            $config = new \Laminas\Config\Reader\Ini();
-            $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-            $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
+            $password = $common->passwordHash($params['servPass']);
             $data = array(
                 'user_name' => $params['userName'],
                 'role_id' => base64_decode($params['roleName']),
@@ -300,6 +318,7 @@ class UserTable extends AbstractTableGateway
                 'comments' => $params['comments'],
                 'status' => $params['userStatus'],
                 'web_access' => $params['webAccess'],
+                'hash_algorithm' => 'phb',
                 'qc_sync_in_days' => $params['noOfDays']
             );
             $this->insert($data);
@@ -339,6 +358,7 @@ class UserTable extends AbstractTableGateway
 
     public function updateUserDetails($params)
     {
+        $common = new CommonService();
         $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
@@ -360,8 +380,8 @@ class UserTable extends AbstractTableGateway
             );
             if ($params['servPass'] != '') {
                 if ($configResult['vlsm-crosslogin']) {
+                    $newPass = $common->encrypt($params['servPass'], base64_decode($configResult['vlsm-crosslogin-salt']));
                     $client = new \GuzzleHttp\Client();
-                    $newPass = CommonService::encrypt($params['servPass'], base64_decode($configResult['vlsm-crosslogin-salt']));
                     $url = rtrim($configResult['vlsm']['domain'], "/");
                     $result = $client->post($url . '/users/editProfileHelper.php', [
                         'form_params' => [
@@ -374,10 +394,10 @@ class UserTable extends AbstractTableGateway
                         error_log('VLSM profile not updated');
                     }
                 }
-                $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
-                $data['server_password'] = $password;
+                $data['server_password'] = $common->passwordHash($params['servPass']);
+                $data['hash_algorithm'] = 'phb';
             }
-            $updateResult = $this->update($data, array('user_id' => base64_decode($params['userId'])));
+            $this->update($data, array('user_id' => base64_decode($params['userId'])));
             $lastInsertedId = base64_decode($params['userId']);
 
             $mapDb->delete("user_id=" . $lastInsertedId);
@@ -398,49 +418,74 @@ class UserTable extends AbstractTableGateway
     //login by api
     public function userLoginApi($params)
     {
-        $common = new CommonService();
-        $config = new \Laminas\Config\Reader\Ini();
-        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-        $dbAdapter = $this->adapter;
-        $sql = new Sql($dbAdapter);
-        $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
-        $password = sha1($params['password'] . $configResult["password"]["salt"]);
-
-        $sQuery = $sql->select()->from(array('u' => 'users'))
-            ->where(array('email' => $params['email'], 'server_password' => $password));
-        $sQueryStr = $sql->buildSqlString($sQuery);
-
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
-        if (isset($rResult['user_id']) && $rResult['user_id'] != '' && $rResult['status'] == 'active') {
-            $auth = $common->generateRandomString(16);
-            if ($rResult->secret_key != '') {
-                $secretKey = $rResult->secret_key;
-            } else {
-                $secretKey = $common->generateRandomString(32);
+        if (isset($params['email']) && !empty($params['email']) && isset($params['password']) && !empty($params['password'])) {
+            $common = new CommonService();
+            $config = new \Laminas\Config\Reader\Ini();
+            $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+            $dbAdapter = $this->adapter;
+            $sql = new Sql($dbAdapter);
+            $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
+            $password = sha1($params['password'] . $configResult["password"]["salt"]);
+            /* Hash alg */
+            $sQuery = $sql->select()->from(array('u' => 'users'))->where(array('email' => $params['email']));
+            $sQueryStr = $sql->buildSqlString($sQuery);
+            $userRow = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+            if ($userRow['hash_algorithm'] == 'sha1') {
+                if ($password == $userRow['server_password']) {
+                    $newPassword = $common->passwordHash($params['password']);
+                    $this->update(
+                        array(
+                            'hash_algorithm' => 'phb',
+                            'server_password' => $newPassword
+                        ),
+                        array('user_id' => $userRow['user_id'])
+                    );
+                } else {
+                    $response["status"] = "fail";
+                    $response["message"] = 'The email id or password that you entered is incorrect';
+                    return $response;
+                }
+            } else if ($userRow['hash_algorithm'] == 'phb') {
+                if (!password_verify($params['password'], $userRow['server_password'])) {
+                    $response["status"] = "fail";
+                    $response["message"] = 'The email id or password that you entered is incorrect';
+                    return $response;
+                }
             }
-            // \Zend\Debug\Debug::dump($rResult['user_id']);die;
-            $id = $this->update(array('auth_token' => $auth, 'secret_key' => $secretKey), array('user_id' => $rResult['user_id']));
-            if ($id > 0) {
-                $response['status'] = 'success';
-                $response["userDetails"] = array(
-                    'userId' => $rResult->user_id,
-                    'userName' => $rResult->user_name,
-                    'userEmailAddress' => $rResult->email,
-                    'noOfDays' => $rResult->qc_sync_in_days,
-                    'authToken' => $auth,
-                    'secretKey' => $secretKey
-                );
-                $response["message"] = "Logged in successfully";
+
+            if (isset($userRow['user_id']) && $userRow['user_id'] != '' && $userRow['status'] == 'active') {
+                $auth = $common->generateRandomString(16);
+                if ($userRow->secret_key != '') {
+                    $secretKey = $userRow->secret_key;
+                } else {
+                    $secretKey = $common->generateRandomString(32);
+                }
+                // \Zend\Debug\Debug::dump($rResult['user_id']);die;
+                $id = $this->update(array('auth_token' => $auth, 'secret_key' => $secretKey), array('user_id' => $userRow['user_id']));
+                if ($id > 0) {
+                    $response['status'] = 'success';
+                    $response["userDetails"] = array(
+                        'userId' => $userRow->user_id,
+                        'userName' => $userRow->user_name,
+                        'userEmailAddress' => $userRow->email,
+                        'noOfDays' => $userRow->qc_sync_in_days,
+                        'authToken' => $auth,
+                        'secretKey' => $secretKey
+                    );
+                    $response["message"] = "Logged in successfully";
+                } else {
+                    $response["status"] = "fail";
+                    $response["message"] = "Please try again!";
+                }
+            } else if ($userRow['status'] == 'inactive') {
+                $adminEmail = $globalDb->getGlobalValue('admin_email');
+                $adminPhone = $globalDb->getGlobalValue('admin_phone');
+                $response['message'] = 'Your password has expired or has been locked, please contact your administrator(' . $adminEmail . ' or ' . $adminPhone . ')';
+                $response['status'] = 'fail';
             } else {
                 $response["status"] = "fail";
-                $response["message"] = "Please try again!";
+                $response["message"] = "Please check your login credentials!";
             }
-        } else if ($rResult['status'] == 'inactive') {
-            $adminEmail = $globalDb->getGlobalValue('admin_email');
-            $adminPhone = $globalDb->getGlobalValue('admin_phone');
-            $response['message'] = 'Your password has expired or has been locked, please contact your administrator(' . $adminEmail . ' or ' . $adminPhone . ')';
-            $response['status'] = 'fail';
         } else {
             $response["status"] = "fail";
             $response["message"] = "Please check your login credentials!";
@@ -449,12 +494,9 @@ class UserTable extends AbstractTableGateway
     }
     public function updateProfile($params)
     {
-
-
         $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
-        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
-
+        $common = new CommonService();
         if (isset($params['userId']) && trim($params['userId']) != "") {
             $data = array(
                 'user_name' => $params['userName'],
@@ -479,9 +521,10 @@ class UserTable extends AbstractTableGateway
                     if (isset($response->status) && $response->status != 'success') {
                         error_log('VLSM profile not updated for the user->' . $params['userName']);
                     }
+                    $newPass = $common->passwordHash($params['servPass']);
+                    $data['server_password'] = $newPass;
+                    $data['hash_algorithm'] = 'phb';
                 }
-                $password = sha1($params['servPass'] . $configResult["password"]["salt"]);
-                $data['server_password'] = $password;
             }
             $updateResult = $this->update($data, array('user_id' => base64_decode($params['userId'])));
         }
@@ -492,15 +535,15 @@ class UserTable extends AbstractTableGateway
     {
         $upId = 0;
         $response = array();
+        $common = new CommonService();
         $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $check = $this->select(array('email' => $params['u']))->current();
         if ($check) {
-            $decryptedPassword = CommonService::decrypt($params['t'], base64_decode($configResult['vlsm-crosslogin-salt']));
-            $password = sha1($decryptedPassword . $configResult["password"]["salt"]);
+            $decryptedPassword = $common->decrypt($params['t'], base64_decode($configResult['vlsm-crosslogin-salt']));
             $data = array(
                 'email' => $params['u'],
-                'server_password' => $password
+                'server_password' => $decryptedPassword
             );
             $upId = $this->update($data, array('user_id' => $check['user_id']));
             if ($upId > 0) {
