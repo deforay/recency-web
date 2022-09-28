@@ -1,8 +1,10 @@
 <?php
+
 use Laminas\Session\Container;
+
 $syn = false;
-foreach($globalConfigResult as $result){
-    if($result['global_name'] == 'recency_to_vlsm_sync' && $result['global_value'] == 'yes'){
+foreach ($globalConfigResult as $result) {
+    if ($result['global_name'] == 'recency_to_vlsm_sync' && $result['global_value'] == 'yes') {
         $syn = true;
     }
 }
@@ -10,9 +12,10 @@ $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 ?>
 <style>
-    .dataTables_empty{
+    .dataTables_empty {
         text-align: center;
     }
+
     .saveResult {
         pointer-events: none;
     }
@@ -39,12 +42,12 @@ $roleCode = $sessionLogin->roleCode;
             <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <?php if($roleCode != "manager"){?>
-                        <a href="<?php echo $this->url('vl-data', array('action' => 'upload-result')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Upload Viral Load Data</a>
-                        <?php if($syn){ ?>
-                        <a href="<?php echo $this->url('vl-data', array('action' => 'request-vl-test-on-vlsm')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-file-medical-alt"></i>&nbsp;Request VL Test on VLSM</a>
+                        <?php if ($roleCode != "manager") { ?>
+                            <a href="<?php echo $this->url('vl-data', array('action' => 'upload-result')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Upload Viral Load Data</a>
+                            <?php if ($syn) { ?>
+                                <a href="<?php echo $this->url('vl-data', array('action' => 'request-vl-test-on-vlsm')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-file-medical-alt"></i>&nbsp;Request VL Test on VLSM</a>
                         <?php }
-                        }?>
+                        } ?>
                     </li>
                 </ol>
             </nav>
@@ -59,11 +62,8 @@ $roleCode = $sessionLogin->roleCode;
         </div>
         <div class="block-content">
             <div class="col-md-12 table-responsive" id="hide">
-
-                <h3 class="block-title" style=" margin-bottom: 2%; "></h3>
                 <div class="form-group row">
-                    <?php
-                    foreach ($globalConfigResult as $config) { ?>
+                    <?php foreach ($globalConfigResult as $config) { ?>
                         <?php if ($config['global_name'] == 'location_one' || $config['global_name'] == 'location_two' || $config['global_name'] == 'location_three') { ?>
                             <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for=""><?php echo ucfirst($config['global_value']); ?></label>
                             <div class="col-sm-4">
@@ -71,8 +71,8 @@ $roleCode = $sessionLogin->roleCode;
                                     <option value="">-- Select --</option>
                                 </select>
                             </div>
-                        <?php }
-                } ?>
+                    <?php }
+                    } ?>
                     <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
                     <div class="col-sm-4">
                         <select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
@@ -100,7 +100,7 @@ $roleCode = $sessionLogin->roleCode;
 </div>
 <script type="text/javascript">
     duplicateName = true;
-    
+
     function searchData(onloadData = null) {
         var province = $("#location_one").val();
         var district = $("#location_two").val();
@@ -143,9 +143,9 @@ $roleCode = $sessionLogin->roleCode;
             width: "290px",
             allowClear: true,
         });
-        <?php foreach ($globalConfigResult as $config) {?>
+        <?php foreach ($globalConfigResult as $config) { ?>
             getLocationDeatils('<?php echo $config["global_name"]; ?>');
-            <?php break;
+        <?php break;
         } ?>
         searchData('yes');
     });
