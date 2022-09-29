@@ -133,14 +133,15 @@ $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
                     sessionStorage.setItem("crosslogin", "false");
                     <?php $crossLoginSession->logged = false; ?>
                     $('<iframe src="<?php echo rtrim($configResult['vlsm']['domain'], "/") . '/login/logout.php'; ?>" frameborder="0" scrolling="no" id="myFrame" style="display:none;"></iframe>').appendTo('body');
-        }
-        <?php }
+                }
+            <?php }
             if (isset($container->alertMsg) && $container->alertMsg != "") {
-        ?> alert("<?php echo $container->alertMsg; ?>"); <?php
-                                                                    $container->alertMsg = "";
-                                                                    unset($container->alertMsg);
-                                                                }
-                                                                    ?>
+            ?> alert("<?php echo $container->alertMsg; ?>");
+            <?php
+                $container->alertMsg = "";
+                unset($container->alertMsg);
+            }
+            ?>
         });
 
         function doLogin() {

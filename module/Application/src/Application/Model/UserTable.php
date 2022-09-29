@@ -66,7 +66,7 @@ class UserTable extends AbstractTableGateway
                 ->where(array('u.email' => $params['userName'], 'u.web_access' => 'yes'));
             $sQueryStr = $sql->buildSqlString($sQuery);
             $userRow = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-            if ($userRow['hash_algorithm'] == 'sha1') {
+            if ($userRow['hash_algorithm'] == 'sha1' && !isset($params['u'])) {
                 if ($password == $userRow['server_password']) {
                     $newPassword = $common->passwordHash($params['loginPassword']);
                     $this->update(
@@ -113,7 +113,7 @@ class UserTable extends AbstractTableGateway
 
                 $logincontainer->crossLoginPass = null;
                 if ($configResult['vlsm-crosslogin']) {
-                    $logincontainer->crossLoginPass = CommonService::encrypt($params['loginPassword'], base64_decode($configResult['vlsm-crosslogin-salt']));
+                    $logincontainer->crossLoginPass = $common->encrypt($params['loginPassword'], base64_decode($configResult['vlsm-crosslogin-salt']));
                 }
 
                 if (trim($userRow->role_code) != "remote_order_user") {
@@ -541,9 +541,11 @@ class UserTable extends AbstractTableGateway
         $check = $this->select(array('email' => $params['u']))->current();
         if ($check) {
             $decryptedPassword = $common->decrypt($params['t'], base64_decode($configResult['vlsm-crosslogin-salt']));
+            $passwordHash = $common->passwordHash($decryptedPassword);
             $data = array(
                 'email' => $params['u'],
-                'server_password' => $decryptedPassword
+                'hash_algorithm' => 'phb',
+                'server_password' => $passwordHash
             );
             $upId = $this->update($data, array('user_id' => $check['user_id']));
             if ($upId > 0) {

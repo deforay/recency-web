@@ -27,7 +27,7 @@ class LoginController extends AbstractActionController
         /* Cross login credential check start*/ else if ($request->getQuery() != "") {
             $params = $this->getRequest()->getQuery();
             $captchaSession = new Container('captcha');
-            $captchaSession->status = 'success'; // bypassing captcha            
+            $captchaSession->status = 'success'; // bypassing captcha
             if (!isset($params['u']) || $params['u'] == "" || !isset($params['t']) || $params['t'] == "") {
                 $viewModel = new ViewModel();
                 $viewModel->setTerminal(true);
