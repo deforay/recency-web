@@ -4,7 +4,7 @@ use Laminas\Session\Container;
 
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
 <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
@@ -60,9 +60,9 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     </td>
                 </tr>
                 <tr>
-                    <td><b>HIV Recency Test Dates:</b></td>
+                    <td><b>QC Test Dates:</b></td>
                     <td>
-                        <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
+                        <input type="text" class="form-control" id="qcTestDate" placeholder="Hiv Recency Test Date" name="qcTestDate" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
                     </td>
                     <td colspan="4" style="text-align: end;"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
                         &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -94,9 +94,6 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                         <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i + 1; ?>" id="iCol<?php echo $i; ?>" data-showhide="kit_expiry_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i; ?>">Kit Expiry Date</label>
                     </div>
                     <div class="col-sm-3">
-                        <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i + 1; ?>" id="iCol<?php echo $i; ?>" data-showhide="hiv_recency_test_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i; ?>">HIV Recency Test Date</label>
-                    </div>
-                    <div class="col-sm-3">
                         <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i + 1; ?>" id="iCol<?php echo $i; ?>" data-showhide="control_line" class="showhideCheckBox" /> <label for="iCol<?php echo $i; ?>">Control Line</label>
                     </div>
                     <div class="col-sm-3">
@@ -120,11 +117,10 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 <thead>
                     <tr>
                         <th>QC Sample ID</th>
-                        <th>QC Date</th>
+                        <th>QC Test Date</th>
                         <th>Reference Result</th>
                         <th>Kit Lot No.</th>
                         <th>Kit Expiry Date</th>
-                        <th>HIV Recency Test Date</th>
                         <th>Control Line</th>
                         <th>Verification Line</th>
                         <th>Long Term Line</th>
@@ -136,9 +132,9 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 <tbody>
                     <tr>
                         <?php if ($roleCode == "user") {
-                            echo "<td colspan='7' class='dataTables_empty'>Loading data from server</td>";
+                            echo "<td colspan='11' class='dataTables_empty'>Loading data from server</td>";
                         } else {
-                            echo "<td colspan='6' class='dataTables_empty'>Loading data from server</td>";
+                            echo "<td colspan='10' class='dataTables_empty'>Loading data from server</td>";
                         } ?>
                     </tr>
                 </tbody>
@@ -149,7 +145,6 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                         <th>Reference Result</th>
                         <th>Kit Lot No.</th>
                         <th>Kit Expiry Date</th>
-                        <th>HIV Recency Test Date</th>
                         <th>Control Line</th>
                         <th>Verification Line</th>
                         <th>Long Term Line </th>
@@ -191,8 +186,8 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     "value": $("#testingFacility").val()
                 });
                 aoData.push({
-                    "name": "hivRecencyTest",
-                    "value": $("#hivRecencyTest").val()
+                    "name": "qcTestDate",
+                    "value": $("#qcTestDate").val()
                 });
                 $.ajax({
                     "dataType": 'json',
@@ -225,7 +220,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             }
         }
 
-        $('#hivRecencyTest').daterangepicker({
+        $('#qcTestDate').daterangepicker({
                 format: 'DD-MMM-YYYY',
                 autoUpdateInput: false,
                 separator: ' to ',
@@ -246,7 +241,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             function(start, end) {
                 startDate = start.format('YYYY-MM-DD');
                 endDate = end.format('YYYY-MM-DD');
-                $('input[name="hivRecencyTest"]').on('apply.daterangepicker', function(ev, picker) {
+                $('input[name="qcTestDate"]').on('apply.daterangepicker', function(ev, picker) {
                     $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
                 });
 

@@ -119,8 +119,8 @@ class QualityCheckTable extends AbstractTableGateway
           if ($parameters['testingFacility'] != '') {
                $sQuery->where(array('testing_facility_id' => $parameters['testingFacility']));
           }
-          if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
-               $s_c_date = explode("to", $_POST['hivRecencyTest']);
+          if (isset($parameters['qcTestDate']) && trim($parameters['qcTestDate']) != '') {
+               $s_c_date = explode("to", $_POST['qcTestDate']);
                if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
                     $start_date = $general->dbDateFormat(trim($s_c_date[0]));
                }
@@ -128,8 +128,8 @@ class QualityCheckTable extends AbstractTableGateway
                     $end_date = $general->dbDateFormat(trim($s_c_date[1]));
                }
           }
-          if ($parameters['hivRecencyTest'] != '') {
-               $sQuery = $sQuery->where(array("qc.hiv_recency_test_date >='" . $start_date . "'", "qc.hiv_recency_test_date <='" . $end_date . "'"));
+          if ($parameters['qcTestDate'] != '') {
+               $sQuery = $sQuery->where(array("qc.qc_test_date >='" . $start_date . "'", "qc.qc_test_date <='" . $end_date . "'"));
           }
 
           if (isset($sOrder) && $sOrder != "") {
@@ -183,7 +183,6 @@ class QualityCheckTable extends AbstractTableGateway
                $row[] = str_replace("_", " ", ucwords($aRow['reference_result']));
                $row[] = ucwords($aRow['kit_lot_no']);
                $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
-               $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
                $row[] = ucwords($aRow['control_line']);
                $row[] = ucwords($aRow['positive_verification_line']);
                $row[] = ucwords($aRow['long_term_verification_line']);
