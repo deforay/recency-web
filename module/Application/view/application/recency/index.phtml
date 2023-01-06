@@ -138,7 +138,13 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                     <td>
                         <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
                     </td>
-                    <td><b>Recency Tests :</b></td>
+                    <td><b>Sample Collection Dates:</b></td>
+                    <td>
+                        <input type="text" class="form-control" id="sampleCollectionDate" placeholder="Sample Collection Date" name="sampleCollectionDate" title="Please select Sample Collection Date" style="width:100%;" readonly>
+                    </td>
+                </tr>
+                <tr>
+                <td><b>Recency Tests :</b></td>
                     <td>
                         <select class="form-control" id="RTest" name="RTest" title="Please select Recency Tests" style="width:100%;">
                             <option value="">All</option>
@@ -146,7 +152,8 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                             <option value="pending">Pending</option>
                         </select>
                     </td>
-                </tr>
+                   <td></td>
+                        </tr>
                 <tr>
                     <td colspan="4" style="text-align: end;"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
                         &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -339,6 +346,11 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                     "name": "hivRecencyTest",
                     "value": $("#hivRecencyTest").val()
                 });
+                aoData.push({
+                    "name": "sampleCollectionDate",
+                    "value": $("#sampleCollectionDate").val()
+                });
+                
                 $.ajax({
                     "dataType": 'json',
                     "type": "POST",
@@ -400,6 +412,35 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                 });
 
             });
+
+            $('#sampleCollectionDate').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="sampleCollectionDate"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
+
+            });
+
+            
         // $('#hivRecencyTest').val('');
         $("#advanceFilter input, #advanceFilter select").on("change", function() {
             searchExecuted = false;
