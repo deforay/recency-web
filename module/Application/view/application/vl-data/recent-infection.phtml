@@ -142,10 +142,6 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             "sAjaxSource": "<?php echo $this->url('vl-data', array('action' => 'recent-infection')); ?>",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 aoData.push({
-                    "name": "fName",
-                    "value": $("#facilityName").val()
-                });
-                aoData.push({
                     "name": "locationOne",
                     "value": $("#location_one").val()
                 });
@@ -156,6 +152,10 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 aoData.push({
                     "name": "locationThree",
                     "value": $("#location_three").val()
+                });
+                aoData.push({
+                    "name": "fName",
+                    "value": $("#facilityId").val()
                 });
                 aoData.push({
                     "name": "testingFacility",
@@ -238,10 +238,11 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             });
     }
 
-    function getLocationDeatils(globalName, nxtGlobalName) {
+    function getLocationDeatils(globalName) {
         var selectValue = document.getElementById(globalName).value;
         var innerId = '';
         var path = '';
+
         if (globalName == 'location_one' && selectValue == '') {
             path = 'get-province';
             innerId = 'location_one';
@@ -249,11 +250,26 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             path = 'get-district';
             innerId = 'location_two';
             $("#location_three").html("<option value=''>-- Select --</option>");
+
         } else if (globalName == 'location_two' && selectValue != '') {
             path = 'get-city';
             innerId = 'location_three';
-        } else if (globalName == 'location_three' || globalName == 'location_two') {
-            getFacilityListByLocation(globalName);
+            if (selectValue == 'other') {
+                $("#otherDistrictName").show();
+                $("#otherDistrictName").addClass('isRequired');
+            } else {
+                $("#otherDistrictName").hide();
+                $("#otherDistrictName").removeClass('isRequired');
+            }
+        } else if (globalName == 'location_three' && selectValue != '') {
+            path = 'get-facility';
+            if (selectValue == 'other') {
+                $("#otherCityName").show();
+                $("#otherCityName").addClass('isRequired');
+            } else {
+                $("#otherCityName").hide();
+                $("#otherCityName").removeClass('isRequired');
+            }
         }
         if (path != '') {
             $.blockUI();
@@ -261,14 +277,25 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     selectValue: selectValue
                 },
                 function(data) {
-                    $("#" + innerId).html(data);
-                    getFacilityListByLocation(globalName);
+                    if (globalName == 'location_one' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityId").html(splitOption[1]);
+                    } else if (globalName == 'location_two' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityId").html(splitOption[1]);
+                    } else if (globalName == 'location_three' && selectValue != '') {
+                        $("#facilityId").html(data);
+                    } else {
+                        $("#" + innerId).html(data);
+                    }
                     $.unblockUI();
                 });
         }
     }
 
-    function getFacilityListByLocation(globalName) {
+   /* function getFacilityListByLocation(globalName) {
         $.blockUI();
         $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {
                 locationOne: $("#location_one").val(),
@@ -280,7 +307,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 $("#facilityId").html('<option value="">-- Select --</option>' + data);
                 $.unblockUI();
             });
-    }
+    }*/
 
     function exportRecentInfection() {
         $.blockUI();

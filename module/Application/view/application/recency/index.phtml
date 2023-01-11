@@ -57,7 +57,21 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
         </div>
         <div class="block-content block-content-full">
             <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-                <tr>
+            <tr>
+            <td><b>Province :</b></td>
+                    <td>
+                    <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name']; ?>');">
+                                                    <option value="">-- Select --</option>
+                                                </select>
+                    </td>
+                    <td><b>District :</b></td>
+                    <td>
+                    <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name']; ?>');">
+                                                    <option value="">-- Select --</option>
+                                                </select>
+                    </td>
+                        </tr>    
+            <tr>
                     <td><b>Facility Name :</b></td>
                     <td>
                         <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:100%;">
@@ -315,6 +329,14 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
             "sAjaxSource": "<?php echo $this->url('recency', array('action' => 'index')); ?>",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 aoData.push({
+                    "name": "province",
+                    "value": $("#location_one").val()
+                });
+                aoData.push({
+                    "name": "district",
+                    "value": $("#location_two").val()
+                });
+                aoData.push({
                     "name": "fName",
                     "value": $("#facilityName").val()
                 });
@@ -445,6 +467,11 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
         $("#advanceFilter input, #advanceFilter select").on("change", function() {
             searchExecuted = false;
         });
+
+        <?php foreach ($globalConfigResult as $config) { ?>
+            getLocationDeatils('<?php echo $config["global_name"]; ?>');
+        <?php break;
+        } ?>
     });
 
     function searchVlRequestData() {
@@ -516,4 +543,62 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                 alert('Manage Columns Successfully Updated');
             });
     }
+
+    function getLocationDeatils(globalName) {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
+
+        if (globalName == 'location_one' && selectValue == '') {
+            path = 'get-province';
+            innerId = 'location_one';
+        } else if (globalName == 'location_one' && selectValue != '') {
+            path = 'get-district';
+            innerId = 'location_two';
+            $("#location_three").html("<option value=''>-- Select --</option>");
+
+        } else if (globalName == 'location_two' && selectValue != '') {
+            path = 'get-city';
+            innerId = 'location_three';
+            if (selectValue == 'other') {
+                $("#otherDistrictName").show();
+                $("#otherDistrictName").addClass('isRequired');
+            } else {
+                $("#otherDistrictName").hide();
+                $("#otherDistrictName").removeClass('isRequired');
+            }
+        } else if (globalName == 'location_three' && selectValue != '') {
+            path = 'get-facility';
+            if (selectValue == 'other') {
+                $("#otherCityName").show();
+                $("#otherCityName").addClass('isRequired');
+            } else {
+                $("#otherCityName").hide();
+                $("#otherCityName").removeClass('isRequired');
+            }
+        }
+        if (path != '') {
+            $.blockUI();
+            $.post("/common/" + path, {
+                    selectValue: selectValue
+                },
+                function(data) {
+                    if (globalName == 'location_one' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityId").html(splitOption[1]);
+                    } else if (globalName == 'location_two' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityName").html(splitOption[1]);
+                    } else if (globalName == 'location_three' && selectValue != '') {
+                        $("#facilityName").html(data);
+                    } else {
+                        $("#" + innerId).html(data);
+                    }
+                    $.unblockUI();
+                });
+        }
+    }
+
 </script>

@@ -282,10 +282,11 @@ $ageArray = array('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49',
         getFacilityListByLocation();
     }
 
-    function getLocationDeatils(globalName, nxtGlobalName) {
+    function getLocationDeatils(globalName) {
         var selectValue = document.getElementById(globalName).value;
         var innerId = '';
         var path = '';
+
         if (globalName == 'location_one' && selectValue == '') {
             path = 'get-province';
             innerId = 'location_one';
@@ -293,11 +294,26 @@ $ageArray = array('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49',
             path = 'get-district';
             innerId = 'location_two';
             $("#location_three").html("<option value=''>-- Select --</option>");
+
         } else if (globalName == 'location_two' && selectValue != '') {
             path = 'get-city';
             innerId = 'location_three';
-        } else if (globalName == 'location_three' || globalName == 'location_two') {
-            getFacilityListByLocation(globalName);
+            if (selectValue == 'other') {
+                $("#otherDistrictName").show();
+                $("#otherDistrictName").addClass('isRequired');
+            } else {
+                $("#otherDistrictName").hide();
+                $("#otherDistrictName").removeClass('isRequired');
+            }
+        } else if (globalName == 'location_three' && selectValue != '') {
+            path = 'get-facility';
+            if (selectValue == 'other') {
+                $("#otherCityName").show();
+                $("#otherCityName").addClass('isRequired');
+            } else {
+                $("#otherCityName").hide();
+                $("#otherCityName").removeClass('isRequired');
+            }
         }
         if (path != '') {
             $.blockUI();
@@ -305,14 +321,25 @@ $ageArray = array('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49',
                     selectValue: selectValue
                 },
                 function(data) {
-                    $("#" + innerId).html(data);
-                    getFacilityListByLocation(globalName);
+                    if (globalName == 'location_one' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityId").html(splitOption[1]);
+                    } else if (globalName == 'location_two' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityId").html(splitOption[1]);
+                    } else if (globalName == 'location_three' && selectValue != '') {
+                        $("#facilityId").html(data);
+                    } else {
+                        $("#" + innerId).html(data);
+                    }
                     $.unblockUI();
                 });
         }
     }
 
-    function getFacilityListByLocation(globalName) {
+    /*function getFacilityListByLocation(globalName) {
         $.post("<?php echo $this->url('facilities', array('action' => 'get-facility-by-location')); ?>", {
                 locationOne: $("#location_one").val(),
                 locationTwo: $("#location_two").val(),
@@ -323,7 +350,7 @@ $ageArray = array('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49',
             function(data) {
                 $("#facilityId").html('<option value="">-- Select --</option>' + data);
             });
-    }
+    }*/
 
     function getReport() {
         $.blockUI();
