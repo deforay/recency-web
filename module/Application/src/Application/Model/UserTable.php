@@ -33,9 +33,14 @@ class UserTable extends AbstractTableGateway
         $crossLoginSession = new Container('crossLogin');
         $common = new CommonService();
         $crossLoginSession->logged = false;
+
+        $userLoginHistoryDb = new \Application\Model\UserLoginHistoryTable($this->adapter);
+
         $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         if (!isset($captchaSession) || empty($captchaSession->status) || $captchaSession->status == 'fail') {
+            //User log details
+            $userLoginHistoryDb->addUserLoginHistory($params,'failed');
             $alertContainer->alertMsg = 'Please check if you entered the text from image correctly';
             return 'login';
         }
@@ -48,6 +53,8 @@ class UserTable extends AbstractTableGateway
             $params['userName'] = base64_decode($params['u']);
         } else {
             if (!$configResult['vlsm-crosslogin'] && !isset($params['userName']) && trim($params['userName']) == "") {
+               //User log details
+                $userLoginHistoryDb->addUserLoginHistory($params,'failed');
                 $alertContainer->alertMsg = 'Cross login not activated in recency!';
                 return 'login';
             }
@@ -77,11 +84,15 @@ class UserTable extends AbstractTableGateway
                         array('user_id' => $userRow['user_id'])
                     );
                 } else {
+                    //User log details
+                    $userLoginHistoryDb->addUserLoginHistory($params,'failed');
                     $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
                     return 'login';
                 }
             } else if ($userRow['hash_algorithm'] == 'phb') {
                 if (!password_verify($params['loginPassword'], $userRow['server_password'])) {
+                    //User log details
+                    $userLoginHistoryDb->addUserLoginHistory($params,'failed');
                     $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
                     return 'login';
                 }
@@ -91,7 +102,8 @@ class UserTable extends AbstractTableGateway
                 if ($userRow->status == 'inactive') {
                     $adminEmail = $globalDb->getGlobalValue('admin_email');
                     $adminPhone = $globalDb->getGlobalValue('admin_phone');
-
+                    //User log details
+                    $userLoginHistoryDb->addUserLoginHistory($params,'locked');
                     $alertContainer->alertMsg = 'Your password has expired or has been locked, please contact your administrator(' . $adminEmail . ' or ' . $adminPhone . ')';
                     return 'login';
                 }
@@ -143,6 +155,8 @@ class UserTable extends AbstractTableGateway
                 if (isset($alertResult['count']) && $alertResult['count'] > 0) {
                     $alertContainer->alertMsg = 'There are ' . $alertResult['count'] . ' recent result(s) without Viral Load result recorded';
                 }
+                 //User log details
+                 $userLoginHistoryDb->addUserLoginHistory($params,'successful');
                 if ($userRow->role_code == 'VLTS') {
                     return 'vl-data';
                 } else if ($userRow->role_code != 'admin') {
@@ -153,10 +167,14 @@ class UserTable extends AbstractTableGateway
                     return 'recency';
                 }
             } else {
+                 //User log details
+                $userLoginHistoryDb->addUserLoginHistory($params,'failed');
                 $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
                 return 'login';
             }
         } else {
+             //User log details
+             $userLoginHistoryDb->addUserLoginHistory($params,'failed');
             $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
             return 'login';
         }

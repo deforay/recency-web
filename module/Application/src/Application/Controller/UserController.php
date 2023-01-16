@@ -94,7 +94,7 @@ class UserController extends AbstractActionController
     }
     public function editProfileAction()
     {
-        
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -113,6 +113,19 @@ class UserController extends AbstractActionController
                 return $this->redirect()->toRoute("home");
             }
         }
+    }
+
+    public function userLoginHistoryAction()
+    {
+        $session = new Container('credo');
+        $request = $this->getRequest();
+            if ($request->isPost()) {
+                $params = $request->getPost();
+                // \Zend\Debug\Debug::dump($params);die;
+                
+                $result = $this->userService->getLoginHistoryDetails($params);
+                return $this->getResponse()->setContent(Json::encode($result));
+            }
     }
 
 }
