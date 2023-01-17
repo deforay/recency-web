@@ -8,7 +8,7 @@ if(count($result['city'])>0){
 $city .='<option value="other">Other</option>';
 
 
-$facility = '';
+$facility = '<option value="">-- Select --</option>';
 if(count($result['facility'])>0){
     foreach($result['facility'] as $name){
         $facility .='<option value="'.base64_encode($name['facility_id']).'">'.$name['facility_name'].'</option>';

@@ -20,8 +20,24 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
         <div class="block-header block-header-default"></div>
 
         <div class="block-content block-content-full">
+        <div class="form-group row">
+            
+            <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="Province">Province</label>
+            <div class="col-sm-4">
+            <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name']; ?>');">
+                                                                <option value="">-- Select --</option>
+                                                            </select>
+            </div>
+            <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="District">District:</label>
+            <div class="col-sm-4">
+            <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name']; ?>');">
+                        <option value="">-- Select --</option>
+                </select>
+            </div>
+        </div>
             <div class="form-group row">
 
+            
                 <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
                 <div class="col-sm-4">
                     <select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
@@ -41,6 +57,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
                 </div>
             </div>
+        
             <div class="row items-push">
                 <div class="col-lg-7 ">
                     <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
@@ -87,6 +104,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
     let searchExecuted = false;
     /* Table initialisation */
     oTable = null;
+    
     $(document).ready(function() {
 
         $("#facilityId").select2({
@@ -109,6 +127,14 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             ],
             "sAjaxSource": "<?php echo $this->url('vl-data', array('action' => 'tat-report')); ?>",
             "fnServerData": function(sSource, aoData, fnCallback) {
+                aoData.push({
+                    "name": "province",
+                    "value": $("#location_one").val()
+                });
+                aoData.push({
+                    "name": "district",
+                    "value": $("#location_two").val()
+                });
                 aoData.push({
                     "name": "testingFacility",
                     "value": $("#testingFacility").val()
@@ -157,6 +183,11 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
         $("#advanceFilter input, #advanceFilter select").on("change", function() {
             searchExecuted = false;
         });
+
+        <?php foreach ($globalConfigResult as $config) { ?>
+            getLocationDeatils('<?php echo $config["global_name"]; ?>');
+        <?php break;
+        } ?>
     });
 
     function searchData() {
@@ -181,5 +212,62 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     document.location.href = '/temporary/' + data;
                 }
             });
+    }
+
+    function getLocationDeatils(globalName) {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
+
+        if (globalName == 'location_one' && selectValue == '') {
+            path = 'get-province';
+            innerId = 'location_one';
+        } else if (globalName == 'location_one' && selectValue != '') {
+            path = 'get-district';
+            innerId = 'location_two';
+            $("#location_three").html("<option value=''>-- Select --</option>");
+
+        } else if (globalName == 'location_two' && selectValue != '') {
+            path = 'get-city';
+            innerId = 'location_three';
+            if (selectValue == 'other') {
+                $("#otherDistrictName").show();
+                $("#otherDistrictName").addClass('isRequired');
+            } else {
+                $("#otherDistrictName").hide();
+                $("#otherDistrictName").removeClass('isRequired');
+            }
+        } else if (globalName == 'location_three' && selectValue != '') {
+            path = 'get-facility';
+            if (selectValue == 'other') {
+                $("#otherCityName").show();
+                $("#otherCityName").addClass('isRequired');
+            } else {
+                $("#otherCityName").hide();
+                $("#otherCityName").removeClass('isRequired');
+            }
+        }
+        if (path != '') {
+            $.blockUI();
+            $.post("/common/" + path, {
+                    selectValue: selectValue
+                },
+                function(data) {
+                    if (globalName == 'location_one' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#testingFacility").html(splitOption[1]);
+                    } else if (globalName == 'location_two' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#testingFacility").html(splitOption[1]);
+                    } else if (globalName == 'location_three' && selectValue != '') {
+                        $("#testingFacility").html(data);
+                    } else {
+                        $("#" + innerId).html(data);
+                    }
+                    $.unblockUI();
+                });
+        }
     }
 </script>

@@ -163,8 +163,14 @@ class RecencyTable extends AbstractTableGateway
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
+        if ($parameters['province'] != '') {
+            $sQuery->where(array('r.location_one' => $parameters['province']));
+        }
+        if ($parameters['district'] != '') {
+            $sQuery->where(array('r.location_two' => $parameters['district']));
+        }
         if ($parameters['fName'] != '') {
-            $sQuery->where(array('r.facility_id' => $parameters['fName']));
+            $sQuery->where(array('r.facility_id' => base64_decode($parameters['fName'])));
         }
         if ($parameters['tOutcome'] != '') {
             $sQuery->where(array('term_outcome' => $parameters['tOutcome']));
@@ -205,6 +211,20 @@ class RecencyTable extends AbstractTableGateway
 
         if ($parameters['hivRecencyTest'] != '') {
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
+        }
+
+        if (isset($parameters['sampleCollectionDate']) && trim($parameters['sampleCollectionDate']) != '') {
+            $s_c_date = explode("to", $_POST['sampleCollectionDate']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($parameters['sampleCollectionDate'] != '') {
+            $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
         if ($sessionLogin->facilityMap != null) {
@@ -1488,18 +1508,18 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->where($sWhere);
         }
         if ($parameters['fName'] != '') {
-            $sQuery->where(array('r.facility_id' => $parameters['fName']));
+            $sQuery->where(array('r.facility_id' => base64_decode($parameters['fName'])));
         }
         if ($parameters['testingFacility'] != '') {
             $sQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
         }
         if ($parameters['locationOne'] != '') {
-            $sQuery = $sQuery->where(array('province' => $parameters['locationOne']));
+            $sQuery = $sQuery->where(array('r.location_one' => $parameters['locationOne']));
             if ($parameters['locationTwo'] != '') {
-                $sQuery = $sQuery->where(array('district' => $parameters['locationTwo']));
+                $sQuery = $sQuery->where(array('r.location_two' => $parameters['locationTwo']));
             }
             if ($parameters['locationThree'] != '') {
-                $sQuery = $sQuery->where(array('city' => $parameters['locationThree']));
+                $sQuery = $sQuery->where(array('r.location_three' => $parameters['locationThree']));
             }
         }
         if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
@@ -1654,15 +1674,15 @@ class RecencyTable extends AbstractTableGateway
             $sQuery->where($sWhere);
         }
         if ($parameters['fName'] != '') {
-            $sQuery->where(array('r.facility_id' => $parameters['fName']));
+            $sQuery->where(array('r.facility_id' => base64_decode($parameters['fName'])));
         }
         if ($parameters['locationOne'] != '') {
-            $sQuery = $sQuery->where(array('province' => $parameters['locationOne']));
+            $sQuery = $sQuery->where(array('r.location_one' => $parameters['locationOne']));
             if ($parameters['locationTwo'] != '') {
-                $sQuery = $sQuery->where(array('district' => $parameters['locationTwo']));
+                $sQuery = $sQuery->where(array('r.location_two' => $parameters['locationTwo']));
             }
             if ($parameters['locationThree'] != '') {
-                $sQuery = $sQuery->where(array('city' => $parameters['locationThree']));
+                $sQuery = $sQuery->where(array('r.location_three' => $parameters['locationThree']));
             }
         }
         if ($parameters['testingFacility'] != '') {
@@ -1879,15 +1899,12 @@ class RecencyTable extends AbstractTableGateway
             ))
 
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array('vl_result_entry_date not like "" AND vl_result_entry_date!="0000-00-00 00:00:00" AND hiv_recency_test_date not like "" AND vl_test_date not like ""'))
+            ->where(array('vl_result_entry_date not like "" AND hiv_recency_test_date not like "" AND vl_test_date not like ""'))
             ->group('recency_id');
         // if(isset($params['start']) && isset($params['end'])){
         //     $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_test_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
         // }
-
-        if ($parameters['testingFacility'] != '') {
-            $sQuery->where(array('r.testing_facility_id' => $parameters['testingFacility']));
-        }
+       
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
@@ -1900,10 +1917,20 @@ class RecencyTable extends AbstractTableGateway
                 $end_date = $common->dbDateFormat(trim($s_c_date[1]));
             }
         }
-
+        if ($parameters['province'] != '') {
+            $sQuery->where(array('r.location_one' => $parameters['province']));
+        }
+        if ($parameters['district'] != '') {
+            $sQuery->where(array('r.location_two' => $parameters['district']));
+        }
+        if ($parameters['testingFacility'] != '') {
+            $sQuery->where(array('r.testing_facility_id' => base64_decode($parameters['testingFacility'])));
+        }
         if ($parameters['hivRecencyTest'] != '') {
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
+      
+        //return $sql->buildSqlString($sQuery); 
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
         }
@@ -1938,7 +1965,10 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['final_outcome'];
             $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
+            if (isset($aRow['vl_result_entry_date']) && trim($aRow['vl_result_entry_date']) != '' && $aRow['vl_result_entry_date'] != '0000-00-00 00:00:00') 
             $row[] = date('d-M-Y', strtotime($aRow['vl_result_entry_date']));
+            else
+            $row[] = '';
             $row[] = $aRow['diffInDays'];
             $output['aaData'][] = $row;
         }
@@ -2220,8 +2250,14 @@ class RecencyTable extends AbstractTableGateway
         if ($params['testingFacility'] != '') {
             $rQuery = $rQuery->where(array('r.testing_facility_id' => $params['testingFacility']));
         }
+        if ($params['province'] != '') {
+            $rQuery = $rQuery->where(array('r.location_one' => $params['province']));
+        }
+        if ($params['district'] != '') {
+            $rQuery = $rQuery->where(array('r.location_two' => $params['district']));
+        }
         if ($params['facilityName'] != '') {
-            $rQuery = $rQuery->where(array('r.facility_id' => $params['facilityName']));
+            $rQuery = $rQuery->where(array('r.facility_id' => base64_decode($params['facilityName'])));
         }
         $queryContainer->exportWeeklyDataQuery = $rQuery;
         $rQueryStr = $sql->buildSqlString($rQuery);
@@ -4726,10 +4762,10 @@ class RecencyTable extends AbstractTableGateway
         $roleCode = $sessionLogin->roleCode;
         if (isset($params['fName']) && $params['fName'] != '') {
             if ($roleCode != 'admin') {
-                $sQuery->where(array('r.facility_id' => $params['fName']));
+                $sQuery->where(array('r.facility_id' => base64_decode($params['fName'])));
             } else {
                 $sQuery = $sQuery->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'));
-                $sQuery->where(array('r.facility_id' => $params['fName']));
+                $sQuery->where(array('r.facility_id' => base64_decode($params['fName'])));
             }
         }
         if ($roleCode != 'admin') {

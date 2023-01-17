@@ -483,3 +483,18 @@ ALTER TABLE `recency_change_trails` ADD `manifest_id` INT NULL DEFAULT NULL AFTE
 
 -- Thana 28-Sep-2022
 ALTER TABLE `users` ADD `hash_algorithm` VARCHAR(256) NOT NULL DEFAULT 'sha1' AFTER `secret_key`;
+
+
+
+-- Jeyabanu 16 Jan 2023
+CREATE TABLE `user_login_history` (
+ `history_id` int NOT NULL AUTO_INCREMENT,
+ `user_id` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+ `login_id` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+ `login_attempted_datetime` datetime DEFAULT NULL,
+ `login_status` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+ `ip_address` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+ `browser` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+ `operating_system` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+ PRIMARY KEY (`history_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2339 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci

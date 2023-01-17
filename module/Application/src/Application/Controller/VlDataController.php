@@ -130,9 +130,11 @@ class VlDataController extends AbstractActionController
             $result = $this->recencyService->getTatReport($params);
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
             $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
+                'globalConfigResult' => $globalConfigResult,
                 'facilityResult' => $facilityResult
             ));
         }
@@ -215,10 +217,10 @@ class VlDataController extends AbstractActionController
 
     public function WeeklyReportAction()
     {
-        
+        $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
         $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
-
         return new ViewModel(array(
+            'globalConfigResult' => $globalConfigResult,
             'facilityResult' => $facilityResult
         ));
     }
@@ -282,9 +284,11 @@ class VlDataController extends AbstractActionController
             $result = $this->qualityCheckService->getQualityCheckReportDetails($parameters);
             return $this->getResponse()->setContent(Json::encode($result));
         } else {
+            $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
             $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
 
             return new ViewModel(array(
+                'globalConfigResult' => $globalConfigResult,
                 'facilityResult' => $facilityResult
             ));
         }

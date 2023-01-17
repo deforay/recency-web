@@ -426,8 +426,8 @@ class CommonService
      }
      public function getFacilityDetails($params)
      {
-          $provienceDb = $this->sm->get('CityTable');
-          return $provienceDb->fetchFacilityDetails($params);
+          $provinceDb = $this->sm->get('CityTable');
+          return $provinceDb->fetchFacilityDetails($params);
      }
 
      public function getCaptcha($config = array())

@@ -10,6 +10,7 @@ use Laminas\View\Model\ViewModel;
 
 // Models
 use Application\Model\UserTable;
+use Application\Model\UserLoginHistoryTable;
 use Application\Model\FacilitiesTable;
 use Application\Model\RoleTable;
 use Application\Model\RecencyTable;
@@ -104,6 +105,11 @@ class Module
                 'UserTable' => function ($sm) {
                     $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
                     $table = new UserTable($dbAdapter);
+                    return $table;
+                },
+                'UserLoginHistoryTable' => function ($sm) {
+                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
+                    $table = new UserLoginHistoryTable($dbAdapter);
                     return $table;
                 },
                 'FacilitiesTable' => function ($sm) {

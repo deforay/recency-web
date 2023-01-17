@@ -57,7 +57,21 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
         </div>
         <div class="block-content block-content-full">
             <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-                <tr>
+            <tr>
+            <td><b>Province :</b></td>
+                    <td>
+                    <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name']; ?>');">
+                                                    <option value="">-- Select --</option>
+                                                </select>
+                    </td>
+                    <td><b>District :</b></td>
+                    <td>
+                    <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name']; ?>');">
+                                                    <option value="">-- Select --</option>
+                                                </select>
+                    </td>
+                        </tr>    
+            <tr>
                     <td><b>Facility Name :</b></td>
                     <td>
                         <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:100%;">
@@ -138,7 +152,13 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                     <td>
                         <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
                     </td>
-                    <td><b>Recency Tests :</b></td>
+                    <td><b>Sample Collection Dates:</b></td>
+                    <td>
+                        <input type="text" class="form-control" id="sampleCollectionDate" placeholder="Sample Collection Date" name="sampleCollectionDate" title="Please select Sample Collection Date" style="width:100%;" readonly>
+                    </td>
+                </tr>
+                <tr>
+                <td><b>Recency Tests :</b></td>
                     <td>
                         <select class="form-control" id="RTest" name="RTest" title="Please select Recency Tests" style="width:100%;">
                             <option value="">All</option>
@@ -146,7 +166,8 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                             <option value="pending">Pending</option>
                         </select>
                     </td>
-                </tr>
+                   <td></td>
+                        </tr>
                 <tr>
                     <td colspan="12" style=""><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
                         &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -308,6 +329,14 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
             "sAjaxSource": "<?php echo $this->url('recency', array('action' => 'index')); ?>",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 aoData.push({
+                    "name": "province",
+                    "value": $("#location_one").val()
+                });
+                aoData.push({
+                    "name": "district",
+                    "value": $("#location_two").val()
+                });
+                aoData.push({
                     "name": "fName",
                     "value": $("#facilityName").val()
                 });
@@ -339,6 +368,11 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                     "name": "hivRecencyTest",
                     "value": $("#hivRecencyTest").val()
                 });
+                aoData.push({
+                    "name": "sampleCollectionDate",
+                    "value": $("#sampleCollectionDate").val()
+                });
+                
                 $.ajax({
                     "dataType": 'json',
                     "type": "POST",
@@ -400,10 +434,44 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                 });
 
             });
+
+            $('#sampleCollectionDate').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="sampleCollectionDate"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
+
+            });
+
+            
         // $('#hivRecencyTest').val('');
         $("#advanceFilter input, #advanceFilter select").on("change", function() {
             searchExecuted = false;
         });
+
+        <?php foreach ($globalConfigResult as $config) { ?>
+            getLocationDeatils('<?php echo $config["global_name"]; ?>');
+        <?php break;
+        } ?>
     });
 
     function searchVlRequestData() {
@@ -475,4 +543,62 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                 alert('Manage Columns Successfully Updated');
             });
     }
+
+    function getLocationDeatils(globalName) {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
+
+        if (globalName == 'location_one' && selectValue == '') {
+            path = 'get-province';
+            innerId = 'location_one';
+        } else if (globalName == 'location_one' && selectValue != '') {
+            path = 'get-district';
+            innerId = 'location_two';
+            $("#location_three").html("<option value=''>-- Select --</option>");
+
+        } else if (globalName == 'location_two' && selectValue != '') {
+            path = 'get-city';
+            innerId = 'location_three';
+            if (selectValue == 'other') {
+                $("#otherDistrictName").show();
+                $("#otherDistrictName").addClass('isRequired');
+            } else {
+                $("#otherDistrictName").hide();
+                $("#otherDistrictName").removeClass('isRequired');
+            }
+        } else if (globalName == 'location_three' && selectValue != '') {
+            path = 'get-facility';
+            if (selectValue == 'other') {
+                $("#otherCityName").show();
+                $("#otherCityName").addClass('isRequired');
+            } else {
+                $("#otherCityName").hide();
+                $("#otherCityName").removeClass('isRequired');
+            }
+        }
+        if (path != '') {
+            $.blockUI();
+            $.post("/common/" + path, {
+                    selectValue: selectValue
+                },
+                function(data) {
+                    if (globalName == 'location_one' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityId").html(splitOption[1]);
+                    } else if (globalName == 'location_two' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityName").html(splitOption[1]);
+                    } else if (globalName == 'location_three' && selectValue != '') {
+                        $("#facilityName").html(data);
+                    } else {
+                        $("#" + innerId).html(data);
+                    }
+                    $.unblockUI();
+                });
+        }
+    }
+
 </script>

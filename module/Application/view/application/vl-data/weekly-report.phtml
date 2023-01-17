@@ -45,6 +45,18 @@ $roleCode = $sessionLogin->roleCode;
                         ?>
                     </select>
                 </div>
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="Province">Province</label>
+            <div class="col-sm-4">
+            <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name']; ?>');">
+                                         <option value="">-- Select --</option>
+                        </select>
+            </div>
+            <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="District">District:</label>
+            <div class="col-sm-4">
+            <select class="form-control <?php echo $locationTwo; ?>" id="<?php echo $globalConfigResult[1]['global_name']; ?>" name="<?php echo $globalConfigResult[1]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[1]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[1]['global_name']; ?>');">
+                        <option value="">-- Select --</option>
+                </select>
+            </div>
                 <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility Name</label>
                 <div class="col-sm-4">
                     <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:100%;">
@@ -174,6 +186,11 @@ $roleCode = $sessionLogin->roleCode;
         });
 
         getWeeklyData();
+
+        <?php foreach ($globalConfigResult as $config) { ?>
+            getLocationDeatils('<?php echo $config["global_name"]; ?>');
+        <?php break;
+        } ?>
     });
 
     function searchData() {
@@ -189,6 +206,8 @@ $roleCode = $sessionLogin->roleCode;
         $.post("<?php echo $this->url('vl-data', array('action' => 'get-weekly-report')); ?>", {
                 samplesCollectionDate: samplesCollectionDate,
                 testingFacility: $("#testingFacility").val(),
+                province: $("#location_one").val(),
+                district: $("#location_two").val(),
                 facilityName: $("#facilityName").val(),
                 hivRecencyTest: $("#hivRecencyTest").val()
             },
@@ -213,5 +232,62 @@ $roleCode = $sessionLogin->roleCode;
                     document.location.href = '/temporary/' + data;
                 }
             });
+    }
+
+    function getLocationDeatils(globalName) {
+        var selectValue = document.getElementById(globalName).value;
+        var innerId = '';
+        var path = '';
+
+        if (globalName == 'location_one' && selectValue == '') {
+            path = 'get-province';
+            innerId = 'location_one';
+        } else if (globalName == 'location_one' && selectValue != '') {
+            path = 'get-district';
+            innerId = 'location_two';
+            $("#location_three").html("<option value=''>-- Select --</option>");
+
+        } else if (globalName == 'location_two' && selectValue != '') {
+            path = 'get-city';
+            innerId = 'location_three';
+            if (selectValue == 'other') {
+                $("#otherDistrictName").show();
+                $("#otherDistrictName").addClass('isRequired');
+            } else {
+                $("#otherDistrictName").hide();
+                $("#otherDistrictName").removeClass('isRequired');
+            }
+        } else if (globalName == 'location_three' && selectValue != '') {
+            path = 'get-facility';
+            if (selectValue == 'other') {
+                $("#otherCityName").show();
+                $("#otherCityName").addClass('isRequired');
+            } else {
+                $("#otherCityName").hide();
+                $("#otherCityName").removeClass('isRequired');
+            }
+        }
+        if (path != '') {
+            $.blockUI();
+            $.post("/common/" + path, {
+                    selectValue: selectValue
+                },
+                function(data) {
+                    if (globalName == 'location_one' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityName").html(splitOption[1]);
+                    } else if (globalName == 'location_two' && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                        $("#facilityName").html(splitOption[1]);
+                    } else if (globalName == 'location_three' && selectValue != '') {
+                        $("#facilityName").html(data);
+                    } else {
+                        $("#" + innerId).html(data);
+                    }
+                    $.unblockUI();
+                });
+        }
     }
 </script>
