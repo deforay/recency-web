@@ -76,7 +76,8 @@ $emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' 
 $recentMenu = "";
 $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Recent Infections Report</span></a></li>";
 
-
+$monitoringMenu = "";
+$monitoringMenu = "<li id='nav-main-item'><a id='user-login-history' class='nav-main-link' href=" . $this->url('user', array('action' => 'all-user-login-history')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> User Login History</span></a></li>";
 // $uploadResultMenu = "";
 // $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'upload-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Upload Results</span></a></li>";
 
@@ -276,8 +277,20 @@ $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-l
                                         </li>
                                    <?php }
                                    ?>
+ <?php if ($roleCode == 'admin') { ?>
+                                        <li class="nav-main-heading"></li>
+                                        <li class="nav-main-item " id="manage">
+                                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                                                  <i class="nav-main-link-icon si si-eye"></i>
+                                                  <span class="nav-main-link-name ">Monitoring</span>
+                                             </a>
+                                             <ul class="nav-main-submenu">
+                                                  <?php echo $monitoringMenu; ?>
+                                             </ul>
+                                        </li>
 
-
+                                   <?php }
+?>
                               </ul>
                          </div>
                     </div>

@@ -122,6 +122,19 @@ class UserController extends AbstractActionController
             if ($request->isPost()) {
                 $params = $request->getPost();
                 // \Zend\Debug\Debug::dump($params);die;
+                $params['user'] = true;
+                $result = $this->userService->getLoginHistoryDetails($params);
+                return $this->getResponse()->setContent(Json::encode($result));
+            }
+    }
+
+    public function allUserLoginHistoryAction()
+    {
+        $session = new Container('credo');
+        $request = $this->getRequest();
+            if ($request->isPost()) {
+                $params = $request->getPost();
+                // \Zend\Debug\Debug::dump($params);die;
                 
                 $result = $this->userService->getLoginHistoryDetails($params);
                 return $this->getResponse()->setContent(Json::encode($result));

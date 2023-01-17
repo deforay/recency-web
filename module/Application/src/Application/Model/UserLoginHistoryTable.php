@@ -64,7 +64,7 @@ class UserLoginHistoryTable extends AbstractTableGateway
         $this->insert($loginData);
     }
 
-    public function fetchUserLoginHistoryDetails($params)
+    public function fetchUserLoginHistoryDetails($parameters)
     {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
         * you want to insert a non-database field (for example a counter or static image)
@@ -144,7 +144,7 @@ class UserLoginHistoryTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('u' => 'user_login_history'))
                     ->join(array('us' => 'users'), 'us.user_id = u.user_id', array('user_name'),'left');
 
-        if($sessionLogin->roleCode != 'admin'){
+        if(isset($parameters['user']) && $sessionLogin->userId != ""){
             $sQuery->where(array('u.user_id' => $sessionLogin->userId));
         }
 
