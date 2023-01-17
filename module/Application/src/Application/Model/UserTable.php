@@ -66,7 +66,7 @@ class UserTable extends AbstractTableGateway
             $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
             $userFacilityMapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
 
-            $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
+            
             /* Hash alg */
             $sQuery = $sql->select()->from(array('u' => 'users'))
                 ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
@@ -74,6 +74,7 @@ class UserTable extends AbstractTableGateway
             $sQueryStr = $sql->buildSqlString($sQuery);
             $userRow = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
             if ($userRow['hash_algorithm'] == 'sha1' && !isset($params['u'])) {
+                $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
                 if ($password == $userRow['server_password']) {
                     $newPassword = $common->passwordHash($params['loginPassword']);
                     $this->update(
@@ -557,6 +558,9 @@ class UserTable extends AbstractTableGateway
         $config = new \Laminas\Config\Reader\Ini();
         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $check = $this->select(array('email' => $params['u']))->current();
+        ob_start();
+        var_dump($params);
+        error_log(ob_get_clean());
         if ($check) {
             $decryptedPassword = $common->decrypt($params['t'], base64_decode($configResult['vlsm-crosslogin-salt']));
             $passwordHash = $common->passwordHash($decryptedPassword);
