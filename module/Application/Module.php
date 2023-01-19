@@ -20,6 +20,7 @@ use Application\Model\UserFacilityMapTable;
 use Application\Model\TempMailTable;
 use Application\Model\SettingsTable;
 use Application\Model\SettingsQcSampleTable;
+use Application\Model\AuditRecencyTable;
 
 use Application\Model\ProvinceTable;
 use Application\Model\DistrictTable;
@@ -206,6 +207,11 @@ class Module
                     $table = new ManifestsTable($dbAdapter);
                     return $table;
                 },
+                'AuditRecencyTable' => function ($sm) {
+                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
+                    $table = new AuditRecencyTable($dbAdapter);
+                    return $table;
+                },
 
 
 
@@ -365,6 +371,11 @@ class Module
                     $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
                     $qualityCheckService = $sm->getServiceLocator()->get('QualityCheckService');
                     return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
+                },
+                'Application\Controller\Monitoring' => function ($sm) {
+                    $userService = $sm->getServiceLocator()->get('UserService');
+                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
+                    return new \Application\Controller\MonitoringController($userService, $globalConfigService);
                 },
             ),
         );

@@ -1,0 +1,191 @@
+<?php
+use Laminas\Session\Container;
+$sessionLogin = new Container('credo');
+//echo '<pre>'; print_r($result); die;
+$auditRecency = $result['auditInfo'];
+$currentRecency = $result['currentRecord'];
+$sampleCode="";
+if(isset($params['sampleCode']))
+$sampleCode = $params['sampleCode'];
+?>
+<style>
+	#current {
+		display: block;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+</style>
+<div class="bg-body-light">
+     <div class="content content-full">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+               <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Audit Trail</h1>
+          </div>
+     </div>
+</div>
+
+
+<div class="content">
+     <div class="block block-rounded block-bordered">
+          
+          <div class="block-content">
+               <div class="col-md-12 table-responsive" id="hide">
+                    <form name="auditTrail" id="auditTrail"  class="mb-5" action="<?php echo $this->url('monitoring', array('action' => 'audit-trail')); ?>" method="post">
+                         <div class="form-group row">
+                              <label class="col-sm-2 col-form-label" for="">Sample Code<span class="mandatory">*</span></label>
+                              <div class="col-sm-4">
+                                   <input type="text" value="<?php echo $sampleCode; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter the Sample Code" title="Please enter the Sample Code">
+                              </div>
+                         </div>
+                         <div class="row items-push">
+                              <div class="col-lg-7 offset-lg-4">
+                                   <a href="<?php echo $this->url('monitoring', array('action' => 'audit-trail')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                   <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Submit</button>
+                              </div>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+
+     <h3> Audit Trail for Sample <?php echo $sampleCode; ?></h3>
+     <table id="auditTable" class="table table-bordered table-striped table-vcenter" aria-hidden="true">
+								<thead>
+									<tr>
+										<?php
+                                                  $colArr = array();
+										foreach ($result['auditColumns'] as $col) {
+											$colArr[] = $col['COLUMN_NAME'];
+										?>
+											<th>
+												<?php
+												echo $col['COLUMN_NAME'];
+												?>
+											</th>
+										<?php } ?>
+									</tr>
+								</thead>
+								<tbody>
+                                <?php
+									if (!empty($auditRecency)) {
+										for ($i = 0; $i < count($auditRecency); $i++) {
+									?>
+											<tr>
+												<?php
+												for ($j = 0; $j < count($colArr); $j++) {
+
+													if (($j > 3) && ($i > 0) && $auditRecency[$i][$colArr[$j]] != $auditRecency[$i - 1][$colArr[$j]]) {
+														echo '<td style="background: orange; color:black;" >' . $auditRecency[$i][$colArr[$j]] . '</td>';
+													} else {
+														echo '<td>' . $auditRecency[$i][$colArr[$j]] . '</td>';
+													}
+												?>
+												<?php }
+												?>
+											</tr>
+									<?php
+										}
+									} else {
+										echo "<tr align='center'><td colspan='10'>No records available</td></tr>";
+									}
+									?>
+                                        </tbody>
+                                        </table>
+<br>
+                                        <h3> Current Recency for Sample <?php echo $sampleCode; ?></h3>
+                                        <table id="current" class="table table-striped table-hover table-bordered" aria-hidden="true">
+								<thead>
+									<tr>
+										<?php
+$colValue=array();
+										foreach ($result['recencyColumns'] as $col) {
+                                                       $colValue[] = $col['COLUMN_NAME'];
+										?>
+											<th>
+												<?php
+												echo $col['COLUMN_NAME'];
+												?>
+											</th>
+										<?php } ?>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+									if (!empty($currentRecency)) {
+									?>
+											<tr>
+												<?php
+												for ($j = 3; $j < count($colValue); $j++) {
+												?>
+													<td>
+														<?php
+														echo $currentRecency[$colValue[$j]];
+														?>
+													</td>
+												<?php }
+												?>
+											</tr>
+									<?php
+										
+									} else {
+										echo "<tr align='center'><td colspan='10'>No records available</td></tr>";
+									}
+									?>
+								</tbody>
+
+							</table>
+</div>
+
+<script type="text/javascript">
+oTable = null;
+oTable1 = null;
+$(document).ready(function() {
+         /* $("#auditTable").DataTable({
+			scrollY: '50vh',
+			scrollX: true,
+			scrollCollapse: true,
+			paging: false,
+			"aaSorting": [1, "asc"]
+		});*/
+
+
+          oTable = $('#auditTable').dataTable( {
+               
+                scrollY: '50vh',
+			scrollX: true,
+			scrollCollapse: true,
+			paging: false,
+                "aaSorting": [1, "asc"]
+            } );
+
+            oTable1 = $('#current').dataTable( {
+               
+               scrollY: '50vh',
+              scrollX: true,
+              scrollCollapse: true,
+              paging: false,
+               "aaSorting": [1, "asc"]
+           } );
+
+
+     });
+
+     duplicateName = true;
+     function validateNow() {
+          var selVal = [];
+        
+
+          flag = deforayValidator.init({
+               formId: 'auditTrail'
+          });
+          if (flag) {
+               if (duplicateName) {
+                    $.blockUI();
+
+                    document.getElementById('auditTrail').submit();
+               }
+          }
+     }
+   
+    
+
+</script>

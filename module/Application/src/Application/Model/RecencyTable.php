@@ -612,6 +612,17 @@ class RecencyTable extends AbstractTableGateway
         return $rResult;
     }
 
+    public function fetchRecencyDetailsBySampleId($sampleId)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery = $sql->select()->from('recency')
+            ->where(array('sample_id' => $sampleId));
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        return $rResult;
+    }
+
     public function fetchRecencyDetailsForPDF($recencyId)
     {
         $dbAdapter = $this->adapter;

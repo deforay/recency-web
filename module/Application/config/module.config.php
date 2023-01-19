@@ -235,6 +235,16 @@ return array(
                          ),
                     ),
                ),
+               'monitoring' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/monitoring[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\Monitoring',
+                              'action' => 'index',
+                         ),
+                    ),
+               ),
 
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new

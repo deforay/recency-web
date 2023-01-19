@@ -152,6 +152,12 @@ class UserService {
         $userHistoryDb = $this->sm->get('UserLoginHistoryTable');
         return $userHistoryDb->fetchUserLoginHistoryDetails($params);
     }
+
+    public function getAuditRecencyDetails($params)
+    {
+        $auditRecencyDb = $this->sm->get('AuditRecencyTable');
+        return $auditRecencyDb->getAuditRecencyDetails($params);
+    }
 }
 
 ?>

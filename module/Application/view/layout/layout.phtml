@@ -77,7 +77,8 @@ $recentMenu = "";
 $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Recent Infections Report</span></a></li>";
 
 $monitoringMenu = "";
-$monitoringMenu = "<li id='nav-main-item'><a id='user-login-history' class='nav-main-link' href=" . $this->url('user', array('action' => 'all-user-login-history')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> User Login History</span></a></li>";
+$monitoringMenu .= "<li id='nav-main-item'><a id='user-login-history' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'all-user-login-history')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> User Login History</span></a></li>";
+$monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'audit-trail')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-clock'></i> Audit Trail</span></a></li>";
 // $uploadResultMenu = "";
 // $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'upload-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Upload Results</span></a></li>";
 
