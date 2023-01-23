@@ -57,4 +57,23 @@ class MonitoringController extends AbstractActionController
             ));
         }
     }
+
+    public function userActivityLogAction()
+    {
+        $session = new Container('credo');
+        $request = $this->getRequest();
+        $eventType = $this->userService->getEventType();
+        $users = $this->userService->getAllUserDetails();
+            if ($request->isPost()) {
+                $params = $request->getPost();
+                // \Zend\Debug\Debug::dump($params);die;
+                
+                $result = $this->userService->getUserActivityLogDetails($params);
+                return $this->getResponse()->setContent(Json::encode($result));
+            }
+            return new ViewModel(array(
+                'eventType' => $eventType,
+                'users' => $users
+            ));
+    }
 }

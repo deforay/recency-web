@@ -1,0 +1,237 @@
+<?php
+
+use Laminas\Session\Container;
+
+$sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
+// $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
+// {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
+// {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+
+$formFields = array(
+    'sample_id', 'facility_name', 'hiv_recency_test_date', 'vl_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'term_outcome', 'vl_result', 'final_outcome', 'gender', 'age', 'patient_id', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type', 'testing_facility_type', 'testing_facility_type_name', 'hiv_diagnosis_date',
+    'kit_lot_no', 'kit_expiry_date', 'tester_name', 'dob', 'marital_status', 'residence', 'education_level', 'name', 'pregnancy_status', 'current_sexual_partner', 'past_hiv_testing', 'last_hiv_status', 'patient_on_art', 'test_last_12_month', 'exp_violence_last_12_month',
+    'form_initiation_datetime', 'form_transfer_datetime'
+);
+$arrFields = explode(", ", $manageColumnsResult['manage_columns']);
+$arrnum = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35");
+$acti = $manageColumnsResult['manage_columns'];
+$resultArr = array_diff($arrnum, $arrFields);
+$HideVal = implode(',', $resultArr);
+
+for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
+    $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
+}
+$resultArr2 = array();
+if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
+    $resultArr2 = explode(",", $arr['display_fields']);
+}
+//\Zend\Debug\Debug::dump($resultArr2);die;
+?>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency Data</h1>
+            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <?php if ($roleCode != "manager") { ?>
+                            <a href="<?php echo $this->url('recency', array('action' => 'add')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Recency</a>
+                        <?php }
+                        if ($roleCode == 'admin' || $roleCode == 'manager') { ?>
+                            <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportRecencyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                        <?php } ?>
+                        <?php
+                        //}
+                        ?>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+        </div>
+        <div class="block-content block-content-full">
+            <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+                <tr>
+                    <td><b> Date Range:</b></td>
+                    <td>
+                        <input type="text" class="form-control" id="addedOn" placeholder="Recorded On" name="addedOn" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
+                    </td>
+                    <td><b>Type of Action:</b></td>
+                    <td>
+                    <select class="form-control" id="action" name="action" title="Please select User" style="width:100%;">
+                        <option value="">All</option>
+                            <?php
+                            foreach($eventType as $event)
+                            {
+                                $evnt = $event['Expression1'];
+                                ?>
+                            <option value="<?php echo $evnt; ?>"><?php echo $evnt; ?></option>
+                                <?php
+                            }
+                            ?>
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                <td><b>Users :</b></td>
+                    <td>
+                        <select class="form-control" id="users" name="users" title="Please select User" style="width:100%;">
+                            <option value="">All</option>
+                            <?php
+                            foreach($users as $usr)
+                            {
+                               // $evnt = $event['Expression1'];
+                                ?>
+                            <option value="<?php echo $usr['user_id']; ?>"><?php echo $usr['user_name']; ?></option>
+                          <?php
+                            }
+                            ?>
+                        </select>
+                    </td>
+                   <td></td>
+                        </tr>
+                <tr>
+                    <td colspan="12" style=""><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
+                        &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+                        &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
+                    </td>
+                </tr>
+            </table>
+            <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;width:70%;" id="showhide">
+
+                <div class="row" style="background:#eee;padding: 15px;border-radius:20px;font-size:13px;">
+                    <div class="col-sm-12 " style=""><a href="javascript:void(0);" style="float:right;font-size:20px;color:red;font-weight:bold" onclick="closeDiv()" title="Close">X</a></div>
+
+                    <?php $i = 0;
+                    foreach ($formFields as  $chk) {
+                        $v = str_replace("_", " ", $chk);
+                    ?>
+                        <div class="col-sm-3">
+                            <?php if (isset($manageColumnsResult['user_id']) && $manageColumnsResult['user_id'] != '') { ?>
+                                <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i; ?>);" value="<?php echo $i; ?>" <?php if (in_array($i, $arrFields)) {
+                                                                                                                                            echo " checked=\"checked\"";
+                                                                                                                                        } ?> name="recencyCheckbox[]" id="iCol<?php echo $i; ?>" class="showhideCheckBox" />&nbsp;&nbsp;<label for="iCol<?php echo $i; ?>"><?php echo ucwords($v); ?></label>
+                            <?php } else {  ?>
+
+                                <input type="checkbox" onclick="javascript:fnShowHide(<?php echo $i; ?>);" value="<?php echo $i; ?>" checked="checked" name="recencyCheckbox[]" id="iCol<?php echo $i; ?>" class="showhideCheckBox" />&nbsp;&nbsp;<label for="iCol<?php echo $i; ?>"><?php echo ucwords($v); ?></label>
+
+                            <?php  } ?>
+                        </div>
+                    <?php $i++;
+                    }
+                    ?>
+
+                    <input type="button" onclick="getCheckBoxVal();" value="Submit" class="btn btn-info btn-sm">
+
+                </div>
+            </span>
+            <table id="facilityDataTable" class="table table-bordered table-striped table-vcenter">
+                <thead>
+                    <tr>
+                    <th>User Name</th>
+                    <th>Event Type</th>
+                        <th>Action</th>
+                        <th>Recorded On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+              <td colspan='4' class='dataTables_empty'>Loading data from server</td>
+                       
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>User Name</th>
+                        <th>Event Type</th>
+                        <th>Action</th>
+                        <th>Recorded On</th>
+                       
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
+<script type="text/javascript">
+    
+    let searchExecuted = false;
+    /* Table initialisation */
+    oTable = null;
+    $(document).ready(function() {
+      
+        oTable = $('#facilityDataTable').dataTable({
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bServerSide": true,
+          
+            "sAjaxSource": "<?php echo $this->url('monitoring', array('action' => 'userActivityLog')); ?>",
+            "fnServerData": function(sSource, aoData, fnCallback) {
+                aoData.push({
+                    "name": "addedOn",
+                    "value": $("#addedOn").val()
+                });
+                aoData.push({
+                    "name": "action",
+                    "value": $("#action").val()
+                });
+                aoData.push({
+                    "name": "users",
+                    "value": $("#users").val()
+                });
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }
+        });
+
+
+
+            $('#addedOn').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="addedOn"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
+
+            });
+
+        });
+
+        function searchVlRequestData() {
+        searchExecuted = true;
+        $.blockUI();
+        oTable.fnDraw();
+        $.unblockUI();
+    }
+
+</script>

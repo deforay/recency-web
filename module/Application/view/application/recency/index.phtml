@@ -490,12 +490,6 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
         oTable.fnSetColumnVis(iCol, bVis ? false : true);
     }
 
-    function searchVlRequestData() {
-        $.blockUI();
-        oTable.fnDraw();
-        $.unblockUI();
-    }
-
     function exportRecencyData() {
         if (searchExecuted === false) {
             searchVlRequestData();

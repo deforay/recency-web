@@ -158,6 +158,20 @@ class UserService {
         $auditRecencyDb = $this->sm->get('AuditRecencyTable');
         return $auditRecencyDb->getAuditRecencyDetails($params);
     }
+
+    public function getUserActivityLogDetails($params)
+    {
+        $eventLogDb = $this->sm->get('EventLogTable');
+        return $eventLogDb->getRecentActivities($params);
+    }
+
+    public function getEventType()
+    {
+        $eventLogDb = $this->sm->get('EventLogTable');
+        return $eventLogDb->getEventType();
+    }
+
+    
 }
 
 ?>
