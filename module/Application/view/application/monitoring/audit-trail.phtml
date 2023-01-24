@@ -31,9 +31,9 @@ $sampleCode = $params['sampleCode'];
                <div class="col-md-12 table-responsive" id="hide">
                     <form name="auditTrail" id="auditTrail"  class="mb-5" action="<?php echo $this->url('monitoring', array('action' => 'audit-trail')); ?>" method="post">
                          <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="">Sample Code<span class="mandatory">*</span></label>
+                              <label class="col-sm-4 col-form-label" for="">Sample Code OR Patient ID<span class="mandatory">*</span></label>
                               <div class="col-sm-4">
-                                   <input type="text" value="<?php echo $sampleCode; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter the Sample Code" title="Please enter the Sample Code">
+                                   <input type="text" value="<?php echo $sampleCode; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter the Sample Code Or Patient ID" title="Please enter the Sample Code Or Patient ID">
                               </div>
                          </div>
                          <div class="row items-push">
@@ -46,7 +46,7 @@ $sampleCode = $params['sampleCode'];
                </div>
           </div>
      </div>
-
+<?php if(!empty($sampleCode)){ ?>
      <h3> Audit Trail for Sample <?php echo $sampleCode; ?></h3>
      <table id="auditTable" class="table table-bordered table-striped table-vcenter" aria-hidden="true">
 								<thead>
@@ -133,6 +133,7 @@ $colValue=array();
 								</tbody>
 
 							</table>
+							<?php } ?>
 </div>
 
 <script type="text/javascript">

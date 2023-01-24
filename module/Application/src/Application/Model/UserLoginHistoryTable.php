@@ -140,12 +140,31 @@ class UserLoginHistoryTable extends AbstractTableGateway
           */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
+        $general = new CommonService();
         
         $sQuery = $sql->select()->from(array('u' => 'user_login_history'))
                     ->join(array('us' => 'users'), 'us.user_id = u.user_id', array('user_name'),'left');
 
         if(isset($parameters['user']) && $sessionLogin->userId != ""){
             $sQuery->where(array('u.user_id' => $sessionLogin->userId));
+        }
+
+        if(isset($parameters['userName']) && $parameters['userName'] != ""){
+            $sQuery->where(array('us.user_name like "%'.$parameters['userName'].'%"'));
+        }
+
+        if (isset($parameters['loggedInDate']) && trim($parameters['loggedInDate']) != '') {
+            $s_c_date = explode("to", $_POST['loggedInDate']);
+            if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+            }
+            if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+            }
+        }
+
+        if ($parameters['loggedInDate'] != '') {
+            $sQuery = $sQuery->where(array("u.login_attempted_datetime >='" . $start_date . "'", "u.login_attempted_datetime <='" . $end_date . "'"));
         }
 
         if (isset($sWhere) && $sWhere != "") {
@@ -183,12 +202,12 @@ class UserLoginHistoryTable extends AbstractTableGateway
             $attemptDateTime = $common->humanDateFormat($attemptDateTimeArr[0]) . " " . $attemptDateTimeArr[1];
             $row = array();
             $row[] = $attemptDateTime;
-            $row[] = ucwords($aRow['user_name']);
-            $row[] = ucwords($aRow['login_id']);
+            $row[] = $aRow['user_name'];
+            $row[] = $aRow['login_id'];
             $row[] = $aRow['ip_address'];
             $row[] = $aRow['browser'];
             $row[] = $aRow['operating_system'];
-            $row[] = ucwords($aRow['login_status']);
+            $row[] = $aRow['login_status'];
            // $row[] = '<a href="/user/edit/' . base64_encode($aRow['user_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             $output['aaData'][] = $row;
         }

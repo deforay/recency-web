@@ -45,7 +45,7 @@ class AuditRecencyTable extends AbstractTableGateway
         $response['currentRecord'] = $recencyDb->fetchRecencyDetailsBySampleId($sampleCode);
         if(isset($sampleCode) && $sampleCode!=''){
                 $sQuery = $sql->select()->from(array('a' => 'audit_recency'))
-                            ->where(array('sample_id' => $sampleCode ));
+                            ->where("(sample_id = '$sampleCode' OR patient_id = '$sampleCode')");
                 $sQueryStr = $sql->buildSqlString($sQuery);
                 $response['auditInfo'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             }

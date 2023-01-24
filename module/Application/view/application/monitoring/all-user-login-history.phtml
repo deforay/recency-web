@@ -1,6 +1,8 @@
 <?php
     use Laminas\Session\Container;
 ?>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
+
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -11,6 +13,24 @@
      </div>
      <div class="content">
           <div class="block block-rounded block-bordered">
+          <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+                <tr>
+                    <td><b> Date Range:</b></td>
+                    <td>
+                        <input type="text" class="form-control" id="loggedInDate" placeholder="Logged In Date" name="loggedInDate" title="Please select Logged In Dates" style="width:100%;" readonly>
+                    </td>
+                    <td><b>User Name:</b></td>
+                    <td>
+                    <input type="text" class="form-control" id="userName" placeholder="User name" name="userName" title="Please Enter Username" style="width:100%;">
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td colspan="12" style=""><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
+                        &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+                    </td>
+               </tr>
+            </table>
                <div class="block-header block-header-default">
                     
                </div>
@@ -37,6 +57,7 @@
                     </div>
                </div>
           </div>
+          <script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
 
           <script type="text/javascript">
           /* Table initialisation */
@@ -48,6 +69,14 @@
                 "bServerSide": true,
                 "sAjaxSource": "<?php echo $this->url('monitoring',array('action' => 'allUserLoginHistory')); ?>",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
+                    aoData.push({
+                    "name": "userName",
+                    "value": $("#userName").val()
+                });
+                aoData.push({
+                    "name": "loggedInDate",
+                    "value": $("#loggedInDate").val()
+                });
                     $.ajax({
                         "dataType": 'json',
                         "type": "POST",
@@ -58,6 +87,39 @@
                 }
             } );
 
+            $('#loggedInDate').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="loggedInDate"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
+
+            });
+
           } );
 
+          function searchVlRequestData() {
+        searchExecuted = true;
+        $.blockUI();
+        oTable.fnDraw();
+        $.unblockUI();
+    }
      </script>
