@@ -14,7 +14,10 @@ $sampleCode = $params['sampleCode'];
 		overflow-x: auto;
 		white-space: nowrap;
 	}
+	.select2-container--default .select2-selection--multiple .select2-selection__choice {color:black;}
 </style>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/css/buttons.dataTables.min.css' ?>" rel="stylesheet">
+
 <div class="bg-body-light">
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -46,13 +49,30 @@ $sampleCode = $params['sampleCode'];
                </div>
           </div>
      </div>
-<?php if(!empty($sampleCode)){ ?>
+<?php if(!empty($sampleCode)){ 
+	
+	if (!empty($auditRecency)) {
+	?>
      <h3> Audit Trail for Sample <?php echo $sampleCode; ?></h3>
-     <table id="auditTable" class="table table-bordered table-striped table-vcenter" aria-hidden="true">
+	 
+	 <select name="auditColumn[]" id="auditColumn" class="form-control" multiple="multiple">
+	<?php
+	$i=0;
+	foreach($result['auditColumns'] as $col)
+	{
+	?>
+	<option value="<?php echo $i; ?>"><?php echo $col['COLUMN_NAME']; ?></option>
+	<?php
+	$i++;
+	}
+	?>
+	</select>
+	
+     <table border="1" id="auditTable" class="table table-bordered table-striped table-vcenter" aria-hidden="true">
 								<thead>
 									<tr>
 										<?php
-                                                  $colArr = array();
+                                            $colArr = array();
 										foreach ($result['auditColumns'] as $col) {
 											$colArr[] = $col['COLUMN_NAME'];
 										?>
@@ -66,7 +86,7 @@ $sampleCode = $params['sampleCode'];
 								</thead>
 								<tbody>
                                 <?php
-									if (!empty($auditRecency)) {
+									
 										for ($i = 0; $i < count($auditRecency); $i++) {
 									?>
 											<tr>
@@ -84,9 +104,6 @@ $sampleCode = $params['sampleCode'];
 											</tr>
 									<?php
 										}
-									} else {
-										echo "<tr align='center'><td colspan='10'>No records available</td></tr>";
-									}
 									?>
                                         </tbody>
                                         </table>
@@ -96,7 +113,7 @@ $sampleCode = $params['sampleCode'];
 								<thead>
 									<tr>
 										<?php
-$colValue=array();
+										$colValue=array();
 										foreach ($result['recencyColumns'] as $col) {
                                                        $colValue[] = $col['COLUMN_NAME'];
 										?>
@@ -109,9 +126,7 @@ $colValue=array();
 									</tr>
 								</thead>
 								<tbody>
-									<?php
-									if (!empty($currentRecency)) {
-									?>
+									
 											<tr>
 												<?php
 												for ($j = 3; $j < count($colValue); $j++) {
@@ -124,21 +139,50 @@ $colValue=array();
 												<?php }
 												?>
 											</tr>
-									<?php
-										
-									} else {
-										echo "<tr align='center'><td colspan='10'>No records available</td></tr>";
-									}
-									?>
+									
 								</tbody>
 
 							</table>
-							<?php } ?>
+							<?php } 
+							
+							else
+							{
+								echo '<h3 align="center">Records are not available for this sample code. Please enter  valid sample code</h3>';
+							}
+						}
+							
+							?>
 </div>
-
+<script src="<?php echo $this->basePath() . '/assets/js/dataTables.buttons.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/jszip.min.js'; ?>"></script>
+<script src="<?php echo $this->basePath() . '/assets/js/buttons.html5.min.js'; ?>"></script>
 <script type="text/javascript">
+	function printString(columnNumber)
+{
+    // To store result (Excel column name)
+        let columnName = [];
+  
+        while (columnNumber > 0) {
+            // Find remainder
+            let rem = columnNumber % 26;
+  
+            // If remainder is 0, then a
+            // 'Z' must be there in output
+            if (rem == 0) {
+                columnName.push("Z");
+                columnNumber = Math.floor(columnNumber / 26) - 1;
+            }
+            else // If remainder is non-zero
+            {
+                columnName.push(String.fromCharCode((rem - 1) + 'A'.charCodeAt(0)));
+                columnNumber = Math.floor(columnNumber / 26);
+            }
+        }
+  
+        // Reverse the string and print result
+        return columnName.reverse().join("");
+}
 oTable = null;
-oTable1 = null;
 $(document).ready(function() {
          /* $("#auditTable").DataTable({
 			scrollY: '50vh',
@@ -147,27 +191,98 @@ $(document).ready(function() {
 			paging: false,
 			"aaSorting": [1, "asc"]
 		});*/
+		$("#auditColumn").select2({
+            placeholder: "Choose Audit Columns",
+            //	allowClear: true,
+        });
 
+          oTable = $('#auditTable').DataTable( {
+               dom: 'Bfrtip',
+    buttons: [ 
+	   {
+	            extend: 'excelHtml5',
+				exportOptions: {
+                    columns: ':visible'
+                },
+	            text: 'Export To Excel',
+	            title:'AuditTrailSample-<?php echo $sampleCode; ?>',
+	            extension:'.xlsx',
+				customize: function ( xlsx ) {
+        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+        // Map used to map column index to Excel index
+		
+		var excelMap = [];
+	b=0;
+	for(a=1;a<=226;a++)
+		{
+				excelMap[b] = printString(a);
+				b++;
+		}
+        var count = 0;
+        var skippedHeader = 0;
+		
+        $('row', sheet).each( function () {
+          var row = this;
+          if (skippedHeader==2) {
+//             var colour = $('tbody tr:eq('+parseInt(count)+') td:eq(2)').css('background-color');
+            
+            // Output first row
+            if (count === 0) {
+              console.log(this);
+            }
+            
+            for (td=0; td<226; td++) {
+              
+              // Output cell contents for first row
+              if (count === 0) {
+                console.log($('c[r^="' + excelMap[td] + '"]', row).text());
+              }
+              var colour = $(oTable.cell(':eq('+count+')',td).node()).css('background-color');            
 
-          oTable = $('#auditTable').dataTable( {
-               
-                scrollY: '50vh',
+              if (colour === 'rgb(255, 165, 0)' || colour == 'orange') {
+                $('c[r^="' + excelMap[td] + '"]', row).attr( 's', '35' );
+              }
+             
+            }
+            count++;
+          }
+          else {
+            skippedHeader++;
+          }
+        });
+      }
+	        }
+    ],
+			scrollY: '250vh',
 			scrollX: true,
 			scrollCollapse: true,
 			paging: false,
-                "aaSorting": [1, "asc"]
+			"aaSorting": [1, "asc"],
             } );
 
-            oTable1 = $('#current').dataTable( {
+           /* oTable1 = $('#current').dataTable( {
                
                scrollY: '50vh',
               scrollX: true,
               scrollCollapse: true,
               paging: false,
                "aaSorting": [1, "asc"]
-           } );
+           } );*/
 
+		   $('#auditColumn').on("select2:select select2:unselect", function(e) {
+		
+		var columns = $(this).val();
 
+		if(columns=="" || columns==null)
+		{
+			oTable.columns().visible(true);
+		}
+		else{
+			oTable.columns().visible(false);
+			oTable.columns(columns).visible(true);
+		}
+	
+		});
      });
 
      duplicateName = true;
