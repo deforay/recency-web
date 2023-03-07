@@ -21,6 +21,7 @@ class ProvinceController extends AbstractActionController
     public function indexAction()
     {
         $session = new Container('credo');
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -38,6 +39,7 @@ class ProvinceController extends AbstractActionController
 
     public function addAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

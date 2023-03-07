@@ -30,6 +30,7 @@ class IndexController extends AbstractActionController
     }
     public function indexAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -50,6 +51,7 @@ class IndexController extends AbstractActionController
     }
     public function exportRecencyDataAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -71,6 +73,7 @@ class IndexController extends AbstractActionController
 
     public function  getRecencyAllDataCountAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -85,6 +88,7 @@ class IndexController extends AbstractActionController
 
     public function analysisDashboardAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -106,6 +110,7 @@ class IndexController extends AbstractActionController
 
     public function qualityControlDashboardAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -127,6 +132,7 @@ class IndexController extends AbstractActionController
 
     public function setSampleFirstChartAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

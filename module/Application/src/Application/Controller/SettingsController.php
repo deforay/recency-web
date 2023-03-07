@@ -20,6 +20,7 @@ class SettingsController extends AbstractActionController
         if($sessionLogin->roleCode != 'admin'){
             return $this->redirect()->toRoute('home');
         }
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -31,7 +32,8 @@ class SettingsController extends AbstractActionController
     public function sampleDataIndexAction()
     {
         $session = new Container('credo');
-            $request = $this->getRequest();
+            /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
                 
@@ -43,7 +45,8 @@ class SettingsController extends AbstractActionController
     public function addAction()
     {
         $session = new Container('credo');
-            $request = $this->getRequest();
+            /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
                 
@@ -74,7 +77,8 @@ class SettingsController extends AbstractActionController
     public function addSampleAction()
     {
         $session = new Container('credo');
-            $request = $this->getRequest();
+            /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
                 

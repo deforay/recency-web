@@ -6,6 +6,7 @@ use Exception;
 use Laminas\Mail;
 use Laminas\Db\Sql\Sql;
 use Laminas\Session\Container;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class QualityCheckService
 {
@@ -175,22 +176,22 @@ class QualityCheckService
             $sheet->mergeCells('K3:K4');
             $sheet->mergeCells('L3:L4');
 
-            $sheet->setCellValue('A1', html_entity_decode('Quality Check Data', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A1', html_entity_decode('Quality Check Data', ENT_QUOTES, 'UTF-8'));
 
-            $sheet->setCellValue('A3', html_entity_decode('Sample ID', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('B3', html_entity_decode('QC Test Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('C3', html_entity_decode('Testing Facility Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('D3', html_entity_decode('Reference Result', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('E3', html_entity_decode('Kit Lot Number', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('F3', html_entity_decode('Kit Expiry Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('G3', html_entity_decode('HIV Recency Test Date', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('H3', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('I3', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('J3', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('K3', html_entity_decode('Assay Outcome', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $sheet->setCellValue('L3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('A3', html_entity_decode('Sample ID', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('B3', html_entity_decode('QC Test Date', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('C3', html_entity_decode('Testing Facility Name', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('D3', html_entity_decode('Reference Result', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('E3', html_entity_decode('Kit Lot Number', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('F3', html_entity_decode('Kit Expiry Date', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('G3', html_entity_decode('HIV Recency Test Date', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('H3', html_entity_decode('Control Line', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('I3', html_entity_decode('Verification Line', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('J3', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('K3', html_entity_decode('Assay Outcome', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('L3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'));
 
-            $sheet->getStyle('A1:B1')->getFont()->setBold(TRUE)->setSize(16);
+            // $sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);
 
             $sheet->getStyle('A3:A4')->applyFromArray($styleArray);
             $sheet->getStyle('B3:B4')->applyFromArray($styleArray);
@@ -208,19 +209,12 @@ class QualityCheckService
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 1;
                 foreach ($rowData as $field => $value) {
-                    if (!isset($value)) {
+                    if (!isset($value) || empty($value)) {
                         $value = "";
                     }
-                    if (is_numeric($value)) {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
-                    } else {
-                        $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                    }
-                    $rRowCount = $rowNo + 5;
-                    $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 5)->getColumn();
-                    $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
-                    $sheet->getDefaultRowDimension()->setRowHeight(18);
-                    $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
+                    $col = Coordinate::stringFromColumnIndex($colNo);
+                    $row = ($rowNo + 5);
+                    $sheet->getCell($col . $row)->setValue($value);
                     $colNo++;
                 }
             }

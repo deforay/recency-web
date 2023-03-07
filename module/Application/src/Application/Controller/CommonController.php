@@ -19,6 +19,7 @@ class CommonController extends AbstractActionController
     public function indexAction()
     {
         $result = "";
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -32,6 +33,7 @@ class CommonController extends AbstractActionController
     public function checkMultipleColumnValueAction()
     {
         $result = "";
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -46,6 +48,7 @@ class CommonController extends AbstractActionController
     public function getProvinceAction()
     {
         $result = "";
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -61,6 +64,7 @@ class CommonController extends AbstractActionController
     public function getDistrictAction()
     {
         $result = "";
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -75,6 +79,7 @@ class CommonController extends AbstractActionController
     public function getCityAction()
     {
         $result = "";
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -89,6 +94,7 @@ class CommonController extends AbstractActionController
     public function getFacilityAction()
     {
         $result = "";
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

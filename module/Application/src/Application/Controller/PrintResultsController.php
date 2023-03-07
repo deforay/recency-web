@@ -18,6 +18,7 @@ class PrintResultsController extends AbstractActionController
 
     public function indexAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $parameters = $request->getPost();

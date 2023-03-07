@@ -33,6 +33,7 @@ class VlDataController extends AbstractActionController
     public function getSampleDataAction()
     {
         $result = "";
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -47,6 +48,7 @@ class VlDataController extends AbstractActionController
     public function updateVlSampleResultAction()
     {
         $result = "";
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -60,6 +62,7 @@ class VlDataController extends AbstractActionController
 
     public function recentInfectionAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -80,6 +83,7 @@ class VlDataController extends AbstractActionController
 
     public function ltInfectionAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -98,6 +102,7 @@ class VlDataController extends AbstractActionController
 
     public function exportRInfectedDataAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -111,6 +116,7 @@ class VlDataController extends AbstractActionController
 
     public function exportLongTermInfectedDataAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -124,6 +130,7 @@ class VlDataController extends AbstractActionController
 
     public function TatReportAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -142,6 +149,7 @@ class VlDataController extends AbstractActionController
 
     public function exportTatReportAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -164,6 +172,7 @@ class VlDataController extends AbstractActionController
     }
     public function emailResultPdfAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -194,6 +203,7 @@ class VlDataController extends AbstractActionController
     }
     public function emailResultSamplesAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -207,6 +217,7 @@ class VlDataController extends AbstractActionController
 
     public function uploadResultAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -227,6 +238,7 @@ class VlDataController extends AbstractActionController
 
     public function getWeeklyReportAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -240,6 +252,7 @@ class VlDataController extends AbstractActionController
 
     public function exportWeeklyReportAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -253,6 +266,7 @@ class VlDataController extends AbstractActionController
 
     public function generateRecentPdfAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -265,6 +279,7 @@ class VlDataController extends AbstractActionController
     }
     public function generateLTermPdfAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -278,6 +293,7 @@ class VlDataController extends AbstractActionController
 
     public function qcReportAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $parameters = $request->getPost();
@@ -304,6 +320,7 @@ class VlDataController extends AbstractActionController
                 return $this->redirect()->toUrl('/vl-data');
             }
         }
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -320,6 +337,7 @@ class VlDataController extends AbstractActionController
 
     public function getVlOnVlsmSampleAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -352,6 +370,7 @@ class VlDataController extends AbstractActionController
     
     public function getAgeWiseInfectionReportAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -363,6 +382,7 @@ class VlDataController extends AbstractActionController
 
     public function exportModalityAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

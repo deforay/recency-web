@@ -26,6 +26,7 @@ class MonitoringController extends AbstractActionController
     public function allUserLoginHistoryAction()
     {
         $session = new Container('credo');
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
@@ -39,6 +40,7 @@ class MonitoringController extends AbstractActionController
     public function auditTrailAction()
     {
         $session = new Container('credo');
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
         if ($request->isPost()) {
@@ -61,6 +63,7 @@ class MonitoringController extends AbstractActionController
     public function userActivityLogAction()
     {
         $session = new Container('credo');
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         $eventType = $this->userService->getEventType();
         $users = $this->userService->getAllUserDetails();

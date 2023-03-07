@@ -21,6 +21,7 @@ class CaptchaController extends AbstractActionController
     }
     public function checkCaptchaAction()
     {
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

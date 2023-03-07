@@ -24,7 +24,8 @@ class UserController extends AbstractActionController
             return $this->redirect()->toRoute('recency');
         }else{
 
-            $request = $this->getRequest();
+            /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
                 // \Zend\Debug\Debug::dump($params);die;
@@ -41,7 +42,8 @@ class UserController extends AbstractActionController
         if($session->roleCode == 'user'){
             return $this->redirect()->toRoute('recency');
         }else{
-            $request = $this->getRequest();
+            /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
             
             if ($request->isPost()) {
                 $params = $request->getPost();
@@ -95,6 +97,7 @@ class UserController extends AbstractActionController
     public function editProfileAction()
     {
 
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -118,6 +121,7 @@ class UserController extends AbstractActionController
     public function userLoginHistoryAction()
     {
         $session = new Container('credo');
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
