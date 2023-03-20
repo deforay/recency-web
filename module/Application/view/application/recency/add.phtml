@@ -195,7 +195,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                                             <label class="col-sm-2 col-form-label <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="patientId">Patient ID <?php echo (in_array("Patient Id", $resultArr) ? "<span class='mandatory'>*</span>" : ""); ?></label>
                                             <div class="col-sm-4 <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
                                                 <input type="text" class="form-control <?php echo $patient;
-                                                                                        echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="patientId" name="patientId" placeholder="Please enter the Patient ID" title="Please enter the patient id">
+                                                                                        echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="patientId" name="patientId" placeholder="Please enter the Patient ID" title="Please enter the patient id" onblur="checkNameValidation('recency','patient_id', this,'null', 'Entered patient Id is already exist.')">
                                                 <small class="text-danger">&nbsp;Please do not enter Patient Name</small>
                                             </div>
 
@@ -1554,4 +1554,17 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             $('#dob,#age').prop('disabled', false);
         }
     }
+    function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+        checkValue = document.getElementById(obj.id).value;
+        if($.trim(checkValue)!= ''){
+            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
+            function(data) {
+                if (data > 0)
+                {
+                    alert(msg);
+                }
+            });
+        }
+    }
+
 </script>

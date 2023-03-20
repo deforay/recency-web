@@ -239,7 +239,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<label class="col-sm-2 col-form-label <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">Patient ID<?php echo (in_array("Patient Id", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 											<div class="col-sm-4 <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
 												<input type="text" value="<?php echo $result['patient_id']; ?>" class="form-control <?php echo $patient;
-																																	echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id">
+																																	echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id" onblur="checkNameValidation('recency','patient_id', this,'<?php echo "patient_id##".$result['patient_id'];?>', 'Entered patient Id is already exist.')">
 												<small class="text-danger">&nbsp;Please do not enter Patient Name</small>
 											</div>
 										</div>
@@ -1619,4 +1619,16 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 	} else {
 		$(".disbaledResult").attr("disabled", true).removeClass("isRequired");
 	}
+	function checkNameValidation(tableName, fieldName, obj, fnct, msg){
+        checkValue = document.getElementById(obj.id).value;
+        if($.trim(checkValue)!= ''){
+            $.post("<?php echo $this->url('common', array('action' => 'index')); ?>", { tableName: tableName, fieldName: fieldName, value: checkValue, fnct: fnct},
+            function(data) {
+                if (data > 0)
+                {
+                    alert(msg);
+                }
+            });
+        }
+    }
 </script>
