@@ -240,7 +240,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 											<div class="col-sm-4 <?php echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>">
 												<input type="text" value="<?php echo $result['patient_id']; ?>" editPatientId="<?php echo $result['patient_id']; ?>" class="form-control <?php echo $patient;
 																																	echo in_array("Patient Id", $resultArr2) ? "showFields" : "hideFields"; ?>" id="patientId" name="patientId" placeholder="Enter the patient id" title="Please enter the patient id" onblur="checkPatientIdValidation()">
-												<small class="text-danger">&nbsp;Please do not enter Patient Name</small>
+												<small class="text-danger">&nbsp;Please do not enter Patient Name</small><br>
+												<small class="text-danger patientIdError" style="display: none;">&nbsp;Patient Id should be 19 characters except special chars</small>
 											</div>
 										</div>
 										<div class="form-group row form-horizontal col-sm-12 col-lg-12">
@@ -1641,4 +1642,19 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             });
         }
     }
+	$('#patientId').on('input', function() {
+        var trimInputValue = $(this).val().trim();
+        var inputValue = trimInputValue.replace(/[^\w\s]/gi, ''); // Remove any special characters
+        var inputLength = inputValue.length;
+
+        if (inputLength > 19) {
+			$(".patientIdError").show();
+        }else if(inputLength < 19){
+			$(".patientIdError").show();
+			$(this).val(trimInputValue);
+		} else {
+			$(".patientIdError").hide();
+            $(this).val(trimInputValue);
+        }
+    });
 </script>
