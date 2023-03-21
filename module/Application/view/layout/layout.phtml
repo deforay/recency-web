@@ -25,6 +25,7 @@ if ($roleCode == 'admin' || $roleCode == 'manager' || $roleCode == 'user') {
 }
 $userMenu = "";
 $userMenu .= "<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=" . $this->url('global-config', array('action' => 'index')) . "><span class='nav-main-link-name'>Global Config</span></a></li>";
+$userMenu .= "<li id='nav-main-item'><a id='role' class='nav-main-link' href=" . $this->url('roles', array('action' => 'index')) . "><span class='nav-main-link-name'>Roles</span></a></li>";
 $userMenu .= "<li id='nav-main-item'><a id='user' class='nav-main-link' href=" . $this->url('user', array('action' => 'index')) . "><span class='nav-main-link-name'>User</span></a></li>";
 $userMenu .= "<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=" . $this->url('facilities', array('action' => 'index')) . "><span class='nav-main-link-name'>Facilities</span></a></li>";
 $userMenu .= "<li id='nav-main-item'><a id='province' class='nav-main-link' href=" . $this->url('province', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[0]['global_value'] . "</span></a></li>";
