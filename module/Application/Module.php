@@ -21,6 +21,7 @@ use Application\Model\TempMailTable;
 use Application\Model\SettingsTable;
 use Application\Model\SettingsQcSampleTable;
 use Application\Model\AuditRecencyTable;
+use Application\Model\ResourcesTable;
 
 use Application\Model\ProvinceTable;
 use Application\Model\DistrictTable;
@@ -46,6 +47,7 @@ use Application\Service\ProvinceService;
 use Application\Service\DistrictService;
 use Application\Service\CityService;
 use Application\Service\ManifestsService;
+use Application\Service\RoleService;
 
 class Module
 {
@@ -212,7 +214,11 @@ class Module
                     $table = new AuditRecencyTable($dbAdapter);
                     return $table;
                 },
-
+                'ResourcesTable' => function ($sm) {
+                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
+                    $table = new ResourcesTable($dbAdapter);
+                    return $table;
+                },
 
 
                 //service
@@ -254,6 +260,9 @@ class Module
                 },
                 'ManifestsService' => function ($sm) {
                     return new ManifestsService($sm);
+                },
+                'RoleService' => function ($sm) {
+                    return new RoleService($sm);
                 },
 
             )
@@ -376,6 +385,10 @@ class Module
                     $userService = $sm->getServiceLocator()->get('UserService');
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     return new \Application\Controller\MonitoringController($userService, $globalConfigService);
+                },
+                'Application\Controller\Roles' => function ($sm) {
+                    $roleService = $sm->getServiceLocator()->get('RoleService');
+                    return new \Application\Controller\RolesController($roleService);
                 },
             ),
         );
