@@ -1,0 +1,9 @@
+<option value="">--Select--</option>
+
+<?php 
+    if(count($result) > 0){
+        foreach ($result as $testKitInfo) { ?>
+            <option value="<?php echo $testKitInfo['kit_lot_no']; ?>" ><?php echo $testKitInfo['kit_lot_no']. '(expiry dt.' . date('d/m/Y',strtotime($testKitInfo['kit_expiry_date'])).')'?></option>
+        <?php }
+    } 
+?>

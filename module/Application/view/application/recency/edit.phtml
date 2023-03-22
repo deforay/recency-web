@@ -625,7 +625,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 										<label class="col-sm-2 col-form-label <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>" for="">HIV Recency Test Date<?php echo (in_array("Hiv Recency Test Date", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 										<div class="col-sm-4 <?php echo in_array("Hiv Recency Test Date", $resultArr2) ? "showFields" : "hideFields"; ?>">
-											<input type="text" value="<?php echo $hivRecencyTestDate; ?>" class="form-control <?php echo $disbaledResult . $hivRecencyRequiredDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly">
+											<input type="text" value="<?php echo $hivRecencyTestDate; ?>" class="form-control <?php echo $disbaledResult . $hivRecencyRequiredDate; ?>" id="hivRecencyTestDate" name="hivRecencyTestDate" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd-M-yyyy" value="" placeholder="Enter the HIV recency Test date" title="Please enter the HIV recency Test date" readonly="readonly" onchange="getTestKitLot()">
 										</div>
 										<br>
 										<br>
@@ -635,9 +635,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 										<div class="col-sm-4 <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>">
 											<select class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no" onchange="testKitLotNoChange(this);">
 												<option value="">--Select--</option>
-												<?php foreach ($kitInfo as $info) { ?>
-													<option value="<?php echo $info['kit_lot_no']; ?>" <?php echo ($info['kit_lot_no'] == $result['kit_lot_no']) ? 'selected="selected"' : ''; ?>><?php echo $info['kit_lot_no'] .' (expiry dt. '.date('d/m/Y',strtotime($info['kit_expiry_date'])).')'; ?></option>
-												<?php } ?>
+												
 											</select>
 											<input type="text" value="<?php echo $testKitExpiryDate; ?>" class="form-control hideFields" id="testKitExpDate" name="testKitExpDate" placeholder="Please select the kit lot no" title="Please select the kit lot no" readonly="readonly">
 										</div>
@@ -1222,7 +1220,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 	}
 
 	jQuery(document).ready(function($) {
-
+		onloadTestKitLot();
 		if ($("#vlLoadResult")) {
 			$("#vlLoadResult").on('keyup keypress blur change paste', function() {
 				if ($('#vlLoadResult').val() != $('#vlLoadResult').val().replace(/[^\d\.]/g, "")) {
@@ -1657,4 +1655,29 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             $(this).val(trimInputValue);
         }
     });
+	function getTestKitLot(){
+        if($('#hivRecencyTestDate').val() != ""){
+                $.post('/recency/get-recency-date-based-test-kit', {
+                    recencyTestDate: $('#hivRecencyTestDate').val()
+                },
+                function(data) {
+                    if (data != "") {
+                        $('#testKitLotNo').html(data);
+                    }
+                });
+        }
+    }
+	function onloadTestKitLot(){
+        if($('#hivRecencyTestDate').val() != ""){
+                $.post('/recency/get-recency-date-based-test-kit', {
+                    recencyTestDate: $('#hivRecencyTestDate').val()
+                },
+                function(data) {
+                    if (data != "") {
+                        $('#testKitLotNo').html(data);
+						$("#testKitLotNo").val("<?php echo $result['kit_lot_no'] ?>");
+                    }
+                });
+        }
+    }
 </script>

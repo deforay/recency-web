@@ -794,7 +794,7 @@ class RecencyService
         $facilityDb = $this->sm->get('FacilitiesTable');
         return $facilityDb->fetchLocationBasedFacility($params);
     }
-
+    
     public function vlsmSync()
     {
         $recencyDb = $this->sm->get('RecencyTable');
@@ -1616,5 +1616,11 @@ class RecencyService
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchPrintResultsDetails($parameters);
+    }
+    
+    public function getRecencyDateBasedTestKit($params)
+    {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->fetchRecencyDateBasedTestKit($params);
     }
 }

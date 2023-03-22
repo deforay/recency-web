@@ -9,6 +9,7 @@ use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
 use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
 
 class RecencyController extends AbstractActionController
 {
@@ -92,21 +93,15 @@ class RecencyController extends AbstractActionController
          return $this->redirect()->toRoute('recency');
       } else {
          $recencyId = base64_decode($this->params()->fromRoute('id'));
-
-
-
-
          $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
          $result = $this->recencyService->getRecencyDetailsById($recencyId);
          $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
          $testFacilityTypeResult = $this->facilitiesService->getTestingFacilitiesTypeDetails();
-         $kitInfo = $this->settingsService->getKitLotDetails();
          $sampleInfo = $this->settingsService->getSamplesDetails();
          return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
             'facilityResult' => $facilityResult,
             'testFacilityTypeResult' => $testFacilityTypeResult,
-            'kitInfo' => $kitInfo,
             'sampleInfo' => $sampleInfo,
             'result' => $result
          ));
@@ -476,6 +471,20 @@ class RecencyController extends AbstractActionController
          $result = $this->recencyService->getKitInfo($params['kitNo']);
          $viewModel = new ViewModel();
          $viewModel->setVariables(array('result' => Json::encode($result)))->setTerminal(true);
+         return $viewModel;
+      }
+   }
+   public function getRecencyDateBasedTestKitAction()
+   {
+      /** @var \Laminas\Http\Request $request */
+      $request = $this->getRequest();
+      if ($request->isPost()) {
+         $params = $request->getPost();
+
+         $result = $this->recencyService->getRecencyDateBasedTestKit($params);
+         $viewModel = new ViewModel();
+         $viewModel->setVariables(array('result' => $result))
+                     ->setTerminal(true);
          return $viewModel;
       }
    }
