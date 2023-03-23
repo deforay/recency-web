@@ -1,13 +1,13 @@
 {
-    "name": "deforay/vldashboard",
-    "description": "National Dashboard",
+    "name": "deforay/recency-web",
+    "description": "HIV Recency Web Application",
     "type": "project",
     "license": "BSD-3-Clause",
     "keywords": [
+        "HIV",
         "viral load",
         "eid",
-        "covid-19",
-        "dashboard"
+        "recency"
     ],
     "require": {
         "php": "^7.3 || ~8.0.0",

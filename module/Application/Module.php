@@ -53,58 +53,76 @@ class Module
 {
     public function onBootstrap(MvcEvent $e)
     {
-        $eventManager        = $e->getApplication()->getEventManager();
+        /** @var $application \Laminas\Mvc\Application */
+        $application = $e->getApplication();
+
+        $eventManager        = $application->getEventManager();
+
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
         //no need to call presetter if request is from CLI
         if (php_sapi_name() != 'cli') {
             $eventManager->attach('dispatch', array($this, 'preSetter'), 100);
-            $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'dispatchError'), -999);
         }
     }
 
-    public function dispatchError(MvcEvent $event)
-    {
-        $error = $event->getError();
-        if (empty($error) || $error != "ACL_ACCESS_DENIED") {
-            return;
-        }
-        $baseModel = new ViewModel();
-        $baseModel->setTemplate('layout/layout');
-        // passing the ACL object
-        $sm = $event->getApplication()->getServiceManager();
-        $acl = $sm->get('AppAcl');
-        $baseModel->acl = $acl;
 
-        $model = new ViewModel();
-        $model->setTemplate('error/403');
-
-        $baseModel->addChild($model, 'aclError');
-        $baseModel->setTerminal(true);
-
-        $event->setViewModel($baseModel);
-
-        $response = $event->getResponse();
-        $response->setStatusCode(403);
-
-        $event->setResponse($response);
-        $event->setResult($baseModel);
-        return false;
-    }
 
     public function preSetter(MvcEvent $e)
     {
-        if (($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Login') && ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Captcha')) {
-            $tempName = explode('Controller', $e->getRouteMatch()->getParam('controller'));
-            if (substr($tempName[0], 0, -1) == 'Application') {
-                $session = new Container('credo');
-                if (!isset($session->userId) || $session->userId == "") {
-                    $url = $e->getRouter()->assemble(array(), array('name' => 'login'));
+
+        /** @var $application \Laminas\Mvc\Application */
+        $application = $e->getApplication();
+        /** @var \Laminas\Http\Request $request */
+        $request = $e->getRequest();
+
+        if (
+            !$request->isXmlHttpRequest()
+            && ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Login') &&
+            ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Captcha')
+        ) {
+
+
+            $session = new Container('credo');
+            if (empty($session) || !isset($session->userId) || empty($session->userId)) {
+                $url = $e->getRouter()->assemble(array(), array('name' => 'login'));
+                /** @var \Laminas\Http\Response $response */
+                $response = $e->getResponse();
+                $response->getHeaders()->addHeaderLine('Location', $url);
+                $response->setStatusCode(302);
+                $response->sendHeaders();
+
+                // To avoid additional processing
+                // we can attach a listener for Event Route with a high priority
+                $stopCallBack = function ($event) use ($response) {
+                    $event->stopPropagation();
+                    return $response;
+                };
+                //Attach the "break" as a listener with a high priority
+                $application->getEventManager()->attach(MvcEvent::EVENT_ROUTE, $stopCallBack, -10000);
+                return $response;
+            } else {
+                $sm = $application->getServiceManager();
+                $viewModel = $application->getMvcEvent()->getViewModel();
+                $acl = $sm->get('AppAcl');
+                $viewModel->acl = $acl;
+                $session->acl = serialize($acl);
+
+                $params = $e->getRouteMatch()->getParams();
+                $resource = $params['controller'];
+                $privilege = $params['action'];
+
+                $role = $session->roleCode;
+
+
+                if (!$acl->hasResource($resource) || (!$acl->isAllowed($role, $resource, $privilege))) {
+                    
+                    /** @var \Laminas\Http\Response $response */
                     $response = $e->getResponse();
-                    $response->getHeaders()->addHeaderLine('Location', $url);
-                    $response->setStatusCode(302);
+                    $response->setStatusCode(403);
                     $response->sendHeaders();
+
                     // To avoid additional processing
                     // we can attach a listener for Event Route with a high priority
                     $stopCallBack = function ($event) use ($response) {
@@ -112,32 +130,8 @@ class Module
                         return $response;
                     };
                     //Attach the "break" as a listener with a high priority
-                    $e->getApplication()->getEventManager()->attach(MvcEvent::EVENT_ROUTE, $stopCallBack, -10000);
+                    $application->getEventManager()->attach(MvcEvent::EVENT_ROUTE, $stopCallBack, -10000);
                     return $response;
-                }
-                if ($e->getRequest()->isXmlHttpRequest()) {
-                    return;
-                }else{
-                    $sm = $e->getApplication()->getServiceManager();
-                    $viewModel = $e->getApplication()->getMvcEvent()->getViewModel();
-                    
-                    $acl = $sm->get('AppAcl');
-                    $viewModel->acl = $acl;
-                    
-                    $params = $e->getRouteMatch()->getParams();
-                    $resource = $params['controller'];
-                    $privilege = $params['action'];
-                    $role = $session->roleCode;
-                    if ((!$acl->hasResource($resource) || (!$acl->isAllowed($role, $resource, $privilege))) ) {
-                        //$e->setError('ACL_ACCESS_DENIED')->setParam('route', $e->getRouteMatch());
-                        //$e->getApplication()->getEventManager()->trigger('dispatch.error', $e);
-                    }
-                    
-                }
-
-            } else {
-                if ($e->getRequest()->isXmlHttpRequest()) {
-                    return;
                 }
             }
         }
@@ -261,7 +255,7 @@ class Module
                     $table = new ResourcesTable($dbAdapter);
                     return $table;
                 },
-                'AppAcl' => function($sm) {
+                'AppAcl' => function ($sm) {
                     $resourcesTable = $sm->get('ResourcesTable');
                     $rolesTable = $sm->get('RoleTable');
                     return new Acl($resourcesTable->fetchAllResourceMap(), $rolesTable->fetchRoleAllDetails());

@@ -223,9 +223,9 @@ class QualityCheckService
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             return $filename;
         } catch (Exception $exc) {
-            return "";
             error_log("RECENCY-QC-REPORT-" . $exc->getMessage());
             error_log($exc->getTraceAsString());
+            return "";
         }
     }
 
