@@ -11,7 +11,6 @@ use Laminas\Mail;
 use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Part as MimePart;
 use Laminas\Mime\Mime as Mime;
-use Laminas\Db\ResultSet\ResultSet;
 
 
 class CommonService
@@ -152,40 +151,6 @@ class CommonService
                error_log($exc->getTraceAsString());
           }
      }
-     public function checkPatientIdValidation($params)
-     {
-          $adapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
-          $value = trim($params['value']);
-          $editPatientId = $params['editPatientId'];
-          try {
-               $sql = new Sql($adapter);
-               if ($editPatientId == '' || $editPatientId == 'null') {
-                    $select = $sql->select()->from('recency')
-                         ->where(array('patient_id' => $value))
-                         ->order('sample_collection_date' . ' DESC')
-                         ->limit(1);
-                    $statement = $sql->prepareStatementForSqlObject($select);
-                    // Execute the query and fetch the results
-                    $resultSet = new ResultSet();
-                    $results = $resultSet->initialize($statement->execute())->toArray();
-                    
-               } else {
-                    // first trying $table[1] without quotes. If this does not work, then in catch we try with single quotes
-                    $select = $sql->select()->from('recency')
-                         ->where(array("patient_id ='".$value."'", "patient_id !='" . $editPatientId."'"))
-                         ->order("sample_collection_date DESC")
-                         ->limit(1);
-                    $statement = $sql->prepareStatementForSqlObject($select);
-                    $resultSet = new ResultSet();
-                    $results = $resultSet->initialize($statement->execute())->toArray();
-               }
-               return $results;
-          } catch (Exception $exc) {
-               error_log($exc->getMessage());
-               error_log($exc->getTraceAsString());
-          }
-     }
-
      public function dbDateFormat($date)
      {
           if (!isset($date) || $date == null || $date == "" || $date == "0000-00-00") {

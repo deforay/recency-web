@@ -1623,4 +1623,9 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyDateBasedTestKit($params);
     }
+    public function checkPatientIdValidation($params)
+     {
+        $recencyDb = $this->sm->get('RecencyTable');
+        return $recencyDb->checkPatientIdValidation($params);
+     }
 }

@@ -531,3 +531,45 @@ INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Co
 
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Roles', 'index', 'Access'), ('Application\\Controller\\Roles', 'add', 'Add');
 
+--Brindha 22-Mar-2023
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Roles', 'edit', 'Edit');
+
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\GlobalConfig', 'GlobalConfig');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\GlobalConfig', 'index', 'Access'), ('Application\\Controller\\GlobalConfig', 'edit', 'Edit');
+UPDATE `resources` SET `display_name` = 'Manage GlobalConfig' WHERE `resources`.`resource_id` = 'Application\\Controller\\GlobalConfig';
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\User', 'Manage User');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\User', 'index', 'Access'), ('Application\\Controller\\User', 'add', 'Add'), ('Application\\Controller\\User', 'edit', 'Edit');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\Facilities', 'Manage Facilities');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Facilities', 'index', 'Access'), ('Application\\Controller\\Facilities', 'add', 'Add'), ('Application\\Controller\\Facilities', 'edit', 'Edit');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\Province', 'Manage Province');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Province', 'index', 'Access'), ('Application\\Controller\\Province', 'add', 'Add'), ('Application\\Controller\\Province', 'edit', 'Edit');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\District', 'Manage District');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\District', 'index', 'Access'), ('Application\\Controller\\District', 'add', 'Add'), ('Application\\Controller\\District', 'edit', 'Edit');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\City', 'Manage City');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\City', 'index', 'Access'), ('Application\\Controller\\City', 'add', 'Add'), ('Application\\Controller\\City', 'edit', 'Edit');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\Settings', 'Settings');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Settings', 'index', 'Access'), ('Application\\Controller\\Settings', 'add', 'Add'), ('Application\\Controller\\Settings', 'edit', 'Edit');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES  ('Application\\Controller\\Settings', 'add-sample', 'Add Sample'), ('Application\\Controller\\Settings', 'edit-sample', 'Edit Sample');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\Recency', 'All Data');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Recency', 'index', 'Access'), ('Application\\Controller\\Recency', 'add', 'Add'), ('Application\\Controller\\Recency', 'edit', 'Edit');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Recency', 'export-recency', 'Export Recency'), ('Application\\Controller\\Recency', 'generate-pdf', 'Generate Pdf');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\QualityCheck', 'QualityCheck');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\QualityCheck', 'index', 'Access'), ('Application\\Controller\\QualityCheck', 'add', 'Add'), ('Application\\Controller\\QualityCheck', 'edit', 'Edit'), ('Application\\Controller\\QualityCheck', 'export-qc-data', 'Export QualityCheck');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\VlData', 'All Pending Results');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'index', 'Add VL'), ('Application\\Controller\\VlData', 'get-sample-data', 'Access'), ('Application\\Controller\\VlData', 'upload-result', 'Upload VL');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'email-result', 'Email Result');
+
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'recent-infection', 'Recent Infection'),('Application\\Controller\\VlData', 'export-r-infected-data', 'Export Recent Infection'),('Application\\Controller\\VlData', 'lt-infection', 'Long Term Infection'),('Application\\Controller\\VlData', 'export-long-term-infected-data', 'Export Long Term Infection');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'tat-report', 'TAT Report'),('Application\\Controller\\VlData', 'export-tat-report', 'Export TAT Report'),('Application\\Controller\\VlData', 'weekly-report', 'Weekly Report'),('Application\\Controller\\VlData', 'export-weekly-report', 'Export Weekly Report');
+
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'qc-report', 'QualityCheck Report'),('Application\\Controller\\VlData', 'age-wise-infection-report', 'Age wise Infection Report'),('Application\\Controller\\VlData', 'export-modality', 'Export Modality');

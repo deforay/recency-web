@@ -1,0 +1,17 @@
+<?php
+use Application\Service\CommonService;
+
+if($result != null){
+    $patientID=$result['patient_id'];
+    $collectionDate = '';
+    $common = new CommonService();
+    if (isset($result['sample_collection_date']) && $result['sample_collection_date'] != '' && $result['sample_collection_date'] != NULL && $result['sample_collection_date'] != '0000-00-00 00:00:00') {
+        $sampleCollectionDate=$result['sample_collection_date'];
+        
+        $collectionDate = $common->humanDateFormat($sampleCollectionDate);
+    }
+    $confirmStr = "Patient ".$patientID." was already tested on ".$collectionDate.". \n Do you want to proceed with another test? \n Press Cancel to go back. \n Press OK to continue adding.";
+    echo $confirmStr;
+}
+
+?>
