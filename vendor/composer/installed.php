@@ -508,6 +508,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'laminas/laminas-permissions-acl' => array(
+            'pretty_version' => '2.10.0',
+            'version' => '2.10.0.0',
+            'reference' => 'e927ae0a3001655fea97eb240eeea9d10638e82f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laminas/laminas-permissions-acl',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'laminas/laminas-psr7bridge' => array(
             'pretty_version' => '1.6.0',
             'version' => '1.6.0.0',

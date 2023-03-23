@@ -1,13 +1,9 @@
 <?php
 namespace Application\Model;
 
-use Laminas\Session\Container;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\TableGateway\AbstractTableGateway;
-use Laminas\Db\Sql\Expression;
-use Application\Service\CommonService;
-use Laminas\Config\Writer\PhpArray;
 
 class ResourcesTable extends AbstractTableGateway {
 

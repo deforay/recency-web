@@ -224,5 +224,14 @@ class RoleTable extends AbstractTableGateway {
                 error_log($exc->getTraceAsString());
            }
     }
+
+    public function fetchAllActiveRole()
+	{
+		$dbAdapter = $this->adapter;
+		$sql = new Sql($dbAdapter);
+		$query = $sql->select()->from('roles')->where(array('status' => 'active'))->order('role_name ASC');
+		$queryStr = $sql->getSqlStringForSqlObject($query);
+		return $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+	}
 }
 ?>
