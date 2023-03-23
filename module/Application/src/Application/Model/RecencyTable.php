@@ -5066,4 +5066,20 @@ class RecencyTable extends AbstractTableGateway
         }
         return $recencySampleId;
     }
+    public function fetchRecencyDateBasedTestKit($params)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $fResult = '';
+        $common = new CommonService();
+        if (isset($params['recencyTestDate']) && $params['recencyTestDate'] != null) {
+            $recencyTestDate = $common->dbDateFormat($params['recencyTestDate']);
+            $sQuery = $sql->select()->from(array('t' => 'test_kit_information'))
+                        ->where("kit_expiry_date <= '" . $recencyTestDate . "'")
+                        ->where(array('status' => 'active'));
+            $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
+            return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        }
+        
+    }
 }
