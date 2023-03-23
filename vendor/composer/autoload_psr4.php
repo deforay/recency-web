@@ -44,6 +44,7 @@ return array(
     'Laminas\\Serializer\\' => array($vendorDir . '/laminas/laminas-serializer/src'),
     'Laminas\\Router\\' => array($vendorDir . '/laminas/laminas-router/src'),
     'Laminas\\Psr7Bridge\\' => array($vendorDir . '/laminas/laminas-psr7bridge/src'),
+    'Laminas\\Permissions\\Acl\\' => array($vendorDir . '/laminas/laminas-permissions-acl/src'),
     'Laminas\\Mvc\\Plugin\\Prg\\' => array($vendorDir . '/laminas/laminas-mvc-plugin-prg/src'),
     'Laminas\\Mvc\\Plugin\\Identity\\' => array($vendorDir . '/laminas/laminas-mvc-plugin-identity/src'),
     'Laminas\\Mvc\\Plugin\\FlashMessenger\\' => array($vendorDir . '/laminas/laminas-mvc-plugin-flashmessenger/src'),

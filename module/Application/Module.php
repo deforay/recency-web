@@ -32,7 +32,7 @@ use Application\Model\RecencyChangeTrailsTable;
 use Application\Model\ManageColumnsMapTable;
 use Application\Model\EventLogTable;
 use Application\Model\ManifestsTable;
-
+use Application\Model\Acl;
 // Service
 
 use Application\Service\CommonService;
@@ -67,8 +67,30 @@ class Module
     public function dispatchError(MvcEvent $event)
     {
         $error = $event->getError();
+        if (empty($error) || $error != "ACL_ACCESS_DENIED") {
+            return;
+        }
         $baseModel = new ViewModel();
         $baseModel->setTemplate('layout/layout');
+        // passing the ACL object
+        $sm = $event->getApplication()->getServiceManager();
+        $acl = $sm->get('AppAcl');
+        $baseModel->acl = $acl;
+
+        $model = new ViewModel();
+        $model->setTemplate('error/403');
+
+        $baseModel->addChild($model, 'aclError');
+        $baseModel->setTerminal(true);
+
+        $event->setViewModel($baseModel);
+
+        $response = $event->getResponse();
+        $response->setStatusCode(403);
+
+        $event->setResponse($response);
+        $event->setResult($baseModel);
+        return false;
     }
 
     public function preSetter(MvcEvent $e)
@@ -93,6 +115,26 @@ class Module
                     $e->getApplication()->getEventManager()->attach(MvcEvent::EVENT_ROUTE, $stopCallBack, -10000);
                     return $response;
                 }
+                if ($e->getRequest()->isXmlHttpRequest()) {
+                    return;
+                }else{
+                    $sm = $e->getApplication()->getServiceManager();
+                    $viewModel = $e->getApplication()->getMvcEvent()->getViewModel();
+                    
+                    $acl = $sm->get('AppAcl');
+                    $viewModel->acl = $acl;
+                    
+                    $params = $e->getRouteMatch()->getParams();
+                    $resource = $params['controller'];
+                    $privilege = $params['action'];
+                    $role = $session->roleCode;
+                    if ((!$acl->hasResource($resource) || (!$acl->isAllowed($role, $resource, $privilege))) ) {
+                        //$e->setError('ACL_ACCESS_DENIED')->setParam('route', $e->getRouteMatch());
+                        //$e->getApplication()->getEventManager()->trigger('dispatch.error', $e);
+                    }
+                    
+                }
+
             } else {
                 if ($e->getRequest()->isXmlHttpRequest()) {
                     return;
@@ -219,7 +261,11 @@ class Module
                     $table = new ResourcesTable($dbAdapter);
                     return $table;
                 },
-
+                'AppAcl' => function($sm) {
+                    $resourcesTable = $sm->get('ResourcesTable');
+                    $rolesTable = $sm->get('RoleTable');
+                    return new Acl($resourcesTable->fetchAllResourceMap(), $rolesTable->fetchRoleAllDetails());
+                },
 
                 //service
 

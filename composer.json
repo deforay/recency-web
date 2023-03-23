@@ -31,7 +31,9 @@
         "phpoffice/phpspreadsheet": "^1.24",
         "halaxa/json-machine": "^0.7.0",
         "guzzlehttp/guzzle": "^7.4",
-        "tecnickcom/tcpdf": "^6.4"
+        "tecnickcom/tcpdf": "^6.4",
+        "laminas/laminas-permissions-acl": "^2.10",
+        "laminas/laminas-eventmanager": "^3.5"
     },
     "autoload": {
         "psr-4": {

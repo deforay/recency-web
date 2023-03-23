@@ -105,6 +105,7 @@ class ComposerStaticInit5795cd93178b9cd95c89b42b53076fb4
             'Laminas\\Serializer\\' => 19,
             'Laminas\\Router\\' => 15,
             'Laminas\\Psr7Bridge\\' => 19,
+            'Laminas\\Permissions\\Acl\\' => 24,
             'Laminas\\Mvc\\Plugin\\Prg\\' => 23,
             'Laminas\\Mvc\\Plugin\\Identity\\' => 28,
             'Laminas\\Mvc\\Plugin\\FlashMessenger\\' => 34,
@@ -319,6 +320,10 @@ class ComposerStaticInit5795cd93178b9cd95c89b42b53076fb4
         'Laminas\\Psr7Bridge\\' => 
         array (
             0 => __DIR__ . '/..' . '/laminas/laminas-psr7bridge/src',
+        ),
+        'Laminas\\Permissions\\Acl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laminas/laminas-permissions-acl/src',
         ),
         'Laminas\\Mvc\\Plugin\\Prg\\' => 
         array (
