@@ -5082,4 +5082,37 @@ class RecencyTable extends AbstractTableGateway
         }
         
     }
+
+    public function checkPatientIdValidation($params)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $results = '';
+        $common = new CommonService();
+        $value = trim($params['value']);
+        $editPatientId = $params['editPatientId'];
+        try {
+            $sql = new Sql($dbAdapter);
+            if ($editPatientId == '' || $editPatientId == 'null') {
+                $sQuery = $sql->select()->from('recency')
+                        ->where(array('patient_id' => $value))
+                        ->order('sample_collection_date' . ' DESC')
+                        ->limit(1);
+                $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
+                $results = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+            } else {
+                $sQuery = $sql->select()->from('recency')
+                        ->where(array("patient_id ='".$value."'", "patient_id !='" . $editPatientId."'"))
+                        ->order("sample_collection_date DESC")
+                        ->limit(1);
+                $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
+                $results =  $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+            }
+            return $results;
+        } catch (Exception $exc) {
+            error_log($exc->getMessage());
+            error_log($exc->getTraceAsString());
+        }
+        
+    }
 }

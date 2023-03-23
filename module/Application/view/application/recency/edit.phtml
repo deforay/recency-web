@@ -1620,19 +1620,13 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 	}
 	function checkPatientIdValidation(){
         checkValue = document.getElementById('patientId').value;
-		editPatientId = $('#patientId').attr('editPatientId');
         if($.trim(checkValue)!= ''){
-            $.post("<?php echo $this->url('common', array('action' => 'checkPatientIdValidation')); ?>", 
-            { value: checkValue, editPatientId : editPatientId},
+            $.post('/recency/check-patient-id-validation',{ 
+                value: checkValue, editPatientId : editPatientId
+            },
             function(data) {
-                var results = data.data;
-                if(results!= null && results.length>0){
-                    finalResults = results[0];
-                    patientID=finalResults['patient_id'];
-                    sampleCollectionDate=finalResults['sample_collection_date'];
-                    dateArray = sampleCollectionDate.split('-');
-                    newDate = dateArray[2] + "-" + dateArray[1] + "-" + dateArray[0];
-                    var confrm = confirm("Patient "+patientID+" was already tested on "+newDate+". \n Do you want to proceed with another test? \n Press Cancel to go back. \n Press OK to continue adding.");
+                if(data != ""){
+                    var confrm = confirm(data);
                     if (!confrm) {
                         document.getElementById('patientId').value = "";
                     }

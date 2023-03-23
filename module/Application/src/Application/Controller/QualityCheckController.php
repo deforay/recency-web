@@ -49,8 +49,6 @@ class QualityCheckController extends AbstractActionController
                $this->qualityCheckService->addQcTestDetails($params);
                return $this->redirect()->toRoute('quality-check');
           } else {
-               
-               
                $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
                $kitInfo = $this->settingsService->getKitLotDetails();
                $sampleInfo = $this->settingsService->getSamplesDetails();
@@ -64,8 +62,6 @@ class QualityCheckController extends AbstractActionController
 
      public function editAction()
      {
-
-          
           if ($this->getRequest()->isPost()) {
                $params = $this->getRequest()->getPost();
                $result = $this->qualityCheckService->updateQualityCheckDetails($params);

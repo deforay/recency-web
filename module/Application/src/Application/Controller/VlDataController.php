@@ -163,7 +163,6 @@ class VlDataController extends AbstractActionController
 
     public function emailResultAction()
     {
-        
         $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
         return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,

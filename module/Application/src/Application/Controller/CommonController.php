@@ -6,7 +6,6 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\Session\Container;
 use Laminas\Json\Json;
-use Laminas\View\Model\JsonModel;
 
 
 class CommonController extends AbstractActionController
@@ -32,23 +31,6 @@ class CommonController extends AbstractActionController
         $viewModel->setVariables(array('result' => $result))
                 ->setTerminal(true);
         return $viewModel;
-    }
-    public function checkPatientIdValidationAction()
-    {
-        $result = "";
-        /** @var \Laminas\Http\Request $request */
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $params = $request->getPost();
-            $results = $this->commonService->checkPatientIdValidation($params);
-        }
-        // Convert the results to a JsonModel object
-        $jsonModel = new JsonModel([
-            'data' => $results
-        ]);
-
-        // Return the JsonModel object as the response
-        return $jsonModel;
     }
     public function checkMultipleColumnValueAction()
     {
@@ -134,6 +116,5 @@ class CommonController extends AbstractActionController
         $viewModel->setTerminal(true);
         return $viewModel;
     }
-
 
 }
