@@ -4,7 +4,12 @@ use Laminas\Session\Container;
 
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+$acl=$this->layout()->acl;
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) {
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+}else{
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+}
 ?>
 <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
@@ -57,7 +62,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             <div class="row items-push">
                 <div class="col-lg-7 ">
                     <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                    <?php if ($roleCode == 'admin') { ?>
+                    <?php if ($roleCode == 'admin' && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'export-long-term-infected-data')) { ?>
                         <a href="javascript:void(0);" class="btn btn-success" onclick="exportRecentLTermInfection();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                     <?php
                     } ?>
@@ -79,7 +84,9 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                         <th>Age</th>
                         <th>Testing Site</th>
                         <th>VL Test Date</th>
+                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) { ?>
                         <th>Action</th>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,7 +109,9 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                         <th>Age</th>
                         <th>Testing Site</th>
                         <th>VL Test Date</th>
+                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) { ?>
                         <th>Action</th>
+                        <?php } ?>
 
                     </tr>
                 </tfoot>

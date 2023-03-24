@@ -181,7 +181,7 @@ class UserTable extends AbstractTableGateway
         }
     }
 
-    public function fetchUserDetails($parameters)
+    public function fetchUserDetails($parameters,$acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -292,6 +292,13 @@ class UserTable extends AbstractTableGateway
             "aaData" => array()
         );
 
+		$roleCode = $sessionLogin->roleCode;
+		if ($acl->isAllowed($roleCode, 'Application\Controller\User', 'edit')) {
+            $update = true;
+        } else {
+            $update = false;
+        }
+
         foreach ($rResult as $aRow) {
 
             $row = array();
@@ -301,7 +308,9 @@ class UserTable extends AbstractTableGateway
             $row[] = $aRow['mobile'];
             $row[] = $aRow['job_responsibility'];
             $row[] = ucwords($aRow['status']);
-            $row[] = '<a href="/user/edit/' . base64_encode($aRow['user_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            if($update){
+                $row[] = '<a href="/user/edit/' . base64_encode($aRow['user_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            }
             $output['aaData'][] = $row;
         }
 

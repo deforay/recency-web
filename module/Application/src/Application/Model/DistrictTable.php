@@ -64,7 +64,7 @@ class DistrictTable extends AbstractTableGateway {
 
     }
 
-    public function fetchAllDistrictDetails($parameters)
+    public function fetchAllDistrictDetails($parameters,$acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -177,13 +177,19 @@ class DistrictTable extends AbstractTableGateway {
             "aaData" => array(),
         );
 
-        $role = $sessionLogin->roleCode;
-        $update = true;
+        $roleCode = $sessionLogin->roleCode;
+		if ($acl->isAllowed($roleCode, 'Application\Controller\District', 'edit')) {
+            $update = true;
+        } else {
+            $update = false;
+        }
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = ucwords($aRow['province_name']);
             $row[] = ucwords($aRow['district_name']);
-            $row[] = '<a href="/district/edit/' . base64_encode($aRow['district_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            if($update){
+                $row[] = '<a href="/district/edit/' . base64_encode($aRow['district_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            }
             $output['aaData'][] = $row;
         }
 

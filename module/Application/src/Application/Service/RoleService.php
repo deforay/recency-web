@@ -24,7 +24,8 @@ class RoleService {
 
     public function getAllRole($parameters){
         $roleDb = $this->sm->get('RoleTable');
-        return $roleDb->fetchAllRole($parameters);
+        $acl = $this->sm->get('AppAcl');
+        return $roleDb->fetchAllRole($parameters,$acl);
     }
     
     public function addRole($params)

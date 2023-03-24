@@ -27,7 +27,8 @@ class RecencyService
     public function getRecencyDetails($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        return $recencyDb->fetchRecencyDetails($params);
+        $acl = $this->sm->get('AppAcl');
+        return $recencyDb->fetchRecencyDetails($params,$acl);
     }
 
     public function getReqVlTestOnVlsmDetails($params)
@@ -358,13 +359,15 @@ class RecencyService
     public function getAllRecencyResultWithVlList($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        return $recencyDb->fetchAllRecencyResultWithVlList($params);
+        $acl = $this->sm->get('AppAcl');
+        return $recencyDb->fetchAllRecencyResultWithVlList($params,$acl);
     }
 
     public function getAllLtResult($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        return $recencyDb->fetchAllLtResult($params);
+        $acl = $this->sm->get('AppAcl');
+        return $recencyDb->fetchAllLtResult($params,$acl);
     }
 
     // Export Result for Recent Infected :

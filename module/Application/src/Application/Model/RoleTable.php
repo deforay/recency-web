@@ -50,7 +50,7 @@ class RoleTable extends AbstractTableGateway {
         return $roleId;
     }
 
-    public function fetchAllRole($parameters) {
+    public function fetchAllRole($parameters,$acl) {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
@@ -162,22 +162,22 @@ class RoleTable extends AbstractTableGateway {
             "aaData" => array()
         );
         
-	    //$sessionLogin = new Container('employee');
-		/*$role = $sessionLogin->roleCode;
-		if ($acl->isAllowed($role, 'Application\Controller\Roles', 'edit')) {
+	    $sessionLogin = new Container('credo');
+		$roleCode = $sessionLogin->roleCode;
+		if ($acl->isAllowed($roleCode, 'Application\Controller\Roles', 'edit')) {
             $update = true;
         } else {
             $update = false;
         }
-        */
+        
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = ucwords($aRow['role_name']);
             $row[] = $aRow['role_code'];
             $row[] = ucfirst($aRow['role_status']);
-            //if($update){
-            $row[] = '<a href="/roles/edit/' . base64_encode($aRow['role_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
-            //}
+            if($update){
+                $row[] = '<a href="/roles/edit/' . base64_encode($aRow['role_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            }
             $output['aaData'][] = $row;
         }
         return $output;

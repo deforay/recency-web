@@ -25,7 +25,8 @@ class DistrictService {
     public function getDistrictDetails($params)
     {
         $districteDb = $this->sm->get('DistrictTable');
-        return $districteDb->fetchAllDistrictDetails($params);
+        $acl = $this->sm->get('AppAcl');
+        return $districteDb->fetchAllDistrictDetails($params,$acl);
     }
 
     public function addDistrictDetails($params)

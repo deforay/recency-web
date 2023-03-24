@@ -21,7 +21,7 @@ class QualityCheckTable extends AbstractTableGateway
           $this->sessionLogin = new Container('credo');
      }
 
-     public function fetchQualityCheckDetails($parameters)
+     public function fetchQualityCheckDetails($parameters,$acl)
      {
 
           /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -174,7 +174,16 @@ class QualityCheckTable extends AbstractTableGateway
                "iTotalDisplayRecords" => $iFilteredTotal,
                "aaData" => array()
           );
+
           $actionBtn = "";
+          $update = false;
+
+          $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
+          if ($roleCode != 'manager' && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'edit')) {
+               $actionBtn .= '<a class="btn btn-danger" href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-pencil"></i> Edit</a>';
+               $update = true;
+          }
+          $actionBtn .= '</div>';
           foreach ($rResult as $aRow) {
 
                $row = array();
@@ -188,17 +197,9 @@ class QualityCheckTable extends AbstractTableGateway
                $row[] = ucwords($aRow['long_term_verification_line']);
                $row[] = ucwords($aRow['term_outcome']);
                $row[] = ucwords($aRow['tester_name']);
-
-               // $row[] = '<a href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
-               $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
-               if ($roleCode != 'manager') {
-                    $actionBtn .= '<a class="btn btn-danger" href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-pencil"></i> Edit</a>';
+               if($update){
+                    $row[] = $actionBtn;
                }
-
-               //$actionBtn.='<a class="btn btn-primary" href="/quality-check/view/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-eye"></i> View</a>';
-
-               $actionBtn .= '</div>';
-               $row[] = $actionBtn;
 
                $output['aaData'][] = $row;
           }

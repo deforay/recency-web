@@ -2,19 +2,26 @@
     use Laminas\Session\Container;
     $sessionLogin = new Container('credo');
     $roleCode = $sessionLogin->roleCode;
-    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+    $acl=$this->layout()->acl;
+    if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Roles', 'edit')) {
+        $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+    }else{
+        $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+    }
 ?>
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
             <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Roles</h1>
-            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="<?php echo $this->url('roles',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-right: 2px;" title="Add"><i class="fa fa-plus"></i> Add New Role</a>
-                    </li>
-                </ol>
-            </nav>
+            <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Roles', 'add')) { ?>
+                <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="<?php echo $this->url('roles',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-right: 2px;" title="Add"><i class="fa fa-plus"></i> Add New Role</a>
+                        </li>
+                    </ol>
+                </nav>
+            <?php } ?>
         </div>
     </div>
 </div>
@@ -30,7 +37,9 @@
                          <th>Role Name</th>
                          <th>Role Code</th>
                          <th>Status</th>
+                         <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Roles', 'edit')) { ?>
                          <th>Action</th>
+                         <?php } ?>
                     </tr>
                 </thead>
                 <tbody>

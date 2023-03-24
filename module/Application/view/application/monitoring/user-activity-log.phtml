@@ -4,6 +4,7 @@ use Laminas\Session\Container;
 
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
+$acl=$this->layout()->acl;
 // $editAction = ' {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 // {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},
 // {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
@@ -36,10 +37,10 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
             <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <?php if ($roleCode != "manager") { ?>
+                        <?php if ($roleCode != "manager" && (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'add'))) { ?>
                             <a href="<?php echo $this->url('recency', array('action' => 'add')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Recency</a>
                         <?php }
-                        if ($roleCode == 'admin' || $roleCode == 'manager') { ?>
+                        if (($roleCode == 'admin' || $roleCode == 'manager') && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'export-recency')) { ?>
                             <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportRecencyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                         <?php } ?>
                         <?php

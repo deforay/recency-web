@@ -10,6 +10,7 @@ foreach ($globalConfigResult as $result) {
 }
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
+$acl=$this->layout()->acl;
 ?>
 <style>
     .dataTables_empty {
@@ -42,7 +43,7 @@ $roleCode = $sessionLogin->roleCode;
             <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <?php if ($roleCode != "manager") { ?>
+                        <?php if ($roleCode != "manager" && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'upload-result')) { ?>
                             <a href="<?php echo $this->url('vl-data', array('action' => 'upload-result')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Upload Viral Load Data</a>
                             <?php if ($syn) { ?>
                                 <a href="<?php echo $this->url('vl-data', array('action' => 'request-vl-test-on-vlsm')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-file-medical-alt"></i>&nbsp;Request VL Test on VLSM</a>

@@ -25,7 +25,8 @@ class CityService {
     public function getCityDetails($params)
     {
         $cityDb = $this->sm->get('CityTable');
-        return $cityDb->fetchAllCityDetails($params);
+        $acl = $this->sm->get('AppAcl');
+        return $cityDb->fetchAllCityDetails($params,$acl);
     }
 
     public function addCityDetails($params)

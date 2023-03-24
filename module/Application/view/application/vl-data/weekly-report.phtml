@@ -4,6 +4,7 @@ use Laminas\Session\Container;
 
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
+$acl=$this->layout()->acl;
 //$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center","bSortable":false}';
 ?>
 <style>
@@ -79,7 +80,7 @@ $roleCode = $sessionLogin->roleCode;
             <div class="row items-push">
                 <div class="col-lg-7 ">
                     <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                    <?php if ($roleCode == 'admin') { ?>
+                    <?php if ($roleCode == 'admin' && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'export-weekly-report')) { ?>
                         <a href="javascript:void(0);" class="btn btn-success" onclick="exportWeeklyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                     <?php } ?>
                 </div>

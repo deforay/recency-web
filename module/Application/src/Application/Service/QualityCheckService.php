@@ -26,7 +26,8 @@ class QualityCheckService
     public function getQualityCheckDetails($params)
     {
         $qcTestDb = $this->sm->get('QualityCheckTable');
-        return $qcTestDb->fetchQualityCheckDetails($params);
+        $acl = $this->sm->get('AppAcl');
+        return $qcTestDb->fetchQualityCheckDetails($params,$acl);
     }
 
     public function addQcTestDetails($params)

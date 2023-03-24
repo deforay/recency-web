@@ -25,7 +25,8 @@ class SettingsService {
     public function getSettingsDetails($params)
     {
         $settingsDb = $this->sm->get('SettingsTable');
-        return $settingsDb->fetchSettingsDetails($params);
+        $acl = $this->sm->get('AppAcl');
+        return $settingsDb->fetchSettingsDetails($params,$acl);
     }
 
     public function addSettingsDetails($params)

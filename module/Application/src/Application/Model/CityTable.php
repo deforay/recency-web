@@ -80,7 +80,7 @@ class CityTable extends AbstractTableGateway {
                 return $fResult;
           }
 
-          public function fetchAllCityDetails($parameters)
+          public function fetchAllCityDetails($parameters,$acl)
           {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -192,13 +192,19 @@ class CityTable extends AbstractTableGateway {
             "aaData" => array(),
         );
 
-        $role = $sessionLogin->roleCode;
-        $update = true;
+        $roleCode = $sessionLogin->roleCode;
+		if ($acl->isAllowed($roleCode, 'Application\Controller\City', 'edit')) {
+            $update = true;
+        } else {
+            $update = false;
+        }
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = ucwords($aRow['district_name']);
             $row[] = ucwords($aRow['city_name']);
-            $row[] = '<a href="/city/edit/' . base64_encode($aRow['city_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            if($update){
+                $row[] = '<a href="/city/edit/' . base64_encode($aRow['city_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            }
             $output['aaData'][] = $row;
         }
 

@@ -17,7 +17,7 @@ class SettingsTable extends AbstractTableGateway
         $this->adapter = $adapter;
     }
 
-    public function fetchSettingsDetails($parameters)
+    public function fetchSettingsDetails($parameters,$acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -132,8 +132,12 @@ class SettingsTable extends AbstractTableGateway
             "aaData" => array(),
         );
 
-        $role = $sessionLogin->roleCode;
-        $update = true;
+        $roleCode = $sessionLogin->roleCode;
+		if ($acl->isAllowed($roleCode, 'Application\Controller\Settings', 'edit')) {
+            $update = true;
+        } else {
+            $update = false;
+        }
         foreach ($rResult as $aRow) {
 
             $row = array();
@@ -143,7 +147,9 @@ class SettingsTable extends AbstractTableGateway
             $row[] = ucwords($aRow['status']);
             $row[] = date('d-M-Y H:s A',strtotime($aRow['added_on']));
             $row[] = ucwords($aRow['user_name']);
-            $row[] = '<a href="/settings/edit/' . base64_encode($aRow['test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            if($update){
+                $row[] = '<a href="/settings/edit/' . base64_encode($aRow['test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            }
             $output['aaData'][] = $row;
         }
 

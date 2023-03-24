@@ -25,7 +25,8 @@ class FacilitiesService {
     public function getFacilitiesDetails($params)
     {
         $facilityDb = $this->sm->get('FacilitiesTable');
-        return $facilityDb->fetchFacilitiesDetails($params);
+        $acl = $this->sm->get('AppAcl');
+        return $facilityDb->fetchFacilitiesDetails($params,$acl);
     }
 
     public function addFacilitiesDetails($params)

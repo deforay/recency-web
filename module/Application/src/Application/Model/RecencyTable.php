@@ -69,7 +69,7 @@ class RecencyTable extends AbstractTableGateway
         return $this->select($whereCondition)->toArray();
     }
 
-    public function fetchRecencyDetails($parameters)
+    public function fetchRecencyDetails($parameters,$acl)
     {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -276,16 +276,23 @@ class RecencyTable extends AbstractTableGateway
                 $formTransferDate = $common->humanDateFormat($formTransferAry[0]) . " " . $formTransferAry[1];
             }
 
+            $update = false;
             $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
-            if ($roleCode != 'manager') {
+            if ($roleCode != 'manager' && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'edit')) {
                 $actionBtn .= '<a class="btn btn-danger" title="Edit Sample"  href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i></a>';
+                $update = true;
+            }   
+            if ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) {
+                $actionBtn .= $pdfBtn;
+                $update = true;
             }
-
-            //$actionBtn .= '<a class="btn btn-primary" title="View Sample"  href="/recency/view/' . base64_encode($aRow['recency_id']) . '"><i class="si si-eye"></i></a>';
-            $actionBtn .= $pdfBtn;
             $actionBtn .= '</div>';
 
-            $row[] = $aRow['sample_id'] . '<br>' . $actionBtn;
+            if($update){
+                $row[] = $aRow['sample_id'] . '<br>' . $actionBtn;
+            }else{
+                $row[] = $aRow['sample_id'];
+            }
             $row[] = $aRow['facility_name'];
             $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
@@ -327,7 +334,9 @@ class RecencyTable extends AbstractTableGateway
 
             $row[] = $formInitiationDate;
             $row[] = $formTransferDate;
-            $row[] = $actionBtn;
+            if($update){
+                $row[] = $actionBtn;
+            }
 
             $output['aaData'][] = $row;
         }
@@ -1431,7 +1440,7 @@ class RecencyTable extends AbstractTableGateway
         }
     }
 
-    public function fetchAllRecencyResultWithVlList($parameters)
+    public function fetchAllRecencyResultWithVlList($parameters,$acl)
     {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -1571,6 +1580,13 @@ class RecencyTable extends AbstractTableGateway
             "aaData" => array(),
         );
 
+        $sessionLogin = new Container('credo');
+		$roleCode = $sessionLogin->roleCode;
+		if ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) {
+            $update = true;
+        } else {
+            $update = false;
+        }
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = $aRow['sample_id'];
@@ -1589,15 +1605,17 @@ class RecencyTable extends AbstractTableGateway
             $row[] = ucwords(str_replace('_', ' ', $aRow['received_specimen_type']));
             $row[] = ucwords($aRow['testing_facility_name']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-            $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
+            if($update){
+                $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                          <a class="btn btn-primary" href="javascript:void(0)" onclick="generateRecentPdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>
                          </div>';
+            }
             $output['aaData'][] = $row;
         }
         return $output;
     }
 
-    public function fetchAllLtResult($parameters)
+    public function fetchAllLtResult($parameters,$acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -1737,6 +1755,13 @@ class RecencyTable extends AbstractTableGateway
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
+        $sessionLogin = new Container('credo');
+		$roleCode = $sessionLogin->roleCode;
+		if ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) {
+            $update = true;
+        } else {
+            $update = false;
+        }
 
         foreach ($rResult as $aRow) {
 
@@ -1754,9 +1779,11 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['age'];
             $row[] = ucwords($aRow['testing_facility_name']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-            $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
-            <a class="btn btn-primary" href="javascript:void(0)" onclick="generateLTermPdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>
-            </div>';
+            if($update){
+                $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
+                <a class="btn btn-primary" href="javascript:void(0)" onclick="generateLTermPdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>
+                </div>';
+            }
             $output['aaData'][] = $row;
         }
         return $output;

@@ -25,7 +25,8 @@ class ProvinceService {
     public function getProvinceDetails($params)
     {
         $provinceDb = $this->sm->get('ProvinceTable');
-        return $provinceDb->fetchAllProvinceDetails($params);
+        $acl = $this->sm->get('AppAcl');
+        return $provinceDb->fetchAllProvinceDetails($params,$acl);
     }
 
     public function addProvinceDetails($params)
