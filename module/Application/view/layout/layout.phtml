@@ -11,6 +11,7 @@ $roleCode = $sessionLogin->roleCode;
 $roleCode = $sessionLogin->roleCode;
 $userName = $sessionLogin->userName;
 $nonRemoteUserMsg = $sessionLogin->nonRemoteUserMsg;
+$acl=$this->layout()->acl;
 $GlobalConfigRes = $this->GlobalConfig();
 /* Crosss Login Block Start */
 $userCrossLoginRes = $this->UserCrossLogin();
@@ -18,69 +19,109 @@ $config = new \Laminas\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 /* Crosss Login Block End */
 $dashboardMenu = "";
-$dashboardMenu .= "<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
-if ($roleCode == 'admin' || $roleCode == 'manager' || $roleCode == 'user') {
-     $dashboardMenu .= "<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=" . $this->url('analysis-dashboard') . "><span class='nav-main-link-name'>Analysis</span></a></li>";
-     $dashboardMenu .= "<li id='nav-main-item'><a id='quality-control-dashboard' class='nav-main-link' href=" . $this->url('quality-control-dashboard') . "><span class='nav-main-link-name'>Quality Control</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'index')) {
+     $dashboardMenu .= "<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
 }
+if ($roleCode == 'admin' || $roleCode == 'manager' || $roleCode == 'user' ){
+     if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'analysis-dashboard')) {
+          $dashboardMenu .= "<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=" . $this->url('analysis-dashboard') . "><span class='nav-main-link-name'>Analysis</span></a></li>";
+     }
+     if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'quality-control-dashboard')) {
+          $dashboardMenu .= "<li id='nav-main-item'><a id='quality-control-dashboard' class='nav-main-link' href=" . $this->url('quality-control-dashboard') . "><span class='nav-main-link-name'>Quality Control</span></a></li>";
+     }
+}
+
 $userMenu = "";
-$userMenu .= "<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=" . $this->url('global-config', array('action' => 'index')) . "><span class='nav-main-link-name'>Global Config</span></a></li>";
-$userMenu .= "<li id='nav-main-item'><a id='role' class='nav-main-link' href=" . $this->url('roles', array('action' => 'index')) . "><span class='nav-main-link-name'>Roles</span></a></li>";
-$userMenu .= "<li id='nav-main-item'><a id='user' class='nav-main-link' href=" . $this->url('user', array('action' => 'index')) . "><span class='nav-main-link-name'>User</span></a></li>";
-$userMenu .= "<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=" . $this->url('facilities', array('action' => 'index')) . "><span class='nav-main-link-name'>Facilities</span></a></li>";
-$userMenu .= "<li id='nav-main-item'><a id='province' class='nav-main-link' href=" . $this->url('province', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[0]['global_value'] . "</span></a></li>";
-$userMenu .= "<li id='nav-main-item'><a id='district' class='nav-main-link' href=" . $this->url('district', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[1]['global_value'] . "</span></a></li>";
-$userMenu .= "<li id='nav-main-item'><a id='city' class='nav-main-link' href=" . $this->url('city', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[2]['global_value'] . "</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\GlobalConfig', 'index')) {
+     $userMenu .= "<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=" . $this->url('global-config', array('action' => 'index')) . "><span class='nav-main-link-name'>Global Config</span></a></li>";
+}
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Roles', 'index')) {
+     $userMenu .= "<li id='nav-main-item'><a id='role' class='nav-main-link' href=" . $this->url('roles', array('action' => 'index')) . "><span class='nav-main-link-name'>Roles</span></a></li>";
+}
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\User', 'index')) {
+     $userMenu .= "<li id='nav-main-item'><a id='user' class='nav-main-link' href=" . $this->url('user', array('action' => 'index')) . "><span class='nav-main-link-name'>User</span></a></li>";
+}
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Facilities', 'index')) {
+     $userMenu .= "<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=" . $this->url('facilities', array('action' => 'index')) . "><span class='nav-main-link-name'>Facilities</span></a></li>";
+}
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Province', 'index')) {
+     $userMenu .= "<li id='nav-main-item'><a id='province' class='nav-main-link' href=" . $this->url('province', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[0]['global_value'] . "</span></a></li>";
+}
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\District', 'index')) {
+     $userMenu .= "<li id='nav-main-item'><a id='district' class='nav-main-link' href=" . $this->url('district', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[1]['global_value'] . "</span></a></li>";
+}
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\City', 'index')) {
+     $userMenu .= "<li id='nav-main-item'><a id='city' class='nav-main-link' href=" . $this->url('city', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[2]['global_value'] . "</span></a></li>";
+}
 
 $recencyMenu = "";
-$recencyMenu .= "<li id='nav-main-item'><a id='recency' class='nav-main-link' href=" . $this->url('recency', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'index')) {
+     $recencyMenu .= "<li id='nav-main-item'><a id='recency' class='nav-main-link' href=" . $this->url('recency', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
+}
 if ($roleCode == 'remote_order_user') {
-     $recencyMenu .= "<li id='nav-main-item'><a id='print-results' class='nav-main-link' href=" . $this->url('print-results', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-printer'></i> Print Results</span></a></li>";
-     $recencyMenu .= "<li id='nav-main-item'><a id='manifests' class='nav-main-link' href=" . $this->url('manifests', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-film'></i> Specimen Manifests</span></a></li>";
+     if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\PrintResults', 'index')){
+          $recencyMenu .= "<li id='nav-main-item'><a id='print-results' class='nav-main-link' href=" . $this->url('print-results', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-printer'></i> Print Results</span></a></li>";
+     }
+     if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Manifests', 'index')){
+          $recencyMenu .= "<li id='nav-main-item'><a id='manifests' class='nav-main-link' href=" . $this->url('manifests', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-film'></i> Specimen Manifests</span></a></li>";
+     }
 }
 
 
 
 $settingsMenu = "";
-if ($roleCode == 'admin') {
+if ($roleCode == 'admin' && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'index')) {
      $settingsMenu .= "<li id='nav-main-item'><a id='settings' class='nav-main-link' href=" . $this->url('settings', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
 }
 
 
 $qcMenu = "";
-$qcMenu = "<li id='nav-main-item'><a id='quality-check' class='nav-main-link' href=" . $this->url('quality-check', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-settings'></i> Quality Check Testing</span></a></li>";
-
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'index')){
+     $qcMenu = "<li id='nav-main-item'><a id='quality-check' class='nav-main-link' href=" . $this->url('quality-check', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-settings'></i> Quality Check Testing</span></a></li>";
+}
 $vlDataMenu = "";
-$vlDataMenu = "<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Pending Results</span></a></li>";
-
-$recentMenu = "";
-$recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Recent Infections</span></a></li>";
-
-$longTermMenu = "";
-$longTermMenu = "<li id='nav-main-item'><a id='lt-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'lt-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Long Term Infections</span></a></li>";
-
-$tatMenu = "";
-$tatMenu = "<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'tat-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> TAT Report</span></a></li>";
-
-$weeklyReportMenu = "";
-$weeklyReportMenu = "<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'weekly-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
-
-$qcReportMenu = "";
-$qcReportMenu = "<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'qc-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
-$modality = "";
-$modality = "<li id='nav-main-item'><a id='age-wise-infection-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'age-wise-infection-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Age-wise Infection Report</span></a></li>";
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'index')){
+     $vlDataMenu = "<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Pending Results</span></a></li>";
+}
+$reportMenu = "";
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'recent-infection')){
+     $reportMenu .= "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Recent Infections</span></a></li>";
+}
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'lt-infection')){
+     $reportMenu .= "<li id='nav-main-item'><a id='lt-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'lt-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Long Term Infections</span></a></li>";
+}
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'tat-report')){
+     $reportMenu .= "<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'tat-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> TAT Report</span></a></li>";
+}
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'weekly-report')){
+     $reportMenu .= "<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'weekly-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
+}
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'qc-report')){
+     $reportMenu .= "<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'qc-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
+}
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'age-wise-infection-report')){
+     $reportMenu .= "<li id='nav-main-item'><a id='age-wise-infection-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'age-wise-infection-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Age-wise Infection Report</span></a></li>";
+}
 
 $emailMenu = "";
-$emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'email-result')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
-
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'email-result')){
+     $emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'email-result')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
+}
 
 $recentMenu = "";
-$recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Recent Infections Report</span></a></li>";
-
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'recent-infection')){
+     $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Recent Infections Report</span></a></li>";
+}
 $monitoringMenu = "";
-$monitoringMenu .= "<li id='nav-main-item'><a id='user-login-history' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'all-user-login-history')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> User Login History</span></a></li>";
-$monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'audit-trail')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-clock'></i> Audit Trail</span></a></li>";
-$monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'user-activity-log')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-list'></i> User Activity Log</span></a></li>";
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring', 'all-user-login-history')){
+     $monitoringMenu .= "<li id='nav-main-item'><a id='user-login-history' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'all-user-login-history')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> User Login History</span></a></li>";
+}
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring', 'audit-trail')){
+     $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'audit-trail')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-clock'></i> Audit Trail</span></a></li>";
+}
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring', 'user-activity-log')){
+     $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'user-activity-log')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-list'></i> User Activity Log</span></a></li>";
+}
 // $uploadResultMenu = "";
 // $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'upload-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Upload Results</span></a></li>";
 
@@ -192,8 +233,7 @@ $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-l
                               <div class="content-header bg-white-10">
                                    <!-- Logo -->
                                    <a class="link-fx font-w600 font-size-md text-white" href="" style=" font-size: 25px; ">
-                                        <span class="text-white">Recency</span>&nbsp;<span class="text-white-75">Web</span>
-                                   </a>
+                                        <span class="text-white">Recency</span>&nbsp;<span class="text-white-75">Web</span>                                   </a>
                                    <!-- END Logo -->
                               </div>
                          </div>
@@ -204,7 +244,7 @@ $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-l
                          <div class="content-side content-side-full">
                               <ul class="nav-main">
                                    <li class="nav-main-heading"></li>
-                                   <?php //if ($roleCode == 'admin' || $roleCode == 'manager') { 
+                                   <?php if ($dashboardMenu != "") { 
                                    ?>
                                    <li class="nav-main-item " id="dashboard">
                                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -215,9 +255,10 @@ $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-l
                                              <?php echo $dashboardMenu; ?>
                                         </ul>
                                    </li>
-                                   <?php //} 
+                                   <?php } 
                                    ?>
-                                   <?php if ($roleCode == 'admin') { ?>
+                                   <?php if ($roleCode == 'admin') { 
+                                        if ($userMenu != "") { ?>
                                         <li class="nav-main-heading"></li>
                                         <li class="nav-main-item " id="manage">
                                              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -230,6 +271,7 @@ $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-l
                                         </li>
 
                                    <?php }
+                                   }
                                    if ($roleCode != 'manager' && $roleCode != 'remote_order_user') { ?>
                                         <li class="nav-main-heading" style="padding:3px;"></li>
                                    <?php echo $settingsMenu;
@@ -256,7 +298,8 @@ $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-l
                                         <li class="nav-main-heading" style="padding:3px;"></li>
                                    <?php //echo $uploadResultMenu; -->
                                    }
-                                   if (($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'user' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
+                                   if (($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'user' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { 
+                                        if($reportMenu != "") { ?>
                                         <li class="nav-main-heading"></li>
                                         <li class="nav-main-item " id="reports">
                                              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -265,22 +308,14 @@ $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-l
                                              </a>
                                              <ul class="nav-main-submenu">
                                                   <li class="nav-main-heading" style="padding:3px;"></li>
-                                                  <?php echo $recentMenu; ?>
-                                                  <li class="nav-main-heading" style="padding:3px;"></li>
-                                                  <?php echo $longTermMenu; ?>
-                                                  <li class="nav-main-heading" style="padding:3px;"></li>
-                                                  <?php echo $tatMenu; ?>
-                                                  <li class="nav-main-heading" style="padding:3px;"></li>
-                                                  <?php echo $weeklyReportMenu; ?>
-                                                  <li class="nav-main-heading" style="padding:3px;"></li>
-                                                  <?php echo $qcReportMenu; ?>
-                                                  <li class="nav-main-heading" style="padding:3px;"></li>
-                                                  <?php echo $modality; ?>
+                                                  <?php echo $reportMenu; ?>
                                              </ul>
                                         </li>
-                                   <?php }
+                                   <?php } 
+                                   }
                                    ?>
- <?php if ($roleCode == 'admin') { ?>
+                                   <?php if ($roleCode == 'admin') { 
+                                        if($monitoringMenu != "") {?>
                                         <li class="nav-main-heading"></li>
                                         <li class="nav-main-item " id="manage">
                                              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -291,9 +326,9 @@ $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-l
                                                   <?php echo $monitoringMenu; ?>
                                              </ul>
                                         </li>
-
                                    <?php }
-?>
+                                   }
+                                   ?>
                               </ul>
                          </div>
                     </div>

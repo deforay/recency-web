@@ -566,10 +566,25 @@ INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Co
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\QualityCheck', 'index', 'Access'), ('Application\\Controller\\QualityCheck', 'add', 'Add'), ('Application\\Controller\\QualityCheck', 'edit', 'Edit'), ('Application\\Controller\\QualityCheck', 'export-qc-data', 'Export QualityCheck');
 
 INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\VlData', 'All Pending Results');
-INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'index', 'Add VL'), ('Application\\Controller\\VlData', 'get-sample-data', 'Access'), ('Application\\Controller\\VlData', 'upload-result', 'Upload VL');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'index', 'Access'), ('Application\\Controller\\VlData', 'get-sample-data', 'Sample Data'), ('Application\\Controller\\VlData', 'upload-result', 'Upload VL');
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'email-result', 'Email Result');
 
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'recent-infection', 'Recent Infection'),('Application\\Controller\\VlData', 'export-r-infected-data', 'Export Recent Infection'),('Application\\Controller\\VlData', 'lt-infection', 'Long Term Infection'),('Application\\Controller\\VlData', 'export-long-term-infected-data', 'Export Long Term Infection');
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'tat-report', 'TAT Report'),('Application\\Controller\\VlData', 'export-tat-report', 'Export TAT Report'),('Application\\Controller\\VlData', 'weekly-report', 'Weekly Report'),('Application\\Controller\\VlData', 'export-weekly-report', 'Export Weekly Report');
 
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'qc-report', 'QualityCheck Report'),('Application\\Controller\\VlData', 'age-wise-infection-report', 'Age wise Infection Report'),('Application\\Controller\\VlData', 'export-modality', 'Export Modality');
+
+--Brindha 23-Mar-2023
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\Index', 'Dashboard');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Index', 'index', 'Access Laboratory'),('Application\\Controller\\Index', 'export-recency-data', 'Export Recency'), ('Application\\Controller\\Index', 'analysis-dashboard', 'Access Analysis'), ('Application\\Controller\\Index', 'quality-control-dashboard', 'Access QualityControl');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\PrintResults', 'Print Results');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\PrintResults', 'index', 'Access');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\Manifests', 'Manifests');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Manifests', 'index', 'Access');
+
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\Monitoring', 'Monitoring');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Monitoring', 'all-user-login-history', 'All UserLogin History'), ('Application\\Controller\\Monitoring', 'audit-trail', 'Audit Trail'), ('Application\\Controller\\Monitoring', 'user-activity-log', 'User Activity Log');
+
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'update-vl-sample-result', 'Update VL Sample');
