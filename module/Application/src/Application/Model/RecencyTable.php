@@ -278,7 +278,7 @@ class RecencyTable extends AbstractTableGateway
 
             $update = false;
             $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
-            if ($roleCode != 'manager' && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'edit')) {
+            if ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'edit')) {
                 $actionBtn .= '<a class="btn btn-danger" title="Edit Sample"  href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i></a>';
                 $update = true;
             }   

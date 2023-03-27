@@ -8,7 +8,6 @@ $crossLoginSession = new Container('crossLogin');
 // \Zend\Debug\Debug::dump($crossLoginSession->logged);
 $role = $sessionLogin->roleId;
 $roleCode = $sessionLogin->roleCode;
-$roleCode = $sessionLogin->roleCode;
 $userName = $sessionLogin->userName;
 $nonRemoteUserMsg = $sessionLogin->nonRemoteUserMsg;
 $acl=$this->layout()->acl;
@@ -22,13 +21,11 @@ $dashboardMenu = "";
 if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'index')) {
      $dashboardMenu .= "<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
 }
-if ($roleCode == 'admin' || $roleCode == 'manager' || $roleCode == 'user' ){
-     if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'analysis-dashboard')) {
-          $dashboardMenu .= "<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=" . $this->url('analysis-dashboard') . "><span class='nav-main-link-name'>Analysis</span></a></li>";
-     }
-     if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'quality-control-dashboard')) {
-          $dashboardMenu .= "<li id='nav-main-item'><a id='quality-control-dashboard' class='nav-main-link' href=" . $this->url('quality-control-dashboard') . "><span class='nav-main-link-name'>Quality Control</span></a></li>";
-     }
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'analysis-dashboard')) {
+     $dashboardMenu .= "<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=" . $this->url('analysis-dashboard') . "><span class='nav-main-link-name'>Analysis</span></a></li>";
+}
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'quality-control-dashboard')) {
+     $dashboardMenu .= "<li id='nav-main-item'><a id='quality-control-dashboard' class='nav-main-link' href=" . $this->url('quality-control-dashboard') . "><span class='nav-main-link-name'>Quality Control</span></a></li>";
 }
 
 $userMenu = "";
@@ -58,19 +55,18 @@ $recencyMenu = "";
 if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'index')) {
      $recencyMenu .= "<li id='nav-main-item'><a id='recency' class='nav-main-link' href=" . $this->url('recency', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
 }
-if ($roleCode == 'remote_order_user') {
-     if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\PrintResults', 'index')){
-          $recencyMenu .= "<li id='nav-main-item'><a id='print-results' class='nav-main-link' href=" . $this->url('print-results', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-printer'></i> Print Results</span></a></li>";
-     }
-     if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Manifests', 'index')){
-          $recencyMenu .= "<li id='nav-main-item'><a id='manifests' class='nav-main-link' href=" . $this->url('manifests', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-film'></i> Specimen Manifests</span></a></li>";
-     }
+
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\PrintResults', 'index')){
+     $recencyMenu .= "<li id='nav-main-item'><a id='print-results' class='nav-main-link' href=" . $this->url('print-results', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-printer'></i> Print Results</span></a></li>";
+}
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Manifests', 'index')){
+     $recencyMenu .= "<li id='nav-main-item'><a id='manifests' class='nav-main-link' href=" . $this->url('manifests', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-film'></i> Specimen Manifests</span></a></li>";
 }
 
 
 
 $settingsMenu = "";
-if ($roleCode == 'admin' && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'index')) {
      $settingsMenu .= "<li id='nav-main-item'><a id='settings' class='nav-main-link' href=" . $this->url('settings', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
 }
 
@@ -257,8 +253,7 @@ if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring'
                                    </li>
                                    <?php } 
                                    ?>
-                                   <?php if ($roleCode == 'admin') { 
-                                        if ($userMenu != "") { ?>
+                                   <?php if ($userMenu != "") { ?>
                                         <li class="nav-main-heading"></li>
                                         <li class="nav-main-item " id="manage">
                                              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -271,35 +266,30 @@ if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring'
                                         </li>
 
                                    <?php }
-                                   }
-                                   if ($roleCode != 'manager' && $roleCode != 'remote_order_user') { ?>
+                                   
+                                   if ($settingsMenu != '') { ?>
                                         <li class="nav-main-heading" style="padding:3px;"></li>
-                                   <?php echo $settingsMenu;
+                                        <?php echo $settingsMenu;
                                    }
-                                   if ($roleCode != 'manager') {
-                                   ?>
+                                   if ($recencyMenu != '') { ?>
                                         <li class="nav-main-heading" style="padding:3px;"></li>
-                                        <?php echo $recencyMenu; ?>
-
-
-                                        <?php if (($roleCode == 'admin' || $roleCode == 'RTS' || $roleCode == 'user' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
-                                             <li class="nav-main-heading" style="padding:3px;"></li>
-                                             <?php echo $qcMenu; ?>
-                                        <?php }
-                                        if (($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { ?>
-                                             <li class="nav-main-heading" style="padding:3px;"></li>
+                                        <?php echo $recencyMenu; 
+                                   }
+                                   if ($qcMenu != '') { ?>
+                                        <li class="nav-main-heading" style="padding:3px;"></li>
+                                        <?php echo $qcMenu;
+                                   }
+                                   if ($vlDataMenu != '') { ?>
+                                        <li class="nav-main-heading" style="padding:3px;"></li>
                                         <?php echo $vlDataMenu;
-                                        }
                                    }
-                                   if (($roleCode == 'VLTS' || $roleCode == 'admin') && $roleCode != 'remote_order_user') {
-                                        ?>
+                                   if ($emailMenu != '') { ?>
                                         <li class="nav-main-heading" style="padding:3px;"></li>
                                         <?php echo $emailMenu; ?>
                                         <li class="nav-main-heading" style="padding:3px;"></li>
                                    <?php //echo $uploadResultMenu; -->
                                    }
-                                   if (($roleCode == 'VLTS' || $roleCode == 'admin' || $roleCode == 'user' || $roleCode == 'manager') && $roleCode != 'remote_order_user') { 
-                                        if($reportMenu != "") { ?>
+                                   if($reportMenu != "") { ?>
                                         <li class="nav-main-heading"></li>
                                         <li class="nav-main-item " id="reports">
                                              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -311,11 +301,9 @@ if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring'
                                                   <?php echo $reportMenu; ?>
                                              </ul>
                                         </li>
-                                   <?php } 
+                                   <?php 
                                    }
-                                   ?>
-                                   <?php if ($roleCode == 'admin') { 
-                                        if($monitoringMenu != "") {?>
+                                   if($monitoringMenu != "") {?>
                                         <li class="nav-main-heading"></li>
                                         <li class="nav-main-item " id="manage">
                                              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -326,7 +314,7 @@ if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring'
                                                   <?php echo $monitoringMenu; ?>
                                              </ul>
                                         </li>
-                                   <?php }
+                                   <?php
                                    }
                                    ?>
                               </ul>

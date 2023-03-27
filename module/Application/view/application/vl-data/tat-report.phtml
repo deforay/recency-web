@@ -62,7 +62,7 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             <div class="row items-push">
                 <div class="col-lg-7 ">
                     <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                    <?php if ($roleCode == 'admin' && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'export-tat-report')) { ?>
+                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'export-tat-report')) { ?>
                         <a href="javascript:void(0);" class="btn btn-success" onclick="exportTatData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                     <?php } ?>
                 </div>

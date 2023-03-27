@@ -19,10 +19,10 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityChe
             <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <?php if ($roleCode != "manager" && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'edit')) { ?>
+                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'edit')) { ?>
                             <a href="<?php echo $this->url('quality-check', array('action' => 'add')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add QC Testing</a>
                         <?php }
-                        if (($roleCode == 'admin' || $roleCode == 'manager') && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'export-qc-data')) { ?>
+                        if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'export-qc-data')) { ?>
                             <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportQCData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                         <?php } ?>
                     </li>
@@ -131,7 +131,7 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityChe
                         <th>Long Term Line</th>
                         <th>Assay Outcome</th>
                         <th>Tester Name</th>
-                        <?php if ($roleCode != 'manager' && isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'edit')) { ?>
+                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'edit')) { ?>
                         <th>Action</th>
                         <?php } ?>
                     </tr>
