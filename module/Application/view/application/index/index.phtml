@@ -870,7 +870,6 @@
 		function exportRecencyInfo() {
 			$.post("<?php echo $this->url('export-recency-data'); ?>",
 				function(data) {
-					console.log(data);
 					if (data == "" || data == null || data == undefined) {
 						alert('Unable to generate download', 'err');
 					} else {

@@ -934,12 +934,14 @@ class RecencyService
             $sheet->getStyle('G1:I2')->applyFromArray($styleArray);
             $sheet->getStyle('G2:H2')->applyFromArray($styleArray);
             $sheet->getStyle('H2:I2')->applyFromArray($styleArray);
+            $sheet->getStyle('I2:J2')->applyFromArray($styleArray);
+            $sheet->getStyle('J2:K2')->applyFromArray($styleArray);
 
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 1;
                 foreach ($rowData as $field => $value) {
                     if (!isset($value) || empty($value)) {
-                        $value = "";
+                        $value = "0";
                     }
                     $col = Coordinate::stringFromColumnIndex($colNo);
                     $row = ($rowNo + 3);
@@ -955,8 +957,8 @@ class RecencyService
                 $sheet->setCellValue('D4', html_entity_decode(($result[0]['Assay Recent'] != '' && $result[0]['Assay Recent'] != 0) ? round(($result[0]['Assay Recent'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
                 $sheet->setCellValue('E4', html_entity_decode(($result[0]['Long Term'] != '' && $result[0]['Long Term'] != 0) ? round(($result[0]['Long Term'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
                 $sheet->setCellValue('F4', html_entity_decode(($result[0]['Assay Negative'] != '' && $result[0]['Assay Negative'] != 0) ? round(($result[0]['Assay Negative'] / $termOutcome) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
-                $sheet->setCellValue('G4', html_entity_decode(($result[0]['VL Done'] != '' && $result[0]['VL Done'] != 0) ? round(($result[0]['VL Done'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
-                $sheet->setCellValue('H4', html_entity_decode(($result[0]['VL Pending'] != '' && $result[0]['VL Pending'] != 0) ? round(($result[0]['VL Pending'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
+                $sheet->setCellValue('G4', html_entity_decode(($result[0]['Done'] != '' && $result[0]['VL Done'] != 0) ? round(($result[0]['VL Done'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
+                $sheet->setCellValue('H4', html_entity_decode(($result[0]['Pending'] != '' && $result[0]['VL Pending'] != 0) ? round(($result[0]['VL Pending'] / $vlResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
                 $sheet->setCellValue('I4', html_entity_decode(($result[0]['RITA Recent'] != '' && $result[0]['RITA Recent'] != 0) ? round(($result[0]['RITA Recent'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
                 $sheet->setCellValue('J4', html_entity_decode(($result[0]['Long Term Final'] != '' && $result[0]['Long Term Final'] != 0) ? round(($result[0]['Long Term Final'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
                 $sheet->setCellValue('K4', html_entity_decode(($result[0]['Inconclusive'] != '' && $result[0]['Inconclusive'] != 0) ? round(($result[0]['Inconclusive'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
