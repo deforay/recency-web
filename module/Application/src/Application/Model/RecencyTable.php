@@ -2312,7 +2312,7 @@ class RecencyTable extends AbstractTableGateway
         $common = new CommonService();
         $general = new CommonService();
         $aColumns = array('f.facility_name', 'ft.facility_name');
-        $orderColumns = array('f.facility_name', 'ft.facility_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome');
+        $orderColumns = array('f.facility_name', 'ft.facility_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome','printedCount','samplesFinalLongTerm','','ritaRecent','','samplesFinalInconclusive','','samplesInvalid','');
 
         /* Paging */
         $sLimit = "";
@@ -2497,7 +2497,11 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
         if (isset($sOrder) && $sOrder != "") {
-            $sQuery->order($sOrder);
+            if(($sOrder == "ft.facility_name asc") || ($sOrder =="ft.facility_name desc")){
+                $sQuery->order(new Expression("CASE WHEN `testing_facility_name` IS NULL OR `testing_facility_name` = '' THEN 1 ELSE 0 END, ".$sOrder));
+            }else{
+                $sQuery->order($sOrder);
+            }            
         }
 
 
@@ -3717,7 +3721,7 @@ class RecencyTable extends AbstractTableGateway
         $common = new CommonService();
         $general = new CommonService();
         $aColumns = array('d.district_name');
-        $orderColumns = array('d.district_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome', 'samplesFinalLongTerm', '', 'ritaRecent');
+        $orderColumns = array('d.district_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome', 'printedCount', 'samplesFinalLongTerm', '', 'ritaRecent', '', 'samplesFinalInconclusive','','samplesInvalid');
 
         /* Paging */
         $sLimit = "";
@@ -3904,7 +3908,11 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
         if (isset($sOrder) && $sOrder != "") {
-            $sQuery->order($sOrder);
+            if(($sOrder == "d.district_name asc") || ($sOrder =="d.district_name desc")){
+                $sQuery->order(new Expression("CASE WHEN `district_name` IS NULL OR `district_name` = '' THEN 1 ELSE 0 END, ".$sOrder));
+            }else{
+                $sQuery->order($sOrder);
+            }            
         }
 
         if ($this->sessionLogin->facilityMap != null) {

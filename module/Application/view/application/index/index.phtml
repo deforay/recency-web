@@ -7,7 +7,7 @@
 	$acl=$this->layout()->acl;
 	//\Zend\Debug\Debug::dump($globalConfigResult);die;
 
-	$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+	$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false},{"sClass":"center"},{"sClass":"center",bSortable:false},{"sClass":"center"},{"sClass":"center",bSortable:false},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 	$startDate = date('d-M-Y', strtotime('today - 365 days'));
 	$currentDate = date('d-M-Y');
 	?>
@@ -703,13 +703,15 @@
 						"sClass": "center"
 					},
 					{
-						"sClass": "center"
+						"sClass": "center",
+						"bSortable": false
 					},
 					{
 						"sClass": "center"
 					},
 					{
-						"sClass": "center"
+						"sClass": "center",
+						"bSortable": false
 					},
 					{
 						"sClass": "center"
@@ -868,6 +870,7 @@
 		function exportRecencyInfo() {
 			$.post("<?php echo $this->url('export-recency-data'); ?>",
 				function(data) {
+					console.log(data);
 					if (data == "" || data == null || data == undefined) {
 						alert('Unable to generate download', 'err');
 					} else {

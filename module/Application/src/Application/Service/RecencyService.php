@@ -1092,7 +1092,7 @@ class RecencyService
             );
 
             $sheet->setCellValue('A1', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'));
-            $sheet->setCellValue('B1', html_entity_decode('Testing Facility Name', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('B1', html_entity_decode('Testing Site Name', ENT_QUOTES, 'UTF-8'));
             $sheet->setCellValue('C1', html_entity_decode('No. of Samples Registered', ENT_QUOTES, 'UTF-8'));
             $sheet->setCellValue('D1', html_entity_decode('No. of Samples Received at Hub', ENT_QUOTES, 'UTF-8'));
             $sheet->setCellValue('E1', html_entity_decode('No. of Samples Rejected', ENT_QUOTES, 'UTF-8'));
@@ -1116,8 +1116,8 @@ class RecencyService
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 1;
                 foreach ($rowData as $field => $value) {
-                    if (!isset($value) || empty($value)) {
-                        $value = "";
+                    if ($field != 1 && (!isset($value) || empty($value))) {
+                        $value = "0";
                     }
                     $col = Coordinate::stringFromColumnIndex($colNo);
                     $row = ($rowNo + 2);
@@ -1327,8 +1327,8 @@ class RecencyService
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 1;
                 foreach ($rowData as $field => $value) {
-                    if (!isset($value) || empty($value)) {
-                        $value = "";
+                    if ($field != 0 && (!isset($value) || empty($value))) {
+                        $value = "0";
                     }
                     $col = Coordinate::stringFromColumnIndex($colNo);
                     $row = ($rowNo + 2);
