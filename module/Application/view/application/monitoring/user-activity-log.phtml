@@ -228,11 +228,27 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
 
         });
 
-        function searchVlRequestData() {
+    function searchVlRequestData() {
         searchExecuted = true;
         $.blockUI();
         oTable.fnDraw();
         $.unblockUI();
+    }
+    function exportRecencyData() {
+        if (searchExecuted === false) {
+            searchVlRequestData();
+        }
+        $.blockUI();
+        $.post("<?php echo $this->url('recency', array('action' => 'export-recency')); ?>",
+            function(data) {
+                if (data == "" || data == null || data == undefined) {
+                    $.unblockUI();
+                    alert('Unable to generate download');
+                } else {
+                    $.unblockUI();
+                    document.location.href = '/temporary/' + data;
+                }
+            });
     }
 
 </script>

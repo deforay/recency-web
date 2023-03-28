@@ -163,6 +163,7 @@ class RecencyService
     public function exportRecencyData()
     {
         ini_set('memory_limit', -1);
+        ini_set('max_execution_time', 30000);
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
@@ -491,7 +492,8 @@ class RecencyService
 
     public function exportLongTermInfected($params)
     {
-
+        ini_set('memory_limit', -1);
+        ini_set('max_execution_time', 30000);
         try {
             $common = new \Application\Service\CommonService();
             $queryContainer = new Container('query');
