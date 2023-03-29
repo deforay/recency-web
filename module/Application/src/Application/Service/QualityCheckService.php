@@ -214,6 +214,15 @@ class QualityCheckService
             $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'Recency-Quality-Check-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
+
+            // Add event log
+            $subject                = $filename;
+            $eventType              = 'Recency Quality Check data-export';
+            $action                 = 'Exported Recency Quality Check data ';
+            $resourceName           = 'Recency Quality Check data ';
+            $eventLogDb             = $this->sm->get('EventLogTable');
+            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
+            return $filename;
             return $filename;
         } catch (Exception $exc) {
             error_log("RECENCY-QC-REPORT-" . $exc->getMessage());
