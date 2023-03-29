@@ -632,7 +632,7 @@ class RecencyTable extends AbstractTableGateway
         return $rResult;
     }
 
-    public function fetchRecencyDetailsForPDF($recencyId)
+    public function fetchRecencyDetailsForPDF($recencyId,$sm)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
@@ -645,9 +645,16 @@ class RecencyTable extends AbstractTableGateway
             ->where(array('recency_id' => $recencyId));
 
         $sQueryStr = $sql->buildSqlString($sQuery);
-        // echo $sQueryStr; die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        // \Zend\Debug\Debug::dump($rResult); die;
+        
+        // Add event log
+        $filename = 'Recency-Result-' . date('d-M-Y-H-i-s') . '.pdf';
+        $subject                = $filename;
+        $eventType              = 'Recency data-pdf';
+        $action                 = 'Downloaded Recency data ';
+        $resourceName           = 'Recency data ';
+        $eventLogDb             = $sm->get('EventLogTable');
+        $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
         return $rResult;
     }
 

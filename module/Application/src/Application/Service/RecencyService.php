@@ -783,6 +783,13 @@ class RecencyService
                                     'upload_result_datetime' => date('Y-m-d h:i:s')
                                 );
                                 $recencyDb->update($data, array('recency_id' => $fResult['recency_id']));
+                                // Add event log
+                                $subject                = $fResult['recency_id'];
+                                $eventType              = 'Upload VL Result File';
+                                $action                 = 'Uploaded VL Result File ';
+                                $resourceName           = 'Upload VL Result ';
+                                $eventLogDb             = $this->sm->get('EventLogTable');
+                                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
                             }
                         }
                     }
@@ -998,7 +1005,7 @@ class RecencyService
     public function getRecencyDetailsForPDF($recenyId)
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        return $recencyDb->fetchRecencyDetailsForPDF($recenyId);
+        return $recencyDb->fetchRecencyDetailsForPDF($recenyId,$this->sm);
     }
 
     public function getAllRecencyResult($params)
