@@ -14,8 +14,7 @@ $acl=$this->layout()->acl;
 $GlobalConfigRes = $this->GlobalConfig();
 /* Crosss Login Block Start */
 $userCrossLoginRes = $this->UserCrossLogin();
-$config = new \Laminas\Config\Reader\Ini();
-$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+$configResult = $this->CustomConfig();
 /* Crosss Login Block End */
 $dashboardMenu = "";
 if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\IndexController', 'index')) {

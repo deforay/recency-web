@@ -448,6 +448,14 @@ class Module implements ConfigProviderInterface
                         $userTable = $container->get('UserTable');
                         return new \Application\View\Helper\UserCrossLogin($userTable);
                     }
+                },
+                'CustomConfig'           => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $configResult = $container->get('Config');
+                        return new \Application\View\Helper\CustomConfig($configResult);
+                    }
                 }
             ),
         );

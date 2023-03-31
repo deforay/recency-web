@@ -1,8 +1,8 @@
 <?php
-// \Zend\Debug\Debug::dump($facilityResult);die;
+
 use Laminas\Session\Container;
-$config = new \Laminas\Config\Reader\Ini();
-$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+
+$configResult = $this->CustomConfig();
 $sessionLogin = new Container('credo');
 ?>
 <style>
@@ -28,18 +28,28 @@ $sessionLogin = new Container('credo');
         appearance: none;
         margin: 0;
     }
-    button#rvlsm_rightAll, button#rvlsm_rightSelected, button#rvlsm_leftSelected, button#rvlsm_leftAll {
+
+    button#rvlsm_rightAll,
+    button#rvlsm_rightSelected,
+    button#rvlsm_leftSelected,
+    button#rvlsm_leftAll {
         background-color: #e1effe;
         color: dimgray;
     }
-    button#rvlsm_rightAll:hover, button#rvlsm_rightSelected:hover, button#rvlsm_leftSelected:hover, button#rvlsm_leftAll:hover {
+
+    button#rvlsm_rightAll:hover,
+    button#rvlsm_rightSelected:hover,
+    button#rvlsm_leftSelected:hover,
+    button#rvlsm_leftAll:hover {
         background-color: #dbe4ef;
         color: black;
-        font-weight : 700;
+        font-weight: 700;
     }
-    .hidden{
-        display:none;
+
+    .hidden {
+        display: none;
     }
+
     div#ms-rvlsm {
         width: 625px !important;
     }
@@ -70,58 +80,58 @@ $sessionLogin = new Container('credo');
         </div>
         <div class="block-content">
             <div class="col-md-12 table-responsive" id="hide">
-                <form name="reqVlTestTable" id="reqVlTestTable"  class="mb-5" action="<?php echo $this->url('vl-data', array('action' => 'request-vl-test-on-vlsm')); ?>" enctype="multipart/form-data"  method="post">
-                <div class="form-group row">
-                    <label style=" margin-bottom: 2%; " class="col-sm-2 col-form-label" for="sampleTestedDates">Sample Collection Date</label>
-                    <div class="col-sm-4">
-                        <input type="text" value="" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;background:#fff;width: 100%;"/>
-                    </div>
-                    <label style=" margin-bottom: 2%; " class="col-sm-2 col-form-label" for="facilityId">Facility<span class="mandatory">*</span></label>
-                    <div class="col-sm-4">
-                        <select class="form-control isRequired js-select2" id="facilityId" name="facilityId" title="Please choose facility" style="width: 100%;" data-placeholder="Choose one..">
-                            <option value="">-- Select --</option>
-                            <?php foreach($facilityResult['facility'] as $facility){ ?>
-                                <option value="<?php echo base64_encode($facility['facility_id']);?>"><?php echo ucwords($facility['facility_name']);?></option>
-                            <?php }?>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row items-push">
-                    <div class="col-lg-7 offset-lg-4">
-                        <a href="javascript:void(0);" class="btn btn-primary" onclick="searchSamples();"><i class="fa fa-fw fa-check"></i> Search</a>
-                        <a href="" class="btn btn-danger"><i class="si si-reload"></i> Reset</a>&nbsp;
-                        <a href="<?php echo $this->url('vl-data', array('action' => 'index')); ?>" class="btn btn-dark"><i class="fa fa-backward"></i> Back</a>
-                    </div>
-                </div>
-
-                <div class="showsample hidden">
+                <form name="reqVlTestTable" id="reqVlTestTable" class="mb-5" action="<?php echo $this->url('vl-data', array('action' => 'request-vl-test-on-vlsm')); ?>" enctype="multipart/form-data" method="post">
                     <div class="form-group row">
-                        <label class="col-form-label col-sm-2" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
+                        <label style=" margin-bottom: 2%; " class="col-sm-2 col-form-label" for="sampleTestedDates">Sample Collection Date</label>
                         <div class="col-sm-4">
-                            <select class="js-select2 form-control is-facility" name="isFacilityLab" id="isFacilityLab" title="Please select facility lab" style="width: 100%;" data-placeholder="Choose one..">
-                                <option value="">-- Select -- </option>
-                            </select>
+                            <input type="text" value="" id="sampleTestedDates" name="sampleTestedDates" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;background:#fff;width: 100%;" />
                         </div>
-                        <label class="col-form-label col-sm-2" for="isVlLab">Viral Load Lab <span class='mandatory'>*</span></label>
+                        <label style=" margin-bottom: 2%; " class="col-sm-2 col-form-label" for="facilityId">Facility<span class="mandatory">*</span></label>
                         <div class="col-sm-4">
-                            <select class="js-select2 form-control is-viral-lab" name="isVlLab" id="isVlLab" title="Please select viral load lab" style="width: 100%;" data-placeholder="Choose one..">
-                                <option value="">-- Select -- </option>
+                            <select class="form-control isRequired js-select2" id="facilityId" name="facilityId" title="Please choose facility" style="width: 100%;" data-placeholder="Choose one..">
+                                <option value="">-- Select --</option>
+                                <?php foreach ($facilityResult['facility'] as $facility) { ?>
+                                    <option value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-md-2" for="rvlsm">Select the samples<span class="mandatory">*</span></label>
-                        <div class="col-md-10">
-                            <select class="form-control isRequired" id='rvlsm' name="rvlsm[]" multiple='multiple'></select>
-                        </div>
-                    </div>
+
                     <div class="row items-push">
                         <div class="col-lg-7 offset-lg-4">
-                            <a href="javascript:void(0);" class="btn btn-primary" onclick="sendRequest();"><i class="fa fa-fw fa-check"></i> Submit</a>
+                            <a href="javascript:void(0);" class="btn btn-primary" onclick="searchSamples();"><i class="fa fa-fw fa-check"></i> Search</a>
+                            <a href="" class="btn btn-danger"><i class="si si-reload"></i> Reset</a>&nbsp;
+                            <a href="<?php echo $this->url('vl-data', array('action' => 'index')); ?>" class="btn btn-dark"><i class="fa fa-backward"></i> Back</a>
                         </div>
                     </div>
-                </div>
+
+                    <div class="showsample hidden">
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-2" for="isFacilityLab">Viral Load Facility <span class='mandatory'>*</span></label>
+                            <div class="col-sm-4">
+                                <select class="js-select2 form-control is-facility" name="isFacilityLab" id="isFacilityLab" title="Please select facility lab" style="width: 100%;" data-placeholder="Choose one..">
+                                    <option value="">-- Select -- </option>
+                                </select>
+                            </div>
+                            <label class="col-form-label col-sm-2" for="isVlLab">Viral Load Lab <span class='mandatory'>*</span></label>
+                            <div class="col-sm-4">
+                                <select class="js-select2 form-control is-viral-lab" name="isVlLab" id="isVlLab" title="Please select viral load lab" style="width: 100%;" data-placeholder="Choose one..">
+                                    <option value="">-- Select -- </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-md-2" for="rvlsm">Select the samples<span class="mandatory">*</span></label>
+                            <div class="col-md-10">
+                                <select class="form-control isRequired" id='rvlsm' name="rvlsm[]" multiple='multiple'></select>
+                            </div>
+                        </div>
+                        <div class="row items-push">
+                            <div class="col-lg-7 offset-lg-4">
+                                <a href="javascript:void(0);" class="btn btn-primary" onclick="sendRequest();"><i class="fa fa-fw fa-check"></i> Submit</a>
+                            </div>
+                        </div>
+                    </div>
 
             </div>
         </div>
@@ -135,46 +145,49 @@ $sessionLogin = new Container('credo');
 
     $(document).ready(function() {
         $('#sampleTestedDates').daterangepicker({
-            format: 'DD-MMM-YYYY',
-            autoUpdateInput: false,
-            separator: ' to ',
-            startDate: moment().subtract('days', 29),
-            endDate: moment(),
-            maxDate: moment(),
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                'Last 7 Days': [moment().subtract('days', 6), moment()],
-                'Last 30 Days': [moment().subtract('days', 29), moment()],
-                'Last 60 Days': [moment().subtract('days', 59), moment()],
-                'Last 180 Days': [moment().subtract('days', 179), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-            }
-        },
-        function(start, end) {
-            startDate = start.format('YYYY-MM-DD');
-            endDate = end.format('YYYY-MM-DD');
-            $('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
-            });
+                format: 'DD-MMM-YYYY',
+                autoUpdateInput: false,
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+                $('input[name="sampleTestedDates"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+                });
 
-        });
+            });
     });
 
-    function searchSamples(){
-        if($('#facilityId').val() != ""){
+    function searchSamples() {
+        if ($('#facilityId').val() != "") {
             $.blockUI();
-            $.post("<?php echo $this->url('vl-data', array('action' => 'get-vl-on-vlsm-sample')); ?>", { sampleTestedDates: $('#sampleTestedDates').val(), facilityId: $('#facilityId').val()},
-            function(data) {
-                $('.showsample').show();
-                getFacilities()
-                option.html(data);
-                option.multiSelect('refresh');
-                $.unblockUI();
-            });
-        }else{
-            alert('Please select the facility to get samples','err');
+            $.post("<?php echo $this->url('vl-data', array('action' => 'get-vl-on-vlsm-sample')); ?>", {
+                    sampleTestedDates: $('#sampleTestedDates').val(),
+                    facilityId: $('#facilityId').val()
+                },
+                function(data) {
+                    $('.showsample').show();
+                    getFacilities()
+                    option.html(data);
+                    option.multiSelect('refresh');
+                    $.unblockUI();
+                });
+        } else {
+            alert('Please select the facility to get samples', 'err');
             $.unblockUI();
         }
     }
@@ -216,7 +229,7 @@ $sessionLogin = new Container('credo');
         }
     });
 
-    option.change(function(){ 
+    option.change(function() {
         selectedSample = $(this).val();
     });
 
@@ -241,19 +254,19 @@ $sessionLogin = new Container('credo');
 
     }
 
-    $('#facilityId').change(function(){
-        $('#isFacilityLab,#isVlLab').val('');$('.showsample').hide();
+    $('#facilityId').change(function() {
+        $('#isFacilityLab,#isVlLab').val('');
+        $('.showsample').hide();
         document.getElementById("rvlsm").options.length = 0;
     });
 
-    function sendRequest(){
+    function sendRequest() {
         flag = deforayValidator.init({
-          formId: 'reqVlTestTable'
+            formId: 'reqVlTestTable'
         });
         if (flag) {
             $.blockUI();
             document.getElementById('reqVlTestTable').submit();
         }
     }
-
 </script>

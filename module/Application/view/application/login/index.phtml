@@ -6,8 +6,7 @@ $container = new Container('alert');
 $loginContainer = new Container('credo');
 $crossLoginSession = new Container('crossLogin');
 
-$config = new \Laminas\Config\Reader\Ini();
-$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+$configResult = $this->CustomConfig();
 ?>
 <!doctype html>
 <html lang="en">

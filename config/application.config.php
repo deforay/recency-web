@@ -7,6 +7,7 @@
  */
 return array(
     'modules' => array(
+        'Laminas\Mail',
         'Laminas\Serializer',
         'Laminas\Mvc\Plugin\FilePrg',
         'Laminas\Mvc\Plugin\FlashMessenger',

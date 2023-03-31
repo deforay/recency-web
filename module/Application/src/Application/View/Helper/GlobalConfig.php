@@ -6,8 +6,6 @@ use Laminas\View\Helper\AbstractHelper;
 
 class GlobalConfig extends AbstractHelper
 {
-
-
     private $globalTable;
     public function __construct($globalTable)
     {

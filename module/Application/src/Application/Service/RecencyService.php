@@ -727,7 +727,8 @@ class RecencyService
         $adapter->beginTransaction();
         try {
             $recencyDb = $this->sm->get('RecencyTable');
-            $result = $recencyDb->updateEmailSendResult($params);
+            $configResult = $this->sm->get('Config');
+            $result = $recencyDb->updateEmailSendResult($params, $configResult);
             if ($result > 0) {
                 $adapter->commit();
                 $alertContainer = new Container('alert');
@@ -1435,8 +1436,7 @@ class RecencyService
             $check = false;
             $recencyDb = $this->sm->get('RecencyTable');
             $client = new GuzzleHttp\Client();
-            $config = new \Laminas\Config\Reader\Ini();
-            $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+            $configResult = $this->sm->get('Config');
             $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/recency/requestVlTest.php';
             if (isset($params['rvlsm']) && count($params['rvlsm']) > 0) {
                 foreach ($params['rvlsm'] as $sample) {
@@ -1651,12 +1651,12 @@ class RecencyService
             $recencyDb = $this->sm->get('RecencyTable');
             $rResult = $recencyDb->getVlRequestSentOnYes();
 
-            if (count($rResult) > 0) {
+            if (!empty($rResult)) {
 
                 $client = new GuzzleHttp\Client();
-                $config = new \Laminas\Config\Reader\Ini();
-                $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+                $configResult = $this->sm->get('Config');
                 $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/recency/requestVlTest.php';
+
                 foreach ($rResult as $data) {
                     if ((isset($data['sample_id']) && $data['sample_id'] != "") && (isset($data['patient_id']) && $data['patient_id'] != "")) {
                         $resultCart = $client->post($urlVlsm, [

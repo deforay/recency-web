@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Global Configuration Override
  *
@@ -18,12 +19,12 @@ return array(
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),
-        'adapters'=>array(
+        'adapters' => array(
             'db1' => array(
                 'driver'  => 'Pdo',
-                'dsn'     => 'mysql:dbname=vlrbc;host=localhost',      
+                'dsn'     => 'mysql:dbname=vlrbc;host=localhost',
                 'driver_options'  => array(
-                        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+                    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
                 ),
             ),
         )
@@ -34,7 +35,7 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'Laminas\Db\Adapter\Adapter'
-                    => 'Laminas\Db\Adapter\AdapterServiceFactory',
+            => 'Laminas\Db\Adapter\AdapterServiceFactory',
         ),
         // to allow other adapter to be called by
         // $sm->get('db1') or $sm->get('db2') based on the adapters config.

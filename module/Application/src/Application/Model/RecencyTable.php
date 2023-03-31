@@ -2073,12 +2073,10 @@ class RecencyTable extends AbstractTableGateway
         return $rResult;
     }
 
-    public function updateEmailSendResult($params)
+    public function updateEmailSendResult($params, $configResult)
     {
         $tempDb = new \Application\Model\TempMailTable($this->adapter);
 
-        $config = new \Laminas\Config\Reader\Ini();
-        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 
         $emailFormField = json_decode($params['emailResultFields'], true);
         $to = $emailFormField['toEmail'];

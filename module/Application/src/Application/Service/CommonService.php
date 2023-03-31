@@ -128,8 +128,7 @@ class CommonService
                     $table = explode("##", $fnct);
                     if ($fieldName == 'password') {
                          //Password encrypted
-                         $config = new \Laminas\Config\Reader\Ini();
-                         $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+                         $configResult = $this->sm->get('Config');
                          $password = sha1($value . $configResult["password"]["salt"]);
                          //$password = $value;
                          $select = $sql->select()->from($tableName)->where(array($fieldName => $password, $table[0] => $table[1]));
@@ -212,8 +211,7 @@ class CommonService
           try {
                $tempDb = $this->sm->get('TempMailTable');
                $globalDb = $this->sm->get('GlobalConfigTable');
-               $config = new \Laminas\Config\Reader\Ini();
-               $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+               $configResult = $this->sm->get('Config');
                $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
                $sql = new Sql($dbAdapter);
 

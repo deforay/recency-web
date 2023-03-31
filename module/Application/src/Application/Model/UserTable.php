@@ -25,7 +25,7 @@ class UserTable extends AbstractTableGateway
         return $this->select(array('user_id' => $logincontainer->userId))->current();
     }
 
-    public function loginProcessDetails($params)
+    public function loginProcessDetails($params, $configResult)
     {
         $alertContainer = new Container('alert');
         $logincontainer = new Container('credo');
@@ -36,11 +36,9 @@ class UserTable extends AbstractTableGateway
 
         $userLoginHistoryDb = new \Application\Model\UserLoginHistoryTable($this->adapter);
 
-        $config = new \Laminas\Config\Reader\Ini();
-        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         if (!isset($captchaSession) || empty($captchaSession->status) || $captchaSession->status == 'fail') {
             //User log details
-            $userLoginHistoryDb->addUserLoginHistory($params,'failed');
+            $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
             $alertContainer->alertMsg = 'Please check if you entered the text from image correctly';
             return 'login';
         }
@@ -53,8 +51,8 @@ class UserTable extends AbstractTableGateway
             $params['userName'] = base64_decode($params['u']);
         } else {
             if (!$configResult['vlsm-crosslogin'] && !isset($params['userName']) && trim($params['userName']) == "") {
-               //User log details
-                $userLoginHistoryDb->addUserLoginHistory($params,'failed');
+                //User log details
+                $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
                 $alertContainer->alertMsg = 'Cross login not activated in recency!';
                 return 'login';
             }
@@ -66,7 +64,7 @@ class UserTable extends AbstractTableGateway
             $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
             $userFacilityMapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
 
-            
+
             /* Hash alg */
             $sQuery = $sql->select()->from(array('u' => 'users'))
                 ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_code'))
@@ -86,14 +84,14 @@ class UserTable extends AbstractTableGateway
                     );
                 } else {
                     //User log details
-                    $userLoginHistoryDb->addUserLoginHistory($params,'failed');
+                    $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
                     $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
                     return 'login';
                 }
             } else if ($userRow['hash_algorithm'] == 'phb') {
                 if (!password_verify($params['loginPassword'], $userRow['server_password'])) {
                     //User log details
-                    $userLoginHistoryDb->addUserLoginHistory($params,'failed');
+                    $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
                     $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
                     return 'login';
                 }
@@ -104,7 +102,7 @@ class UserTable extends AbstractTableGateway
                     $adminEmail = $globalDb->getGlobalValue('admin_email');
                     $adminPhone = $globalDb->getGlobalValue('admin_phone');
                     //User log details
-                    $userLoginHistoryDb->addUserLoginHistory($params,'locked');
+                    $userLoginHistoryDb->addUserLoginHistory($params, 'locked');
                     $alertContainer->alertMsg = 'Your password has expired or has been locked, please contact your administrator(' . $adminEmail . ' or ' . $adminPhone . ')';
                     return 'login';
                 }
@@ -156,8 +154,8 @@ class UserTable extends AbstractTableGateway
                 if (isset($alertResult['count']) && $alertResult['count'] > 0) {
                     $alertContainer->alertMsg = 'There are ' . $alertResult['count'] . ' recent result(s) without Viral Load result recorded';
                 }
-                 //User log details
-                 $userLoginHistoryDb->addUserLoginHistory($params,'successful');
+                //User log details
+                $userLoginHistoryDb->addUserLoginHistory($params, 'successful');
                 if ($userRow->role_code == 'VLTS') {
                     return 'vl-data';
                 } else if ($userRow->role_code != 'admin') {
@@ -168,20 +166,20 @@ class UserTable extends AbstractTableGateway
                     return 'recency';
                 }
             } else {
-                 //User log details
-                $userLoginHistoryDb->addUserLoginHistory($params,'failed');
+                //User log details
+                $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
                 $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
                 return 'login';
             }
         } else {
-             //User log details
-             $userLoginHistoryDb->addUserLoginHistory($params,'failed');
+            //User log details
+            $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
             $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
             return 'login';
         }
     }
 
-    public function fetchUserDetails($parameters,$acl)
+    public function fetchUserDetails($parameters, $acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -292,8 +290,8 @@ class UserTable extends AbstractTableGateway
             "aaData" => array()
         );
 
-		$roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\UserController', 'edit')) {
+        $roleCode = $sessionLogin->roleCode;
+        if ($acl->isAllowed($roleCode, 'Application\Controller\UserController', 'edit')) {
             $update = true;
         } else {
             $update = false;
@@ -308,7 +306,7 @@ class UserTable extends AbstractTableGateway
             $row[] = $aRow['mobile'];
             $row[] = $aRow['job_responsibility'];
             $row[] = ucwords($aRow['status']);
-            if($update){
+            if ($update) {
                 $row[] = '<a href="/user/edit/' . base64_encode($aRow['user_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             }
             $output['aaData'][] = $row;
@@ -384,11 +382,9 @@ class UserTable extends AbstractTableGateway
         return $rResult;
     }
 
-    public function updateUserDetails($params)
+    public function updateUserDetails($params, $configResult)
     {
         $common = new CommonService();
-        $config = new \Laminas\Config\Reader\Ini();
-        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
 
         if (isset($params['userId']) && trim($params['userId']) != "") {
@@ -444,12 +440,10 @@ class UserTable extends AbstractTableGateway
     }
 
     //login by api
-    public function userLoginApi($params)
+    public function userLoginApi($params, $configResult)
     {
         if (isset($params['email']) && !empty($params['email']) && isset($params['password']) && !empty($params['password'])) {
             $common = new CommonService();
-            $config = new \Laminas\Config\Reader\Ini();
-            $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
             $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
@@ -520,10 +514,9 @@ class UserTable extends AbstractTableGateway
         }
         return $response;
     }
-    public function updateProfile($params)
+    public function updateProfile($params, $configResult)
     {
-        $config = new \Laminas\Config\Reader\Ini();
-        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+
         $common = new CommonService();
         if (isset($params['userId']) && trim($params['userId']) != "") {
             $data = array(
@@ -559,13 +552,11 @@ class UserTable extends AbstractTableGateway
         return $updateResult;
     }
 
-    public function updatePasswordFromVLSMAPI($params)
+    public function updatePasswordFromVLSMAPI($params, $configResult)
     {
         $upId = 0;
         $response = array();
         $common = new CommonService();
-        $config = new \Laminas\Config\Reader\Ini();
-        $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
         $check = $this->select(array('email' => $params['u']))->current();
         ob_start();
         var_dump($params);

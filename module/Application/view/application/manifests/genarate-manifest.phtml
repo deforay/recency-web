@@ -5,8 +5,7 @@ use Laminas\Session\Container;
 
 $sessionLogin = new Container('credo');
 $common = new CommonService();
-$config = new \Laminas\Config\Reader\Ini();
-$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+$configResult = $this->CustomConfig();
 // \Zend\Debug\Debug::dump($result);die;
 // Extend the TCPDF class to create custom Header and Footer
 class MYPDF extends TCPDF

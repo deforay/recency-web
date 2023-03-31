@@ -2,8 +2,7 @@
 
 use Laminas\Session\Container;
 
-$config = new \Laminas\Config\Reader\Ini();
-$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+$configResult = $this->CustomConfig();
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 $arr = array();

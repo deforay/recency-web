@@ -33,7 +33,8 @@
         "guzzlehttp/guzzle": "^7.4",
         "tecnickcom/tcpdf": "^6.4",
         "laminas/laminas-permissions-acl": "^2.10",
-        "laminas/laminas-eventmanager": "^3.5"
+        "laminas/laminas-eventmanager": "^3.5",
+        "laminas/laminas-mail": "^2.16"
     },
     "autoload": {
         "psr-4": {
