@@ -1642,4 +1642,51 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->checkPatientIdValidation($params);
      }
+
+     public function vlsmSendRequests()
+     {
+        try {
+            $sessionLogin = new Container('credo');
+            $data = array();
+            $recencyDb = $this->sm->get('RecencyTable');
+            $rResult = $recencyDb->getVlRequestSentOnYes();
+            
+            if (count($rResult) > 0) {
+
+                $client = new GuzzleHttp\Client();
+                $config = new \Laminas\Config\Reader\Ini();
+                $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
+                $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/recency/requestVlTest.php';
+                foreach ($rResult as $data) {
+                    if ((isset($data['sample_id']) && $data['sample_id'] != "") && (isset($data['patient_id']) && $data['patient_id'] != "") ) {
+                        $resultCart = $client->post($urlVlsm, [
+                            'form_params' => [
+                                'sampleId'              => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
+                                'patientId'             => (isset($data['patient_id']) && $data['patient_id'] != '') ? $data['patient_id'] : '',
+                                'facility_id'            => (isset($data['facility_id']) && $data['facility_id'] != '') ? $data['facility_id'] : '',
+                                //'isFacilityLab'         => (isset($params['isFacilityLab']) && $params['isFacilityLab'] != '') ? $params['isFacilityLab'] : '',
+                                // 'province'              => $data['province'],
+                                // 'district'              => $data['district'],
+                                'sCDate'                => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
+                                // 'sampleType'            => $data['received_specimen_type'],
+                                //'isVlLab'               => (isset($params['isVlLab']) && $params['isVlLab'] != '') ? $params['isVlLab'] : '',
+                                'userId'                => (isset($sessionLogin->userId) && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
+                                'dob'                   => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
+                                'age'                   => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
+                                'gender'                => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
+                                'service'               => ''
+                            ]
+                        ]);
+                        $responseCart = $resultCart->getBody()->getContents();
+                        
+                        if ($responseCart == 'success') {
+                            $recencyDb->updateVlRequestSentNO($data['recency_id']);
+                        }
+                    }
+                }
+            }
+        }catch (Exception $e) {
+            error_log('Error :' . $e->getMessage());
+        }
+     }
 }

@@ -355,6 +355,16 @@ return array(
                               ),
                          ),
                     ),
+                    'vlsm-send-requests' => array(
+                         'type'    => 'simple',
+                         'options' => array(
+                              'route'    => 'vlsm-send-requests',
+                              'defaults' => array(
+                                   'controller' => 'Application\Controller\Cron',
+                                   'action' => 'vlsm-send-requests'
+                              ),
+                         ),
+                    ),
                ),
           ),
      ),

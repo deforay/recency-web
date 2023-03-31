@@ -722,7 +722,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         var jsonArr = [];
         if (($("#sampleId").val() != "") || ($("#patientId").val() != "")) {
 
-            if ($('#sendVlsm').val() == 'yes') {
+            /*if ($('#sendVlsm').val() == 'yes') {
                 jsonArr['sampleId'] = $("#sampleId").val();
                 jsonArr['patientId'] = $("#patientId").val();
                 jsonArr['facilityId'] = $("#isFacilityLab").val();
@@ -731,7 +731,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 jsonArr['sampleCollectionDate'] = $("#sampleCollectionDate").val();
                 jsonArr['sampleType'] = $("#receivedSpecimenType").val();
                 jsonArr['viralLoad'] = $("#isVlLab").val();
-                jsonArr['request_created_by'] = 'recency##<?php echo $sessionLogin->userId; ?>';
+                jsonArr['request_created_by'] = 'recency##< ?php echo $sessionLogin->userId; ?>';
                 jsonArr['dob'] = $("#dob").val();
                 jsonArr['age'] = $("#age").val();
                 jsonArr['gender'] = $("#gender").val();
@@ -739,7 +739,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
                 var http = new XMLHttpRequest();
 
-                var url = '<?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/requestVlTest.php';
+                var url = '< ?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/requestVlTest.php';
                 http.open('POST', url, true);
                 http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 http.onreadystatechange = function() {
@@ -753,7 +753,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                     }
                 }
                 http.send(params);
-            }
+            }*/
             // if (($("#dob").val() != "") || ($("#age").val() != "")) {
             flag = deforayValidator.init({
                 formId: 'recencyInformation'

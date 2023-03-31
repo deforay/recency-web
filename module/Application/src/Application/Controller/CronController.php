@@ -33,4 +33,13 @@ class CronController extends AbstractActionController
   {
     $this->recencyService->vlsmSync();
   }
+
+  public function vlsmSendRequestsAction()
+  {
+    $this->recencyService->vlsmSendRequests();
+
+    $viewModel = new ViewModel();
+    $viewModel->setTerminal(true);
+    return $viewModel;
+  }
 }

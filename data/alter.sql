@@ -588,3 +588,5 @@ INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Co
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Monitoring', 'all-user-login-history', 'All UserLogin History'), ('Application\\Controller\\Monitoring', 'audit-trail', 'Audit Trail'), ('Application\\Controller\\Monitoring', 'user-activity-log', 'User Activity Log');
 
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'update-vl-sample-result', 'Update VL Sample');
+
+ALTER TABLE `recency` CHANGE `vl_request_sent` `vl_request_sent` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'not-required';

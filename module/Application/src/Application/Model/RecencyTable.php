@@ -5157,4 +5157,30 @@ class RecencyTable extends AbstractTableGateway
         }
         
     }
+
+    //refer getVlRequestSentOnYes Function
+    public function getVlRequestSentOnYes()
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+
+        $fQuery = $sql->select()->from(array('r' => 'recency'))
+            ->where(array('vl_request_sent="yes"'))
+            ->limit('10');
+
+        $fQueryStr = $sql->buildSqlString($fQuery);
+        $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+        return $fResult;
+    }
+
+    //refer updateVlRequestSentNO Function
+    public function updateVlRequestSentNO($rId)
+    {
+        $common = new CommonService();
+        $this->update(array(
+            'vl_request_sent'           => 'no',
+            'vl_request_sent_date_time' => $common->getDateTime()
+        ), array('recency_id' => $rId));
+    }
 }
