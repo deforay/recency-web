@@ -43,14 +43,14 @@ class UserTable extends AbstractTableGateway
             return 'login';
         }
         /* Cross login credential check */
-        if ((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "") && $configResult['vlsm-crosslogin']) {
+        if ((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "") && $configResult['vlsm']['crosslogin']) {
             $params['u'] = $params['u'];
             $params['t'] = $params['t'];
-            $decryptedPassword = CommonService::decrypt($params['t'], base64_decode($configResult['vlsm-crosslogin-salt']));
+            $decryptedPassword = CommonService::decrypt($params['t'], base64_decode($configResult['vlsm']['crosslogin-salt']));
             $params['loginPassword'] = $decryptedPassword;
             $params['userName'] = base64_decode($params['u']);
         } else {
-            if (!$configResult['vlsm-crosslogin'] && !isset($params['userName']) && trim($params['userName']) == "") {
+            if (!$configResult['vlsm']['crosslogin'] && !isset($params['userName']) && trim($params['userName']) == "") {
                 //User log details
                 $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
                 $alertContainer->alertMsg = 'Cross login not activated in recency!';
@@ -123,8 +123,8 @@ class UserTable extends AbstractTableGateway
                 }
 
                 $logincontainer->crossLoginPass = null;
-                if ($configResult['vlsm-crosslogin']) {
-                    $logincontainer->crossLoginPass = $common->encrypt($params['loginPassword'], base64_decode($configResult['vlsm-crosslogin-salt']));
+                if (!empty($configResult['vlsm']['crosslogin']) && $configResult['vlsm']['crosslogin'] === true) {
+                    $logincontainer->crossLoginPass = $common->encrypt($params['loginPassword'], base64_decode($configResult['vlsm']['crosslogin']['salt']));
                 }
 
                 if (trim($userRow->role_code) != "remote_order_user") {
@@ -403,8 +403,8 @@ class UserTable extends AbstractTableGateway
 
             );
             if ($params['servPass'] != '') {
-                if ($configResult['vlsm-crosslogin']) {
-                    $newPass = $common->encrypt($params['servPass'], base64_decode($configResult['vlsm-crosslogin-salt']));
+                if (!empty($configResult['vlsm']['crosslogin']) && $configResult['vlsm']['crosslogin'] === true) {
+                    $newPass = $common->encrypt($params['servPass'], base64_decode($configResult['vlsm']['crosslogin-salt']));
                     $client = new \GuzzleHttp\Client();
                     $url = rtrim($configResult['vlsm']['domain'], "/");
                     $result = $client->post($url . '/users/editProfileHelper.php', [
@@ -529,7 +529,7 @@ class UserTable extends AbstractTableGateway
                 'comments' => $params['comments'],
             );
             if ($params['servPass'] != '') {
-                if ($configResult['vlsm-crosslogin']) {
+                if (!empty($configResult['vlsm']['crosslogin']) && $configResult['vlsm']['crosslogin'] === true) {
                     $client = new \GuzzleHttp\Client();
                     $url = rtrim($configResult['vlsm']['domain'], "/");
                     $result = $client->post($url . '/users/editProfileHelper.php', [
@@ -558,11 +558,8 @@ class UserTable extends AbstractTableGateway
         $response = array();
         $common = new CommonService();
         $check = $this->select(array('email' => $params['u']))->current();
-        ob_start();
-        var_dump($params);
-        error_log(ob_get_clean());
         if ($check) {
-            $decryptedPassword = $common->decrypt($params['t'], base64_decode($configResult['vlsm-crosslogin-salt']));
+            $decryptedPassword = $common->decrypt($params['t'], base64_decode($configResult['vlsm']['crosslogin-salt']));
             $passwordHash = $common->passwordHash($decryptedPassword);
             $data = array(
                 'email' => $params['u'],
