@@ -392,7 +392,7 @@
 			<div class="col-md-12">
 				<h2 class="content-heading ">
 					<i class="fa fa-angle-right text-muted mr-1"></i> Facility Recency Results
-					<?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'export-recency-data')) { ?>
+					<?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\IndexController', 'export-recency-data')) { ?>
 						<a href="javascript:void(0);" class="btn btn-hero-primary float-right" onclick="exportRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
 					<?php } ?> 
 				</h2>
@@ -439,7 +439,7 @@
 			<div class="col-md-12">
 				<h2 class="content-heading ">
 					<i class="fa fa-angle-right text-muted mr-1"></i> District Wise Recency Results
-					<?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'export-recency-data')) { ?>
+					<?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\IndexController', 'export-recency-data')) { ?>
 						<a href="javascript:void(0);" class="btn btn-hero-primary float-right" onclick="exportDistrictRecencyInfo();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
 					<?php } ?> 
 				</h2>

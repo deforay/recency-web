@@ -133,7 +133,7 @@ class SettingsTable extends AbstractTableGateway
         );
 
         $roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\Settings', 'edit')) {
+		if ($acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'edit')) {
             $update = true;
         } else {
             $update = false;

@@ -178,7 +178,7 @@ class DistrictTable extends AbstractTableGateway {
         );
 
         $roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\District', 'edit')) {
+		if ($acl->isAllowed($roleCode, 'Application\Controller\DistrictController', 'edit')) {
             $update = true;
         } else {
             $update = false;

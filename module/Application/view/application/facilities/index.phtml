@@ -3,7 +3,7 @@
     $sessionLogin = new Container('credo');
     $roleCode = $sessionLogin->roleCode;
     $acl=$this->layout()->acl;
-    if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Facilities', 'edit')) {
+    if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\FacilitiesController', 'edit')) {
      $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
     }
     else{
@@ -14,7 +14,7 @@
      <div class="content content-full">
           <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Facilities</h1>
-                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Facilities', 'add')) { ?>
+                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\FacilitiesController', 'add')) { ?>
                     <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                          <ol class="breadcrumb">
                               <li class="breadcrumb-item">
@@ -40,7 +40,7 @@
                                     <th>District</th>
                                     <th>Email</th>
                                     <th>Status</th>
-                                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Facilities', 'edit')) { ?>
+                                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\FacilitiesController', 'edit')) { ?>
                                     <th>Action</th>
                                     <?php } ?>
                               </tr>

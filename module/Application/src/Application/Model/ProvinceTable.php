@@ -162,7 +162,7 @@ class ProvinceTable extends AbstractTableGateway {
             );
     
             $roleCode = $sessionLogin->roleCode;
-            if ($acl->isAllowed($roleCode, 'Application\Controller\Province', 'edit')) {
+            if ($acl->isAllowed($roleCode, 'Application\Controller\ProvinceController', 'edit')) {
                 $update = true;
             } else {
                 $update = false;

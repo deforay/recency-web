@@ -28,7 +28,7 @@ class RecencyService
     {
         $recencyDb = $this->sm->get('RecencyTable');
         $acl = $this->sm->get('AppAcl');
-        return $recencyDb->fetchRecencyDetails($params,$acl);
+        return $recencyDb->fetchRecencyDetails($params, $acl);
     }
 
     public function getReqVlTestOnVlsmDetails($params)
@@ -361,14 +361,14 @@ class RecencyService
     {
         $recencyDb = $this->sm->get('RecencyTable');
         $acl = $this->sm->get('AppAcl');
-        return $recencyDb->fetchAllRecencyResultWithVlList($params,$acl);
+        return $recencyDb->fetchAllRecencyResultWithVlList($params, $acl);
     }
 
     public function getAllLtResult($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
         $acl = $this->sm->get('AppAcl');
-        return $recencyDb->fetchAllLtResult($params,$acl);
+        return $recencyDb->fetchAllLtResult($params, $acl);
     }
 
     // Export Result for Recent Infected :
@@ -806,7 +806,7 @@ class RecencyService
         $facilityDb = $this->sm->get('FacilitiesTable');
         return $facilityDb->fetchLocationBasedFacility($params);
     }
-    
+
     public function vlsmSync()
     {
         $recencyDb = $this->sm->get('RecencyTable');
@@ -1005,7 +1005,7 @@ class RecencyService
     public function getRecencyDetailsForPDF($recenyId)
     {
         $recencyDb = $this->sm->get('RecencyTable');
-        return $recencyDb->fetchRecencyDetailsForPDF($recenyId,$this->sm);
+        return $recencyDb->fetchRecencyDetailsForPDF($recenyId, $this->sm);
     }
 
     public function getAllRecencyResult($params)
@@ -1631,26 +1631,26 @@ class RecencyService
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchPrintResultsDetails($parameters);
     }
-    
+
     public function getRecencyDateBasedTestKit($params)
     {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyDateBasedTestKit($params);
     }
     public function checkPatientIdValidation($params)
-     {
+    {
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->checkPatientIdValidation($params);
-     }
+    }
 
-     public function vlsmSendRequests()
-     {
+    public function vlsmSendRequests()
+    {
         try {
             $sessionLogin = new Container('credo');
             $data = array();
             $recencyDb = $this->sm->get('RecencyTable');
             $rResult = $recencyDb->getVlRequestSentOnYes();
-            
+
             if (count($rResult) > 0) {
 
                 $client = new GuzzleHttp\Client();
@@ -1658,7 +1658,7 @@ class RecencyService
                 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
                 $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/recency/requestVlTest.php';
                 foreach ($rResult as $data) {
-                    if ((isset($data['sample_id']) && $data['sample_id'] != "") && (isset($data['patient_id']) && $data['patient_id'] != "") ) {
+                    if ((isset($data['sample_id']) && $data['sample_id'] != "") && (isset($data['patient_id']) && $data['patient_id'] != "")) {
                         $resultCart = $client->post($urlVlsm, [
                             'form_params' => [
                                 'sampleId'              => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
@@ -1678,15 +1678,15 @@ class RecencyService
                             ]
                         ]);
                         $responseCart = $resultCart->getBody()->getContents();
-                        
+
                         if ($responseCart == 'success') {
                             $recencyDb->updateVlRequestSentNO($data['recency_id']);
                         }
                     }
                 }
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             error_log('Error :' . $e->getMessage());
         }
-     }
+    }
 }

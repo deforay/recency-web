@@ -132,7 +132,7 @@ class FacilitiesTable extends AbstractTableGateway
         );
 
         $roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\Facilities', 'edit')) {
+		if ($acl->isAllowed($roleCode, 'Application\Controller\FacilitiesController', 'edit')) {
             $update = true;
         } else {
             $update = false;

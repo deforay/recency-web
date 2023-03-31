@@ -531,7 +531,7 @@ INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Co
 
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Roles', 'index', 'Access'), ('Application\\Controller\\Roles', 'add', 'Add');
 
---Brindha 22-Mar-2023
+-- Brindha 22-Mar-2023
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Roles', 'edit', 'Edit');
 
 
@@ -574,7 +574,7 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'qc-report', 'QualityCheck Report'),('Application\\Controller\\VlData', 'age-wise-infection-report', 'Age wise Infection Report'),('Application\\Controller\\VlData', 'export-modality', 'Export Modality');
 
---Brindha 23-Mar-2023
+-- Brindha 23-Mar-2023
 INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\Index', 'Dashboard');
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\Index', 'index', 'Access Laboratory'),('Application\\Controller\\Index', 'export-recency-data', 'Export Recency'), ('Application\\Controller\\Index', 'analysis-dashboard', 'Access Analysis'), ('Application\\Controller\\Index', 'quality-control-dashboard', 'Access QualityControl');
 

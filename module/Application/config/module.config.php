@@ -16,7 +16,7 @@ return array(
                     'options' => array(
                          'route'    => '/',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Index',
+                              'controller' => 'Application\Controller\IndexController',
                               'action'     => 'index',
                          ),
                     ),
@@ -26,7 +26,7 @@ return array(
                     'options' => array(
                          'route'    => '/analysis-dashboard',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Index',
+                              'controller' => 'Application\Controller\IndexController',
                               'action' => 'analysis-dashboard',
                          ),
                     ),
@@ -36,7 +36,7 @@ return array(
                     'options' => array(
                          'route'    => '/quality-control-dashboard',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Index',
+                              'controller' => 'Application\Controller\IndexController',
                               'action' => 'quality-control-dashboard',
                          ),
                     ),
@@ -46,7 +46,7 @@ return array(
                     'options' => array(
                          'route'    => '/export-recency-data',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Index',
+                              'controller' => 'Application\Controller\IndexController',
                               'action' => 'export-recency-data',
                          ),
                     ),
@@ -56,7 +56,7 @@ return array(
                     'options' => array(
                          'route'    => '/set-sample-first-chart',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Index',
+                              'controller' => 'Application\Controller\IndexController',
                               'action' => 'set-sample-first-chart',
                          ),
                     ),
@@ -66,7 +66,7 @@ return array(
                     'options' => array(
                          'route'    => '/login[/:action]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Login',
+                              'controller' => 'Application\Controller\LoginController',
                               'action' => 'index',
                          ),
                     ),
@@ -88,7 +88,7 @@ return array(
                     'options' => array(
                          'route' => '/common[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Common',
+                              'controller' => 'Application\Controller\CommonController',
                               'action' => 'index',
                          ),
                     ),
@@ -99,7 +99,7 @@ return array(
                     'options' => array(
                          'route' => '/facilities[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Facilities',
+                              'controller' => 'Application\Controller\FacilitiesController',
                               'action' => 'index',
                          ),
                     ),
@@ -109,7 +109,7 @@ return array(
                     'options' => array(
                          'route' => '/user[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\User',
+                              'controller' => 'Application\Controller\UserController',
                               'action' => 'index',
                          ),
                     ),
@@ -119,7 +119,7 @@ return array(
                     'options' => array(
                          'route' => '/recency[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Recency',
+                              'controller' => 'Application\Controller\RecencyController',
                               'action' => 'index',
                          ),
                     ),
@@ -129,7 +129,7 @@ return array(
                     'options' => array(
                          'route' => '/global-config[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\GlobalConfig',
+                              'controller' => 'Application\Controller\GlobalConfigController',
                               'action' => 'index',
                          ),
                     ),
@@ -140,7 +140,7 @@ return array(
                     'options' => array(
                          'route' => '/quality-check[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\QualityCheck',
+                              'controller' => 'Application\Controller\QualityCheckController',
                               'action' => 'index',
                          ),
                     ),
@@ -150,7 +150,7 @@ return array(
                     'options' => array(
                          'route' => '/captcha[/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Captcha',
+                              'controller' => 'Application\Controller\CaptchaController',
                               'action' => 'index',
                          ),
                     ),
@@ -160,7 +160,7 @@ return array(
                     'options' => array(
                          'route' => '/checkcaptcha',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Captcha',
+                              'controller' => 'Application\Controller\CaptchaController',
                               'action' => 'check-captcha',
                          ),
                     ),
@@ -170,7 +170,7 @@ return array(
                     'options' => array(
                          'route' => '/vl-data[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\VlData',
+                              'controller' => 'Application\Controller\VlDataController',
                               'action' => 'index',
                          ),
                     ),
@@ -180,7 +180,7 @@ return array(
                     'options' => array(
                          'route' => '/settings[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Settings',
+                              'controller' => 'Application\Controller\SettingsController',
                               'action' => 'index',
                          ),
                     ),
@@ -190,7 +190,7 @@ return array(
                     'options' => array(
                          'route' => '/province[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Province',
+                              'controller' => 'Application\Controller\ProvinceController',
                               'action' => 'index',
                          ),
                     ),
@@ -200,7 +200,7 @@ return array(
                     'options' => array(
                          'route' => '/district[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\District',
+                              'controller' => 'Application\Controller\DistrictController',
                               'action' => 'index',
                          ),
                     ),
@@ -210,7 +210,7 @@ return array(
                     'options' => array(
                          'route' => '/city[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\City',
+                              'controller' => 'Application\Controller\CityController',
                               'action' => 'index',
                          ),
                     ),
@@ -220,7 +220,7 @@ return array(
                     'options' => array(
                          'route' => '/print-results[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\PrintResults',
+                              'controller' => 'Application\Controller\PrintResultsController',
                               'action' => 'index',
                          ),
                     ),
@@ -230,7 +230,7 @@ return array(
                     'options' => array(
                          'route' => '/manifests[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Manifests',
+                              'controller' => 'Application\Controller\ManifestsController',
                               'action' => 'index',
                          ),
                     ),
@@ -240,7 +240,7 @@ return array(
                     'options' => array(
                          'route' => '/monitoring[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Monitoring',
+                              'controller' => 'Application\Controller\MonitoringController',
                               'action' => 'index',
                          ),
                     ),
@@ -250,7 +250,7 @@ return array(
                     'options' => array(
                          'route' => '/roles[/:action][/][:id]',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Roles',
+                              'controller' => 'Application\Controller\RolesController',
                               'action' => 'index',
                          ),
                     ),
@@ -291,6 +291,10 @@ return array(
                'Laminas\Cache\Service\StorageCacheAbstractServiceFactory',
                'Laminas\Log\LoggerAbstractServiceFactory',
           ),
+          'factories' => [
+               Application\Command\VlsmSendRequests::class => Application\Command\VlsmSendRequestsFactory::class,
+               Application\Command\SendMail::class => Application\Command\SendMailFactory::class,
+          ],
           'aliases' => array(
                'translator' => 'MvcTranslator',
           ),
@@ -321,6 +325,12 @@ return array(
                __DIR__ . '/../view',
           ),
      ),
+     'laminas-cli' => [
+          'commands' => [
+               'send-mail' => Application\Command\SendMail::class,
+               'vlsm-send-requests' => \Application\Command\VlsmSendRequests::class,
+          ],
+     ],
      // Placeholder for console routes
      'console' => array(
           'router' => array(
@@ -330,7 +340,7 @@ return array(
                          'options' => array(
                               'route'    => 'send-mail',
                               'defaults' => array(
-                                   'controller' => 'Application\Controller\Cron',
+                                   'controller' => 'Application\Controller\CronController',
                                    'action' => 'send-mail'
                               ),
                          ),
@@ -340,7 +350,7 @@ return array(
                          'options' => array(
                               'route'    => 'update-outcome',
                               'defaults' => array(
-                                   'controller' => 'Application\Controller\Cron',
+                                   'controller' => 'Application\Controller\CronController',
                                    'action' => 'update-outcome'
                               ),
                          ),
@@ -350,7 +360,7 @@ return array(
                          'options' => array(
                               'route'    => 'vlsm-sync',
                               'defaults' => array(
-                                   'controller' => 'Application\Controller\Cron',
+                                   'controller' => 'Application\Controller\CronController',
                                    'action' => 'vlsm-sync'
                               ),
                          ),
@@ -360,7 +370,7 @@ return array(
                          'options' => array(
                               'route'    => 'vlsm-send-requests',
                               'defaults' => array(
-                                   'controller' => 'Application\Controller\Cron',
+                                   'controller' => 'Application\Controller\CronController',
                                    'action' => 'vlsm-send-requests'
                               ),
                          ),

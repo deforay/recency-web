@@ -3,12 +3,12 @@
     $sessionLogin = new Container('credo');
     $roleCode = $sessionLogin->roleCode;
     $acl=$this->layout()->acl;
-    if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'edit')) {
+    if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'edit')) {
         $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
     }else{
         $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
     }
-    if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'edit-sample')) {
+    if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'edit-sample')) {
         $editSampleAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
     }else{
         $editSampleAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
@@ -21,10 +21,10 @@
                     <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                          <ol class="breadcrumb">
                               <li class="breadcrumb-item">
-                              <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'add')) { ?>
+                              <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'add')) { ?>
                                 <a href="<?php echo $this->url('settings',array('action' => 'add'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add Recency TestKit</a>
                               <?php } ?>
-                              <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'add-sample')) { ?>
+                              <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'add-sample')) { ?>
                                 <a href="<?php echo $this->url('settings',array('action' => 'add-sample'));?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add QC Sample ID</a>
                               <?php } ?>
                               </li>
@@ -55,7 +55,7 @@
                                 <th>Status</th>
                                 <th>Added On</th>
                                 <th>Added By</th>
-                                <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'edit')) { ?>
+                                <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'edit')) { ?>
                                 <th>Action</th>
                                 <?php } ?>
                             </tr>
@@ -76,7 +76,7 @@
                                 <th>Added On</th>
                                 <th>Added By</th>
                                 <th>Status</th>
-                                <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'edit-sample')) { ?>
+                                <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'edit-sample')) { ?>
                                 <th>Action</th>
                                 <?php } ?>
                             </tr>

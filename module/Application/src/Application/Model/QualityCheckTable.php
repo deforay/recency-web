@@ -179,7 +179,7 @@ class QualityCheckTable extends AbstractTableGateway
           $update = false;
 
           $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
-          if ($acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'edit')) {
+          if ($acl->isAllowed($roleCode, 'Application\Controller\QualityCheckController', 'edit')) {
                $actionBtn .= '<a class="btn btn-danger" href="/quality-check/edit/' . base64_encode($aRow['qc_test_id']) . '"><i class="si si-pencil"></i> Edit</a>';
                $update = true;
           }

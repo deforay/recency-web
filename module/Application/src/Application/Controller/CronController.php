@@ -12,8 +12,8 @@ class CronController extends AbstractActionController
 
   public function __construct($recencyService, $commonService)
   {
-      $this->recencyService = $recencyService;
-      $this->commonService = $commonService;
+    $this->recencyService = $recencyService;
+    $this->commonService = $commonService;
   }
 
   public function indexAction()

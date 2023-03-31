@@ -18,104 +18,104 @@ $config = new \Laminas\Config\Reader\Ini();
 $configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 /* Crosss Login Block End */
 $dashboardMenu = "";
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\IndexController', 'index')) {
      $dashboardMenu .= "<li id='nav-main-item'><a id='lab-dashboard' class='nav-main-link' href='/'><span class='nav-main-link-name'>Laboratory</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'analysis-dashboard')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\IndexController', 'analysis-dashboard')) {
      $dashboardMenu .= "<li id='nav-main-item'><a id='analysis-dashboard' class='nav-main-link' href=" . $this->url('analysis-dashboard') . "><span class='nav-main-link-name'>Analysis</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Index', 'quality-control-dashboard')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\IndexController', 'quality-control-dashboard')) {
      $dashboardMenu .= "<li id='nav-main-item'><a id='quality-control-dashboard' class='nav-main-link' href=" . $this->url('quality-control-dashboard') . "><span class='nav-main-link-name'>Quality Control</span></a></li>";
 }
 
 $userMenu = "";
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\GlobalConfig', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\GlobalConfigController', 'index')) {
      $userMenu .= "<li id='nav-main-item'><a id='global-config' class='nav-main-link' href=" . $this->url('global-config', array('action' => 'index')) . "><span class='nav-main-link-name'>Global Config</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Roles', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RolesController', 'index')) {
      $userMenu .= "<li id='nav-main-item'><a id='role' class='nav-main-link' href=" . $this->url('roles', array('action' => 'index')) . "><span class='nav-main-link-name'>Roles</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\User', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\UserController', 'index')) {
      $userMenu .= "<li id='nav-main-item'><a id='user' class='nav-main-link' href=" . $this->url('user', array('action' => 'index')) . "><span class='nav-main-link-name'>User</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Facilities', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\FacilitiesController', 'index')) {
      $userMenu .= "<li id='nav-main-item'><a id='facilities' class='nav-main-link' href=" . $this->url('facilities', array('action' => 'index')) . "><span class='nav-main-link-name'>Facilities</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Province', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ProvinceController', 'index')) {
      $userMenu .= "<li id='nav-main-item'><a id='province' class='nav-main-link' href=" . $this->url('province', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[0]['global_value'] . "</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\District', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\DistrictController', 'index')) {
      $userMenu .= "<li id='nav-main-item'><a id='district' class='nav-main-link' href=" . $this->url('district', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[1]['global_value'] . "</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\City', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\CityController', 'index')) {
      $userMenu .= "<li id='nav-main-item'><a id='city' class='nav-main-link' href=" . $this->url('city', array('action' => 'index')) . "><span class='nav-main-link-name'>" . $GlobalConfigRes[2]['global_value'] . "</span></a></li>";
 }
 
 $recencyMenu = "";
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'index')) {
      $recencyMenu .= "<li id='nav-main-item'><a id='recency' class='nav-main-link' href=" . $this->url('recency', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Data</span></a></li>";
 }
 
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\PrintResults', 'index')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\PrintResultsController', 'index')){
      $recencyMenu .= "<li id='nav-main-item'><a id='print-results' class='nav-main-link' href=" . $this->url('print-results', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-printer'></i> Print Results</span></a></li>";
 }
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Manifests', 'index')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ManifestsController', 'index')){
      $recencyMenu .= "<li id='nav-main-item'><a id='manifests' class='nav-main-link' href=" . $this->url('manifests', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-film'></i> Specimen Manifests</span></a></li>";
 }
 
 
 
 $settingsMenu = "";
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Settings', 'index')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'index')) {
      $settingsMenu .= "<li id='nav-main-item'><a id='settings' class='nav-main-link' href=" . $this->url('settings', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-wrench'></i> Settings</span></a></li>";
 }
 
 
 $qcMenu = "";
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheck', 'index')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheckController', 'index')){
      $qcMenu = "<li id='nav-main-item'><a id='quality-check' class='nav-main-link' href=" . $this->url('quality-check', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-settings'></i> Quality Check Testing</span></a></li>";
 }
 $vlDataMenu = "";
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'index')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'index')){
      $vlDataMenu = "<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Pending Results</span></a></li>";
 }
 $reportMenu = "";
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'recent-infection')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'recent-infection')){
      $reportMenu .= "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Recent Infections</span></a></li>";
 }
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'lt-infection')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'lt-infection')){
      $reportMenu .= "<li id='nav-main-item'><a id='lt-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'lt-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Long Term Infections</span></a></li>";
 }
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'tat-report')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'tat-report')){
      $reportMenu .= "<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'tat-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> TAT Report</span></a></li>";
 }
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'weekly-report')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'weekly-report')){
      $reportMenu .= "<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'weekly-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
 }
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'qc-report')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'qc-report')){
      $reportMenu .= "<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'qc-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
 }
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'age-wise-infection-report')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'age-wise-infection-report')){
      $reportMenu .= "<li id='nav-main-item'><a id='age-wise-infection-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'age-wise-infection-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Age-wise Infection Report</span></a></li>";
 }
 
 $emailMenu = "";
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'email-result')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'email-result')){
      $emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'email-result')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
 }
 
 $recentMenu = "";
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'recent-infection')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'recent-infection')){
      $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Recent Infections Report</span></a></li>";
 }
 $monitoringMenu = "";
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring', 'all-user-login-history')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\MonitoringController', 'all-user-login-history')){
      $monitoringMenu .= "<li id='nav-main-item'><a id='user-login-history' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'all-user-login-history')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> User Login History</span></a></li>";
 }
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring', 'audit-trail')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\MonitoringController', 'audit-trail')){
      $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'audit-trail')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-clock'></i> Audit Trail</span></a></li>";
 }
-if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring', 'user-activity-log')){
+if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\MonitoringController', 'user-activity-log')){
      $monitoringMenu .= "<li id='nav-main-item'><a id='audit-trail' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'user-activity-log')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-list'></i> User Activity Log</span></a></li>";
 }
 // $uploadResultMenu = "";

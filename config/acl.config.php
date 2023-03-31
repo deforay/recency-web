@@ -1,26 +1,26 @@
 <?php
 return array(
     'sss' => array(
-        'Application\\Controller\\Roles' => array(
+        'Application\\Controller\\RolesController' => array(
             'index' => 'allow',
             'add' => 'allow',
         ),
     ),
     'manager' => array(
-        'Application\\Controller\\Roles' => array(
+        'Application\\Controller\\RolesController' => array(
             'index' => 'allow',
             'add' => 'deny',
         ),
     ),
     'admin' => array(
-        'Application\\Controller\\Recency' => array(
+        'Application\\Controller\\RecencyController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
             'export-recency' => 'allow',
             'generate-pdf' => 'allow',
         ),
-        'Application\\Controller\\VlData' => array(
+        'Application\\Controller\\VlDataController' => array(
             'index' => 'allow',
             'age-wise-infection-report' => 'allow',
             'email-result' => 'allow',
@@ -38,64 +38,64 @@ return array(
             'upload-result' => 'allow',
             'weekly-report' => 'allow',
         ),
-        'Application\\Controller\\Index' => array(
+        'Application\\Controller\\IndexController' => array(
             'analysis-dashboard' => 'allow',
             'index' => 'allow',
             'quality-control-dashboard' => 'allow',
             'export-recency-data' => 'allow',
         ),
-        'Application\\Controller\\City' => array(
+        'Application\\Controller\\CityController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\District' => array(
+        'Application\\Controller\\DistrictController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\Facilities' => array(
+        'Application\\Controller\\FacilitiesController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\GlobalConfig' => array(
+        'Application\\Controller\\GlobalConfigController' => array(
             'index' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\Province' => array(
+        'Application\\Controller\\ProvinceController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\Roles' => array(
+        'Application\\Controller\\RolesController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\User' => array(
+        'Application\\Controller\\UserController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\Manifests' => array(
+        'Application\\Controller\\ManifestsController' => array(
             'index' => 'allow',
         ),
-        'Application\\Controller\\Monitoring' => array(
+        'Application\\Controller\\MonitoringController' => array(
             'all-user-login-history' => 'allow',
             'audit-trail' => 'allow',
             'user-activity-log' => 'allow',
         ),
-        'Application\\Controller\\PrintResults' => array(
+        'Application\\Controller\\PrintResultsController' => array(
             'index' => 'allow',
         ),
-        'Application\\Controller\\QualityCheck' => array(
+        'Application\\Controller\\QualityCheckController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
             'export-qc-data' => 'allow',
         ),
-        'Application\\Controller\\Settings' => array(
+        'Application\\Controller\\SettingsController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'add-sample' => 'allow',
@@ -104,14 +104,14 @@ return array(
         ),
     ),
     'user' => array(
-        'Application\\Controller\\Recency' => array(
+        'Application\\Controller\\RecencyController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
             'export-recency' => 'allow',
             'generate-pdf' => 'allow',
         ),
-        'Application\\Controller\\VlData' => array(
+        'Application\\Controller\\VlDataController' => array(
             'index' => 'allow',
             'age-wise-infection-report' => 'allow',
             'email-result' => 'allow',
@@ -129,64 +129,64 @@ return array(
             'upload-result' => 'allow',
             'weekly-report' => 'allow',
         ),
-        'Application\\Controller\\Index' => array(
+        'Application\\Controller\\IndexController' => array(
             'analysis-dashboard' => 'allow',
             'index' => 'allow',
             'quality-control-dashboard' => 'allow',
             'export-recency-data' => 'allow',
         ),
-        'Application\\Controller\\City' => array(
+        'Application\\Controller\\CityController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\District' => array(
+        'Application\\Controller\\DistrictController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\Facilities' => array(
+        'Application\\Controller\\FacilitiesController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\GlobalConfig' => array(
+        'Application\\Controller\\GlobalConfigController' => array(
             'index' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\Province' => array(
+        'Application\\Controller\\ProvinceController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\Roles' => array(
+        'Application\\Controller\\RolesController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\User' => array(
+        'Application\\Controller\\UserController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
         ),
-        'Application\\Controller\\Manifests' => array(
+        'Application\\Controller\\ManifestsController' => array(
             'index' => 'allow',
         ),
-        'Application\\Controller\\Monitoring' => array(
+        'Application\\Controller\\MonitoringController' => array(
             'all-user-login-history' => 'allow',
             'audit-trail' => 'allow',
             'user-activity-log' => 'allow',
         ),
-        'Application\\Controller\\PrintResults' => array(
+        'Application\\Controller\\PrintResultsController' => array(
             'index' => 'allow',
         ),
-        'Application\\Controller\\QualityCheck' => array(
+        'Application\\Controller\\QualityCheckController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
             'export-qc-data' => 'allow',
         ),
-        'Application\\Controller\\Settings' => array(
+        'Application\\Controller\\SettingsController' => array(
             'index' => 'allow',
             'add' => 'allow',
             'add-sample' => 'allow',

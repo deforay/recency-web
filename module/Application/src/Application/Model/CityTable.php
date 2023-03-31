@@ -193,7 +193,7 @@ class CityTable extends AbstractTableGateway {
         );
 
         $roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\City', 'edit')) {
+		if ($acl->isAllowed($roleCode, 'Application\Controller\CityController', 'edit')) {
             $update = true;
         } else {
             $update = false;

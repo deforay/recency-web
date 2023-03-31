@@ -10,8 +10,6 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
-$config = new \Laminas\Config\Reader\Ini();
-$configResult = $config->fromFile(CONFIG_PATH . '/custom.config.ini');
 
 return array(
     'db' => array(

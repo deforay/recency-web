@@ -293,7 +293,7 @@ class UserTable extends AbstractTableGateway
         );
 
 		$roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\User', 'edit')) {
+		if ($acl->isAllowed($roleCode, 'Application\Controller\UserController', 'edit')) {
             $update = true;
         } else {
             $update = false;

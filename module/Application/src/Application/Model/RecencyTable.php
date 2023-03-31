@@ -69,7 +69,7 @@ class RecencyTable extends AbstractTableGateway
         return $this->select($whereCondition)->toArray();
     }
 
-    public function fetchRecencyDetails($parameters,$acl)
+    public function fetchRecencyDetails($parameters, $acl)
     {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -278,19 +278,19 @@ class RecencyTable extends AbstractTableGateway
 
             $update = false;
             $actionBtn = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">';
-            if ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'edit')) {
+            if ($acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'edit')) {
                 $actionBtn .= '<a class="btn btn-danger" title="Edit Sample"  href="/recency/edit/' . base64_encode($aRow['recency_id']) . '"><i class="si si-pencil"></i></a>';
                 $update = true;
-            }   
-            if ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) {
+            }
+            if ($acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf')) {
                 $actionBtn .= $pdfBtn;
                 $update = true;
             }
             $actionBtn .= '</div>';
 
-            if($update){
+            if ($update) {
                 $row[] = $aRow['sample_id'] . '<br>' . $actionBtn;
-            }else{
+            } else {
                 $row[] = $aRow['sample_id'];
             }
             $row[] = $aRow['facility_name'];
@@ -334,7 +334,7 @@ class RecencyTable extends AbstractTableGateway
 
             $row[] = $formInitiationDate;
             $row[] = $formTransferDate;
-            if($update){
+            if ($update) {
                 $row[] = $actionBtn;
             }
 
@@ -626,13 +626,13 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('recency')
-        ->where("(sample_id = '$sampleId' OR patient_id = '$sampleId')");
+            ->where("(sample_id = '$sampleId' OR patient_id = '$sampleId')");
         $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         return $rResult;
     }
 
-    public function fetchRecencyDetailsForPDF($recencyId,$sm)
+    public function fetchRecencyDetailsForPDF($recencyId, $sm)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
@@ -646,7 +646,7 @@ class RecencyTable extends AbstractTableGateway
 
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        
+
         // Add event log
         $filename = 'Recency-Result-' . date('d-M-Y-H-i-s') . '.pdf';
         $subject                = $filename;
@@ -1447,7 +1447,7 @@ class RecencyTable extends AbstractTableGateway
         }
     }
 
-    public function fetchAllRecencyResultWithVlList($parameters,$acl)
+    public function fetchAllRecencyResultWithVlList($parameters, $acl)
     {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -1588,8 +1588,8 @@ class RecencyTable extends AbstractTableGateway
         );
 
         $sessionLogin = new Container('credo');
-		$roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) {
+        $roleCode = $sessionLogin->roleCode;
+        if ($acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf')) {
             $update = true;
         } else {
             $update = false;
@@ -1612,7 +1612,7 @@ class RecencyTable extends AbstractTableGateway
             $row[] = ucwords(str_replace('_', ' ', $aRow['received_specimen_type']));
             $row[] = ucwords($aRow['testing_facility_name']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-            if($update){
+            if ($update) {
                 $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                          <a class="btn btn-primary" href="javascript:void(0)" onclick="generateRecentPdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>
                          </div>';
@@ -1622,7 +1622,7 @@ class RecencyTable extends AbstractTableGateway
         return $output;
     }
 
-    public function fetchAllLtResult($parameters,$acl)
+    public function fetchAllLtResult($parameters, $acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -1763,8 +1763,8 @@ class RecencyTable extends AbstractTableGateway
             "aaData" => array(),
         );
         $sessionLogin = new Container('credo');
-		$roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) {
+        $roleCode = $sessionLogin->roleCode;
+        if ($acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf')) {
             $update = true;
         } else {
             $update = false;
@@ -1786,7 +1786,7 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['age'];
             $row[] = ucwords($aRow['testing_facility_name']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-            if($update){
+            if ($update) {
                 $row[] = '<div class="btn-group btn-group-sm" role="group" aria-label="Small Horizontal Primary">
                 <a class="btn btn-primary" href="javascript:void(0)" onclick="generateLTermPdf(' . $aRow['recency_id'] . ')"><i class="far fa-file-pdf"></i> PDF</a>
                 </div>';
@@ -1949,7 +1949,7 @@ class RecencyTable extends AbstractTableGateway
         // if(isset($params['start']) && isset($params['end'])){
         //     $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_test_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
         // }
-       
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
@@ -1974,7 +1974,7 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['hivRecencyTest'] != '') {
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
-      
+
         //return $sql->buildSqlString($sQuery); 
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
@@ -2010,10 +2010,10 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['final_outcome'];
             $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-            if (isset($aRow['vl_result_entry_date']) && trim($aRow['vl_result_entry_date']) != '' && $aRow['vl_result_entry_date'] != '0000-00-00 00:00:00') 
-            $row[] = date('d-M-Y', strtotime($aRow['vl_result_entry_date']));
+            if (isset($aRow['vl_result_entry_date']) && trim($aRow['vl_result_entry_date']) != '' && $aRow['vl_result_entry_date'] != '0000-00-00 00:00:00')
+                $row[] = date('d-M-Y', strtotime($aRow['vl_result_entry_date']));
             else
-            $row[] = '';
+                $row[] = '';
             $row[] = $aRow['diffInDays'];
             $output['aaData'][] = $row;
         }
@@ -2319,7 +2319,7 @@ class RecencyTable extends AbstractTableGateway
         $common = new CommonService();
         $general = new CommonService();
         $aColumns = array('f.facility_name', 'ft.facility_name');
-        $orderColumns = array('f.facility_name', 'ft.facility_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome','printedCount','samplesFinalLongTerm','','ritaRecent','','samplesFinalInconclusive','','samplesInvalid','');
+        $orderColumns = array('f.facility_name', 'ft.facility_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome', 'printedCount', 'samplesFinalLongTerm', '', 'ritaRecent', '', 'samplesFinalInconclusive', '', 'samplesInvalid', '');
 
         /* Paging */
         $sLimit = "";
@@ -2504,11 +2504,11 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
         if (isset($sOrder) && $sOrder != "") {
-            if(($sOrder == "ft.facility_name asc") || ($sOrder =="ft.facility_name desc")){
-                $sQuery->order(new Expression("CASE WHEN `testing_facility_name` IS NULL OR `testing_facility_name` = '' THEN 1 ELSE 0 END, ".$sOrder));
-            }else{
+            if (($sOrder == "ft.facility_name asc") || ($sOrder == "ft.facility_name desc")) {
+                $sQuery->order(new Expression("CASE WHEN `testing_facility_name` IS NULL OR `testing_facility_name` = '' THEN 1 ELSE 0 END, " . $sOrder));
+            } else {
                 $sQuery->order($sOrder);
-            }            
+            }
         }
 
 
@@ -3728,7 +3728,7 @@ class RecencyTable extends AbstractTableGateway
         $common = new CommonService();
         $general = new CommonService();
         $aColumns = array('d.district_name');
-        $orderColumns = array('d.district_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome', 'printedCount', 'samplesFinalLongTerm', '', 'ritaRecent', '', 'samplesFinalInconclusive','','samplesInvalid');
+        $orderColumns = array('d.district_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome', 'printedCount', 'samplesFinalLongTerm', '', 'ritaRecent', '', 'samplesFinalInconclusive', '', 'samplesInvalid');
 
         /* Paging */
         $sLimit = "";
@@ -3915,11 +3915,11 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
         if (isset($sOrder) && $sOrder != "") {
-            if(($sOrder == "d.district_name asc") || ($sOrder =="d.district_name desc")){
-                $sQuery->order(new Expression("CASE WHEN `district_name` IS NULL OR `district_name` = '' THEN 1 ELSE 0 END, ".$sOrder));
-            }else{
+            if (($sOrder == "d.district_name asc") || ($sOrder == "d.district_name desc")) {
+                $sQuery->order(new Expression("CASE WHEN `district_name` IS NULL OR `district_name` = '' THEN 1 ELSE 0 END, " . $sOrder));
+            } else {
                 $sQuery->order($sOrder);
-            }            
+            }
         }
 
         if ($this->sessionLogin->facilityMap != null) {
@@ -5117,12 +5117,11 @@ class RecencyTable extends AbstractTableGateway
         if (isset($params['recencyTestDate']) && $params['recencyTestDate'] != null) {
             $recencyTestDate = $common->dbDateFormat($params['recencyTestDate']);
             $sQuery = $sql->select()->from(array('t' => 'test_kit_information'))
-                        ->where("kit_expiry_date <= '" . $recencyTestDate . "'")
-                        ->where(array('status' => 'active'));
+                ->where("kit_expiry_date <= '" . $recencyTestDate . "'")
+                ->where(array('status' => 'active'));
             $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
             return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         }
-        
     }
 
     public function checkPatientIdValidation($params)
@@ -5137,16 +5136,16 @@ class RecencyTable extends AbstractTableGateway
             $sql = new Sql($dbAdapter);
             if ($editPatientId == '' || $editPatientId == 'null') {
                 $sQuery = $sql->select()->from('recency')
-                        ->where(array('patient_id' => $value))
-                        ->order('sample_collection_date' . ' DESC')
-                        ->limit(1);
+                    ->where(array('patient_id' => $value))
+                    ->order('sample_collection_date' . ' DESC')
+                    ->limit(1);
                 $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
                 $results = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
             } else {
                 $sQuery = $sql->select()->from('recency')
-                        ->where(array("patient_id ='".$value."'", "patient_id !='" . $editPatientId."'"))
-                        ->order("sample_collection_date DESC")
-                        ->limit(1);
+                    ->where(array("patient_id ='" . $value . "'", "patient_id !='" . $editPatientId . "'"))
+                    ->order("sample_collection_date DESC")
+                    ->limit(1);
                 $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
                 $results =  $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
             }
@@ -5155,7 +5154,6 @@ class RecencyTable extends AbstractTableGateway
             error_log($exc->getMessage());
             error_log($exc->getTraceAsString());
         }
-        
     }
 
     //refer getVlRequestSentOnYes Function

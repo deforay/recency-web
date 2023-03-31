@@ -80,7 +80,7 @@ $acl=$this->layout()->acl;
             <div class="row items-push">
                 <div class="col-lg-7 ">
                     <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'export-weekly-report')) { ?>
+                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'export-weekly-report')) { ?>
                         <a href="javascript:void(0);" class="btn btn-success" onclick="exportWeeklyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                     <?php } ?>
                 </div>

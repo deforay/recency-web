@@ -5,7 +5,7 @@ use Laminas\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 $acl=$this->layout()->acl;
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) {
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf')) {
     $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 }else{
     $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
@@ -62,7 +62,7 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 
             <div class="row items-push">
                 <div class="col-lg-7 ">
                     <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlData', 'export-long-term-infected-data')) { ?>
+                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'export-long-term-infected-data')) { ?>
                         <a href="javascript:void(0);" class="btn btn-success" onclick="exportRecentLTermInfection();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                     <?php
                     } ?>
@@ -84,7 +84,7 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 
                         <th>Age</th>
                         <th>Testing Site</th>
                         <th>VL Test Date</th>
-                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) { ?>
+                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf')) { ?>
                         <th>Action</th>
                         <?php } ?>
                     </tr>
@@ -109,7 +109,7 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 
                         <th>Age</th>
                         <th>Testing Site</th>
                         <th>VL Test Date</th>
-                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf')) { ?>
+                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf')) { ?>
                         <th>Action</th>
                         <?php } ?>
 

@@ -37,10 +37,10 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
             <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'add')) { ?>
+                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'add')) { ?>
                             <a href="<?php echo $this->url('recency', array('action' => 'add')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Recency</a>
                         <?php }
-                            if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'export-recency')) { ?>
+                            if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'export-recency')) { ?>
                             <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportRecencyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                         <?php } ?>
                         <?php
@@ -243,7 +243,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                         <th>Experienced Violence Last 12 Month</th>
                         <th>Form Initiation Datetime</th>
                         <th>Form Transfer Datetime</th>
-                        <?php if (isset($acl) && ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'edit') || $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf'))) { ?>
+                        <?php if (isset($acl) && ($acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'edit') || $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf'))) { ?>
                         <th>Action</th>
                         <?php } ?>
                     </tr>
@@ -295,7 +295,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                         <th>Experienced Violence Last 12 Month</th>
                         <th>Form Initiation Datetime</th>
                         <th>Form Transfer Datetime</th>
-                        <?php if (isset($acl) && ($acl->isAllowed($roleCode, 'Application\Controller\Recency', 'edit') || $acl->isAllowed($roleCode, 'Application\Controller\Recency', 'generate-pdf'))) { ?>
+                        <?php if (isset($acl) && ($acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'edit') || $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf'))) { ?>
                         <th>Action</th>
                         <?php } ?>
                     </tr>

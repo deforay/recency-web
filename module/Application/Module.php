@@ -2,11 +2,11 @@
 
 namespace Application;
 
+
 use Laminas\Session\Container;
 
 use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
-use Laminas\View\Model\ViewModel;
 
 // Models
 use Application\Model\UserTable;
@@ -49,7 +49,10 @@ use Application\Service\CityService;
 use Application\Service\ManifestsService;
 use Application\Service\RoleService;
 
-class Module
+use Laminas\ModuleManager\Feature\ConfigProviderInterface;
+
+
+class Module implements ConfigProviderInterface
 {
     public function onBootstrap(MvcEvent $e)
     {
@@ -77,10 +80,12 @@ class Module
         /** @var \Laminas\Http\Request $request */
         $request = $e->getRequest();
 
+
+
         if (
             !$request->isXmlHttpRequest()
-            && ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Login') &&
-            ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\Captcha')
+            && ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\LoginController') &&
+            ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\CaptchaController')
         ) {
 
 
@@ -117,7 +122,7 @@ class Module
 
 
                 if (!$acl->hasResource($resource) || (!$acl->isAllowed($role, $resource, $privilege))) {
-                    
+
                     /** @var \Laminas\Http\Response $response */
                     $response = $e->getResponse();
                     $response->setStatusCode(403);
@@ -141,169 +146,285 @@ class Module
     {
         return array(
             'factories' => array(
-                'UserTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new UserTable($dbAdapter);
-                    return $table;
+                'UserTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new UserTable($dbAdapter);
+                    }
                 },
-                'UserLoginHistoryTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new UserLoginHistoryTable($dbAdapter);
-                    return $table;
+                'UserLoginHistoryTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new UserLoginHistoryTable($dbAdapter);
+                    }
                 },
-                'FacilitiesTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new FacilitiesTable($dbAdapter);
-                    return $table;
+                'FacilitiesTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new FacilitiesTable($dbAdapter);
+                    }
                 },
-                'RoleTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new RoleTable($dbAdapter);
-                    return $table;
+                'RoleTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new RoleTable($dbAdapter);
+                    }
                 },
-                'RecencyTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new RecencyTable($dbAdapter);
-                    return $table;
+                'RecencyTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new RecencyTable($dbAdapter);
+                    }
                 },
-                'RiskPopulationsTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new RiskPopulationsTable($dbAdapter);
-                    return $table;
+                'RiskPopulationsTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new RiskPopulationsTable($dbAdapter);
+                    }
                 },
-                'GlobalConfigTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new GlobalConfigTable($dbAdapter);
-                    return $table;
+                'GlobalConfigTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new GlobalConfigTable($dbAdapter);
+                    }
                 },
-                'UserFacilityMapTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new UserFacilityMapTable($dbAdapter);
-                    return $table;
+                'UserFacilityMapTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new UserFacilityMapTable($dbAdapter);
+                    }
                 },
-
-                'ProvinceTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new ProvinceTable($dbAdapter);
-                    return $table;
+                'ProvinceTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new ProvinceTable($dbAdapter);
+                    }
                 },
-
-                'DistrictTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new DistrictTable($dbAdapter);
-                    return $table;
+                'DistrictTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new DistrictTable($dbAdapter);
+                    }
                 },
-
-                'CityTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new CityTable($dbAdapter);
-                    return $table;
+                'CityTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new CityTable($dbAdapter);
+                    }
                 },
-
-                'QualityCheckTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new QualityCheckTable($dbAdapter);
-                    return $table;
+                'QualityCheckTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new QualityCheckTable($dbAdapter);
+                    }
                 },
-                'TempMailTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new TempMailTable($dbAdapter);
-                    return $table;
+                'TempMailTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new TempMailTable($dbAdapter);
+                    }
                 },
-                'TestingFacilityTypeTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new TestingFacilityTypeTable($dbAdapter);
-                    return $table;
+                'TestingFacilityTypeTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new TestingFacilityTypeTable($dbAdapter);
+                    }
                 },
-                'RecencyChangeTrailsTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new RecencyChangeTrailsTable($dbAdapter);
-                    return $table;
+                'RecencyChangeTrailsTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new RecencyChangeTrailsTable($dbAdapter);
+                    }
                 },
-                'ManageColumnsMapTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new ManageColumnsMapTable($dbAdapter);
-                    return $table;
+                'ManageColumnsMapTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new ManageColumnsMapTable($dbAdapter);
+                    }
                 },
-                'SettingsTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new SettingsTable($dbAdapter);
-                    return $table;
+                'SettingsTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new SettingsTable($dbAdapter);
+                    }
                 },
-                'SettingsQcSampleTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new SettingsQcSampleTable($dbAdapter);
-                    return $table;
+                'SettingsQcSampleTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new SettingsQcSampleTable($dbAdapter);
+                    }
                 },
-                'EventLogTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new EventLogTable($dbAdapter);
-                    return $table;
+                'EventLogTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new EventLogTable($dbAdapter);
+                    }
                 },
-                'ManifestsTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new ManifestsTable($dbAdapter);
-                    return $table;
+                'ManifestsTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new ManifestsTable($dbAdapter);
+                    }
                 },
-                'AuditRecencyTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new AuditRecencyTable($dbAdapter);
-                    return $table;
+                'AuditRecencyTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new AuditRecencyTable($dbAdapter);
+                    }
                 },
-                'ResourcesTable' => function ($sm) {
-                    $dbAdapter = $sm->get('Laminas\Db\Adapter\Adapter');
-                    $table = new ResourcesTable($dbAdapter);
-                    return $table;
+                'ResourcesTable'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        return new ResourcesTable($dbAdapter);
+                    }
                 },
-                'AppAcl' => function ($sm) {
-                    $resourcesTable = $sm->get('ResourcesTable');
-                    $rolesTable = $sm->get('RoleTable');
-                    return new Acl($resourcesTable->fetchAllResourceMap(), $rolesTable->fetchRoleAllDetails());
+                'AppAcl'  => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $resourcesTable = $container->get('ResourcesTable');
+                        $rolesTable = $container->get('RoleTable');
+                        return new Acl($resourcesTable->fetchAllResourceMap(), $rolesTable->fetchRoleAllDetails());
+                    }
                 },
-
                 //service
 
-                'CommonService' => function ($sm) {
-                    return new CommonService($sm);
-                },
 
-                'UserService' => function ($sm) {
-                    return new UserService($sm);
+                'CommonService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new CommonService($container);
+                    }
                 },
-                'FacilitiesService' => function ($sm) {
-                    return new FacilitiesService($sm);
+                'UserService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new UserService($container);
+                    }
                 },
-                'RecencyService' => function ($sm) {
-                    return new RecencyService($sm);
+                'FacilitiesService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new FacilitiesService($container);
+                    }
                 },
-                'RiskPopulationsService' => function ($sm) {
-                    return new RiskPopulationsService($sm);
+                'RecencyService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new RecencyService($container);
+                    }
                 },
-                'GlobalConfigService' => function ($sm) {
-                    return new GlobalConfigService($sm);
+                'RiskPopulationsService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new RiskPopulationsService($container);
+                    }
                 },
-
-                'QualityCheckService' => function ($sm) {
-                    return new QualityCheckService($sm);
+                'GlobalConfigService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new GlobalConfigService($container);
+                    }
                 },
-                'SettingsService' => function ($sm) {
-                    return new SettingsService($sm);
+                'QualityCheckService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new QualityCheckService($container);
+                    }
                 },
-                'ProvinceService' => function ($sm) {
-                    return new ProvinceService($sm);
+                'SettingsService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new SettingsService($container);
+                    }
                 },
-                'DistrictService' => function ($sm) {
-                    return new DistrictService($sm);
+                'ProvinceService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new ProvinceService($container);
+                    }
                 },
-                'CityService' => function ($sm) {
-                    return new CityService($sm);
+                'DistrictService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new DistrictService($container);
+                    }
                 },
-                'ManifestsService' => function ($sm) {
-                    return new ManifestsService($sm);
+                'CityService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new CityService($container);
+                    }
                 },
-                'RoleService' => function ($sm) {
-                    return new RoleService($sm);
+                'ManifestsService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new ManifestsService($container);
+                    }
                 },
+                'RoleService' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        return new RoleService($container);
+                    }
+                }
 
             )
         );
@@ -312,95 +433,120 @@ class Module
     {
         return array(
             'factories' => array(
-                'GlobalConfig'          => function ($sm) {
-                    $globalTable = $sm->getServiceLocator()->get('GlobalConfigTable');
-                    return new \Application\View\Helper\GlobalConfig($globalTable);
+                'GlobalConfig'           => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $globalTable = $container->get('GlobalConfigTable');
+                        return new \Application\View\Helper\GlobalConfig($globalTable);
+                    }
                 },
-                'UserCrossLogin' => function ($sm) {
-                    $userTable = $sm->getServiceLocator()->get('UserTable');
-                    return new \Application\View\Helper\UserCrossLogin($userTable);
+                'UserCrossLogin'           => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $userTable = $container->get('UserTable');
+                        return new \Application\View\Helper\UserCrossLogin($userTable);
+                    }
                 }
             ),
         );
     }
 
+
     public function getControllerConfig()
     {
         return array(
             'factories' => array(
-                'Application\Controller\Login' => function ($sm) {
-                    $userService = $sm->getServiceLocator()->get('UserService');
-                    return new \Application\Controller\LoginController($userService);
+                'Application\Controller\LoginController' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $userService = $container->get('UserService');
+                        return new \Application\Controller\LoginController($userService);
+                    }
                 },
-                'Application\Controller\Common' => function ($sm) {
-                    $commonService = $sm->getServiceLocator()->get('CommonService');
-                    return new \Application\Controller\CommonController($commonService);
+                'Application\Controller\CaptchaController' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $commonService = $container->get('CommonService');
+                        return new \Application\Controller\CaptchaController($commonService);
+                    }
                 },
-                'Application\Controller\Captcha' => function ($sm) {
-                    $commonService = $sm->getServiceLocator()->get('CommonService');
-                    return new \Application\Controller\CaptchaController($commonService);
+                'Application\Controller\CommonController' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $commonService = $container->get('CommonService');
+                        return new \Application\Controller\CommonController($commonService);
+                    }
                 },
-                'Application\Controller\User' => function ($sm) {
+                'Application\Controller\RecencyController' => new class
+                {
+                    public function __invoke($container)
+                    {
+                        $recencyService = $container->get('RecencyService');
+                        $globalConfigService = $container->get('GlobalConfigService');
+                        $facilitiesService = $container->get('FacilitiesService');
+                        $settingsService = $container->get('SettingsService');
+                        return new \Application\Controller\RecencyController($recencyService, $facilitiesService, $globalConfigService, $settingsService);
+                    }
+                },
+                'Application\Controller\UserController' => function ($sm) {
                     $userService = $sm->getServiceLocator()->get('UserService');
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     return new \Application\Controller\UserController($userService, $globalConfigService);
                 },
-                'Application\Controller\Facilities' => function ($sm) {
+                'Application\Controller\FacilitiesController' => function ($sm) {
                     $userService = $sm->getServiceLocator()->get('UserService');
                     $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     return new \Application\Controller\FacilitiesController($facilitiesService, $userService, $globalConfigService);
                 },
-                'Application\Controller\GlobalConfig' => function ($sm) {
+                'Application\Controller\GlobalConfigController' => function ($sm) {
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     return new \Application\Controller\GlobalConfigController($globalConfigService);
                 },
-                'Application\Controller\Settings' => function ($sm) {
+                'Application\Controller\SettingsController' => function ($sm) {
                     $settingsService = $sm->getServiceLocator()->get('SettingsService');
                     return new \Application\Controller\SettingsController($settingsService);
                 },
-                'Application\Controller\PrintResults' => function ($sm) {
+                'Application\Controller\PrintResultsController' => function ($sm) {
                     $recencyService = $sm->getServiceLocator()->get('RecencyService');
                     return new \Application\Controller\PrintResultsController($recencyService);
                 },
-                'Application\Controller\Cron' => function ($sm) {
+                'Application\Controller\CronController' => function ($sm) {
                     $recencyService = $sm->getServiceLocator()->get('RecencyService');
                     $commonService = $sm->getServiceLocator()->get('CommonService');
                     return new \Application\Controller\CronController($recencyService, $commonService);
                 },
-                'Application\Controller\Province' => function ($sm) {
+                'Application\Controller\ProvinceController' => function ($sm) {
 
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     $provinceService = $sm->getServiceLocator()->get('ProvinceService');
                     return new \Application\Controller\ProvinceController($provinceService, $globalConfigService);
                 },
-                'Application\Controller\District' => function ($sm) {
+                'Application\Controller\DistrictController' => function ($sm) {
 
                     $districtService = $sm->getServiceLocator()->get('DistrictService');
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     $provinceService = $sm->getServiceLocator()->get('ProvinceService');
                     return new \Application\Controller\DistrictController($districtService, $provinceService, $globalConfigService);
                 },
-                'Application\Controller\City' => function ($sm) {
+                'Application\Controller\CityController' => function ($sm) {
                     $cityService = $sm->getServiceLocator()->get('CityService');
                     $districtService = $sm->getServiceLocator()->get('DistrictService');
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     return new \Application\Controller\CityController($cityService, $districtService, $globalConfigService);
                 },
-                'Application\Controller\Recency' => function ($sm) {
-                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
-                    $settingsService = $sm->getServiceLocator()->get('SettingsService');
-                    return new \Application\Controller\RecencyController($recencyService, $facilitiesService, $globalConfigService, $settingsService);
-                },
-                'Application\Controller\QualityCheck' => function ($sm) {
+                'Application\Controller\QualityCheckController' => function ($sm) {
                     $qualityCheckService = $sm->getServiceLocator()->get('QualityCheckService');
                     $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
                     $settingsService = $sm->getServiceLocator()->get('SettingsService');
                     return new \Application\Controller\QualityCheckController($qualityCheckService, $facilitiesService, $settingsService);
                 },
-                'Application\Controller\Manifests' => function ($sm) {
+                'Application\Controller\ManifestsController' => function ($sm) {
                     $recencyService = $sm->getServiceLocator()->get('RecencyService');
                     $manifestsService = $sm->getServiceLocator()->get('ManifestsService');
                     $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
@@ -408,25 +554,25 @@ class Module
                     $commonService = $sm->getServiceLocator()->get('CommonService');
                     return new \Application\Controller\ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService);
                 },
-                'Application\Controller\Index' => function ($sm) {
+                'Application\Controller\IndexController' => function ($sm) {
                     $recencyService = $sm->getServiceLocator()->get('RecencyService');
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
                     return new \Application\Controller\IndexController($recencyService, $facilitiesService, $globalConfigService);
                 },
-                'Application\Controller\VlData' => function ($sm) {
+                'Application\Controller\VlDataController' => function ($sm) {
                     $recencyService = $sm->getServiceLocator()->get('RecencyService');
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
                     $qualityCheckService = $sm->getServiceLocator()->get('QualityCheckService');
                     return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
                 },
-                'Application\Controller\Monitoring' => function ($sm) {
+                'Application\Controller\MonitoringController' => function ($sm) {
                     $userService = $sm->getServiceLocator()->get('UserService');
                     $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
                     return new \Application\Controller\MonitoringController($userService, $globalConfigService);
                 },
-                'Application\Controller\Roles' => function ($sm) {
+                'Application\Controller\RolesController' => function ($sm) {
                     $roleService = $sm->getServiceLocator()->get('RoleService');
                     return new \Application\Controller\RolesController($roleService);
                 },

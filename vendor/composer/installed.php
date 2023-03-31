@@ -1,6 +1,6 @@
 <?php return array(
     'root' => array(
-        'name' => 'deforay/vldashboard',
+        'name' => 'deforay/recency-web',
         'pretty_version' => 'dev-default',
         'version' => 'dev-default',
         'reference' => NULL,
@@ -25,7 +25,7 @@
                 0 => '^1.2.0',
             ),
         ),
-        'deforay/vldashboard' => array(
+        'deforay/recency-web' => array(
             'pretty_version' => 'dev-default',
             'version' => 'dev-default',
             'reference' => NULL,
@@ -799,8 +799,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0',
-                1 => '1.0.0',
+                0 => '1.0.0',
+                1 => '1.0|2.0',
             ),
         ),
         'psr/simple-cache' => array(
@@ -828,9 +828,9 @@
             'dev_requirement' => false,
         ),
         'symfony/console' => array(
-            'pretty_version' => 'v5.4.21',
-            'version' => '5.4.21.0',
-            'reference' => 'c77433ddc6cdc689caf48065d9ea22ca0853fbd9',
+            'pretty_version' => 'v5.4.22',
+            'version' => '5.4.22.0',
+            'reference' => '3cd51fd2e6c461ca678f84d419461281bd87a0a8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/console',
             'aliases' => array(),
@@ -846,9 +846,9 @@
             'dev_requirement' => false,
         ),
         'symfony/event-dispatcher' => array(
-            'pretty_version' => 'v5.4.21',
-            'version' => '5.4.21.0',
-            'reference' => 'f0ae1383a8285dfc6752b8d8602790953118ff5a',
+            'pretty_version' => 'v5.4.22',
+            'version' => '5.4.22.0',
+            'reference' => '1df20e45d56da29a4b1d8259dd6e950acbf1b13f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/event-dispatcher',
             'aliases' => array(),
@@ -933,9 +933,9 @@
             'dev_requirement' => false,
         ),
         'symfony/string' => array(
-            'pretty_version' => 'v5.4.21',
-            'version' => '5.4.21.0',
-            'reference' => 'edac10d167b78b1d90f46a80320d632de0bd9f2f',
+            'pretty_version' => 'v5.4.22',
+            'version' => '5.4.22.0',
+            'reference' => '8036a4c76c0dd29e60b6a7cafcacc50cf088ea62',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/string',
             'aliases' => array(),
