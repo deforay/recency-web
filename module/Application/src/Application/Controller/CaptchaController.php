@@ -26,7 +26,7 @@ class CaptchaController extends AbstractActionController
         if ($request->isPost()) {
             $params = $request->getPost();
             $captchaSession = new Container('captcha');
-            $params['challenge_field'] = filter_var($params['challenge_field'], FILTER_SANITIZE_STRING);
+            $params['challenge_field'] = htmlspecialchars($params['challenge_field']);
             if ($captchaSession->code == $params['challenge_field']) {
                 $result = "success";
                 $captchaSession->status = 'success';

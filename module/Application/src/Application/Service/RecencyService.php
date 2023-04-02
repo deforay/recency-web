@@ -1445,19 +1445,19 @@ class RecencyService
                     if (isset($data['sample_id']) && $data['sample_id'] != "") {
                         $resultCart = $client->post($urlVlsm, [
                             'form_params' => [
-                                'sampleId'              => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
-                                'patientId'             => (isset($data['patient_id']) && $data['patient_id'] != '') ? $data['patient_id'] : '',
-                                'isFacilityLab'         => (isset($params['isFacilityLab']) && $params['isFacilityLab'] != '') ? $params['isFacilityLab'] : '',
-                                // 'province'              => $data['province'],
-                                // 'district'              => $data['district'],
-                                'sCDate'                => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
-                                // 'sampleType'            => $data['received_specimen_type'],
-                                'isVlLab'               => (isset($params['isVlLab']) && $params['isVlLab'] != '') ? $params['isVlLab'] : '',
-                                'userId'                => (isset($sessionLogin->userId) && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
-                                'dob'                   => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
-                                'age'                   => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
-                                'gender'                => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
-                                'service'               => ''
+                                'sampleId'            => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
+                                'patientId'           => (isset($data['patient_id']) && $data['patient_id'] != '') ? $data['patient_id'] : '',
+                                'isFacilityLab'       => (isset($params['isFacilityLab']) && $params['isFacilityLab'] != '') ? $params['isFacilityLab'] : '',
+                                // 'province'            => $data['province'],
+                                // 'district'            => $data['district'],
+                                'sCDate'              => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
+                                // 'sampleType'          => $data['received_specimen_type'],
+                                'isVlLab'             => (isset($params['isVlLab']) && $params['isVlLab'] != '') ? $params['isVlLab'] : '',
+                                'userId'              => (isset($sessionLogin->userId) && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
+                                'dob'                 => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
+                                'age'                 => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
+                                'gender'              => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
+                                'service'             => ''
                             ]
                         ]);
                         $responseCart = $resultCart->getBody()->getContents();
@@ -1661,20 +1661,20 @@ class RecencyService
                     if ((isset($data['sample_id']) && $data['sample_id'] != "") && (isset($data['patient_id']) && $data['patient_id'] != "")) {
                         $resultCart = $client->post($urlVlsm, [
                             'form_params' => [
-                                'sampleId'              => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
-                                'patientId'             => (isset($data['patient_id']) && $data['patient_id'] != '') ? $data['patient_id'] : '',
-                                'facility_id'            => (isset($data['facility_id']) && $data['facility_id'] != '') ? $data['facility_id'] : '',
-                                //'isFacilityLab'         => (isset($params['isFacilityLab']) && $params['isFacilityLab'] != '') ? $params['isFacilityLab'] : '',
-                                // 'province'              => $data['province'],
-                                // 'district'              => $data['district'],
-                                'sCDate'                => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
-                                // 'sampleType'            => $data['received_specimen_type'],
-                                //'isVlLab'               => (isset($params['isVlLab']) && $params['isVlLab'] != '') ? $params['isVlLab'] : '',
-                                'userId'                => (isset($sessionLogin->userId) && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
-                                'dob'                   => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
-                                'age'                   => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
-                                'gender'                => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
-                                'service'               => ''
+                                'sampleId'            => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
+                                'patientId'           => (isset($data['patient_id']) && $data['patient_id'] != '') ? $data['patient_id'] : '',
+                                'facility_id'          => (isset($data['facility_id']) && $data['facility_id'] != '') ? $data['facility_id'] : '',
+                                //'isFacilityLab'       => (isset($params['isFacilityLab']) && $params['isFacilityLab'] != '') ? $params['isFacilityLab'] : '',
+                                // 'province'            => $data['province'],
+                                // 'district'            => $data['district'],
+                                'sCDate'              => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
+                                // 'sampleType'          => $data['received_specimen_type'],
+                                //'isVlLab'             => (isset($params['isVlLab']) && $params['isVlLab'] != '') ? $params['isVlLab'] : '',
+                                'userId'              => (isset($sessionLogin->userId) && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
+                                'dob'                 => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
+                                'age'                 => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
+                                'gender'              => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
+                                'service'             => ''
                             ]
                         ]);
                         $responseCart = $resultCart->getBody()->getContents();

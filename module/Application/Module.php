@@ -148,186 +148,186 @@ class Module implements ConfigProviderInterface
             'factories' => array(
                 'UserTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new UserTable($dbAdapter);
                     }
                 },
                 'UserLoginHistoryTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new UserLoginHistoryTable($dbAdapter);
                     }
                 },
                 'FacilitiesTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new FacilitiesTable($dbAdapter);
                     }
                 },
                 'RoleTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new RoleTable($dbAdapter);
                     }
                 },
                 'RecencyTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new RecencyTable($dbAdapter);
                     }
                 },
                 'RiskPopulationsTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new RiskPopulationsTable($dbAdapter);
                     }
                 },
                 'GlobalConfigTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new GlobalConfigTable($dbAdapter);
                     }
                 },
                 'UserFacilityMapTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new UserFacilityMapTable($dbAdapter);
                     }
                 },
                 'ProvinceTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new ProvinceTable($dbAdapter);
                     }
                 },
                 'DistrictTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new DistrictTable($dbAdapter);
                     }
                 },
                 'CityTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new CityTable($dbAdapter);
                     }
                 },
                 'QualityCheckTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new QualityCheckTable($dbAdapter);
                     }
                 },
                 'TempMailTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new TempMailTable($dbAdapter);
                     }
                 },
                 'TestingFacilityTypeTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new TestingFacilityTypeTable($dbAdapter);
                     }
                 },
                 'RecencyChangeTrailsTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new RecencyChangeTrailsTable($dbAdapter);
                     }
                 },
                 'ManageColumnsMapTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new ManageColumnsMapTable($dbAdapter);
                     }
                 },
                 'SettingsTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new SettingsTable($dbAdapter);
                     }
                 },
                 'SettingsQcSampleTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new SettingsQcSampleTable($dbAdapter);
                     }
                 },
                 'EventLogTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new EventLogTable($dbAdapter);
                     }
                 },
                 'ManifestsTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new ManifestsTable($dbAdapter);
                     }
                 },
                 'AuditRecencyTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new AuditRecencyTable($dbAdapter);
                     }
                 },
                 'ResourcesTable'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new ResourcesTable($dbAdapter);
                     }
                 },
                 'AppAcl'  => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $resourcesTable = $container->get('ResourcesTable');
-                        $rolesTable = $container->get('RoleTable');
+                        $resourcesTable = $diContainer->get('ResourcesTable');
+                        $rolesTable = $diContainer->get('RoleTable');
                         return new Acl($resourcesTable->fetchAllResourceMap(), $rolesTable->fetchRoleAllDetails());
                     }
                 },
@@ -336,93 +336,93 @@ class Module implements ConfigProviderInterface
 
                 'CommonService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new CommonService($container);
+                        return new CommonService($diContainer);
                     }
                 },
                 'UserService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new UserService($container);
+                        return new UserService($diContainer);
                     }
                 },
                 'FacilitiesService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new FacilitiesService($container);
+                        return new FacilitiesService($diContainer);
                     }
                 },
                 'RecencyService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new RecencyService($container);
+                        return new RecencyService($diContainer);
                     }
                 },
                 'RiskPopulationsService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new RiskPopulationsService($container);
+                        return new RiskPopulationsService($diContainer);
                     }
                 },
                 'GlobalConfigService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new GlobalConfigService($container);
+                        return new GlobalConfigService($diContainer);
                     }
                 },
                 'QualityCheckService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new QualityCheckService($container);
+                        return new QualityCheckService($diContainer);
                     }
                 },
                 'SettingsService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new SettingsService($container);
+                        return new SettingsService($diContainer);
                     }
                 },
                 'ProvinceService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new ProvinceService($container);
+                        return new ProvinceService($diContainer);
                     }
                 },
                 'DistrictService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new DistrictService($container);
+                        return new DistrictService($diContainer);
                     }
                 },
                 'CityService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new CityService($container);
+                        return new CityService($diContainer);
                     }
                 },
                 'ManifestsService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new ManifestsService($container);
+                        return new ManifestsService($diContainer);
                     }
                 },
                 'RoleService' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        return new RoleService($container);
+                        return new RoleService($diContainer);
                     }
                 }
 
@@ -433,27 +433,27 @@ class Module implements ConfigProviderInterface
     {
         return array(
             'factories' => array(
-                'GlobalConfig'           => new class
+                'GlobalConfig'         => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $globalTable = $container->get('GlobalConfigTable');
+                        $globalTable = $diContainer->get('GlobalConfigTable');
                         return new \Application\View\Helper\GlobalConfig($globalTable);
                     }
                 },
-                'UserCrossLogin'           => new class
+                'UserCrossLogin'         => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $userTable = $container->get('UserTable');
+                        $userTable = $diContainer->get('UserTable');
                         return new \Application\View\Helper\UserCrossLogin($userTable);
                     }
                 },
-                'CustomConfig'           => new class
+                'CustomConfig'         => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $configResult = $container->get('Config');
+                        $configResult = $diContainer->get('Config');
                         return new \Application\View\Helper\CustomConfig($configResult);
                     }
                 }
@@ -468,121 +468,181 @@ class Module implements ConfigProviderInterface
             'factories' => array(
                 'Application\Controller\LoginController' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $userService = $container->get('UserService');
+                        $userService = $diContainer->get('UserService');
                         return new \Application\Controller\LoginController($userService);
                     }
                 },
                 'Application\Controller\CaptchaController' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $commonService = $container->get('CommonService');
+                        $commonService = $diContainer->get('CommonService');
                         return new \Application\Controller\CaptchaController($commonService);
                     }
                 },
                 'Application\Controller\CommonController' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $commonService = $container->get('CommonService');
+                        $commonService = $diContainer->get('CommonService');
                         return new \Application\Controller\CommonController($commonService);
                     }
                 },
                 'Application\Controller\RecencyController' => new class
                 {
-                    public function __invoke($container)
+                    public function __invoke($diContainer)
                     {
-                        $recencyService = $container->get('RecencyService');
-                        $globalConfigService = $container->get('GlobalConfigService');
-                        $facilitiesService = $container->get('FacilitiesService');
-                        $settingsService = $container->get('SettingsService');
+                        $recencyService = $diContainer->get('RecencyService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        $facilitiesService = $diContainer->get('FacilitiesService');
+                        $settingsService = $diContainer->get('SettingsService');
                         return new \Application\Controller\RecencyController($recencyService, $facilitiesService, $globalConfigService, $settingsService);
                     }
                 },
-                'Application\Controller\UserController' => function ($sm) {
-                    $userService = $sm->getServiceLocator()->get('UserService');
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    return new \Application\Controller\UserController($userService, $globalConfigService);
+                'Application\Controller\UserController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $userService = $diContainer->get('UserService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        return new \Application\Controller\UserController($userService, $globalConfigService);
+                    }
                 },
-                'Application\Controller\FacilitiesController' => function ($sm) {
-                    $userService = $sm->getServiceLocator()->get('UserService');
-                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    return new \Application\Controller\FacilitiesController($facilitiesService, $userService, $globalConfigService);
+                'Application\Controller\FacilitiesController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $userService = $diContainer->get('UserService');
+                        $facilitiesService = $diContainer->get('FacilitiesService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        return new \Application\Controller\FacilitiesController($facilitiesService, $userService, $globalConfigService);
+                    }
                 },
-                'Application\Controller\GlobalConfigController' => function ($sm) {
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    return new \Application\Controller\GlobalConfigController($globalConfigService);
+                'Application\Controller\GlobalConfigController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        return new \Application\Controller\GlobalConfigController($globalConfigService);
+                    }
                 },
-                'Application\Controller\SettingsController' => function ($sm) {
-                    $settingsService = $sm->getServiceLocator()->get('SettingsService');
-                    return new \Application\Controller\SettingsController($settingsService);
+                'Application\Controller\SettingsController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $settingsService = $diContainer->get('SettingsService');
+                        return new \Application\Controller\SettingsController($settingsService);
+                    }
                 },
-                'Application\Controller\PrintResultsController' => function ($sm) {
-                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
-                    return new \Application\Controller\PrintResultsController($recencyService);
+                'Application\Controller\PrintResultsController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $recencyService = $diContainer->get('RecencyService');
+                        return new \Application\Controller\PrintResultsController($recencyService);
+                    }
                 },
-                'Application\Controller\CronController' => function ($sm) {
-                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
-                    $commonService = $sm->getServiceLocator()->get('CommonService');
-                    return new \Application\Controller\CronController($recencyService, $commonService);
+                'Application\Controller\CronController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $recencyService = $diContainer->get('RecencyService');
+                        $commonService = $diContainer->get('CommonService');
+                        return new \Application\Controller\CronController($recencyService, $commonService);
+                    }
                 },
-                'Application\Controller\ProvinceController' => function ($sm) {
+                'Application\Controller\ProvinceController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
 
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    $provinceService = $sm->getServiceLocator()->get('ProvinceService');
-                    return new \Application\Controller\ProvinceController($provinceService, $globalConfigService);
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        $provinceService = $diContainer->get('ProvinceService');
+                        return new \Application\Controller\ProvinceController($provinceService, $globalConfigService);
+                    }
                 },
-                'Application\Controller\DistrictController' => function ($sm) {
+                'Application\Controller\DistrictController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
 
-                    $districtService = $sm->getServiceLocator()->get('DistrictService');
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    $provinceService = $sm->getServiceLocator()->get('ProvinceService');
-                    return new \Application\Controller\DistrictController($districtService, $provinceService, $globalConfigService);
+                        $districtService = $diContainer->get('DistrictService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        $provinceService = $diContainer->get('ProvinceService');
+                        return new \Application\Controller\DistrictController($districtService, $provinceService, $globalConfigService);
+                    }
                 },
-                'Application\Controller\CityController' => function ($sm) {
-                    $cityService = $sm->getServiceLocator()->get('CityService');
-                    $districtService = $sm->getServiceLocator()->get('DistrictService');
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    return new \Application\Controller\CityController($cityService, $districtService, $globalConfigService);
+                'Application\Controller\CityController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $cityService = $diContainer->get('CityService');
+                        $districtService = $diContainer->get('DistrictService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        return new \Application\Controller\CityController($cityService, $districtService, $globalConfigService);
+                    }
                 },
-                'Application\Controller\QualityCheckController' => function ($sm) {
-                    $qualityCheckService = $sm->getServiceLocator()->get('QualityCheckService');
-                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
-                    $settingsService = $sm->getServiceLocator()->get('SettingsService');
-                    return new \Application\Controller\QualityCheckController($qualityCheckService, $facilitiesService, $settingsService);
+                'Application\Controller\QualityCheckController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $qualityCheckService = $diContainer->get('QualityCheckService');
+                        $facilitiesService = $diContainer->get('FacilitiesService');
+                        $settingsService = $diContainer->get('SettingsService');
+                        return new \Application\Controller\QualityCheckController($qualityCheckService, $facilitiesService, $settingsService);
+                    }
                 },
-                'Application\Controller\ManifestsController' => function ($sm) {
-                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
-                    $manifestsService = $sm->getServiceLocator()->get('ManifestsService');
-                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    $commonService = $sm->getServiceLocator()->get('CommonService');
-                    return new \Application\Controller\ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService);
+                'Application\Controller\ManifestsController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $recencyService = $diContainer->get('RecencyService');
+                        $manifestsService = $diContainer->get('ManifestsService');
+                        $facilitiesService = $diContainer->get('FacilitiesService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        $commonService = $diContainer->get('CommonService');
+                        return new \Application\Controller\ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService);
+                    }
                 },
-                'Application\Controller\IndexController' => function ($sm) {
-                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
-                    return new \Application\Controller\IndexController($recencyService, $facilitiesService, $globalConfigService);
+                'Application\Controller\IndexController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $recencyService = $diContainer->get('RecencyService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        $facilitiesService = $diContainer->get('FacilitiesService');
+                        return new \Application\Controller\IndexController($recencyService, $facilitiesService, $globalConfigService);
+                    }
                 },
-                'Application\Controller\VlDataController' => function ($sm) {
-                    $recencyService = $sm->getServiceLocator()->get('RecencyService');
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    $facilitiesService = $sm->getServiceLocator()->get('FacilitiesService');
-                    $qualityCheckService = $sm->getServiceLocator()->get('QualityCheckService');
-                    return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
+                'Application\Controller\VlDataController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $recencyService = $diContainer->get('RecencyService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        $facilitiesService = $diContainer->get('FacilitiesService');
+                        $qualityCheckService = $diContainer->get('QualityCheckService');
+                        return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
+                    }
                 },
-                'Application\Controller\MonitoringController' => function ($sm) {
-                    $userService = $sm->getServiceLocator()->get('UserService');
-                    $globalConfigService = $sm->getServiceLocator()->get('GlobalConfigService');
-                    return new \Application\Controller\MonitoringController($userService, $globalConfigService);
+                'Application\Controller\MonitoringController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $userService = $diContainer->get('UserService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        return new \Application\Controller\MonitoringController($userService, $globalConfigService);
+                    }
                 },
-                'Application\Controller\RolesController' => function ($sm) {
-                    $roleService = $sm->getServiceLocator()->get('RoleService');
-                    return new \Application\Controller\RolesController($roleService);
+                'Application\Controller\RolesController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $roleService = $diContainer->get('RoleService');
+                        return new \Application\Controller\RolesController($roleService);
+                    }
                 },
             ),
         );

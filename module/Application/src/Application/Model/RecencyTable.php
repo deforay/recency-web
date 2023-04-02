@@ -528,47 +528,47 @@ class RecencyTable extends AbstractTableGateway
                 'recency_test_performed' => $params['recencyTestPerformed'],
                 'recency_test_not_performed' => ($params['recencyTestPerformed'] == 'true') ? $params['recencyTestNotPerformed'] : null,
                 'other_recency_test_not_performed'  => ($params['recencyTestNotPerformed'] == 'other') ? $params['otherRecencyTestNotPerformed'] : null,
-                'control_line'                      => (isset($params['controlLine']) && $params['controlLine'] != '') ? $params['controlLine'] : null,
-                'positive_verification_line'        => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine'] != '') ? $params['positiveVerificationLine'] : null,
-                'long_term_verification_line'       => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine'] != '') ? $params['longTermVerificationLine'] : null,
-                'term_outcome'                      => (isset($params['outcomeData']) && $params['outcomeData'] != "") ? $params['outcomeData'] : $params['outcomeData'],
-                'final_outcome'                     => $params['vlfinaloutcomeResult'],
-                'age_not_reported'                  => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : 'no',
-                'gender'                            => $params['gender'],
-                'age'                               => ($params['age'] != '') ? $params['age'] : null,
-                'marital_status'                    => $params['maritalStatus'],
-                'residence'                         => $params['residence'],
-                'education_level'                   => $params['educationLevel'],
-                'risk_population'                   => base64_decode($params['riskPopulation']),
-                'pregnancy_status'                  => $params['pregnancyStatus'],
-                'current_sexual_partner'            => $params['currentSexualPartner'],
-                'past_hiv_testing'                  => $params['pastHivTesting'],
-                'last_hiv_status'                   => $params['lastHivStatus'],
-                'patient_on_art'                    => $params['patientOnArt'],
-                'test_last_12_month'                => $params['testLast12Month'],
-                'location_one'                      => $params['location_one'],
-                'location_two'                      => $params['location_two'],
-                'location_three'                    => $params['location_three'],
-                'exp_violence_last_12_month'        => $params['expViolence'],
-                'notes'                             => $params['comments'],
-                'added_on'                          => date("Y-m-d H:i:s"),
-                'added_by'                          => $logincontainer->userId,
-                'form_initiation_datetime'          => date("Y-m-d H:i:s"),
-                'form_transfer_datetime'            => date("Y-m-d H:i:s"),
-                // 'kit_name'                          =>  $params['testKitName'],
-                'kit_lot_no'                        => $params['testKitLotNo'],
-                'kit_expiry_date'                   => ($params['testKitExpDate'] != '') ? $common->dbDateFormat($params['testKitExpDate']) : null,
-                'vl_request_sent'                   => isset($params['sendVlsm']) ? $params['sendVlsm'] : 'no',
-                'vl_request_sent_date_time'         => (isset($params['sendVlsm']) && $params['sendVlsm'] == 'yes') ? $common->getDateTime() : null,
-                'tester_name'                       => $params['testerName'],
-                'vl_test_date'                      => ($params['vlTestDate'] != '') ? $common->dbDateFormat($params['vlTestDate']) : null,
-                'vl_lab'                            => ($params['isVlLab'] != '') ? $params['isViralLabText'] : null,
-                // 'vl_result'                         => ($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
-                'sample_collection_date'            => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate'] != '') ? $common->dbDateFormat($params['sampleCollectionDate']) : null,
-                'sample_receipt_date'               => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate'] != '') ? $common->dbDateFormat($params['sampleReceiptDate']) : null,
-                'received_specimen_type'            => $params['receivedSpecimenType'],
-                'unique_id'                         => $this->randomizer(10),
-                'testing_facility_type'             => $params['testingModality']
+                'control_line'                    => (isset($params['controlLine']) && $params['controlLine'] != '') ? $params['controlLine'] : null,
+                'positive_verification_line'      => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine'] != '') ? $params['positiveVerificationLine'] : null,
+                'long_term_verification_line'     => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine'] != '') ? $params['longTermVerificationLine'] : null,
+                'term_outcome'                    => (isset($params['outcomeData']) && $params['outcomeData'] != "") ? $params['outcomeData'] : $params['outcomeData'],
+                'final_outcome'                   => $params['vlfinaloutcomeResult'],
+                'age_not_reported'                => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : 'no',
+                'gender'                          => $params['gender'],
+                'age'                             => ($params['age'] != '') ? $params['age'] : null,
+                'marital_status'                  => $params['maritalStatus'],
+                'residence'                       => $params['residence'],
+                'education_level'                 => $params['educationLevel'],
+                'risk_population'                 => base64_decode($params['riskPopulation']),
+                'pregnancy_status'                => $params['pregnancyStatus'],
+                'current_sexual_partner'          => $params['currentSexualPartner'],
+                'past_hiv_testing'                => $params['pastHivTesting'],
+                'last_hiv_status'                 => $params['lastHivStatus'],
+                'patient_on_art'                  => $params['patientOnArt'],
+                'test_last_12_month'              => $params['testLast12Month'],
+                'location_one'                    => $params['location_one'],
+                'location_two'                    => $params['location_two'],
+                'location_three'                  => $params['location_three'],
+                'exp_violence_last_12_month'      => $params['expViolence'],
+                'notes'                           => $params['comments'],
+                'added_on'                        => date("Y-m-d H:i:s"),
+                'added_by'                        => $logincontainer->userId,
+                'form_initiation_datetime'        => date("Y-m-d H:i:s"),
+                'form_transfer_datetime'          => date("Y-m-d H:i:s"),
+                // 'kit_name'                        =>  $params['testKitName'],
+                'kit_lot_no'                      => $params['testKitLotNo'],
+                'kit_expiry_date'                 => ($params['testKitExpDate'] != '') ? $common->dbDateFormat($params['testKitExpDate']) : null,
+                'vl_request_sent'                 => isset($params['sendVlsm']) ? $params['sendVlsm'] : 'no',
+                'vl_request_sent_date_time'       => (isset($params['sendVlsm']) && $params['sendVlsm'] == 'yes') ? $common->getDateTime() : null,
+                'tester_name'                     => $params['testerName'],
+                'vl_test_date'                    => ($params['vlTestDate'] != '') ? $common->dbDateFormat($params['vlTestDate']) : null,
+                'vl_lab'                          => ($params['isVlLab'] != '') ? $params['isViralLabText'] : null,
+                // 'vl_result'                       => ($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
+                'sample_collection_date'          => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate'] != '') ? $common->dbDateFormat($params['sampleCollectionDate']) : null,
+                'sample_receipt_date'             => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate'] != '') ? $common->dbDateFormat($params['sampleReceiptDate']) : null,
+                'received_specimen_type'          => $params['receivedSpecimenType'],
+                'unique_id'                       => $this->randomizer(10),
+                'testing_facility_type'           => $params['testingModality']
             );
             if ($params['positiveVerificationLineActual'] != '') {
                 $data['invalid_control_line']       = $params['controlLineActual'];
@@ -768,49 +768,49 @@ class RecencyTable extends AbstractTableGateway
             }
 
             $data = array(
-                'patient_id'                        => $params['patientId'],
-                'facility_id'                       => base64_decode($params['facilityId']),
-                'testing_facility_id'               => ($params['testingFacilityId'] != '') ? base64_decode($params['testingFacilityId']) : null,
-                'dob'                               => ($params['dob'] != '') ? $common->dbDateFormat($params['dob']) : null,
-                'hiv_diagnosis_date'                => ($params['hivDiagnosisDate'] != '') ? $common->dbDateFormat($params['hivDiagnosisDate']) : null,
-                'hiv_recency_test_date'             => (isset($params['hivRecencyTestDate']) && $params['hivRecencyTestDate'] != '') ? $common->dbDateFormat($params['hivRecencyTestDate']) : null,
-                'recency_test_performed'            => $params['recencyTestPerformed'],
-                'recency_test_not_performed'        => ($params['recencyTestPerformed'] == 'true') ? $params['recencyTestNotPerformed'] : null,
+                'patient_id'                      => $params['patientId'],
+                'facility_id'                     => base64_decode($params['facilityId']),
+                'testing_facility_id'             => ($params['testingFacilityId'] != '') ? base64_decode($params['testingFacilityId']) : null,
+                'dob'                             => ($params['dob'] != '') ? $common->dbDateFormat($params['dob']) : null,
+                'hiv_diagnosis_date'              => ($params['hivDiagnosisDate'] != '') ? $common->dbDateFormat($params['hivDiagnosisDate']) : null,
+                'hiv_recency_test_date'           => (isset($params['hivRecencyTestDate']) && $params['hivRecencyTestDate'] != '') ? $common->dbDateFormat($params['hivRecencyTestDate']) : null,
+                'recency_test_performed'          => $params['recencyTestPerformed'],
+                'recency_test_not_performed'      => ($params['recencyTestPerformed'] == 'true') ? $params['recencyTestNotPerformed'] : null,
                 'other_recency_test_not_performed'  => (isset($params['recencyTestPerformed']) && $params['recencyTestPerformed'] = 'other') ? $params['otherRecencyTestNotPerformed'] : null,
-                'control_line'                      => (isset($params['controlLine']) && $params['controlLine'] != '') ? $params['controlLine'] : null,
-                'positive_verification_line'        => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine'] != '') ? $params['positiveVerificationLine'] : null,
-                'long_term_verification_line'       => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine'] != '') ? $params['longTermVerificationLine'] : null,
-                'term_outcome'                      => (isset($params['outcomeData']) && $params['outcomeData'] != "") ? $params['outcomeData'] : $params['outcomeData'],
-                'final_outcome'                     => $params['vlfinaloutcomeResult'],
-                'gender'                            => $params['gender'],
-                'age_not_reported'                  => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : 'no',
-                'age'                               => ($params['age'] != '') ? $params['age'] : null,
-                'marital_status'                    => $params['maritalStatus'],
-                'residence'                         => $params['residence'],
-                'education_level'                   => $params['educationLevel'],
-                'risk_population'                   => base64_decode($params['riskPopulation']),
-                'pregnancy_status'                  => $params['pregnancyStatus'],
-                'current_sexual_partner'            => $params['currentSexualPartner'],
-                'past_hiv_testing'                  => $params['pastHivTesting'],
-                'last_hiv_status'                   => $params['lastHivStatus'],
-                'patient_on_art'                    => $params['patientOnArt'],
-                'test_last_12_month'                => $params['testLast12Month'],
-                'location_one'                      => $params['location_one'],
-                'location_two'                      => $params['location_two'],
-                'location_three'                    => $params['location_three'],
-                'exp_violence_last_12_month'        => $params['expViolence'],
-                'notes'                             => $params['comments'],
-                'kit_lot_no'                        => $params['testKitLotNo'],
-                // 'kit_name'                          =>$params['testKitName'],
-                'kit_expiry_date'                   => ($params['testKitExpDate'] != '') ? $common->dbDateFormat($params['testKitExpDate']) : null,
-                'tester_name'                       => $params['testerName'],
-                'form_saved_datetime'               => date('Y-m-d H:i:s'),
-                'vl_test_date'                      => ($params['vlTestDate'] != '') ? $common->dbDateFormat($params['vlTestDate']) : null,
-                // 'vl_result'                         =>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
-                'sample_collection_date'            => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate'] != '') ? $common->dbDateFormat($params['sampleCollectionDate']) : null,
-                'sample_receipt_date'               => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate'] != '') ? $common->dbDateFormat($params['sampleReceiptDate']) : null,
-                'received_specimen_type'            => $params['receivedSpecimenType'],
-                'testing_facility_type'             => $params['testingModality']
+                'control_line'                    => (isset($params['controlLine']) && $params['controlLine'] != '') ? $params['controlLine'] : null,
+                'positive_verification_line'      => (isset($params['positiveVerificationLine']) && $params['positiveVerificationLine'] != '') ? $params['positiveVerificationLine'] : null,
+                'long_term_verification_line'     => (isset($params['longTermVerificationLine']) && $params['longTermVerificationLine'] != '') ? $params['longTermVerificationLine'] : null,
+                'term_outcome'                    => (isset($params['outcomeData']) && $params['outcomeData'] != "") ? $params['outcomeData'] : $params['outcomeData'],
+                'final_outcome'                   => $params['vlfinaloutcomeResult'],
+                'gender'                          => $params['gender'],
+                'age_not_reported'                => (isset($params['ageNotReported']) && $params['ageNotReported'] != '') ? $params['ageNotReported'] : 'no',
+                'age'                             => ($params['age'] != '') ? $params['age'] : null,
+                'marital_status'                  => $params['maritalStatus'],
+                'residence'                       => $params['residence'],
+                'education_level'                 => $params['educationLevel'],
+                'risk_population'                 => base64_decode($params['riskPopulation']),
+                'pregnancy_status'                => $params['pregnancyStatus'],
+                'current_sexual_partner'          => $params['currentSexualPartner'],
+                'past_hiv_testing'                => $params['pastHivTesting'],
+                'last_hiv_status'                 => $params['lastHivStatus'],
+                'patient_on_art'                  => $params['patientOnArt'],
+                'test_last_12_month'              => $params['testLast12Month'],
+                'location_one'                    => $params['location_one'],
+                'location_two'                    => $params['location_two'],
+                'location_three'                  => $params['location_three'],
+                'exp_violence_last_12_month'      => $params['expViolence'],
+                'notes'                           => $params['comments'],
+                'kit_lot_no'                      => $params['testKitLotNo'],
+                // 'kit_name'                        =>$params['testKitName'],
+                'kit_expiry_date'                 => ($params['testKitExpDate'] != '') ? $common->dbDateFormat($params['testKitExpDate']) : null,
+                'tester_name'                     => $params['testerName'],
+                'form_saved_datetime'             => date('Y-m-d H:i:s'),
+                'vl_test_date'                    => ($params['vlTestDate'] != '') ? $common->dbDateFormat($params['vlTestDate']) : null,
+                // 'vl_result'                       =>($params['vlLoadResult']!='')?$params['vlLoadResult']:NULL,
+                'sample_collection_date'          => (isset($params['sampleCollectionDate']) && $params['sampleCollectionDate'] != '') ? $common->dbDateFormat($params['sampleCollectionDate']) : null,
+                'sample_receipt_date'             => (isset($params['sampleReceiptDate']) && $params['sampleReceiptDate'] != '') ? $common->dbDateFormat($params['sampleReceiptDate']) : null,
+                'received_specimen_type'          => $params['receivedSpecimenType'],
+                'testing_facility_type'           => $params['testingModality']
             );
 
             if ($params['positiveVerificationLineActual'] != '') {
@@ -852,8 +852,8 @@ class RecencyTable extends AbstractTableGateway
         if ($updateResult > 0) {
             $recencyId = $params['recencyId'];
             $modifyData = array(
-                'modified_on'   => $common->getDateTime(),
-                'modified_by'   => $logincontainer->userId
+                'modified_on' => $common->getDateTime(),
+                'modified_by' => $logincontainer->userId
             );
             $this->update($modifyData, array('recency_id' => $params['recencyId']));
             $explode = explode(',', $params['oldRecords']);
@@ -4659,11 +4659,11 @@ class RecencyTable extends AbstractTableGateway
         $responseStatus['status'] = 'fail';
         if (isset($params['sampleId']) && $params['sampleId'] != "") {
             $data = array(
-                'lis_vl_result'             => $params['result'],
-                'lis_vl_test_date'          => date('Y-m-d', strtotime($params['sampleTestedDatetime'])),
+                'lis_vl_result'           => $params['result'],
+                'lis_vl_test_date'        => date('Y-m-d', strtotime($params['sampleTestedDatetime'])),
                 'lis_vl_result_entry_date'  => $common->getDateTime()
-                // 'vl_result'             => $params['result'],
-                // 'vl_test_date'          => date('Y-m-d', strtotime($params['sampleTestedDatetime'])),
+                // 'vl_result'           => $params['result'],
+                // 'vl_test_date'        => date('Y-m-d', strtotime($params['sampleTestedDatetime'])),
                 // 'vl_result_entry_date'  => $common->getDateTime() 
             );
             $results =  $this->update($data, array('sample_id' => $params['sampleId']));
@@ -4720,7 +4720,7 @@ class RecencyTable extends AbstractTableGateway
     {
         $common = new CommonService();
         $this->update(array(
-            'vl_request_sent'           => 'yes',
+            'vl_request_sent'         => 'yes',
             'vl_request_sent_date_time' => $common->getDateTime()
         ), array('recency_id' => $rId));
     }
@@ -5175,7 +5175,7 @@ class RecencyTable extends AbstractTableGateway
     {
         $common = new CommonService();
         $this->update(array(
-            'vl_request_sent'           => 'no',
+            'vl_request_sent'         => 'no',
             'vl_request_sent_date_time' => $common->getDateTime()
         ), array('recency_id' => $rId));
     }

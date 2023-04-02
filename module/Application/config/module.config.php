@@ -14,17 +14,17 @@ return array(
                'home' => array(
                     'type' => 'Literal',
                     'options' => array(
-                         'route'    => '/',
+                         'route'  => '/',
                          'defaults' => array(
                               'controller' => 'Application\Controller\IndexController',
-                              'action'     => 'index',
+                              'action'   => 'index',
                          ),
                     ),
                ),
                'analysis-dashboard' => array(
-                    'type'    => 'Literal',
+                    'type'  => 'Literal',
                     'options' => array(
-                         'route'    => '/analysis-dashboard',
+                         'route'  => '/analysis-dashboard',
                          'defaults' => array(
                               'controller' => 'Application\Controller\IndexController',
                               'action' => 'analysis-dashboard',
@@ -32,9 +32,9 @@ return array(
                     ),
                ),
                'quality-control-dashboard' => array(
-                    'type'    => 'Literal',
+                    'type'  => 'Literal',
                     'options' => array(
-                         'route'    => '/quality-control-dashboard',
+                         'route'  => '/quality-control-dashboard',
                          'defaults' => array(
                               'controller' => 'Application\Controller\IndexController',
                               'action' => 'quality-control-dashboard',
@@ -42,9 +42,9 @@ return array(
                     ),
                ),
                'export-recency-data' => array(
-                    'type'    => 'Literal',
+                    'type'  => 'Literal',
                     'options' => array(
-                         'route'    => '/export-recency-data',
+                         'route'  => '/export-recency-data',
                          'defaults' => array(
                               'controller' => 'Application\Controller\IndexController',
                               'action' => 'export-recency-data',
@@ -52,9 +52,9 @@ return array(
                     ),
                ),
                'dashboard' => array(
-                    'type'    => 'Literal',
+                    'type'  => 'Literal',
                     'options' => array(
-                         'route'    => '/set-sample-first-chart',
+                         'route'  => '/set-sample-first-chart',
                          'defaults' => array(
                               'controller' => 'Application\Controller\IndexController',
                               'action' => 'set-sample-first-chart',
@@ -64,7 +64,7 @@ return array(
                'login' => array(
                     'type' => 'segment',
                     'options' => array(
-                         'route'    => '/login[/:action]',
+                         'route'  => '/login[/:action]',
                          'defaults' => array(
                               'controller' => 'Application\Controller\LoginController',
                               'action' => 'index',
@@ -75,10 +75,10 @@ return array(
                'logout' => array(
                     'type' => 'Literal',
                     'options' => array(
-                         'route'    => '/logout',
+                         'route'  => '/logout',
                          'defaults' => array(
                               'controller' => 'Application\Controller\Login',
-                              'action'     => 'logout',
+                              'action'   => 'logout',
                          ),
                     ),
                ),
@@ -260,24 +260,24 @@ return array(
                // module. Simply drop new controllers in, and you can access them
                // using the path /application/:controller/:action
                'application' => array(
-                    'type'    => 'Literal',
+                    'type'  => 'Literal',
                     'options' => array(
-                         'route'    => '/application',
+                         'route'  => '/application',
                          'defaults' => array(
                               '__NAMESPACE__' => 'Application\Controller',
-                              'controller'    => 'Index',
-                              'action'        => 'index',
+                              'controller'  => 'Index',
+                              'action'      => 'index',
                          ),
                     ),
                     'may_terminate' => true,
                     'child_routes' => array(
                          'default' => array(
-                              'type'    => 'Segment',
+                              'type'  => 'Segment',
                               'options' => array(
-                                   'route'    => '/[:controller[/:action]]',
+                                   'route'  => '/[:controller[/:action]]',
                                    'constraints' => array(
                                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                                    ),
                                    'defaults' => array(),
                               ),
@@ -303,7 +303,7 @@ return array(
           'locale' => 'en_US',
           'translation_file_patterns' => array(
                array(
-                    'type'     => 'gettext',
+                    'type'   => 'gettext',
                     'base_dir' => __DIR__ . '/../language',
                     'pattern'  => '%s.mo',
                ),
@@ -311,15 +311,15 @@ return array(
      ),
      'view_manager' => array(
           'display_not_found_reason' => true,
-          'display_exceptions'       => true,
-          'doctype'                  => 'HTML5',
-          'not_found_template'       => 'error/404',
-          'exception_template'       => 'error/index',
+          'display_exceptions'     => true,
+          'doctype'                => 'HTML5',
+          'not_found_template'     => 'error/404',
+          'exception_template'     => 'error/index',
           'template_map' => array(
-               'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
+               'layout/layout'         => __DIR__ . '/../view/layout/layout.phtml',
                'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-               'error/404'               => __DIR__ . '/../view/error/404.phtml',
-               'error/index'             => __DIR__ . '/../view/error/index.phtml',
+               'error/404'             => __DIR__ . '/../view/error/404.phtml',
+               'error/index'           => __DIR__ . '/../view/error/index.phtml',
           ),
           'template_path_stack' => array(
                __DIR__ . '/../view',
@@ -336,9 +336,9 @@ return array(
           'router' => array(
                'routes' => array(
                     'mail-console-route' => array(
-                         'type'    => 'simple',
+                         'type'  => 'simple',
                          'options' => array(
-                              'route'    => 'send-mail',
+                              'route'  => 'send-mail',
                               'defaults' => array(
                                    'controller' => 'Application\Controller\CronController',
                                    'action' => 'send-mail'
@@ -346,9 +346,9 @@ return array(
                          ),
                     ),
                     'update-outcome' => array(
-                         'type'    => 'simple',
+                         'type'  => 'simple',
                          'options' => array(
-                              'route'    => 'update-outcome',
+                              'route'  => 'update-outcome',
                               'defaults' => array(
                                    'controller' => 'Application\Controller\CronController',
                                    'action' => 'update-outcome'
@@ -356,9 +356,9 @@ return array(
                          ),
                     ),
                     'vlsm-sync' => array(
-                         'type'    => 'simple',
+                         'type'  => 'simple',
                          'options' => array(
-                              'route'    => 'vlsm-sync',
+                              'route'  => 'vlsm-sync',
                               'defaults' => array(
                                    'controller' => 'Application\Controller\CronController',
                                    'action' => 'vlsm-sync'
@@ -366,9 +366,9 @@ return array(
                          ),
                     ),
                     'vlsm-send-requests' => array(
-                         'type'    => 'simple',
+                         'type'  => 'simple',
                          'options' => array(
-                              'route'    => 'vlsm-send-requests',
+                              'route'  => 'vlsm-send-requests',
                               'defaults' => array(
                                    'controller' => 'Application\Controller\CronController',
                                    'action' => 'vlsm-send-requests'
