@@ -47,5 +47,4 @@ return array(
     'f598d06aa772fa33d905e87be6398fb1' => $vendorDir . '/symfony/polyfill-intl-idn/bootstrap.php',
     '37a3dc5111fe8f707ab4c132ef1dbc62' => $vendorDir . '/guzzlehttp/guzzle/src/functions_include.php',
     'ace6d88241f812b4accb2d847454aef6' => $vendorDir . '/halaxa/json-machine/src/functions.php',
-    '78d47739fff607f33066e6259f091845' => $vendorDir . '/laminas/laminas-cache/autoload/patternPluginManagerPolyfill.php',
 );

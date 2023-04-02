@@ -48,7 +48,6 @@ class ComposerStaticInit5795cd93178b9cd95c89b42b53076fb4
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'ace6d88241f812b4accb2d847454aef6' => __DIR__ . '/..' . '/halaxa/json-machine/src/functions.php',
-        '78d47739fff607f33066e6259f091845' => __DIR__ . '/..' . '/laminas/laminas-cache/autoload/patternPluginManagerPolyfill.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -76,6 +75,7 @@ class ComposerStaticInit5795cd93178b9cd95c89b42b53076fb4
             'Symfony\\Component\\String\\' => 25,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Console\\' => 26,
+            'StellaMaris\\Clock\\' => 18,
         ),
         'P' => 
         array (
@@ -86,6 +86,7 @@ class ComposerStaticInit5795cd93178b9cd95c89b42b53076fb4
             'Psr\\Http\\Client\\' => 16,
             'Psr\\EventDispatcher\\' => 20,
             'Psr\\Container\\' => 14,
+            'Psr\\Clock\\' => 10,
             'Psr\\Cache\\' => 10,
             'PhpParser\\' => 10,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
@@ -237,6 +238,10 @@ class ComposerStaticInit5795cd93178b9cd95c89b42b53076fb4
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
+        'StellaMaris\\Clock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stella-maris/clock/src',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -266,6 +271,10 @@ class ComposerStaticInit5795cd93178b9cd95c89b42b53076fb4
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Psr\\Clock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/clock/src',
         ),
         'Psr\\Cache\\' => 
         array (
@@ -457,21 +466,7 @@ class ComposerStaticInit5795cd93178b9cd95c89b42b53076fb4
         ),
         'Laminas\\Cache\\Storage\\Adapter\\' => 
         array (
-            0 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-apc/src',
-            1 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-apcu/src',
-            2 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-blackhole/src',
-            3 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-dba/src',
-            4 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-ext-mongodb/src',
-            5 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-filesystem/src',
-            6 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-memcache/src',
-            7 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-memcached/src',
-            8 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-memory/src',
-            9 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-mongodb/src',
-            10 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-redis/src',
-            11 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-session/src',
-            12 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-wincache/src',
-            13 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-xcache/src',
-            14 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-zend-server/src',
+            0 => __DIR__ . '/..' . '/laminas/laminas-cache-storage-adapter-filesystem/src',
         ),
         'Laminas\\Cache\\' => 
         array (

@@ -7,6 +7,7 @@
  */
 return array(
     'modules' => array(
+        'Laminas\Cache',
         'Laminas\Mail',
         'Laminas\Serializer',
         'Laminas\Mvc\Plugin\FilePrg',
@@ -26,9 +27,9 @@ return array(
         'Laminas\Hydrator',
         'Laminas\Di',
         'Laminas\Db',
-        'Laminas\Cache',
         'Laminas\ZendFrameworkBridge',
         'Laminas\Diactoros',
+        'Laminas\Cache\Storage\Adapter\Filesystem',
         'Application',
         'Api',
         'EdpModuleLayouts'
