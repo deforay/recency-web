@@ -46,7 +46,7 @@ CREATE TABLE `global_config` (
  `global_name` varchar(255) DEFAULT NULL,
  `global_value` varchar(255) DEFAULT NULL,
  PRIMARY KEY (`config_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4_general_ci;
 
 --Vivek 26-sept-2018
 
@@ -395,7 +395,7 @@ CREATE TABLE `recency_change_trails` (
  KEY `user_foreign_key` (`added_by`),
  KEY `recency_id` (`recency_id`),
  CONSTRAINT `recency_change_trails_ibfk_1` FOREIGN KEY (`recency_id`) REFERENCES `recency` (`recency_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 -- Thanaseelan 21-Oct-2019 
 ALTER TABLE `recency` ADD `modified_on` DATETIME NULL DEFAULT NULL AFTER `kit_name`;
 ALTER TABLE `recency` ADD `modified_by` INT(11) NULL DEFAULT NULL AFTER `modified_on`;
@@ -441,7 +441,7 @@ CREATE TABLE `event_log` (
  `resource_name` varchar(255) DEFAULT NULL,
  `added_on` datetime DEFAULT NULL,
  PRIMARY KEY (`event_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Thanaseelan 20 Feb 2020 For syn option from vlsm lis_vl_result and lis_vl_test_data
 
@@ -497,14 +497,14 @@ CREATE TABLE `user_login_history` (
  `browser` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
  `operating_system` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
  PRIMARY KEY (`history_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 --ilahir 21-Mar-2023
 CREATE TABLE `resources` (
   `resource_id` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `resources`
   ADD PRIMARY KEY (`resource_id`),
@@ -515,7 +515,7 @@ CREATE TABLE `privileges` (
   `resource_id` varchar(255) NOT NULL DEFAULT '',
   `privilege_name` varchar(255) NOT NULL DEFAULT '',
   `display_name` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `privileges`
   ADD PRIMARY KEY (`resource_id`,`privilege_name`),
@@ -589,4 +589,4 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'update-vl-sample-result', 'Update VL Sample');
 
-ALTER TABLE `recency` CHANGE `vl_request_sent` `vl_request_sent` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'not-required';
+ALTER TABLE `recency` CHANGE `vl_request_sent` `vl_request_sent` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'not-required';

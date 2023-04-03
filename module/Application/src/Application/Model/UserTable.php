@@ -124,7 +124,7 @@ class UserTable extends AbstractTableGateway
 
                 $logincontainer->crossLoginPass = null;
                 if (!empty($configResult['vlsm']['crosslogin']) && $configResult['vlsm']['crosslogin'] === true) {
-                    $logincontainer->crossLoginPass = $common->encrypt($params['loginPassword'], base64_decode($configResult['vlsm']['crosslogin']['salt']));
+                    $logincontainer->crossLoginPass = $common->encrypt($params['loginPassword'], base64_decode($configResult['vlsm']['crosslogin-salt']));
                 }
 
                 if (trim($userRow->role_code) != "remote_order_user") {

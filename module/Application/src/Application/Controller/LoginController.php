@@ -8,7 +8,7 @@ use Laminas\Session\Container;
 
 class LoginController extends AbstractActionController
 {
-    private $userService = null;
+    public \Application\Service\UserService $userService;
 
     public function __construct($userService)
     {
