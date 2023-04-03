@@ -9,9 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SendMail extends Command
 {
 
-    public $commonService = null;
+    public \Application\Service\CommonService  $commonService;
 
-    public function __construct(\Application\Service\CommonService $commonService)
+    public function __construct($commonService)
     {
         $this->commonService = $commonService;
         parent::__construct();
