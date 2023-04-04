@@ -293,6 +293,7 @@ return array(
           ),
           'factories' => [
                Application\Command\VlsmSendRequests::class => Application\Command\VlsmSendRequestsFactory::class,
+               Application\Command\VlsmReceiveResults::class => Application\Command\VlsmReceiveResultsFactory::class,
                Application\Command\SendMail::class => Application\Command\SendMailFactory::class,
           ],
           'aliases' => array(
@@ -329,6 +330,7 @@ return array(
           'commands' => [
                'send-mail' => Application\Command\SendMail::class,
                'vlsm-send-requests' => \Application\Command\VlsmSendRequests::class,
+               'vlsm-receive-results' => \Application\Command\VlsmReceiveResults::class,
           ],
      ],
      // Placeholder for console routes

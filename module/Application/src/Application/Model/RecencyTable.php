@@ -5179,4 +5179,15 @@ class RecencyTable extends AbstractTableGateway
             'vl_request_sent_date_time' => $common->getDateTime()
         ), array('recency_id' => $rId));
     }
+    //refer updatefinalOutComeBasedOnVlsm Function
+    public function updatefinalOutComeBasedOnVlsm($sampleId,$finaloutcome)
+    {
+        $common = new CommonService();
+        $logincontainer = new Container('credo');
+        $this->update(array(
+            'final_outcome'            => $finaloutcome,
+            'final_outcome_updated_by' => $logincontainer->userId,
+            'final_outcome_updated_on' => $common->getDateTime()
+        ), array('sample_id' => $sampleId));
+    }
 }

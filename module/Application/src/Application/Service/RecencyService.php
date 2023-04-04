@@ -1646,8 +1646,6 @@ class RecencyService
     public function vlsmSendRequests()
     {
         try {
-            $sessionLogin = new Container('credo');
-            $data = array();
             $recencyDb = $this->sm->get('RecencyTable');
             $rResult = $recencyDb->getVlRequestSentOnYes();
 
@@ -1657,7 +1655,7 @@ class RecencyService
                 $authToken = 'LTBjNDZmOA==';
                 $configResult = $this->sm->get('Config');
                 $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/vl/save-request.php';
-                //echo $urlVlsm."     ";
+                echo $urlVlsm."     ";
                 foreach ($rResult as $data) {
                     $dataArray = array();
                     $dataArray[] = [
@@ -1670,7 +1668,8 @@ class RecencyService
                         'patientGender'        => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
                         'specimenType'         => (isset($data['received_specimen_type']) && $data['received_specimen_type'] != '') ? $data['received_specimen_type'] : '',
                         'provinceId'           => (isset($data['location_one']) && $data['location_one'] != '') ? $data['location_one'] : '',
-                        'reasonForVLTesting'   => '9999'
+                        'reasonForVLTesting'   => '9999',
+                        'serialNo' => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
                     ]; 
                     $params = array(
                         'appVersion' => 'v1.1',
@@ -1690,8 +1689,49 @@ class RecencyService
                         $recencyDb->updateVlRequestSentNO($data['recency_id']);
                     }
                 }
-                
             }
+        } catch (Exception $e) {
+            error_log('Error :' . $e->getMessage());
+        }
+    }
+    public function VlsmReceiveResults()
+    {
+        try {
+            $recencyDb = $this->sm->get('RecencyTable');
+            $client = new GuzzleHttp\Client();
+            $authToken = 'LTBjNDZmOA==';
+            $configResult = $this->sm->get('Config');
+            $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/vl/fetch-results.php';
+            echo $urlVlsm."     ";
+            $response = $client->request('GET', $urlVlsm, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $authToken,
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+            $jsonResponse = $response->getBody();
+            $response = json_decode($jsonResponse, true);
+
+            if ($response['status'] === 'success') {
+                $responseData = $response['data'];
+                foreach($responseData as $data){
+                   if((isset($data['vlResult']) && $data['vlResult'] > 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")){
+                        $final_outcome = "RITA Recent";
+                        if(isset($data['serialNo']) && $data['serialNo'] != ''){
+                            $recencyDb->updatefinalOutComeBasedOnVlsm($data['serialNo'],$final_outcome);
+                        }
+                        
+                    }
+                    if((isset($data['vlResult']) && $data['vlResult'] <= 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")){
+                        $final_outcome = "Long Term";
+                        if(isset($data['serialNo']) && $data['serialNo'] != ''){
+                            $recencyDb->updatefinalOutComeBasedOnVlsm($data['serialNo'],$final_outcome);
+                        }
+                    }
+
+                }
+            }
+
         } catch (Exception $e) {
             error_log('Error :' . $e->getMessage());
         }
