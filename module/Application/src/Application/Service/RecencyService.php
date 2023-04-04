@@ -1654,32 +1654,43 @@ class RecencyService
             if (!empty($rResult)) {
 
                 $client = new GuzzleHttp\Client();
+                $authToken = 'LTBjNDZmOA==';
                 $configResult = $this->sm->get('Config');
-                $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/recency/requestVlTest.php';
-
+                $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/vl/save-request.php';
+                //echo $urlVlsm."     ";
                 foreach ($rResult as $data) {
-                    if ((isset($data['sample_id']) && $data['sample_id'] != "") && (isset($data['patient_id']) && $data['patient_id'] != "")) {
-                        $resultCart = $client->post($urlVlsm, [
-                            'form_params' => [
-                                'sampleId'            => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
-                                'patientId'           => (isset($data['patient_id']) && $data['patient_id'] != '') ? $data['patient_id'] : '',
-                                'facility_id'         => (isset($data['facility_id']) && $data['facility_id'] != '') ? $data['facility_id'] : '',
-                                'sCDate'              => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
-                                'isVlLab'             => (isset($data['isVlLab']) && $data['isVlLab'] != '') ? $data['isVlLab'] : '',
-                                'userId'              => (isset($sessionLogin->userId) && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
-                                'dob'                 => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
-                                'age'                 => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
-                                'gender'              => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
-                                'service'             => ''
-                            ]
-                        ]);
-                        $responseCart = $resultCart->getBody()->getContents();
-
-                        if ($responseCart == 'success') {
-                            $recencyDb->updateVlRequestSentNO($data['recency_id']);
-                        }
+                    $dataArray = array();
+                    $dataArray[] = [
+                        'uniqueId'             => (isset($data['unique_id']) && $data['unique_id'] != '') ? $data['unique_id'] : '',
+                        'appSampleCode'        => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
+                        'sampleCollectionDate' => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
+                        'facilityId'           => (isset($data['facility_id']) && $data['facility_id'] != '') ? $data['facility_id'] : '',
+                        'patientDob'           => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
+                        'ageInYears'           => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
+                        'patientGender'        => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
+                        'specimenType'         => (isset($data['received_specimen_type']) && $data['received_specimen_type'] != '') ? $data['received_specimen_type'] : '',
+                        'provinceId'           => (isset($data['location_one']) && $data['location_one'] != '') ? $data['location_one'] : '',
+                        'reasonForVLTesting'   => '9999'
+                    ]; 
+                    $params = array(
+                        'appVersion' => 'v1.1',
+                        'data' => $dataArray,
+                    );
+                    $response = $client->request('POST', $urlVlsm, [
+                        'headers' => [
+                            'Authorization' => 'Bearer ' . $authToken,
+                            'Content-Type' => 'application/json',
+                        ],
+                        'json' => $params,
+                    ]);
+                    //echo $response->getBody();
+                    $statusValue = $response->getStatusCode();
+                    if ($statusValue == 200 && (isset($data['recency_id']) && $data['recency_id'] != "") ) {
+                        //echo "SUCCESS";
+                        $recencyDb->updateVlRequestSentNO($data['recency_id']);
                     }
                 }
+                
             }
         } catch (Exception $e) {
             error_log('Error :' . $e->getMessage());

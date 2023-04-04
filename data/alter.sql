@@ -590,3 +590,8 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlData', 'update-vl-sample-result', 'Update VL Sample');
 
 ALTER TABLE `recency` CHANGE `vl_request_sent` `vl_request_sent` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'not-required';
+
+-- Brindha 04-April-2023
+ALTER TABLE `recency` CHANGE `received_specimen_type` `received_specimen_type` INT NULL DEFAULT NULL;
+UPDATE recency set received_specimen_type = 1 WHERE received_specimen_type like 'plasma';
+UPDATE recency set received_specimen_type = 2 WHERE received_specimen_type like 'whole_blood';
