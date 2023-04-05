@@ -1684,9 +1684,18 @@ class RecencyService
                     ]);
                     //echo $response->getBody();
                     $statusValue = $response->getStatusCode();
+                    $vlSampleCode = "";
                     if ($statusValue == 200 && (isset($data['recency_id']) && $data['recency_id'] != "") ) {
+                        $jsonResponse = $response->getBody();
+                        $response = json_decode($jsonResponse, true);
+                        if($response != '' && isset($response['data']) && $response['data'] != ''){
+                            $responseData = $response['data'][0];
+                            if($responseData != '' && isset($responseData['sampleCode'])){
+                                $vlSampleCode = $responseData['sampleCode'];
+                            }
+                        }
                         //echo "SUCCESS";
-                        $recencyDb->updateVlRequestSentNO($data['recency_id']);
+                        $recencyDb->updateVlRequestSentNO($data['recency_id'],$vlSampleCode);
                     }
                 }
             }

@@ -5171,12 +5171,13 @@ class RecencyTable extends AbstractTableGateway
     }
 
     //refer updateVlRequestSentNO Function
-    public function updateVlRequestSentNO($rId)
+    public function updateVlRequestSentNO($rId,$vlSampleCode)
     {
         $common = new CommonService();
         $this->update(array(
-            'vl_request_sent'         => 'no',
-            'vl_request_sent_date_time' => $common->getDateTime()
+            'vl_request_sent'           => 'no',
+            'vl_request_sent_date_time' => $common->getDateTime(),
+            'lis_vl_sample_code'        => $vlSampleCode
         ), array('recency_id' => $rId));
     }
     //refer updatefinalOutComeBySampleId Function

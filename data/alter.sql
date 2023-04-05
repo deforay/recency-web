@@ -593,5 +593,9 @@ ALTER TABLE `recency` CHANGE `vl_request_sent` `vl_request_sent` VARCHAR(255) CH
 
 -- Brindha 04-April-2023
 ALTER TABLE `recency` CHANGE `received_specimen_type` `received_specimen_type` INT NULL DEFAULT NULL;
-UPDATE recency set received_specimen_type = 1 WHERE received_specimen_type like 'plasma';
-UPDATE recency set received_specimen_type = 2 WHERE received_specimen_type like 'whole_blood';
+UPDATE `recency` set `received_specimen_type` = '1' WHERE `received_specimen_type` like 'plasma';
+UPDATE `recency` set `received_specimen_type` = '2' WHERE `received_specimen_type` like 'whole_blood';
+
+-- Brindha 05-April-2023
+ALTER TABLE `recency` ADD `lis_vl_sample_code` TEXT NULL DEFAULT NULL AFTER `vl_lab`;
+ALTER TABLE `audit_recency` ADD `lis_vl_sample_code` TEXT NULL DEFAULT NULL AFTER `vl_lab`;
