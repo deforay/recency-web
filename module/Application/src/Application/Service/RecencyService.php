@@ -1669,7 +1669,7 @@ class RecencyService
                         'specimenType'         => (isset($data['received_specimen_type']) && $data['received_specimen_type'] != '') ? $data['received_specimen_type'] : '',
                         'provinceId'           => (isset($data['location_one']) && $data['location_one'] != '') ? $data['location_one'] : '',
                         'reasonForVLTesting'   => '9999',
-                        'serialNo' => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
+                        'serialNo'             => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
                     ]; 
                     $params = array(
                         'appVersion' => 'v1.1',
@@ -1715,17 +1715,19 @@ class RecencyService
             if ($response['status'] === 'success') {
                 $responseData = $response['data'];
                 foreach($responseData as $data){
-                   if((isset($data['vlResult']) && $data['vlResult'] > 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")){
+                   if((isset($data['vlResult']) && $data['vlResult'] > 1000) || 
+                                (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")){
                         $final_outcome = "RITA Recent";
                         if(isset($data['serialNo']) && $data['serialNo'] != ''){
-                            $recencyDb->updatefinalOutComeBasedOnVlsm($data['serialNo'],$final_outcome);
+                            $recencyDb->updatefinalOutComeBySampleId($data['serialNo'],$final_outcome);
                         }
                         
                     }
-                    if((isset($data['vlResult']) && $data['vlResult'] <= 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")){
+                    if((isset($data['vlResult']) && $data['vlResult'] <= 1000) || 
+                                    (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")){
                         $final_outcome = "Long Term";
                         if(isset($data['serialNo']) && $data['serialNo'] != ''){
-                            $recencyDb->updatefinalOutComeBasedOnVlsm($data['serialNo'],$final_outcome);
+                            $recencyDb->updatefinalOutComeBySampleId($data['serialNo'],$final_outcome);
                         }
                     }
 

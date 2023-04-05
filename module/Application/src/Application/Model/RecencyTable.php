@@ -5179,8 +5179,8 @@ class RecencyTable extends AbstractTableGateway
             'vl_request_sent_date_time' => $common->getDateTime()
         ), array('recency_id' => $rId));
     }
-    //refer updatefinalOutComeBasedOnVlsm Function
-    public function updatefinalOutComeBasedOnVlsm($sampleId,$finaloutcome)
+    //refer updatefinalOutComeBySampleId Function
+    public function updatefinalOutComeBySampleId($sampleId,$finaloutcome)
     {
         $common = new CommonService();
         $logincontainer = new Container('credo');

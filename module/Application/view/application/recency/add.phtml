@@ -995,8 +995,8 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 $('.is-facility').append($newOption).trigger('change');
             }
 
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open("GET", '<?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/fetchFacilities.php', false); // false for synchronous request
+            /*var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", '< ?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/fetchFacilities.php', false); // false for synchronous request
             xmlHttp.send(null);
             if (typeof xmlHttp.responseText != 'undefined' && xmlHttp.responseText != "") {
                 jsonData = JSON.parse(xmlHttp.responseText);
@@ -1016,7 +1016,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
             } else {
                 console.log('Facility API from VLSM is not working! Please check domain url of vlsm');
                 return;
-            }
+            }*/
         <?php } ?>
         //}
     }
