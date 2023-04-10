@@ -77,7 +77,7 @@ return array(
                     'options' => array(
                          'route'  => '/logout',
                          'defaults' => array(
-                              'controller' => 'Application\Controller\Login',
+                              'controller' => 'Application\Controller\LoginController',
                               'action'   => 'logout',
                          ),
                     ),

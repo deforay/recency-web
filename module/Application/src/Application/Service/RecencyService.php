@@ -1655,7 +1655,7 @@ class RecencyService
                 $authToken = 'LTBjNDZmOA==';
                 $configResult = $this->sm->get('Config');
                 $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/vl/save-request.php';
-                echo $urlVlsm."     ";
+                //echo $urlVlsm."     ";
                 foreach ($rResult as $data) {
                     $dataArray = array();
                     $dataArray[] = [
@@ -1711,7 +1711,7 @@ class RecencyService
             $authToken = 'LTBjNDZmOA==';
             $configResult = $this->sm->get('Config');
             $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/vl/fetch-results.php';
-            echo $urlVlsm."     ";
+            //echo $urlVlsm."     ";
             $response = $client->request('GET', $urlVlsm, [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $authToken,

@@ -359,10 +359,12 @@ if(isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\MonitoringC
                                         <a class="dropdown-item" href="/user/edit-profile/<?php echo base64_encode($sessionLogin->userId); ?>">
                                              <i class="far fa-fw fa-user mr-1"></i> Edit Profile
                                         </a>
+                                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\LoginController', 'logout')) { ?>
                                         <div role="separator" class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="/logout">
                                              <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> Sign Out
                                         </a>
+                                        <?php }?>
 
                                    </div>
                               </div>

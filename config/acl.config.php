@@ -107,6 +107,9 @@ return array(
             'edit' => 'allow',
             'edit-sample' => 'allow',
         ),
+        'Application\\Controller\\LoginController' => array(
+            'logout' => 'allow',
+        ),
     ),
     'user' => array(
         'Application\\Controller\\RecencyController' => array(
