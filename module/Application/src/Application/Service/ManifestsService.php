@@ -31,7 +31,8 @@ class ManifestsService
     public function getManifests($params)
     {
         $manifestDb = $this->sm->get('ManifestsTable');
-        return $manifestDb->fetchManifests($params);
+        $acl = $this->sm->get('AppAcl');
+        return $manifestDb->fetchManifests($params,$acl);
     }
 
     public function addManifest($params)

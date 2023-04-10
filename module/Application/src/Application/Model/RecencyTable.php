@@ -158,7 +158,8 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('tf' => 'testing_facility_type'), 'tf.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left')
             ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
             ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
-            ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'), 'left');
+            ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'), 'left')
+            ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'), 'left');
         //->order("r.recency_id DESC");
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -308,7 +309,7 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['patient_id'];
             $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
             $row[] = $common->humanDateFormat($aRow['sample_receipt_date']);
-            $row[] = str_replace("_", " ", ucwords($aRow['received_specimen_type']));
+            $row[] = $aRow['sample_name'];
 
             $row[] = $aRow['testing_facility_name'];
             $row[] = $aRow['testing_facility_type_name'];
@@ -1529,6 +1530,7 @@ class RecencyTable extends AbstractTableGateway
         $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
+            ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'), 'left')
             ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
 
         if (isset($sWhere) && $sWhere != "") {
@@ -1609,7 +1611,7 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['age'];
             $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
             $row[] = $common->humanDateFormat($aRow['sample_receipt_date']);
-            $row[] = ucwords(str_replace('_', ' ', $aRow['received_specimen_type']));
+            $row[] = $aRow['sample_name'];
             $row[] = ucwords($aRow['testing_facility_name']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
             if ($update) {

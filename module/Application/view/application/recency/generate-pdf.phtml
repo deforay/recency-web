@@ -161,10 +161,14 @@ $html .='<tr>';
 $html .='<td colspan="3" style="line-height:10px;"></td>';
 $html .='</tr>';
 $html .='<tr>';
-$sampleTypes = array('whole_blood' => 'Whole Blood', 'plasma' => 'Plasma');
+
 $receivedSpecimenType = '';
 if(isset($result['received_specimen_type'])){
-    $receivedSpecimenType = $sampleTypes[$result['received_specimen_type']];
+    foreach($sampleTypes as $sampleType){
+        if($sampleType['sample_id'] == $result['received_specimen_type']){
+            $receivedSpecimenType = $sampleType['sample_name'];
+        }
+    }
 }
 $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE COLLECTION DATE</td>';
 $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE RECEIPT DATE</td>';

@@ -237,7 +237,7 @@ class RecencyService
                     $row[] = $aRow['testing_facility_type_name'];
                     $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
                     $row[] = $common->humanDateFormat($aRow['sample_receipt_date']);
-                    $row[] = ucwords(str_replace("_", " ", $aRow['received_specimen_type']));
+                    $row[] = $aRow['sample_name'];
                     $row[] = $common->humanDateFormat($aRow['hiv_diagnosis_date']);
                     $row[] = (isset($aRow['recency_test_performed']) && !empty($aRow['recency_test_performed']) && ($aRow['recency_test_performed'] == 1)) ? 'Not Performed' : '';
                     $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
@@ -405,7 +405,7 @@ class RecencyService
                     $row[] = $aRow['age'];
                     $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
                     $row[] = $common->humanDateFormat($aRow['sample_receipt_date']);
-                    $row[] = ucwords(str_replace('_', ' ', $aRow['received_specimen_type']));
+                    $row[] = $aRow['sample_name'];
                     $row[] = ucwords($aRow['testing_facility_name']);
                     $row[] = $common->humanDateFormat($aRow['vl_test_date']);
                     $output[] = $row;

@@ -16,13 +16,15 @@ class RecencyController extends AbstractActionController
    private $facilitiesService = null;
    private $globalConfigService = null;
    private $settingsService = null;
+   private $sampleTypesService = null;
 
-   public function __construct($recencyService, $facilitiesService, $globalConfigService, $settingsService)
+   public function __construct($recencyService, $facilitiesService, $globalConfigService, $settingsService,$sampleTypesService)
    {
       $this->recencyService = $recencyService;
       $this->facilitiesService = $facilitiesService;
       $this->globalConfigService = $globalConfigService;
       $this->settingsService = $settingsService;
+      $this->sampleTypesService = $sampleTypesService;
    }
    public function indexAction()
    {
@@ -71,13 +73,15 @@ class RecencyController extends AbstractActionController
          $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
          $kitInfo = $this->settingsService->getKitLotDetails();
          $sampleInfo = $this->settingsService->getSamplesDetails();
+         $sampleTypes = $this->sampleTypesService->getSampleTypesDetails();
          return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
             'facilityResult' => $facilityResult,
             'testFacilityTypeResult' => $testFacilityTypeResult,
             'kitInfo' => $kitInfo,
             'sampleInfo' => $sampleInfo,
-            'sampleId' => $sampleId
+            'sampleId' => $sampleId,
+            'sampleTypes' => $sampleTypes
          ));
       }
    }
@@ -97,12 +101,14 @@ class RecencyController extends AbstractActionController
          $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
          $testFacilityTypeResult = $this->facilitiesService->getTestingFacilitiesTypeDetails();
          $sampleInfo = $this->settingsService->getSamplesDetails();
+         $sampleTypes = $this->sampleTypesService->getSampleTypesDetails();
          return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
             'facilityResult' => $facilityResult,
             'testFacilityTypeResult' => $testFacilityTypeResult,
             'sampleInfo' => $sampleInfo,
-            'result' => $result
+            'result' => $result,
+            'sampleTypes' => $sampleTypes
          ));
       }
    }
@@ -182,8 +188,9 @@ class RecencyController extends AbstractActionController
          $result = $this->recencyService->getRecencyDetailsForPDF($params['recencyId']);
 
          $globalConfigResult = $this->globalConfigService->fetchGlobalConfig();
+         $sampleTypes = $this->sampleTypesService->getSampleTypesDetails();
          $viewModel = new ViewModel();
-         $viewModel->setVariables(array('result' => $result, 'globalConfigResult' => $globalConfigResult));
+         $viewModel->setVariables(array('result' => $result, 'globalConfigResult' => $globalConfigResult, 'sampleTypes' => $sampleTypes));
          $viewModel->setTerminal(true);
          return $viewModel;
       }

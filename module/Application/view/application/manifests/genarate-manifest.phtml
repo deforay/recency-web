@@ -156,6 +156,14 @@ if ($result) {
             $patientDOB = $common->humanDateFormat($sample['dob']);
         }
         $params = $pdf->serializeTCPDFtagParameters(array($sample['manifest_code'], 'C39', '', '', 0, 9, 0.25, array('border' => false, 'align' => 'L', 'padding' => 1, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 9, 'stretchtext' => 2), 'N'));
+        $receivedSpecimenType = '';
+        if(isset($sample['received_specimen_type'])){
+            foreach($sampleTypes as $sampleType){
+                if($sampleType['sample_id'] == $sample['received_specimen_type']){
+                    $receivedSpecimenType = $sampleType['sample_name'];
+                }
+            }
+        }
         $tbl .= '<table nobr="true" style="width:100%;" border="1" cellpadding="2">';
         $tbl .= '<tr nobr="true">';
         $tbl .= '<td style="font-size:11px;width:5%;" align="center"><br><br>' . $sampleCounter . '.</td>';
@@ -165,7 +173,7 @@ if ($result) {
         $tbl .= '<td style="font-size:11px;width:5%;" align="center"><br><br>' . ucwords($sample['age']) . '</td>';
         // $tbl .= '<td style="font-size:11px;width:6%;" align="center"><br><br>' . $patientDOB . '</td>';
         $tbl .= '<td style="font-size:11px;width:6%;" align="center"><br><br>' . ucwords($sample['gender']) . '</td>';
-        $tbl .= '<td style="font-size:11px;width:8%;" align="center"><br><br>' . ucwords(str_replace('_', ' ', $sample['received_specimen_type'])) . '</td>';
+        $tbl .= '<td style="font-size:11px;width:8%;" align="center"><br><br>' . $receivedSpecimenType . '</td>';
         $tbl .= '<td style="font-size:11px;width:10%;" align="center"><br><br>' . $collectionDate . '</td>';
         $tbl .= '<td style="font-size:11px;width:23%;" align="center"><br><br><tcpdf method="write1DBarcode" params="' . $params . '" /></td>';
         $tbl .= '</tr>';

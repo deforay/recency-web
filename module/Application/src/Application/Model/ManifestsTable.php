@@ -25,7 +25,7 @@ class ManifestsTable extends AbstractTableGateway
         return $this->select(array('manifest_id' => $manifestId))->current();
     }
 
-    public function fetchManifests($parameters)
+    public function fetchManifests($parameters,$acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -104,6 +104,7 @@ class ManifestsTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $roleId = $sessionLogin->roleId;
+        $roleCode = $sessionLogin->roleCode;
 
         $sQuery = $sql->select()->from(array('m' => 'manifests'))
             ->join(array('u' => 'users'), 'u.user_id = m.added_by', array('user_name'))
@@ -145,15 +146,26 @@ class ManifestsTable extends AbstractTableGateway
 
         foreach ($rResult as $aRow) {
 
+            $update = false;
+            $actionBtn = '';
+            if ($acl->isAllowed($roleCode, 'Application\Controller\ManifestsController', 'edit')) {
+                $actionBtn .= '<a href="/manifests/edit/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-block btn-sm btn-danger" style="" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+                $update = true;
+            }
+            if ($acl->isAllowed($roleCode, 'Application\Controller\ManifestsController', 'genarate-manifest')) {
+                $actionBtn .= '<a href="/manifests/genarate-manifest/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-block btn-info btn-sm" style="" title="Genarate Manifest" target="_blank"><i class="fa fa-barcode"></i> Print Manifest</a>';
+                $update = true;
+            }
+            $actionBtn .= '</div>';
+
             $row = array();
             $row[] = ucwords($aRow['manifest_code']);
             $row[] = $aRow['totalSamples'];
             $row[] = ucwords($aRow['added_on']);
             $row[] = ucwords($aRow['user_name']);
-            $row[] = '
-                <a href="/manifests/edit/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-block btn-sm btn-danger" style="" title="Edit"><i class="far fa-edit"></i>Edit</a>
-                <a href="/manifests/genarate-manifest/' . base64_encode($aRow['manifest_id']) . '" class="btn btn-block btn-info btn-sm" style="" title="Genarate Manifest" target="_blank"><i class="fa fa-barcode"></i> Print Manifest</a>
-                ';
+            if ($update) {
+                $row[] = $actionBtn;
+            }
             $output['aaData'][] = $row;
         }
 

@@ -24,6 +24,8 @@ return array(
             'index' => 'allow',
             'age-wise-infection-report' => 'allow',
             'email-result' => 'allow',
+            'email-result-pdf' => 'allow',
+            'download-result-pdf' => 'allow',
             'export-long-term-infected-data' => 'allow',
             'export-modality' => 'allow',
             'export-r-infected-data' => 'allow',
@@ -80,6 +82,9 @@ return array(
         ),
         'Application\\Controller\\ManifestsController' => array(
             'index' => 'allow',
+            'add' => 'allow',
+            'edit' => 'allow',
+            'genarate-manifest' => 'allow',
         ),
         'Application\\Controller\\MonitoringController' => array(
             'all-user-login-history' => 'allow',
@@ -171,6 +176,8 @@ return array(
         ),
         'Application\\Controller\\ManifestsController' => array(
             'index' => 'allow',
+            'edit' => 'allow',
+            'genarate-manifest' => 'allow',
         ),
         'Application\\Controller\\MonitoringController' => array(
             'all-user-login-history' => 'allow',

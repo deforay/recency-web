@@ -212,8 +212,9 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
                                                 <select class="form-control <?php echo $receivedSpecimenTypeMandatory; ?> <?php echo in_array("Received Specimen Type", $resultArr2) ? "showFields" : "hideFields"; ?>" id="receivedSpecimenType" name="receivedSpecimenType" title="Enter the received specimen type">
                                                     <option value="">--Select--</option>
-                                                    <option value="whole_blood">Whole Blood</option>
-                                                    <option value="plasma">Plasma</option>
+                                                    <?php foreach ($sampleTypes as $sampleType) { ?>
+                                                        <option value="<?php echo $sampleType['sample_id']; ?>"><?php echo $sampleType['sample_name']; ?></option>
+                                                    <?php } ?>
                                                 </select>
                                             </div>
 

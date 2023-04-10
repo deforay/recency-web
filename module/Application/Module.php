@@ -14,6 +14,7 @@ use Application\Model\UserLoginHistoryTable;
 use Application\Model\FacilitiesTable;
 use Application\Model\RoleTable;
 use Application\Model\RecencyTable;
+use Application\Model\SampleTypesTable;
 use Application\Model\RiskPopulationsTable;
 use Application\Model\GlobalConfigTable;
 use Application\Model\UserFacilityMapTable;
@@ -39,6 +40,7 @@ use Application\Service\CommonService;
 use Application\Service\UserService;
 use Application\Service\FacilitiesService;
 use Application\Service\RecencyService;
+use Application\Service\SampleTypesService;
 use Application\Service\RiskPopulationsService;
 use Application\Service\GlobalConfigService;
 use Application\Service\QualityCheckService;
@@ -331,6 +333,14 @@ class Module implements ConfigProviderInterface
                         return new Acl($resourcesTable->fetchAllResourceMap(), $rolesTable->fetchRoleAllDetails());
                     }
                 },
+                'SampleTypesTable'  => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
+                        return new SampleTypesTable($dbAdapter);
+                    }
+                },
                 //service
 
 
@@ -424,6 +434,13 @@ class Module implements ConfigProviderInterface
                     {
                         return new RoleService($diContainer);
                     }
+                },
+                'SampleTypesService' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        return new SampleTypesService($diContainer);
+                    }
                 }
 
             )
@@ -498,7 +515,8 @@ class Module implements ConfigProviderInterface
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $settingsService = $diContainer->get('SettingsService');
-                        return new \Application\Controller\RecencyController($recencyService, $facilitiesService, $globalConfigService, $settingsService);
+                        $sampleTypesService = $diContainer->get('SampleTypesService');
+                        return new \Application\Controller\RecencyController($recencyService, $facilitiesService, $globalConfigService, $settingsService, $sampleTypesService);
                     }
                 },
                 'Application\Controller\UserController' => new class
@@ -603,7 +621,8 @@ class Module implements ConfigProviderInterface
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $commonService = $diContainer->get('CommonService');
-                        return new \Application\Controller\ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService);
+                        $sampleTypesService = $diContainer->get('SampleTypesService');
+                        return new \Application\Controller\ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService,$sampleTypesService);
                     }
                 },
                 'Application\Controller\IndexController' => new class
@@ -624,7 +643,8 @@ class Module implements ConfigProviderInterface
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $qualityCheckService = $diContainer->get('QualityCheckService');
-                        return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
+                        $sampleTypesService = $diContainer->get('SampleTypesService');
+                        return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService, $sampleTypesService);
                     }
                 },
                 'Application\Controller\MonitoringController' => new class

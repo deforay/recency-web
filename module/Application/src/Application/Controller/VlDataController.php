@@ -13,13 +13,15 @@ class VlDataController extends AbstractActionController
     private $facilitiesService = null;
     private $globalConfigService = null;
     private $qualityCheckService = null;
+    private $sampleTypesService = null;
 
-    public function __construct($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService)
+    public function __construct($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService,$sampleTypesService)
     {
         $this->recencyService = $recencyService;
         $this->facilitiesService = $facilitiesService;
         $this->globalConfigService = $globalConfigService;
         $this->qualityCheckService = $qualityCheckService;
+        $this->sampleTypesService = $sampleTypesService;
     }
     
     public function indexAction()
@@ -184,11 +186,12 @@ class VlDataController extends AbstractActionController
                 $this->recencyService->UpdateMultiplePdfUpdatedDate($params);
                 
                 $globalConfigResult = $this->globalConfigService->fetchGlobalConfig();
-                //\Zend\Debug\Debug::dump(count($result));die;
+                $sampleTypes = $this->sampleTypesService->getSampleTypesDetails();
                 return new ViewModel(array(
                     'result' => $result,
                     'globalConfigResult' => $globalConfigResult,
-                    'formFields' => json_encode($params)
+                    'formFields' => json_encode($params),
+                    'sampleTypes' => $sampleTypes
                 ));
             }
         }

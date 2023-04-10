@@ -7,7 +7,8 @@ $sessionLogin = new Container('credo');
 $common = new CommonService();
 $configResult = $this->CustomConfig();
 $domain = $configResult["domain"];
-
+$roleCode = $sessionLogin->roleCode;
+$acl=$this->layout()->acl;
 $logoImage = UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $globalConfigResult["logo_image"];
 class MYPDF extends TCPDF
 {
@@ -189,11 +190,14 @@ for ($s = 0; $s < count($result); $s++) {
      $html .= '<td colspan="3" style="line-height:10px;"></td>';
      $html .= '</tr>';
      $html .= '<tr>';
-     $sampleTypes = array('whole_blood' => 'Whole Blood', 'plasma' => 'Plasma');
      $receivedSpecimenType = '';
-     if (isset($result[$s]['received_specimen_type'])) {
-          $receivedSpecimenType = $sampleTypes[$result[$s]['received_specimen_type']];
-     }
+     if(isset($result[$s]['received_specimen_type'])){
+          foreach($sampleTypes as $sampleType){
+              if($sampleType['sample_id'] == $result[$s]['received_specimen_type']){
+                  $receivedSpecimenType = $sampleType['sample_name'];
+              }
+          }
+      }
      $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE COLLECTION DATE</td>';
      $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE RECEIPT DATE</td>';
      $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SPECIMEN TYPE</td>';
@@ -363,9 +367,11 @@ $pdf->Output($filePath, "F");
                                    <a href="<?php echo $this->url('vl-data', array('action' => 'email-result')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
                                    <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Send</button>
                               </div>
+                              <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'download-result-pdf')) { ?>
                               <div class="col-lg-7 offset-lg-4">
                                    <p style="margin-top:10px;"><a class="send-mail" href="/vl-data/download-result-pdf/<?php echo $filename; ?>" style="text-decoration:none;">Click here to download the PDF</a></p>
                               </div>
+                              <?php } ?>
                          </div>
                     </form>
                </div>

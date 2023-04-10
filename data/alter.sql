@@ -599,3 +599,20 @@ UPDATE `recency` set `received_specimen_type` = '2' WHERE `received_specimen_typ
 -- Brindha 05-April-2023
 ALTER TABLE `recency` ADD `lis_vl_sample_code` TEXT NULL DEFAULT NULL AFTER `vl_lab`;
 ALTER TABLE `audit_recency` ADD `lis_vl_sample_code` TEXT NULL DEFAULT NULL AFTER `vl_lab`;
+
+-- Brindha 06-April-2023
+CREATE TABLE `r_sample_types` (
+  `sample_id` int NOT NULL AUTO_INCREMENT,
+  `sample_name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `status` varchar(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `updated_datetime` datetime DEFAULT NULL,
+  `data_sync` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`sample_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+-- Brindha 10-April-2023
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ManifestsController', 'edit', 'Edit'), ('Application\\Controller\\ManifestsController', 'genarate-manifest', 'Generate Manifest');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ManifestsController', 'add', 'Add');
+
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlDataController', 'email-result-pdf', 'Email Result Pdf');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlDataController', 'download-result-pdf', 'Download Email Result Pdf');
