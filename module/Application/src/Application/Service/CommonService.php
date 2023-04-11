@@ -582,4 +582,10 @@ class CommonService
 
           return password_hash($password, PASSWORD_BCRYPT, $options);
      }
+
+     public function getBarcodeImageContent($code, $type = 'C39', $width = 2, $height = 30, $color = array(0, 0, 0))
+    {
+        $barcodeobj = new \TCPDFBarcode($code, $type);
+        return 'data:image/png;base64,' . base64_encode($barcodeobj->getBarcodePngData($width, $height, $color));
+    }
 }
