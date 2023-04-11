@@ -5193,4 +5193,26 @@ class RecencyTable extends AbstractTableGateway
             'final_outcome_updated_on' => $common->getDateTime()
         ), array('sample_id' => $sampleId));
     }
+
+    public function fetchPendingVlSampleData()
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('lis_vl_sample_code'))
+                ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+                ->where(array('r.term_outcome' => 'Assay Recent'))
+                ->where(array('r.lis_vl_sample_code IS NOT NULL AND r.lis_vl_sample_code NOT like ""'))
+                ->where(array('r.vl_result is null OR r.vl_result=""'));
+        $sQueryStr = $sql->buildSqlString($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $sampleCodes = array();
+        if(count($rResult) > 0) {
+            foreach($rResult as $row) {
+                if(isset($row['lis_vl_sample_code']) && $row['lis_vl_sample_code']!= ''){
+                    $sampleCodes[] = $row['lis_vl_sample_code'];
+                }
+             }
+        }
+        return $sampleCodes;
+    }
 }

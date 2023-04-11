@@ -1713,34 +1713,35 @@ class RecencyService
             $configResult = $this->sm->get('Config');
             $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/vl/fetch-results.php';
             //echo $urlVlsm."     ";
-            $response = $client->request('GET', $urlVlsm, [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $authToken,
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
-            $jsonResponse = $response->getBody();
-            $response = json_decode($jsonResponse, true);
-
-            if ($response['status'] === 'success') {
-                $responseData = $response['data'];
-                foreach($responseData as $data){
-                   if((isset($data['vlResult']) && $data['vlResult'] > 1000) || 
-                                (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")){
-                        $final_outcome = "RITA Recent";
-                        if(isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined'){
+            $sampleCodes = $recencyDb->fetchPendingVlSampleData();
+            if(!empty($sampleCodes)){
+                $params = array(
+                    'sampleCode' => $sampleCodes,
+                );
+                $response = $client->request('GET', $urlVlsm, [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $authToken,
+                        'Content-Type' => 'application/json',
+                    ],
+                    'json' => $params,
+                ]);
+                $jsonResponse = $response->getBody();
+                $response = json_decode($jsonResponse, true);
+    
+                if ($response['status'] === 'success') {
+                    $responseData = $response['data'];
+                    foreach($responseData as $data){
+                        $final_outcome = '';
+                        if((isset($data['vlResult']) && $data['vlResult'] > 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")){
+                            $final_outcome = "RITA Recent";
+                        }
+                        if((isset($data['vlResult']) && $data['vlResult'] <= 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")){
+                            $final_outcome = "Long Term";
+                        }
+                        if(isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined' && $final_outcome != ''){
                             $recencyDb->updatefinalOutComeBySampleId($data['serialNo'],$final_outcome);
                         }
-                        
                     }
-                    if((isset($data['vlResult']) && $data['vlResult'] <= 1000) || 
-                                    (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")){
-                        $final_outcome = "Long Term";
-                        if(isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined'){
-                            $recencyDb->updatefinalOutComeBySampleId($data['serialNo'],$final_outcome);
-                        }
-                    }
-
                 }
             }
 
