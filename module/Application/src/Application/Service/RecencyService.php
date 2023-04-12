@@ -1739,7 +1739,7 @@ class RecencyService
                             $final_outcome = "Long Term";
                         }
                         if(isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined' && $final_outcome != ''){
-                            $recencyDb->updatefinalOutComeBySampleId($data['serialNo'],$final_outcome);
+                            $recencyDb->updatefinalOutComeBySampleId($data,$final_outcome);
                         }
                     }
                 }

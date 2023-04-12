@@ -5170,15 +5170,17 @@ class RecencyTable extends AbstractTableGateway
         ), array('recency_id' => $rId));
     }
     //refer updatefinalOutComeBySampleId Function
-    public function updatefinalOutComeBySampleId($sampleId,$finaloutcome)
+    public function updatefinalOutComeBySampleId($data,$finaloutcome)
     {
         $common = new CommonService();
-        $logincontainer = new Container('credo');
         $this->update(array(
+            'vl_lab_id'                => $data['labId'],
+            'vl_result'                => $data['result'],
+            'vl_test_date'             => $data['sampleTestingDateAtLab'],
+            'vl_result_entry_date'     => date("Y-m-d H:i:s"),
             'final_outcome'            => $finaloutcome,
-            'final_outcome_updated_by' => $logincontainer->userId,
             'final_outcome_updated_on' => $common->getDateTime()
-        ), array('sample_id' => $sampleId));
+        ), array('sample_id' => $data['serialNo']));
     }
 
     public function fetchPendingVlSampleData()

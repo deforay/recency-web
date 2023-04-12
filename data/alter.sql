@@ -622,3 +622,7 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 
 -- Brindha 12-April-2023
 ALTER TABLE `recency_change_trails` ADD `lis_vl_sample_code` TEXT NULL DEFAULT NULL AFTER `vl_lab`;
+
+ALTER TABLE `recency` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER `vl_lab`;
+ALTER TABLE `audit_recency` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER `vl_lab`;
+ALTER TABLE `recency_change_trails` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER `vl_lab`;
