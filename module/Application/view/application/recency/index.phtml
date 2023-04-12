@@ -14,12 +14,16 @@ $formFields = array(
     'kit_lot_no', 'kit_expiry_date', 'tester_name', 'dob', 'marital_status', 'residence', 'education_level', 'name', 'pregnancy_status', 'current_sexual_partner', 'past_hiv_testing', 'last_hiv_status', 'patient_on_art', 'test_last_12_month', 'exp_violence_last_12_month',
     'form_initiation_datetime', 'form_transfer_datetime'
 );
-$arrFields = explode(", ", $manageColumnsResult['manage_columns']);
 $arrnum = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35");
-$acti = $manageColumnsResult['manage_columns'];
-$resultArr = array_diff($arrnum, $arrFields);
-$HideVal = implode(',', $resultArr);
-
+$resultArr = array();
+if(!empty($manageColumnsResult)){
+    $arrFields = explode(", ", $manageColumnsResult['manage_columns']);
+    $acti = $manageColumnsResult['manage_columns'];
+    $resultArr = array_diff($arrnum, $arrFields);
+    $HideVal = implode(',', $resultArr);
+}
+$locationOne = in_array("Province", $resultArr) ? "isRequired" : "";
+$locationTwo = in_array("District", $resultArr) ? "isRequired" : "";
 for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
     $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
 }
