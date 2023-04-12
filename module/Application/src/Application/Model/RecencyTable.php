@@ -150,7 +150,6 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $roleId = $sessionLogin->roleId;
-        $general = new CommonService();
 
         $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
@@ -203,10 +202,10 @@ class RecencyTable extends AbstractTableGateway
         if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
             $s_c_date = explode("to", $_POST['hivRecencyTest']);
             if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
             }
             if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
             }
         }
 
@@ -217,10 +216,10 @@ class RecencyTable extends AbstractTableGateway
         if (isset($parameters['sampleCollectionDate']) && trim($parameters['sampleCollectionDate']) != '') {
             $s_c_date = explode("to", $_POST['sampleCollectionDate']);
             if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
             }
             if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
             }
         }
 
@@ -872,8 +871,6 @@ class RecencyTable extends AbstractTableGateway
 
     public function fetchAllRecencyListApi($params)
     {
-
-        $common = new CommonService();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         //check the user is active or not
@@ -924,7 +921,6 @@ class RecencyTable extends AbstractTableGateway
 
     public function fetchAllRecencyResultWithVlListApi($params)
     {
-        $common = new CommonService();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         //check the user is active or not
@@ -970,7 +966,6 @@ class RecencyTable extends AbstractTableGateway
     // Pending
     public function fetchAllPendingVlResultListApi($params)
     {
-        $common = new CommonService();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
@@ -1525,7 +1520,6 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $general = new CommonService();
 
         $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
@@ -1554,10 +1548,10 @@ class RecencyTable extends AbstractTableGateway
         if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
             $s_c_date = explode("to", $_POST['hivRecencyTest']);
             if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
             }
             if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
             }
         }
 
@@ -1702,7 +1696,6 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $general = new CommonService();
         $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
@@ -1729,10 +1722,10 @@ class RecencyTable extends AbstractTableGateway
         if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
             $s_c_date = explode("to", $_POST['hivRecencyTest']);
             if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-                $start_date = $general->dbDateFormat(trim($s_c_date[0]));
+                $start_date = $common->dbDateFormat(trim($s_c_date[0]));
             }
             if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-                $end_date = $general->dbDateFormat(trim($s_c_date[1]));
+                $end_date = $common->dbDateFormat(trim($s_c_date[1]));
             }
         }
 
@@ -2316,7 +2309,6 @@ class RecencyTable extends AbstractTableGateway
          * you want to insert a non-database field (for example a counter or static image)
          */
         $queryContainer = new Container('query');
-        $common = new CommonService();
         $general = new CommonService();
         $aColumns = array('f.facility_name', 'ft.facility_name');
         $orderColumns = array('f.facility_name', 'ft.facility_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome', 'printedCount', 'samplesFinalLongTerm', '', 'ritaRecent', '', 'samplesFinalInconclusive', '', 'samplesInvalid', '');
@@ -2387,7 +2379,6 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $general = new CommonService();
 
         $sQuery = $sql->select()->from(array('r' => 'recency'))
             ->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))
@@ -3725,7 +3716,6 @@ class RecencyTable extends AbstractTableGateway
          * you want to insert a non-database field (for example a counter or static image)
          */
         $queryContainer = new Container('query');
-        $common = new CommonService();
         $general = new CommonService();
         $aColumns = array('d.district_name');
         $orderColumns = array('d.district_name', 'totalSamples', 'samplesReceived', 'samplesRejected', 'samplesTestBacklog', 'samplesTestVlPending', 'samplesTestedRecency', 'samplesTestedViralLoad', 'samplesFinalOutcome', 'printedCount', 'samplesFinalLongTerm', '', 'ritaRecent', '', 'samplesFinalInconclusive', '', 'samplesInvalid');
@@ -3796,7 +3786,6 @@ class RecencyTable extends AbstractTableGateway
          */
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $general = new CommonService();
 
         $sQuery = $sql->select()->from(array('r' => 'recency'))
             ->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))
@@ -4918,7 +4907,6 @@ class RecencyTable extends AbstractTableGateway
 
     public function fetchPrintResultsDetails($parameters)
     {
-        $common = new CommonService();
         $sessionLogin = new Container('credo');
         $aColumns = array('r.sample_id', 'DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name', 'r.final_outcome');
         $orderColumns = array('r.sample_id', 'r.sample_collection_date', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name', 'ft.final_outcome');
@@ -5059,7 +5047,7 @@ class RecencyTable extends AbstractTableGateway
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = $aRow['sample_id'];
-            $row[] = $common->humanDateFormat($aRow['sample_collection_date']);
+            $row[] = $general->humanDateFormat($aRow['sample_collection_date']);
             $row[] = ucwords($aRow['facility_name']);
             $row[] = $aRow['patient_id'];
             $row[] = ucwords($aRow['gender']);
@@ -5129,7 +5117,6 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $results = '';
-        $common = new CommonService();
         $value = trim($params['value']);
         $editPatientId = $params['editPatientId'];
         try {
