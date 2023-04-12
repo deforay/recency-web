@@ -1652,8 +1652,8 @@ class RecencyService
             if (!empty($rResult)) {
 
                 $client = new GuzzleHttp\Client();
-                $authToken = 'LTBjNDZmOA==';
                 $configResult = $this->sm->get('Config');
+                $authToken = $configResult['authToken'];
                 $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/vl/save-request.php';
                 //echo $urlVlsm."     ";
                 foreach ($rResult as $data) {
@@ -1709,8 +1709,8 @@ class RecencyService
         try {
             $recencyDb = $this->sm->get('RecencyTable');
             $client = new GuzzleHttp\Client();
-            $authToken = 'LTBjNDZmOA==';
             $configResult = $this->sm->get('Config');
+            $authToken = $configResult['authToken'];
             $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/vl/fetch-results.php';
             //echo $urlVlsm."     ";
             $sampleCodes = $recencyDb->fetchPendingVlSampleData();

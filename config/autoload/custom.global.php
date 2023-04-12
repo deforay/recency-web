@@ -19,5 +19,6 @@ return [
             'ssl' => 'tls',
             'auth' => 'login'
         ],
-    ]
+    ],
+    'authToken' => 'LTBjNDZmOA=='
 ];
