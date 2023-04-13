@@ -5169,6 +5169,7 @@ class RecencyTable extends AbstractTableGateway
             'lis_vl_sample_code'        => $vlSampleCode
         ), array('recency_id' => $rId));
     }
+
     //refer updatefinalOutComeBySampleId Function
     public function updatefinalOutComeBySampleId($data,$finaloutcome)
     {
@@ -5183,25 +5184,18 @@ class RecencyTable extends AbstractTableGateway
         ), array('sample_id' => $data['serialNo']));
     }
 
+    //refer fetchPendingVlSampleData Function
     public function fetchPendingVlSampleData()
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('lis_vl_sample_code'))
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('unique_id','facility_id','sample_collection_date','lis_vl_sample_code'))
                 ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
                 ->where(array('r.term_outcome' => 'Assay Recent'))
                 ->where(array('r.lis_vl_sample_code IS NOT NULL AND r.lis_vl_sample_code NOT like ""'))
                 ->where(array('r.vl_result is null OR r.vl_result=""'));
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        $sampleCodes = array();
-        if(count($rResult) > 0) {
-            foreach($rResult as $row) {
-                if(isset($row['lis_vl_sample_code']) && $row['lis_vl_sample_code']!= ''){
-                    $sampleCodes[] = $row['lis_vl_sample_code'];
-                }
-             }
-        }
-        return $sampleCodes;
+        return $rResult;
     }
 }

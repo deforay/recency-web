@@ -1713,10 +1713,40 @@ class RecencyService
             $authToken = $configResult['authToken'];
             $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/vl/fetch-results.php';
             //echo $urlVlsm."     ";
-            $sampleCodes = $recencyDb->fetchPendingVlSampleData();
+            $rResult = $recencyDb->fetchPendingVlSampleData();
+            $sampleCodes = array();
+            $facilityIds = array();
+            $uniqueIds = array();
+            $sampleCollectionDates = array();
+            $fromAndToDate = [];
+            if(count($rResult) > 0) {
+                foreach($rResult as $row) {
+                    if(isset($row['unique_id']) && $row['unique_id']!= ''){
+                        $uniqueIds[] = $row['unique_id'];
+                    }
+                    if(isset($row['facility_id']) && $row['facility_id']!= ''){
+                        $facilityIds[] = $row['facility_id'];
+                    }
+                    if(isset($row['sample_collection_date']) && $row['sample_collection_date']!= ''){
+                        $sampleCollectionDates[] = $row['sample_collection_date'];
+                    }
+                    if(isset($row['lis_vl_sample_code']) && $row['lis_vl_sample_code']!= ''){
+                        $sampleCodes[] = $row['lis_vl_sample_code'];
+                    }
+                }
+            }
+            if(!empty($sampleCollectionDates)){
+                $fromDate = date('Y-m-d', strtotime(min($sampleCollectionDates)));
+                $toDate = date('Y-m-d', strtotime(max($sampleCollectionDates)));
+                $fromAndToDate[] = $fromDate;
+                $fromAndToDate[] = $toDate;
+            }
             if(!empty($sampleCodes)){
                 $params = array(
+                    'uniqueId'   => $uniqueIds,
+                    'facility' => $facilityIds,
                     'sampleCode' => $sampleCodes,
+                    'sampleCollectionDate' => $fromAndToDate
                 );
                 $response = $client->request('GET', $urlVlsm, [
                     'headers' => [
@@ -1731,15 +1761,15 @@ class RecencyService
                 if ($response['status'] === 'success') {
                     $responseData = $response['data'];
                     foreach($responseData as $data){
-                        $final_outcome = '';
+                        $finaloutcome = '';
                         if((isset($data['vlResult']) && $data['vlResult'] > 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")){
-                            $final_outcome = "RITA Recent";
+                            $finaloutcome = "RITA Recent";
                         }
                         if((isset($data['vlResult']) && $data['vlResult'] <= 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")){
-                            $final_outcome = "Long Term";
+                            $finaloutcome = "Long Term";
                         }
-                        if(isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined' && $final_outcome != ''){
-                            $recencyDb->updatefinalOutComeBySampleId($data,$final_outcome);
+                        if(isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined' && $finaloutcome != ''){
+                            $recencyDb->updatefinalOutComeBySampleId($data,$finaloutcome);
                         }
                     }
                 }
