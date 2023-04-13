@@ -110,9 +110,9 @@ class Module implements ConfigProviderInterface
                 $application->getEventManager()->attach(MvcEvent::EVENT_ROUTE, $stopCallBack, -10000);
                 return $response;
             } else {
-                $sm = $application->getServiceManager();
+                $diContainer = $application->getServiceManager();
                 $viewModel = $application->getMvcEvent()->getViewModel();
-                $acl = $sm->get('AppAcl');
+                $acl = $diContainer->get('AppAcl');
                 $viewModel->acl = $acl;
                 $session->acl = serialize($acl);
 

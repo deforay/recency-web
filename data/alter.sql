@@ -592,9 +592,9 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 ALTER TABLE `recency` CHANGE `vl_request_sent` `vl_request_sent` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'not-required';
 
 -- Brindha 04-April-2023
-ALTER TABLE `recency` CHANGE `received_specimen_type` `received_specimen_type` INT NULL DEFAULT NULL;
 UPDATE `recency` set `received_specimen_type` = '1' WHERE `received_specimen_type` like 'plasma';
 UPDATE `recency` set `received_specimen_type` = '2' WHERE `received_specimen_type` like 'whole_blood';
+ALTER TABLE `recency` CHANGE `received_specimen_type` `received_specimen_type` INT NULL DEFAULT NULL;
 
 -- Brindha 05-April-2023
 ALTER TABLE `recency` ADD `lis_vl_sample_code` TEXT NULL DEFAULT NULL AFTER `vl_lab`;
@@ -608,7 +608,9 @@ CREATE TABLE `r_sample_types` (
   `updated_datetime` datetime DEFAULT NULL,
   `data_sync` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`sample_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `r_sample_types` (`sample_id`, `sample_name`, `status`, `updated_datetime`, `data_sync`) VALUES ('1', 'Plasma', 'active', NULL, '0'), ('2', 'Whole Blood', 'active', NULL, '0');
 
 -- Brindha 10-April-2023
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ManifestsController', 'edit', 'Edit'), ('Application\\Controller\\ManifestsController', 'genarate-manifest', 'Generate Manifest');

@@ -35,7 +35,7 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'Laminas\Db\Adapter\Adapter'
-          => 'Laminas\Db\Adapter\AdapterServiceFactory',
+            => 'Laminas\Db\Adapter\AdapterServiceFactory',
         ),
         // to allow other adapter to be called by
         // $sm->get('db1') or $sm->get('db2') based on the adapters config.
