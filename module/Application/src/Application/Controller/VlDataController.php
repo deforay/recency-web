@@ -186,12 +186,10 @@ class VlDataController extends AbstractActionController
                 $this->recencyService->UpdateMultiplePdfUpdatedDate($params);
                 
                 $globalConfigResult = $this->globalConfigService->fetchGlobalConfig();
-                $sampleTypes = $this->sampleTypesService->getSampleTypesDetails();
                 return new ViewModel(array(
                     'result' => $result,
                     'globalConfigResult' => $globalConfigResult,
-                    'formFields' => json_encode($params),
-                    'sampleTypes' => $sampleTypes
+                    'formFields' => json_encode($params)
                 ));
             }
         }

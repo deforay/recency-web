@@ -2061,6 +2061,9 @@ class RecencyTable extends AbstractTableGateway
 
         $sQuery = $sql->select()->from(array('r' => 'recency'))
             ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+            ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'))
+            ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
+            ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'))
             ->where("recency_id IN(" . $params['selectedSampleId'] . ")");
 
         $sQueryStr = $sql->buildSqlString($sQuery);
@@ -2072,7 +2075,6 @@ class RecencyTable extends AbstractTableGateway
     {
         $tempDb = new \Application\Model\TempMailTable($this->adapter);
 
-
         $emailFormField = json_decode($params['emailResultFields'], true);
         $to = $emailFormField['toEmail'];
         $subject = $emailFormField['subject'];
@@ -2083,8 +2085,11 @@ class RecencyTable extends AbstractTableGateway
         $mailResult = 0;
         $mailResult = $tempDb->insertTempMailDetails($to, $subject, $message, $fromMail, $fromName, $cc = null, $bcc = null, $attachment);
         if ($mailResult > 0) {
-            foreach ($emailFormField['to'] as $recencyId) {
-                $this->update(array('mail_sent_status' => 'yes'), array('recency_id' => $recencyId));
+            if(!empty($emailFormField['selectedSampleId'])){
+                $recencyIds = explode(",", $emailFormField['selectedSampleId']);
+                foreach ($recencyIds as $recencyId) {
+                    $this->update(array('mail_sent_status' => 'yes'), array('recency_id' => $recencyId));
+                }
             }
         }
         return $mailResult;
@@ -4909,7 +4914,7 @@ class RecencyTable extends AbstractTableGateway
     {
         $sessionLogin = new Container('credo');
         $aColumns = array('r.sample_id', 'DATE_FORMAT(r.sample_collection_date,"%d-%b-%Y")', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name', 'r.final_outcome');
-        $orderColumns = array('r.sample_id', 'r.sample_collection_date', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name', 'ft.final_outcome');
+        $orderColumns = array('r.sample_id', 'r.sample_collection_date', 'f.facility_name', 'r.patient_id', 'r.gender', 'r.age', 'ft.facility_name', 'tft.testing_facility_type_name', 'r.final_outcome');
 
         /* Paging */
         $sLimit = "";
