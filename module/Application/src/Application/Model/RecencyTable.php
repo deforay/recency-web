@@ -642,6 +642,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'), 'left')
             ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'), 'left')
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
+            ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'))
             ->where(array('recency_id' => $recencyId));
 
         $sQueryStr = $sql->buildSqlString($sQuery);

@@ -13,15 +13,13 @@ class VlDataController extends AbstractActionController
     private $facilitiesService = null;
     private $globalConfigService = null;
     private $qualityCheckService = null;
-    private $sampleTypesService = null;
 
-    public function __construct($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService,$sampleTypesService)
+    public function __construct($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService)
     {
         $this->recencyService = $recencyService;
         $this->facilitiesService = $facilitiesService;
         $this->globalConfigService = $globalConfigService;
         $this->qualityCheckService = $qualityCheckService;
-        $this->sampleTypesService = $sampleTypesService;
     }
     
     public function indexAction()

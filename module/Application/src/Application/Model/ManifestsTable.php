@@ -260,6 +260,7 @@ class ManifestsTable extends AbstractTableGateway
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'), 'left')
             ->join(array('dd' => 'district_details'), 'f.district=dd.district_id', array('district_name'), 'left')
+            ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'))
             ->where(array('m.' . $this->primary_id => $id));
         $sQueryStr = $sql->buildSqlString($sQuery);
         // echo $sQueryStr;die;

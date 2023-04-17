@@ -621,8 +621,7 @@ class Module implements ConfigProviderInterface
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $commonService = $diContainer->get('CommonService');
-                        $sampleTypesService = $diContainer->get('SampleTypesService');
-                        return new \Application\Controller\ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService,$sampleTypesService);
+                        return new \Application\Controller\ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService);
                     }
                 },
                 'Application\Controller\IndexController' => new class
@@ -643,8 +642,7 @@ class Module implements ConfigProviderInterface
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $qualityCheckService = $diContainer->get('QualityCheckService');
-                        $sampleTypesService = $diContainer->get('SampleTypesService');
-                        return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService, $sampleTypesService);
+                        return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
                     }
                 },
                 'Application\Controller\MonitoringController' => new class

@@ -15,16 +15,14 @@ class ManifestsController extends AbstractActionController
     private $recencyService = null;
     private $globalConfigService = null;
     private $commonService = null;
-    private $sampleTypesService = null;
 
-    public function __construct($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService,$sampleTypesService)
+    public function __construct($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService)
     {
         $this->manifestsService = $manifestsService;
         $this->facilitiesService = $facilitiesService;
         $this->recencyService = $recencyService;
         $this->globalConfigService = $globalConfigService;
         $this->commonService = $commonService;
-        $this->sampleTypesService = $sampleTypesService;
     }
 
     public function indexAction()
@@ -101,7 +99,6 @@ class ManifestsController extends AbstractActionController
 
         $result = $this->manifestsService->getManifestsPDF($id);
         $globalConfigResult = $this->globalConfigService->fetchGlobalConfig();
-        $sampleTypes = $this->sampleTypesService->getSampleTypesDetails();
         if (count($result) == 0) {
             $alertContainer = new Container('alert');
             $alertContainer->alertMsg = 'Unable to generate Specimen Manifest PDF. Please check if there are Samples added.';
@@ -109,7 +106,7 @@ class ManifestsController extends AbstractActionController
         }
         // \Zend\Debug\Debug::dump($result);die;
         $viewModel = new ViewModel();
-        $viewModel->setVariables(array('result' => $result, 'globalConfigResult' => $globalConfigResult, 'sampleTypes' => $sampleTypes));
+        $viewModel->setVariables(array('result' => $result, 'globalConfigResult' => $globalConfigResult));
 
         return $viewModel;
     }
