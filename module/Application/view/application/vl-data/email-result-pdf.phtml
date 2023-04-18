@@ -160,8 +160,8 @@ for ($s = 0; $s < count($result); $s++) {
 
      $html .= '<tr>';
      $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY NAME</td>';
-     $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">District</td>';
-     $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Province</td>';
+     $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DISTRICT</td>';
+     $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PROVINCE</td>';
      $html .= '</tr>';
      $html .= '<tr>';
      $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result[$s]['facility_name'] . '</td>';
@@ -208,7 +208,7 @@ for ($s = 0; $s < count($result); $s++) {
      //$html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ASSAY NAME</td>';
      $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HIV RECENCY TEST DATE</td>';
      if (isset($result[$s]['vl_test_date']) && $result[$s]['vl_test_date'] != '') {
-          $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL TEST DATE </td>';
+          $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HIV VIRAL LOAD TEST DATE </td>';
      }
      $html .= '</tr>';
      $html .= '<tr>';
