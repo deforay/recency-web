@@ -628,3 +628,9 @@ ALTER TABLE `recency_change_trails` ADD `lis_vl_sample_code` TEXT NULL DEFAULT N
 ALTER TABLE `recency` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER `vl_lab`;
 ALTER TABLE `audit_recency` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER `vl_lab`;
 ALTER TABLE `recency_change_trails` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER `vl_lab`;
+
+
+-- Cron Run Query
+save-request  - ./vendor/bin/laminas vlsm-send-requests
+fetch-results - ./vendor/bin/laminas vlsm-receive-results
+send-mail     - ./vendor/bin/laminas send-mail

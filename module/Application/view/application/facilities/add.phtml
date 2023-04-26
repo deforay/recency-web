@@ -224,7 +224,12 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                 $.blockUI();
                 $.post("/common/"+path, {selectValue:selectValue},
                 function(data) {
-                    $("#"+innerId).html(data);
+                    if ((globalName == 'location_one' || globalName == 'location_two') && selectValue != '') {
+                         var splitOption = data.split("##");
+                         $("#" + innerId).html(splitOption[0]);
+                    }else{
+                         $("#" + innerId).html(data);
+                    }
                     $.unblockUI();
                 });
             }

@@ -85,7 +85,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                             foreach ($facilityResult['facility'] as $facilityRow) {
                                 // if(2 == (int)$facilityRow['facility_type_id']) continue;
                             ?>
-                                <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ($facilityRow['facility_name']); ?></option>
+                                <option value="<?php echo base64_encode($facilityRow['facility_id']); ?>"><?php echo ($facilityRow['facility_name']); ?></option>
                             <?php
                             }
                             ?>
@@ -589,7 +589,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                     if (globalName == 'location_one' && selectValue != '') {
                         var splitOption = data.split("##");
                         $("#" + innerId).html(splitOption[0]);
-                        $("#facilityId").html(splitOption[1]);
+                        $("#facilityName").html(splitOption[1]);
                     } else if (globalName == 'location_two' && selectValue != '') {
                         var splitOption = data.split("##");
                         $("#" + innerId).html(splitOption[0]);

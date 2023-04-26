@@ -256,11 +256,11 @@ class FacilitiesTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $logincontainer = new Container('credo');
         $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
-
+        
         $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id', 'facility_name', 'facility_type_id'));
-        if (isset($logincontainer->facilityMap) && $logincontainer->facilityMap != null && $logincontainer->facilityMap != "") {
+        if (isset($logincontainer->userId) && $logincontainer->userId != null && $logincontainer->userId != "") {
             $sQuery = $sQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
-                ->where(array('f.status' => 'active', 'f.facility_id IN (' . $logincontainer->facilityMap . ')'));
+                ->where(array('f.status' => 'active','ufm.user_id' => $logincontainer->userId));
         } else {
             $sQuery = $sQuery->where(array('status' => 'active'));
         }
@@ -338,7 +338,7 @@ class FacilitiesTable extends AbstractTableGateway
             if ($params['locationTwo'] != '') {
                 $sQuery = $sQuery->where(array('district' => $params['locationTwo']));
             }
-            if ($params['locationThree'] != '') {
+            if ($params['locationThree'] != '' && $params['locationThree'] != 'other') {
                 $sQuery = $sQuery->where(array('city' => $params['locationThree']));
             }
         }

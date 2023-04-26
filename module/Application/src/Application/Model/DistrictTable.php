@@ -47,7 +47,7 @@ class DistrictTable extends AbstractTableGateway {
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        
+        $logincontainer = new Container('credo');
         $sQuery = $sql->select()->from(array('dd' => 'district_details'))->columns(array('district_id','province_id','district_name'))
                             ->where(array('province_id' => $params['selectValue'] ));
         $sQueryStr = $sql->buildSqlString($sQuery);
@@ -55,8 +55,15 @@ class DistrictTable extends AbstractTableGateway {
 
         //fetch facility data
         $fQuery = $sql->select()->from(array('f' => 'facilities'))
-                            ->where(array('province' => $params['selectValue']))
-                            ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
+                            ->where(array('province' => $params['selectValue']));
+        if (isset($logincontainer->userId) && $logincontainer->userId != null && $logincontainer->userId != "") {
+            $fQuery = $fQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
+                ->where(array('ufm.user_id' => $logincontainer->userId))
+                ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
+        } else {
+            $fQuery = $fQuery->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
+        }
+                    
         $fQueryStr = $sql->buildSqlString($fQuery);
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 

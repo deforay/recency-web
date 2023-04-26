@@ -288,7 +288,10 @@
 				} ?>
 				<div class="col-sm-2" style=" margin-top: 10px; ">
 					<select class="form-control" id="facilityId" name="facilityId" title="Please choose facility" style="width:100%;">
-						<option value="">-- Select --</option>
+						<option value=""> -- Select-- </option>
+						<?php foreach ($facilityResult['facility'] as $facilityRow) { ?>
+							<option value="<?php echo base64_encode($facilityRow['facility_id']); ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+						<?php } ?>
 					</select>
 				</div>
 
@@ -849,7 +852,12 @@
 						selectValue: selectValue
 					},
 					function(data) {
-						$("#" + innerId).html(data);
+						if ((globalName == 'location_one' || globalName == 'location_two') && selectValue != '') {
+							var splitOption = data.split("##");
+							$("#" + innerId).html(splitOption[0]);
+						}else{
+							$("#" + innerId).html(data);
+						}
 						getFacilityListByLocation(globalName);
 					});
 			}

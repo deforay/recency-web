@@ -3,7 +3,7 @@ if(count($result)>0){
     foreach($result as $list){
         $facilityType = ($list['facility_type_id'] == 2) ? ' (Recency Testing Site)' : ' (Health Facility)';
     ?>
-    <option value="<?php echo $list['facility_id'];?>"><?php echo ($list['facility_name']).$facilityType;?></option>
+    <option value="<?php echo base64_encode($list['facility_id']);?>"><?php echo ($list['facility_name']).$facilityType;?></option>
 <?php
     }
 }

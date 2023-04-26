@@ -33,22 +33,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Recency Data</h1>
-            <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'add')) { ?>
-                            <a href="<?php echo $this->url('recency', array('action' => 'add')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add New Recency</a>
-                        <?php }
-                        if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'export-recency')) { ?>
-                            <a href="javascript:void(0)" class="btn btn-primary pull-right" style="margin-top:-5px;" onclick="exportRecencyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-                        <?php } ?>
-                        <?php
-                        //}
-                        ?>
-                    </li>
-                </ol>
-            </nav>
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">User Activity Log</h1>
         </div>
     </div>
 </div>

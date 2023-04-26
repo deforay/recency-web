@@ -263,7 +263,12 @@ $sessionLogin = new Container('credo');
                     selectValue: selectValue
                 },
                 function(data) {
-                    $("#" + innerId).html(data);
+                    if ((globalName == 'location_one' || globalName == 'location_two') && selectValue != '') {
+                        var splitOption = data.split("##");
+                        $("#" + innerId).html(splitOption[0]);
+                    }else{
+                        $("#" + innerId).html(data);
+                    }
                     getFacilityListByLocation(globalName);
                     $.unblockUI();
                 });
