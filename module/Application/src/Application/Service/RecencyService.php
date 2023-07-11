@@ -3,11 +3,12 @@
 namespace Application\Service;
 
 use Exception;
+use GuzzleHttp;
 use Laminas\Db\Sql\Sql;
 use Laminas\Session\Container;
-use GuzzleHttp;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use Application\Model\RecencyTable;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class RecencyService
 {
@@ -26,6 +27,7 @@ class RecencyService
 
     public function getRecencyDetails($params)
     {
+        /** @var RecencyTable $recencyDb */
         $recencyDb = $this->sm->get('RecencyTable');
         $acl = $this->sm->get('AppAcl');
         return $recencyDb->fetchRecencyDetails($params, $acl);
@@ -115,36 +117,42 @@ class RecencyService
 
     public function getAllRecencyListApi($params)
     {
+        /** @var RecencyTable $recencyDb */
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchAllRecencyListApi($params);
     }
 
     public function getAllRecencyResultWithVlListApi($params)
     {
+        /** @var RecencyTable $recencyDb */
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchAllRecencyResultWithVlListApi($params);
     }
 
     public function getAllPendingVlResultListApi($params)
     {
+        /** @var RecencyTable $recencyDb */
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchAllPendingVlResultListApi($params);
     }
 
     public function addRecencyDataApi($params)
     {
+        /** @var RecencyTable $recencyDb */
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->addRecencyDetailsApi($params);
     }
 
     public function getRecencyOrderDetails($id)
     {
+        /** @var RecencyTable $recencyDb */
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->fetchRecencyOrderDetails($id);
     }
 
     public function getTesterData($val)
     {
+        /** @var RecencyTable $recencyDb */
         $recencyDb = $this->sm->get('RecencyTable');
         return $recencyDb->getActiveTester($val);
     }
@@ -1671,7 +1679,7 @@ class RecencyService
                         'reasonForVLTesting'   => '9999',
                         'serialNo'             => (isset($data['sample_id']) && $data['sample_id'] != '') ? $data['sample_id'] : '',
                         'vlResult'             => (isset($data['vl_result']) && $data['vl_result'] != '') ? $data['vl_result'] : '',
-                    ]; 
+                    ];
                     $params = array(
                         'appVersion' => 'v1.1',
                         'data' => $dataArray,
@@ -1686,17 +1694,17 @@ class RecencyService
                     //echo $response->getBody();
                     $statusValue = $response->getStatusCode();
                     $vlSampleCode = "";
-                    if ($statusValue == 200 && (isset($data['recency_id']) && $data['recency_id'] != "") ) {
+                    if ($statusValue == 200 && (isset($data['recency_id']) && $data['recency_id'] != "")) {
                         $jsonResponse = $response->getBody();
                         $response = json_decode($jsonResponse, true);
-                        if($response != '' && isset($response['data']) && $response['data'] != ''){
+                        if ($response != '' && isset($response['data']) && $response['data'] != '') {
                             $responseData = $response['data'][0];
-                            if($responseData != '' && isset($responseData['sampleCode'])){
+                            if ($responseData != '' && isset($responseData['sampleCode'])) {
                                 $vlSampleCode = $responseData['sampleCode'];
                             }
                         }
                         //echo "SUCCESS";
-                        $recencyDb->updateVlRequestSentNO($data['recency_id'],$vlSampleCode);
+                        $recencyDb->updateVlRequestSentNO($data['recency_id'], $vlSampleCode);
                     }
                 }
             }
@@ -1719,29 +1727,29 @@ class RecencyService
             $uniqueIds = array();
             $sampleCollectionDates = array();
             $fromAndToDate = [];
-            if(count($rResult) > 0) {
-                foreach($rResult as $row) {
-                    if(isset($row['unique_id']) && $row['unique_id']!= ''){
+            if (count($rResult) > 0) {
+                foreach ($rResult as $row) {
+                    if (isset($row['unique_id']) && $row['unique_id'] != '') {
                         $uniqueIds[] = $row['unique_id'];
                     }
-                    if(isset($row['facility_id']) && $row['facility_id']!= ''){
+                    if (isset($row['facility_id']) && $row['facility_id'] != '') {
                         $facilityIds[] = $row['facility_id'];
                     }
-                    if(isset($row['sample_collection_date']) && $row['sample_collection_date']!= ''){
+                    if (isset($row['sample_collection_date']) && $row['sample_collection_date'] != '') {
                         $sampleCollectionDates[] = $row['sample_collection_date'];
                     }
-                    if(isset($row['lis_vl_sample_code']) && $row['lis_vl_sample_code']!= ''){
+                    if (isset($row['lis_vl_sample_code']) && $row['lis_vl_sample_code'] != '') {
                         $sampleCodes[] = $row['lis_vl_sample_code'];
                     }
                 }
             }
-            if(!empty($sampleCollectionDates)){
+            if (!empty($sampleCollectionDates)) {
                 $fromDate = date('Y-m-d', strtotime(min($sampleCollectionDates)));
                 $toDate = date('Y-m-d', strtotime(max($sampleCollectionDates)));
                 $fromAndToDate[] = $fromDate;
                 $fromAndToDate[] = $toDate;
             }
-            if(!empty($sampleCodes)){
+            if (!empty($sampleCodes)) {
                 $params = array(
                     'uniqueId'   => $uniqueIds,
                     'facility' => $facilityIds,
@@ -1757,24 +1765,23 @@ class RecencyService
                 ]);
                 $jsonResponse = $response->getBody();
                 $response = json_decode($jsonResponse, true);
-    
+
                 if ($response['status'] === 'success') {
                     $responseData = $response['data'];
-                    foreach($responseData as $data){
+                    foreach ($responseData as $data) {
                         $finaloutcome = '';
-                        if((isset($data['vlResult']) && $data['vlResult'] > 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")){
+                        if ((isset($data['vlResult']) && $data['vlResult'] > 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")) {
                             $finaloutcome = "RITA Recent";
                         }
-                        if((isset($data['vlResult']) && $data['vlResult'] <= 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")){
+                        if ((isset($data['vlResult']) && $data['vlResult'] <= 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")) {
                             $finaloutcome = "Long Term";
                         }
-                        if(isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined' && $finaloutcome != ''){
-                            $recencyDb->updatefinalOutComeBySampleId($data,$finaloutcome);
+                        if (isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined' && $finaloutcome != '') {
+                            $recencyDb->updatefinalOutComeBySampleId($data, $finaloutcome);
                         }
                     }
                 }
             }
-
         } catch (Exception $e) {
             error_log('Error :' . $e->getMessage());
         }

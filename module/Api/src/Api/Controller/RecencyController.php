@@ -2,12 +2,13 @@
 
 namespace Api\Controller;
 
-use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
+use Application\Service\RecencyService;
+use Laminas\Mvc\Controller\AbstractRestfulController;
 
 class RecencyController extends AbstractRestfulController
 {
-    private $recencyService = null;
+    private RecencyService $recencyService = null;
 
     public function __construct($recencyService)
     {

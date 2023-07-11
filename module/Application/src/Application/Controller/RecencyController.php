@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Service\RecencyService;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Expression;
 use Laminas\Session\Container;
@@ -12,13 +13,13 @@ use Laminas\Mvc\Controller\AbstractActionController;
 
 class RecencyController extends AbstractActionController
 {
-   private $recencyService = null;
+   private RecencyService $recencyService = null;
    private $facilitiesService = null;
    private $globalConfigService = null;
    private $settingsService = null;
    private $sampleTypesService = null;
 
-   public function __construct($recencyService, $facilitiesService, $globalConfigService, $settingsService,$sampleTypesService)
+   public function __construct($recencyService, $facilitiesService, $globalConfigService, $settingsService, $sampleTypesService)
    {
       $this->recencyService = $recencyService;
       $this->facilitiesService = $facilitiesService;
@@ -489,22 +490,22 @@ class RecencyController extends AbstractActionController
          $result = $this->recencyService->getRecencyDateBasedTestKit($params);
          $viewModel = new ViewModel();
          $viewModel->setVariables(array('result' => $result))
-                     ->setTerminal(true);
+            ->setTerminal(true);
          return $viewModel;
       }
    }
    public function checkPatientIdValidationAction()
-    {
-        $result = "";
-        /** @var \Laminas\Http\Request $request */
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $params = $request->getPost();
-            $result = $this->recencyService->checkPatientIdValidation($params);
-            $viewModel = new ViewModel();
-            $viewModel->setVariables(array('result' => $result))
-                        ->setTerminal(true);
-            return $viewModel;
-        }
-    }
+   {
+      $result = "";
+      /** @var \Laminas\Http\Request $request */
+      $request = $this->getRequest();
+      if ($request->isPost()) {
+         $params = $request->getPost();
+         $result = $this->recencyService->checkPatientIdValidation($params);
+         $viewModel = new ViewModel();
+         $viewModel->setVariables(array('result' => $result))
+            ->setTerminal(true);
+         return $viewModel;
+      }
+   }
 }

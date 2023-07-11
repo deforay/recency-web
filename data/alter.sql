@@ -193,7 +193,7 @@ CREATE TABLE `facility_type` ( `facility_type_id` INT(11) NOT NULL AUTO_INCREMEN
 INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`, `facility_type_status`) VALUES (NULL, 'Normal', 'active'), (NULL, 'Testing', 'active');
 
 -- vivek 24-jan-2019
- ALTER TABLE `facilities` ADD `facility_type_id` INT NULL DEFAULT NULL AFTER `facility_id`; 
+ ALTER TABLE `facilities` ADD `facility_type_id` INT NULL DEFAULT NULL AFTER `facility_id`;
 
 -- saravanan 28-jan-2019
 ALTER TABLE `recency` ADD `testing_facility_id` INT NULL DEFAULT NULL AFTER `facility_id`;
@@ -396,7 +396,7 @@ CREATE TABLE `recency_change_trails` (
  KEY `recency_id` (`recency_id`),
  CONSTRAINT `recency_change_trails_ibfk_1` FOREIGN KEY (`recency_id`) REFERENCES `recency` (`recency_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
--- Thanaseelan 21-Oct-2019 
+-- Thanaseelan 21-Oct-2019
 ALTER TABLE `recency` ADD `modified_on` DATETIME NULL DEFAULT NULL AFTER `kit_name`;
 ALTER TABLE `recency` ADD `modified_by` INT(11) NULL DEFAULT NULL AFTER `modified_on`;
 ALTER TABLE `recency` ADD `invalid_control_line` VARCHAR(255) NULL DEFAULT NULL AFTER `modified_by`, ADD `invalid_verification_line` VARCHAR(255) NULL DEFAULT NULL AFTER `invalid_control_line`, ADD `invalid_longterm_line` VARCHAR(255) NULL DEFAULT NULL AFTER `invalid_verification_line`;
@@ -500,7 +500,7 @@ CREATE TABLE `user_login_history` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
---ilahir 21-Mar-2023
+-- ilahir 21-Mar-2023
 CREATE TABLE `resources` (
   `resource_id` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL
