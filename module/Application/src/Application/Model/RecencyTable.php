@@ -2576,16 +2576,16 @@ class RecencyTable extends AbstractTableGateway
         foreach ($rResult as $aRow) {
 
             $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
-            if (trim($aRow['samplesFinalLongTerm']) != "") {
+            if (trim($aRow['samplesFinalLongTerm']) != "" && trim($aRow['samplesFinalOutcome'])!=0) {
                 $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (trim($aRow['ritaRecent']) != "") {
+            if (trim($aRow['ritaRecent']) != "" && trim($aRow['samplesFinalOutcome'])!=0) {
                 $recentPercentage = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'])) {
+            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'] && trim($aRow['samplesFinalOutcome'])!=0)) {
                 $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid'])) {
+            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid']) && trim($aRow['samplesTestedRecency'])!=0) {
                 $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
             }
 
@@ -3979,16 +3979,16 @@ class RecencyTable extends AbstractTableGateway
 
         foreach ($rResult as $aRow) {
             $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
-            if (trim($aRow['samplesFinalLongTerm']) != "") {
+            if (trim($aRow['samplesFinalLongTerm']) != "" && trim($aRow['samplesFinalOutcome'])!=0) {
                 $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['ritaRecent']) && !empty($aRow['ritaRecent'])) {
+            if (isset($aRow['ritaRecent']) && !empty($aRow['ritaRecent']) && trim($aRow['samplesFinalOutcome'])!=0) {
                 $recentPercentage = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'])) {
+            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive']) && trim($aRow['samplesFinalOutcome'])!=0) {
                 $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid'])) {
+            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid']) && trim($aRow['samplesTestedRecency'])!=0) {
                 $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
             }
             $row = array();
