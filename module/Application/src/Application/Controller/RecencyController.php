@@ -13,7 +13,7 @@ use Laminas\Mvc\Controller\AbstractActionController;
 
 class RecencyController extends AbstractActionController
 {
-   private RecencyService $recencyService = null;
+   private $recencyService = null;
    private $facilitiesService = null;
    private $globalConfigService = null;
    private $settingsService = null;

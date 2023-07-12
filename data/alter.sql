@@ -619,9 +619,6 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlDataController', 'email-result-pdf', 'Email Result Pdf');
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\VlDataController', 'download-result-pdf', 'Download Email Result Pdf');
 
-INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\LoginController', 'Logout');
-INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\LoginController', 'logout', 'Logout');
-
 -- Brindha 12-April-2023
 ALTER TABLE `recency_change_trails` ADD `lis_vl_sample_code` TEXT NULL DEFAULT NULL AFTER `vl_lab`;
 

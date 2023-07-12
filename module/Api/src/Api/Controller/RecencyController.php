@@ -8,7 +8,7 @@ use Laminas\Mvc\Controller\AbstractRestfulController;
 
 class RecencyController extends AbstractRestfulController
 {
-    private RecencyService $recencyService = null;
+    private $recencyService;
 
     public function __construct($recencyService)
     {
