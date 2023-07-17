@@ -2,6 +2,54 @@
 use Laminas\Session\Container;
 $sessionLogin = new Container('credo');
 ?>
+<style>
+	.switch-field {
+		display: flex;
+		overflow: hidden;
+	}
+
+	.switch-field input {
+		position: absolute !important;
+		clip: rect(0, 0, 0, 0);
+		height: 1px;
+		width: 1px;
+		border: 0;
+		overflow: hidden;
+	}
+
+	.switch-field label {
+		background-color: #e4e4e4;
+		color: rgba(0, 0, 0, 0.6);
+		font-size: 14px;
+		line-height: 1;
+		text-align: center;
+		padding: 8px 16px;
+		margin-right: -1px;
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+		transition: all 0.1s ease-in-out;
+	}
+
+	.switch-field label:hover {
+		cursor: pointer;
+	}
+
+	.switch-field input:checked+label {
+		background-color: #87CEFA;
+		box-shadow: none;
+	}
+
+	.switch-field label:first-of-type {
+		border-radius: 4px 0 0 4px;
+	}
+
+	.switch-field label:last-of-type {
+		border-radius: 0 4px 4px 0;
+	}
+    .pull-right {
+        float: right !important;
+    }
+</style>
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -56,42 +104,68 @@ $sessionLogin = new Container('credo');
                                 <p class="form-control-static">Unless you choose "access" the people belonging to this role will not be able to access other rights like "add", "edit" etc.</p>
                             </div>
                         </div>
-                        <div class="form-group" style="padding-left:134px;">
-                            <strong>Select All</strong> <a style="color: #333;" href="javascript:void(0);" id="cekAllPrivileges"><input type='radio' class='layCek' name='cekUnCekAll'/> <i class='fa fa-check'></i></a>
-			    &nbsp&nbsp&nbsp&nbsp<strong>Unselect All</strong> <a style="color: #333;" href="javascript:void(0);" id="unCekAllPrivileges"><input type='radio' class='layCek' name='cekUnCekAll' checked='checked'/> <i class='fa fa-times'></i></a>
+                        <div class="form-group" style="padding-left:138px;">
+                            <div class="switch-field">
+                                <input type="radio" class='layCek' id="cekAllPrivileges" name='cekUnCekAll'
+                                    value="yes" />
+                                <label for="cekAllPrivileges">
+                                    <?php echo _("Select All"); ?>
+                                </label>
+                                <input type="radio" class='layCek' id="unCekAllPrivileges" name='cekUnCekAll' 
+                                     value="no" />
+                                <label for="unCekAllPrivileges">
+                                    <?php echo _("Unselect All"); ?>
+                                </label>
+                            </div>
                         </div>
-                        <div class="table-responsive">
-                        <table class="table table-striped table-hover responsive-utilities jambo_table">
+                        <table class="table table-striped responsive-utilities jambo_table">
                         <?php
-                        $role = $result->role_code;
-                        foreach ($resourceResult as $value) {
-                        echo "<tr class=''>";
-                        echo "<td><strong>" . ucwords($value['display_name']) . "</strong></td>";
-                        foreach ($value['privilege'] as $privilege) {
-                        if(isset($resourcePrivilegeMap[$role][$value['resource_id']][$privilege['privilege_name']]) && $resourcePrivilegeMap[$role][$value['resource_id']][$privilege['privilege_name']] == 'allow'){
-										$allowChecked = " checked='' ";
-											  $denyChecked = "";
-											  } else {
-											  $denyChecked = " checked='' ";
-											  $allowChecked = "";
-											  }
-                        echo "<td>"
-                        . "<label class='labelName'>" . ucwords($privilege['display_name']) . "</label>
-                                                                
-													  <label>
-															  <input type='radio' class='cekAll layCek'  name='resource[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]" . "' value='allow' $allowChecked> <i class='fa fa-check'></i>
-													  </label>
-													  <label>
-															  <input type='radio' class='unCekAll layCek'  name='resource[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]" . "' value='deny' $denyChecked>  <i class='fa fa-times'></i>
-													  </label>
-																		 
-									  </td>";
-                                                                        }
-                                                                        echo "</tr>";
-                                                                }
-                                                                ?>	
-                                                </table>
-						</div>
+                            $role = $result->role_code;
+                            foreach ($resourceResult as $value) {
+                                echo "<tr>";
+                                    echo "<th>";
+                                    ?>
+                                    <small class="toggler">
+                                        <h4 style="font-weight: bold;">
+                                            <?= _(ucwords($value['display_name'])); ?>
+                                        </h4>
+                                        <div class="switch-field pull-right">
+                                            <input type='radio' class='display_name' id='all<?= $value['display_name']; ?>'
+                                                name='<?= $value['display_name']; ?>'
+                                                onclick='togglePrivilegesForThisResource("<?= $value['display_name']; ?>",true);'>
+                                            <label for='all<?= $value['display_name']; ?>'><?= _("All"); ?></label>
+                                            <input type='radio' class='display_name' id='none<?= $value['display_name']; ?>'
+                                                name='<?= $value['display_name']; ?>'
+                                                onclick='togglePrivilegesForThisResource("<?= $value['display_name']; ?>",false);'>
+                                            <label for='none<?= $value['display_name']; ?>'><?= _("None"); ?></label>
+                                        </div>
+                                    </small>
+                                    <?php
+                                    echo "</th>";
+                                echo "</tr>";
+                                echo "<tr class=''>";
+                                echo "<td style='text-align:center;vertical-align:middle;' class='privilegesNode' id='" . $value['display_name'] . "'>";
+                                foreach ($value['privilege'] as $privilege) {
+                                    if(isset($resourcePrivilegeMap[$role][$value['resource_id']][$privilege['privilege_name']]) && $resourcePrivilegeMap[$role][$value['resource_id']][$privilege['privilege_name']] == 'allow'){
+                                        $allowChecked = " checked='' ";
+                                        $denyChecked = "";
+                                    } else {
+                                        $denyChecked = " checked='' ";
+                                        $allowChecked = "";
+                                    }
+                                    echo "<div class='col-lg-3' style='float: left; margin-top:5px;border:1px solid #eee;padding:10px; width: 25%;'>
+                                            <strong style='font-size: 14px;'>" . _($privilege['display_name']) . "</strong>
+                                            <br>
+                                            <div class='switch-field' style='margin: 30px 0 36px 40px;'>
+                                                <input type='radio' class='cekAll layCek'  name='resource[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]" ."'id='radio-one[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]". "' value='allow' $allowChecked><label for='radio-one[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]"."'>Yes</label>
+                                                <input type='radio' class='unCekAll layCek'  name='resource[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]" . "'id='radio-two[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]"."' value='deny' $denyChecked> <label for='radio-two[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]"."'> No</label>
+                                            </div>
+                                        </div>";
+                                }
+                            echo "</td></tr>";
+                            }
+                        echo "</table>";
+                        ?>
                     </fieldset>
                     <div class="row items-push">
                         <div class="col-lg-7 offset-lg-4">
@@ -149,4 +223,14 @@ $sessionLogin = new Container('credo');
       $('.unCekAll').prop('checked', true);
       $(".cekAll").prop( "checked", false );
     });
+
+    function togglePrivilegesForThisResource(obj, checked) {
+		if (checked == true) {
+			$("#" + obj).find('.cekAll').prop('checked', true);
+			$("#" + obj).find('.unCekAll').prop('checked', false);
+		} else if (checked == false) {
+			$("#" + obj).find('.cekAll').prop('checked', false);
+			$("#" + obj).find('.unCekAll').prop('checked', true);
+		}
+	}
 </script>
