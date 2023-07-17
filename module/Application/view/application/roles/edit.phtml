@@ -130,21 +130,21 @@ $sessionLogin = new Container('credo');
                                             <?= _(ucwords($value['display_name'])); ?>
                                         </h4>
                                         <div class="switch-field pull-right">
-                                            <input type='radio' class='display_name' id='all<?= $value['display_name']; ?>'
-                                                name='<?= $value['display_name']; ?>'
-                                                onclick='togglePrivilegesForThisResource("<?= $value['display_name']; ?>",true);'>
-                                            <label for='all<?= $value['display_name']; ?>'><?= _("All"); ?></label>
-                                            <input type='radio' class='display_name' id='none<?= $value['display_name']; ?>'
-                                                name='<?= $value['display_name']; ?>'
-                                                onclick='togglePrivilegesForThisResource("<?= $value['display_name']; ?>",false);'>
-                                            <label for='none<?= $value['display_name']; ?>'><?= _("None"); ?></label>
+                                            <input type='radio' class='display_name' id='all<?= str_replace(' ', '', $value['display_name']); ?>'
+                                                name='<?= str_replace(' ', '', $value['display_name']); ?>'
+                                                onclick='togglePrivilegesForThisResource("<?= str_replace(' ', '', $value['display_name']); ?>",true);'>
+                                            <label for='all<?= str_replace(' ', '', $value['display_name']); ?>'><?= _("All"); ?></label>
+                                            <input type='radio' class='display_name' id='none<?= str_replace(' ', '', $value['display_name']); ?>'
+                                                name='<?= str_replace(' ', '', $value['display_name']); ?>'
+                                                onclick='togglePrivilegesForThisResource("<?= str_replace(' ', '', $value['display_name']); ?>",false);'>
+                                            <label for='none<?= str_replace(' ', '', $value['display_name']); ?>'><?= _("None"); ?></label>
                                         </div>
                                     </small>
                                     <?php
                                     echo "</th>";
                                 echo "</tr>";
                                 echo "<tr class=''>";
-                                echo "<td style='text-align:center;vertical-align:middle;' class='privilegesNode' id='" . $value['display_name'] . "'>";
+                                echo "<td style='text-align:center;vertical-align:middle;' class='privilegesNode' id='" . str_replace(' ', '', $value['display_name']) . "'>";
                                 foreach ($value['privilege'] as $privilege) {
                                     if(isset($resourcePrivilegeMap[$role][$value['resource_id']][$privilege['privilege_name']]) && $resourcePrivilegeMap[$role][$value['resource_id']][$privilege['privilege_name']] == 'allow'){
                                         $allowChecked = " checked='' ";

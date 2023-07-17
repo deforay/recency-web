@@ -2077,8 +2077,10 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
             ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'))
             ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
-            ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'))
-            ->where("recency_id IN(" . $params['selectedSampleId'] . ")");
+            ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'));
+        if($params['selectedSampleId'] != ''){
+            $sQuery->where("recency_id IN(" . $params['selectedSampleId'] . ")");
+        }
 
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
