@@ -112,7 +112,7 @@ $currentDate = date('d-M-Y');
             "aoColumns": [
                 <?php echo $editAction; ?>
             ],
-            "sAjaxSource": "<?php echo $this->url('vl-data', array('action' => 'qc-report')); ?>",
+            "sAjaxSource": "<?php echo $this->url('reports', array('action' => 'qc-report')); ?>",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 aoData.push({
                     "name": "testDate",

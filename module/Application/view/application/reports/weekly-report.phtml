@@ -5,14 +5,19 @@ use Laminas\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 $acl=$this->layout()->acl;
-$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center","bSortable":false}';
-
+//$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center","bSortable":false}';
 ?>
+<style>
+    .thCenter {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
 <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">TAT Report</h1>
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Weekly Report</h1>
         </div>
     </div>
 </div>
@@ -21,13 +26,31 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
         <div class="block-header block-header-default"></div>
 
         <div class="block-content block-content-full">
-        <div class="form-group row">
-            
-            <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="Province">Province</label>
+            <div class="form-group row">
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Sample Collection Date</label>
+                <div class="col-sm-4">
+                    <input type="text" id="samplesCollectionDate" name="samplesCollectionDate" class="form-control" placeholder="Select Date Range" readonly style="background:#fff;" />
+                </div>
+
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
+                        <option value=""> -- Select -- </option>
+                        <?php
+                        foreach ($facilityResult['facilityTest'] as $facilityRow) {
+                            //if(2 != (int)$facilityRow['facility_type_id']) continue;
+                        ?>
+                            <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="Province">Province</label>
             <div class="col-sm-4">
             <select class="form-control <?php echo $locationOne; ?>" id="<?php echo $globalConfigResult[0]['global_name']; ?>" name="<?php echo $globalConfigResult[0]['global_name']; ?>" placeholder="Enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" title="Please enter the <?php echo lcfirst($globalConfigResult[0]['global_value']); ?>" onchange="getLocationDeatils('<?php echo $globalConfigResult[0]['global_name']; ?>');">
-                                                                <option value="">-- Select --</option>
-                                                            </select>
+                                         <option value="">-- Select --</option>
+                        </select>
             </div>
             <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="District">District:</label>
             <div class="col-sm-4">
@@ -35,19 +58,15 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                         <option value="">-- Select --</option>
                 </select>
             </div>
-        </div>
-            <div class="form-group row">
-
-            
-                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Testing Site</label>
+                <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility Name</label>
                 <div class="col-sm-4">
-                    <select class="form-control" id="testingFacility" name="testingFacility" title="Please select testing facility name" style="width:100%;">
+                    <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:100%;">
                         <option value=""> -- Select -- </option>
                         <?php
-                        foreach ($facilityResult['facilityTest'] as $facilityRow) {
-                            // if(2 != (int)$facilityRow['facility_type_id']) continue;
+                        foreach ($facilityResult['facility'] as $facilityRow) {
+                            // if(2 == (int)$facilityRow['facility_type_id']) continue;
                         ?>
-                            <option value="<?php echo $facilityRow['facility_id']; ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+                            <option value="<?php echo base64_encode($facilityRow['facility_id']); ?>"><?php echo ($facilityRow['facility_name']); ?></option>
                         <?php
                         }
                         ?>
@@ -58,44 +77,40 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
                 </div>
             </div>
-        
             <div class="row items-push">
                 <div class="col-lg-7 ">
                     <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'export-tat-report')) { ?>
-                        <a href="javascript:void(0);" class="btn btn-success" onclick="exportTatData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'export-weekly-report')) { ?>
+                        <a href="javascript:void(0);" class="btn btn-success" onclick="exportWeeklyData();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                     <?php } ?>
                 </div>
             </div>
-            <code>Note:TAT (in days) = Viral Load Result entered date - Recency Test Date</code>
             <table id="tatTable" class="table table-bordered table-striped table-vcenter">
                 <thead>
                     <tr>
-                        <th>Sample ID</th>
-                        <th>Testing Site</th>
-                        <th>Final Result</th>
-                        <th>Recency Testing Date</th>
-                        <th>VL Tested Date</th>
-                        <th>VL Entered Date</th>
-                        <th>Difference(TAT)</th>
+                        <th rowspan="2" class="thCenter">Samples Received</th>
+                        <th rowspan="2" class="thCenter">Samples Pending to be Tested</th>
+                        <th rowspan="2" class="thCenter">Samples Tested</th>
+                        <th colspan="3" class="thCenter" style="background-color:#9cc2e5;">Recency Testing Results(Asante)</th>
+                        <th colspan="2" class="thCenter" style="background-color:#ebed89;">Assay Recent VL Results </th>
+                        <th colspan="3" class="thCenter" style="background-color:#11aa06;">Final Results</th>
+                    </tr>
+                    <tr>
+                        <th class="thCenter testingResult">Assay Recent</th>
+                        <th class="thCenter testingResult">Long Term</th>
+                        <th class="thCenter testingResult">Assay Negative</th>
+                        <th class="thCenter vlResult">Done</th>
+                        <th class="thCenter vlResult">Pending</th>
+                        <th class="thCenter finalResult">RITA Recent</th>
+                        <th class="thCenter finalResult">Long Term</th>
+                        <th class="thCenter finalResult">Inconclusive</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="weeklyData">
                     <tr>
                         <td colspan='6' class='dataTables_empty'>Loading data from server</td>
                     </tr>
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Sample ID</th>
-                        <th>Testing Site</th>
-                        <th>Final Result</th>
-                        <th>Recency Testing Date</th>
-                        <th>VL Tested Date</th>
-                        <th>VL Entered Date</th>
-                        <th>Difference(TAT)</th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>
@@ -105,10 +120,9 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
     let searchExecuted = false;
     /* Table initialisation */
     oTable = null;
-    
     $(document).ready(function() {
-
-        $("#facilityId").select2({
+        $('#page-container').removeClass('sidebar-o');
+        $("#facilityName").select2({
             placeholder: "Choose Facility",
             width: "290px",
             allowClear: true,
@@ -119,40 +133,27 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             allowClear: true,
         });
 
-        oTable = $('#tatTable').dataTable({
-            "bAutoWidth": false,
-            "bProcessing": true,
-            "bServerSide": true,
-            "aoColumns": [
-                <?php echo $editAction; ?>
-            ],
-            "sAjaxSource": "<?php echo $this->url('vl-data', array('action' => 'tat-report')); ?>",
-            "fnServerData": function(sSource, aoData, fnCallback) {
-                aoData.push({
-                    "name": "province",
-                    "value": $("#location_one").val()
-                });
-                aoData.push({
-                    "name": "district",
-                    "value": $("#location_two").val()
-                });
-                aoData.push({
-                    "name": "testingFacility",
-                    "value": $("#testingFacility").val()
-                });
-                aoData.push({
-                    "name": "hivRecencyTest",
-                    "value": $("#hivRecencyTest").val()
-                });
-                $.ajax({
-                    "dataType": 'json',
-                    "type": "POST",
-                    "url": sSource,
-                    "data": aoData,
-                    "success": fnCallback
-                });
-            }
-        });
+        $('#samplesCollectionDate').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                separator: ' to ',
+                startDate: moment().subtract('days', 30),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                }
+            },
+            function(start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+            });
 
         $('#hivRecencyTest').daterangepicker({
                 format: 'DD-MMM-YYYY',
@@ -185,6 +186,8 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
             searchExecuted = false;
         });
 
+        getWeeklyData();
+
         <?php foreach ($globalConfigResult as $config) { ?>
             getLocationDeatils('<?php echo $config["global_name"]; ?>');
         <?php break;
@@ -194,16 +197,33 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
     function searchData() {
         searchExecuted = true;
         $.blockUI();
-        oTable.fnDraw();
+        getWeeklyData();
         $.unblockUI();
     }
 
-    function exportTatData() {
+    function getWeeklyData() {
+        var samplesCollectionDate = $("#samplesCollectionDate").val();
+        $.blockUI();
+        $.post("<?php echo $this->url('reports', array('action' => 'get-weekly-report')); ?>", {
+                samplesCollectionDate: samplesCollectionDate,
+                testingFacility: $("#testingFacility").val(),
+                province: $("#location_one").val(),
+                district: $("#location_two").val(),
+                facilityName: $("#facilityName").val(),
+                hivRecencyTest: $("#hivRecencyTest").val()
+            },
+            function(data) {
+                $("#weeklyData").html(data);
+                $.unblockUI();
+            });
+    }
+
+    function exportWeeklyData() {
         if (searchExecuted === false) {
-            searchData();
+            getWeeklyData();
         }
         $.blockUI();
-        $.post("<?php echo $this->url('vl-data', array('action' => 'export-tat-report')); ?>",
+        $.post("<?php echo $this->url('reports', array('action' => 'export-weekly-report')); ?>",
             function(data) {
                 if (data == "" || data == null || data == undefined) {
                     $.unblockUI();
@@ -257,13 +277,13 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     if (globalName == 'location_one' && selectValue != '') {
                         var splitOption = data.split("##");
                         $("#" + innerId).html(splitOption[0]);
-                        $("#testingFacility").html(splitOption[1]);
+                        $("#facilityName").html(splitOption[1]);
                     } else if (globalName == 'location_two' && selectValue != '') {
                         var splitOption = data.split("##");
                         $("#" + innerId).html(splitOption[0]);
-                        $("#testingFacility").html(splitOption[1]);
+                        $("#facilityName").html(splitOption[1]);
                     } else if (globalName == 'location_three' && selectValue != '') {
-                        $("#testingFacility").html(data);
+                        $("#facilityName").html(data);
                     } else {
                         $("#" + innerId).html(data);
                     }

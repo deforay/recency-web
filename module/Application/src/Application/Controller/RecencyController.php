@@ -508,4 +508,59 @@ class RecencyController extends AbstractActionController
          return $viewModel;
       }
    }
+
+   public function emailResultAction()
+    {
+        $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+        return new ViewModel(array(
+            'globalConfigResult' => $globalConfigResult,
+
+        ));
+    }
+
+    public function emailResultPdfAction()
+    {
+        /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            if (isset($params['pdfFile'])) {
+                $result = $this->recencyService->updateEmailSendResult($params);
+                return $this->redirect()->toUrl('/recency/email-result');
+            } else {
+                $result = $this->recencyService->getEmailSendResult($params);
+                $this->recencyService->UpdateMultiplePdfUpdatedDate($params);
+                
+                $globalConfigResult = $this->globalConfigService->fetchGlobalConfig();
+                return new ViewModel(array(
+                    'result' => $result,
+                    'globalConfigResult' => $globalConfigResult,
+                    'formFields' => json_encode($params)
+                ));
+            }
+        }
+    }
+
+    public function emailResultSamplesAction()
+    {
+        /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $sampleResult = $this->recencyService->getSampleResult($params);
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array('sampleResult' => $sampleResult,));
+            $viewModel->setTerminal(true);
+            return $viewModel;
+        }
+    }
+
+    public function downloadResultPdfAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        return new ViewModel(array(
+            'fileName' => $id
+        ));
+    }
 }

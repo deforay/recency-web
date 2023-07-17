@@ -662,6 +662,17 @@ class Module implements ConfigProviderInterface
                         return new \Application\Controller\RolesController($roleService);
                     }
                 },
+                'Application\Controller\ReportsController' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $recencyService = $diContainer->get('RecencyService');
+                        $facilitiesService = $diContainer->get('FacilitiesService');
+                        $globalConfigService = $diContainer->get('GlobalConfigService');
+                        $qualityCheckService = $diContainer->get('QualityCheckService');
+                        return new \Application\Controller\ReportsController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
+                    }
+                },
             ),
         );
     }

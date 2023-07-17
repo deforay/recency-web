@@ -86,7 +86,7 @@ $ageArray = array('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49',
             <div class="col-sm-2" style=" margin-top: 10px; ">
                 <input type="text" class="form-control" id="hivRecencyTest" placeholder="Hiv Recency Test Date" name="hivRecencyTest" title="Please select HIV Recency Test Dates" style="width:100%;" readonly>
             </div>
-            <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'export-modality')) { ?>
+            <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'export-modality')) { ?>
                 <div class="items-push col-lg-2" style=" margin-top: 10px; ">
                     <a href="javascript:void(0);" class="btn btn-hero-success" onclick="exportReport();"><i class="fa fa-fw fa-download"></i> Export Excel</a>
                 </div>
@@ -355,7 +355,7 @@ $ageArray = array('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49',
 
     function getReport() {
         $.blockUI();
-        $.post("<?php echo $this->url('vl-data', array('action' => 'get-age-wise-infection-report')); ?>", {
+        $.post("<?php echo $this->url('reports', array('action' => 'get-age-wise-infection-report')); ?>", {
             sampleTestedDates: $("#sampleTestedDates").val(),
             locationOne: $("#location_one").val(),
             locationTwo: $("#location_two").val(),
@@ -375,7 +375,7 @@ $ageArray = array('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49',
             searchData();
         }
         $.blockUI();
-        $.post("<?php echo $this->url('vl-data', array('action' => 'export-modality')); ?>", {
+        $.post("<?php echo $this->url('reports', array('action' => 'export-modality')); ?>", {
             sampleTestedDates: $("#sampleTestedDates").val(),
             locationOne: $("#location_one").val(),
             locationTwo: $("#location_two").val(),
