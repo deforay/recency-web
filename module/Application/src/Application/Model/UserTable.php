@@ -355,7 +355,7 @@ class UserTable extends AbstractTableGateway
                     foreach ($mapArray as $facilityId) {
                         $mapData = array(
                             'user_id' => $lastInsertedId,
-                            'facility_id' => $facilityId
+                            'facility_id' => base64_decode($facilityId)
                         );
                         $mapDb->insert($mapData);
                     }
@@ -430,7 +430,7 @@ class UserTable extends AbstractTableGateway
                 foreach ($mapArray as $facilityId) {
                     $mapData = array(
                         'user_id' => $lastInsertedId,
-                        'facility_id' => $facilityId
+                        'facility_id' => base64_decode($facilityId)
                     );
                     $mapDb->insert($mapData);
                 }
