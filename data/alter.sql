@@ -627,7 +627,44 @@ ALTER TABLE `audit_recency` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER `vl_lab`
 ALTER TABLE `recency_change_trails` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER `vl_lab`;
 
 
--- Cron Run Query
+-- Cron Run cmd
 save-request  - ./vendor/bin/laminas vlsm-send-requests
 fetch-results - ./vendor/bin/laminas vlsm-receive-results
 send-mail     - ./vendor/bin/laminas send-mail
+
+-- Brindha 14-July-2023
+INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'Reports');
+
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'recent-infection';
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'export-r-infected-data';
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'lt-infection';
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'export-long-term-infected-data';
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'tat-report';
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'export-tat-report';
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'weekly-report';
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'export-weekly-report';
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'qc-report';
+DELETE FROM `privileges` WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'age-wise-infection-report';
+DELETE FROM `privileges` WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'export-modality';
+DELETE FROM `privileges` WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'email-result';
+DELETE FROM `privileges` WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'email-result-pdf';
+DELETE FROM `privileges` WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataController' AND `privileges`.`privilege_name` = 'download-result-pdf';
+
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataControllerController' AND `privileges`.`privilege_name` = 'download-result-pdf';
+DELETE FROM privileges WHERE `privileges`.`resource_id` = 'Application\\Controller\\VlDataControllerController' AND `privileges`.`privilege_name` = 'email-result-pdf';
+
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'recent-infection', 'Recent Infection');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'export-r-infected-data', 'Export Recent Infection');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'lt-infection', 'Long Term Infection');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'export-long-term-infected-data', 'Export Long Term Infection');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'tat-report', 'TAT Report');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'export-tat-report', 'Export TAT Report');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'weekly-report', 'Weekly Report');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'export-weekly-report', 'Export Weekly Report');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'qc-report', 'QualityCheck Report');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'age-wise-infection-report', 'Age wise Infection Report');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'export-modality', 'Export Modality');
+
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\RecencyController', 'email-result', 'Email Result');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\RecencyController', 'email-result-pdf', 'Email Result Pdf');
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\RecencyController', 'download-result-pdf', 'Download Email Result Pdf');

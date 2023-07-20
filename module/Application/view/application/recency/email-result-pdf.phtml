@@ -332,7 +332,7 @@ $pdf->Output($filePath, "F");
           </div>
           <div class="block-content">
                <div class="col-md-12 table-responsive">
-                    <form name="emailInformation" id="emailInformation" class="mb-5" action="<?php echo $this->url('vl-data', array('action' => 'email-result-pdf')); ?>" method="post">
+                    <form name="emailInformation" id="emailInformation" class="mb-5" action="<?php echo $this->url('recency', array('action' => 'email-result-pdf')); ?>" method="post">
                          <div class="form-group row">
                               <table class="table table-bordered table-striped" style="width:18%;margin-left:41%;">
                                    <thead>
@@ -356,12 +356,12 @@ $pdf->Output($filePath, "F");
                               <div class="col-lg-7 offset-lg-4">
                                    <input type="hidden" name="pdfFile" value="<?php echo $downloadFile1; ?>" />
                                    <input type="hidden" name="emailResultFields" value='<?php echo $formFields; ?>' />
-                                   <a href="<?php echo $this->url('vl-data', array('action' => 'email-result')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
+                                   <a href="<?php echo $this->url('recency', array('action' => 'email-result')); ?>" class="btn btn-danger">Cancel</a>&nbsp;
                                    <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Send</button>
                               </div>
-                              <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'download-result-pdf')) { ?>
+                              <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'download-result-pdf')) { ?>
                               <div class="col-lg-7 offset-lg-4">
-                                   <p style="margin-top:10px;"><a class="send-mail" href="/vl-data/download-result-pdf/<?php echo $filename; ?>" style="text-decoration:none;">Click here to download the PDF</a></p>
+                                   <p style="margin-top:10px;"><a class="send-mail" href="/recency/download-result-pdf/<?php echo $filename; ?>" style="text-decoration:none;">Click here to download the PDF</a></p>
                               </div>
                               <?php } ?>
                          </div>

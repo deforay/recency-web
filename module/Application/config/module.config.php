@@ -255,6 +255,16 @@ return array(
                          ),
                     ),
                ),
+               'reports' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                         'route' => '/reports[/:action][/][:id]',
+                         'defaults' => array(
+                              'controller' => 'Application\Controller\ReportsController',
+                              'action' => 'recent-infection',
+                         ),
+                    ),
+               ),
                // The following is a route to simplify getting started creating
                // new controllers and actions without needing to create a new
                // module. Simply drop new controllers in, and you can access them

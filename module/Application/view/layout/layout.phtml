@@ -79,33 +79,33 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataCont
      $vlDataMenu = "<li id='nav-main-item'><a id='vl-data' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'index')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Pending Results</span></a></li>";
 }
 $reportMenu = "";
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'recent-infection')) {
-     $reportMenu .= "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Recent Infections</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'recent-infection')) {
+     $reportMenu .= "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('reports', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Recent Infections</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'lt-infection')) {
-     $reportMenu .= "<li id='nav-main-item'><a id='lt-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'lt-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Long Term Infections</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'lt-infection')) {
+     $reportMenu .= "<li id='nav-main-item'><a id='lt-infection' class='nav-main-link' href=" . $this->url('reports', array('action' => 'lt-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> All Long Term Infections</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'tat-report')) {
-     $reportMenu .= "<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'tat-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> TAT Report</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'tat-report')) {
+     $reportMenu .= "<li id='nav-main-item'><a id='tat-report' class='nav-main-link' href=" . $this->url('reports', array('action' => 'tat-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> TAT Report</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'weekly-report')) {
-     $reportMenu .= "<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'weekly-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'weekly-report')) {
+     $reportMenu .= "<li id='nav-main-item'><a id='weekly-report' class='nav-main-link' href=" . $this->url('reports', array('action' => 'weekly-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Weekly Report</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'qc-report')) {
-     $reportMenu .= "<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'qc-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'qc-report')) {
+     $reportMenu .= "<li id='nav-main-item'><a id='qc-report' class='nav-main-link' href=" . $this->url('reports', array('action' => 'qc-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> QC Report</span></a></li>";
 }
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'age-wise-infection-report')) {
-     $reportMenu .= "<li id='nav-main-item'><a id='age-wise-infection-report' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'age-wise-infection-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Age-wise Infection Report</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'age-wise-infection-report')) {
+     $reportMenu .= "<li id='nav-main-item'><a id='age-wise-infection-report' class='nav-main-link' href=" . $this->url('reports', array('action' => 'age-wise-infection-report')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Age-wise Infection Report</span></a></li>";
 }
 
 $emailMenu = "";
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'email-result')) {
-     $emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'email-result')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'email-result')) {
+     $emailMenu = "<li id='nav-main-item'><a id='email-result' class='nav-main-link' href=" . $this->url('recency', array('action' => 'email-result')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-docs'></i> Email Results</span></a></li>";
 }
 
 $recentMenu = "";
-if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'recent-infection')) {
-     $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('vl-data', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Recent Infections Report</span></a></li>";
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'recent-infection')) {
+     $recentMenu = "<li id='nav-main-item'><a id='recent-infection' class='nav-main-link' href=" . $this->url('reports', array('action' => 'recent-infection')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Recent Infections Report</span></a></li>";
 }
 $monitoringMenu = "";
 if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\MonitoringController', 'all-user-login-history')) {
@@ -509,27 +509,27 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring
                } else if (splitsUrl[1] == 'settings') {
                     $('#settings').removeClass('open');
                     $('#' + splitsUrl[1]).addClass('active');
-               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'recent-infection') {
+               } else if (splitsUrl[1] == 'reports' && splitsUrl[2] == 'recent-infection') {
                     $('#manage').removeClass('open');
                     $('#reports').addClass('open');
                     $('#' + splitsUrl[2]).addClass('active');
-               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'lt-infection') {
+               } else if (splitsUrl[1] == 'reports' && splitsUrl[2] == 'lt-infection') {
                     $('#manage').removeClass('open');
                     $('#reports').addClass('open');
                     $('#' + splitsUrl[2]).addClass('active');
-               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'tat-report') {
+               } else if (splitsUrl[1] == 'reports' && splitsUrl[2] == 'tat-report') {
                     $('#manage').removeClass('open');
                     $('#reports').addClass('open');
                     $('#' + splitsUrl[2]).addClass('active');
-               } else if (splitsUrl[1] == 'vl-data' && (splitsUrl[2] == 'weekly-report' || splitsUrl[2] == 'qc-report')) {
+               } else if (splitsUrl[1] == 'reports' && (splitsUrl[2] == 'weekly-report' || splitsUrl[2] == 'qc-report')) {
                     $('#manage').removeClass('open');
                     $('#reports').addClass('open');
                     $('#' + splitsUrl[2]).addClass('active');
-               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'age-wise-infection-report') {
+               } else if (splitsUrl[1] == 'reports' && splitsUrl[2] == 'age-wise-infection-report') {
                     $('#manage').removeClass('open');
                     $('#reports').addClass('open');
                     $('#' + splitsUrl[2]).addClass('active');
-               } else if (splitsUrl[1] == 'vl-data' && splitsUrl[2] == 'email-result') {
+               } else if (splitsUrl[1] == 'recency' && splitsUrl[2] == 'email-result') {
                     $('#email-result').removeClass('open');
                     $('#' + splitsUrl[2]).addClass('active');
                } else if (splitsUrl[1] == 'vl-data') {

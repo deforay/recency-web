@@ -62,7 +62,7 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyCon
             <div class="row items-push">
                 <div class="col-lg-7 ">
                     <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
-                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\VlDataController', 'export-long-term-infected-data')) { ?>
+                    <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\ReportsController', 'export-long-term-infected-data')) { ?>
                         <a href="javascript:void(0);" class="btn btn-success" onclick="exportRecentLTermInfection();"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
                     <?php
                     } ?>
@@ -143,7 +143,7 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyCon
             "aoColumns": [
                 <?php echo $editAction; ?>
             ],
-            "sAjaxSource": "<?php echo $this->url('vl-data', array('action' => 'lt-infection')); ?>",
+            "sAjaxSource": "<?php echo $this->url('reports', array('action' => 'lt-infection')); ?>",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 aoData.push({
                     "name": "fName",
@@ -343,7 +343,7 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyCon
 
     function exportRecentLTermInfection() {
         $.blockUI();
-        $.post("<?php echo $this->url('vl-data', array('action' => 'export-long-term-infected-data')); ?>",
+        $.post("<?php echo $this->url('reports', array('action' => 'export-long-term-infected-data')); ?>",
             function(data) {
                 if (data == "" || data == null || data == undefined) {
                     $.unblockUI();

@@ -74,7 +74,7 @@ $sessionLogin = new Container('credo');
                               <a href="javascript:void(0);" class="btn btn-primary" onclick="searchData();"><i class="fa fa-fw fa-check"></i> Search</a>
                          </div>
                     </div>
-                    <form name="emailInformation" id="emailInformation" class="mb-5" action="<?php echo $this->url('vl-data', array('action' => 'email-result-pdf')); ?>" method="post">
+                    <form name="emailInformation" id="emailInformation" class="mb-5" action="<?php echo $this->url('recency', array('action' => 'email-result-pdf')); ?>" method="post">
 
                          <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="">Subject<span class="mandatory">*</span></label>
@@ -219,7 +219,7 @@ $sessionLogin = new Container('credo');
 
      function searchData() {
           $.blockUI();
-          $.post("<?php echo $this->url('vl-data', array('action' => 'email-result-samples')); ?>", {
+          $.post("<?php echo $this->url('recency', array('action' => 'email-result-samples')); ?>", {
                locationOne: $("#location_one").val(),
                locationTwo: $("#location_two").val(),
                locationThree: $("#location_three").val(),
