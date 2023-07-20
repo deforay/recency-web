@@ -68,6 +68,7 @@ return array(
             'index' => 'allow',
             'add' => 'allow',
             'edit' => 'allow',
+            'edit-profile' => 'allow',
         ),
         'Application\\Controller\\ManifestsController' => array(
             'index' => 'allow',

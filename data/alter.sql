@@ -671,3 +671,5 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 
 -- Brindha 20-July-2023
 DELETE FROM `resources` WHERE `resources`.`resource_id` = 'Application\\Controller\\LoginController';
+
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\UserController', 'edit-profile', 'Edit Profile');
