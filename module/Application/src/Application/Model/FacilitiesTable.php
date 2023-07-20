@@ -18,7 +18,7 @@ class FacilitiesTable extends AbstractTableGateway
         $this->adapter = $adapter;
     }
 
-    public function fetchFacilitiesDetails($parameters,$acl)
+    public function fetchFacilitiesDetails($parameters, $acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -132,7 +132,7 @@ class FacilitiesTable extends AbstractTableGateway
         );
 
         $roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\FacilitiesController', 'edit')) {
+        if ($acl->isAllowed($roleCode, 'Application\Controller\FacilitiesController', 'edit')) {
             $update = true;
         } else {
             $update = false;
@@ -145,7 +145,7 @@ class FacilitiesTable extends AbstractTableGateway
             $row[] = ucwords($aRow['district_name']);
             $row[] = $aRow['email'];
             $row[] = ucwords($aRow['status']);
-            if($update){
+            if ($update) {
                 $row[] = '<a href="/facilities/edit/' . base64_encode($aRow['facility_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             }
             $output['aaData'][] = $row;
@@ -255,14 +255,18 @@ class FacilitiesTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $logincontainer = new Container('credo');
-        $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
-        
-        $sQuery = $sql->select()->from(array('f' => 'facilities'))->columns(array('facility_id', 'facility_name', 'facility_type_id'));
-        if (isset($logincontainer->userId) && $logincontainer->userId != null && $logincontainer->userId != "") {
-            $sQuery = $sQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
-                ->where(array('f.status' => 'active','ufm.user_id' => $logincontainer->userId));
+
+        $sQuery = $sql->select()
+            ->from(array('f' => 'facilities'))
+            ->columns([
+                'facility_id',
+                'facility_name',
+                'facility_type_id'
+            ]);
+        if (isset($logincontainer->facilityMap) && !empty($logincontainer->facilityMap) && $logincontainer->userId != "") {
+            $sQuery = $sQuery->where('f.facility_id IN (' . $logincontainer->facilityMap . ')');
         } else {
-            $sQuery = $sQuery->where(array('status' => 'active'));
+            $sQuery = $sQuery->where(['status' => 'active']);
         }
         $sQuery = $sQuery->where(array('facility_type_id != 2'));
         $sQuery = $sQuery->order('facility_name ASC');
@@ -285,6 +289,7 @@ class FacilitiesTable extends AbstractTableGateway
             $result['facilityTest'][$key]['facility_id'] = $row['facility_id'];
             $result['facilityTest'][$key]['facility_name'] = $row['facility_name'];
         }
+        $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
         $result['riskPopulations'] = $riskPopulationsDb->select()->toArray();
         return $result;
     }

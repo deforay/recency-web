@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Model;
 
 use Application\Service\CommonService;
@@ -17,7 +18,7 @@ class SettingsTable extends AbstractTableGateway
         $this->adapter = $adapter;
     }
 
-    public function fetchSettingsDetails($parameters,$acl)
+    public function fetchSettingsDetails($parameters, $acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -26,7 +27,7 @@ class SettingsTable extends AbstractTableGateway
         $sessionLogin = new Container('credo');
         $common = new CommonService();
         $aColumns = array('reference_result', 'kit_lot_no', 'DATE_FORMAT(kit_expiry_date,"%d-%b-%Y")', 'status');
-        $orderColumns = array('reference_result', 'kit_lot_no', 'kit_expiry_date','status');
+        $orderColumns = array('reference_result', 'kit_lot_no', 'kit_expiry_date', 'status');
 
         /* Paging */
         $sLimit = "";
@@ -97,7 +98,7 @@ class SettingsTable extends AbstractTableGateway
         $roleId = $sessionLogin->roleId;
 
         $sQuery = $sql->select()->from(array('t' => 'test_kit_information'))
-        ->join(array('u'=>'users'),'t.added_by = u.user_id',array('user_name'))
+            ->join(array('u' => 'users'), 't.added_by = u.user_id', array('user_name'))
             //->join(array('p' => 'province_details'), 'p.province_id=f.province', array('province_name'), 'left')
             //->join(array('d' => 'district_details'), 'd.district_id=f.district', array('district_name'), 'left')
         ;
@@ -133,7 +134,7 @@ class SettingsTable extends AbstractTableGateway
         );
 
         $roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'edit')) {
+        if ($acl->isAllowed($roleCode, 'Application\Controller\SettingsController', 'edit')) {
             $update = true;
         } else {
             $update = false;
@@ -145,9 +146,9 @@ class SettingsTable extends AbstractTableGateway
             $row[] = ucwords($aRow['kit_lot_no']);
             $row[] = $common->humanDateFormat($aRow['kit_expiry_date']);
             $row[] = ucwords($aRow['status']);
-            $row[] = date('d-M-Y H:s A',strtotime($aRow['added_on']));
+            $row[] = date('d-M-Y H:s A', strtotime($aRow['added_on']));
             $row[] = ucwords($aRow['user_name']);
-            if($update){
+            if ($update) {
                 $row[] = '<a href="/settings/edit/' . base64_encode($aRow['test_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             }
             $output['aaData'][] = $row;
@@ -158,7 +159,7 @@ class SettingsTable extends AbstractTableGateway
 
     public function addSettingsDetails($params)
     {
-        
+
         $logincontainer = new Container('credo');
         $common = new CommonService();
         if (isset($params['testKitName']) && trim($params['testKitName']) != "") {
@@ -170,7 +171,7 @@ class SettingsTable extends AbstractTableGateway
                 'added_on' => date("Y-m-d H:i:s"),
                 'added_by' => $logincontainer->userId,
             );
-           
+
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
         }
@@ -188,7 +189,7 @@ class SettingsTable extends AbstractTableGateway
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         //facility map
-         return $rResult;
+        return $rResult;
     }
 
     public function updateSettingsDetails($params)
@@ -204,12 +205,12 @@ class SettingsTable extends AbstractTableGateway
                 'status' => $params['status'],
             );
             $updateResult = $this->update($data, array('test_id' => $params['testId']));
-      
         }
         return  $params['testId'];
     }
 
-    public function fetchKitLotDetails(){
-        return $this->select(array('status'=>'active'))->toArray();
+    public function fetchKitLotDetails()
+    {
+        return $this->select(array('status' => 'active'))->toArray();
     }
 }
