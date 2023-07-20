@@ -668,3 +668,6 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\RecencyController', 'email-result', 'Email Result');
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\RecencyController', 'email-result-pdf', 'Email Result Pdf');
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\RecencyController', 'download-result-pdf', 'Download Email Result Pdf');
+
+-- Brindha 20-July-2023
+DELETE FROM `resources` WHERE `resources`.`resource_id` = 'Application\\Controller\\LoginController';

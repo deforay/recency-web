@@ -154,9 +154,9 @@ $sessionLogin = new Container('credo');
                                         $allowChecked = "";
                                     }
                                     echo "<div class='col-lg-3' style='float: left; margin-top:5px;border:1px solid #eee;padding:10px; width: 25%;'>
-                                            <strong style='font-size: 14px;'>" . _($privilege['display_name']) . "</strong>
+                                            <strong>" . _($privilege['display_name']) . "</strong>
                                             <br>
-                                            <div class='switch-field' style='margin: 30px 0 36px 40px;'>
+                                            <div class='switch-field' style='margin: 30px 0 36px 60px;'>
                                                 <input type='radio' class='cekAll layCek'  name='resource[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]" ."'id='radio-one[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]". "' value='allow' $allowChecked><label for='radio-one[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]"."'>Yes</label>
                                                 <input type='radio' class='unCekAll layCek'  name='resource[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]" . "'id='radio-two[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]"."' value='deny' $denyChecked> <label for='radio-two[" . $value['resource_id'] . "][" . $privilege['privilege_name'] . "]"."'> No</label>
                                             </div>
