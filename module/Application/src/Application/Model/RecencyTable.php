@@ -1358,7 +1358,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome','facility_id'))
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome', 'facility_id'))
             ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
             ->where(array('r.term_outcome' => 'Assay Recent'));
 
@@ -2099,7 +2099,7 @@ class RecencyTable extends AbstractTableGateway
         $mailResult = 0;
         $mailResult = $tempDb->insertTempMailDetails($to, $subject, $message, $fromMail, $fromName, $cc = null, $bcc = null, $attachment);
         if ($mailResult > 0) {
-            if(!empty($emailFormField['selectedSampleId'])){
+            if (!empty($emailFormField['selectedSampleId'])) {
                 $recencyIds = explode(",", $emailFormField['selectedSampleId']);
                 foreach ($recencyIds as $recencyId) {
                     $this->update(array('mail_sent_status' => 'yes'), array('recency_id' => $recencyId));
@@ -2576,16 +2576,16 @@ class RecencyTable extends AbstractTableGateway
         foreach ($rResult as $aRow) {
 
             $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
-            if (trim($aRow['samplesFinalLongTerm']) != "" && trim($aRow['samplesFinalOutcome'])!=0) {
+            if (trim($aRow['samplesFinalLongTerm']) != "" && trim($aRow['samplesFinalOutcome']) != 0) {
                 $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (trim($aRow['ritaRecent']) != "" && trim($aRow['samplesFinalOutcome'])!=0) {
+            if (trim($aRow['ritaRecent']) != "" && trim($aRow['samplesFinalOutcome']) != 0) {
                 $recentPercentage = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'] && trim($aRow['samplesFinalOutcome'])!=0)) {
+            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'] && trim($aRow['samplesFinalOutcome']) != 0)) {
                 $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid']) && trim($aRow['samplesTestedRecency'])!=0) {
+            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid']) && trim($aRow['samplesTestedRecency']) != 0) {
                 $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
             }
 
@@ -3617,7 +3617,7 @@ class RecencyTable extends AbstractTableGateway
         }
 
         $sQueryStr = $sql->buildSqlString($sQuery);
-        
+
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $j = 0;
@@ -3979,16 +3979,16 @@ class RecencyTable extends AbstractTableGateway
 
         foreach ($rResult as $aRow) {
             $ltPercentage = $invalidPercentage = $inconlusivePercentage = $recentPercentage = "0 %";
-            if (trim($aRow['samplesFinalLongTerm']) != "" && trim($aRow['samplesFinalOutcome'])!=0) {
+            if (trim($aRow['samplesFinalLongTerm']) != "" && trim($aRow['samplesFinalOutcome']) != 0) {
                 $ltPercentage = round((($aRow['samplesFinalLongTerm'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['ritaRecent']) && !empty($aRow['ritaRecent']) && trim($aRow['samplesFinalOutcome'])!=0) {
+            if (isset($aRow['ritaRecent']) && !empty($aRow['ritaRecent']) && trim($aRow['samplesFinalOutcome']) != 0) {
                 $recentPercentage = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive']) && trim($aRow['samplesFinalOutcome'])!=0) {
+            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive']) && trim($aRow['samplesFinalOutcome']) != 0) {
                 $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid']) && trim($aRow['samplesTestedRecency'])!=0) {
+            if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid']) && trim($aRow['samplesTestedRecency']) != 0) {
                 $invalidPercentage = round((($aRow['samplesInvalid'] / $aRow['samplesTestedRecency']) * 100), 2) . '%';
             }
             $row = array();
@@ -4676,7 +4676,7 @@ class RecencyTable extends AbstractTableGateway
                 'lis_vl_result_entry_date'  => $common->getDateTime()
                 // 'vl_result'           => $params['result'],
                 // 'vl_test_date'        => date('Y-m-d', strtotime($params['sampleTestedDatetime'])),
-                // 'vl_result_entry_date'  => $common->getDateTime() 
+                // 'vl_result_entry_date'  => $common->getDateTime()
             );
             $results =  $this->update($data, array('sample_id' => $params['sampleId']));
         }
@@ -5126,9 +5126,9 @@ class RecencyTable extends AbstractTableGateway
         if (isset($params['recencyTestDate']) && $params['recencyTestDate'] != null) {
             $recencyTestDate = $common->dbDateFormat($params['recencyTestDate']);
             $sQuery = $sql->select()->from(array('t' => 'test_kit_information'))
-                ->where("kit_expiry_date <= '" . $recencyTestDate . "'")
+                ->where("kit_expiry_date >= '$recencyTestDate'")
                 ->where(array('status' => 'active'));
-            $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
+            $sQueryStr = $sql->buildSqlString($sQuery);
             return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         }
     }
@@ -5181,7 +5181,7 @@ class RecencyTable extends AbstractTableGateway
     }
 
     //refer updateVlRequestSentNO Function
-    public function updateVlRequestSentNO($rId,$vlSampleCode)
+    public function updateVlRequestSentNO($rId, $vlSampleCode)
     {
         $common = new CommonService();
         $this->update(array(
@@ -5192,7 +5192,7 @@ class RecencyTable extends AbstractTableGateway
     }
 
     //refer updatefinalOutComeBySampleId Function
-    public function updatefinalOutComeBySampleId($data,$finaloutcome)
+    public function updatefinalOutComeBySampleId($data, $finaloutcome)
     {
         $common = new CommonService();
         $this->update(array(
@@ -5210,11 +5210,11 @@ class RecencyTable extends AbstractTableGateway
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('unique_id','facility_id','sample_collection_date','lis_vl_sample_code'))
-                ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
-                ->where(array('r.term_outcome' => 'Assay Recent'))
-                ->where(array('r.lis_vl_sample_code IS NOT NULL AND r.lis_vl_sample_code NOT like ""'))
-                ->where(array('r.vl_result is null OR r.vl_result=""'));
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('unique_id', 'facility_id', 'sample_collection_date', 'lis_vl_sample_code'))
+            ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
+            ->where(array('r.term_outcome' => 'Assay Recent'))
+            ->where(array('r.lis_vl_sample_code IS NOT NULL AND r.lis_vl_sample_code NOT like ""'))
+            ->where(array('r.vl_result is null OR r.vl_result=""'));
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
