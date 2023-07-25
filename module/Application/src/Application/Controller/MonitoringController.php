@@ -11,11 +11,13 @@ class MonitoringController extends AbstractActionController
 {
     private $userService = null;
     private $globalConfigService = null;
+    private $facilitiesService = null;
 
-    public function __construct($userService, $globalConfigService)
+    public function __construct($userService, $globalConfigService, $facilitiesService)
     {
         $this->userService = $userService;
         $this->globalConfigService = $globalConfigService;
+        $this->facilitiesService = $facilitiesService;
     }
 
     public function indexAction()
@@ -79,4 +81,35 @@ class MonitoringController extends AbstractActionController
                 'users' => $users
             ));
     }
+
+    public function systemAlertsAction()
+    {
+        $session = new Container('credo');
+        /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
+        $alertType = $this->userService->getAlertType();
+        $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $result = $this->userService->getAllAlertsDetails($params);
+            return $this->getResponse()->setContent(Json::encode($result));
+        }
+        return new ViewModel(array(
+            'alertType' => $alertType,
+            'facilityResult' => $facilityResult
+        ));
+    }
+    public function updateAlertStatusAction()
+    {
+        $session = new Container('credo');
+        /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $this->userService->UpdateAlertStatus($params);
+            $result = $this->userService->getAllAlertsDetails($params);
+            return $this->getResponse()->setContent(Json::encode($result));
+        }
+    }
+    
 }

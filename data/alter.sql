@@ -673,3 +673,21 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 DELETE FROM `resources` WHERE `resources`.`resource_id` = 'Application\\Controller\\LoginController';
 
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\UserController', 'edit-profile', 'Edit Profile');
+
+-- Brindha 25-July-2023
+CREATE TABLE `system_alerts` (
+  `alert_id` int NOT NULL AUTO_INCREMENT,
+  `alert_text` text NOT NULL,
+  `facility_id` int DEFAULT NULL,
+  `lab_id` int DEFAULT NULL,
+  `alert_type` varchar(256) NOT NULL,
+  `alert_status` varchar(256) NOT NULL,
+  `alerted_on` datetime NOT NULL,
+  `updated_datetime` datetime NOT NULL,
+  PRIMARY KEY (`alert_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\MonitoringController', 'system-alerts', 'system-alerts');
+
+UPDATE `privileges` SET `display_name` = 'Download Email Result' WHERE `privileges`.`resource_id` = 'Application\\Controller\\RecencyController' AND `privileges`.`privilege_name` = 'download-result-pdf';
+UPDATE `privileges` SET `display_name` = 'Export Long Term' WHERE `privileges`.`resource_id` = 'Application\\Controller\\ReportsController' AND `privileges`.`privilege_name` = 'export-long-term-infected-data';

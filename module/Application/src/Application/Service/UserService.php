@@ -177,4 +177,21 @@ class UserService
         $eventLogDb = $this->sm->get('EventLogTable');
         return $eventLogDb->getEventType();
     }
+
+    public function getAlertType()
+    {
+        $systmeAlertsDb = $this->sm->get('SystemAlertsTable');
+        return $systmeAlertsDb->getAlertType();
+    }
+
+    public function getAllAlertsDetails($params)
+    {
+        $systmeAlertsDb = $this->sm->get('SystemAlertsTable');
+        return $systmeAlertsDb->fetchAllAlertsDetails($params);
+    }
+    public function UpdateAlertStatus($params)
+    {
+        $systmeAlertsDb = $this->sm->get('SystemAlertsTable');
+        return $systmeAlertsDb->UpdateAlertStatus($params);
+    }
 }

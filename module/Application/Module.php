@@ -33,6 +33,7 @@ use Application\Model\RecencyChangeTrailsTable;
 use Application\Model\ManageColumnsMapTable;
 use Application\Model\EventLogTable;
 use Application\Model\ManifestsTable;
+use Application\Model\SystemAlertsTable;
 use Application\Model\Acl;
 // Service
 
@@ -339,6 +340,14 @@ class Module implements ConfigProviderInterface
                     {
                         $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new SampleTypesTable($dbAdapter);
+                    }
+                },
+                'SystemAlertsTable'  => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
+                        return new SystemAlertsTable($dbAdapter);
                     }
                 },
                 //service
@@ -651,7 +660,8 @@ class Module implements ConfigProviderInterface
                     {
                         $userService = $diContainer->get('UserService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
-                        return new \Application\Controller\MonitoringController($userService, $globalConfigService);
+                        $facilitiesService = $diContainer->get('FacilitiesService');
+                        return new \Application\Controller\MonitoringController($userService, $globalConfigService, $facilitiesService);
                     }
                 },
                 'Application\Controller\RolesController' => new class
