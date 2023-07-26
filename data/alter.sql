@@ -631,6 +631,7 @@ ALTER TABLE `recency_change_trails` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER 
 save-request  - ./vendor/bin/laminas vlsm-send-requests
 fetch-results - ./vendor/bin/laminas vlsm-receive-results
 send-mail     - ./vendor/bin/laminas send-mail
+system-alerts - ./vendor/bin/laminas system-alerts
 
 -- Brindha 14-July-2023
 INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'Reports');

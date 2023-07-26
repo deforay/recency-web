@@ -175,8 +175,10 @@ class SystemAlertsTable extends AbstractTableGateway {
         foreach ($rResult as $aRow) {
             $row = array();
             $status = '<select class="form-control" name="status[]" id="' . $aRow['alert_id'] . '" title="' . _("Please select status") . '" onchange="updateStatus(this,\'' . $aRow['alert_status'] . '\')">
-            <option value="active" ' . ($aRow['alert_status'] == "active" ? "selected=selected" : "") . '>' . _("Active") . '</option>
-            <option value="inactive" ' . ($aRow['alert_status'] == "inactive" ? "selected=selected" : "") . '>' . _("Inactive") . '</option>
+            <option value="Pending" ' . ($aRow['alert_status'] == "Pending" ? "selected=selected" : "") . '>' . _("Pending") . '</option>
+            <option value="Resolved" ' . ($aRow['alert_status'] == "Resolved" ? "selected=selected" : "") . '>' . _("Resolved") . '</option>
+            <option value="Ignore" ' . ($aRow['alert_status'] == "Ignore" ? "selected=selected" : "") . '>' . _("Ignore") . '</option>
+            <option value="Expired" ' . ($aRow['alert_status'] == "Expired" ? "selected=selected" : "") . '>' . _("Expired") . '</option>
             </select>';
             $date = explode(" ",$aRow['alerted_on']);
             $dateTime = $common->humanDateFormat($date[0]);

@@ -1786,4 +1786,18 @@ class RecencyService
             error_log('Error :' . $e->getMessage());
         }
     }
+
+    public function systemAlerts()
+    {
+        try {
+            $recencyDb = $this->sm->get('RecencyTable');
+
+            //Get empty vlResult for more than 30 days and Insert alert table
+            $rResult = $recencyDb->getEmptyVLResultAndInsertAlert();
+
+        } catch (Exception $e) {
+            error_log('Error :' . $e->getMessage());
+        }
+    }
+
 }

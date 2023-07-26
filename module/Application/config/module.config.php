@@ -305,6 +305,7 @@ return array(
                Application\Command\VlsmSendRequests::class => Application\Command\VlsmSendRequestsFactory::class,
                Application\Command\VlsmReceiveResults::class => Application\Command\VlsmReceiveResultsFactory::class,
                Application\Command\SendMail::class => Application\Command\SendMailFactory::class,
+               Application\Command\SystemAlerts::class => Application\Command\SystemAlertsFactory::class,
           ],
           'aliases' => array(
                'translator' => 'MvcTranslator',
@@ -341,6 +342,7 @@ return array(
                'send-mail' => Application\Command\SendMail::class,
                'vlsm-send-requests' => \Application\Command\VlsmSendRequests::class,
                'vlsm-receive-results' => \Application\Command\VlsmReceiveResults::class,
+               'system-alerts' => \Application\Command\SystemAlerts::class,
           ],
      ],
      // Placeholder for console routes

@@ -14,6 +14,7 @@ use \Application\Model\FacilitiesTable;
 
 use Laminas\Crypt\BlockCipher;
 use Laminas\Crypt\Symmetric\Mcrypt;
+use Laminas\Db\Sql\Predicate\Literal;
 
 class RecencyTable extends AbstractTableGateway
 {
@@ -5220,5 +5221,40 @@ class RecencyTable extends AbstractTableGateway
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
+    }
+
+    //refer getEmptyVLResultAndInsertAlert Function
+    public function getEmptyVLResultAndInsertAlert()
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $systemAlertDb = new SystemAlertsTable($this->adapter);
+        $thirtyDaysAgo = (new \DateTime())->sub(new \DateInterval('P30D'))->format('Y-m-d');
+        // Create the WHERE clause conditions
+        $where = [
+            new Literal('vl_result IS NULL'),
+            new Literal('added_on < ' . $dbAdapter->platform->quoteValue($thirtyDaysAgo)),
+        ];
+        $rQuery = $sql->select()
+            ->from(['r' => 'recency'])
+            ->columns(array('sample_id', 'facility_id', 'testing_facility_id'))
+            ->where($where)
+            ->limit(1);
+        $rQueryStr = $sql->buildSqlString($rQuery);
+        $rResult = $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        if(count($rResult)>0){
+            foreach($rResult as $res){
+                $common = new CommonService();
+                $alertData = array(
+                    'alert_text' => $res['sample_id'].' Still not having VL resuts',
+                    'facility_id' => $res['facility_id'],
+                    'lab_id' => $res['testing_facility_id'],
+                    'alert_type' => 'Informational',
+                    'alert_status' => 'Pending',
+                    'alerted_on' => $common->getDateTime()
+                );
+                $systemAlertDb->insert($alertData);
+            }
+        }
     }
 }
