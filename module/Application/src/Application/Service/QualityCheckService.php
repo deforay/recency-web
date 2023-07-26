@@ -130,6 +130,8 @@ class QualityCheckService
                     $row[] = ucwords($aRow['long_term_verification_line']);
                     $row[] = ucwords($aRow['term_outcome']);
                     $row[] = ucwords($aRow['tester_name']);
+                    $row[] = ucwords($aRow['hiv_recency_test_date']);
+                    $row[] = ucwords($aRow['facility_name']);
                     $output[] = $row;
                 }
             }
@@ -172,6 +174,8 @@ class QualityCheckService
             $sheet->mergeCells('H3:H4');
             $sheet->mergeCells('I3:I4');
             $sheet->mergeCells('J3:J4');
+            $sheet->mergeCells('K3:K4');
+            $sheet->mergeCells('L3:L4');
 
             $sheet->setCellValue('A1', html_entity_decode('Quality Check Data', ENT_QUOTES, 'UTF-8'));
 
@@ -185,6 +189,8 @@ class QualityCheckService
             $sheet->setCellValue('H3', html_entity_decode('Long Term Line', ENT_QUOTES, 'UTF-8'));
             $sheet->setCellValue('I3', html_entity_decode('Assay Outcome', ENT_QUOTES, 'UTF-8'));
             $sheet->setCellValue('J3', html_entity_decode('Tester Name', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('K3', html_entity_decode('HIV Recency Test Date', ENT_QUOTES, 'UTF-8'));
+            $sheet->setCellValue('L3', html_entity_decode('Testing Facility', ENT_QUOTES, 'UTF-8'));
 
             // $sheet->getStyle('A1:B1')->getFont()->setBold(true)->setSize(16);L
 
@@ -198,6 +204,8 @@ class QualityCheckService
             $sheet->getStyle('H3:H4')->applyFromArray($styleArray);
             $sheet->getStyle('I3:I4')->applyFromArray($styleArray);
             $sheet->getStyle('J3:J4')->applyFromArray($styleArray);
+            $sheet->getStyle('K3:K4')->applyFromArray($styleArray);
+            $sheet->getStyle('L3:L4')->applyFromArray($styleArray);
 
             foreach ($output as $rowNo => $rowData) {
                 $colNo = 1;

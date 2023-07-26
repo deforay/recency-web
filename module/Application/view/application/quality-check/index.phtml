@@ -6,9 +6,9 @@ $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 $acl=$this->layout()->acl;
 if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheckController', 'edit')) {
-    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 }else{
-    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
+    $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"}';
 }
 ?>
 <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
@@ -113,6 +113,12 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityChe
                     <div class="col-sm-3">
                         <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i + 1; ?>" id="iCol<?php echo $i; ?>" data-showhide="tester_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i; ?>">Tester Name</label>
                     </div>
+                    <div class="col-sm-3">
+                        <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i + 1; ?>" id="iCol<?php echo $i; ?>" data-showhide="hiv_recency_test_date" class="showhideCheckBox" /> <label for="iCol<?php echo $i; ?>">HIV Recency Test Date</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i + 1; ?>" id="iCol<?php echo $i; ?>" data-showhide="facility_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i; ?>">Testing Facility</label>
+                    </div>
                 </div>
             </span>
 
@@ -131,6 +137,8 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityChe
                         <th>Long Term Line</th>
                         <th>Assay Outcome</th>
                         <th>Tester Name</th>
+                        <th>HIV Recency Test Date</th>
+                        <th>Testing Facility</th>
                         <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheckController', 'edit')) { ?>
                         <th>Action</th>
                         <?php } ?>
@@ -139,9 +147,9 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityChe
                 <tbody>
                     <tr>
                         <?php if ($roleCode == "user") {
-                            echo "<td colspan='11' class='dataTables_empty'>Loading data from server</td>";
+                            echo "<td colspan='13' class='dataTables_empty'>Loading data from server</td>";
                         } else {
-                            echo "<td colspan='10' class='dataTables_empty'>Loading data from server</td>";
+                            echo "<td colspan='12' class='dataTables_empty'>Loading data from server</td>";
                         } ?>
                     </tr>
                 </tbody>
@@ -157,6 +165,8 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityChe
                         <th>Long Term Line </th>
                         <th>Assay Outcome</th>
                         <th>Tester Name</th>
+                        <th>HIV Recency Test Date</th>
+                        <th>Testing Facility</th>
                         <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheckController', 'edit')) { ?>
                         <th>Action</th>
                         <?php } ?>

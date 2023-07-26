@@ -197,6 +197,8 @@ class QualityCheckTable extends AbstractTableGateway
                $row[] = ucwords($aRow['long_term_verification_line']);
                $row[] = ucwords($aRow['term_outcome']);
                $row[] = ucwords($aRow['tester_name']);
+               $row[] = ucwords($aRow['hiv_recency_test_date']);
+               $row[] = ucwords($aRow['facility_name']);
                if($update){
                     $row[] = $actionBtn;
                }
