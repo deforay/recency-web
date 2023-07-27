@@ -99,6 +99,20 @@ class RecencyController extends AbstractActionController
          $recencyId = base64_decode($this->params()->fromRoute('id'));
          $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
          $result = $this->recencyService->getRecencyDetailsById($recencyId);
+
+         $resultFacility = false;
+         foreach($facilityResult['facility'] as $facility){
+            if($result['facility_id'] == $facility['facility_id']){
+               $resultFacility = true;
+            }
+         }
+         if(!$resultFacility && $result['facility_id'] != ''){
+            $fResult = $this->facilitiesService->getFacilitiesByFacilityId($result['facility_id']);
+            foreach ($fResult['facility'] as $newFacility) {
+               $facilityResult['facility'][] = $newFacility;
+            }
+         }
+         
          $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
          $testFacilityTypeResult = $this->facilitiesService->getTestingFacilitiesTypeDetails();
          $sampleInfo = $this->settingsService->getSamplesDetails();

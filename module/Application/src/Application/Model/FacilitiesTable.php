@@ -430,4 +430,22 @@ class FacilitiesTable extends AbstractTableGateway
         }
         return json_encode($fResult);
     }
+
+    public function fetchFacilitiesByFacilityId($facilityId)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery = $sql->select()->from(array('f' => 'facilities'))
+            ->columns(['facility_id','facility_name','facility_type_id'])
+            ->where(array('f.facility_id' => $facilityId));
+        $sQueryStr = $sql->buildSqlString($sQuery);
+        $fetchResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+
+        // Populating Collection/Client Sites
+        foreach ($fetchResult as $key => $row) {
+            $result['facility'][$key]['facility_id'] = $row['facility_id'];
+            $result['facility'][$key]['facility_name'] = $row['facility_name'];
+        }
+        return $result;
+    }
 }

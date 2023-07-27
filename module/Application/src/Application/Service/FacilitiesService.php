@@ -123,6 +123,12 @@ class FacilitiesService {
         return $facilityDb->fetchTestingFacilitiesTypeDetails();
     }
 
+    public function getFacilitiesByFacilityId($facilityId)
+    {
+        $facilityDb = $this->sm->get('FacilitiesTable');
+        return $facilityDb->fetchFacilitiesByFacilityId($facilityId);
+    }
+
     
 }
 
