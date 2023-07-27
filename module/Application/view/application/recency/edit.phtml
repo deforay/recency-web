@@ -571,6 +571,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 								$testNotPermform = "";
 								$testingFacility = "";
 								$hivRecencyTestDate = "";
+								$kitLotNo = "";
 								$KitExpiryDate = "";
 								$controlLineResult = "";
 								$positiveVerificationLine = "";
@@ -635,7 +636,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
 
 										<label class="col-sm-2 col-form-label <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>" for="testKitLotNo">Test Kit Lot Number <?php echo (in_array("Test Kit Lot No", $resultArr) ? "<span class='mandatory'> *</span>" : ""); ?></label>
 										<div class="col-sm-4 <?php echo in_array("Test Kit Lot No", $resultArr2) ? "showFields" : "hideFields"; ?>">
-											<select class="form-control <?php echo $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no" onchange="testKitLotNoChange(this);">
+											<select class="form-control <?php echo $disbaledResult . $kitLotNo; ?>" id="testKitLotNo" name="testKitLotNo" title="Please select the kit lot no" onchange="testKitLotNoChange(this);">
 												<option value="">--Select--</option>
 
 											</select>
