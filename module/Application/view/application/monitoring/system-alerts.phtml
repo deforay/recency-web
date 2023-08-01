@@ -34,8 +34,19 @@ $acl=$this->layout()->acl;
                             foreach($alertType as $alert)
                             {
                                 $alrt = $alert['Expression1'];
+                                if($alrt == 1){
+                                    $alertType = "Critical";
+                                }elseif($alrt == 2){
+                                    $alertType = "Warning";
+                                }elseif($alrt == 3){
+                                    $alertType = "Error";
+                                }elseif($alrt == 4){
+                                    $alertType = "Failure";
+                                }elseif($alrt == 5){
+                                    $alertType = "Informational";
+                                }
                                 ?>
-                            <option value="<?php echo $alrt; ?>"><?php echo $alrt; ?></option>
+                            <option value="<?php echo $alrt; ?>"><?php echo $alertType; ?></option>
                                 <?php
                             }
                             ?>

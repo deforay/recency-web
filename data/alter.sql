@@ -692,3 +692,6 @@ INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUE
 
 UPDATE `privileges` SET `display_name` = 'Download Email Result' WHERE `privileges`.`resource_id` = 'Application\\Controller\\RecencyController' AND `privileges`.`privilege_name` = 'download-result-pdf';
 UPDATE `privileges` SET `display_name` = 'Export Long Term' WHERE `privileges`.`resource_id` = 'Application\\Controller\\ReportsController' AND `privileges`.`privilege_name` = 'export-long-term-infected-data';
+
+-- Brindha 01-August-2023
+ALTER TABLE system_alerts MODIFY COLUMN alert_type INT NOT NULL;
