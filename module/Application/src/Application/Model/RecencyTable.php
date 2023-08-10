@@ -228,9 +228,9 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.sample_collection_date >='" . $start_date . "'", "r.sample_collection_date <='" . $end_date . "'"));
         }
 
-        /*if ($sessionLogin->facilityMap != null && $parameters['fName'] == '') {
-            $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $sessionLogin->facilityMap . ')');
-        }*/
+        if ($sessionLogin->facilityMap != null && $parameters['fName'] == '') {
+            $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
+        }
 
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
