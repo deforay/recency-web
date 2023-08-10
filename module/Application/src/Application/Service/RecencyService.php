@@ -1793,7 +1793,9 @@ class RecencyService
             $recencyDb = $this->sm->get('RecencyTable');
 
             //Get empty vlResult for more than 30 days and Insert alert table
-            $rResult = $recencyDb->getEmptyVLResultAndInsertAlert();
+            $rResult = $recencyDb->getPendingVLResultAndInsertAlert();
+            //Get empty  Recency Test for more than 30 days and Insert alert table
+            $rResult = $recencyDb->getPendingRecencyTestAndInsertAlert();
 
         } catch (Exception $e) {
             error_log('Error :' . $e->getMessage());

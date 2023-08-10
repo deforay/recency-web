@@ -5223,8 +5223,8 @@ class RecencyTable extends AbstractTableGateway
         return $rResult;
     }
 
-    //refer getEmptyVLResultAndInsertAlert Function
-    public function getEmptyVLResultAndInsertAlert()
+    //refer getPendingVLResultAndInsertAlert Function
+    public function getPendingVLResultAndInsertAlert()
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
@@ -5249,7 +5249,7 @@ class RecencyTable extends AbstractTableGateway
                     'alert_text' => $res['sample_id'].' Still not having VL resuts',
                     'facility_id' => $res['facility_id'],
                     'lab_id' => $res['testing_facility_id'],
-                    'alert_type' => 'Informational',
+                    'alert_type' => 5,
                     'alert_status' => 'Pending',
                     'alerted_on' => $common->getDateTime()
                 );
@@ -5257,4 +5257,40 @@ class RecencyTable extends AbstractTableGateway
             }
         }
     }
+
+    //refer getPendingRecencyTestAndInsertAlert Function
+    public function getPendingRecencyTestAndInsertAlert()
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $systemAlertDb = new SystemAlertsTable($this->adapter);
+        $thirtyDaysAgo = (new \DateTime())->sub(new \DateInterval('P30D'))->format('Y-m-d');
+        // Create the WHERE clause conditions
+        $where = [
+            new Literal('hiv_recency_test_date IS NULL'),
+            new Literal('added_on < ' . $dbAdapter->platform->quoteValue($thirtyDaysAgo)),
+        ];
+        $rQuery = $sql->select()
+            ->from(['r' => 'recency'])
+            ->columns(array('sample_id', 'facility_id', 'testing_facility_id'))
+            ->where($where)
+            ->limit(1);
+        $rQueryStr = $sql->buildSqlString($rQuery);
+        $rResult = $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        if(count($rResult)>0){
+            foreach($rResult as $res){
+                $common = new CommonService();
+                $alertData = array(
+                    'alert_text' => $res['sample_id'].' Still not having Recency Test',
+                    'facility_id' => $res['facility_id'],
+                    'lab_id' => $res['testing_facility_id'],
+                    'alert_type' => 5,
+                    'alert_status' => 'Pending',
+                    'alerted_on' => $common->getDateTime()
+                );
+                $systemAlertDb->insert($alertData);
+            }
+        }
+    }
+    
 }

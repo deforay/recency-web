@@ -180,13 +180,27 @@ class SystemAlertsTable extends AbstractTableGateway {
             <option value="Ignore" ' . ($aRow['alert_status'] == "Ignore" ? "selected=selected" : "") . '>' . _("Ignore") . '</option>
             <option value="Expired" ' . ($aRow['alert_status'] == "Expired" ? "selected=selected" : "") . '>' . _("Expired") . '</option>
             </select>';
+
+            $alertType = '';
+            if($aRow['alert_type'] == 1){
+                $alertType = "Critical";
+            }elseif($aRow['alert_type'] == 2){
+                $alertType = "Warning";
+            }elseif($aRow['alert_type'] == 3){
+                $alertType = "Error";
+            }elseif($aRow['alert_type'] == 4){
+                $alertType = "Failure";
+            }elseif($aRow['alert_type'] == 5){
+                $alertType = "Informational";
+            }
+
             $date = explode(" ",$aRow['alerted_on']);
             $dateTime = $common->humanDateFormat($date[0]);
             $time_in_12_hour_format  = date("g:i a", strtotime($date[1]));
             $row[] = ucfirst($aRow['facility_name']);
             $row[] = ucfirst($aRow['lab_name']);
             $row[] = $aRow['alert_text'];
-            $row[] = $aRow['alert_type'];
+            $row[] = $alertType;
             $row[] = $status;
             $row[] = $dateTime." ".$time_in_12_hour_format;
             $output['aaData'][] = $row;
