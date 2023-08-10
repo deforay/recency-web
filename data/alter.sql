@@ -686,7 +686,7 @@ CREATE TABLE `system_alerts` (
   `alerted_on` datetime NOT NULL,
   `updated_datetime` datetime NOT NULL,
   PRIMARY KEY (`alert_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\MonitoringController', 'system-alerts', 'system-alerts');
 
