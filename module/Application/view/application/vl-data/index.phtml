@@ -78,6 +78,9 @@ $acl=$this->layout()->acl;
                     <div class="col-sm-4">
                         <select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
                             <option value="">-- Select --</option>
+                            <?php foreach ($facilityResult['facility'] as $facilityRow) { ?>
+                                <option value="<?php echo base64_encode($facilityRow['facility_id']); ?>"><?php echo ucwords($facilityRow['facility_name']); ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>

@@ -25,8 +25,10 @@ class VlDataController extends AbstractActionController
     public function indexAction()
     {
         $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
+        $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
         return new ViewModel(array(
             'globalConfigResult' => $globalConfigResult,
+            'facilityResult' => $facilityResult,
         ));
     }
 

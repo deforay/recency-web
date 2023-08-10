@@ -1743,7 +1743,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
         if ($this->sessionLogin->facilityMap != null && $parameters['fName'] == '') {
-            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') )');
         }
         if (isset($sOrder) && $sOrder != "") {
             $sQuery->order($sOrder);
