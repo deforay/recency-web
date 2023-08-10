@@ -157,7 +157,7 @@ button#search_rightAll:hover, button#search_rightSelected:hover, button#search_l
                                        $facilityId[] = $facility['facility_id'];
                                        $facilityType = ($facility['facility_type_id'] == 2) ? ' (Recency Testing Site)' : ' (Health Facility)';
                                         ?>
-                                        <option value="<?php echo $facility['facility_id']; ?>" selected='selected'><?php echo ($facility['facility_name']).$facilityType; ?></option>
+                                        <option value="<?php echo base64_encode($facility['facility_id']); ?>" selected='selected'><?php echo ($facility['facility_name']).$facilityType; ?></option>
                                    <?php } ?>
                                    </select>
                               </div>
