@@ -105,12 +105,15 @@ class ManifestsTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $roleId = $sessionLogin->roleId;
         $roleCode = $sessionLogin->roleCode;
+        $userId = $sessionLogin->userId;
 
         $sQuery = $sql->select()->from(array('m' => 'manifests'))
             ->join(array('u' => 'users'), 'u.user_id = m.added_by', array('user_name'))
             ->join(array('r' => 'recency'), 'r.manifest_id = m.manifest_id', array('totalSamples' => new Expression('count(recency_id)')), 'left')
             ->group(array('m.manifest_id'));
-
+        if ($roleCode != 'admin') {
+            $sQuery->where(array('m.added_by' => $userId));
+        }
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
         }
