@@ -60,7 +60,7 @@ $sessionLogin = new Container('credo');
 
                         <label class="col-sm-2 col-form-label" for="manifestCode">Manifest Code<span class="mandatory">*</span></label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control isRequired" id="manifestCode" disabled name="manifestCode" placeholder="Manifest Code" value="<?php echo $manifestData['manifest_code']; ?>">
+                            <input type="text" class="form-control isRequired" id="manifestCode" readonly="readonly" name="manifestCode" placeholder="Manifest Code" value="<?php echo $manifestData['manifest_code']; ?>">
                             <input type="hidden" class="form-control isRequired" id="manifestId" readonly="readonly" name="manifestId" placeholder="Manifest Code" value="<?php echo $manifestData['manifest_id']; ?>">
                         </div>
 
