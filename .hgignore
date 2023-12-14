@@ -1,13 +1,3 @@
-syntax: regexp
-^data/cache/(?!index.php)
-^backup/(?!index.php)
-^public/uploads/(?!index.php)
-^public/temporary/(?!index.php)
-^vendor
-error_log
-\.DS_Store$
-[Tt]humbs\.db$
-
 syntax: glob
 error_log
 error.log
@@ -26,3 +16,17 @@ rector.php
 .gitignore
 config/autoload/custom.global.php
 config/development.config.php
+*.vendor
+vendor/
+
+
+syntax: regexp
+^data/cache/(?!index.php)
+^backup/(?!index.php)
+^public/uploads/(?!index.php)
+^public/temporary/(?!index.php)
+^vendor
+error_log
+\.DS_Store$
+[Tt]humbs\.db$
+^vendor/*

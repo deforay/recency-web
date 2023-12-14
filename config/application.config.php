@@ -7,6 +7,7 @@
  */
 return array(
     'modules' => array(
+        'Laminas\Form',
         'Laminas\Cache',
         'Laminas\Mail',
         'Laminas\Serializer',
