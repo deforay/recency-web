@@ -13,3 +13,4 @@ Thumbs.db.orig
 .vscode
 .gitattributes
 .gitignore
+rector.php

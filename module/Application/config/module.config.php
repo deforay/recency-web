@@ -345,51 +345,51 @@ return array(
                'system-alerts' => \Application\Command\SystemAlerts::class,
           ],
      ],
-     // Placeholder for console routes
-     'console' => array(
-          'router' => array(
-               'routes' => array(
-                    'mail-console-route' => array(
-                         'type'  => 'simple',
-                         'options' => array(
-                              'route'  => 'send-mail',
-                              'defaults' => array(
-                                   'controller' => 'Application\Controller\CronController',
-                                   'action' => 'send-mail'
-                              ),
-                         ),
-                    ),
-                    'update-outcome' => array(
-                         'type'  => 'simple',
-                         'options' => array(
-                              'route'  => 'update-outcome',
-                              'defaults' => array(
-                                   'controller' => 'Application\Controller\CronController',
-                                   'action' => 'update-outcome'
-                              ),
-                         ),
-                    ),
-                    'vlsm-sync' => array(
-                         'type'  => 'simple',
-                         'options' => array(
-                              'route'  => 'vlsm-sync',
-                              'defaults' => array(
-                                   'controller' => 'Application\Controller\CronController',
-                                   'action' => 'vlsm-sync'
-                              ),
-                         ),
-                    ),
-                    'vlsm-send-requests' => array(
-                         'type'  => 'simple',
-                         'options' => array(
-                              'route'  => 'vlsm-send-requests',
-                              'defaults' => array(
-                                   'controller' => 'Application\Controller\CronController',
-                                   'action' => 'vlsm-send-requests'
-                              ),
-                         ),
-                    ),
-               ),
-          ),
-     ),
+     // // Placeholder for console routes
+     // 'console' => array(
+     //      'router' => array(
+     //           'routes' => array(
+     //                'mail-console-route' => array(
+     //                     'type'  => 'simple',
+     //                     'options' => array(
+     //                          'route'  => 'send-mail',
+     //                          'defaults' => array(
+     //                               'controller' => 'Application\Controller\CronController',
+     //                               'action' => 'send-mail'
+     //                          ),
+     //                     ),
+     //                ),
+     //                'update-outcome' => array(
+     //                     'type'  => 'simple',
+     //                     'options' => array(
+     //                          'route'  => 'update-outcome',
+     //                          'defaults' => array(
+     //                               'controller' => 'Application\Controller\CronController',
+     //                               'action' => 'update-outcome'
+     //                          ),
+     //                     ),
+     //                ),
+     //                'vlsm-sync' => array(
+     //                     'type'  => 'simple',
+     //                     'options' => array(
+     //                          'route'  => 'vlsm-sync',
+     //                          'defaults' => array(
+     //                               'controller' => 'Application\Controller\CronController',
+     //                               'action' => 'vlsm-sync'
+     //                          ),
+     //                     ),
+     //                ),
+     //                'vlsm-send-requests' => array(
+     //                     'type'  => 'simple',
+     //                     'options' => array(
+     //                          'route'  => 'vlsm-send-requests',
+     //                          'defaults' => array(
+     //                               'controller' => 'Application\Controller\CronController',
+     //                               'action' => 'vlsm-send-requests'
+     //                          ),
+     //                     ),
+     //                ),
+     //           ),
+     //      ),
+     // ),
 );

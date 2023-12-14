@@ -2,16 +2,19 @@
 
 namespace Application\Controller;
 
+use Application\Service\RecencyService;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
 class CronController extends AbstractActionController
 {
-  private $recencyService = null;
+  /** @var RecencyService $recencyService */
+  private $recencyService;
   private $commonService = null;
 
-  public function __construct($recencyService, $commonService)
+  public function __construct(RecencyService $recencyService, $commonService)
   {
+
     $this->recencyService = $recencyService;
     $this->commonService = $commonService;
   }
@@ -33,5 +36,4 @@ class CronController extends AbstractActionController
   {
     $this->recencyService->vlsmSync();
   }
-
 }

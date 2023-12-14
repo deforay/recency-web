@@ -11,9 +11,6 @@ use Laminas\Session\Container;
 use \Application\Model\CityTable;
 use \Application\Model\DistrictTable;
 use \Application\Model\FacilitiesTable;
-
-use Laminas\Crypt\BlockCipher;
-use Laminas\Crypt\Symmetric\Mcrypt;
 use Laminas\Db\Sql\Predicate\Literal;
 
 class RecencyTable extends AbstractTableGateway
@@ -2079,7 +2076,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('p' => 'province_details'), 'p.province_id = r.location_one', array('province_name'))
             ->join(array('d' => 'district_details'), 'd.district_id = r.location_two', array('district_name'))
             ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'));
-        if($params['selectedSampleId'] != ''){
+        if ($params['selectedSampleId'] != '') {
             $sQuery->where("recency_id IN(" . $params['selectedSampleId'] . ")");
         }
 
@@ -5242,11 +5239,11 @@ class RecencyTable extends AbstractTableGateway
             ->limit(1);
         $rQueryStr = $sql->buildSqlString($rQuery);
         $rResult = $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        if(count($rResult)>0){
-            foreach($rResult as $res){
+        if (count($rResult) > 0) {
+            foreach ($rResult as $res) {
                 $common = new CommonService();
                 $alertData = array(
-                    'alert_text' => $res['sample_id'].' Still not having VL resuts',
+                    'alert_text' => $res['sample_id'] . ' Still not having VL resuts',
                     'facility_id' => $res['facility_id'],
                     'lab_id' => $res['testing_facility_id'],
                     'alert_type' => 5,
@@ -5277,11 +5274,11 @@ class RecencyTable extends AbstractTableGateway
             ->limit(1);
         $rQueryStr = $sql->buildSqlString($rQuery);
         $rResult = $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        if(count($rResult)>0){
-            foreach($rResult as $res){
+        if (count($rResult) > 0) {
+            foreach ($rResult as $res) {
                 $common = new CommonService();
                 $alertData = array(
-                    'alert_text' => $res['sample_id'].' Still not having Recency Test',
+                    'alert_text' => $res['sample_id'] . ' Still not having Recency Test',
                     'facility_id' => $res['facility_id'],
                     'lab_id' => $res['testing_facility_id'],
                     'alert_type' => 5,
@@ -5292,5 +5289,4 @@ class RecencyTable extends AbstractTableGateway
             }
         }
     }
-    
 }

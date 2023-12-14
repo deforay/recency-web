@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Model;
 
 use Laminas\Db\Sql\Sql;
@@ -9,47 +10,48 @@ use Laminas\Config\Writer\PhpArray;
 use Application\Service\CommonService;
 use Laminas\Db\TableGateway\AbstractTableGateway;
 
-class ManageColumnsMapTable extends AbstractTableGateway {
+class ManageColumnsMapTable extends AbstractTableGateway
+{
 
     protected $table = 'manage_columns_map';
 
-    public function __construct(Adapter $adapter) {
-          $this->adapter = $adapter;
+    public function __construct(Adapter $adapter)
+    {
+        $this->adapter = $adapter;
     }
 
-    
+
     public function mapManageColumnsDetails($params)
     {
         $logincontainer = new Container('credo');
-        $str = implode (", ", $params['recencyManageColumns']);
+        $str = implode(", ", $params['recencyManageColumns']);
         $common = new CommonService();
         $userId = $logincontainer->userId;
         $testftResult = $this->checkUserId($userId);
-        if(isset($testftResult['user_id']) && $testftResult['user_id']!= ''){
+        if (isset($testftResult['user_id']) && $testftResult['user_id'] != '') {
             $data = array(
                 //'user_id'=>$result,
-                'manage_columns'=>$str,
+                'manage_columns' => $str,
             );
-            $this->update($data,array('user_id'=> $testftResult['user_id']));
-        }else{
+            $this->update($data, array('user_id' => $testftResult['user_id']));
+        } else {
             $dataNew = array(
-                'user_id'=>$userId,
-                'manage_columns'=>$str,
+                'user_id' => $userId,
+                'manage_columns' => $str,
             );
             //\Zend\Debug\Debug::dump($dataNew);die;
-           $this->insert($dataNew);
+            $this->insert($dataNew);
         }
-             
-         }
+    }
 
-         
-         public function checkUserId($id)
+
+    public function checkUserId($id)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $fQuery = $sql->select()->from('manage_columns_map')
             ->where(array('user_id' => $id));
-       
+
         $fQueryStr = $sql->buildSqlString($fQuery); // Get the string of the Sql, instead of the Select-instance
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
@@ -62,13 +64,10 @@ class ManageColumnsMapTable extends AbstractTableGateway {
         $sql = new Sql($dbAdapter);
         $fQuery = $sql->select()->from('manage_columns_map')
             ->where(array('user_id' => $userId));
-       
+
         $fQueryStr = $sql->buildSqlString($fQuery); // Get the string of the Sql, instead of the Select-instance
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
 
         return $fResult;
     }
-    
-    }
-
-?>
+}
