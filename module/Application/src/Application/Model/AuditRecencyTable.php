@@ -23,6 +23,7 @@ class AuditRecencyTable extends AbstractTableGateway
 {
 
     protected $table = 'audit_recency';
+    protected $adapter;
 
     public function __construct(Adapter $adapter)
     {
@@ -43,17 +44,15 @@ class AuditRecencyTable extends AbstractTableGateway
 
         $sampleCode = $parameters['sampleCode'];
         $response['currentRecord'] = $recencyDb->fetchRecencyDetailsBySampleId($sampleCode);
-        if(isset($sampleCode) && $sampleCode != ''){
-                $sQuery = $sql->select()->from(array('a' => 'audit_recency'))
-                            ->where("(sample_id = '$sampleCode' OR patient_id = '$sampleCode')");
-                $sQueryStr = $sql->buildSqlString($sQuery);
-                $response['auditInfo'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-            }
-            else
-            {
-                $response["status"] = "fail";
-                $response["message"] = "Please select valid Sample Code!";
-            }
+        if (isset($sampleCode) && $sampleCode != '') {
+            $sQuery = $sql->select()->from(array('a' => 'audit_recency'))
+                ->where("(sample_id = '$sampleCode' OR patient_id = '$sampleCode')");
+            $sQueryStr = $sql->buildSqlString($sQuery);
+            $response['auditInfo'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        } else {
+            $response["status"] = "fail";
+            $response["message"] = "Please select valid Sample Code!";
+        }
         return $response;
     }
 }

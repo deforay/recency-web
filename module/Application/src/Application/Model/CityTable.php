@@ -1,109 +1,108 @@
 <?php
+
 namespace Application\Model;
 
+use Laminas\Db\Sql\Sql;
 use Laminas\Session\Container;
 use Laminas\Db\Adapter\Adapter;
-use Laminas\Db\Sql\Sql;
-use Laminas\Db\TableGateway\AbstractTableGateway;
-use Laminas\Db\Sql\Expression;
 use Application\Service\CommonService;
+use Laminas\Db\TableGateway\AbstractTableGateway;
 
-class CityTable extends AbstractTableGateway {
+class CityTable extends AbstractTableGateway
+{
 
-     protected $table = 'city_details';
+    protected $table = 'city_details';
+    protected $adapter;
 
-     public function __construct(Adapter $adapter) {
-          $this->adapter = $adapter;
-     }
+    public function __construct(Adapter $adapter)
+    {
+        $this->adapter = $adapter;
+    }
 
-          public function fetchAllCityListApi($params)
-          {
-               $common = new CommonService();
-               $config = new \Laminas\Config\Reader\Ini();
-               $dbAdapter = $this->adapter;
-               $sql = new Sql($dbAdapter);
-
-
-               if(isset($params['districtId']) && $params['districtId'] != ''){
-                    $sQuery = $sql->select()->from(array('cd' => 'city_details'))->columns(array('city_id','district_id','city_name'))
-                    ->where(array('district_id' => $params['districtId'] ));
-               }
-               else
-               {
-                    $sQuery = $sql->select()->from(array('cd' => 'city_details'))->columns(array('city_id','district_id','city_name'));
-               }
+    public function fetchAllCityListApi($params)
+    {
+        $common = new CommonService();
+        $config = new \Laminas\Config\Reader\Ini();
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
 
 
-               $sQueryStr = $sql->buildSqlString($sQuery);
-               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        if (isset($params['districtId']) && $params['districtId'] != '') {
+            $sQuery = $sql->select()->from(array('cd' => 'city_details'))->columns(array('city_id', 'district_id', 'city_name'))
+                ->where(array('district_id' => $params['districtId']));
+        } else {
+            $sQuery = $sql->select()->from(array('cd' => 'city_details'))->columns(array('city_id', 'district_id', 'city_name'));
+        }
 
-               if($rResult) {
-                    $response['status']='success';
-                    $response['city'] = $rResult;
-               }
 
-               else {
-                    $response["status"] = "fail";
-                    $response["message"] = "Please select valid City detail!";
-               }
-               return $response;
-          }
-          public function fetchCityDetails($params)
-          {
-               $dbAdapter = $this->adapter;
-               $sql = new Sql($dbAdapter);
-               $logincontainer = new Container('credo');
-                $sQuery = $sql->select()->from(array('cd' => 'city_details'))->columns(array('city_id','district_id','city_name'))
-                                    ->where(array('district_id' => $params['selectValue']));
-               $sQueryStr = $sql->buildSqlString($sQuery);
-               $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        $sQueryStr = $sql->buildSqlString($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-               //fetch facility data
-                $fQuery = $sql->select()->from(array('f' => 'facilities'))
-                            ->where(array('district' => $params['selectValue']));
-                if (property_exists($logincontainer, 'userId') && $logincontainer->userId !== null && $logincontainer->userId != null && $logincontainer->userId != "") {
-                    $fQuery = $fQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
-                        ->where(array('ufm.user_id' => $logincontainer->userId))
-                        ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
-                } else {
-                    $fQuery = $fQuery->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
-                }
-                $fQueryStr = $sql->buildSqlString($fQuery);
-                $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        if ($rResult) {
+            $response['status'] = 'success';
+            $response['city'] = $rResult;
+        } else {
+            $response["status"] = "fail";
+            $response["message"] = "Please select valid City detail!";
+        }
+        return $response;
+    }
+    public function fetchCityDetails($params)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $logincontainer = new Container('credo');
+        $sQuery = $sql->select()->from(array('cd' => 'city_details'))->columns(array('city_id', 'district_id', 'city_name'))
+            ->where(array('district_id' => $params['selectValue']));
+        $sQueryStr = $sql->buildSqlString($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-                return array('city'=>$rResult,'facility'=>$fResult);
-          }
+        //fetch facility data
+        $fQuery = $sql->select()->from(array('f' => 'facilities'))
+            ->where(array('district' => $params['selectValue']));
+        if (!empty($logincontainer->userId)) {
+            $fQuery = $fQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
+                ->where(array('ufm.user_id' => $logincontainer->userId))
+                ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
+        } else {
+            $fQuery = $fQuery->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
+        }
+        $fQueryStr = $sql->buildSqlString($fQuery);
+        $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-          public function fetchFacilityDetails($params)
-          {
-            $dbAdapter = $this->adapter;
-            $sql = new Sql($dbAdapter);
-            $logincontainer = new Container('credo');
-                //fetch facility data
-                $fQuery = $sql->select()->from(array('f' => 'facilities'))
-                        ->where(array('city' => $params['selectValue']));
-                if (property_exists($logincontainer, 'userId') && $logincontainer->userId !== null && $logincontainer->userId != null && $logincontainer->userId != "") {
-                    $fQuery = $fQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
-                        ->where(array('ufm.user_id' => $logincontainer->userId))
-                        ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
-                } else {
-                    $fQuery = $fQuery->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
-                }
-                            
-                $fQueryStr = $sql->buildSqlString($fQuery);
-                $fResult['facility'] = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-                return $fResult;
-          }
+        return array('city' => $rResult, 'facility' => $fResult);
+    }
 
-          public function fetchAllCityDetails($parameters,$acl)
-          {
+    public function fetchFacilityDetails($params)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $logincontainer = new Container('credo');
+        //fetch facility data
+        $fQuery = $sql->select()->from(array('f' => 'facilities'))
+            ->where(array('city' => $params['selectValue']));
+        if (!empty($logincontainer->userId)) {
+            $fQuery = $fQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
+                ->where(array('ufm.user_id' => $logincontainer->userId))
+                ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
+        } else {
+            $fQuery = $fQuery->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
+        }
+
+        $fQueryStr = $sql->buildSqlString($fQuery);
+        $fResult['facility'] = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
+        return $fResult;
+    }
+
+    public function fetchAllCityDetails($parameters, $acl)
+    {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
         $sessionLogin = new Container('credo');
         $common = new CommonService();
-        $aColumns = array('district_name','city_name');
-        $orderColumns = array('district_name','city_name');
+        $aColumns = array('district_name', 'city_name');
+        $orderColumns = array('district_name', 'city_name');
 
         /* Paging */
         $sLimit = "";
@@ -176,8 +175,7 @@ class CityTable extends AbstractTableGateway {
         $roleId = $sessionLogin->roleId;
 
         $sQuery = $sql->select()->from(array('c' => 'city_details'))
-        ->join(array('d' => 'district_details'), 'd.district_id=c.district_id', array('district_name'), 'left')
-        ;
+            ->join(array('d' => 'district_details'), 'd.district_id=c.district_id', array('district_name'), 'left');
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -210,12 +208,12 @@ class CityTable extends AbstractTableGateway {
         );
 
         $roleCode = $sessionLogin->roleCode;
-		$update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\CityController', 'edit');
+        $update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\CityController', 'edit');
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = ucwords($aRow['district_name']);
             $row[] = ucwords($aRow['city_name']);
-            if($update){
+            if ($update) {
                 $row[] = '<a href="/city/edit/' . base64_encode($aRow['city_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             }
             $output['aaData'][] = $row;
@@ -224,7 +222,7 @@ class CityTable extends AbstractTableGateway {
         return $output;
     }
 
-    
+
     public function addCityDetails($params)
     {
         if (isset($params['cityName']) && trim($params['cityName']) != "") {
@@ -238,29 +236,27 @@ class CityTable extends AbstractTableGateway {
         return $lastInsertedId;
     }
 
-    
+
     public function fetchCityDetailsById($cityId)
     {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('c' => 'city_details'))
-                                ->where(array('c.city_id' => $cityId));
+            ->where(array('c.city_id' => $cityId));
         $sQueryStr = $sql->buildSqlString($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
-    
+
     public function updateCityDetails($params)
     {
         if (isset($params['cityId']) && trim($params['cityId']) != "") {
-          $data = array(
-               'city_name' => $params['cityName'],
-               'district_id' => $params['districtName'],
-           );
+            $data = array(
+                'city_name' => $params['cityName'],
+                'district_id' => $params['districtName'],
+            );
             $updateResult = $this->update($data, array('city_id' => $params['cityId']));
-           
         }
         return $params['cityId'];
     }
-     }
-?>
+}

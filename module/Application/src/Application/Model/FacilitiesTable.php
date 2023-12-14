@@ -12,6 +12,7 @@ class FacilitiesTable extends AbstractTableGateway
 {
 
     protected $table = 'facilities';
+    protected $adapter;
 
     public function __construct(Adapter $adapter)
     {
@@ -259,7 +260,8 @@ class FacilitiesTable extends AbstractTableGateway
                 'facility_name',
                 'facility_type_id'
             ]);
-        if (property_exists($logincontainer, 'facilityMap') && $logincontainer->facilityMap !== null && !empty($logincontainer->facilityMap) && $logincontainer->userId != "") {
+
+        if (!empty($logincontainer->facilityMap)) {
             $sQuery = $sQuery->where('f.facility_id IN (' . $logincontainer->facilityMap . ')');
         } else {
             $sQuery = $sQuery->where(['status' => 'active']);
@@ -431,7 +433,7 @@ class FacilitiesTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('f' => 'facilities'))
-            ->columns(['facility_id','facility_name','facility_type_id'])
+            ->columns(['facility_id', 'facility_name', 'facility_type_id'])
             ->where(array('f.facility_id' => $facilityId));
         $sQueryStr = $sql->buildSqlString($sQuery);
         $fetchResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();

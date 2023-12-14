@@ -13,11 +13,14 @@ use Laminas\Db\TableGateway\AbstractTableGateway;
  * and open the template in the editor.
  */
 
-class SystemAlertsTable extends AbstractTableGateway {
+class SystemAlertsTable extends AbstractTableGateway
+{
 
     protected $table = 'system_alerts';
+    protected $adapter;
 
-    public function __construct(Adapter $adapter) {
+    public function __construct(Adapter $adapter)
+    {
         $this->adapter = $adapter;
     }
 
@@ -26,8 +29,8 @@ class SystemAlertsTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('s' => 'system_alerts'))
-        ->columns(array(new Expression('DISTINCT(alert_type)')));
-        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance 
+            ->columns(array(new Expression('DISTINCT(alert_type)')));
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }
@@ -39,8 +42,8 @@ class SystemAlertsTable extends AbstractTableGateway {
          */
         $sessionLogin = new Container('credo');
         $common = new \Application\Service\CommonService();
-        $aColumns = array('f1.facility_name','f2.facility_name','s.alert_text','s.alert_type','s.alert_status',"DATE_FORMAT(s.alerted_on,'%d-%b-%Y %g:%i %a')");
-        $orderColumns = array('f1.facility_name','f2.facility_name','s.alert_text','s.alert_type','s.alert_status','s.alerted_on');
+        $aColumns = array('f1.facility_name', 'f2.facility_name', 's.alert_text', 's.alert_type', 's.alert_status', "DATE_FORMAT(s.alerted_on,'%d-%b-%Y %g:%i %a')");
+        $orderColumns = array('f1.facility_name', 'f2.facility_name', 's.alert_text', 's.alert_type', 's.alert_status', 's.alerted_on');
         /*
          * Paging
          */
@@ -58,7 +61,7 @@ class SystemAlertsTable extends AbstractTableGateway {
         if (isset($parameters['iSortCol_0'])) {
             for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
                 if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
-                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -85,9 +88,9 @@ class SystemAlertsTable extends AbstractTableGateway {
 
                 for ($i = 0; $i < $colSize; $i++) {
                     if ($i < $colSize - 1) {
-                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' OR ";
                     } else {
-                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' ";
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' ";
                     }
                 }
                 $sWhereSub .= ")";
@@ -110,8 +113,8 @@ class SystemAlertsTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery =  $sql->select()->from(array('s' => 'system_alerts'))
-                    ->join(array('f1' => 'facilities'), 'f1.facility_id=s.facility_id', array('facility_name'))
-                    ->join(array('f2' => 'facilities'), 'f2.facility_id=s.lab_id', array('lab_name' => 'facility_name'));
+            ->join(array('f1' => 'facilities'), 'f1.facility_id=s.facility_id', array('facility_name'))
+            ->join(array('f2' => 'facilities'), 'f2.facility_id=s.lab_id', array('lab_name' => 'facility_name'));
 
         $start_date = "";
         $end_date = "";
@@ -128,7 +131,7 @@ class SystemAlertsTable extends AbstractTableGateway {
         if ($parameters['alertedOn'] != '') {
             $sQuery = $sQuery->where(array("DATE(s.alerted_on) >='" . $start_date . "'", "DATE(s.alerted_on) <='" . $end_date . "'"));
         }
-        
+
 
         if ($parameters['alertType'] != '') {
             $sQuery->where(array('s.alert_type' => trim($parameters['alertType'])));
@@ -155,7 +158,7 @@ class SystemAlertsTable extends AbstractTableGateway {
             $sQuery->offset($sOffset);
         }
 
-        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance 
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
@@ -184,19 +187,19 @@ class SystemAlertsTable extends AbstractTableGateway {
             </select>';
 
             $alertType = '';
-            if($aRow['alert_type'] == 1){
+            if ($aRow['alert_type'] == 1) {
                 $alertType = "Critical";
-            }elseif($aRow['alert_type'] == 2){
+            } elseif ($aRow['alert_type'] == 2) {
                 $alertType = "Warning";
-            }elseif($aRow['alert_type'] == 3){
+            } elseif ($aRow['alert_type'] == 3) {
                 $alertType = "Error";
-            }elseif($aRow['alert_type'] == 4){
+            } elseif ($aRow['alert_type'] == 4) {
                 $alertType = "Failure";
-            }elseif($aRow['alert_type'] == 5){
+            } elseif ($aRow['alert_type'] == 5) {
                 $alertType = "Informational";
             }
 
-            $date = explode(" ",$aRow['alerted_on']);
+            $date = explode(" ", $aRow['alerted_on']);
             $dateTime = $common->humanDateFormat($date[0]);
             $time_in_12_hour_format  = date("g:i a", strtotime($date[1]));
             $row[] = ucfirst($aRow['facility_name']);
@@ -204,13 +207,14 @@ class SystemAlertsTable extends AbstractTableGateway {
             $row[] = $aRow['alert_text'];
             $row[] = $alertType;
             $row[] = $status;
-            $row[] = $dateTime." ".$time_in_12_hour_format;
+            $row[] = $dateTime . " " . $time_in_12_hour_format;
             $output['aaData'][] = $row;
         }
         return $output;
     }
 
-    public function UpdateAlertStatus($parameters) {
+    public function UpdateAlertStatus($parameters)
+    {
         $common = new \Application\Service\CommonService();
         $status = array(
             'alert_status' => $parameters['status'],

@@ -20,15 +20,19 @@ use ZipArchive;
  *
  * @author amit
  */
-class TrackApiRequestsTable extends AbstractTableGateway {
+class TrackApiRequestsTable extends AbstractTableGateway
+{
 
     protected $table = 'track_api_requests';
+    protected $adapter;
 
-    public function __construct(Adapter $adapter) {
+    public function __construct(Adapter $adapter)
+    {
         $this->adapter = $adapter;
     }
 
-    public function addApiTracking($transactionId, $user, $numberOfRecords, $requestType, $testType, $url, $format, $requestData = null, $responseData = null){
+    public function addApiTracking($transactionId, $user, $numberOfRecords, $requestType, $testType, $url, $format, $requestData = null, $responseData = null)
+    {
 
         $folderPath = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'track-api';
         if (!empty($requestData) && $requestData !== '[]') {
@@ -60,7 +64,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
         }
 
         $common = new CommonService();
-        $currentDateTime=$common->getDateTime();
+        $currentDateTime = $common->getDateTime();
         $data = [
             'transaction_id' => $transactionId ?? null,
             'requested_by' => $user ?? 'system',
@@ -81,8 +85,8 @@ class TrackApiRequestsTable extends AbstractTableGateway {
          */
         $sessionLogin = new Container('credo');
         $common = new \Application\Service\CommonService();
-        $aColumns = array('t.transaction_id','t.number_of_records','t.request_type','t.test_type','t.api_url',"DATE_FORMAT(t.requested_on,'%d-%b-%Y %g:%i %a')");
-        $orderColumns = array('t.transaction_id','t.number_of_records','t.request_type','t.test_type','t.api_url','t.requested_on');
+        $aColumns = array('t.transaction_id', 't.number_of_records', 't.request_type', 't.test_type', 't.api_url', "DATE_FORMAT(t.requested_on,'%d-%b-%Y %g:%i %a')");
+        $orderColumns = array('t.transaction_id', 't.number_of_records', 't.request_type', 't.test_type', 't.api_url', 't.requested_on');
         /*
          * Paging
          */
@@ -100,7 +104,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
         if (isset($parameters['iSortCol_0'])) {
             for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
                 if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
-                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -127,9 +131,9 @@ class TrackApiRequestsTable extends AbstractTableGateway {
 
                 for ($i = 0; $i < $colSize; $i++) {
                     if ($i < $colSize - 1) {
-                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' OR ";
                     } else {
-                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' ";
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' ";
                     }
                 }
                 $sWhereSub .= ")";
@@ -165,7 +169,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
             }
             $sQuery = $sQuery->where(array("DATE(t.requested_on) >='" . $start_date . "'", "DATE(t.requested_on) <='" . $end_date . "'"));
         }
-        
+
 
         if ($parameters['testType'] != '') {
             $sQuery->where(array('t.test_type' => trim($parameters['testType'])));
@@ -188,7 +192,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
             $sQuery->offset($sOffset);
         }
 
-        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance 
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
@@ -210,7 +214,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
         foreach ($rResult as $aRow) {
             $row = array();
 
-            $date = explode(" ",$aRow['requested_on']);
+            $date = explode(" ", $aRow['requested_on']);
             $dateTime = $common->humanDateFormat($date[0]);
             $time_in_12_hour_format  = date("g:i a", strtotime($date[1]));
             $row[] = $aRow['transaction_id'];
@@ -218,8 +222,8 @@ class TrackApiRequestsTable extends AbstractTableGateway {
             $row[] = $aRow['request_type'];
             $row[] = $aRow['test_type'];
             $row[] = $aRow['api_url'];
-            $row[] = $dateTime." ".$time_in_12_hour_format;
-            $row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showParams(\''.base64_encode($aRow['api_track_id']).'\');"> Show Params</a>';
+            $row[] = $dateTime . " " . $time_in_12_hour_format;
+            $row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showParams(\'' . base64_encode($aRow['api_track_id']) . '\');"> Show Params</a>';
             $output['aaData'][] = $row;
         }
         return $output;
@@ -228,18 +232,18 @@ class TrackApiRequestsTable extends AbstractTableGateway {
     {
         $userRequest = $userResponse = "{}";
         $data = [];
-        if(isset($params['apiTrackId']) && $params['apiTrackId'] != ''){
+        if (isset($params['apiTrackId']) && $params['apiTrackId'] != '') {
 
             $apiTrackId = base64_decode($params['apiTrackId']);
 
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
             $sQuery =  $sql->select()->from(array('t' => 'track_api_requests'))
-                            ->where(array('t.api_track_id' => $apiTrackId));
+                ->where(array('t.api_track_id' => $apiTrackId));
             $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
             $result = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-            
-            
+
+
             $folder = realpath(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'track-api');
 
             // Check if the requests directory exists
@@ -290,6 +294,4 @@ class TrackApiRequestsTable extends AbstractTableGateway {
             'userResponse' => $userResponse,
         ];
     }
-    
 }
-?>

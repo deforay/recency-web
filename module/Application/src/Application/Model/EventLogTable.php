@@ -19,35 +19,41 @@ use Application\Service\CommonService;
  *
  * @author amit
  */
-class EventLogTable extends AbstractTableGateway {
+class EventLogTable extends AbstractTableGateway
+{
 
     protected $table = 'event_log';
+    protected $adapter;
 
-    public function __construct(Adapter $adapter) {
+    public function __construct(Adapter $adapter)
+    {
         $this->adapter = $adapter;
     }
 
-    public function addEventLog($subject, $eventType, $action, $resourceName) {
-            $logincontainer = new Container('credo');
-            $actor_id = $logincontainer->userId;
-            $common = new CommonService();
-            $currentDateTime=$common->getDateTime();
-            $data = array('actor'=>$actor_id,
-                          'subject'=>$subject,
-                          'event_type'=>$eventType,
-                          'action'=>$action,
-                          'resource_name'=>$resourceName,
-                          'added_on'=> $currentDateTime
-                        );
-            $id = $this->insert($data);
+    public function addEventLog($subject, $eventType, $action, $resourceName)
+    {
+        $logincontainer = new Container('credo');
+        $actor_id = $logincontainer->userId;
+        $common = new CommonService();
+        $currentDateTime = $common->getDateTime();
+        $data = array(
+            'actor' => $actor_id,
+            'subject' => $subject,
+            'event_type' => $eventType,
+            'action' => $action,
+            'resource_name' => $resourceName,
+            'added_on' => $currentDateTime
+        );
+        $id = $this->insert($data);
     }
-    public function getRecentActivities($parameters) {
+    public function getRecentActivities($parameters)
+    {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
         $common = new \Application\Service\CommonService();
-        $aColumns = array('u.user_name','e_l.action',"DATE_FORMAT(e_l.added_on,'%d-%b-%Y %g:%i %a')");
-        $orderColumns = array('u.user_name','e_l.action','e_l.added_on');
+        $aColumns = array('u.user_name', 'e_l.action', "DATE_FORMAT(e_l.added_on,'%d-%b-%Y %g:%i %a')");
+        $orderColumns = array('u.user_name', 'e_l.action', 'e_l.added_on');
         /*
          * Paging
          */
@@ -65,7 +71,7 @@ class EventLogTable extends AbstractTableGateway {
         if (isset($parameters['iSortCol_0'])) {
             for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
                 if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
-                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -92,9 +98,9 @@ class EventLogTable extends AbstractTableGateway {
 
                 for ($i = 0; $i < $colSize; $i++) {
                     if ($i < $colSize - 1) {
-                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' OR ";
                     } else {
-                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' ";
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' ";
                     }
                 }
                 $sWhereSub .= ")";
@@ -123,7 +129,7 @@ class EventLogTable extends AbstractTableGateway {
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
         $sQuery = $sql->select()->from(array('e_l' => 'event_log'))
-                ->join(array('u' => 'users'), 'u.user_id=e_l.actor', array('user_name'));
+            ->join(array('u' => 'users'), 'u.user_id=e_l.actor', array('user_name'));
         $start_date = "";
         $end_date = "";
         if (isset($parameters['addedOn']) && trim($parameters['addedOn']) != '') {
@@ -139,7 +145,7 @@ class EventLogTable extends AbstractTableGateway {
         if ($parameters['addedOn'] != '') {
             $sQuery = $sQuery->where(array("DATE(e_l.added_on) >='" . $start_date . "'", "DATE(e_l.added_on) <='" . $end_date . "'"));
         }
-     
+
 
         if ($parameters['action'] != '') {
             $sQuery->where(array('event_type' => trim($parameters['action'])));
@@ -162,8 +168,8 @@ class EventLogTable extends AbstractTableGateway {
             $sQuery->offset($sOffset);
         }
 
-        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance 
-       // echo $sQueryStr;die;
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
+        // echo $sQueryStr;die;
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
@@ -185,13 +191,13 @@ class EventLogTable extends AbstractTableGateway {
         foreach ($rResult as $aRow) {
             $row = array();
             $common = new \Application\Service\CommonService();
-            $date = explode(" ",$aRow['added_on']);
+            $date = explode(" ", $aRow['added_on']);
             $dateTime = $common->humanDateFormat($date[0]);
             $time_in_12_hour_format  = date("g:i a", strtotime($date[1]));
             $row[] = ucfirst($aRow['user_name']);
             $row[] = $aRow['event_type'];
             $row[] = $aRow['action'];
-            $row[] = $dateTime." ".$time_in_12_hour_format;
+            $row[] = $dateTime . " " . $time_in_12_hour_format;
             $output['aaData'][] = $row;
         }
         return $output;
@@ -202,10 +208,9 @@ class EventLogTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from(array('e_l' => 'event_log'))
-        ->columns(array(new Expression('DISTINCT(event_type)')));
-        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance 
+            ->columns(array(new Expression('DISTINCT(event_type)')));
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         return $rResult;
     }
 }
-?>

@@ -13,6 +13,7 @@ class UserTable extends AbstractTableGateway
 {
 
     protected $table = 'users';
+    protected $adapter;
 
     public function __construct(Adapter $adapter)
     {

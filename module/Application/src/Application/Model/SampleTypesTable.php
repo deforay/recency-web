@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Model;
 
 use Laminas\Db\Sql\Sql;
@@ -8,12 +9,15 @@ use Laminas\Db\Adapter\Adapter;
 use Laminas\Config\Writer\PhpArray;
 use Laminas\Db\TableGateway\AbstractTableGateway;
 
-class SampleTypesTable extends AbstractTableGateway {
+class SampleTypesTable extends AbstractTableGateway
+{
 
     protected $table = 'r_sample_types';
+    protected $adapter;
 
-    public function __construct(Adapter $adapter) {
-          $this->adapter = $adapter;
+    public function __construct(Adapter $adapter)
+    {
+        $this->adapter = $adapter;
     }
 
     public function fetchAllSampleTypes()
@@ -21,4 +25,3 @@ class SampleTypesTable extends AbstractTableGateway {
         return $this->select()->toArray();
     }
 }
-?>

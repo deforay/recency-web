@@ -12,6 +12,7 @@ class SettingsTable extends AbstractTableGateway
 {
 
     protected $table = 'test_kit_information';
+    protected $adapter;
 
     public function __construct(Adapter $adapter)
     {

@@ -20,6 +20,7 @@ class RecencyTable extends AbstractTableGateway
     public $vlResultOptionArray = array('target not detected', 'below detection line', 'tnd', 'bdl', 'failed', '<20', '<40', '< 20', '< 40', '< 400', '< 800', '<20', '<40');
     public $vlFailOptionArray = array('fail', 'failed');
     public $sessionLogin = null;
+    protected $adapter;
 
     public function __construct(Adapter $adapter)
     {
@@ -2170,7 +2171,8 @@ class RecencyTable extends AbstractTableGateway
             || ($controlLine == 'absent' && $positiveControlLine == 'absent' && $longControlLine == 'present')
             || ($controlLine == 'absent' && $positiveControlLine == 'present' && $longControlLine == 'absent')
             || ($controlLine == 'absent' && $positiveControlLine == 'present' && $longControlLine == 'present')
-            || ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'present')) {
+            || ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'present')
+        ) {
             $data = array('term_outcome' => 'Invalid â€“ Please Verify');
         } elseif ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'absent') {
             $data = array('term_outcome' => 'Assay Negative');

@@ -2,15 +2,16 @@
 
 namespace Application\Controller;
 
-use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\View\Model\ViewModel;
 use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
+use Application\Service\UserService;
+use Laminas\Mvc\Controller\AbstractActionController;
 
 class LoginController extends AbstractActionController
 {
-    public \Application\Service\UserService $userService;
+    public ?UserService $userService;
 
-    public function __construct($userService)
+    public function __construct(UserService $userService)
     {
         $this->userService = $userService;
     }
@@ -25,7 +26,7 @@ class LoginController extends AbstractActionController
             $params = $request->getPost();
             $redirectUrl = $this->userService->loginProcess($params);
         } elseif ($request->getQuery() != "") {
-            $params = $this->getRequest()->getQuery();
+            $params = $request->getQuery();
             $captchaSession = new Container('captcha');
             $captchaSession->status = 'success';
             // bypassing captcha
@@ -39,7 +40,7 @@ class LoginController extends AbstractActionController
             }
         }
         /* Cross login credential check end*/
-        if (property_exists($logincontainer, 'userId') && $logincontainer->userId !== null && $logincontainer->userId != "") {
+        if (!empty($logincontainer->userId)) {
             //$alertContainer = new Container('alert');
             return $this->redirect()->toRoute("recency");
         } else {

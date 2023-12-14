@@ -17,39 +17,44 @@ use Laminas\Db\Sql\Sql;
  *
  * @author amit
  */
-class TempMailTable extends AbstractTableGateway {
+class TempMailTable extends AbstractTableGateway
+{
 
     protected $table = 'temp_mail';
+    protected $adapter;
 
-    public function __construct(Adapter $adapter) {
+    public function __construct(Adapter $adapter)
+    {
         $this->adapter = $adapter;
     }
 
-    public function insertTempMailDetails($to, $subject, $message, $fromMail, $fromName,$cc,$bcc,$attachment) {
-            $data = array(
-                'message' => $message,
-                'from_mail' => $fromMail,
-                'to_email' => $to,
-                'cc' => $cc,
-                'bcc' => $bcc,
-                'subject' => $subject,
-                'from_full_name' => $fromName,
-                'attachment' => $attachment,
-            );
-            if(trim($to) != ""){
-                $this->insert($data);
-            }
-            return $this->lastInsertValue;
-    }
-    public function deleteTempMail($id){
-         $this->delete(array('temp_id = ' . $id));
-    }
-     public function updateTempMailStatus($id){
-        
+    public function insertTempMailDetails($to, $subject, $message, $fromMail, $fromName, $cc, $bcc, $attachment)
+    {
         $data = array(
-                'status' => 'not-sent'
-            );
-        $this->update($data,array('temp_id='.$id));
+            'message' => $message,
+            'from_mail' => $fromMail,
+            'to_email' => $to,
+            'cc' => $cc,
+            'bcc' => $bcc,
+            'subject' => $subject,
+            'from_full_name' => $fromName,
+            'attachment' => $attachment,
+        );
+        if (trim($to) != "") {
+            $this->insert($data);
+        }
+        return $this->lastInsertValue;
     }
-    
+    public function deleteTempMail($id)
+    {
+        $this->delete(array('temp_id = ' . $id));
+    }
+    public function updateTempMailStatus($id)
+    {
+
+        $data = array(
+            'status' => 'not-sent'
+        );
+        $this->update($data, array('temp_id=' . $id));
+    }
 }

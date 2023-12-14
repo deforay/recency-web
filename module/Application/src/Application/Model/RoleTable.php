@@ -14,6 +14,8 @@ class RoleTable extends AbstractTableGateway
 {
 
     protected $table = 'roles';
+    protected $adapter;
+
 
     public function __construct(Adapter $adapter)
     {
@@ -148,7 +150,7 @@ class RoleTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance 
+        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
         //error_log($sQueryForm);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 

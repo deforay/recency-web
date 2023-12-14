@@ -14,6 +14,7 @@ class QualityCheckTable extends AbstractTableGateway
 
      protected $table = 'quality_check_test';
      public $sessionLogin = null;
+     protected $adapter;
 
      public function __construct(Adapter $adapter)
      {
@@ -21,7 +22,7 @@ class QualityCheckTable extends AbstractTableGateway
           $this->sessionLogin = new Container('credo');
      }
 
-     public function fetchQualityCheckDetails($parameters,$acl)
+     public function fetchQualityCheckDetails($parameters, $acl)
      {
 
           /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -177,7 +178,7 @@ class QualityCheckTable extends AbstractTableGateway
                "aaData" => array()
           );
 
-          
+
           $update = false;
 
           foreach ($rResult as $aRow) {
@@ -202,7 +203,7 @@ class QualityCheckTable extends AbstractTableGateway
                $row[] = ucwords($aRow['tester_name']);
                $row[] = ucwords($aRow['hiv_recency_test_date']);
                $row[] = ucwords($aRow['facility_name']);
-               if($update){
+               if ($update) {
                     $row[] = $actionBtn;
                }
 
@@ -350,7 +351,7 @@ class QualityCheckTable extends AbstractTableGateway
                }
                $formData = $formsVal;
           }
-          // if (isset($params["qc"])) {   
+          // if (isset($params["qc"])) {
           if (isset($formData)) {
 
                //check user status active or not
@@ -414,7 +415,7 @@ class QualityCheckTable extends AbstractTableGateway
                $syncedVal = $this->getQCSyncData($userId);
                $syncedData = $this->cryptoJsAesEncrypt($secretKey, $syncedVal);
           } else {
-              $syncedData = $this->getQCSyncData($userId);
+               $syncedData = $this->getQCSyncData($userId);
           }
           $response['syncCount']['tenRecord'] = $syncedData;
           return $response;
@@ -471,7 +472,7 @@ class QualityCheckTable extends AbstractTableGateway
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
           foreach ($rResult as $sRow) {
                if ($sRow["tester_name"] == null) {
-                   continue;
+                    continue;
                }
                $result[$sRow['tester_name']] = (isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
           }
@@ -1193,9 +1194,9 @@ class QualityCheckTable extends AbstractTableGateway
 
           if (isset($parameters['qualityCheck']) && trim($parameters['qualityCheck']) != "") {
                if ($parameters['qualityCheck'] == 'qc_not_performed') {
-                   $sQuery->where(array('recency_test_performed' => ''));
+                    $sQuery->where(array('recency_test_performed' => ''));
                } elseif ($parameters['qualityCheck'] == 'qc_performed') {
-                   $sQuery->where('recency_test_performed != ""');
+                    $sQuery->where('recency_test_performed != ""');
                }
           }
           if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {

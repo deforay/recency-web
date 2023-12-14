@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Model;
 
 use Laminas\Session\Container;
@@ -8,11 +9,14 @@ use Laminas\Db\TableGateway\AbstractTableGateway;
 use Laminas\Db\Sql\Expression;
 use Application\Service\CommonService;
 
-class DistrictTable extends AbstractTableGateway {
+class DistrictTable extends AbstractTableGateway
+{
 
     protected $table = 'district_details';
+    protected $adapter;
 
-    public function __construct(Adapter $adapter) {
+    public function __construct(Adapter $adapter)
+    {
         $this->adapter = $adapter;
     }
     public function fetchAllDistrictListApi($params)
@@ -20,26 +24,22 @@ class DistrictTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        if(isset($params['provinceId']) && $params['provinceId'] != ''){
-                $sQuery = $sql->select()->from(array('dd' => 'district_details'))->columns(array('district_id','province_id','district_name'))
-                ->where(array('province_id' => $params['provinceId'] ));
-        }
-        else
-        {
-                $sQuery = $sql->select()->from(array('dd' => 'district_details'))->columns(array('district_id','province_id','district_name'));
+        if (isset($params['provinceId']) && $params['provinceId'] != '') {
+            $sQuery = $sql->select()->from(array('dd' => 'district_details'))->columns(array('district_id', 'province_id', 'district_name'))
+                ->where(array('province_id' => $params['provinceId']));
+        } else {
+            $sQuery = $sql->select()->from(array('dd' => 'district_details'))->columns(array('district_id', 'province_id', 'district_name'));
         }
 
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-        if($rResult) {
-                $response['status']='success';
-                $response['district'] = $rResult;
-        }
-
-        else {
-                $response["status"] = "fail";
-                $response["message"] = "Please select valid District detail!";
+        if ($rResult) {
+            $response['status'] = 'success';
+            $response['district'] = $rResult;
+        } else {
+            $response["status"] = "fail";
+            $response["message"] = "Please select valid District detail!";
         }
         return $response;
     }
@@ -48,30 +48,29 @@ class DistrictTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $logincontainer = new Container('credo');
-        $sQuery = $sql->select()->from(array('dd' => 'district_details'))->columns(array('district_id','province_id','district_name'))
-                            ->where(array('province_id' => $params['selectValue'] ));
+        $sQuery = $sql->select()->from(array('dd' => 'district_details'))->columns(array('district_id', 'province_id', 'district_name'))
+            ->where(array('province_id' => $params['selectValue']));
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         //fetch facility data
         $fQuery = $sql->select()->from(array('f' => 'facilities'))
-                            ->where(array('province' => $params['selectValue']));
-        if (property_exists($logincontainer, 'userId') && $logincontainer->userId !== null && $logincontainer->userId != null && $logincontainer->userId != "") {
+            ->where(array('province' => $params['selectValue']));
+        if (!empty($logincontainer->userId)) {
             $fQuery = $fQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
                 ->where(array('ufm.user_id' => $logincontainer->userId))
                 ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
         } else {
             $fQuery = $fQuery->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
         }
-                    
+
         $fQueryStr = $sql->buildSqlString($fQuery);
         $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-        return array('district'=>$rResult,'facility'=>$fResult);
-
+        return array('district' => $rResult, 'facility' => $fResult);
     }
 
-    public function fetchAllDistrictDetails($parameters,$acl)
+    public function fetchAllDistrictDetails($parameters, $acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -79,8 +78,8 @@ class DistrictTable extends AbstractTableGateway {
          */
         $sessionLogin = new Container('credo');
         $common = new CommonService();
-        $aColumns = array('province_name','district_name');
-        $orderColumns = array('province_name','district_name');
+        $aColumns = array('province_name', 'district_name');
+        $orderColumns = array('province_name', 'district_name');
 
         /* Paging */
         $sLimit = "";
@@ -153,8 +152,7 @@ class DistrictTable extends AbstractTableGateway {
         $roleId = $sessionLogin->roleId;
 
         $sQuery = $sql->select()->from(array('d' => 'district_details'))
-        ->join(array('p' => 'province_details'), 'p.province_id=d.province_id', array('province_name'), 'left')
-        ;
+            ->join(array('p' => 'province_details'), 'p.province_id=d.province_id', array('province_name'), 'left');
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -187,12 +185,12 @@ class DistrictTable extends AbstractTableGateway {
         );
 
         $roleCode = $sessionLogin->roleCode;
-		$update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\DistrictController', 'edit');
+        $update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\DistrictController', 'edit');
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = ucwords($aRow['province_name']);
             $row[] = ucwords($aRow['district_name']);
-            if($update){
+            if ($update) {
                 $row[] = '<a href="/district/edit/' . base64_encode($aRow['district_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             }
             $output['aaData'][] = $row;
@@ -200,7 +198,7 @@ class DistrictTable extends AbstractTableGateway {
 
         return $output;
     }
-      
+
     public function addDistrictDetails($params)
     {
         if (isset($params['districtName']) && trim($params['districtName']) != "") {
@@ -214,7 +212,7 @@ class DistrictTable extends AbstractTableGateway {
         return $lastInsertedId;
     }
 
-    
+
     public function fetchDistrictDetailsById($districtId)
     {
         $dbAdapter = $this->adapter;
@@ -225,7 +223,7 @@ class DistrictTable extends AbstractTableGateway {
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
-    
+
     public function updateDistrictDetails($params)
     {
         if (isset($params['districtId']) && trim($params['districtId']) != "") {
@@ -234,12 +232,11 @@ class DistrictTable extends AbstractTableGateway {
                 'province_id' => $params['provinceName'],
             );
             $updateResult = $this->update($data, array('district_id' => $params['districtId']));
-           
         }
         return $params['districtId'];
     }
 
-    
+
     public function fetchCities()
     {
         $dbAdapter = $this->adapter;
@@ -250,6 +247,4 @@ class DistrictTable extends AbstractTableGateway {
         $sQueryStr = $sql->buildSqlString($sQuery);
         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
-
 }
-?>

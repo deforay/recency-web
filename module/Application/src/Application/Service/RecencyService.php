@@ -1459,7 +1459,7 @@ class RecencyService
                                 'sCDate'              => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
                                 // 'sampleType'          => $data['received_specimen_type'],
                                 'isVlLab'             => (isset($params['isVlLab']) && $params['isVlLab'] != '') ? $params['isVlLab'] : '',
-                                'userId'              => (property_exists($sessionLogin, 'userId') && $sessionLogin->userId !== null && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
+                                'userId'              => $sessionLogin->userId ?? '',
                                 'dob'                 => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
                                 'age'                 => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
                                 'gender'              => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
@@ -1684,7 +1684,7 @@ class RecencyService
                     );
                     $requestData = json_encode($params, JSON_PRETTY_PRINT);
                     $dataArrayCount = count($dataArray);
-                    
+
                     $response = $client->request('POST', $urlVlsm, [
                         'headers' => [
                             'Authorization' => 'Bearer ' . $authToken,
@@ -1697,7 +1697,7 @@ class RecencyService
                     $vlSampleCode = "";
                     $jsonResponse = $response->getBody();
                     $response = json_decode($jsonResponse, true);
-                    if ($response != '' ){
+                    if ($response != '') {
                         if ($statusValue == 200 && (isset($data['recency_id']) && $data['recency_id'] != "")) {
                             if ($response != '' && isset($response['data']) && $response['data'] != '') {
                                 $responseData = $response['data'][0];
@@ -1774,8 +1774,8 @@ class RecencyService
                 ]);
                 $jsonResponse = $response->getBody();
                 $response = json_decode($jsonResponse, true);
-                
-                if ($response != '' ){
+
+                if ($response != '') {
                     $responseData = $response['data'];
                     if ($response['status'] === 'success') {
                         foreach ($responseData as $data) {

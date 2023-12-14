@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Model;
 
 use Application\Service\CommonService;
@@ -11,6 +12,7 @@ class SettingsQcSampleTable extends AbstractTableGateway
 {
 
     protected $table = 'qc_samples';
+    protected $adapter;
 
     public function __construct(Adapter $adapter)
     {
@@ -26,8 +28,8 @@ class SettingsQcSampleTable extends AbstractTableGateway
         $sessionLogin = new Container('credo');
         $common = new CommonService();
 
-        $aColumns = array('qc_sample_no', 'DATE_FORMAT(added_on,"%d-%b-%Y")','added_by','qc_sample_status');
-        $orderColumns = array('qc_sample_no', 'added_on','added_by','qc_sample_status');
+        $aColumns = array('qc_sample_no', 'DATE_FORMAT(added_on,"%d-%b-%Y")', 'added_by', 'qc_sample_status');
+        $orderColumns = array('qc_sample_no', 'added_on', 'added_by', 'qc_sample_status');
 
         /* Paging */
         $sLimit = "";
@@ -100,8 +102,7 @@ class SettingsQcSampleTable extends AbstractTableGateway
         $roleId = $sessionLogin->roleId;
 
         $sQuery = $sql->select()->from(array('qcs' => 'qc_samples'))
-        ->join(array('u'=>'users'),'qcs.added_by = u.user_id',array('user_name'))
-        ;
+            ->join(array('u' => 'users'), 'qcs.added_by = u.user_id', array('user_name'));
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery->where($sWhere);
@@ -139,7 +140,7 @@ class SettingsQcSampleTable extends AbstractTableGateway
 
             $row = array();
             $row[] = ucwords($aRow['qc_sample_no']);
-            $row[] = date('d-M-Y H:s A',strtotime($aRow['added_on']));
+            $row[] = date('d-M-Y H:s A', strtotime($aRow['added_on']));
             $row[] = ucwords($aRow['user_name']);
             $row[] = ucwords($aRow['qc_sample_status']);
             $row[] = '<a href="/settings/edit-sample/' . base64_encode($aRow['qc_sample_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
@@ -151,7 +152,7 @@ class SettingsQcSampleTable extends AbstractTableGateway
 
     public function addSampleSettingsDetails($params)
     {
-        
+
         $logincontainer = new Container('credo');
         $common = new CommonService();
         if (isset($params['sampleNo']) && trim($params['sampleNo']) != "") {
@@ -176,7 +177,7 @@ class SettingsQcSampleTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('qcs' => 'qc_samples'))
             ->where(array('qcs.qc_sample_id' => $sampleId));
         $sQueryStr = $sql->buildSqlString($sQuery);
-         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     public function updateSampleSettingsDetails($params)
@@ -202,26 +203,24 @@ class SettingsQcSampleTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
 
         $sQuery = $sql->select()->from(array('qcs' => 'qc_samples'))
-        ->columns(array('qcSampleId'=>'qc_sample_id','qcSampleNo'=>'qc_sample_no','qcSampleStatus'=>'qc_sample_status'))
-        ->where(array('qc_sample_status'=>'active'))
-        ;
+            ->columns(array('qcSampleId' => 'qc_sample_id', 'qcSampleNo' => 'qc_sample_no', 'qcSampleStatus' => 'qc_sample_status'))
+            ->where(array('qc_sample_status' => 'active'));
 
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-        if($rResult) {
-            $response['status']='success';
+        if ($rResult) {
+            $response['status'] = 'success';
             $response['data'] = $rResult;
-        }
-
-        else {
+        } else {
             $response["status"] = "fail";
             $response["message"] = "No sample data's found!";
         }
         return $response;
     }
-    
-    public function fetchSamples(){
-        return $this->select(array('qc_sample_status'=>'active'))->toArray();
+
+    public function fetchSamples()
+    {
+        return $this->select(array('qc_sample_status' => 'active'))->toArray();
     }
 }

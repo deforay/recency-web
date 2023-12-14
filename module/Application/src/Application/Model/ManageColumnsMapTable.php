@@ -14,6 +14,7 @@ class ManageColumnsMapTable extends AbstractTableGateway
 {
 
     protected $table = 'manage_columns_map';
+    protected $adapter;
 
     public function __construct(Adapter $adapter)
     {

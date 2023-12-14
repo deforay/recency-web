@@ -96,7 +96,7 @@ class Module implements ConfigProviderInterface
 
 
             $session = new Container('credo');
-            if (empty($session) || (!property_exists($session, 'userId') || $session->userId === null) || empty($session->userId)) {
+            if (empty($session) || empty($session->userId) || empty($session->userId)) {
                 $url = $e->getRouter()->assemble(array(), array('name' => 'login'));
                 /** @var \Laminas\Http\Response $response */
                 $response = $e->getResponse();

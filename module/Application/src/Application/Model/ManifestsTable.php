@@ -14,6 +14,7 @@ class ManifestsTable extends AbstractTableGateway
 
     protected $table = 'manifests';
     protected $primary_id = 'manifest_id';
+    protected $adapter;
 
     public function __construct(Adapter $adapter)
     {
@@ -25,7 +26,7 @@ class ManifestsTable extends AbstractTableGateway
         return $this->select(array('manifest_id' => $manifestId))->current();
     }
 
-    public function fetchManifests($parameters,$acl)
+    public function fetchManifests($parameters, $acl)
     {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -34,8 +35,8 @@ class ManifestsTable extends AbstractTableGateway
         $sessionLogin = new Container('credo');
 
         $common = new CommonService();
-        $aColumns = array('manifest_code','manifest_code', 'added_on', 'u.user_name');
-        $orderColumns = array('manifest_code','manifest_code', 'added_on', 'u.user_name');
+        $aColumns = array('manifest_code', 'manifest_code', 'added_on', 'u.user_name');
+        $orderColumns = array('manifest_code', 'manifest_code', 'added_on', 'u.user_name');
 
         /* Paging */
         $sLimit = "";
