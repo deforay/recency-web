@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\Session\Container;
@@ -21,7 +22,7 @@ class CommonController extends AbstractActionController
     public function indexAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -35,7 +36,7 @@ class CommonController extends AbstractActionController
     public function checkMultipleColumnValueAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -50,7 +51,7 @@ class CommonController extends AbstractActionController
     public function getProvinceAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -66,7 +67,7 @@ class CommonController extends AbstractActionController
     public function getDistrictAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -81,7 +82,7 @@ class CommonController extends AbstractActionController
     public function getCityAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -96,7 +97,7 @@ class CommonController extends AbstractActionController
     public function getFacilityAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

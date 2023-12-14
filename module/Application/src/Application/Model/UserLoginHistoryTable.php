@@ -29,7 +29,7 @@ class UserLoginHistoryTable extends AbstractTableGateway
         $this->adapter = $adapter;
     }
 
-    public function addUserLoginHistory($params,$status)
+    public function addUserLoginHistory($params, $status)
     {
         $logincontainer = new Container('credo');
         $ipaddress = '';
@@ -51,15 +51,15 @@ class UserLoginHistoryTable extends AbstractTableGateway
             $ipaddress = 'UNKNOWN';
         }
         $common = new CommonService();
-        $currentDateTime=$common->getDateTime();
+        $currentDateTime = $common->getDateTime();
         $loginData = array(
-            'user_id'=>$logincontainer->userId,
-            'login_id'=>$params['userName'],
-            'login_attempted_datetime'=>$currentDateTime,
-            'login_status'=>$status,
-            'ip_address'=>$ipaddress,
-            'browser'=>$browserAgent,
-            'operating_system'=>$os,
+            'user_id' => $logincontainer->userId,
+            'login_id' => $params['userName'],
+            'login_attempted_datetime' => $currentDateTime,
+            'login_status' => $status,
+            'ip_address' => $ipaddress,
+            'browser' => $browserAgent,
+            'operating_system' => $os,
         );
         $this->insert($loginData);
     }
@@ -71,8 +71,8 @@ class UserLoginHistoryTable extends AbstractTableGateway
         */
         $common = new CommonService();
         $sessionLogin = new Container('credo');
-        $aColumns = array('u.login_attempted_datetime', 'us.user_name','u.login_id', 'u.ip_address', 'u.browser', 'u.operating_system', 'u.login_status');
-        $orderColumns = array('u.login_attempted_datetime', 'us.user_name','u.login_id', 'u.ip_address', 'u.browser', 'u.operating_system', 'u.login_status');
+        $aColumns = array('u.login_attempted_datetime', 'us.user_name', 'u.login_id', 'u.ip_address', 'u.browser', 'u.operating_system', 'u.login_status');
+        $orderColumns = array('u.login_attempted_datetime', 'us.user_name', 'u.login_id', 'u.ip_address', 'u.browser', 'u.operating_system', 'u.login_status');
 
         /* Paging */
         $sLimit = "";
@@ -143,16 +143,16 @@ class UserLoginHistoryTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
-        
-        $sQuery = $sql->select()->from(array('u' => 'user_login_history'))
-                    ->join(array('us' => 'users'), 'us.user_id = u.user_id', array('user_name'),'left');
 
-        if(isset($parameters['user']) && $sessionLogin->userId != ""){
+        $sQuery = $sql->select()->from(array('u' => 'user_login_history'))
+            ->join(array('us' => 'users'), 'us.user_id = u.user_id', array('user_name'), 'left');
+
+        if (isset($parameters['user']) && $sessionLogin->userId != "") {
             $sQuery->where(array('u.user_id' => $sessionLogin->userId));
         }
 
-        if(isset($parameters['userName']) && $parameters['userName'] != ""){
-            $sQuery->where(array('us.user_name like "%'.$parameters['userName'].'%"'));
+        if (isset($parameters['userName']) && $parameters['userName'] != "") {
+            $sQuery->where(array('us.user_name like "%' . $parameters['userName'] . '%"'));
         }
 
         if (isset($parameters['loggedInDate']) && trim($parameters['loggedInDate']) != '') {
@@ -169,11 +169,11 @@ class UserLoginHistoryTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("u.login_attempted_datetime >='" . $start_date . "'", "u.login_attempted_datetime <='" . $end_date . "'"));
         }
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -198,7 +198,7 @@ class UserLoginHistoryTable extends AbstractTableGateway
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-        
+
         foreach ($rResult as $aRow) {
             $attemptDateTimeArr = explode(" ", $aRow['login_attempted_datetime']);
             $attemptDateTime = $common->humanDateFormat($attemptDateTimeArr[0]) . " " . $attemptDateTimeArr[1];
@@ -210,11 +210,10 @@ class UserLoginHistoryTable extends AbstractTableGateway
             $row[] = $aRow['browser'];
             $row[] = $aRow['operating_system'];
             $row[] = $aRow['login_status'];
-           // $row[] = '<a href="/user/edit/' . base64_encode($aRow['user_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
+            // $row[] = '<a href="/user/edit/' . base64_encode($aRow['user_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             $output['aaData'][] = $row;
         }
 
         return $output;
     }
- 
 }

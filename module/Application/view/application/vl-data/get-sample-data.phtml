@@ -1,7 +1,9 @@
 <?php
+
+use Application\Service\CommonService;
 use Laminas\Session\Container;
 
-$common = new \Application\Service\CommonService();
+$common = new CommonService();
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 ?>

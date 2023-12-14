@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use Application\Service\CommonService;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Expression;
@@ -31,8 +32,7 @@ class SystemAlertsTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('s' => 'system_alerts'))
             ->columns(array(new Expression('DISTINCT(alert_type)')));
         $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
     public function fetchAllAlertsDetails($parameters)
@@ -41,7 +41,7 @@ class SystemAlertsTable extends AbstractTableGateway
          * you want to insert a non-database field (for example a counter or static image)
          */
         $sessionLogin = new Container('credo');
-        $common = new \Application\Service\CommonService();
+        $common = new CommonService();
         $aColumns = array('f1.facility_name', 'f2.facility_name', 's.alert_text', 's.alert_type', 's.alert_status', "DATE_FORMAT(s.alerted_on,'%d-%b-%Y %g:%i %a')");
         $orderColumns = array('f1.facility_name', 'f2.facility_name', 's.alert_text', 's.alert_type', 's.alert_status', 's.alerted_on');
         /*
@@ -141,7 +141,7 @@ class SystemAlertsTable extends AbstractTableGateway
             $sQuery->where(array('s.facility_id' => base64_decode($parameters['facilityName'])));
         }
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
@@ -149,7 +149,7 @@ class SystemAlertsTable extends AbstractTableGateway
             $sQuery = $sQuery->where('s.facility_id IN (' . $sessionLogin->facilityMap . ') OR s.lab_id IN (' . $sessionLogin->facilityMap . ')');
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -215,7 +215,7 @@ class SystemAlertsTable extends AbstractTableGateway
 
     public function UpdateAlertStatus($parameters)
     {
-        $common = new \Application\Service\CommonService();
+        $common = new CommonService();
         $status = array(
             'alert_status' => $parameters['status'],
             'updated_datetime'     =>  $common->getDateTime(),

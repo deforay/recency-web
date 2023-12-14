@@ -21,9 +21,9 @@ class RecencyController extends AbstractRestfulController
         return new JsonModel($response);
     }
 
-    public function create($params)
+    public function create($data)
     {
-        $response = $this->recencyService->addRecencyDataApi($params);
+        $response = $this->recencyService->addRecencyDataApi($data);
         return new JsonModel($response);
     }
 }

@@ -7,6 +7,10 @@ use Laminas\Mail;
 use Laminas\Db\Sql\Sql;
 use Laminas\Session\Container;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class QualityCheckService
 {
@@ -106,9 +110,9 @@ class QualityCheckService
     public function exportQcData($params)
     {
         try {
-            $common = new \Application\Service\CommonService();
+            $common = new CommonService();
             $queryContainer = new Container('query');
-            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $excel = new Spreadsheet();
 
             $output = array();
             $sheet = $excel->getActiveSheet();
@@ -142,23 +146,23 @@ class QualityCheckService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'style' => Border::BORDER_THIN,
                     ),
                 )
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'style' => Border::BORDER_THIN,
                     ),
                 )
             );
@@ -219,7 +223,7 @@ class QualityCheckService
                     $colNo++;
                 }
             }
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $writer = IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'Recency-Quality-Check-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
 

@@ -13,9 +13,9 @@ class LoginController extends AbstractRestfulController
     {
         $this->userService = $userService;
     }
-    public function create($params)
+    public function create($data)
     {
-        $response = $this->userService->userLoginApi($params);
+        $response = $this->userService->userLoginApi($data);
         return new JsonModel($response);
     }
 }

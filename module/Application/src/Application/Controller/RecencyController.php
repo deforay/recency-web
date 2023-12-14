@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Service\RecencyService;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Expression;
+use Laminas\Http\Request;
 use Laminas\Session\Container;
 
 use Laminas\View\Model\ViewModel;
@@ -31,7 +32,7 @@ class RecencyController extends AbstractActionController
    {
       $logincontainer = new Container('credo');
       $userId = $logincontainer->userId;
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
 
       if ($request->isPost()) {
@@ -57,7 +58,7 @@ class RecencyController extends AbstractActionController
 
    public function addAction()
    {
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
 
       if ($request->isPost()) {
@@ -153,7 +154,7 @@ class RecencyController extends AbstractActionController
    public function getTesterAction()
    {
 
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -165,7 +166,7 @@ class RecencyController extends AbstractActionController
    }
    public function exportRecencyAction()
    {
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -179,7 +180,7 @@ class RecencyController extends AbstractActionController
 
    public function getLocationBasedFacilityAction()
    {
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -194,7 +195,7 @@ class RecencyController extends AbstractActionController
 
    public function generatePdfAction()
    {
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -214,7 +215,7 @@ class RecencyController extends AbstractActionController
    public function getRecencyAllDataCountAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -228,7 +229,7 @@ class RecencyController extends AbstractActionController
    public function getFinalOutcomeChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -243,7 +244,7 @@ class RecencyController extends AbstractActionController
 
    public function mapManageColumnsAction()
    {
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -259,7 +260,7 @@ class RecencyController extends AbstractActionController
    public function getRecencyLabActivityChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -275,7 +276,7 @@ class RecencyController extends AbstractActionController
    public function getTesterWiseFinalOutcomeChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -291,7 +292,7 @@ class RecencyController extends AbstractActionController
    public function getTesterWiseInvalidChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -307,7 +308,7 @@ class RecencyController extends AbstractActionController
    public function getFacilityWiseInvalidChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -323,7 +324,7 @@ class RecencyController extends AbstractActionController
    public function getLotChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -339,7 +340,7 @@ class RecencyController extends AbstractActionController
    public function recentInfectionByGenderChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -355,7 +356,7 @@ class RecencyController extends AbstractActionController
    public function recentInfectionByDistrictChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -371,7 +372,7 @@ class RecencyController extends AbstractActionController
    public function recentInfectionByAgeChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -387,7 +388,7 @@ class RecencyController extends AbstractActionController
    public function recentHivViralLoadChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -403,7 +404,7 @@ class RecencyController extends AbstractActionController
    public function getModalityWiseFinalOutcomeChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -419,7 +420,7 @@ class RecencyController extends AbstractActionController
    public function getRecentInfectionBySexAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -435,7 +436,7 @@ class RecencyController extends AbstractActionController
    public function getDistrictWiseMissingViralloadAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -451,7 +452,7 @@ class RecencyController extends AbstractActionController
    public function getModalityWiseMissingViralloadAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -467,7 +468,7 @@ class RecencyController extends AbstractActionController
    public function recentInfectionByMonthSexChartAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -483,7 +484,7 @@ class RecencyController extends AbstractActionController
    public function getKitLotInfoAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -496,7 +497,7 @@ class RecencyController extends AbstractActionController
    }
    public function getRecencyDateBasedTestKitAction()
    {
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -511,7 +512,7 @@ class RecencyController extends AbstractActionController
    public function checkPatientIdValidationAction()
    {
       $result = "";
-      /** @var \Laminas\Http\Request $request */
+      /** @var Request $request */
       $request = $this->getRequest();
       if ($request->isPost()) {
          $params = $request->getPost();
@@ -534,7 +535,7 @@ class RecencyController extends AbstractActionController
 
     public function emailResultPdfAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -558,7 +559,7 @@ class RecencyController extends AbstractActionController
 
     public function emailResultSamplesAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

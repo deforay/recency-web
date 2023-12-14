@@ -106,11 +106,11 @@ class SettingsTable extends AbstractTableGateway
             //->join(array('d' => 'district_details'), 'd.district_id=f.district', array('district_name'), 'left')
         ;
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -193,7 +193,7 @@ class SettingsTable extends AbstractTableGateway
     public function updateSettingsDetails($params)
     {
         $logincontainer = new Container('credo');
-        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
+        $mapDb = new UserFacilityMapTable($this->adapter);
         $common = new CommonService();
         if (isset($params['testKitName']) && trim($params['testKitName']) != "") {
             $data = array(

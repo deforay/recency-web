@@ -84,7 +84,7 @@ class TrackApiRequestsTable extends AbstractTableGateway
          * you want to insert a non-database field (for example a counter or static image)
          */
         $sessionLogin = new Container('credo');
-        $common = new \Application\Service\CommonService();
+        $common = new CommonService();
         $aColumns = array('t.transaction_id', 't.number_of_records', 't.request_type', 't.test_type', 't.api_url', "DATE_FORMAT(t.requested_on,'%d-%b-%Y %g:%i %a')");
         $orderColumns = array('t.transaction_id', 't.number_of_records', 't.request_type', 't.test_type', 't.api_url', 't.requested_on');
         /*
@@ -179,11 +179,11 @@ class TrackApiRequestsTable extends AbstractTableGateway
             $sQuery->where(array('t.request_type' => base64_decode($parameters['syncType'])));
         }
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 

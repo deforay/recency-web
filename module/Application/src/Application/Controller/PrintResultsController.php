@@ -1,6 +1,7 @@
 <?php
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
@@ -18,7 +19,7 @@ class PrintResultsController extends AbstractActionController
 
     public function indexAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $parameters = $request->getPost();

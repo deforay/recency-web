@@ -2,6 +2,27 @@
 
 namespace Api;
 
+use Api\Controller\CityController;
+use Api\Controller\DistrictController;
+use Api\Controller\FacilityController;
+use Api\Controller\GlobalConfigController;
+use Api\Controller\LoginController;
+use Api\Controller\PendingVlResultController;
+use Api\Controller\ProvinceController;
+use Api\Controller\QualityCheckController;
+use Api\Controller\RecencyController;
+use Api\Controller\RecencyHideController;
+use Api\Controller\RecencyMandatoryController;
+use Api\Controller\RecencyResultWithVlController;
+use Api\Controller\RecencySampleidController;
+use Api\Controller\RiskPopulationsController;
+use Api\Controller\SampleDataController;
+use Api\Controller\TatReportController;
+use Api\Controller\TechnicalSupportController;
+use Api\Controller\TestKitInfoController;
+use Api\Controller\UpdatePasswordController;
+use Api\Controller\VlTestResultController;
+
 class Module
 {
     public function getConfig()
@@ -18,7 +39,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $userService = $diContainer->get('UserService');
-                        return new \Api\Controller\LoginController($userService);
+                        return new LoginController($userService);
                     }
                 },
                 'Api\Controller\UpdatePasswordController' => new class
@@ -26,7 +47,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $userService = $diContainer->get('UserService');
-                        return new \Api\Controller\UpdatePasswordController($userService);
+                        return new UpdatePasswordController($userService);
                     }
                 },
                 'Api\Controller\ProvinceController' => new class
@@ -34,7 +55,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $commonService = $diContainer->get('CommonService');
-                        return new \Api\Controller\ProvinceController($commonService);
+                        return new ProvinceController($commonService);
                     }
                 },
                 'Api\Controller\DistrictController' => new class
@@ -42,7 +63,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $commonService = $diContainer->get('CommonService');
-                        return new \Api\Controller\DistrictController($commonService);
+                        return new DistrictController($commonService);
                     }
                 },
                 'Api\Controller\QualityCheckController' => new class
@@ -50,7 +71,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $qualityCheckService = $diContainer->get('QualityCheckService');
-                        return new \Api\Controller\QualityCheckController($qualityCheckService);
+                        return new QualityCheckController($qualityCheckService);
                     }
                 },
                 'Api\Controller\SampleDataController' => new class
@@ -58,7 +79,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $settingsService = $diContainer->get('SettingsService');
-                        return new \Api\Controller\SampleDataController($settingsService);
+                        return new SampleDataController($settingsService);
                     }
                 },
                 'Api\Controller\GlobalConfigController' => new class
@@ -66,7 +87,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $globalConfigService = $diContainer->get('GlobalConfigService');
-                        return new \Api\Controller\GlobalConfigController($globalConfigService);
+                        return new GlobalConfigController($globalConfigService);
                     }
                 },
                 'Api\Controller\RiskPopulationsController' => new class
@@ -74,7 +95,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $riskPopulationsService = $diContainer->get('RiskPopulationsService');
-                        return new \Api\Controller\RiskPopulationsController($riskPopulationsService);
+                        return new RiskPopulationsController($riskPopulationsService);
                     }
                 },
                 'Api\Controller\RecencyMandatoryController' => new class
@@ -82,7 +103,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $globalConfigService = $diContainer->get('GlobalConfigService');
-                        return new \Api\Controller\RecencyMandatoryController($globalConfigService);
+                        return new RecencyMandatoryController($globalConfigService);
                     }
                 },
                 'Api\Controller\TechnicalSupportController' => new class
@@ -90,7 +111,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $globalConfigService = $diContainer->get('GlobalConfigService');
-                        return new \Api\Controller\TechnicalSupportController($globalConfigService);
+                        return new TechnicalSupportController($globalConfigService);
                     }
                 },
                 'Api\Controller\RecencyHideController' => new class
@@ -98,7 +119,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $globalConfigService = $diContainer->get('GlobalConfigService');
-                        return new \Api\Controller\RecencyHideController($globalConfigService);
+                        return new RecencyHideController($globalConfigService);
                     }
                 },
                 'Api\Controller\FacilityController' => new class
@@ -106,7 +127,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $facilitiesService = $diContainer->get('FacilitiesService');
-                        return new \Api\Controller\FacilityController($facilitiesService);
+                        return new FacilityController($facilitiesService);
                     }
                 },
                 'Api\Controller\RecencyController' => new class
@@ -114,7 +135,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $recencyService = $diContainer->get('RecencyService');
-                        return new \Api\Controller\RecencyController($recencyService);
+                        return new RecencyController($recencyService);
                     }
                 },
                 'Api\Controller\PendingVlResultController' => new class
@@ -122,7 +143,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $recencyService = $diContainer->get('RecencyService');
-                        return new \Api\Controller\PendingVlResultController($recencyService);
+                        return new PendingVlResultController($recencyService);
                     }
                 },
                 'Api\Controller\RecencySampleidController' => new class
@@ -130,7 +151,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $recencyService = $diContainer->get('RecencyService');
-                        return new \Api\Controller\RecencySampleidController($recencyService);
+                        return new RecencySampleidController($recencyService);
                     }
                 },
                 'Api\Controller\VlTestResultController' => new class
@@ -138,7 +159,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $recencyService = $diContainer->get('RecencyService');
-                        return new \Api\Controller\VlTestResultController($recencyService);
+                        return new VlTestResultController($recencyService);
                     }
                 },
                 'Api\Controller\TestKitInfoController' => new class
@@ -146,7 +167,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $recencyService = $diContainer->get('RecencyService');
-                        return new \Api\Controller\TestKitInfoController($recencyService);
+                        return new TestKitInfoController($recencyService);
                     }
                 },
                 'Api\Controller\TatReportController' => new class
@@ -154,7 +175,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $recencyService = $diContainer->get('RecencyService');
-                        return new \Api\Controller\TatReportController($recencyService);
+                        return new TatReportController($recencyService);
                     }
                 },
                 'Api\Controller\RecencyResultWithVlController' => new class
@@ -162,7 +183,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $recencyService = $diContainer->get('RecencyService');
-                        return new \Api\Controller\RecencyResultWithVlController($recencyService);
+                        return new RecencyResultWithVlController($recencyService);
                     }
                 },
                 'Api\Controller\CityController' => new class
@@ -170,7 +191,7 @@ class Module
                     public function __invoke($diContainer)
                     {
                         $commonService = $diContainer->get('CommonService');
-                        return new \Api\Controller\CityController($commonService);
+                        return new CityController($commonService);
                     }
                 },
             ),

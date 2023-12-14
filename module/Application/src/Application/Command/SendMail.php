@@ -2,6 +2,7 @@
 
 namespace Application\Command;
 
+use Application\Service\CommonService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -9,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SendMail extends Command
 {
 
-    public \Application\Service\CommonService  $commonService;
+    public CommonService  $commonService;
 
     public function __construct($commonService)
     {

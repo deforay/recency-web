@@ -1,6 +1,8 @@
 <?php
 namespace Application\Controller;
 
+use Laminas\Config\Factory;
+use Laminas\Http\Request;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\Session\Container;
@@ -37,7 +39,7 @@ class RolesController extends AbstractActionController
         if($session->roleCode == 'user'){
             return $this->redirect()->toRoute('recency');
         }else{
-            /** @var \Laminas\Http\Request $request */
+            /** @var Request $request */
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
@@ -58,7 +60,7 @@ class RolesController extends AbstractActionController
         if($session->roleCode == 'user'){
             return $this->redirect()->toRoute('recency');
         }else{
-            /** @var \Laminas\Http\Request $request */
+            /** @var Request $request */
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
@@ -66,7 +68,7 @@ class RolesController extends AbstractActionController
                 return $this->redirect()->toRoute('roles');
             }else{
                 $configFile = CONFIG_PATH . DIRECTORY_SEPARATOR . "acl.config.php";
-                $config = \Laminas\Config\Factory::fromFile($configFile, true);
+                $config = Factory::fromFile($configFile, true);
                 $resourceResult = $this->roleService->getAllResource();
                 $roelId=base64_decode($this->params()->fromRoute('id'));
                 $result = $this->roleService->getRole($roelId);

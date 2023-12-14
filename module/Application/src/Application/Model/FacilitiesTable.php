@@ -104,11 +104,11 @@ class FacilitiesTable extends AbstractTableGateway
             ->join(array('p' => 'province_details'), 'p.province_id=f.province', array('province_name'), 'left')
             ->join(array('d' => 'district_details'), 'd.district_id=f.district', array('district_name'), 'left');
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -141,7 +141,7 @@ class FacilitiesTable extends AbstractTableGateway
             $row = array();
             $row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['province_name']);
-            $row[] = ucwords($aRow['district_name']);
+            $row[] = $aRow['district_name'];
             $row[] = $aRow['email'];
             $row[] = ucwords($aRow['status']);
             if ($update) {
@@ -156,7 +156,7 @@ class FacilitiesTable extends AbstractTableGateway
     public function addFacilitiesDetails($params)
     {
         //\Zend\Debug\Debug::dump($params);die;
-        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
+        $mapDb = new UserFacilityMapTable($this->adapter);
         if (isset($params['facilityName']) && trim($params['facilityName']) != "") {
             $data = array(
                 'facility_name' => $params['facilityName'],
@@ -208,7 +208,7 @@ class FacilitiesTable extends AbstractTableGateway
 
     public function updateFacilitiesDetails($params)
     {
-        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
+        $mapDb = new UserFacilityMapTable($this->adapter);
         if (isset($params['facilityId']) && trim($params['facilityId']) != "") {
             $data = array(
                 'facility_name' => $params['facilityName'],
@@ -287,7 +287,7 @@ class FacilitiesTable extends AbstractTableGateway
             $result['facilityTest'][$key]['facility_id'] = $row['facility_id'];
             $result['facilityTest'][$key]['facility_name'] = $row['facility_name'];
         }
-        $riskPopulationsDb = new \Application\Model\RiskPopulationsTable($this->adapter);
+        $riskPopulationsDb = new RiskPopulationsTable($this->adapter);
         $result['riskPopulations'] = $riskPopulationsDb->select()->toArray();
         return $result;
     }
@@ -381,9 +381,7 @@ class FacilitiesTable extends AbstractTableGateway
         //     $fQuery = $fQuery->where(array('facility_type_id' => $facilityType));
         // }
         $fQueryStr = $sql->buildSqlString($fQuery); // Get the string of the Sql, instead of the Select-instance
-        $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
-        return $fResult;
+        return $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     public function checkDistrictName($districtName, $provinceId)
@@ -393,9 +391,7 @@ class FacilitiesTable extends AbstractTableGateway
         $dQuery = $sql->select()->from('district_details')
             ->where(array('district_name' => trim($districtName), 'province_id' => $provinceId));
         $dQueryStr = $sql->buildSqlString($dQuery); // Get the string of the Sql, instead of the Select-instance
-        $dResult = $dbAdapter->query($dQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
-        return $dResult;
+        return $dbAdapter->query($dQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     public function checkCityName($cityName, $districtId)
@@ -405,9 +401,7 @@ class FacilitiesTable extends AbstractTableGateway
         $cQuery = $sql->select()->from('city_details')
             ->where(array('city_name' => trim($cityName), 'district_id' => $districtId));
         $cQueryStr = $sql->buildSqlString($cQuery); // Get the string of the Sql, instead of the Select-instance
-        $cResult = $dbAdapter->query($cQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
-        return $cResult;
+        return $dbAdapter->query($cQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     public function fetchLocationBasedFacility($params)

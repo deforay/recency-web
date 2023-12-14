@@ -2,6 +2,7 @@
 
 namespace Application\Command;
 
+use Application\Service\RecencyService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -9,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SystemAlerts extends Command
 {
 
-    public \Application\Service\RecencyService $recencyService;
+    public RecencyService $recencyService;
 
     public function __construct($recencyService)
     {

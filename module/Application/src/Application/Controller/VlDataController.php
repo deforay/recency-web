@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
@@ -35,7 +36,7 @@ class VlDataController extends AbstractActionController
     public function getSampleDataAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -50,7 +51,7 @@ class VlDataController extends AbstractActionController
     public function updateVlSampleResultAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -64,7 +65,7 @@ class VlDataController extends AbstractActionController
 
     public function uploadResultAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -75,7 +76,7 @@ class VlDataController extends AbstractActionController
 
     public function generateRecentPdfAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -88,7 +89,7 @@ class VlDataController extends AbstractActionController
     }
     public function generateLTermPdfAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -110,7 +111,7 @@ class VlDataController extends AbstractActionController
                 return $this->redirect()->toUrl('/vl-data');
             }
         }
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -127,7 +128,7 @@ class VlDataController extends AbstractActionController
 
     public function getVlOnVlsmSampleAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

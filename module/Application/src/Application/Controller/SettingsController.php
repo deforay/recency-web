@@ -1,6 +1,7 @@
 <?php
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
@@ -20,7 +21,7 @@ class SettingsController extends AbstractActionController
         if($sessionLogin->roleCode != 'admin'){
             return $this->redirect()->toRoute('home');
         }
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -32,7 +33,7 @@ class SettingsController extends AbstractActionController
     public function sampleDataIndexAction()
     {
         $session = new Container('credo');
-            /** @var \Laminas\Http\Request $request */
+            /** @var Request $request */
         $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
@@ -45,7 +46,7 @@ class SettingsController extends AbstractActionController
     public function addAction()
     {
         $session = new Container('credo');
-            /** @var \Laminas\Http\Request $request */
+            /** @var Request $request */
         $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
@@ -77,7 +78,7 @@ class SettingsController extends AbstractActionController
     public function addSampleAction()
     {
         $session = new Container('credo');
-            /** @var \Laminas\Http\Request $request */
+            /** @var Request $request */
         $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();

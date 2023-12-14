@@ -10,6 +10,7 @@
 
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
@@ -30,7 +31,7 @@ class IndexController extends AbstractActionController
     }
     public function indexAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -51,7 +52,7 @@ class IndexController extends AbstractActionController
     }
     public function exportRecencyDataAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -73,7 +74,7 @@ class IndexController extends AbstractActionController
 
     public function  getRecencyAllDataCountAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -88,7 +89,7 @@ class IndexController extends AbstractActionController
 
     public function analysisDashboardAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -110,7 +111,7 @@ class IndexController extends AbstractActionController
 
     public function qualityControlDashboardAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -132,7 +133,7 @@ class IndexController extends AbstractActionController
 
     public function setSampleFirstChartAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

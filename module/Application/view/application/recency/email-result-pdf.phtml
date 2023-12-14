@@ -8,10 +8,14 @@ $common = new CommonService();
 $configResult = $this->CustomConfig();
 $domain = $configResult["domain"];
 $roleCode = $sessionLogin->roleCode;
-$acl=$this->layout()->acl;
+$acl = $this->layout()->acl;
 $logoImage = UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $globalConfigResult["logo_image"];
 class MYPDF extends TCPDF
 {
+     public ?string $logo = null;
+     public ?string $text = null;
+     public ?string $logoImage = null;
+
      //Page header
      public function setHeading($logo, $text, $logoImage)
      {
@@ -360,9 +364,9 @@ $pdf->Output($filePath, "F");
                                    <button type="submit" class="btn btn-primary" onclick="validateNow();return false;"><i class="fa fa-fw fa-check"></i> Send</button>
                               </div>
                               <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'download-result-pdf')) { ?>
-                              <div class="col-lg-7 offset-lg-4">
-                                   <p style="margin-top:10px;"><a class="send-mail" href="/recency/download-result-pdf/<?php echo $filename; ?>" style="text-decoration:none;">Click here to download the PDF</a></p>
-                              </div>
+                                   <div class="col-lg-7 offset-lg-4">
+                                        <p style="margin-top:10px;"><a class="send-mail" href="/recency/download-result-pdf/<?php echo $filename; ?>" style="text-decoration:none;">Click here to download the PDF</a></p>
+                                   </div>
                               <?php } ?>
                          </div>
                     </form>

@@ -3,6 +3,32 @@
 namespace Application;
 
 
+use Application\Controller\CaptchaController;
+use Application\Controller\CityController;
+use Application\Controller\CommonController;
+use Application\Controller\CronController;
+use Application\Controller\DistrictController;
+use Application\Controller\FacilitiesController;
+use Application\Controller\GlobalConfigController;
+use Application\Controller\IndexController;
+use Application\Controller\LoginController;
+use Application\Controller\ManifestsController;
+use Application\Controller\MonitoringController;
+use Application\Controller\PrintResultsController;
+use Application\Controller\ProvinceController;
+use Application\Controller\QualityCheckController;
+use Application\Controller\RecencyController;
+use Application\Controller\ReportsController;
+use Application\Controller\RolesController;
+use Application\Controller\SettingsController;
+use Application\Controller\UserController;
+use Application\Controller\VlDataController;
+use Application\View\Helper\CustomConfig;
+use Application\View\Helper\GlobalConfig;
+use Application\View\Helper\UserCrossLogin;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\Mvc\Application;
 use Laminas\Session\Container;
 
 use Laminas\Mvc\ModuleRouteListener;
@@ -60,7 +86,7 @@ class Module implements ConfigProviderInterface
 {
     public function onBootstrap(MvcEvent $e)
     {
-        /** @var $application \Laminas\Mvc\Application */
+        /** @var $application Application */
         $application = $e->getApplication();
 
         $eventManager        = $application->getEventManager();
@@ -70,7 +96,7 @@ class Module implements ConfigProviderInterface
 
         //no need to call presetter if request is from CLI
         if (php_sapi_name() != 'cli') {
-            $eventManager->attach('dispatch', function (\Laminas\Mvc\MvcEvent $e) {
+            $eventManager->attach('dispatch', function (MvcEvent $e) {
                 return $this->preSetter($e);
             }, 100);
         }
@@ -81,9 +107,9 @@ class Module implements ConfigProviderInterface
     public function preSetter(MvcEvent $e)
     {
 
-        /** @var $application \Laminas\Mvc\Application */
+        /** @var $application Application */
         $application = $e->getApplication();
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $e->getRequest();
 
 
@@ -98,7 +124,7 @@ class Module implements ConfigProviderInterface
             $session = new Container('credo');
             if (empty($session) || empty($session->userId) || empty($session->userId)) {
                 $url = $e->getRouter()->assemble(array(), array('name' => 'login'));
-                /** @var \Laminas\Http\Response $response */
+                /** @var Response $response */
                 $response = $e->getResponse();
                 $response->getHeaders()->addHeaderLine('Location', $url);
                 $response->setStatusCode(302);
@@ -129,7 +155,7 @@ class Module implements ConfigProviderInterface
 
                 if (!$acl->hasResource($resource) || (!$acl->isAllowed($role, $resource, $privilege))) {
 
-                    /** @var \Laminas\Http\Response $response */
+                    /** @var Response $response */
                     $response = $e->getResponse();
                     $response->setStatusCode(403);
                     $response->sendHeaders();
@@ -475,7 +501,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $globalTable = $diContainer->get('GlobalConfigTable');
-                        return new \Application\View\Helper\GlobalConfig($globalTable);
+                        return new GlobalConfig($globalTable);
                     }
                 },
                 'UserCrossLogin'         => new class
@@ -483,7 +509,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $userTable = $diContainer->get('UserTable');
-                        return new \Application\View\Helper\UserCrossLogin($userTable);
+                        return new UserCrossLogin($userTable);
                     }
                 },
                 'CustomConfig'         => new class
@@ -491,7 +517,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $configResult = $diContainer->get('Config');
-                        return new \Application\View\Helper\CustomConfig($configResult);
+                        return new CustomConfig($configResult);
                     }
                 }
             ),
@@ -508,7 +534,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $userService = $diContainer->get('UserService');
-                        return new \Application\Controller\LoginController($userService);
+                        return new LoginController($userService);
                     }
                 },
                 'Application\Controller\CaptchaController' => new class
@@ -516,7 +542,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $commonService = $diContainer->get('CommonService');
-                        return new \Application\Controller\CaptchaController($commonService);
+                        return new CaptchaController($commonService);
                     }
                 },
                 'Application\Controller\CommonController' => new class
@@ -524,7 +550,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $commonService = $diContainer->get('CommonService');
-                        return new \Application\Controller\CommonController($commonService);
+                        return new CommonController($commonService);
                     }
                 },
                 'Application\Controller\RecencyController' => new class
@@ -536,7 +562,7 @@ class Module implements ConfigProviderInterface
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $settingsService = $diContainer->get('SettingsService');
                         $sampleTypesService = $diContainer->get('SampleTypesService');
-                        return new \Application\Controller\RecencyController($recencyService, $facilitiesService, $globalConfigService, $settingsService, $sampleTypesService);
+                        return new RecencyController($recencyService, $facilitiesService, $globalConfigService, $settingsService, $sampleTypesService);
                     }
                 },
                 'Application\Controller\UserController' => new class
@@ -545,7 +571,7 @@ class Module implements ConfigProviderInterface
                     {
                         $userService = $diContainer->get('UserService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
-                        return new \Application\Controller\UserController($userService, $globalConfigService);
+                        return new UserController($userService, $globalConfigService);
                     }
                 },
                 'Application\Controller\FacilitiesController' => new class
@@ -555,7 +581,7 @@ class Module implements ConfigProviderInterface
                         $userService = $diContainer->get('UserService');
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
-                        return new \Application\Controller\FacilitiesController($facilitiesService, $userService, $globalConfigService);
+                        return new FacilitiesController($facilitiesService, $userService, $globalConfigService);
                     }
                 },
                 'Application\Controller\GlobalConfigController' => new class
@@ -563,7 +589,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $globalConfigService = $diContainer->get('GlobalConfigService');
-                        return new \Application\Controller\GlobalConfigController($globalConfigService);
+                        return new GlobalConfigController($globalConfigService);
                     }
                 },
                 'Application\Controller\SettingsController' => new class
@@ -571,7 +597,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $settingsService = $diContainer->get('SettingsService');
-                        return new \Application\Controller\SettingsController($settingsService);
+                        return new SettingsController($settingsService);
                     }
                 },
                 'Application\Controller\PrintResultsController' => new class
@@ -579,7 +605,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $recencyService = $diContainer->get('RecencyService');
-                        return new \Application\Controller\PrintResultsController($recencyService);
+                        return new PrintResultsController($recencyService);
                     }
                 },
                 'Application\Controller\CronController' => new class
@@ -588,7 +614,7 @@ class Module implements ConfigProviderInterface
                     {
                         $recencyService = $diContainer->get('RecencyService');
                         $commonService = $diContainer->get('CommonService');
-                        return new \Application\Controller\CronController($recencyService, $commonService);
+                        return new CronController($recencyService, $commonService);
                     }
                 },
                 'Application\Controller\ProvinceController' => new class
@@ -598,7 +624,7 @@ class Module implements ConfigProviderInterface
 
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $provinceService = $diContainer->get('ProvinceService');
-                        return new \Application\Controller\ProvinceController($provinceService, $globalConfigService);
+                        return new ProvinceController($provinceService, $globalConfigService);
                     }
                 },
                 'Application\Controller\DistrictController' => new class
@@ -609,7 +635,7 @@ class Module implements ConfigProviderInterface
                         $districtService = $diContainer->get('DistrictService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $provinceService = $diContainer->get('ProvinceService');
-                        return new \Application\Controller\DistrictController($districtService, $provinceService, $globalConfigService);
+                        return new DistrictController($districtService, $provinceService, $globalConfigService);
                     }
                 },
                 'Application\Controller\CityController' => new class
@@ -619,7 +645,7 @@ class Module implements ConfigProviderInterface
                         $cityService = $diContainer->get('CityService');
                         $districtService = $diContainer->get('DistrictService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
-                        return new \Application\Controller\CityController($cityService, $districtService, $globalConfigService);
+                        return new CityController($cityService, $districtService, $globalConfigService);
                     }
                 },
                 'Application\Controller\QualityCheckController' => new class
@@ -629,7 +655,7 @@ class Module implements ConfigProviderInterface
                         $qualityCheckService = $diContainer->get('QualityCheckService');
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $settingsService = $diContainer->get('SettingsService');
-                        return new \Application\Controller\QualityCheckController($qualityCheckService, $facilitiesService, $settingsService);
+                        return new QualityCheckController($qualityCheckService, $facilitiesService, $settingsService);
                     }
                 },
                 'Application\Controller\ManifestsController' => new class
@@ -641,7 +667,7 @@ class Module implements ConfigProviderInterface
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $commonService = $diContainer->get('CommonService');
-                        return new \Application\Controller\ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService);
+                        return new ManifestsController($manifestsService, $recencyService, $facilitiesService, $globalConfigService, $commonService);
                     }
                 },
                 'Application\Controller\IndexController' => new class
@@ -651,7 +677,7 @@ class Module implements ConfigProviderInterface
                         $recencyService = $diContainer->get('RecencyService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $facilitiesService = $diContainer->get('FacilitiesService');
-                        return new \Application\Controller\IndexController($recencyService, $facilitiesService, $globalConfigService);
+                        return new IndexController($recencyService, $facilitiesService, $globalConfigService);
                     }
                 },
                 'Application\Controller\VlDataController' => new class
@@ -662,7 +688,7 @@ class Module implements ConfigProviderInterface
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $qualityCheckService = $diContainer->get('QualityCheckService');
-                        return new \Application\Controller\VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
+                        return new VlDataController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
                     }
                 },
                 'Application\Controller\MonitoringController' => new class
@@ -672,7 +698,7 @@ class Module implements ConfigProviderInterface
                         $userService = $diContainer->get('UserService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $facilitiesService = $diContainer->get('FacilitiesService');
-                        return new \Application\Controller\MonitoringController($userService, $globalConfigService, $facilitiesService);
+                        return new MonitoringController($userService, $globalConfigService, $facilitiesService);
                     }
                 },
                 'Application\Controller\RolesController' => new class
@@ -680,7 +706,7 @@ class Module implements ConfigProviderInterface
                     public function __invoke($diContainer)
                     {
                         $roleService = $diContainer->get('RoleService');
-                        return new \Application\Controller\RolesController($roleService);
+                        return new RolesController($roleService);
                     }
                 },
                 'Application\Controller\ReportsController' => new class
@@ -691,7 +717,7 @@ class Module implements ConfigProviderInterface
                         $facilitiesService = $diContainer->get('FacilitiesService');
                         $globalConfigService = $diContainer->get('GlobalConfigService');
                         $qualityCheckService = $diContainer->get('QualityCheckService');
-                        return new \Application\Controller\ReportsController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
+                        return new ReportsController($recencyService, $facilitiesService, $globalConfigService, $qualityCheckService);
                     }
                 },
             ),

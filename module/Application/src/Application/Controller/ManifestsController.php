@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
@@ -28,7 +29,7 @@ class ManifestsController extends AbstractActionController
     public function indexAction()
     {
         $session = new Container('credo');
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -40,7 +41,7 @@ class ManifestsController extends AbstractActionController
     }
     public function addAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -64,7 +65,7 @@ class ManifestsController extends AbstractActionController
     }
     public function editAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -93,7 +94,7 @@ class ManifestsController extends AbstractActionController
 
     public function genarateManifestAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         $id = base64_decode($this->params()->fromRoute('id'));
 
@@ -113,7 +114,7 @@ class ManifestsController extends AbstractActionController
     public function getSamplesByTestingSiteAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

@@ -154,11 +154,11 @@ class DistrictTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('d' => 'district_details'))
             ->join(array('p' => 'province_details'), 'p.province_id=d.province_id', array('province_name'), 'left');
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -189,7 +189,7 @@ class DistrictTable extends AbstractTableGateway
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = ucwords($aRow['province_name']);
-            $row[] = ucwords($aRow['district_name']);
+            $row[] = $aRow['district_name'];
             if ($update) {
                 $row[] = '<a href="/district/edit/' . base64_encode($aRow['district_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             }

@@ -28,4 +28,3 @@ class RiskPopulationsService {
         return $riskPopulationsDb->fetchAllRiskPopulationsListApi($params);
     }
 }
-?>

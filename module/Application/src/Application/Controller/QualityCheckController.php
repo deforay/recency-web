@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
 use Laminas\Mvc\Controller\AbstractActionController;
@@ -22,7 +23,7 @@ class QualityCheckController extends AbstractActionController
 
      public function indexAction()
      {
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -41,7 +42,7 @@ class QualityCheckController extends AbstractActionController
 
      public function addAction()
      {
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -102,7 +103,7 @@ class QualityCheckController extends AbstractActionController
 
      public function exportQcDataAction()
      {
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -118,7 +119,7 @@ class QualityCheckController extends AbstractActionController
      public function getQualityCheckVolumeChartAction()
      {
           $result = "";
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -134,7 +135,7 @@ class QualityCheckController extends AbstractActionController
      public function getQualityResultWiseTermOutcomeChartAction()
      {
           $result = "";
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -148,7 +149,7 @@ class QualityCheckController extends AbstractActionController
      public function getKitLotNumberChartAction()
      {
           $result = "";
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -162,7 +163,7 @@ class QualityCheckController extends AbstractActionController
      public function getSampleLotChartAction()
      {
           $result = "";
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -176,7 +177,7 @@ class QualityCheckController extends AbstractActionController
      public function getTestingQualityNegativeChartAction()
      {
           $result = "";
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -190,7 +191,7 @@ class QualityCheckController extends AbstractActionController
      public function getTestingQualityInvalidChartAction()
      {
           $result = "";
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -203,7 +204,7 @@ class QualityCheckController extends AbstractActionController
 
      public function getPassRateByFacilityAction()
      {
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -216,7 +217,7 @@ class QualityCheckController extends AbstractActionController
      public function getMonthWiseQualityControlAction()
      {
           $result = "";
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();
@@ -232,7 +233,7 @@ class QualityCheckController extends AbstractActionController
      public function getDistrictWiseQualityCheckInvalidAction()
      {
           $result = "";
-          /** @var \Laminas\Http\Request $request */
+          /** @var Request $request */
         $request = $this->getRequest();
           if ($request->isPost()) {
                $params = $request->getPost();

@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\Session\Container;
@@ -21,7 +22,7 @@ class CaptchaController extends AbstractActionController
     }
     public function checkCaptchaAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

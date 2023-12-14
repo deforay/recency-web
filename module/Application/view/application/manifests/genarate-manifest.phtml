@@ -104,20 +104,13 @@ if ($result) {
     // set image scale factor
     $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-    // set some language-dependent strings (optional)
-    if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
-        require_once(dirname(__FILE__) . '/lang/eng.php');
-        $pdf->setLanguageArray($l);
-    }
-
     // set font
     $pdf->SetFont('helvetica', '', 10);
     $pdf->setPageOrientation('L');
     // add a page
     $pdf->AddPage();
-    $tbl = '';
 
-    $tbl .= '<table nobr="true" style="width:100%;" border="0" cellpadding="2">';
+    $tbl = '<table nobr="true" style="width:100%;" border="0" cellpadding="2">';
     $tbl .= '<tr nobr="true">';
     $tbl .= '<td style="width:50%;" align="center"><h1>' . $result[0]['manifest_code'] . '</h1></td>';
     $tbl .= '<td style="width:50%;" align="center"><strong> <img style="width:200px;height:30px;" src="'.$common->getBarcodeImageContent($result[0]['manifest_code'], 'C39').'"></strong></td>';

@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use Laminas\Config\Reader\Ini;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Expression;
 use Laminas\Session\Container;
@@ -105,11 +106,11 @@ class GlobalConfigTable extends AbstractTableGateway
 
         $sQuery = $sql->select()->from('global_config');
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -218,7 +219,7 @@ class GlobalConfigTable extends AbstractTableGateway
     public function fetchAllGlobalConfigListApi($params)
     {
         $common = new CommonService();
-        $config = new \Laminas\Config\Reader\Ini();
+        $config = new Ini();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
@@ -385,7 +386,7 @@ class GlobalConfigTable extends AbstractTableGateway
     public function fetchTechnicalSupportDetailsApi()
     {
         $common = new CommonService();
-        $config = new \Laminas\Config\Reader\Ini();
+        $config = new Ini();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('global_config')

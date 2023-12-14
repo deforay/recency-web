@@ -43,8 +43,6 @@ class TestingFacilityTypeTable extends AbstractTableGateway
             ->where(array('testing_facility_type_name' => trim($fName)));
 
         $fQueryStr = $sql->buildSqlString($fQuery); // Get the string of the Sql, instead of the Select-instance
-        $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
-        return $fResult;
+        return $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 }

@@ -54,9 +54,7 @@ class ManageColumnsMapTable extends AbstractTableGateway
             ->where(array('user_id' => $id));
 
         $fQueryStr = $sql->buildSqlString($fQuery); // Get the string of the Sql, instead of the Select-instance
-        $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
-        return $fResult;
+        return $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     public function fetchAllManagaColumnsDetails($userId)
@@ -67,8 +65,6 @@ class ManageColumnsMapTable extends AbstractTableGateway
             ->where(array('user_id' => $userId));
 
         $fQueryStr = $sql->buildSqlString($fQuery); // Get the string of the Sql, instead of the Select-instance
-        $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-
-        return $fResult;
+        return $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 }

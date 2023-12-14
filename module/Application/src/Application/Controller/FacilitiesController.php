@@ -1,6 +1,7 @@
 <?php
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
@@ -27,7 +28,7 @@ class FacilitiesController extends AbstractActionController
             return $this->redirect()->toRoute('recency');
         }else{
 
-            /** @var \Laminas\Http\Request $request */
+            /** @var Request $request */
         $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
@@ -45,7 +46,7 @@ class FacilitiesController extends AbstractActionController
             return $this->redirect()->toRoute('recency');
         }else{
 
-            /** @var \Laminas\Http\Request $request */
+            /** @var Request $request */
         $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
@@ -93,7 +94,7 @@ class FacilitiesController extends AbstractActionController
     public function getFacilityByLocationAction()
     {
         $result = "";
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

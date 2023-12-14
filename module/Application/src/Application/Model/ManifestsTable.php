@@ -117,14 +117,14 @@ class ManifestsTable extends AbstractTableGateway
         if ($roleCode != 'admin') {
             $sQuery->where(array('m.added_by' => $userId));
         }
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
         if ($sessionLogin->facilityMap != null) {
             $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 

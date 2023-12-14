@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use GuzzleHttp\Client;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Expression;
 use Laminas\Session\Container;
@@ -35,7 +36,7 @@ class UserTable extends AbstractTableGateway
         $common = new CommonService();
         $crossLoginSession->logged = false;
 
-        $userLoginHistoryDb = new \Application\Model\UserLoginHistoryTable($this->adapter);
+        $userLoginHistoryDb = new UserLoginHistoryTable($this->adapter);
 
         if (!isset($captchaSession) || empty($captchaSession->status) || $captchaSession->status == 'fail') {
             //User log details
@@ -60,8 +61,8 @@ class UserTable extends AbstractTableGateway
         if (isset($params['userName']) && trim($params['userName']) != "" && trim($params['loginPassword']) != "") {
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
-            $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
-            $userFacilityMapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
+            $globalDb = new GlobalConfigTable($this->adapter);
+            $userFacilityMapDb = new UserFacilityMapTable($this->adapter);
 
 
             /* Hash alg */
@@ -257,11 +258,11 @@ class UserTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('u' => 'users'))
             ->join(array('r' => 'roles'), 'u.role_id = r.role_id', array('role_name'));
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -321,7 +322,7 @@ class UserTable extends AbstractTableGateway
     public function addUserDetails($params)
     {
         $common = new CommonService();
-        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
+        $mapDb = new UserFacilityMapTable($this->adapter);
         if (isset($params['userName']) && trim($params['userName']) != "") {
             $password = $common->passwordHash($params['servPass']);
             $data = array(
@@ -375,7 +376,7 @@ class UserTable extends AbstractTableGateway
     public function updateUserDetails($params, $configResult)
     {
         $common = new CommonService();
-        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
+        $mapDb = new UserFacilityMapTable($this->adapter);
 
         if (isset($params['userId']) && trim($params['userId']) != "") {
             $data = array(
@@ -395,7 +396,7 @@ class UserTable extends AbstractTableGateway
             if ($params['servPass'] != '') {
                 if (!empty($configResult['vlsm']['crosslogin']) && $configResult['vlsm']['crosslogin'] === true) {
                     $newPass = $common->encrypt($params['servPass'], base64_decode($configResult['vlsm']['crosslogin-salt']));
-                    $client = new \GuzzleHttp\Client();
+                    $client = new Client();
                     $url = rtrim($configResult['vlsm']['domain'], "/");
                     $result = $client->post($url . '/users/editProfileHelper.php', [
                         'form_params' => [
@@ -436,7 +437,7 @@ class UserTable extends AbstractTableGateway
             $common = new CommonService();
             $dbAdapter = $this->adapter;
             $sql = new Sql($dbAdapter);
-            $globalDb = new \Application\Model\GlobalConfigTable($this->adapter);
+            $globalDb = new GlobalConfigTable($this->adapter);
             $password = sha1($params['password'] . $configResult["password"]["salt"]);
             /* Hash alg */
             $sQuery = $sql->select()->from(array('u' => 'users'))->where(array('email' => $params['email']));
@@ -515,7 +516,7 @@ class UserTable extends AbstractTableGateway
                 'comments' => $params['comments'],
             );
             if ($params['servPass'] != '' && (!empty($configResult['vlsm']['crosslogin']) && $configResult['vlsm']['crosslogin'] === true)) {
-                $client = new \GuzzleHttp\Client();
+                $client = new Client();
                 $url = rtrim($configResult['vlsm']['domain'], "/");
                 $result = $client->post($url . '/users/editProfileHelper.php', [
                     'form_params' => [
@@ -574,7 +575,6 @@ class UserTable extends AbstractTableGateway
             ->where(array('u.auth_token' => $authToken))
             ->where(array('u.status' => 'active'));
         $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 }

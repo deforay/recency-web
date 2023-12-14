@@ -15,9 +15,9 @@ class VlTestResultController extends AbstractRestfulController
     {
         $this->recencyService = $recencyService;
     }
-    public function create($params)
+    public function create($data)
     {
-        $response = $this->recencyService->addVlTestResultApi($params);
+        $response = $this->recencyService->addVlTestResultApi($data);
         return new JsonModel($response);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use Laminas\Config\Config;
 use Laminas\Session\Container;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Sql;
@@ -137,11 +138,11 @@ class RoleTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $sQuery = $sql->select()->from('roles');
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -150,14 +151,14 @@ class RoleTable extends AbstractTableGateway
             $sQuery->offset($sOffset);
         }
 
-        $sQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         //error_log($sQueryForm);
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
 
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $fQuery = $sql->getSqlStringForSqlObject($sQuery);
+        $fQuery = $sql->buildSqlString($sQuery);
         $aResultFilterTotal = $dbAdapter->query($fQuery, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -197,14 +198,14 @@ class RoleTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $resourceQuery = $sql->select()->from('resources')->order('display_name');
-        $resourceQueryStr = $sql->getSqlStringForSqlObject($resourceQuery);
+        $resourceQueryStr = $sql->buildSqlString($resourceQuery);
         $resourceResult = $dbAdapter->query($resourceQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $count = count($resourceResult);
         for ($i = 0; $i < $count; $i++) {
             $privilageQuery = $sql->select()->from('privileges')
                 ->where(array('resource_id' => $resourceResult[$i]['resource_id']))
                 ->order('display_name');
-            $privilageQueryStr = $sql->getSqlStringForSqlObject($privilageQuery);
+            $privilageQueryStr = $sql->buildSqlString($privilageQuery);
             $resourceResult[$i]['privilege'] = $dbAdapter->query($privilageQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         }
         return $resourceResult;
@@ -215,7 +216,7 @@ class RoleTable extends AbstractTableGateway
         try {
             $roleCode = $params['roleCode'];
             $configFile = CONFIG_PATH . DIRECTORY_SEPARATOR . "acl.config.php";
-            $config = new \Laminas\Config\Config(include($configFile), true);
+            $config = new Config(include($configFile), true);
             $config->$roleCode = array();
 
             foreach ($params['resource'] as $resourceName => $privilege) {
@@ -236,7 +237,7 @@ class RoleTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $query = $sql->select()->from('roles')->where(array('status' => 'active'))->order('role_name ASC');
-        $queryStr = $sql->getSqlStringForSqlObject($query);
+        $queryStr = $sql->buildSqlString($query);
         return $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 }

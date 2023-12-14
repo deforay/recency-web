@@ -8,6 +8,10 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
+use Application\Command\SystemAlerts;
+use Application\Command\VlsmReceiveResults;
+use Application\Command\VlsmSendRequests;
+
 return array(
      'router' => array(
           'routes' => array(
@@ -340,9 +344,9 @@ return array(
      'laminas-cli' => [
           'commands' => [
                'send-mail' => Application\Command\SendMail::class,
-               'vlsm-send-requests' => \Application\Command\VlsmSendRequests::class,
-               'vlsm-receive-results' => \Application\Command\VlsmReceiveResults::class,
-               'system-alerts' => \Application\Command\SystemAlerts::class,
+               'vlsm-send-requests' => VlsmSendRequests::class,
+               'vlsm-receive-results' => VlsmReceiveResults::class,
+               'system-alerts' => SystemAlerts::class,
           ],
      ],
      // // Placeholder for console routes

@@ -51,7 +51,7 @@ class EventLogTable extends AbstractTableGateway
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
-        $common = new \Application\Service\CommonService();
+        $common = new CommonService();
         $aColumns = array('u.user_name', 'e_l.action', "DATE_FORMAT(e_l.added_on,'%d-%b-%Y %g:%i %a')");
         $orderColumns = array('u.user_name', 'e_l.action', 'e_l.added_on');
         /*
@@ -155,11 +155,11 @@ class EventLogTable extends AbstractTableGateway
             $sQuery->where(array('actor' => trim($parameters['users'])));
         }
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -190,7 +190,7 @@ class EventLogTable extends AbstractTableGateway
 
         foreach ($rResult as $aRow) {
             $row = array();
-            $common = new \Application\Service\CommonService();
+            $common = new CommonService();
             $date = explode(" ", $aRow['added_on']);
             $dateTime = $common->humanDateFormat($date[0]);
             $time_in_12_hour_format  = date("g:i a", strtotime($date[1]));
@@ -210,7 +210,6 @@ class EventLogTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('e_l' => 'event_log'))
             ->columns(array(new Expression('DISTINCT(event_type)')));
         $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
 use Laminas\Mvc\Controller\AbstractActionController;
@@ -16,7 +17,7 @@ class GlobalConfigController extends AbstractActionController
     }
     public function indexAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $parameters = $request->getPost();

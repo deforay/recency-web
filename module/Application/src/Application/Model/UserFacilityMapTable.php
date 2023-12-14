@@ -17,4 +17,4 @@ class UserFacilityMapTable extends AbstractTableGateway {
           $this->adapter = $adapter;
     }
 }
-?>
+

@@ -9,6 +9,10 @@ use Laminas\Session\Container;
 use Application\Model\RecencyTable;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class RecencyService
 {
@@ -173,7 +177,7 @@ class RecencyService
         ini_set('memory_limit', -1);
         ini_set('max_execution_time', 30000);
         try {
-            $common = new \Application\Service\CommonService();
+            $common = new CommonService();
             $queryContainer = new Container('query');
 
 
@@ -186,7 +190,7 @@ class RecencyService
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (!empty($sResult)) {
 
-                $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+                $excel = new Spreadsheet();
                 $sheet = $excel->getActiveSheet();
                 $styleArray = array(
                     'font' => array(
@@ -194,12 +198,12 @@ class RecencyService
                         'size' => 12,
                     ),
                     'alignment' => array(
-                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                        'horizontal' => Alignment::HORIZONTAL_CENTER,
+                        'vertical' => Alignment::VERTICAL_CENTER,
                     ),
                     'borders' => array(
                         'outline' => array(
-                            'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'style' => Border::BORDER_THIN,
                         ),
                     ),
                 );
@@ -207,7 +211,7 @@ class RecencyService
                 $borderStyle = array(
                     'borders' => array(
                         'outline' => array(
-                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                            'borderStyle' => Border::BORDER_THICK,
                             'color' => array('argb' => '000000'),
                         ),
                     ),
@@ -239,7 +243,7 @@ class RecencyService
                     $row[] = $aRow['sample_id'];
                     $row[] = $aRow['patient_id'];
                     $row[] = ucwords($aRow['province_name']);
-                    $row[] = ucwords($aRow['district_name']);
+                    $row[] = $aRow['district_name'];
                     $row[] = ucwords($aRow['facility_name']);
                     $row[] = ucwords($aRow['testing_facility_name']);
                     $row[] = $aRow['testing_facility_type_name'];
@@ -385,9 +389,9 @@ class RecencyService
     {
 
         try {
-            $common = new \Application\Service\CommonService();
+            $common = new CommonService();
             $queryContainer = new Container('query');
-            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $excel = new Spreadsheet();
 
             $output = array();
             $sheet = $excel->getActiveSheet();
@@ -426,12 +430,12 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'style' => Border::BORDER_THIN,
                     ),
                 ),
             );
@@ -439,7 +443,7 @@ class RecencyService
             $borderStyle = array(
                 'borders' => array(
                     'outline' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                        'borderStyle' => Border::BORDER_THICK,
                         'color' => array('argb' => '000000'),
                     ),
                 ),
@@ -478,7 +482,7 @@ class RecencyService
                 }
             }
 
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $writer = IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'Recent-Infections-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
@@ -503,9 +507,9 @@ class RecencyService
         ini_set('memory_limit', -1);
         ini_set('max_execution_time', 30000);
         try {
-            $common = new \Application\Service\CommonService();
+            $common = new CommonService();
             $queryContainer = new Container('query');
-            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $excel = new Spreadsheet();
 
             $output = array();
             $sheet = $excel->getActiveSheet();
@@ -541,12 +545,12 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'style' => Border::BORDER_THIN,
                     ),
                 ),
             );
@@ -554,7 +558,7 @@ class RecencyService
             $borderStyle = array(
                 'borders' => array(
                     'outline' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                        'borderStyle' => Border::BORDER_THICK,
                         'color' => array('argb' => '000000'),
                     ),
                 ),
@@ -588,7 +592,7 @@ class RecencyService
                 }
             }
 
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $writer = IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'Long-term-Infection-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
@@ -623,9 +627,9 @@ class RecencyService
     {
 
         try {
-            $common = new \Application\Service\CommonService();
+            $common = new CommonService();
             $queryContainer = new Container('query');
-            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $excel = new Spreadsheet();
 
             $output = array();
             $sheet = $excel->getActiveSheet();
@@ -655,12 +659,12 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'style' => Border::BORDER_THIN,
                     ),
                 ),
             );
@@ -668,7 +672,7 @@ class RecencyService
             $borderStyle = array(
                 'borders' => array(
                     'outline' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                        'borderStyle' => Border::BORDER_THICK,
                         'color' => array('argb' => '000000'),
                     ),
                 ),
@@ -699,7 +703,7 @@ class RecencyService
                 }
             }
 
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $writer = IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'TAT-Report-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
@@ -772,10 +776,10 @@ class RecencyService
             }
 
             if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName) && move_uploaded_file($_FILES['fileName']['tmp_name'], UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName)) {
-                $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
+                $objPHPExcel = IOFactory::load(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
                 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 $count = count($sheetData);
-                $common = new \Application\Service\CommonService();
+                $common = new CommonService();
                 for ($i = 2; $i <= $count; ++$i) {
                     $sampleId = $sheetData[$i]['A'];
                     if (isset($sheetData[$i]['A']) && trim($sheetData[$i]['A']) != '') {
@@ -831,9 +835,9 @@ class RecencyService
     {
 
         try {
-            $common = new \Application\Service\CommonService();
+            $common = new CommonService();
             $queryContainer = new Container('query');
-            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $excel = new Spreadsheet();
 
             $output = array();
             $sheet = $excel->getActiveSheet();
@@ -874,12 +878,12 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                        'style' => Border::BORDER_THICK,
                     ),
                 ),
             );
@@ -887,7 +891,7 @@ class RecencyService
             $borderStyle = array(
                 'borders' => array(
                     'outline' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                        'borderStyle' => Border::BORDER_THICK,
                         'color' => array('argb' => '000000'),
                     ),
                 ),
@@ -980,7 +984,7 @@ class RecencyService
                 $sheet->setCellValue('K4', html_entity_decode(($result[0]['Inconclusive'] != '' && $result[0]['Inconclusive'] != 0) ? round(($result[0]['Inconclusive'] / $finalResult) * 100, 2) . "%" : 0, ENT_QUOTES, 'UTF-8'));
             }
 
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $writer = IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'Weekly-Report-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
@@ -1002,7 +1006,7 @@ class RecencyService
     public function cellColor($cells, $color, $excel)
     {
         $excel->getActiveSheet()->getStyle($cells)->getFill()->applyFromArray(array(
-            'type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'type' => Fill::FILL_SOLID,
             'startcolor' => array(
                 'rgb' => $color
             )
@@ -1040,7 +1044,7 @@ class RecencyService
             $sResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
             if (!empty($sResult)) {
 
-                $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+                $excel = new Spreadsheet();
                 $sheet = $excel->getActiveSheet();
                 foreach ($sResult as $aRow) {
 
@@ -1090,12 +1094,12 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'style' => Border::BORDER_THIN,
                     ),
                 ),
             );
@@ -1103,7 +1107,7 @@ class RecencyService
             $borderStyle = array(
                 'borders' => array(
                     'outline' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                        'borderStyle' => Border::BORDER_THICK,
                         'color' => array('argb' => '000000'),
                     ),
                 ),
@@ -1144,7 +1148,7 @@ class RecencyService
                 }
             }
 
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $writer = IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'Facility-Recency-Results-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
@@ -1243,9 +1247,9 @@ class RecencyService
     public function exportDistrictRecencyData($params)
     {
         try {
-            $common = new \Application\Service\CommonService();
+            $common = new CommonService();
             $queryContainer = new Container('query');
-            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $excel = new Spreadsheet();
 
             $output = array();
             $sheet = $excel->getActiveSheet();
@@ -1299,12 +1303,12 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'style' => Border::BORDER_THIN,
                     ),
                 ),
             );
@@ -1312,7 +1316,7 @@ class RecencyService
             $borderStyle = array(
                 'borders' => array(
                     'outline' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                        'borderStyle' => Border::BORDER_THICK,
                         'color' => array('argb' => '000000'),
                     ),
                 ),
@@ -1355,7 +1359,7 @@ class RecencyService
                 }
             }
 
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $writer = IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'District-Recency-Results-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
@@ -1499,7 +1503,7 @@ class RecencyService
     public function exportModalityDetails($params)
     {
         try {
-            $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $excel = new Spreadsheet();
 
             $output = array();
             $sheet = $excel->getActiveSheet();
@@ -1513,23 +1517,23 @@ class RecencyService
                     'size' => 12,
                 ),
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'style' => Border::BORDER_THIN,
                     ),
                 ),
             );
 
             $borderStyle = array(
                 'alignment' => array(
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ),
                 'borders' => array(
                     'outline' => array(
-                        'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'style' => Border::BORDER_THIN,
                     ),
                 ),
             );
@@ -1614,7 +1618,7 @@ class RecencyService
                 }
             }
             /* Value cell creation end */
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+            $writer = IOFactory::createWriter($excel, 'Xlsx');
             $filename = 'Age-wise Infection Report-' . date('d-M-Y-H-i-s') . '.xlsx';
             $writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
             // Add event log
@@ -1707,7 +1711,7 @@ class RecencyService
                             }
                             $recencyDb->updateVlRequestSentNO($data['recency_id'], $vlSampleCode);
                         }
-                        $transactionId = isset($response['transactionId']) ? $response['transactionId'] : null;
+                        $transactionId = $response['transactionId'] ?? null;
                         $userDb = $this->sm->get('UserTable');
                         $user = $userDb->fetchUserDetailsByauthToken($authToken);
                         $trackApiDb = $this->sm->get('TrackApiRequestsTable');
@@ -1791,7 +1795,7 @@ class RecencyService
                             }
                         }
                     }
-                    $transactionId = isset($response['transactionId']) ? $response['transactionId'] : null;
+                    $transactionId = $response['transactionId'] ?? null;
                     $userDb = $this->sm->get('UserTable');
                     $user = $userDb->fetchUserDetailsByauthToken($authToken);
                     $trackApiDb = $this->sm->get('TrackApiRequestsTable');

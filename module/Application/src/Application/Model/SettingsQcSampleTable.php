@@ -104,11 +104,11 @@ class SettingsQcSampleTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('qcs' => 'qc_samples'))
             ->join(array('u' => 'users'), 'qcs.added_by = u.user_id', array('user_name'));
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -183,7 +183,7 @@ class SettingsQcSampleTable extends AbstractTableGateway
     public function updateSampleSettingsDetails($params)
     {
         $logincontainer = new Container('credo');
-        $mapDb = new \Application\Model\UserFacilityMapTable($this->adapter);
+        $mapDb = new UserFacilityMapTable($this->adapter);
         $common = new CommonService();
         if (isset($params['sampleNo']) && trim($params['sampleNo']) != "") {
             $data = array(

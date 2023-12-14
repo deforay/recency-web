@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
@@ -24,7 +25,7 @@ class ReportsController extends AbstractActionController
 
     public function recentInfectionAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -45,7 +46,7 @@ class ReportsController extends AbstractActionController
 
     public function exportRInfectedDataAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -59,7 +60,7 @@ class ReportsController extends AbstractActionController
 
     public function ltInfectionAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -78,7 +79,7 @@ class ReportsController extends AbstractActionController
 
     public function exportLongTermInfectedDataAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -92,7 +93,7 @@ class ReportsController extends AbstractActionController
 
     public function TatReportAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -111,7 +112,7 @@ class ReportsController extends AbstractActionController
 
     public function exportTatReportAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -135,7 +136,7 @@ class ReportsController extends AbstractActionController
 
     public function getWeeklyReportAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -149,7 +150,7 @@ class ReportsController extends AbstractActionController
 
     public function exportWeeklyReportAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -163,7 +164,7 @@ class ReportsController extends AbstractActionController
 
     public function qcReportAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $parameters = $request->getPost();
@@ -202,7 +203,7 @@ class ReportsController extends AbstractActionController
     
     public function getAgeWiseInfectionReportAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -214,7 +215,7 @@ class ReportsController extends AbstractActionController
 
     public function exportModalityAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

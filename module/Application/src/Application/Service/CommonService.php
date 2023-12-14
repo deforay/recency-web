@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use DateTime;
+use DateTimeZone;
 use Laminas\Session\Container;
 use Exception;
 use Laminas\Db\Sql\Sql;
@@ -11,6 +13,7 @@ use Laminas\Mail;
 use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Part as MimePart;
 use Laminas\Mime\Mime as Mime;
+use TCPDFBarcode;
 
 
 class CommonService
@@ -52,10 +55,10 @@ class CommonService
      {
           $decoded = sodium_base642bin($encrypted, SODIUM_BASE64_VARIANT_URLSAFE);
           if ($decoded === false) {
-               throw new \Exception('The message encoding failed');
+               throw new Exception('The message encoding failed');
           }
           if (mb_strlen($decoded, '8bit') < (SODIUM_CRYPTO_SECRETBOX_NONCEBYTES + SODIUM_CRYPTO_SECRETBOX_MACBYTES)) {
-               throw new \Exception('The message was truncated');
+               throw new Exception('The message was truncated');
           }
           $nonce = mb_substr($decoded, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, '8bit');
           $ciphertext = mb_substr($decoded, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, null, '8bit');
@@ -66,7 +69,7 @@ class CommonService
                $key
           );
           if ($plain === false) {
-               throw new \Exception('The message was tampered with in transit');
+               throw new Exception('The message was tampered with in transit');
           }
           sodium_memzero($ciphertext);
           sodium_memzero($key);
@@ -349,8 +352,8 @@ class CommonService
           $url = str_replace(" ", "-", $url);
 
           $url = preg_replace('/[^a-zA-Z0-9\-]/', '', $url);
-          $url = preg_replace('/^[\-]+/', '', $url);
-          $url = preg_replace('/[\-]+$/', '', $url);
+          $url = ltrim($url, "-");
+          $url = rtrim($url, "-");
           $url = preg_replace('/[\-]{2,}/', '', $url);
 
           return strtolower($url);
@@ -358,13 +361,13 @@ class CommonService
 
      public static function getDateTime($timezone = 'Asia/Calcutta')
      {
-          $date = new \DateTime(date('Y-m-d H:i:s'), new \DateTimeZone($timezone));
+          $date = new DateTime(date('Y-m-d H:i:s'), new DateTimeZone($timezone));
           return $date->format('Y-m-d H:i:s');
      }
 
      public static function getDate($timezone = 'Asia/Calcutta')
      {
-          $date = new \DateTime(date('Y-m-d'), new \DateTimeZone($timezone));
+          $date = new DateTime(date('Y-m-d'), new DateTimeZone($timezone));
           return $date->format('Y-m-d');
      }
 
@@ -590,7 +593,7 @@ class CommonService
 
      public function getBarcodeImageContent($code, $type = 'C39', $width = 2, $height = 30, $color = array(0, 0, 0))
      {
-          $barcodeobj = new \TCPDFBarcode($code, $type);
+          $barcodeobj = new TCPDFBarcode($code, $type);
           return 'data:image/png;base64,' . base64_encode($barcodeobj->getBarcodePngData($width, $height, $color));
      }
 }

@@ -3,14 +3,17 @@
 namespace Application\Model;
 
 use Application\Service\CommonService;
+use DateInterval;
+use DateTime;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Expression;
+use Laminas\Db\Sql\Predicate\Like;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\TableGateway\AbstractTableGateway;
 use Laminas\Session\Container;
-use \Application\Model\CityTable;
-use \Application\Model\DistrictTable;
-use \Application\Model\FacilitiesTable;
+use Application\Model\CityTable;
+use Application\Model\DistrictTable;
+use Application\Model\FacilitiesTable;
 use Laminas\Db\Sql\Predicate\Literal;
 
 class RecencyTable extends AbstractTableGateway
@@ -161,7 +164,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('rp' => 'risk_populations'), 'rp.rp_id = r.risk_population', array('name'), 'left')
             ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'), 'left');
         //->order("r.recency_id DESC");
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
         if ($parameters['province'] != '') {
@@ -232,7 +235,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('r.facility_id IN (' . $sessionLogin->facilityMap . ')');
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -554,7 +557,7 @@ class RecencyTable extends AbstractTableGateway
                 // 'kit_name'                        =>  $params['testKitName'],
                 'kit_lot_no'                      => $params['testKitLotNo'],
                 'kit_expiry_date'                 => ($params['testKitExpDate'] != '') ? $common->dbDateFormat($params['testKitExpDate']) : null,
-                'vl_request_sent'                 => isset($params['sendVlsm']) ? $params['sendVlsm'] : 'no',
+                'vl_request_sent'                 => $params['sendVlsm'] ?? 'no',
                 'vl_request_sent_date_time'       => (isset($params['sendVlsm']) && $params['sendVlsm'] == 'yes') ? $common->getDateTime() : null,
                 'tester_name'                     => $params['testerName'],
                 'vl_test_date'                    => ($params['vlTestDate'] != '') ? $common->dbDateFormat($params['vlTestDate']) : null,
@@ -613,8 +616,7 @@ class RecencyTable extends AbstractTableGateway
         $sQuery = $sql->select()->from('recency')
             ->where(array('recency_id' => $recencyId));
         $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     public function fetchRecencyDetailsBySampleId($sampleId)
@@ -624,8 +626,7 @@ class RecencyTable extends AbstractTableGateway
         $sQuery = $sql->select()->from('recency')
             ->where("(sample_id = '$sampleId' OR patient_id = '$sampleId')");
         $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     public function fetchRecencyDetailsForPDF($recencyId, $sm)
@@ -934,7 +935,7 @@ class RecencyTable extends AbstractTableGateway
             $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
                 ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
-                ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
+                ->where(array(new Like('final_outcome', '%RITA Recent%')));
             if ($uResult['role_code'] != 'admin') {
                 $rececnyQuery = $rececnyQuery->where(array('u.auth_token' => $params['authToken']));
             }
@@ -1201,7 +1202,7 @@ class RecencyTable extends AbstractTableGateway
                             'kit_lot_no' => $recency['testKitLotNo'],
                             //'kit_name' => $recency['testKitName'],
                             'tester_name' => $recency['testerName'],
-                            'unique_id' => isset($recency['unique_id']) ? $recency['unique_id'] : $this->randomizer(10),
+                            'unique_id' => $recency['unique_id'] ?? $this->randomizer(10),
                             'testing_facility_type' => $recency['testingModality'],
                             //'vl_test_date'=>$recency['vlTestDate'],
 
@@ -1215,7 +1216,7 @@ class RecencyTable extends AbstractTableGateway
                         }
                         if ($recency['vlLoadResult'] != '') {
                             $data['vl_result'] = htmlentities($recency['vlLoadResult']);
-                            $date['vl_result_entry_date'] = $recency['formSavedDateTime'];
+                            $data['vl_result_entry_date'] = $recency['formSavedDateTime'];
                         }
                         if ($recency['finalOutcome'] != '') {
                             $data['final_outcome'] = $recency['finalOutcome'];
@@ -1527,9 +1528,9 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('st' => 'r_sample_types'), 'st.sample_id = r.received_specimen_type', array('sample_name'), 'left')
-            ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%RITA Recent%')));
+            ->where(array(new Like('final_outcome', '%RITA Recent%')));
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
         if ($parameters['fName'] != '') {
@@ -1563,7 +1564,7 @@ class RecencyTable extends AbstractTableGateway
         if ($this->sessionLogin->facilityMap != null && $parameters['fName'] == '') {
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -1702,9 +1703,9 @@ class RecencyTable extends AbstractTableGateway
         $sQuery = $sql->select()->quantifier(new Expression('SQL_CALC_FOUND_ROWS'))->from(array('r' => 'recency'))->columns(array('recency_id', 'hiv_recency_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'age', 'gender', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type'))
             ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
-            ->where(array(new \Laminas\Db\Sql\Predicate\Like('final_outcome', '%Long Term%')));
+            ->where(array(new Like('final_outcome', '%Long Term%')));
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
         if ($parameters['fName'] != '') {
@@ -1738,7 +1739,7 @@ class RecencyTable extends AbstractTableGateway
         if ($this->sessionLogin->facilityMap != null && $parameters['fName'] == '') {
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') )');
         }
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -1948,7 +1949,7 @@ class RecencyTable extends AbstractTableGateway
         //     $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . date("Y-m-d", strtotime($params['start'])) ."'", "r.hiv_recency_test_date <='" . date("Y-m-d", strtotime($params['end']))."'"));
         // }
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
         if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
@@ -1975,7 +1976,7 @@ class RecencyTable extends AbstractTableGateway
         if ($this->sessionLogin->facilityMap != null && $parameters['testing_facility_id'] == '') {
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -2080,7 +2081,7 @@ class RecencyTable extends AbstractTableGateway
 
     public function updateEmailSendResult($params, $configResult)
     {
-        $tempDb = new \Application\Model\TempMailTable($this->adapter);
+        $tempDb = new TempMailTable($this->adapter);
 
         $emailFormField = json_decode($params['emailResultFields'], true);
         $to = $emailFormField['toEmail'];
@@ -2143,9 +2144,9 @@ class RecencyTable extends AbstractTableGateway
             $data['final_outcome'] = 'Inconclusive';
         } elseif (in_array(strtolower($fOutCome['vl_result']), $this->vlResultOptionArray)) {
             $data['final_outcome'] = 'Long Term';
-        } elseif (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] > 1000) {
+        } elseif (str_contains($fOutCome['term_outcome'], 'Recent') && $fOutCome['vl_result'] > 1000) {
             $data['final_outcome'] = 'RITA Recent';
-        } elseif (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
+        } elseif (str_contains($fOutCome['term_outcome'], 'Recent') && $fOutCome['vl_result'] <= 1000) {
             $data['final_outcome'] = 'Long Term';
         }
         if (isset($data['final_outcome']) && $data['final_outcome'] != "") {
@@ -2458,7 +2459,7 @@ class RecencyTable extends AbstractTableGateway
             ->group('r.facility_id');
 
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
         if ($parameters['fName'] != '') {
@@ -2508,7 +2509,7 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['hivRecencyTest'] != '') {
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             if (($sOrder == "ft.facility_name asc") || ($sOrder == "ft.facility_name desc")) {
                 $sQuery->order(new Expression("CASE WHEN `testing_facility_name` IS NULL OR `testing_facility_name` = '' THEN 1 ELSE 0 END, " . $sOrder));
             } else {
@@ -2536,7 +2537,7 @@ class RecencyTable extends AbstractTableGateway
         /* Data set length after filtering */
         $sQuery->reset('limit');
         $sQuery->reset('offset');
-        $tQueryStr = $sql->getSqlStringForSqlObject($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $tQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $aResultFilterTotal = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -2756,7 +2757,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sessionLogin = new Container('credo');
 
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
 
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
@@ -2887,7 +2888,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
 
         $sQuery = $sql->select()->from(array('r' => 'recency'));
         if ($format == 'percentage') {
@@ -3334,7 +3335,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
 
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
 
         $sQuery = $sql->select()->from(array('r' => 'recency'));
         if ($format == 'percentage') {
@@ -3434,7 +3435,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
         $sQuery = $sql->select()->from(array('r' => 'recency'));
 
         if ($format == 'percentage') {
@@ -3532,7 +3533,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
         $sQuery = $sql->select()->from(array('r' => 'recency'));
         if ($format == 'percentage') {
             $sQuery = $sQuery
@@ -3858,7 +3859,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
             ->group('r.location_two');
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
         if ($parameters['fName'] != '') {
@@ -3910,7 +3911,7 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['hivRecencyTest'] != '') {
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             if (($sOrder == "d.district_name asc") || ($sOrder == "d.district_name desc")) {
                 $sQuery->order(new Expression("CASE WHEN `district_name` IS NULL OR `district_name` = '' THEN 1 ELSE 0 END, " . $sOrder));
             } else {
@@ -4052,7 +4053,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
         $sQuery = $sql->select()->from(array('r' => 'recency'));
         if ($format == 'percentage') {
             $sQuery = $sQuery
@@ -4179,7 +4180,7 @@ class RecencyTable extends AbstractTableGateway
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
 
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
 
         $sQuery = $sql->select()->from(array('r' => 'recency'));
 
@@ -4280,7 +4281,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
         $sQuery = $sql->select()->from(array('r' => 'recency'));
         if ($format == 'percentage') {
             $sQuery = $sQuery
@@ -4377,7 +4378,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
         $sQuery = $sql->select()->from(array('r' => 'recency'));
         if ($format == 'percentage') {
             $sQuery = $sQuery
@@ -4480,7 +4481,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $general = new CommonService();
-        $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+        $format = $parameters['format'] ?? 'percentage';
         $sQuery = $sql->select()->from(array('r' => 'recency'));
         if ($format == 'percentage') {
             $sQuery = $sQuery
@@ -4990,7 +4991,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('ft' => 'facilities'), 'ft.facility_id = r.testing_facility_id', array('testing_facility_name' => 'facility_name'), 'left')
             ->join(array('tft' => 'testing_facility_type'), 'tft.testing_facility_type_id = r.testing_facility_type', array('testing_facility_type_name'), 'left');
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
         if ($sessionLogin->facilityMap != null) {
@@ -5029,7 +5030,7 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['hivRecencyTest'] != '') {
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -5081,7 +5082,7 @@ class RecencyTable extends AbstractTableGateway
             ->columns(array(
                 "sample_prefix_id" => new Expression("MAX(sample_prefix_id)"), "sample_id_year_prefix", "sample_id_string_prefix"
             ))
-            ->where(array('sample_id_year_prefix' => $date));;
+            ->where(array('sample_id_year_prefix' => $date));
         $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
         $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
         $sampleIdYearPrefix = $rResult['sample_id_year_prefix'];
@@ -5093,13 +5094,13 @@ class RecencyTable extends AbstractTableGateway
             $recencySampleId['sample_prefix_id'] = $samplePrefixId;
             $recencySampleId['sample_id_year_prefix'] = $date;
             $recencySampleId['sample_id_string_prefix'] = "RT";
-            $recencySampleId['recencyId'] = "RT" . $date . "" . $samplePrefixId;
+            $recencySampleId['recencyId'] = "RT" . $date . $samplePrefixId;
         } else {
             $samplePrefixId = "000001";
             $recencySampleId['sample_prefix_id'] = $samplePrefixId;
             $recencySampleId['sample_id_year_prefix'] = $date;
             $recencySampleId['sample_id_string_prefix'] = "RT";
-            $recencySampleId['recencyId'] = "RT" . $date . "" . $samplePrefixId;
+            $recencySampleId['recencyId'] = "RT" . $date . $samplePrefixId;
         }
         return $recencySampleId;
     }
@@ -5210,7 +5211,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $systemAlertDb = new SystemAlertsTable($this->adapter);
-        $thirtyDaysAgo = (new \DateTime())->sub(new \DateInterval('P30D'))->format('Y-m-d');
+        $thirtyDaysAgo = (new DateTime())->sub(new DateInterval('P30D'))->format('Y-m-d');
         // Create the WHERE clause conditions
         $where = [
             new Literal('vl_result IS NULL'),
@@ -5245,7 +5246,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
         $systemAlertDb = new SystemAlertsTable($this->adapter);
-        $thirtyDaysAgo = (new \DateTime())->sub(new \DateInterval('P30D'))->format('Y-m-d');
+        $thirtyDaysAgo = (new DateTime())->sub(new DateInterval('P30D'))->format('Y-m-d');
         // Create the WHERE clause conditions
         $where = [
             new Literal('hiv_recency_test_date IS NULL'),

@@ -92,4 +92,4 @@ class GlobalConfigService {
         return $globalConfigDb->fetchTechnicalSupportDetailsApi();
     }
 }
-?>
+

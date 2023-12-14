@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use Laminas\Config\Reader\Ini;
 use Laminas\Db\Sql\Sql;
 use Laminas\Session\Container;
 use Laminas\Db\Adapter\Adapter;
@@ -22,7 +23,7 @@ class CityTable extends AbstractTableGateway
     public function fetchAllCityListApi($params)
     {
         $common = new CommonService();
-        $config = new \Laminas\Config\Reader\Ini();
+        $config = new Ini();
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
@@ -177,11 +178,11 @@ class CityTable extends AbstractTableGateway
         $sQuery = $sql->select()->from(array('c' => 'city_details'))
             ->join(array('d' => 'district_details'), 'd.district_id=c.district_id', array('district_name'), 'left');
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 
@@ -211,8 +212,8 @@ class CityTable extends AbstractTableGateway
         $update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\CityController', 'edit');
         foreach ($rResult as $aRow) {
             $row = array();
-            $row[] = ucwords($aRow['district_name']);
-            $row[] = ucwords($aRow['city_name']);
+            $row[] = $aRow['district_name'];
+            $row[] = $aRow['city_name'];
             if ($update) {
                 $row[] = '<a href="/city/edit/' . base64_encode($aRow['city_id']) . '" class="btn btn-default" style="margin-right: 2px;" title="Edit"><i class="far fa-edit"></i>Edit</a>';
             }

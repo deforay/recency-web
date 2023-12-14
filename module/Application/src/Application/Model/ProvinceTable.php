@@ -133,11 +133,11 @@ class ProvinceTable extends AbstractTableGateway
 
         $sQuery = $sql->select()->from(array('p' => 'province_details'));
 
-        if (isset($sWhere) && $sWhere != "") {
+        if (!empty($sWhere)) {
             $sQuery->where($sWhere);
         }
 
-        if (isset($sOrder) && $sOrder != "") {
+        if (!empty($sOrder)) {
             $sQuery->order($sOrder);
         }
 

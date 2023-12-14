@@ -13,8 +13,8 @@ class UpdatePasswordController extends AbstractRestfulController
     {
         $this->userService = $userService;
     }
-    public function create($params)
+    public function create($data)
     {
-        return new JsonModel($this->userService->updatePasswordAPI($params));
+        return new JsonModel($this->userService->updatePasswordAPI($data));
     }
 }

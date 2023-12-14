@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Laminas\Http\Request;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
@@ -28,7 +29,7 @@ class MonitoringController extends AbstractActionController
     public function allUserLoginHistoryAction()
     {
         $session = new Container('credo');
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
             if ($request->isPost()) {
                 $params = $request->getPost();
@@ -42,7 +43,7 @@ class MonitoringController extends AbstractActionController
     public function auditTrailAction()
     {
         $session = new Container('credo');
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         $globalConfigResult = $this->globalConfigService->getGlobalConfigAllDetails();
         if ($request->isPost()) {
@@ -65,7 +66,7 @@ class MonitoringController extends AbstractActionController
     public function userActivityLogAction()
     {
         $session = new Container('credo');
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         $eventType = $this->userService->getEventType();
         $users = $this->userService->getAllUserDetails();
@@ -85,7 +86,7 @@ class MonitoringController extends AbstractActionController
     public function systemAlertsAction()
     {
         $session = new Container('credo');
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         $alertType = $this->userService->getAlertType();
         $facilityResult = $this->facilitiesService->getFacilitiesAllDetails();
@@ -102,7 +103,7 @@ class MonitoringController extends AbstractActionController
     public function updateAlertStatusAction()
     {
         $session = new Container('credo');
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -115,7 +116,7 @@ class MonitoringController extends AbstractActionController
     public function apiHistoryAction()
     {
         $session = new Container('credo');
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
@@ -126,7 +127,7 @@ class MonitoringController extends AbstractActionController
     public function getApiParamsAction()
     {
         $session = new Container('credo');
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();

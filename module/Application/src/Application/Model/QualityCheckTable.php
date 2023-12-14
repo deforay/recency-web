@@ -110,7 +110,7 @@ class QualityCheckTable extends AbstractTableGateway
           $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
                ->join(array('ft' => 'facilities'), 'ft.facility_id = qc.testing_facility_id', array('facility_name'));
 
-          if (isset($sWhere) && $sWhere != "") {
+          if (!empty($sWhere)) {
                $sQuery->where($sWhere);
           }
 
@@ -135,7 +135,7 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery = $sQuery->where(array("qc.qc_test_date >='" . $start_date . "'", "qc.qc_test_date <='" . $end_date . "'"));
           }
 
-          if (isset($sOrder) && $sOrder != "") {
+          if (!empty($sOrder)) {
                $sQuery->order($sOrder);
           }
 
@@ -259,8 +259,7 @@ class QualityCheckTable extends AbstractTableGateway
                ->where(array('qc_test_id' => $qualityCheckId));
 
           $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
-          $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-          return $rResult;
+         return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
      }
 
      public function updateQualityCheckTestDetails($params)
@@ -396,7 +395,7 @@ class QualityCheckTable extends AbstractTableGateway
                               'form_transfer_datetime' => $qcTest['formTransferDateTime'],
                               'form_saved_datetime' => $qcTest['formSavedDateTime'],
                               'testing_facility_id' => $qcTest['testingFacility'],
-                              'unique_id' => isset($qcTest['unique_id']) ? $qcTest['unique_id'] : NULL,
+                              'unique_id' => $qcTest['unique_id'] ?? NULL,
                          );
 
                          $this->insert($data);
@@ -484,7 +483,7 @@ class QualityCheckTable extends AbstractTableGateway
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
           $general = new CommonService();
-          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          $format = $parameters['format'] ?? 'percentage';
           if ($format == 'percentage') {
                $sQuery = $sql->select()->from('quality_check_test')
                     ->columns(array(
@@ -550,7 +549,7 @@ class QualityCheckTable extends AbstractTableGateway
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
           $general = new CommonService();
-          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          $format = $parameters['format'] ?? 'percentage';
           $sQuery = $sql->select()->from('quality_check_test')
                ->columns(array('kit_lot_no', "total" => new Expression('COUNT(*)')))
                ->group('kit_lot_no')
@@ -602,7 +601,7 @@ class QualityCheckTable extends AbstractTableGateway
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
           $general = new CommonService();
-          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          $format = $parameters['format'] ?? 'percentage';
           $sQuery = $sql->select()->from('quality_check_test')
                ->columns(array('qc_sample_id', "total" => new Expression('COUNT(*)')))
                ->group('qc_sample_id')
@@ -654,7 +653,7 @@ class QualityCheckTable extends AbstractTableGateway
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
           $general = new CommonService();
-          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          $format = $parameters['format'] ?? 'percentage';
           if ($format == 'percentage') {
                $sQuery = $sql->select()->from('recency')
                     ->columns(array(
@@ -727,7 +726,7 @@ class QualityCheckTable extends AbstractTableGateway
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
           $general = new CommonService();
-          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          $format = $parameters['format'] ?? 'percentage';
           if ($format == 'percentage') {
                $sQuery = $sql->select()->from('recency')
                     ->columns(array(
@@ -893,11 +892,11 @@ class QualityCheckTable extends AbstractTableGateway
                //->join(array('c' => 'city_details'), 'c.city_id = r.location_three', array('city_name'), 'left')
                ->group(new Expression("kit_lot_no,facility_name"));
 
-          if (isset($sWhere) && $sWhere != "") {
+          if (!empty($sWhere)) {
                $sQuery->where($sWhere);
           }
 
-          if (isset($sOrder) && $sOrder != "") {
+          if (!empty($sOrder)) {
                $sQuery->order($sOrder);
           }
 
@@ -945,7 +944,7 @@ class QualityCheckTable extends AbstractTableGateway
                $row = array();
                $row[] = ucwords($aRow['facility_name']);
                $row[] = ucwords($aRow['kit_lot_no']);
-               $row[] = ucwords($aRow['district_name']);
+               $row[] = $aRow['district_name'];
                $row[] = round($aRow['pass'], 2);
 
                $output['aaData'][] = $row;
@@ -958,7 +957,7 @@ class QualityCheckTable extends AbstractTableGateway
           $dbAdapter = $this->adapter;
           $sql = new Sql($dbAdapter);
           $general = new CommonService();
-          $format = isset($parameters['format']) ? $parameters['format'] : 'percentage';
+          $format = $parameters['format'] ?? 'percentage';
           $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'));
           if ($format == 'percentage') {
                $sQuery = $sQuery
@@ -1213,11 +1212,11 @@ class QualityCheckTable extends AbstractTableGateway
                $sQuery = $sQuery->where(array("qc.hiv_recency_test_date >='" . $start_date . "'", "qc.hiv_recency_test_date <='" . $end_date . "'"));
           }
 
-          if (isset($sWhere) && $sWhere != "") {
+          if (!empty($sWhere)) {
                $sQuery->where($sWhere);
           }
 
-          if (isset($sOrder) && $sOrder != "") {
+          if (!empty($sOrder)) {
                $sQuery->order($sOrder);
           }
 

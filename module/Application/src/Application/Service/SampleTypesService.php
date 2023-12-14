@@ -28,4 +28,3 @@ class SampleTypesService {
         return $samplesTypesDb->fetchAllSampleTypes();
     }
 }
-?>

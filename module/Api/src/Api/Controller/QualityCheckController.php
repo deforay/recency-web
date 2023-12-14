@@ -13,8 +13,8 @@ class QualityCheckController extends AbstractRestfulController
     {
         $this->qualityCheckService = $qualityCheckService;
     }
-    public function create($params) {
-        $response = $this->qualityCheckService->addQualityCheckDataApi($params);
+    public function create($data) {
+        $response = $this->qualityCheckService->addQualityCheckDataApi($data);
         return new JsonModel($response);
     }
 }
