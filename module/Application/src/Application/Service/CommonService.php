@@ -104,8 +104,7 @@ class CommonService
           //error_log($sql);
           $statement = $sql->prepareStatementForSqlObject($select);
           $result = $statement->execute();
-          $data = count($result);
-          return $data;
+          return count($result);
      }
 
 
@@ -156,7 +155,7 @@ class CommonService
                return "0000-00-00";
           } else {
                $dateArray = explode('-', $date);
-               if (sizeof($dateArray) == 0) {
+               if (count($dateArray) == 0) {
                     return;
                }
                $newDate = $dateArray[2] . "-";
@@ -194,8 +193,7 @@ class CommonService
                return "";
           } else {
                $dateArray = explode('-', $date);
-               $newDate = $dateArray[1] . "/" . $dateArray[2] . "/" . $dateArray[0];
-               return $newDate;
+               return $dateArray[1] . "/" . $dateArray[2] . "/" . $dateArray[0];
           }
      }
 
@@ -461,18 +459,24 @@ class CommonService
           }
 
           // Restrict certain values
-          if ($captcha_config['min_length'] < 1)
-               $captcha_config['min_length'] = 1;
-          if ($captcha_config['angle_min'] < 0)
-               $captcha_config['angle_min'] = 0;
-          if ($captcha_config['angle_max'] > 10)
-               $captcha_config['angle_max'] = 10;
-          if ($captcha_config['angle_max'] < $captcha_config['angle_min'])
-               $captcha_config['angle_max'] = $captcha_config['angle_min'];
-          if ($captcha_config['min_font_size'] < 10)
-               $captcha_config['min_font_size'] = 10;
-          if ($captcha_config['max_font_size'] < $captcha_config['min_font_size'])
-               $captcha_config['max_font_size'] = $captcha_config['min_font_size'];
+          if ($captcha_config['min_length'] < 1) {
+              $captcha_config['min_length'] = 1;
+          }
+          if ($captcha_config['angle_min'] < 0) {
+              $captcha_config['angle_min'] = 0;
+          }
+          if ($captcha_config['angle_max'] > 10) {
+              $captcha_config['angle_max'] = 10;
+          }
+          if ($captcha_config['angle_max'] < $captcha_config['angle_min']) {
+              $captcha_config['angle_max'] = $captcha_config['angle_min'];
+          }
+          if ($captcha_config['min_font_size'] < 10) {
+              $captcha_config['min_font_size'] = 10;
+          }
+          if ($captcha_config['max_font_size'] < $captcha_config['min_font_size']) {
+              $captcha_config['max_font_size'] = $captcha_config['min_font_size'];
+          }
 
           // Use milliseconds instead of seconds
           //srand(microtime() * 100);
@@ -538,8 +542,9 @@ class CommonService
           $font = $captcha_config['fonts'][rand(0, count($captcha_config['fonts']) - 1)];
 
           // Verify font file exists
-          if (!file_exists($font))
-               throw new Exception('Font file not found: ' . $font);
+          if (!file_exists($font)) {
+              throw new Exception('Font file not found: ' . $font);
+          }
 
           //Set the font size.
           $font_size = rand($captcha_config['min_font_size'], $captcha_config['max_font_size']);

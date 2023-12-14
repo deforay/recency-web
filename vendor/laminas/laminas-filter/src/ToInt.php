@@ -6,6 +6,11 @@ namespace Laminas\Filter;
 
 use function is_scalar;
 
+/**
+ * @psalm-type Options = array{}
+ * @extends AbstractFilter<Options>
+ * @final
+ */
 class ToInt extends AbstractFilter
 {
     /**
@@ -17,6 +22,7 @@ class ToInt extends AbstractFilter
      *
      * @param  mixed $value
      * @return int|mixed
+     * @psalm-return ($value is scalar ? int : mixed)
      */
     public function filter($value)
     {

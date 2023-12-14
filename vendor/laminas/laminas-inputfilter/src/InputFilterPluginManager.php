@@ -13,9 +13,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\InitializableInterface;
 use Laminas\Validator\ValidatorPluginManager;
 use Psr\Container\ContainerInterface;
-use Psr\Container\ContainerInterface as PsrContainerInterface;
 
-use function get_class;
 use function gettype;
 use function is_object;
 use function sprintf;
@@ -91,7 +89,7 @@ class InputFilterPluginManager extends AbstractPluginManager
     protected $shareByDefault = false;
 
     /**
-     * @param null|ConfigInterface|ContainerInterface|PsrContainerInterface $configOrContainer
+     * @param null|ConfigInterface|ContainerInterface $configOrContainer
      * @param ServiceManagerConfiguration $v3config
      */
     public function __construct($configOrContainer = null, array $v3config = [])
@@ -143,9 +141,9 @@ class InputFilterPluginManager extends AbstractPluginManager
     }
 
     /**
-     * {@inheritDoc} (v3)
-     *
+     * @inheritDoc
      * @psalm-assert InstanceType $instance
+     * @param mixed $instance
      */
     public function validate($instance)
     {
@@ -161,7 +159,7 @@ class InputFilterPluginManager extends AbstractPluginManager
 
         throw new InvalidServiceException(sprintf(
             'Plugin of type %s is invalid; must implement %s or %s',
-            is_object($instance) ? get_class($instance) : gettype($instance),
+            is_object($instance) ? $instance::class : gettype($instance),
             InputFilterInterface::class,
             InputInterface::class
         ));

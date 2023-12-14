@@ -7,6 +7,11 @@ namespace Laminas\Filter;
 use function basename;
 use function is_scalar;
 
+/**
+ * @psalm-type Options = array{}
+ * @extends AbstractFilter<Options>
+ * @final
+ */
 class BaseName extends AbstractFilter
 {
     /**
@@ -16,16 +21,16 @@ class BaseName extends AbstractFilter
      *
      * If the value provided is non-scalar, the value will remain unfiltered
      *
-     * @param  string $value
+     * @param  mixed $value
      * @return string|mixed
+     * @psalm-return ($value is scalar ? string : mixed)
      */
     public function filter($value)
     {
         if (! is_scalar($value)) {
             return $value;
         }
-        $value = (string) $value;
 
-        return basename($value);
+        return basename((string) $value);
     }
 }

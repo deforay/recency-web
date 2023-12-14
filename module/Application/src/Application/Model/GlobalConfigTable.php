@@ -38,9 +38,9 @@ class GlobalConfigTable extends AbstractTableGateway {
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                        $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                        $sOrder .= $aColumns[(int) $parameters['iSortCol_' . $i]] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -76,9 +76,11 @@ class GlobalConfigTable extends AbstractTableGateway {
                         }
                         $sWhere .= $sWhereSub;
                 }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
             /* Individual column filtering */
-            for ($i = 0; $i < count($aColumns); $i++) {
+            for ($i = 0; $i < $counter; $i++) {
                     if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                         if ($sWhere == "") {
                             $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -122,7 +124,7 @@ class GlobalConfigTable extends AbstractTableGateway {
             $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
             $iFilteredTotal = count($tResult);
             $output = array(
-                "sEcho" => intval($parameters['sEcho']),
+                "sEcho" => (int) $parameters['sEcho'],
                 "iTotalRecords" => count($tResult),
                 "iTotalDisplayRecords" => $iFilteredTotal,
                 "aaData" => array()
@@ -173,11 +175,9 @@ class GlobalConfigTable extends AbstractTableGateway {
             $this->update(array('global_value' => $fieldValue), array('global_name' => $fieldName));
         }
 
-        if (isset($params['removeLogoImage']) && $params['removeLogoImage'] != '') {
-            if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $params['removeLogoImage'])) {
-                unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $params['removeLogoImage']);
-                $this->update(array('global_value' => ""), array('global_name' => 'logo_image'));
-            }
+        if (isset($params['removeLogoImage']) && $params['removeLogoImage'] != '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $params['removeLogoImage'])) {
+            unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image" . DIRECTORY_SEPARATOR . $params['removeLogoImage']);
+            $this->update(array('global_value' => ""), array('global_name' => 'logo_image'));
         }
         if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image")) {
             mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo_image");
@@ -219,7 +219,7 @@ class GlobalConfigTable extends AbstractTableGateway {
 
         $rResult = $this->select()->toArray();
         foreach($rResult as $result){
-            if(isset($result['config_id']) && $result['config_id']!='') {
+            if(isset($result['config_id']) && $result['config_id'] != '') {
                 $response['status']='success';
                 $response[] = array(
                     $result['display_name'] => $result['global_value']
@@ -238,10 +238,11 @@ class GlobalConfigTable extends AbstractTableGateway {
         $sql = new Sql($dbAdapter);
         $arr = array();
         $rResult = $this->select()->toArray();
-        for ($i = 0; $i < sizeof($rResult); $i++) {
+        $counter = count($rResult);
+        for ($i = 0; $i < $counter; $i++) {
             $arr[$rResult[$i]['global_name']] = $rResult[$i]['global_value'];
         }
-        if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields'])!= ''){
+        if(isset($arr['mandatory_fields']) && trim($arr['mandatory_fields']) != ''){
             $explodField = explode(",",$arr['mandatory_fields']);
         }
         $row[] = in_array("Sample Id",$explodField)?"sampleId":"";
@@ -289,7 +290,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         $row[] = in_array("Comments",$explodField)?"notes":"";
 
         $output = array_filter($row);
-        if(isset($explodField) && $explodField !='') {
+        if(isset($explodField) && $explodField != '') {
             $response['status']='success';
             $response['fields'] = array_values($output);
         } else {
@@ -305,50 +306,51 @@ class GlobalConfigTable extends AbstractTableGateway {
         $sql = new Sql($dbAdapter);
         $arr = array();
         $rResult = $this->select()->toArray();
-        for ($i = 0; $i < sizeof($rResult); $i++) {
+        $counter = count($rResult);
+        for ($i = 0; $i < $counter; $i++) {
             $arr[$rResult[$i]['global_name']] = $rResult[$i]['global_value'];
         }
         $explodField = array();
-        if(isset($arr['display_fields']) && trim($arr['display_fields'])!= ''){
+        if(isset($arr['display_fields']) && trim($arr['display_fields']) != ''){
             $explodField = explode(",",$arr['display_fields']);
         }
-        $row['sampleId'] = in_array("Sample Id",$explodField)?true:false;
-        $row['patientId'] = in_array("Patient Id",$explodField)?true:false;
-        $row['sampleCollectionDate'] = in_array("Sample Collection Date from the Client",$explodField)?true:false;
-        $row['sampleReceiptDate'] = in_array("Sample Receipt Date at the Recency Testing Site",$explodField)?true:false;
-        $row['receivedSpecimenType'] = in_array("Received Specimen Type",$explodField)?true:false;
-        $row['facilityId'] = in_array("Facility Name",$explodField)?true:false;
-        $row['location_one'] = in_array("Province",$explodField)?true:false;
-        $row['location_two'] = in_array("District",$explodField)?true:false;
-        $row['location_three'] = in_array("City",$explodField)?true:false;
-        $row['hivDiagnosisDate'] = in_array("Hiv Diagnosis Date",$explodField)?true:false;
-        $row['pastHivTesting'] = in_array("Past Hiv Testing",$explodField)?true:false;
-        $row['testLast12Month'] = in_array("Test Last 12 Month",$explodField)?true:false;
-        $row['lastHivStatus'] = in_array("Last HIV Status",$explodField)?true:false;
-        $row['patientOnArt'] = in_array("Patient on ART",$explodField)?true:false;
+        $row['sampleId'] = in_array("Sample Id",$explodField);
+        $row['patientId'] = in_array("Patient Id",$explodField);
+        $row['sampleCollectionDate'] = in_array("Sample Collection Date from the Client",$explodField);
+        $row['sampleReceiptDate'] = in_array("Sample Receipt Date at the Recency Testing Site",$explodField);
+        $row['receivedSpecimenType'] = in_array("Received Specimen Type",$explodField);
+        $row['facilityId'] = in_array("Facility Name",$explodField);
+        $row['location_one'] = in_array("Province",$explodField);
+        $row['location_two'] = in_array("District",$explodField);
+        $row['location_three'] = in_array("City",$explodField);
+        $row['hivDiagnosisDate'] = in_array("Hiv Diagnosis Date",$explodField);
+        $row['pastHivTesting'] = in_array("Past Hiv Testing",$explodField);
+        $row['testLast12Month'] = in_array("Test Last 12 Month",$explodField);
+        $row['lastHivStatus'] = in_array("Last HIV Status",$explodField);
+        $row['patientOnArt'] = in_array("Patient on ART",$explodField);
        
-        $row['hivRecencyTestDate'] = in_array("Hiv Recency Test Date",$explodField)?true:false;
-        $row['ctrlLine'] = in_array("Control Line",$explodField)?true:false;
-        $row['positiveLine'] = in_array("Verification Line",$explodField)?true:false;
-        $row['longTermLine'] = in_array("Long Term Line",$explodField)?true:false;
-        $row['testKitLotNo'] = in_array("Test Kit Lot No",$explodField)?true:false;
-        $row['testKitExpDate'] = in_array("Kit Expiry Date",$explodField)?true:false;
-        $row['testerName'] = in_array("Tester Name",$explodField)?true:false;
-        $row['testingModality'] = in_array("Testing Modality",$explodField)?true:false;
-        $row['testingFacility'] = in_array("Testing Facility",$explodField)?true:false;
-        $row['vlTestDate'] = in_array("Viral Load Test Date",$explodField)?true:false;
-        $row['vlLoadResult'] = in_array("Viral Load Result",$explodField)?true:false;
-        $row['dob'] = in_array("Dob",$explodField)?true:false;
-        $row['age'] = in_array("Age",$explodField)?true:false;
-        $row['gender'] = in_array("Gender",$explodField)?true:false;
-        $row['pregnancyStatus'] = in_array("Pregnancy Status",$explodField)?true:false;
-        $row['maritalStatus'] = in_array("Marital Status",$explodField)?true:false;
-        $row['educationLevel'] = in_array("Education Level",$explodField)?true:false;
-        $row['riskPopulation'] = in_array("Risk Population",$explodField)?true:false;
-        $row['residence'] = in_array("Residence",$explodField)?true:false;
-        $row['currentSexualPartner'] = in_array("Current Sexual Partner",$explodField)?true:false;
-        $row['violenceLast12Month'] = in_array("Experience Violence Last 12 Month",$explodField)?true:false;
-        $row['notes'] = in_array("Comments",$explodField)?true:false;
+        $row['hivRecencyTestDate'] = in_array("Hiv Recency Test Date",$explodField);
+        $row['ctrlLine'] = in_array("Control Line",$explodField);
+        $row['positiveLine'] = in_array("Verification Line",$explodField);
+        $row['longTermLine'] = in_array("Long Term Line",$explodField);
+        $row['testKitLotNo'] = in_array("Test Kit Lot No",$explodField);
+        $row['testKitExpDate'] = in_array("Kit Expiry Date",$explodField);
+        $row['testerName'] = in_array("Tester Name",$explodField);
+        $row['testingModality'] = in_array("Testing Modality",$explodField);
+        $row['testingFacility'] = in_array("Testing Facility",$explodField);
+        $row['vlTestDate'] = in_array("Viral Load Test Date",$explodField);
+        $row['vlLoadResult'] = in_array("Viral Load Result",$explodField);
+        $row['dob'] = in_array("Dob",$explodField);
+        $row['age'] = in_array("Age",$explodField);
+        $row['gender'] = in_array("Gender",$explodField);
+        $row['pregnancyStatus'] = in_array("Pregnancy Status",$explodField);
+        $row['maritalStatus'] = in_array("Marital Status",$explodField);
+        $row['educationLevel'] = in_array("Education Level",$explodField);
+        $row['riskPopulation'] = in_array("Risk Population",$explodField);
+        $row['residence'] = in_array("Residence",$explodField);
+        $row['currentSexualPartner'] = in_array("Current Sexual Partner",$explodField);
+        $row['violenceLast12Month'] = in_array("Experience Violence Last 12 Month",$explodField);
+        $row['notes'] = in_array("Comments",$explodField);
 
        
         
@@ -401,8 +403,7 @@ class GlobalConfigTable extends AbstractTableGateway {
         $sql = new Sql($dbAdapter);
         $sQuery =  $sql->select()->from('global_config');
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 }
 ?>

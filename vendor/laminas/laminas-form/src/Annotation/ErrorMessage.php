@@ -1,6 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\Annotation;
+
+use Attribute;
+use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 
 /**
  * ErrorMessage annotation
@@ -9,16 +15,23 @@ namespace Laminas\Form\Annotation;
  * given element. The content should be a string.
  *
  * @Annotation
+ * @NamedArgumentConstructor
  */
-class ErrorMessage extends AbstractStringAnnotation
+#[Attribute]
+final class ErrorMessage
 {
     /**
-     * Retrieve the message
-     *
-     * @return null|string
+     * Receive and process the contents of an annotation
      */
-    public function getMessage()
+    public function __construct(private string $message)
     {
-        return $this->value;
+    }
+
+    /**
+     * Retrieve the message
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
     }
 }

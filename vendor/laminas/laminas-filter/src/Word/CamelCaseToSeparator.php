@@ -9,12 +9,18 @@ use Laminas\Stdlib\StringUtils;
 
 use function preg_replace;
 
+/**
+ * @psalm-type Options = array{
+ *     separator?: string,
+ *     ...
+ * }
+ * @template TOptions of Options
+ * @extends AbstractSeparator<TOptions>
+ */
 class CamelCaseToSeparator extends AbstractSeparator
 {
     /**
-     * Defined by Laminas\Filter\Filter
-     *
-     * @param  mixed $value
+     * @param mixed $value
      * @return mixed
      */
     public function filter($value)

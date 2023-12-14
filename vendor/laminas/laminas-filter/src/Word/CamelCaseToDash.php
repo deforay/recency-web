@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace Laminas\Filter\Word;
 
+/**
+ * @psalm-type Options = array{
+ *     separator?: string,
+ *     ...
+ * }
+ * @template TOptions of Options
+ * @extends CamelCaseToSeparator<TOptions>
+ * @final
+ */
 class CamelCaseToDash extends CamelCaseToSeparator
 {
     public function __construct()

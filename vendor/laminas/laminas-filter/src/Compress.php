@@ -10,10 +10,8 @@ use Traversable;
 
 use function call_user_func_array;
 use function class_exists;
-use function get_class;
-use function gettype;
+use function get_debug_type;
 use function is_array;
-use function is_object;
 use function is_string;
 use function method_exists;
 use function sprintf;
@@ -21,6 +19,13 @@ use function ucfirst;
 
 /**
  * Compresses a given string
+ *
+ * @psalm-type Options = array{
+ *     adapter?: Compress\CompressionAlgorithmInterface|'Bz2'|'Gz'|'Lzf'|'Rar'|'Snappy'|'Tar'|'Zip',
+ *     adapter_options?: array,
+ *     ...
+ * }
+ * @extends AbstractFilter<Options>
  */
 class Compress extends AbstractFilter
 {
@@ -64,7 +69,7 @@ class Compress extends AbstractFilter
             throw new Exception\InvalidArgumentException(sprintf(
                 '"%s" expects an array or Traversable; received "%s"',
                 __METHOD__,
-                is_object($options) ? get_class($options) : gettype($options)
+                get_debug_type($options)
             ));
         }
 
@@ -163,7 +168,6 @@ class Compress extends AbstractFilter
     /**
      * Set adapter options
      *
-     * @param  array $options
      * @return self
      */
     public function setAdapterOptions(array $options)
@@ -207,8 +211,9 @@ class Compress extends AbstractFilter
      *
      * Compresses the content $value with the defined settings
      *
-     * @param  string $value Content to compress
-     * @return string The compressed content
+     * @param  mixed $value Content to compress
+     * @return string|mixed The compressed content
+     * @psalm-return ($value is string ? string : mixed)
      */
     public function filter($value)
     {

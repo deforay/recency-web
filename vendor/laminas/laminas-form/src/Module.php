@@ -1,17 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form;
 
+use Laminas\ModuleManager\Feature\FormElementProviderInterface;
+use Laminas\ModuleManager\Listener\ServiceListener;
 use Laminas\ModuleManager\ModuleManager;
 
-class Module
+final class Module
 {
     /**
      * Return laminas-form configuration for laminas-mvc application.
      *
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $provider = new ConfigProvider();
         return [
@@ -22,20 +26,18 @@ class Module
 
     /**
      * Register a specification for the FormElementManager with the ServiceListener.
-     *
-     * @param ModuleManager $moduleManager
-     * @return void
      */
-    public function init($moduleManager)
+    public function init(ModuleManager $moduleManager): void
     {
-        $event = $moduleManager->getEvent();
+        $event     = $moduleManager->getEvent();
         $container = $event->getParam('ServiceManager');
+        /** @var ServiceListener $serviceListener */
         $serviceListener = $container->get('ServiceListener');
 
         $serviceListener->addServiceManager(
-            'FormElementManager',
+            FormElementManager::class,
             'form_elements',
-            'Laminas\ModuleManager\Feature\FormElementProviderInterface',
+            FormElementProviderInterface::class,
             'getFormElementConfig'
         );
     }

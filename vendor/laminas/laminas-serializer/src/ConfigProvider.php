@@ -8,6 +8,13 @@ declare(strict_types=1);
 
 namespace Laminas\Serializer;
 
+use Laminas\Serializer\Adapter\AdapterInterface;
+use Laminas\Serializer\Adapter\PhpSerialize;
+use Psr\Container\ContainerInterface;
+
+/**
+ * @see ContainerInterface
+ */
 class ConfigProvider
 {
     /**
@@ -25,15 +32,24 @@ class ConfigProvider
     /**
      * Return dependency mappings for this component.
      *
-     * @return array
+     * @return array{
+     *     factories: array<
+     *      string,
+     *      callable(ContainerInterface,?string,?array<mixed>|null):object
+     *     >,
+     *     aliases: array<never,never>
+     * }
      */
+    // @phpcs:ignore SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
     public function getDependencyConfig()
     {
         return [
             // Legacy Zend Framework aliases
             'aliases'   => [],
             'factories' => [
-                'SerializerAdapterManager' => AdapterPluginManagerFactory::class,
+                'SerializerAdapterManager'  => AdapterPluginManagerFactory::class,
+                AdapterPluginManager::class => AdapterPluginManagerFactory::class,
+                AdapterInterface::class     => new GenericSerializerFactory(PhpSerialize::class),
             ],
         ];
     }

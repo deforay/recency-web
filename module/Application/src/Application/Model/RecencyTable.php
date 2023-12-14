@@ -91,9 +91,9 @@ class RecencyTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -129,9 +129,11 @@ class RecencyTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -185,13 +187,13 @@ class RecencyTable extends AbstractTableGateway
         if ($parameters['vlResult'] != '') {
             if ($parameters['vlResult'] == 'pending') {
                 $sQuery->where(array('term_outcome' => 'Assay Recent'));
-            } else if ($parameters['vlResult'] == 'vl_load_tested') {
+            } elseif ($parameters['vlResult'] == 'vl_load_tested') {
                 $sQuery->where('vl_result not like "" AND  vl_result is not NULL ');
             }
         }
         if ($parameters['RTest'] == 'pending') {
             $sQuery = $sQuery->where(array('term_outcome = "" OR  term_outcome IS NULL '));
-        } else if ($parameters['RTest'] == 'completed') {
+        } elseif ($parameters['RTest'] == 'completed') {
             $sQuery = $sQuery->where(array('term_outcome != "" AND  term_outcome IS NOT NULL '));
         } else {
             // all requests
@@ -249,7 +251,7 @@ class RecencyTable extends AbstractTableGateway
         $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
@@ -285,11 +287,7 @@ class RecencyTable extends AbstractTableGateway
             }
             $actionBtn .= '</div>';
 
-            if ($update) {
-                $row[] = $aRow['sample_id'] . '<br>' . $actionBtn;
-            } else {
-                $row[] = $aRow['sample_id'];
-            }
+            $row[] = $update ? $aRow['sample_id'] . '<br>' . $actionBtn : $aRow['sample_id'];
             $row[] = $aRow['facility_name'];
             $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
@@ -575,7 +573,7 @@ class RecencyTable extends AbstractTableGateway
             if ($params['vlLoadResult'] != '') {
                 $data['vl_result'] = $params['vlLoadResult'];
                 $data['vl_result_entry_date'] = date("Y-m-d H:i:s");
-            } else if ($params['vlResultOption']) {
+            } elseif ($params['vlResultOption']) {
                 $data['vl_result'] = htmlentities($params['vlResultOption']);
                 $data['vl_result_entry_date'] = date("Y-m-d H:i:s");
             }
@@ -819,7 +817,7 @@ class RecencyTable extends AbstractTableGateway
 
             if ($params['vlLoadResult'] != '') {
                 $data['vl_result'] = $params['vlLoadResult'];
-            } else if ($params['vlResultOption']) {
+            } elseif ($params['vlResultOption']) {
                 $data['vl_result'] = htmlentities($params['vlResultOption']);
             }
             if ((isset($params['outcomeDataActual']) && $params['outcomeDataActual'] != "") || (isset($params['outcomeData']) && $params['outcomeData'] != "")) {
@@ -881,14 +879,13 @@ class RecencyTable extends AbstractTableGateway
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
-        } else if (isset($uResult['status']) && $uResult['status'] == 'active') {
+        } elseif (isset($uResult['status']) && $uResult['status'] == 'active') {
             $rececnyQuery = $sql->select()->from(array('r' => 'recency'))
                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name', 'province'))
                 ->join(array('u' => 'users'), 'u.user_id = r.added_by', array());
             if ($uResult['role_code'] != 'admin') {
                 $rececnyQuery = $rececnyQuery->where(array('u.auth_token' => $params['authToken'], 'r.added_by' => $uResult['user_id']));
             }
-
             if (isset($params['start']) && isset($params['end'])) {
                 $rececnyQuery = $rececnyQuery->where(
                     array(
@@ -904,8 +901,9 @@ class RecencyTable extends AbstractTableGateway
                 $response['status'] = 'success';
                 if ($params['version'] > 2.8 && $secretKey != "" && $params["version"] != null) {
                     $response['recency'] = $this->cryptoJsAesEncrypt($secretKey, $recencyResult);
-                } else
+                } else {
                     $response['recency'] = $recencyResult;
+                }
             } else {
                 $response["status"] = "fail";
                 $response["message"] = "You don't have recency data!";
@@ -931,7 +929,7 @@ class RecencyTable extends AbstractTableGateway
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
-        } else if (isset($uResult['status']) && $uResult['status'] == 'active') {
+        } elseif (isset($uResult['status']) && $uResult['status'] == 'active') {
             $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result', 'vl_test_date'))
                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
                 ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
@@ -948,8 +946,9 @@ class RecencyTable extends AbstractTableGateway
                 $response['status'] = 'success';
                 if ($params['version'] > 2.8 && $secretKey != "" && $params["version"] != null) {
                     $response['recency'] = $this->cryptoJsAesEncrypt($secretKey, $recencyResult);
-                } else
+                } else {
                     $response['recency'] = $recencyResult;
+                }
             } else {
                 $response["status"] = "fail";
                 $response["message"] = "You don't have recency data!";
@@ -977,7 +976,7 @@ class RecencyTable extends AbstractTableGateway
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
-        } else if (isset($uResult['status']) && $uResult['status'] == 'active') {
+        } elseif (isset($uResult['status']) && $uResult['status'] == 'active') {
             $rececnyQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('hiv_recency_test_date', 'sample_id', 'term_outcome', 'final_outcome', 'vl_result'))
                 ->join(array('f' => 'facilities'), 'r.facility_id = f.facility_id', array('facility_name'))
                 ->join(array('u' => 'users'), 'u.user_id = r.added_by', array())
@@ -991,8 +990,9 @@ class RecencyTable extends AbstractTableGateway
                 $response['status'] = 'success';
                 if ($params['version'] > 2.8 && $secretKey != "" && $params["version"] != null) {
                     $response['recency'] = $this->cryptoJsAesEncrypt($secretKey, $recencyResult);
-                } else
+                } else {
                     $response['recency'] = $recencyResult;
+                }
             } else {
                 $response["status"] = "fail";
                 $response["message"] = "You don't have recency data!";
@@ -1037,10 +1037,7 @@ class RecencyTable extends AbstractTableGateway
                 $arrayCount = count($params['form']);
                 $formsVal = array();
                 for ($x = 0; $x < $arrayCount; $x++) {
-                    if ($secretKey != "")
-                        $formsVal[] = $this->cryptoJsAesDecrypt($secretKey, $params['form'][$x]);
-                    else
-                        $formsVal[] = $params['form'][$x];
+                    $formsVal[] = $secretKey != "" ? $this->cryptoJsAesDecrypt($secretKey, $params['form'][$x]) : $params['form'][$x];
                 }
                 $formData = $formsVal;
             } else {
@@ -1295,8 +1292,7 @@ class RecencyTable extends AbstractTableGateway
             ->join(array('cd' => 'city_details'), 'cd.city_id = f.city', array('city_name'), 'left')
             ->where(array('recency_id' => $id));
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
     public function getTotalSyncCount($syncedBy)
     {
@@ -1306,8 +1302,7 @@ class RecencyTable extends AbstractTableGateway
             ->columns(array("Total" => new Expression('COUNT(*)')))
             ->where(array('sync_by' => $syncedBy));
         $queryStr = $sql->buildSqlString($query);
-        $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $result;
+        return $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
     public function getActiveTester($strSearch)
@@ -1426,13 +1421,13 @@ class RecencyTable extends AbstractTableGateway
                 'vl_result_entry_date' => date('Y-m-d H:i:s'),
             );
 
-            if ((in_array(strtolower($result), $this->vlFailOptionArray))) {
+            if (in_array(strtolower($result), $this->vlFailOptionArray)) {
                 $data['final_outcome'] = 'Inconclusive';
-            } else if ((in_array(strtolower($result), $this->vlResultOptionArray))) {
+            } elseif (in_array(strtolower($result), $this->vlResultOptionArray)) {
                 $data['final_outcome'] = 'Long Term';
-            } else if ($result > 1000) {
+            } elseif ($result > 1000) {
                 $data['final_outcome'] = 'RITA Recent';
-            } else if ($result <= 1000) {
+            } elseif ($result <= 1000) {
                 $data['final_outcome'] = 'Long Term';
             }
             if (isset($data['final_outcome']) && $data['final_outcome'] != "") {
@@ -1468,9 +1463,9 @@ class RecencyTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -1506,9 +1501,11 @@ class RecencyTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -1584,7 +1581,7 @@ class RecencyTable extends AbstractTableGateway
         $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
@@ -1592,11 +1589,7 @@ class RecencyTable extends AbstractTableGateway
 
         $sessionLogin = new Container('credo');
         $roleCode = $sessionLogin->roleCode;
-        if ($acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf')) {
-            $update = true;
-        } else {
-            $update = false;
-        }
+        $update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf');
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = $aRow['sample_id'];
@@ -1647,9 +1640,9 @@ class RecencyTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -1685,9 +1678,11 @@ class RecencyTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -1761,18 +1756,14 @@ class RecencyTable extends AbstractTableGateway
         $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
         $sessionLogin = new Container('credo');
         $roleCode = $sessionLogin->roleCode;
-        if ($acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf')) {
-            $update = true;
-        } else {
-            $update = false;
-        }
+        $update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\RecencyController', 'generate-pdf');
 
         foreach ($rResult as $aRow) {
 
@@ -1816,7 +1807,7 @@ class RecencyTable extends AbstractTableGateway
         if (isset($uResult['status']) && $uResult['status'] == 'inactive') {
             $response["status"] = "fail";
             $response["message"] = "Your status is Inactive!";
-        } else if (isset($uResult['status']) && $uResult['status'] == 'active') {
+        } elseif (isset($uResult['status']) && $uResult['status'] == 'active') {
             $sQuery = $sql->select()->from(array('r' => 'recency'))
                 ->columns(array(
                     'sample_id', 'final_outcome', "hiv_recency_test_date" => new Expression("DATE_FORMAT(DATE(hiv_recency_test_date), '%d-%b-%Y')"), 'vl_test_date' => new Expression("DATE_FORMAT(DATE(vl_test_date), '%d-%b-%Y')"), 'vl_result_entry_date' => new Expression("DATE_FORMAT(DATE(vl_result_entry_date), '%d-%b-%Y')"),
@@ -1839,7 +1830,6 @@ class RecencyTable extends AbstractTableGateway
                     $end_date = $common->dbDateFormat(trim($s_c_date[1]));
                 }
             }
-
             if ($params['hivRecencyTest'] != '') {
                 $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
             }
@@ -1849,8 +1839,9 @@ class RecencyTable extends AbstractTableGateway
                 $response['status'] = 'success';
                 if ($params['version'] > 2.8 && $secretKey != "" && $params["version"] != null) {
                     $response['tat'] = $this->cryptoJsAesEncrypt($secretKey, $rResult);
-                } else
+                } else {
                     $response['tat'] = $rResult;
+                }
             } else {
                 $response["status"] = "fail";
                 $response["message"] = "You don't have TAT data!";
@@ -1883,9 +1874,9 @@ class RecencyTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -1921,9 +1912,11 @@ class RecencyTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -2000,7 +1993,7 @@ class RecencyTable extends AbstractTableGateway
         $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
@@ -2014,10 +2007,11 @@ class RecencyTable extends AbstractTableGateway
             $row[] = $aRow['final_outcome'];
             $row[] = $common->humanDateFormat($aRow['hiv_recency_test_date']);
             $row[] = $common->humanDateFormat($aRow['vl_test_date']);
-            if (isset($aRow['vl_result_entry_date']) && trim($aRow['vl_result_entry_date']) != '' && $aRow['vl_result_entry_date'] != '0000-00-00 00:00:00')
+            if (isset($aRow['vl_result_entry_date']) && trim($aRow['vl_result_entry_date']) != '' && $aRow['vl_result_entry_date'] != '0000-00-00 00:00:00') {
                 $row[] = date('d-M-Y', strtotime($aRow['vl_result_entry_date']));
-            else
+            } else {
                 $row[] = '';
+            }
             $row[] = $aRow['diffInDays'];
             $output['aaData'][] = $row;
         }
@@ -2062,8 +2056,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
     public function fetchEmailSendResult($params)
@@ -2081,8 +2074,7 @@ class RecencyTable extends AbstractTableGateway
         }
 
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
     public function updateEmailSendResult($params, $configResult)
@@ -2098,12 +2090,10 @@ class RecencyTable extends AbstractTableGateway
         $fromMail = $configResult["email"]["config"]["username"];
         $mailResult = 0;
         $mailResult = $tempDb->insertTempMailDetails($to, $subject, $message, $fromMail, $fromName, $cc = null, $bcc = null, $attachment);
-        if ($mailResult > 0) {
-            if (!empty($emailFormField['selectedSampleId'])) {
-                $recencyIds = explode(",", $emailFormField['selectedSampleId']);
-                foreach ($recencyIds as $recencyId) {
-                    $this->update(array('mail_sent_status' => 'yes'), array('recency_id' => $recencyId));
-                }
+        if ($mailResult > 0 && !empty($emailFormField['selectedSampleId'])) {
+            $recencyIds = explode(",", $emailFormField['selectedSampleId']);
+            foreach ($recencyIds as $recencyId) {
+                $this->update(array('mail_sent_status' => 'yes'), array('recency_id' => $recencyId));
             }
         }
         return $mailResult;
@@ -2148,13 +2138,13 @@ class RecencyTable extends AbstractTableGateway
     {
         $recencyId = $fOutCome['recency_id'];
         $logincontainer = new Container('credo');
-        if ((in_array(strtolower($fOutCome['vl_result']), $this->vlFailOptionArray))) {
+        if (in_array(strtolower($fOutCome['vl_result']), $this->vlFailOptionArray)) {
             $data['final_outcome'] = 'Inconclusive';
-        } else if ((in_array(strtolower($fOutCome['vl_result']), $this->vlResultOptionArray))) {
+        } elseif (in_array(strtolower($fOutCome['vl_result']), $this->vlResultOptionArray)) {
             $data['final_outcome'] = 'Long Term';
-        } else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] > 1000) {
+        } elseif (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] > 1000) {
             $data['final_outcome'] = 'RITA Recent';
-        } else if (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
+        } elseif (strpos($fOutCome['term_outcome'], 'Recent') !== false && $fOutCome['vl_result'] <= 1000) {
             $data['final_outcome'] = 'Long Term';
         }
         if (isset($data['final_outcome']) && $data['final_outcome'] != "") {
@@ -2180,14 +2170,13 @@ class RecencyTable extends AbstractTableGateway
             || ($controlLine == 'absent' && $positiveControlLine == 'absent' && $longControlLine == 'present')
             || ($controlLine == 'absent' && $positiveControlLine == 'present' && $longControlLine == 'absent')
             || ($controlLine == 'absent' && $positiveControlLine == 'present' && $longControlLine == 'present')
-            || ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'present')
-        ) {
+            || ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'present')) {
             $data = array('term_outcome' => 'Invalid â€“ Please Verify');
-        } else if ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'absent') {
+        } elseif ($controlLine == 'present' && $positiveControlLine == 'absent' && $longControlLine == 'absent') {
             $data = array('term_outcome' => 'Assay Negative');
-        } else if ($controlLine == 'present' && $positiveControlLine == 'present' && $longControlLine == 'absent') {
+        } elseif ($controlLine == 'present' && $positiveControlLine == 'present' && $longControlLine == 'absent') {
             $data = array('term_outcome' => 'Assay Recent');
-        } else if ($controlLine == 'present' && $positiveControlLine == 'present' && $longControlLine == 'present') {
+        } elseif ($controlLine == 'present' && $positiveControlLine == 'present' && $longControlLine == 'present') {
             $data = array('term_outcome' => 'Long Term');
         }
         if (isset($data['term_outcome']) && $data['term_outcome'] != "") {
@@ -2321,8 +2310,7 @@ class RecencyTable extends AbstractTableGateway
         }
         $queryContainer->exportWeeklyDataQuery = $rQuery;
         $rQueryStr = $sql->buildSqlString($rQuery);
-        $fResult = $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $fResult;
+        return $dbAdapter->query($rQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
     public function fetchAllRecencyResult($parameters)
@@ -2345,9 +2333,9 @@ class RecencyTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -2383,9 +2371,11 @@ class RecencyTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -2564,7 +2554,7 @@ class RecencyTable extends AbstractTableGateway
         $iQueryStr = $sql->buildSqlString($iQuery); // Get the string of the Sql, instead of the Select-instance
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => count($iResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
@@ -2582,7 +2572,7 @@ class RecencyTable extends AbstractTableGateway
             if (trim($aRow['ritaRecent']) != "" && trim($aRow['samplesFinalOutcome']) != 0) {
                 $recentPercentage = round((($aRow['ritaRecent'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
-            if (isset($aRow['samplesFinalInconclusive']) && !empty($aRow['samplesFinalInconclusive'] && trim($aRow['samplesFinalOutcome']) != 0)) {
+            if (isset($aRow['samplesFinalInconclusive']) && ($aRow['samplesFinalInconclusive'] && trim($aRow['samplesFinalOutcome']) != 0)) {
                 $inconlusivePercentage = round((($aRow['samplesFinalInconclusive'] / $aRow['samplesFinalOutcome']) * 100), 2) . '%';
             }
             if (isset($aRow['samplesInvalid']) && !empty($aRow['samplesInvalid']) && trim($aRow['samplesTestedRecency']) != 0) {
@@ -2842,11 +2832,11 @@ class RecencyTable extends AbstractTableGateway
         if (isset($parameters['ritaFilter']) && trim($parameters['ritaFilter']) != '') {
             if ($parameters['ritaFilter'] == 'inconclusive') {
                 $sQuery = $sQuery->order("inconclusive DESC");
-            } else if ($parameters['ritaFilter'] == 'longTerm') {
+            } elseif ($parameters['ritaFilter'] == 'longTerm') {
                 $sQuery = $sQuery->order("longTerm DESC");
-            } else if ($parameters['ritaFilter'] == 'ritaRecent') {
+            } elseif ($parameters['ritaFilter'] == 'ritaRecent') {
                 $sQuery = $sQuery->order("ritaRecent DESC");
-            } else if ($parameters['ritaFilter'] == 'hivRecencyTestDate') {
+            } elseif ($parameters['ritaFilter'] == 'hivRecencyTestDate') {
                 $sQuery = $sQuery->order("hiv_recency_test_date DESC");
             }
         }
@@ -2987,9 +2977,9 @@ class RecencyTable extends AbstractTableGateway
         if (isset($parameters['activityFilter']) && trim($parameters['activityFilter']) != '') {
             if ($parameters['activityFilter'] == 'recencyDone') {
                 $sQuery = $sQuery->order("samplesTested DESC");
-            } else if ($parameters['activityFilter'] == 'vlDone') {
+            } elseif ($parameters['activityFilter'] == 'vlDone') {
                 $sQuery = $sQuery->order("VLDone DESC");
-            } else if ($parameters['activityFilter'] == 'vlPending') {
+            } elseif ($parameters['activityFilter'] == 'vlPending') {
                 $sQuery = $sQuery->order("VLPending DESC");
             }
         } else {
@@ -3097,9 +3087,9 @@ class RecencyTable extends AbstractTableGateway
         if (isset($parameters['recencyTesterFilter']) && trim($parameters['recencyTesterFilter']) != '') {
             if ($parameters['recencyTesterFilter'] == 'assayRecent') {
                 $sQuery = $sQuery->order("assayRecent DESC");
-            } else if ($parameters['recencyTesterFilter'] == 'assayLongTerm') {
+            } elseif ($parameters['recencyTesterFilter'] == 'assayLongTerm') {
                 $sQuery = $sQuery->order("assayLongTerm DESC");
-            } else if ($parameters['recencyTesterFilter'] == 'assayInvalid') {
+            } elseif ($parameters['recencyTesterFilter'] == 'assayInvalid') {
                 $sQuery = $sQuery->order("assayInvalid DESC");
             }
         } else {
@@ -3422,11 +3412,7 @@ class RecencyTable extends AbstractTableGateway
                 continue;
             }
 
-            if ($sRow["gender"] == 'not_reported') {
-                $sRow["gender"] = 'Gender Missing';
-            } else {
-                $sRow["gender"] = ucwords($sRow["gender"]);
-            }
+            $sRow["gender"] = $sRow["gender"] == 'not_reported' ? 'Gender Missing' : ucwords($sRow["gender"]);
 
             $n = (isset($sRow['total']) && $sRow['total'] != null) ? round($sRow['total'], 2) : 0;
             $result['finalOutCome']['Long Term'][$sRow["gender"]] = (isset($sRow['longTerm']) && $sRow['longTerm'] != null && $sRow['longTerm'] > 0) ? round($sRow['longTerm'], 2) : 0;
@@ -3634,11 +3620,7 @@ class RecencyTable extends AbstractTableGateway
                 continue;
             }
 
-            if ($sRow["gender"] == 'not_reported') {
-                $sRow["gender"] = 'Gender Missing';
-            } else {
-                $sRow["gender"] = ucwords($sRow["gender"]);
-            }
+            $sRow["gender"] = $sRow["gender"] == 'not_reported' ? 'Gender Missing' : ucwords($sRow["gender"]);
             $n = (isset($sRow['total']) && $sRow['total'] != null) ? $sRow['total'] : 0;
             $result['finalOutCome'][$sRow["gender"]]['15-24'] += (isset($sRow['15T24']) && $sRow['15T24'] != null) ? round($sRow['15T24'], 2) : 0;
             $result['finalOutCome'][$sRow["gender"]]['25-34'] += (isset($sRow['25T34']) && $sRow['25T34'] != null) ? round($sRow['25T34'], 2) : 0;
@@ -3751,9 +3733,9 @@ class RecencyTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -3789,9 +3771,11 @@ class RecencyTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -3970,7 +3954,7 @@ class RecencyTable extends AbstractTableGateway
         $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => count($iResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
@@ -4607,8 +4591,7 @@ class RecencyTable extends AbstractTableGateway
             ->where(array('recency_id' => $recencyId));
 
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     public function fetchLTermDetailsForPDF($recencyId)
@@ -4624,8 +4607,7 @@ class RecencyTable extends AbstractTableGateway
             ->where(array('recency_id' => $recencyId));
 
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
 
@@ -4942,9 +4924,9 @@ class RecencyTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -4980,9 +4962,11 @@ class RecencyTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -5018,7 +5002,7 @@ class RecencyTable extends AbstractTableGateway
         }
         if ($parameters['viewFlag'] == 'printed') {
             $sQuery->where('r.result_printed_on IS NOT NULL');
-        } else if ($parameters['viewFlag'] == 'not-printed') {
+        } elseif ($parameters['viewFlag'] == 'not-printed') {
             $sQuery->where('r.result_printed_on IS NULL');
         }
         if ($parameters['locationOne'] != '') {
@@ -5059,7 +5043,7 @@ class RecencyTable extends AbstractTableGateway
         $iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
 
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
@@ -5145,7 +5129,7 @@ class RecencyTable extends AbstractTableGateway
             if ($editPatientId == '' || $editPatientId == 'null') {
                 $sQuery = $sql->select()->from('recency')
                     ->where(array('patient_id' => $value))
-                    ->order('sample_collection_date' . ' DESC')
+                    ->order('sample_collection_date DESC')
                     ->limit(1);
                 $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
                 $results = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
@@ -5175,9 +5159,8 @@ class RecencyTable extends AbstractTableGateway
             ->limit('10');
 
         $fQueryStr = $sql->buildSqlString($fQuery);
-        $fResult = $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-        return $fResult;
+        return $dbAdapter->query($fQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
     //refer updateVlRequestSentNO Function
@@ -5216,8 +5199,7 @@ class RecencyTable extends AbstractTableGateway
             ->where(array('r.lis_vl_sample_code IS NOT NULL AND r.lis_vl_sample_code NOT like ""'))
             ->where(array('r.vl_result is null OR r.vl_result=""'));
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
     //refer getPendingVLResultAndInsertAlert Function

@@ -8,9 +8,16 @@ use Laminas\Filter\Exception;
 use Traversable;
 
 use function extension_loaded;
+use function snappy_compress;
+use function snappy_uncompress;
 
 /**
  * Compression adapter for php snappy (http://code.google.com/p/php-snappy/)
+ *
+ * @deprecated Since 2.28. This adapter will be removed in version 3.0 of this component. Other compression formats
+ *             remain available.
+ *
+ * @psalm-suppress UndefinedFunction
  */
 class Snappy implements CompressionAlgorithmInterface
 {

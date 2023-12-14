@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\Element;
 
+use ArrayAccess;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\Fieldset;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Form\FormInterface;
+use Laminas\Form\InputFilterProviderFieldset;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Traversable;
 
+use function assert;
+use function class_exists;
 use function count;
-use function get_class;
-use function gettype;
+use function get_debug_type;
 use function is_array;
-use function is_object;
+use function is_int;
 use function is_string;
 use function iterator_to_array;
 use function max;
@@ -26,12 +31,15 @@ class Collection extends Fieldset
     /**
      * Default template placeholder
      */
-    const DEFAULT_TEMPLATE_PLACEHOLDER = '__index__';
+    public const DEFAULT_TEMPLATE_PLACEHOLDER = '__index__';
+
+    /** @var array|ArrayAccess */
+    protected $object;
 
     /**
      * Element used in the collection
      *
-     * @var ElementInterface
+     * @var null|ElementInterface
      */
     protected $targetElement;
 
@@ -80,7 +88,7 @@ class Collection extends Fieldset
     /**
      * Element used as a template
      *
-     * @var ElementInterface|FieldsetInterface
+     * @var null|ElementInterface|FieldsetInterface
      */
     protected $templateElement;
 
@@ -107,10 +115,9 @@ class Collection extends Fieldset
      * - should_create_template: if set to true, a template is generated (inside a <span>)
      * - template_placeholder: placeholder used in the data template
      *
-     * @param array|Traversable $options
      * @return $this
      */
-    public function setOptions($options)
+    public function setOptions(iterable $options)
     {
         parent::setOptions($options);
 
@@ -148,10 +155,9 @@ class Collection extends Fieldset
     /**
      * Checks if the object can be set in this fieldset
      *
-     * @param object $object
-     * @return bool
+     * @param object|array $object
      */
-    public function allowObjectBinding($object)
+    public function allowObjectBinding($object): bool
     {
         return true;
     }
@@ -160,8 +166,8 @@ class Collection extends Fieldset
      * Set the object used by the hydrator
      * In this case the "object" is a collection of objects
      *
-     * @param  array|Traversable $object
-     * @return Fieldset|FieldsetInterface
+     * @param iterable $object
+     * @return $this
      * @throws Exception\InvalidArgumentException
      */
     public function setObject($object)
@@ -172,7 +178,7 @@ class Collection extends Fieldset
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects an array or Traversable object argument; received "%s"',
                 __METHOD__,
-                is_object($object) ? get_class($object) : gettype($object)
+                get_debug_type($object),
             ));
         }
 
@@ -185,28 +191,20 @@ class Collection extends Fieldset
     /**
      * Populate values
      *
-     * @param array|Traversable $data
      * @throws Exception\InvalidArgumentException
      * @throws Exception\DomainException
-     * @return void
      */
-    public function populateValues($data)
+    public function populateValues(iterable $data): void
     {
         if ($data instanceof Traversable) {
             $data = ArrayUtils::iteratorToArray($data);
-        } elseif (! is_array($data)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s expects an array or Traversable set of data; received "%s"',
-                __METHOD__,
-                is_object($data) ? get_class($data) : gettype($data)
-            ));
         }
 
         if (! $this->allowRemove && count($data) < $this->count) {
             throw new Exception\DomainException(sprintf(
                 'There are fewer elements than specified in the collection (%s). Either set the allow_remove option '
                 . 'to true, or re-submit the form.',
-                get_class($this)
+                static::class
             ));
         }
 
@@ -220,7 +218,7 @@ class Collection extends Fieldset
             if (! $this->allowRemove) {
                 throw new Exception\DomainException(sprintf(
                     'Elements have been removed from the collection (%s) but the allow_remove option is not true.',
-                    get_class($this)
+                    static::class
                 ));
             }
 
@@ -228,17 +226,17 @@ class Collection extends Fieldset
         }
 
         foreach ($toRemove as $name) {
-            $this->remove($name);
+            $this->remove((string) $name);
         }
 
         foreach ($data as $key => $value) {
             $elementOrFieldset = null;
-            if ($this->has($key)) {
-                $elementOrFieldset = $this->get($key);
+            if ($this->has((string) $key)) {
+                $elementOrFieldset = $this->get((string) $key);
             } elseif ($this->targetElement) {
-                $elementOrFieldset = $this->addNewTargetElementInstance($key);
+                $elementOrFieldset = $this->addNewTargetElementInstance((string) $key);
 
-                if ($key > $this->lastChildIndex) {
+                if (is_int($key) && $key > $this->lastChildIndex) {
                     $this->lastChildIndex = $key;
                 }
             }
@@ -260,10 +258,8 @@ class Collection extends Fieldset
 
     /**
      * Checks if this fieldset can bind data
-     *
-     * @return bool
      */
-    public function allowValueBinding()
+    public function allowValueBinding(): bool
     {
         return true;
     }
@@ -273,14 +269,13 @@ class Collection extends Fieldset
      *
      * @param array $values
      * @param array $validationGroup
-     *
      * @return array|mixed|void
      */
-    public function bindValues(array $values = [], array $validationGroup = null)
+    public function bindValues(array $values = [], ?array $validationGroup = null)
     {
         $collection = [];
         foreach ($values as $name => $value) {
-            $element = $this->get($name);
+            $element = $this->get((string) $name);
 
             if ($element instanceof FieldsetInterface) {
                 $collection[] = $element->bindValues($value, $validationGroup);
@@ -295,10 +290,9 @@ class Collection extends Fieldset
     /**
      * Set the initial count of target element
      *
-     * @param $count
      * @return $this
      */
-    public function setCount($count)
+    public function setCount(int $count)
     {
         $this->count = $count > 0 ? $count : 0;
         return $this;
@@ -306,10 +300,8 @@ class Collection extends Fieldset
 
     /**
      * Get the initial count of target element
-     *
-     * @return int
      */
-    public function getCount()
+    public function getCount(): int
     {
         return $this->count;
     }
@@ -323,10 +315,11 @@ class Collection extends Fieldset
      */
     public function setTargetElement($elementOrFieldset)
     {
-        if (is_array($elementOrFieldset)
+        if (
+            is_array($elementOrFieldset)
             || ($elementOrFieldset instanceof Traversable && ! $elementOrFieldset instanceof ElementInterface)
         ) {
-            $factory = $this->getFormFactory();
+            $factory           = $this->getFormFactory();
             $elementOrFieldset = $factory->create($elementOrFieldset);
         }
 
@@ -335,7 +328,7 @@ class Collection extends Fieldset
                 '%s requires that $elementOrFieldset be an object implementing %s; received "%s"',
                 __METHOD__,
                 __NAMESPACE__ . '\ElementInterface',
-                is_object($elementOrFieldset) ? get_class($elementOrFieldset) : gettype($elementOrFieldset)
+                get_debug_type($elementOrFieldset),
             ));
         }
 
@@ -346,10 +339,8 @@ class Collection extends Fieldset
 
     /**
      * Get target element
-     *
-     * @return ElementInterface|null
      */
-    public function getTargetElement()
+    public function getTargetElement(): ?ElementInterface
     {
         return $this->targetElement;
     }
@@ -357,39 +348,32 @@ class Collection extends Fieldset
     /**
      * Get allow add
      *
-     * @param bool $allowAdd
      * @return $this
      */
-    public function setAllowAdd($allowAdd)
+    public function setAllowAdd(bool $allowAdd)
     {
-        $this->allowAdd = (bool) $allowAdd;
+        $this->allowAdd = $allowAdd;
         return $this;
     }
 
     /**
      * Get allow add
-     *
-     * @return bool
      */
-    public function allowAdd()
+    public function allowAdd(): bool
     {
         return $this->allowAdd;
     }
 
     /**
-     * @param bool $allowRemove
      * @return $this
      */
-    public function setAllowRemove($allowRemove)
+    public function setAllowRemove(bool $allowRemove)
     {
-        $this->allowRemove = (bool) $allowRemove;
+        $this->allowRemove = $allowRemove;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function allowRemove()
+    public function allowRemove(): bool
     {
         return $this->allowRemove;
     }
@@ -398,22 +382,19 @@ class Collection extends Fieldset
      * If set to true, a template prototype is automatically added to the form
      * to ease the creation of dynamic elements through JavaScript
      *
-     * @param bool $shouldCreateTemplate
      * @return $this
      */
-    public function setShouldCreateTemplate($shouldCreateTemplate)
+    public function setShouldCreateTemplate(bool $shouldCreateTemplate)
     {
-        $this->shouldCreateTemplate = (bool) $shouldCreateTemplate;
+        $this->shouldCreateTemplate = $shouldCreateTemplate;
 
         return $this;
     }
 
     /**
      * Get if the collection should create a template
-     *
-     * @return bool
      */
-    public function shouldCreateTemplate()
+    public function shouldCreateTemplate(): bool
     {
         return $this->shouldCreateTemplate;
     }
@@ -421,42 +402,33 @@ class Collection extends Fieldset
     /**
      * Set the placeholder used in the template generated to help create new elements in JavaScript
      *
-     * @param string $templatePlaceholder
      * @return $this
      */
-    public function setTemplatePlaceholder($templatePlaceholder)
+    public function setTemplatePlaceholder(string $templatePlaceholder)
     {
-        if (is_string($templatePlaceholder)) {
-            $this->templatePlaceholder = $templatePlaceholder;
-        }
+        $this->templatePlaceholder = $templatePlaceholder;
 
         return $this;
     }
 
     /**
      * Get the template placeholder
-     *
-     * @return string
      */
-    public function getTemplatePlaceholder()
+    public function getTemplatePlaceholder(): string
     {
         return $this->templatePlaceholder;
     }
 
     /**
-     * @param bool $createNewObjects
      * @return $this
      */
-    public function setCreateNewObjects($createNewObjects)
+    public function setCreateNewObjects(bool $createNewObjects)
     {
-        $this->createNewObjects = (bool) $createNewObjects;
+        $this->createNewObjects = $createNewObjects;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function createNewObjects()
+    public function createNewObjects(): bool
     {
         return $this->createNewObjects;
     }
@@ -477,16 +449,13 @@ class Collection extends Fieldset
 
     /**
      * Prepare the collection by adding a dummy template element if the user want one
-     *
-     * @param  FormInterface $form
-     * @return mixed|void
      */
-    public function prepareElement(FormInterface $form)
+    public function prepareElement(FormInterface $form): void
     {
         if (true === $this->shouldCreateChildrenOnPrepareElement) {
             if ($this->targetElement !== null && $this->count > 0) {
                 while ($this->count > $this->lastChildIndex + 1) {
-                    $this->addNewTargetElementInstance(++$this->lastChildIndex);
+                    $this->addNewTargetElementInstance((string) ++$this->lastChildIndex);
                 }
             }
         }
@@ -513,7 +482,7 @@ class Collection extends Fieldset
      * @throws Exception\DomainException
      * @throws Exception\InvalidElementException
      */
-    public function extract()
+    public function extract(): array
     {
         if ($this->object instanceof Traversable) {
             $this->object = ArrayUtils::iteratorToArray($this->object, false);
@@ -537,10 +506,13 @@ class Collection extends Fieldset
                     continue;
                 }
                 $targetElement = clone $this->targetElement;
+                assert($targetElement instanceof Fieldset);
                 $targetElement->setObject($value);
                 $values[$key] = $targetElement->extract();
-                if (! $this->createNewObjects() && $this->has($key)) {
-                    $this->get($key)->setObject($value);
+                if (! $this->createNewObjects() && $this->has((string) $key)) {
+                    $fieldset = $this->get((string) $key);
+                    assert($fieldset instanceof FieldsetInterface);
+                    $fieldset->setObject($value);
                 }
                 continue;
             }
@@ -548,8 +520,8 @@ class Collection extends Fieldset
             // If the target element is a non-fieldset element, just use the value
             if ($this->targetElement instanceof ElementInterface) {
                 $values[$key] = $value;
-                if (! $this->createNewObjects() && $this->has($key)) {
-                    $this->get($key)->setValue($value);
+                if (! $this->createNewObjects() && $this->has((string) $key)) {
+                    $this->get((string) $key)->setValue($value);
                 }
                 continue;
             }
@@ -560,22 +532,25 @@ class Collection extends Fieldset
 
     /**
      * Create a new instance of the target element
-     *
-     * @return ElementInterface
      */
-    protected function createNewTargetElementInstance()
+    protected function createNewTargetElementInstance(): ElementInterface
     {
+        assert($this->targetElement !== null);
+        if ($this->targetElement instanceof InputFilterProviderFieldset) {
+            if (null !== ($type = $this->targetElement->getOption('target_type'))) {
+                assert(is_string($type) && class_exists($type));
+                $this->targetElement->setObject(new $type());
+            }
+        }
         return clone $this->targetElement;
     }
 
     /**
      * Add a new instance of the target element
      *
-     * @param string $name
-     * @return ElementInterface
      * @throws Exception\DomainException
      */
-    protected function addNewTargetElementInstance($name)
+    protected function addNewTargetElementInstance(string $name): ElementInterface
     {
         $this->shouldCreateChildrenOnPrepareElement = false;
 
@@ -588,7 +563,7 @@ class Collection extends Fieldset
             throw new Exception\DomainException(sprintf(
                 'There are more elements than specified in the collection (%s). Either set the allow_add option '
                 . 'to true, or re-submit the form.',
-                get_class($this)
+                static::class
             ));
         }
 
@@ -619,10 +594,8 @@ class Collection extends Fieldset
     /**
      * Replaces the default template object of a sub element with the corresponding
      * real entity so that all properties are preserved.
-     *
-     * @return void
      */
-    protected function replaceTemplateObjects()
+    protected function replaceTemplateObjects(): void
     {
         $fieldsets = $this->getFieldsets();
 
@@ -631,8 +604,8 @@ class Collection extends Fieldset
         }
 
         foreach ($fieldsets as $fieldset) {
-            $i = $fieldset->getName();
-            if (isset($this->object[$i])) {
+            $i = (string) $fieldset->getName();
+            if ($i !== '' && isset($this->object[$i])) {
                 $fieldset->setObject($this->object[$i]);
             }
         }

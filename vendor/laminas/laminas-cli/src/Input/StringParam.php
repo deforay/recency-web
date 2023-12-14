@@ -30,8 +30,7 @@ final class StringParam extends AbstractInputParam
         $pattern  = $this->pattern;
 
         $question->setValidator(
-            /** @param mixed $value */
-            static function ($value) use ($pattern): string {
+            static function (mixed $value) use ($pattern): string {
                 Assert::string($value, sprintf(
                     'Invalid value: string expected, %s given',
                     get_debug_type($value)
@@ -52,6 +51,7 @@ final class StringParam extends AbstractInputParam
     }
 
     /**
+     * @param non-empty-string $pattern
      * @throws InvalidArgumentException If PCRE pattern is invalid.
      */
     public function setPattern(string $pattern): self
@@ -63,6 +63,9 @@ final class StringParam extends AbstractInputParam
         return $this;
     }
 
+    /**
+     * @param non-empty-string $pattern
+     */
     private function validatePattern(string $pattern): bool
     {
         // phpcs:ignore WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps

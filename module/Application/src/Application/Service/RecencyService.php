@@ -771,41 +771,38 @@ class RecencyService
                 mkdir(APPLICATION_PATH . DIRECTORY_SEPARATOR . "uploads");
             }
 
-            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName)) {
-
-                if (move_uploaded_file($_FILES['fileName']['tmp_name'], UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName)) {
-                    $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
-                    $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
-                    $count = count($sheetData);
-                    $common = new \Application\Service\CommonService();
-                    for ($i = 2; $i <= $count; ++$i) {
-                        $sampleId = $sheetData[$i]['A'];
-                        if (isset($sheetData[$i]['A']) && trim($sheetData[$i]['A']) != '') {
-                            $cQuery = $sql->select()->from('recency')->columns(array('recency_id'))
-                                ->where(array('sample_id' => $sampleId));
-                            $fQuery = $sql->buildSqlString($cQuery);
-                            $fResult = $dbAdapter->query($fQuery, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-                            if (isset($fResult['recency_id'])) {
-                                $data = array(
-                                    'vl_test_date' => date('Y-m-d', strtotime($sheetData[$i]['C'])),
-                                    'vl_result' => $sheetData[$i]['B'],
-                                    'upload_result_datetime' => date('Y-m-d h:i:s')
-                                );
-                                $recencyDb->update($data, array('recency_id' => $fResult['recency_id']));
-                                // Add event log
-                                $subject                = $fResult['recency_id'];
-                                $eventType              = 'Upload VL Result File';
-                                $action                 = 'Uploaded VL Result File ';
-                                $resourceName           = 'Upload VL Result ';
-                                $eventLogDb             = $this->sm->get('EventLogTable');
-                                $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
-                            }
+            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName) && move_uploaded_file($_FILES['fileName']['tmp_name'], UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName)) {
+                $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
+                $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+                $count = count($sheetData);
+                $common = new \Application\Service\CommonService();
+                for ($i = 2; $i <= $count; ++$i) {
+                    $sampleId = $sheetData[$i]['A'];
+                    if (isset($sheetData[$i]['A']) && trim($sheetData[$i]['A']) != '') {
+                        $cQuery = $sql->select()->from('recency')->columns(array('recency_id'))
+                            ->where(array('sample_id' => $sampleId));
+                        $fQuery = $sql->buildSqlString($cQuery);
+                        $fResult = $dbAdapter->query($fQuery, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+                        if (isset($fResult['recency_id'])) {
+                            $data = array(
+                                'vl_test_date' => date('Y-m-d', strtotime($sheetData[$i]['C'])),
+                                'vl_result' => $sheetData[$i]['B'],
+                                'upload_result_datetime' => date('Y-m-d h:i:s')
+                            );
+                            $recencyDb->update($data, array('recency_id' => $fResult['recency_id']));
+                            // Add event log
+                            $subject                = $fResult['recency_id'];
+                            $eventType              = 'Upload VL Result File';
+                            $action                 = 'Uploaded VL Result File ';
+                            $resourceName           = 'Upload VL Result ';
+                            $eventLogDb             = $this->sm->get('EventLogTable');
+                            $eventLogDb->addEventLog($subject, $eventType, $action, $resourceName);
                         }
                     }
-                    unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
-                    $container = new Container('alert');
-                    $container->alertMsg = 'Result details uploaded successfully';
                 }
+                unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . $fileName);
+                $container = new Container('alert');
+                $container->alertMsg = 'Result details uploaded successfully';
             }
         }
     }
@@ -1462,7 +1459,7 @@ class RecencyService
                                 'sCDate'              => (isset($data['sample_collection_date']) && $data['sample_collection_date'] != '') ? $data['sample_collection_date'] : '',
                                 // 'sampleType'          => $data['received_specimen_type'],
                                 'isVlLab'             => (isset($params['isVlLab']) && $params['isVlLab'] != '') ? $params['isVlLab'] : '',
-                                'userId'              => (isset($sessionLogin->userId) && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
+                                'userId'              => (property_exists($sessionLogin, 'userId') && $sessionLogin->userId !== null && $sessionLogin->userId != '') ? $sessionLogin->userId : '',
                                 'dob'                 => (isset($data['dob']) && $data['dob'] != '') ? $data['dob'] : '',
                                 'age'                 => (isset($data['age']) && $data['age'] != '') ? $data['age'] : '',
                                 'gender'              => (isset($data['gender']) && $data['gender'] != '') ? $data['gender'] : '',
@@ -1565,19 +1562,19 @@ class RecencyService
                 $sheet->setCellValue($horizontal[$index] . '8', html_entity_decode($age, ENT_QUOTES, 'UTF-8'));
                 $sheet->getStyle($horizontal[$index] . '2')->applyFromArray($borderStyle);
                 $sheet->getStyle($horizontal[$index] . '8')->applyFromArray($borderStyle);
-                $index = ($index + 2);
+                $index += 2;
 
                 $sheet->mergeCells($horizontal[$rtrif] . '2:' . $horizontal[$rtrim] . '2');
                 $sheet->mergeCells($horizontal[$rtrif] . '8:' . $horizontal[$rtrim] . '8');
-                $rtrim = ($rtrim + 2);
-                $rtrif = ($rtrif + 2);
+                $rtrim += 2;
+                $rtrif += 2;
             }
             $sheet->mergeCells('B2:C2');
             $sheet->mergeCells('B8:C8');
             /* Male Female cell creation */
             $index = 0;
             foreach (range(1, 16) as $x) {
-                if ($x % 2) {
+                if ($x % 2 !== 0) {
                     $sheet->setCellValue($horizontal[$index] . '3', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'));
                     $sheet->setCellValue($horizontal[$index] . '9', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'));
                 } else {
@@ -1593,7 +1590,7 @@ class RecencyService
             foreach (range(1, 16) as $x) {
                 $sheet->getStyle($horizontal[($x - 1)] . '4')->applyFromArray($borderStyle);
                 $sheet->getStyle($horizontal[($x - 1)] . '5')->applyFromArray($borderStyle);
-                if ($x % 2) {
+                if ($x % 2 !== 0) {
                     $sheet->setCellValue($horizontal[($x - 1)] . '4', html_entity_decode($result['rtriRecent' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'));
                     $sheet->setCellValue($horizontal[($x - 1)] . '5', html_entity_decode($result['rtriLT' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'));
                 } else {
@@ -1607,7 +1604,7 @@ class RecencyService
             foreach (range(1, 16) as $x) {
                 $sheet->getStyle($horizontal[($x - 1)] . '10')->applyFromArray($borderStyle);
                 $sheet->getStyle($horizontal[($x - 1)] . '11')->applyFromArray($borderStyle);
-                if ($x % 2) {
+                if ($x % 2 !== 0) {
                     $sheet->setCellValue($horizontal[($x - 1)] . '10', html_entity_decode($result['confirmedRecent' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'));
                     $sheet->setCellValue($horizontal[($x - 1)] . '11', html_entity_decode($result['confirmedLT' . $ageArray[$index] . 'F'], ENT_QUOTES, 'UTF-8'));
                 } else {
@@ -1753,13 +1750,13 @@ class RecencyService
                     }
                 }
             }
-            if (!empty($sampleCollectionDates)) {
+            if ($sampleCollectionDates !== []) {
                 $fromDate = date('Y-m-d', strtotime(min($sampleCollectionDates)));
                 $toDate = date('Y-m-d', strtotime(max($sampleCollectionDates)));
                 $fromAndToDate[] = $fromDate;
                 $fromAndToDate[] = $toDate;
             }
-            if (!empty($sampleCodes)) {
+            if ($sampleCodes !== []) {
                 $params = array(
                     'uniqueId'   => $uniqueIds,
                     'facility' => $facilityIds,

@@ -1,6 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\Annotation;
+
+use Attribute;
+use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 
 /**
  * Name annotation
@@ -9,16 +15,23 @@ namespace Laminas\Form\Annotation;
  * when building the form, element, or input. The value should be a string.
  *
  * @Annotation
+ * @NamedArgumentConstructor
  */
-class Name extends AbstractStringAnnotation
+#[Attribute]
+final class Name
 {
     /**
-     * Retrieve the name
-     *
-     * @return null|string
+     * Receive and process the contents of an annotation
      */
-    public function getName()
+    public function __construct(private string $name)
     {
-        return $this->value;
+    }
+
+    /**
+     * Retrieve the name
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

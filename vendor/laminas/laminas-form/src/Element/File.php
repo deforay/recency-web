@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\Element;
 
 use Laminas\Form\Element;
@@ -10,39 +12,35 @@ use Laminas\InputFilter\InputProviderInterface;
 
 class File extends Element implements InputProviderInterface, ElementPrepareAwareInterface
 {
-    /**
-     * Seed attributes
-     *
-     * @var array
-     */
+    /** @var array<string, scalar|null>  */
     protected $attributes = [
         'type' => 'file',
     ];
 
     /**
      * Prepare the form element (mostly used for rendering purposes)
-     *
-     * @param  FormInterface $form
-     * @return mixed
      */
-    public function prepareElement(FormInterface $form)
+    public function prepareElement(FormInterface $form): void
     {
         // Ensure the form is using correct enctype
         $form->setAttribute('enctype', 'multipart/form-data');
     }
 
     /**
-     * Should return an array specification compatible with
-     * {@link Laminas\InputFilter\Factory::createInput()}.
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getInputSpecification()
+    public function getInputSpecification(): array
     {
-        return [
+        $spec = [
             'type'     => FileInput::class,
-            'name'     => $this->getName(),
             'required' => false,
         ];
+
+        $name = $this->getName();
+        if ($name !== null) {
+            $spec['name'] = $name;
+        }
+
+        return $spec;
     }
 }

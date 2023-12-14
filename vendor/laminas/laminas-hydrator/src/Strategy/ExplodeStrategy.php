@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Laminas\Hydrator\Strategy;
 
 use function explode;
-use function get_class;
 use function gettype;
 use function implode;
 use function is_array;
@@ -16,20 +15,18 @@ use function sprintf;
 
 final class ExplodeStrategy implements StrategyInterface
 {
+    /** @var non-empty-string */
     private string $valueDelimiter;
-
-    private ?int $explodeLimit;
 
     /**
      * Constructor
      *
-     * @param string   $delimiter    String that the values will be split upon
+     * @param non-empty-string $delimiter String that the values will be split upon
      * @param int|null $explodeLimit Explode limit
      */
-    public function __construct(string $delimiter = ',', ?int $explodeLimit = null)
+    public function __construct(string $delimiter = ',', private ?int $explodeLimit = null)
     {
         $this->setValueDelimiter($delimiter);
-        $this->explodeLimit = $explodeLimit;
     }
 
     /**
@@ -63,7 +60,7 @@ final class ExplodeStrategy implements StrategyInterface
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects argument 1 to be string, %s provided instead',
                 __METHOD__,
-                is_object($value) ? get_class($value) : gettype($value)
+                is_object($value) ? $value::class : gettype($value)
             ));
         }
 
@@ -89,7 +86,7 @@ final class ExplodeStrategy implements StrategyInterface
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects argument 1 to be array, %s provided instead',
                 __METHOD__,
-                is_object($value) ? get_class($value) : gettype($value)
+                is_object($value) ? $value::class : gettype($value)
             ));
         }
 

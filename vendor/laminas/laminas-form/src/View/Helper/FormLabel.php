@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\View\Helper;
 
 use Laminas\Form\ElementInterface;
@@ -7,7 +9,6 @@ use Laminas\Form\Exception;
 use Laminas\Form\LabelAwareInterface;
 
 use function array_merge;
-use function get_class;
 use function gettype;
 use function is_array;
 use function is_object;
@@ -15,8 +16,8 @@ use function sprintf;
 
 class FormLabel extends AbstractHelper
 {
-    const APPEND  = 'append';
-    const PREPEND = 'prepend';
+    public const APPEND  = 'append';
+    public const PREPEND = 'prepend';
 
     /**
      * Attributes valid for the label tag
@@ -34,13 +35,13 @@ class FormLabel extends AbstractHelper
      * Always generates a "for" statement, as we cannot assume the form input
      * will be provided in the $labelContent.
      *
-     * @param  ElementInterface $element
-     * @param  null|string      $labelContent
-     * @param  string           $position
+     * @template T as null|ElementInterface
+     * @psalm-param T $element
+     * @psalm-return (T is null ? self : string)
      * @throws Exception\DomainException
      * @return string|FormLabel
      */
-    public function __invoke(ElementInterface $element = null, $labelContent = null, $position = null)
+    public function __invoke(?ElementInterface $element = null, ?string $labelContent = null, ?string $position = null)
     {
         if (! $element) {
             return $this;
@@ -66,7 +67,7 @@ class FormLabel extends AbstractHelper
 
             if (! $element instanceof LabelAwareInterface || ! $element->getLabelOption('disable_html_escape')) {
                 $escapeHtmlHelper = $this->getEscapeHtmlHelper();
-                $label = $escapeHtmlHelper($label);
+                $label            = $escapeHtmlHelper($label);
             }
         }
 
@@ -95,11 +96,10 @@ class FormLabel extends AbstractHelper
      * @param  null|array|ElementInterface $attributesOrElement
      * @throws Exception\InvalidArgumentException
      * @throws Exception\DomainException
-     * @return string
      */
-    public function openTag($attributesOrElement = null)
+    public function openTag($attributesOrElement = null): string
     {
-        if (null === $attributesOrElement) {
+        if (null === $attributesOrElement || [] === $attributesOrElement) {
             return '<label>';
         }
 
@@ -112,7 +112,7 @@ class FormLabel extends AbstractHelper
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects an array or Laminas\Form\ElementInterface instance; received "%s"',
                 __METHOD__,
-                is_object($attributesOrElement) ? get_class($attributesOrElement) : gettype($attributesOrElement)
+                is_object($attributesOrElement) ? $attributesOrElement::class : gettype($attributesOrElement)
             ));
         }
 
@@ -141,10 +141,8 @@ class FormLabel extends AbstractHelper
 
     /**
      * Return a closing label tag
-     *
-     * @return string
      */
-    public function closeTag()
+    public function closeTag(): string
     {
         return '</label>';
     }

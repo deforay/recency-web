@@ -70,7 +70,9 @@ class Module implements ConfigProviderInterface
 
         //no need to call presetter if request is from CLI
         if (php_sapi_name() != 'cli') {
-            $eventManager->attach('dispatch', array($this, 'preSetter'), 100);
+            $eventManager->attach('dispatch', function (\Laminas\Mvc\MvcEvent $e) {
+                return $this->preSetter($e);
+            }, 100);
         }
     }
 
@@ -94,7 +96,7 @@ class Module implements ConfigProviderInterface
 
 
             $session = new Container('credo');
-            if (empty($session) || !isset($session->userId) || empty($session->userId)) {
+            if (empty($session) || (!property_exists($session, 'userId') || $session->userId === null) || empty($session->userId)) {
                 $url = $e->getRouter()->assemble(array(), array('name' => 'login'));
                 /** @var \Laminas\Http\Response $response */
                 $response = $e->getResponse();

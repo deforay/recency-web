@@ -7,8 +7,6 @@ namespace Laminas\Hydrator;
 use ReflectionClass;
 use ReflectionProperty;
 
-use function get_class;
-
 class ReflectionHydrator extends AbstractHydrator
 {
     /**
@@ -64,7 +62,7 @@ class ReflectionHydrator extends AbstractHydrator
      */
     protected static function getReflProperties(object $input): array
     {
-        $class = get_class($input);
+        $class = $input::class;
 
         if (isset(static::$reflProperties[$class])) {
             return static::$reflProperties[$class];
@@ -75,7 +73,6 @@ class ReflectionHydrator extends AbstractHydrator
         $reflProperties                 = $reflClass->getProperties();
 
         foreach ($reflProperties as $property) {
-            $property->setAccessible(true);
             static::$reflProperties[$class][$property->getName()] = $property;
         }
 

@@ -12,11 +12,13 @@ use Locale;
 use NumberFormatter;
 use Traversable;
 
+use function assert;
 use function intl_is_failure;
 use function is_bool;
 use function is_float;
 use function is_int;
 use function is_scalar;
+use function is_string;
 use function preg_match;
 use function preg_quote;
 use function str_replace;
@@ -114,6 +116,12 @@ class IsFloat extends AbstractValidator
 
         if (is_float($value) || is_int($value)) {
             return true;
+        }
+
+        if ($value === '') {
+            $this->error(self::NOT_FLOAT);
+
+            return false;
         }
 
         // Need to check if this is scientific formatted string. If not, switch to decimal.
@@ -230,10 +238,17 @@ class IsFloat extends AbstractValidator
 
         // No strrpos() in wrappers yet. ICU 4.x doesn't have grouping size for
         // everything. ICU 52 has 3 for ALL locales.
-        $groupSize       = $formatter->getAttribute(NumberFormatter::GROUPING_SIZE) ?: 3;
+        $groupSize = $formatter->getAttribute(NumberFormatter::GROUPING_SIZE) ?: 3;
+        assert(is_int($groupSize));
         $lastStringGroup = $this->wrapper->strlen($value) > $groupSize ?
-            $this->wrapper->substr($value, -$groupSize) :
+            $this->wrapper->substr($value, 0 - $groupSize) :
             $value;
+
+        assert(is_string($lastStringGroup));
+        assert($lastStringGroup !== '');
+        assert($lnumSearch !== '');
+        assert($dnumSearch !== '');
+        assert($expDnumSearch !== '');
 
         if (
             (preg_match($lnumSearch, $unGroupedValue)

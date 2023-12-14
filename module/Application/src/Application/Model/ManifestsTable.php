@@ -47,9 +47,9 @@ class ManifestsTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $aColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -85,9 +85,11 @@ class ManifestsTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -141,7 +143,7 @@ class ManifestsTable extends AbstractTableGateway
         $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($tResult);
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => count($tResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
@@ -195,19 +197,17 @@ class ManifestsTable extends AbstractTableGateway
 
 
         // loop through the selected samples and update Recency main table
-        if ($manifestId) {
-            if ($params['selectedRecencyId'] != '') {
-                $recencyDb = new RecencyTable($this->adapter);
-                $recencyList = explode(",", $params['selectedRecencyId']);
-                foreach ($recencyList as $recencyId) {
+        if ($manifestId !== 0 && $params['selectedRecencyId'] != '') {
+            $recencyDb = new RecencyTable($this->adapter);
+            $recencyList = explode(",", $params['selectedRecencyId']);
+            foreach ($recencyList as $recencyId) {
 
-                    $updateData = array(
-                        'manifest_id' => $manifestId,
-                        'manifest_code' => $manifestCode,
-                    );
+                $updateData = array(
+                    'manifest_id' => $manifestId,
+                    'manifest_code' => $manifestCode,
+                );
 
-                    $recencyDb->update($updateData, array('recency_id' => $recencyId));
-                }
+                $recencyDb->update($updateData, array('recency_id' => $recencyId));
             }
         }
 

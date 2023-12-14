@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\Element;
 
 use Laminas\Filter\StringTrim;
@@ -10,26 +12,18 @@ use Laminas\Validator\ValidatorInterface;
 
 class Url extends Element implements InputProviderInterface
 {
-    /**
-     * Seed attributes
-     *
-     * @var array
-     */
+    /** @var array<string, scalar|null>  */
     protected $attributes = [
         'type' => 'url',
     ];
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var null|ValidatorInterface */
     protected $validator;
 
     /**
      * Get validator
-     *
-     * @return ValidatorInterface
      */
-    public function getValidator()
+    public function getValidator(): ValidatorInterface
     {
         if (null === $this->validator) {
             $this->validator = new UriValidator([
@@ -45,19 +39,25 @@ class Url extends Element implements InputProviderInterface
      *
      * Attaches an uri validator.
      *
-     * @return array
+     * @inheritDoc
      */
-    public function getInputSpecification()
+    public function getInputSpecification(): array
     {
-        return [
-            'name' => $this->getName(),
-            'required' => true,
-            'filters' => [
+        $spec = [
+            'required'   => true,
+            'filters'    => [
                 ['name' => StringTrim::class],
             ],
             'validators' => [
                 $this->getValidator(),
             ],
         ];
+
+        $name = $this->getName();
+        if ($name !== null) {
+            $spec['name'] = $name;
+        }
+
+        return $spec;
     }
 }

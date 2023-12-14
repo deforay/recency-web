@@ -49,13 +49,11 @@ class UserTable extends AbstractTableGateway
             $decryptedPassword = CommonService::decrypt($params['t'], base64_decode($configResult['vlsm']['crosslogin-salt']));
             $params['loginPassword'] = $decryptedPassword;
             $params['userName'] = base64_decode($params['u']);
-        } else {
-            if (!$configResult['vlsm']['crosslogin'] && !isset($params['userName']) && trim($params['userName']) == "") {
-                //User log details
-                $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
-                $alertContainer->alertMsg = 'Cross login not activated in recency!';
-                return 'login';
-            }
+        } elseif (!$configResult['vlsm']['crosslogin'] && !isset($params['userName']) && trim($params['userName']) == "") {
+            //User log details
+            $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
+            $alertContainer->alertMsg = 'Cross login not activated in recency!';
+            return 'login';
         }
 
         if (isset($params['userName']) && trim($params['userName']) != "" && trim($params['loginPassword']) != "") {
@@ -88,7 +86,7 @@ class UserTable extends AbstractTableGateway
                     $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
                     return 'login';
                 }
-            } else if ($userRow['hash_algorithm'] == 'phb') {
+            } elseif ($userRow['hash_algorithm'] == 'phb') {
                 if (!password_verify($params['loginPassword'], $userRow['server_password'])) {
                     //User log details
                     $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
@@ -109,18 +107,14 @@ class UserTable extends AbstractTableGateway
                 $ufmResult = $userFacilityMapDb->select(array('user_id' => $userRow->user_id))->toArray();
                 $ufmdata = array();
                 foreach ($ufmResult as $val) {
-                    array_push($ufmdata, $val['facility_id']);
+                    $ufmdata[] = $val['facility_id'];
                 }
                 $logincontainer->userId = $userRow->user_id;
                 $logincontainer->roleId = $userRow->role_id;
                 $logincontainer->roleCode = $userRow->role_code;
                 $logincontainer->userName = ucwords($userRow->user_name);
                 $logincontainer->userEmail = ucwords($userRow->email);
-                if (!empty($ufmdata)) {
-                    $logincontainer->facilityMap = implode(',', $ufmdata);
-                } else {
-                    $logincontainer->facilityMap = null;
-                }
+                $logincontainer->facilityMap = $ufmdata === [] ? null : implode(',', $ufmdata);
 
                 $logincontainer->crossLoginPass = null;
                 if (!empty($configResult['vlsm']['crosslogin']) && $configResult['vlsm']['crosslogin'] === true) {
@@ -158,9 +152,9 @@ class UserTable extends AbstractTableGateway
                 $userLoginHistoryDb->addUserLoginHistory($params, 'successful');
                 if ($userRow->role_code == 'VLTS') {
                     return 'vl-data';
-                } else if ($userRow->role_code != 'admin') {
+                } elseif ($userRow->role_code != 'admin') {
                     return 'recency';
-                } else if ($userRow->role_code == 'manager') {
+                } elseif ($userRow->role_code == 'manager') {
                     return 'recency';
                 } else {
                     return 'recency';
@@ -199,9 +193,9 @@ class UserTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $aColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -237,9 +231,11 @@ class UserTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -284,18 +280,14 @@ class UserTable extends AbstractTableGateway
         $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($tResult);
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => count($tResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
 
         $roleCode = $sessionLogin->roleCode;
-        if ($acl->isAllowed($roleCode, 'Application\Controller\UserController', 'edit')) {
-            $update = true;
-        } else {
-            $update = false;
-        }
+        $update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\UserController', 'edit');
 
         foreach ($rResult as $aRow) {
 
@@ -322,8 +314,7 @@ class UserTable extends AbstractTableGateway
         $sQuery =  $sql->select()->from('users')
             ->where(array('status' => 'active'));
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
     public function addUserDetails($params)
@@ -349,16 +340,14 @@ class UserTable extends AbstractTableGateway
             );
             $this->insert($data);
             $lastInsertedId = $this->lastInsertValue;
-            if ($lastInsertedId > 0) {
-                if ($params['selectedMapFacility'] != '') {
-                    $mapArray = explode(",", $params['selectedMapFacility']);
-                    foreach ($mapArray as $facilityId) {
-                        $mapData = array(
-                            'user_id' => $lastInsertedId,
-                            'facility_id' => base64_decode($facilityId)
-                        );
-                        $mapDb->insert($mapData);
-                    }
+            if ($lastInsertedId > 0 && $params['selectedMapFacility'] != '') {
+                $mapArray = explode(",", $params['selectedMapFacility']);
+                foreach ($mapArray as $facilityId) {
+                    $mapData = array(
+                        'user_id' => $lastInsertedId,
+                        'facility_id' => base64_decode($facilityId)
+                    );
+                    $mapDb->insert($mapData);
                 }
             }
         }
@@ -467,7 +456,7 @@ class UserTable extends AbstractTableGateway
                     $response["message"] = 'The email id or password that you entered is incorrect';
                     return $response;
                 }
-            } else if ($userRow['hash_algorithm'] == 'phb') {
+            } elseif ($userRow['hash_algorithm'] == 'phb') {
                 if (!password_verify($params['password'], $userRow['server_password'])) {
                     $response["status"] = "fail";
                     $response["message"] = 'The email id or password that you entered is incorrect';
@@ -477,11 +466,7 @@ class UserTable extends AbstractTableGateway
 
             if (isset($userRow['user_id']) && $userRow['user_id'] != '' && $userRow['status'] == 'active') {
                 $auth = $common->generateRandomString(16);
-                if ($userRow->secret_key != '') {
-                    $secretKey = $userRow->secret_key;
-                } else {
-                    $secretKey = $common->generateRandomString(32);
-                }
+                $secretKey = $userRow->secret_key != '' ? $userRow->secret_key : $common->generateRandomString(32);
                 // \Zend\Debug\Debug::dump($rResult['user_id']);die;
                 $id = $this->update(array('auth_token' => $auth, 'secret_key' => $secretKey), array('user_id' => $userRow['user_id']));
                 if ($id > 0) {
@@ -499,7 +484,7 @@ class UserTable extends AbstractTableGateway
                     $response["status"] = "fail";
                     $response["message"] = "Please try again!";
                 }
-            } else if ($userRow['status'] == 'inactive') {
+            } elseif ($userRow['status'] == 'inactive') {
                 $adminEmail = $globalDb->getGlobalValue('admin_email');
                 $adminPhone = $globalDb->getGlobalValue('admin_phone');
                 $response['message'] = 'Your password has expired or has been locked, please contact your administrator(' . $adminEmail . ' or ' . $adminPhone . ')';
@@ -528,24 +513,22 @@ class UserTable extends AbstractTableGateway
                 'job_responsibility' => $params['JobResponse'],
                 'comments' => $params['comments'],
             );
-            if ($params['servPass'] != '') {
-                if (!empty($configResult['vlsm']['crosslogin']) && $configResult['vlsm']['crosslogin'] === true) {
-                    $client = new \GuzzleHttp\Client();
-                    $url = rtrim($configResult['vlsm']['domain'], "/");
-                    $result = $client->post($url . '/users/editProfileHelper.php', [
-                        'form_params' => [
-                            'u' => $params['email'],
-                            't' => sha1($params['servPass'] . $configResult["password"]["salt"])
-                        ]
-                    ]);
-                    $response = json_decode($result->getBody()->getContents());
-                    if (isset($response->status) && $response->status != 'success') {
-                        error_log('VLSM profile not updated for the user->' . $params['userName']);
-                    }
-                    $newPass = $common->passwordHash($params['servPass']);
-                    $data['server_password'] = $newPass;
-                    $data['hash_algorithm'] = 'phb';
+            if ($params['servPass'] != '' && (!empty($configResult['vlsm']['crosslogin']) && $configResult['vlsm']['crosslogin'] === true)) {
+                $client = new \GuzzleHttp\Client();
+                $url = rtrim($configResult['vlsm']['domain'], "/");
+                $result = $client->post($url . '/users/editProfileHelper.php', [
+                    'form_params' => [
+                        'u' => $params['email'],
+                        't' => sha1($params['servPass'] . $configResult["password"]["salt"])
+                    ]
+                ]);
+                $response = json_decode($result->getBody()->getContents());
+                if (isset($response->status) && $response->status != 'success') {
+                    error_log('VLSM profile not updated for the user->' . $params['userName']);
                 }
+                $newPass = $common->passwordHash($params['servPass']);
+                $data['server_password'] = $newPass;
+                $data['hash_algorithm'] = 'phb';
             }
             $updateResult = $this->update($data, array('user_id' => base64_decode($params['userId'])));
         }

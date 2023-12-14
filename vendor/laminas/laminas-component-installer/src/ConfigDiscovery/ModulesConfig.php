@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace Laminas\ComponentInstaller\ConfigDiscovery;
 
-class ModulesConfig extends AbstractDiscovery
+/**
+ * @internal
+ */
+final class ModulesConfig extends AbstractDiscovery
 {
     /**
      * Configuration file to look for.
      *
-     * @var string
+     * @var non-empty-string
      */
-    protected $configFile = 'config/modules.config.php';
+    protected string $configFile = 'config/modules.config.php';
 
     /**
      * Expected pattern to match if the configuration file exists.
      *
-     * @var string
+     * @var non-empty-string
      */
-    protected $expected = '/^return\s+(array\(|\[)\s*$/m';
+    protected string $expected = '/^return\s+(array\(|\[)\s*$/m';
 }

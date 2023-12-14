@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Laminas\Diactoros;
 
 use Psr\Http\Message\StreamInterface;
+use Stringable;
 
 use function array_key_exists;
 
@@ -13,7 +14,7 @@ use const SEEK_SET;
 /**
  * Implementation of PSR HTTP streams
  */
-class CallbackStream implements StreamInterface
+class CallbackStream implements StreamInterface, Stringable
 {
     /** @var callable|null */
     protected $callback;
@@ -96,12 +97,8 @@ class CallbackStream implements StreamInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param int $offset
-     * @param int $whence
-     * @return void
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek(int $offset, int $whence = SEEK_SET): void
     {
         throw Exception\UnseekableStreamException::forCallbackStream();
     }
@@ -125,7 +122,7 @@ class CallbackStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string): void
+    public function write(string $string): int
     {
         throw Exception\UnwritableStreamException::forCallbackStream();
     }
@@ -141,7 +138,7 @@ class CallbackStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length): string
+    public function read(int $length): string
     {
         throw Exception\UnreadableStreamException::forCallbackStream();
     }
@@ -159,7 +156,7 @@ class CallbackStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getMetadata($key = null)
+    public function getMetadata(?string $key = null)
     {
         $metadata = [
             'eof'         => $this->eof(),

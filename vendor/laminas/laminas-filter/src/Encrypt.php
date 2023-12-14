@@ -19,6 +19,15 @@ use function ucfirst;
 
 /**
  * Encrypts a given string
+ *
+ * @deprecated Since 2.24.0. This filter will be removed in 3.0. You are encouraged to use an alternative encryption
+ *             library and write your own filter.
+ *
+ * @psalm-type Options = array{
+ *     adapter?: Encrypt\EncryptionAlgorithmInterface,
+ *     ...
+ * }
+ * @extends AbstractFilter<Options>
  */
 class Encrypt extends AbstractFilter
 {

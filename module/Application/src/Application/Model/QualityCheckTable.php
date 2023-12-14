@@ -45,9 +45,9 @@ class QualityCheckTable extends AbstractTableGateway
           /* Ordering */
           $sOrder = "";
           if (isset($parameters['iSortCol_0'])) {
-               for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                    if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                         $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+               for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                    if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                         $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                     }
                }
                $sOrder = substr_replace($sOrder, "", -1);
@@ -83,9 +83,11 @@ class QualityCheckTable extends AbstractTableGateway
                }
                $sWhere .= $sWhereSub;
           }
+          /* Individual column filtering */
+          $counter = count($aColumns);
 
           /* Individual column filtering */
-          for ($i = 0; $i < count($aColumns); $i++) {
+          for ($i = 0; $i < $counter; $i++) {
                if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                     if ($sWhere == "") {
                          $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -169,7 +171,7 @@ class QualityCheckTable extends AbstractTableGateway
           $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
           $output = array(
-               "sEcho" => intval($parameters['sEcho']),
+               "sEcho" => (int) $parameters['sEcho'],
                "iTotalRecords" => count($iResult),
                "iTotalDisplayRecords" => $iFilteredTotal,
                "aaData" => array()
@@ -243,9 +245,8 @@ class QualityCheckTable extends AbstractTableGateway
           );
 
           $this->insert($data);
-          $lastInsertedId = $this->lastInsertValue;
 
-          return $lastInsertedId;
+          return $this->lastInsertValue;
      }
 
      public function fetchQualityCheckTestDetailsById($qualityCheckId)
@@ -306,8 +307,7 @@ class QualityCheckTable extends AbstractTableGateway
           $sQuery = $sql->select()->from(array('qc' => 'quality_check_test'))
                ->where(array('qc_test_id' => $id));
           $sQueryStr = $sql->buildSqlString($sQuery);
-          $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-          return $rResult;
+          return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
      }
 
 
@@ -334,10 +334,7 @@ class QualityCheckTable extends AbstractTableGateway
                $formsVal = array();
                // \Zend\Debug\Debug::dump($params['qc'][0]);
                for ($x = 0; $x < $arrayCount; $x++) {
-                    if ($secretKey)
-                         $return = $this->cryptoJsAesDecrypt($secretKey, $params['qc'][$x]);
-                    else
-                         $return = $params['qc'][$x];
+                    $return = $secretKey ? $this->cryptoJsAesDecrypt($secretKey, $params['qc'][$x]) : $params['qc'][$x];
                     // $formsVal[$x]=$return[0];
                     $formsVal[$x] = $return;
                }
@@ -403,11 +400,7 @@ class QualityCheckTable extends AbstractTableGateway
 
                          $this->insert($data);
                          $lastInsertedId = $this->lastInsertValue;
-                         if ($lastInsertedId > 0) {
-                              $response['syncData']['response'][$key] = 'success';
-                         } else {
-                              $response['syncData']['response'][$key] = 'failed';
-                         }
+                         $response['syncData']['response'][$key] = $lastInsertedId > 0 ? 'success' : 'failed';
                     } catch (Exception $exc) {
                          error_log($exc->getMessage());
                          error_log($exc->getTraceAsString());
@@ -420,8 +413,9 @@ class QualityCheckTable extends AbstractTableGateway
           if ($secretKey && $params["version"] > "2.8") {
                $syncedVal = $this->getQCSyncData($userId);
                $syncedData = $this->cryptoJsAesEncrypt($secretKey, $syncedVal);
-          } else
-               $syncedData = $this->getQCSyncData($userId);
+          } else {
+              $syncedData = $this->getQCSyncData($userId);
+          }
           $response['syncCount']['tenRecord'] = $syncedData;
           return $response;
      }
@@ -434,9 +428,8 @@ class QualityCheckTable extends AbstractTableGateway
                ->columns(array("Total" => new Expression('COUNT(*)'),))
                ->where(array('sync_by' => $syncedBy));
           $queryStr = $sql->buildSqlString($query);
-          $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
           //\Zend\Debug\Debug::dump($result);die;
-          return $result;
+          return $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
      }
 
      public function getQCSyncData($syncedBy)
@@ -448,8 +441,7 @@ class QualityCheckTable extends AbstractTableGateway
                ->order("qc.qc_test_id DESC")
                ->limit(10);
           $queryStr = $sql->buildSqlString($query);
-          $result = $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-          return $result;
+          return $dbAdapter->query($queryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
      }
 
      public function fetchQualityCheckVolumeChart($parameters)
@@ -478,7 +470,9 @@ class QualityCheckTable extends AbstractTableGateway
           //\Zend\Debug\Debug::dump($sQueryStr);die;
           $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
           foreach ($rResult as $sRow) {
-               if ($sRow["tester_name"] == null) continue;
+               if ($sRow["tester_name"] == null) {
+                   continue;
+               }
                $result[$sRow['tester_name']] = (isset($sRow['total']) && $sRow['total'] != NULL) ? $sRow['total'] : 0;
           }
           return $result;
@@ -822,9 +816,9 @@ class QualityCheckTable extends AbstractTableGateway
           /* Ordering */
           $sOrder = "";
           if (isset($parameters['iSortCol_0'])) {
-               for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                    if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                         $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+               for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                    if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                         $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                     }
                }
                $sOrder = substr_replace($sOrder, "", -1);
@@ -860,9 +854,11 @@ class QualityCheckTable extends AbstractTableGateway
                }
                $sWhere .= $sWhereSub;
           }
+          /* Individual column filtering */
+          $counter = count($aColumns);
 
           /* Individual column filtering */
-          for ($i = 0; $i < count($aColumns); $i++) {
+          for ($i = 0; $i < $counter; $i++) {
                if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                     if ($sWhere == "") {
                          $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -937,7 +933,7 @@ class QualityCheckTable extends AbstractTableGateway
           $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
           $output = array(
-               "sEcho" => intval($parameters['sEcho']),
+               "sEcho" => (int) $parameters['sEcho'],
                "iTotalRecords" => count($iResult),
                "iTotalDisplayRecords" => $iFilteredTotal,
                "aaData" => array()
@@ -1108,9 +1104,9 @@ class QualityCheckTable extends AbstractTableGateway
           /* Ordering */
           $sOrder = "";
           if (isset($parameters['iSortCol_0'])) {
-               for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                    if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                         $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+               for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                    if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                         $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                     }
                }
                $sOrder = substr_replace($sOrder, "", -1);
@@ -1146,9 +1142,11 @@ class QualityCheckTable extends AbstractTableGateway
                }
                $sWhere .= $sWhereSub;
           }
+          /* Individual column filtering */
+          $counter = count($aColumns);
 
           /* Individual column filtering */
-          for ($i = 0; $i < count($aColumns); $i++) {
+          for ($i = 0; $i < $counter; $i++) {
                if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                     if ($sWhere == "") {
                          $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -1195,9 +1193,9 @@ class QualityCheckTable extends AbstractTableGateway
 
           if (isset($parameters['qualityCheck']) && trim($parameters['qualityCheck']) != "") {
                if ($parameters['qualityCheck'] == 'qc_not_performed') {
-                    $sQuery->where(array('recency_test_performed' => ''));
-               } else if ($parameters['qualityCheck'] == 'qc_performed') {
-                    $sQuery->where('recency_test_performed != ""');
+                   $sQuery->where(array('recency_test_performed' => ''));
+               } elseif ($parameters['qualityCheck'] == 'qc_performed') {
+                   $sQuery->where('recency_test_performed != ""');
                }
           }
           if (isset($parameters['hivRecencyTest']) && trim($parameters['hivRecencyTest']) != '') {
@@ -1249,7 +1247,7 @@ class QualityCheckTable extends AbstractTableGateway
           $iResult = $dbAdapter->query($iQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
           $output = array(
-               "sEcho" => intval($parameters['sEcho']),
+               "sEcho" => (int) $parameters['sEcho'],
                "iTotalRecords" => count($iResult),
                "iTotalDisplayRecords" => $iFilteredTotal,
                "aaData" => array()

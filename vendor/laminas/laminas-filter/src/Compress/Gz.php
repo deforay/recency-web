@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Laminas\Filter\Compress;
 
 use Laminas\Filter\Exception;
-use Traversable;
 
 use function end;
 use function extension_loaded;
@@ -22,13 +21,22 @@ use function gzopen;
 use function gzread;
 use function gzuncompress;
 use function gzwrite;
-use function strpos;
+use function is_string;
+use function str_contains;
 use function unpack;
 
 use const SEEK_END;
 
 /**
  * Compression adapter for Gzip (ZLib)
+ *
+ * @psalm-type Options = array{
+ *     level?: int,
+ *     mode?: string,
+ *     archive?: string|null,
+ * }
+ * @extends AbstractCompressionAlgorithm<Options>
+ * @final
  */
 class Gz extends AbstractCompressionAlgorithm
 {
@@ -40,7 +48,7 @@ class Gz extends AbstractCompressionAlgorithm
      *     'archive'  => Archive to use
      * )
      *
-     * @var array
+     * @var Options
      */
     protected $options = [
         'level'   => 9,
@@ -49,7 +57,7 @@ class Gz extends AbstractCompressionAlgorithm
     ];
 
     /**
-     * @param null|array|Traversable $options (Optional) Options to set
+     * @param null|Options|iterable $options (Optional) Options to set
      * @throws Exception\ExtensionNotLoadedException If zlib extension not loaded.
      */
     public function __construct($options = null)
@@ -117,7 +125,7 @@ class Gz extends AbstractCompressionAlgorithm
     /**
      * Returns the set archive
      *
-     * @return string
+     * @return string|null
      */
     public function getArchive()
     {
@@ -146,10 +154,10 @@ class Gz extends AbstractCompressionAlgorithm
     public function compress($content)
     {
         $archive = $this->getArchive();
-        if (! empty($archive)) {
+        if (is_string($archive) && $archive !== '') {
             $file = gzopen($archive, 'w' . $this->getLevel());
             if (! $file) {
-                throw new Exception\RuntimeException("Error opening the archive '" . $this->options['archive'] . "'");
+                throw new Exception\RuntimeException("Error opening the archive '" . $archive . "'");
             }
 
             gzwrite($file, $content);
@@ -181,7 +189,7 @@ class Gz extends AbstractCompressionAlgorithm
         $mode    = $this->getMode();
 
         //check if there are null byte characters before doing a file_exists check
-        if (null !== $content && false === strpos($content, "\0") && file_exists($content)) {
+        if (null !== $content && ! str_contains($content, "\0") && file_exists($content)) {
             $archive = $content;
         }
 

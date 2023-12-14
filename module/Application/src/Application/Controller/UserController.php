@@ -64,33 +64,27 @@ class UserController extends AbstractActionController
     public function editAction()
     {
         $session = new Container('credo');
-        if($session->roleCode == 'user'){
+        if ($session->roleCode == 'user') {
             return $this->redirect()->toRoute('recency');
-        }else{
-
+        } elseif ($this->getRequest()->isPost()) {
+            $params=$this->getRequest()->getPost();
+            $result=$this->userService->updateUserDetails($params);
+            return $this->redirect()->toRoute('user');
+        } else
+        {
+            $userId=base64_decode( $this->params()->fromRoute('id') );
+            if($userId != ''){
+            $roleResult=$this->userService->getRoleAllDetails();
+            $result=$this->userService->getuserDetailsById($userId);
             
-            if($this->getRequest()->isPost())
-            {
-                $params=$this->getRequest()->getPost();
-                $result=$this->userService->updateUserDetails($params);
-                return $this->redirect()->toRoute('user');
-            }
-            else
-            {
-                $userId=base64_decode( $this->params()->fromRoute('id') );
-                if($userId!=''){
-                $roleResult=$this->userService->getRoleAllDetails();
-                $result=$this->userService->getuserDetailsById($userId);
-                
-                $globalConfigResult=$this->globalConfigService->getGlobalConfigAllDetails();
-                return new ViewModel(array(
-                    'result' => $result,
-                    'roleResult' => $roleResult,
-                    'globalConfigResult' => $globalConfigResult,
-                ));
-                }else{
-                    return $this->redirect()->toRoute("user");
-                }
+            $globalConfigResult=$this->globalConfigService->getGlobalConfigAllDetails();
+            return new ViewModel(array(
+                'result' => $result,
+                'roleResult' => $roleResult,
+                'globalConfigResult' => $globalConfigResult,
+            ));
+            }else{
+                return $this->redirect()->toRoute("user");
             }
         }
     }
@@ -107,7 +101,7 @@ class UserController extends AbstractActionController
         else
         {
             $userId=base64_decode( $this->params()->fromRoute('id'));
-            if($userId!=''){
+            if($userId != ''){
             $result=$this->userService->getuserDetailsById($userId);
             return new ViewModel(array(
                 'result' => $result,

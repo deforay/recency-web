@@ -8,6 +8,16 @@ use function is_array;
 use function ksort;
 use function vsprintf;
 
+/**
+ * @psalm-type Options = array{
+ *     null_on_empty?: bool,
+ *     null_on_all_empty?: bool,
+ *     ...
+ * }
+ * @template TOptions of Options
+ * @template-extends AbstractDateDropdown<TOptions>
+ * @final
+ */
 class DateTimeSelect extends AbstractDateDropdown
 {
     /**

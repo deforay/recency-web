@@ -6,7 +6,6 @@ namespace Laminas\Hydrator\Strategy;
 
 use Laminas\Hydrator\Exception\InvalidArgumentException;
 
-use function get_class;
 use function gettype;
 use function is_bool;
 use function is_int;
@@ -19,11 +18,9 @@ use function sprintf;
  */
 final class BooleanStrategy implements StrategyInterface
 {
-    /** @var int|string */
-    private $trueValue;
+    private int|string $trueValue;
 
-    /** @var int|string */
-    private $falseValue;
+    private int|string $falseValue;
 
     /**
      * @param int|string $trueValue
@@ -35,14 +32,14 @@ final class BooleanStrategy implements StrategyInterface
         if (! is_int($trueValue) && ! is_string($trueValue)) {
             throw new InvalidArgumentException(sprintf(
                 'Unable to instantiate BooleanStrategy. Expected int or string as $trueValue. %s was given',
-                is_object($trueValue) ? get_class($trueValue) : gettype($trueValue)
+                is_object($trueValue) ? $trueValue::class : gettype($trueValue)
             ));
         }
 
         if (! is_int($falseValue) && ! is_string($falseValue)) {
             throw new InvalidArgumentException(sprintf(
                 'Unable to instantiate BooleanStrategy. Expected int or string as $falseValue. %s was given',
-                is_object($falseValue) ? get_class($falseValue) : gettype($falseValue)
+                is_object($falseValue) ? $falseValue::class : gettype($falseValue)
             ));
         }
 
@@ -62,7 +59,7 @@ final class BooleanStrategy implements StrategyInterface
         if (! is_bool($value)) {
             throw new InvalidArgumentException(sprintf(
                 'Unable to extract. Expected bool. %s was given.',
-                is_object($value) ? get_class($value) : gettype($value)
+                is_object($value) ? $value::class : gettype($value)
             ));
         }
 
@@ -85,7 +82,7 @@ final class BooleanStrategy implements StrategyInterface
         if (! is_string($value) && ! is_int($value)) {
             throw new InvalidArgumentException(sprintf(
                 'Unable to hydrate. Expected bool, string or int. %s was given.',
-                is_object($value) ? get_class($value) : gettype($value)
+                is_object($value) ? $value::class : gettype($value)
             ));
         }
 

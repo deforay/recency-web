@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\Element;
 
 use Laminas\Form\Element\Number as NumberElement;
@@ -11,11 +13,7 @@ use Laminas\Validator\ValidatorInterface;
 
 class Range extends NumberElement
 {
-    /**
-     * Seed attributes
-     *
-     * @var array
-     */
+    /** @var array<string, scalar|null>  */
     protected $attributes = [
         'type' => 'range',
     ];
@@ -25,13 +23,13 @@ class Range extends NumberElement
      *
      * @return ValidatorInterface[]
      */
-    protected function getValidators()
+    protected function getValidators(): array
     {
         if ($this->validators) {
             return $this->validators;
         }
 
-        $validators = [];
+        $validators   = [];
         $validators[] = new NumberValidator();
 
         $inclusive = true;
@@ -40,21 +38,22 @@ class Range extends NumberElement
         }
 
         $validators[] = new GreaterThanValidator([
-            'min'       => isset($this->attributes['min']) ? $this->attributes['min'] : 0,
+            'min'       => $this->attributes['min'] ?? 0,
             'inclusive' => $inclusive,
         ]);
 
         $validators[] = new LessThanValidator([
-            'max'       => isset($this->attributes['max']) ? $this->attributes['max'] : 100,
+            'max'       => $this->attributes['max'] ?? 100,
             'inclusive' => $inclusive,
         ]);
 
-        if (! isset($this->attributes['step'])
+        if (
+            ! isset($this->attributes['step'])
             || 'any' !== $this->attributes['step']
         ) {
             $validators[] = new StepValidator([
-                'baseValue' => isset($this->attributes['min']) ? $this->attributes['min'] : 0,
-                'step'      => isset($this->attributes['step']) ? $this->attributes['step'] : 1,
+                'baseValue' => $this->attributes['min'] ?? 0,
+                'step'      => $this->attributes['step'] ?? 1,
             ]);
         }
 

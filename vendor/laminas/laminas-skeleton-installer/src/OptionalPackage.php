@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-skeleton-installer for the canonical source repository
- * @copyright https://github.com/laminas/laminas-skeleton-installer/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-skeleton-installer/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\SkeletonInstaller;
 
@@ -12,21 +8,23 @@ use function array_key_exists;
 
 class OptionalPackage
 {
-    /** @var string */
-    private $constraint;
+    private string $constraint;
+    private bool $dev    = false;
+    private bool $module = false;
+    private string $name;
+    private string $prompt;
 
-    /** @var bool */
-    private $dev = false;
-
-    /** @var bool */
-    private $module = false;
-
-    /** @var string*/
-    private $name;
-
-    /** @var string */
-    private $prompt;
-
+    /**
+     * @param array $spec
+     * @psalm-param array{
+     *     constraint: string,
+     *     name: string,
+     *     prompt: string,
+     *     dev?: mixed,
+     *     module?: mixed,
+     *     ...
+     * } $spec
+     */
     public function __construct(array $spec)
     {
         $this->constraint = $spec['constraint'];
@@ -42,6 +40,7 @@ class OptionalPackage
         }
     }
 
+    /** @psalm-assert-if-true array{name: mixed, constraint: mixed, prompt: mixed, ...} $spec */
     public static function isValidSpec(array $spec): bool
     {
         return array_key_exists('name', $spec)

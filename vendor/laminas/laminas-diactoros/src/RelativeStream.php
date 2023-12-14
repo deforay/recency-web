@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Laminas\Diactoros;
 
 use Psr\Http\Message\StreamInterface;
+use Stringable;
 
 use const SEEK_SET;
 
@@ -14,16 +15,13 @@ use const SEEK_SET;
  *
  * @see AbstractSerializer::splitStream()
  */
-final class RelativeStream implements StreamInterface
+final class RelativeStream implements StreamInterface, Stringable
 {
-    private StreamInterface $decoratedStream;
-
     private int $offset;
 
-    public function __construct(StreamInterface $decoratedStream, ?int $offset)
+    public function __construct(private StreamInterface $decoratedStream, ?int $offset)
     {
-        $this->decoratedStream = $decoratedStream;
-        $this->offset          = (int) $offset;
+        $this->offset = (int) $offset;
     }
 
     /**
@@ -88,7 +86,7 @@ final class RelativeStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek(int $offset, int $whence = SEEK_SET): void
     {
         if ($whence === SEEK_SET) {
             $this->decoratedStream->seek($offset + $this->offset, $whence);
@@ -116,7 +114,7 @@ final class RelativeStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string): int
+    public function write(string $string): int
     {
         if ($this->tell() < 0) {
             throw new Exception\InvalidStreamPointerPositionException();
@@ -135,7 +133,7 @@ final class RelativeStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length): string
+    public function read(int $length): string
     {
         if ($this->tell() < 0) {
             throw new Exception\InvalidStreamPointerPositionException();
@@ -157,7 +155,7 @@ final class RelativeStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getMetadata($key = null)
+    public function getMetadata(?string $key = null)
     {
         return $this->decoratedStream->getMetadata($key);
     }

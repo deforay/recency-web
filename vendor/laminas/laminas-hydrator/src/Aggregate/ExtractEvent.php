@@ -11,6 +11,10 @@ use function array_merge;
 /**
  * Event triggered when the {@see AggregateHydrator} extracts
  * data from an object
+ *
+ * @template TTarget of object
+ * @extends Event<TTarget, array<empty, empty>>
+ * @final
  */
 class ExtractEvent extends Event
 {
@@ -21,17 +25,13 @@ class ExtractEvent extends Event
      */
     protected $name = self::EVENT_EXTRACT;
 
-    /** @var object */
-    protected $extractionObject;
-
     /** @var mixed[] Data being extracted from the $extractionObject */
     protected $extractedData = [];
 
-    public function __construct(object $target, object $extractionObject)
+    /** @psalm-param TTarget $target */
+    public function __construct(object $target, protected object $extractionObject)
     {
-        parent::__construct();
-        $this->target           = $target;
-        $this->extractionObject = $extractionObject;
+        parent::__construct(self::EVENT_EXTRACT, $target, []);
     }
 
     /**

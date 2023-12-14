@@ -24,11 +24,11 @@ class LoginController extends AbstractActionController
         if ($request->isPost()) {
             $params = $request->getPost();
             $redirectUrl = $this->userService->loginProcess($params);
-        }
-        /* Cross login credential check start*/ else if ($request->getQuery() != "") {
+        } elseif ($request->getQuery() != "") {
             $params = $this->getRequest()->getQuery();
             $captchaSession = new Container('captcha');
-            $captchaSession->status = 'success'; // bypassing captcha
+            $captchaSession->status = 'success';
+            // bypassing captcha
             if (!isset($params['u']) || $params['u'] == "" || !isset($params['t']) || $params['t'] == "") {
                 $viewModel = new ViewModel();
                 $viewModel->setTerminal(true);
@@ -39,7 +39,7 @@ class LoginController extends AbstractActionController
             }
         }
         /* Cross login credential check end*/
-        if (isset($logincontainer->userId) && $logincontainer->userId != "") {
+        if (property_exists($logincontainer, 'userId') && $logincontainer->userId !== null && $logincontainer->userId != "") {
             //$alertContainer = new Container('alert');
             return $this->redirect()->toRoute("recency");
         } else {

@@ -26,6 +26,16 @@ use function str_replace;
 
 /**
  * Filter chain for string inflection
+ *
+ * @psalm-type Options = array{
+ *     target?: string,
+ *     rules?: array,
+ *     throwTargetExceptionsOn?: bool,
+ *     targetReplacementIdentifier?: string,
+ *     pluginManager?: FilterPluginManager,
+ * }
+ * @extends AbstractFilter<Options>
+ * @final
  */
 class Inflector extends AbstractFilter
 {
@@ -45,8 +55,6 @@ class Inflector extends AbstractFilter
     protected $rules = [];
 
     /**
-     * Constructor
-     *
      * @param string|array|Traversable $options Options to set
      */
     public function __construct($options = null)
@@ -108,7 +116,7 @@ class Inflector extends AbstractFilter
     /**
      * Set options
      *
-     * @param  array|Traversable $options
+     * @param  array|Options|iterable $options
      * @return self
      */
     public function setOptions($options)
@@ -231,7 +239,6 @@ class Inflector extends AbstractFilter
      * Is the same as calling addRules() with the exception that it
      * clears the rules before adding them.
      *
-     * @param  array $rules
      * @return self
      */
     public function setRules(array $rules)
@@ -340,11 +347,9 @@ class Inflector extends AbstractFilter
     /**
      * Add a filter rule for a spec
      *
-     * @param  mixed $spec
-     * @param  mixed $ruleSet
      * @return self
      */
-    public function addFilterRule($spec, $ruleSet)
+    public function addFilterRule(mixed $spec, mixed $ruleSet)
     {
         $spec = $this->_normalizeSpec($spec);
         if (! isset($this->rules[$spec])) {
@@ -390,10 +395,9 @@ class Inflector extends AbstractFilter
      * target.
      *
      * @param  string $name
-     * @param  mixed $reference
      * @return self
      */
-    public function setStaticRuleReference($name, &$reference)
+    public function setStaticRuleReference($name, mixed &$reference)
     {
         $name               = $this->_normalizeSpec($name);
         $this->rules[$name] = &$reference;

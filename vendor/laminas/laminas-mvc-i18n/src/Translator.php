@@ -15,12 +15,8 @@ class Translator implements
     I18nTranslatorInterface,
     ValidatorTranslatorInterface
 {
-    /** @var I18nTranslatorInterface */
-    protected $translator;
-
-    public function __construct(I18nTranslatorInterface $translator)
+    public function __construct(protected I18nTranslatorInterface $translator)
     {
-        $this->translator = $translator;
     }
 
     /**
@@ -72,7 +68,7 @@ class Translator implements
      *
      * @param string $singular
      * @param string $plural
-     * @param string $number
+     * @param int $number
      * @param string $textDomain
      * @param string $locale
      * @return string

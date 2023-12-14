@@ -7,8 +7,8 @@ namespace Laminas\Mvc\I18n\Router;
 use Laminas\I18n\Translator\TranslatorAwareInterface;
 use Laminas\I18n\Translator\TranslatorInterface as Translator;
 use Laminas\Router\Exception;
+use Laminas\Router\Http\RouteInterface;
 use Laminas\Router\Http\TreeRouteStack;
-use Laminas\Router\RouteInterface;
 use Laminas\Router\RouteMatch;
 use Laminas\Stdlib\RequestInterface as Request;
 use Traversable;
@@ -17,6 +17,9 @@ use function iterator_to_array;
 
 /**
  * Translator aware tree route stack.
+ *
+ * @template TRoute of RouteInterface
+ * @extends TreeRouteStack<TRoute>
  */
 class TranslatorAwareTreeRouteStack extends TreeRouteStack implements TranslatorAwareInterface
 {
@@ -47,7 +50,7 @@ class TranslatorAwareTreeRouteStack extends TreeRouteStack implements Translator
      * Overrides TreeRouteStack::factory() in order to inject the configured
      * translator_text_domain, if present, prior to returning the instance.
      *
-     * @param array $options
+     * @param iterable $options
      * @return self
      */
     public static function factory($options = [])

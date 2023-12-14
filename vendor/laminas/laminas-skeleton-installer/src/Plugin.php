@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-skeleton-installer for the canonical source repository
- * @copyright https://github.com/laminas/laminas-skeleton-installer/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-skeleton-installer/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\SkeletonInstaller;
 
@@ -13,8 +9,6 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event as ScriptEvent;
-
-use function version_compare;
 
 /**
  * Plugin that uninstalls itself following a create-project operation.
@@ -47,10 +41,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $subscribers = [
             ['installOptionalDependencies', 1000],
         ];
-
-        if (version_compare(PluginInterface::PLUGIN_API_VERSION, '2.0', 'lt')) {
-            $subscribers[] = ['uninstallPlugin'];
-        }
 
         return [
             'post-install-cmd' => $subscribers,

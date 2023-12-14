@@ -9,10 +9,22 @@ use Laminas\Uri\Uri;
 use Laminas\Uri\UriFactory;
 use Traversable;
 
+use function assert;
+use function count;
 use function explode;
 use function is_scalar;
-use function strpos;
+use function str_contains;
 
+/**
+ * @psalm-type Options = array{
+ *     default_scheme?: string,
+ *     enforced_scheme?: string,
+ *     ...
+ * }
+ * @template TOptions of Options
+ * @template-extends AbstractFilter<TOptions>
+ * @final
+ */
 class UriNormalize extends AbstractFilter
 {
     /**
@@ -32,7 +44,7 @@ class UriNormalize extends AbstractFilter
     /**
      * Sets filter options
      *
-     * @param array|Traversable|null $options
+     * @param Options|Traversable|null $options
      */
     public function __construct($options = null)
     {
@@ -48,7 +60,7 @@ class UriNormalize extends AbstractFilter
      * normalize the URI and thus may affect the resulting normalize URI.
      *
      * @param  string $defaultScheme
-     * @return self
+     * @return $this
      */
     public function setDefaultScheme($defaultScheme)
     {
@@ -68,7 +80,7 @@ class UriNormalize extends AbstractFilter
      * real-world user mishaps, it may yield unexpected results at times.
      *
      * @param  string $enforcedScheme
-     * @return self
+     * @return $this
      */
     public function setEnforcedScheme($enforcedScheme)
     {
@@ -79,8 +91,8 @@ class UriNormalize extends AbstractFilter
     /**
      * Filter the URL by normalizing it and applying a default scheme if set
      *
-     * @param  string $value
-     * @return string
+     * @param  mixed $value
+     * @return mixed|string
      */
     public function filter($value)
     {
@@ -101,8 +113,8 @@ class UriNormalize extends AbstractFilter
             if ($this->enforcedScheme && ! $uri->getScheme()) {
                 $this->enforceScheme($uri);
             }
-        } catch (UriException $ex) {
-            // We are unable to parse / enfore scheme with the given config and input
+        } catch (UriException) {
+            // We are unable to parse / enforce scheme with the given config and input
             return $value;
         }
 
@@ -120,13 +132,17 @@ class UriNormalize extends AbstractFilter
      *
      * This will also adjust the host and path parts of the URI as expected in
      * the case of scheme-less network URIs
+     *
+     * @return void
      */
     protected function enforceScheme(Uri $uri)
     {
         $path = $uri->getPath() ?? '';
 
-        if (strpos($path, '/') !== false) {
-            [$host, $path] = explode('/', $path, 2);
+        if (str_contains($path, '/')) {
+            $parts = explode('/', $path, 2);
+            assert(count($parts) >= 2);
+            [$host, $path] = $parts;
             $path          = '/' . $path;
         } else {
             $host = $path;

@@ -39,9 +39,9 @@ class FacilitiesTable extends AbstractTableGateway
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $aColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -77,9 +77,11 @@ class FacilitiesTable extends AbstractTableGateway
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -125,18 +127,14 @@ class FacilitiesTable extends AbstractTableGateway
         $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($tResult);
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => count($tResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
 
         $roleCode = $sessionLogin->roleCode;
-        if ($acl->isAllowed($roleCode, 'Application\Controller\FacilitiesController', 'edit')) {
-            $update = true;
-        } else {
-            $update = false;
-        }
+        $update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\FacilitiesController', 'edit');
         foreach ($rResult as $aRow) {
 
             $row = array();
@@ -177,16 +175,14 @@ class FacilitiesTable extends AbstractTableGateway
             $lastInsertedId = $this->lastInsertValue;
         }
 
-        if ($lastInsertedId > 0) {
-            if ($params['selectedMapUser'] != '') {
-                $mapArray = explode(",", $params['selectedMapUser']);
-                foreach ($mapArray as $userId) {
-                    $mapData = array(
-                        'user_id' => $userId,
-                        'facility_id' => $lastInsertedId,
-                    );
-                    $mapDb->insert($mapData);
-                }
+        if ($lastInsertedId > 0 && $params['selectedMapUser'] != '') {
+            $mapArray = explode(",", $params['selectedMapUser']);
+            foreach ($mapArray as $userId) {
+                $mapData = array(
+                    'user_id' => $userId,
+                    'facility_id' => $lastInsertedId,
+                );
+                $mapDb->insert($mapData);
             }
         }
         return $lastInsertedId;
@@ -263,7 +259,7 @@ class FacilitiesTable extends AbstractTableGateway
                 'facility_name',
                 'facility_type_id'
             ]);
-        if (isset($logincontainer->facilityMap) && !empty($logincontainer->facilityMap) && $logincontainer->userId != "") {
+        if (property_exists($logincontainer, 'facilityMap') && $logincontainer->facilityMap !== null && !empty($logincontainer->facilityMap) && $logincontainer->userId != "") {
             $sQuery = $sQuery->where('f.facility_id IN (' . $logincontainer->facilityMap . ')');
         } else {
             $sQuery = $sQuery->where(['status' => 'active']);
@@ -368,8 +364,7 @@ class FacilitiesTable extends AbstractTableGateway
         }
         //$sQuery = $sQuery->where(array('facility_type_id != 2'));
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $fResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $fResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
     public function checkFacilityName($fName, $facilityType)

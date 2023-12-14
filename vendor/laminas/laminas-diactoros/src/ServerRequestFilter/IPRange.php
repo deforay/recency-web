@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Laminas\Diactoros\ServerRequestFilter;
 
+use function assert;
+use function count;
 use function explode;
 use function inet_pton;
 use function intval;
 use function ip2long;
 use function pack;
 use function sprintf;
+use function str_contains;
 use function str_pad;
 use function str_repeat;
-use function strpos;
 use function substr_compare;
 use function unpack;
 
@@ -29,7 +31,7 @@ final class IPRange
     /** @psalm-pure */
     public static function matches(string $ip, string $cidr): bool
     {
-        if (false !== strpos($ip, ':')) {
+        if (str_contains($ip, ':')) {
             return self::matchesIPv6($ip, $cidr);
         }
 
@@ -42,8 +44,10 @@ final class IPRange
         $mask   = 32;
         $subnet = $cidr;
 
-        if (false !== strpos($cidr, '/')) {
-            [$subnet, $mask] = explode('/', $cidr, 2);
+        if (str_contains($cidr, '/')) {
+            $parts = explode('/', $cidr, 2);
+            assert(count($parts) >= 2);
+            [$subnet, $mask] = $parts;
             $mask            = (int) $mask;
         }
 
@@ -72,8 +76,10 @@ final class IPRange
         $mask   = 128;
         $subnet = $cidr;
 
-        if (false !== strpos($cidr, '/')) {
-            [$subnet, $mask] = explode('/', $cidr, 2);
+        if (str_contains($cidr, '/')) {
+            $parts = explode('/', $cidr, 2);
+            assert(count($parts) >= 2);
+            [$subnet, $mask] = $parts;
             $mask            = (int) $mask;
         }
 

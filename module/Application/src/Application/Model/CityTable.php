@@ -24,7 +24,7 @@ class CityTable extends AbstractTableGateway {
                $sql = new Sql($dbAdapter);
 
 
-               if(isset($params['districtId']) && $params['districtId']!=''){
+               if(isset($params['districtId']) && $params['districtId'] != ''){
                     $sQuery = $sql->select()->from(array('cd' => 'city_details'))->columns(array('city_id','district_id','city_name'))
                     ->where(array('district_id' => $params['districtId'] ));
                }
@@ -61,7 +61,7 @@ class CityTable extends AbstractTableGateway {
                //fetch facility data
                 $fQuery = $sql->select()->from(array('f' => 'facilities'))
                             ->where(array('district' => $params['selectValue']));
-                if (isset($logincontainer->userId) && $logincontainer->userId != null && $logincontainer->userId != "") {
+                if (property_exists($logincontainer, 'userId') && $logincontainer->userId !== null && $logincontainer->userId != null && $logincontainer->userId != "") {
                     $fQuery = $fQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
                         ->where(array('ufm.user_id' => $logincontainer->userId))
                         ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
@@ -82,7 +82,7 @@ class CityTable extends AbstractTableGateway {
                 //fetch facility data
                 $fQuery = $sql->select()->from(array('f' => 'facilities'))
                         ->where(array('city' => $params['selectValue']));
-                if (isset($logincontainer->userId) && $logincontainer->userId != null && $logincontainer->userId != "") {
+                if (property_exists($logincontainer, 'userId') && $logincontainer->userId !== null && $logincontainer->userId != null && $logincontainer->userId != "") {
                     $fQuery = $fQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
                         ->where(array('ufm.user_id' => $logincontainer->userId))
                         ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
@@ -115,9 +115,9 @@ class CityTable extends AbstractTableGateway {
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $aColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -153,9 +153,11 @@ class CityTable extends AbstractTableGateway {
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -201,18 +203,14 @@ class CityTable extends AbstractTableGateway {
         $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($tResult);
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => count($tResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
 
         $roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\CityController', 'edit')) {
-            $update = true;
-        } else {
-            $update = false;
-        }
+		$update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\CityController', 'edit');
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = ucwords($aRow['district_name']);
@@ -248,8 +246,7 @@ class CityTable extends AbstractTableGateway {
         $sQuery = $sql->select()->from(array('c' => 'city_details'))
                                 ->where(array('c.city_id' => $cityId));
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     

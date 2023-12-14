@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\View\Helper;
 
 use Laminas\Escaper\Exception\RuntimeException as EscaperException;
@@ -13,13 +15,13 @@ use Laminas\View\Helper\EscapeHtmlAttr;
 use function implode;
 use function in_array;
 use function is_bool;
+use function is_string;
 use function mb_strpos;
 use function method_exists;
 use function preg_match;
 use function sprintf;
-use function strlen;
+use function str_starts_with;
 use function strtolower;
-use function substr;
 
 /**
  * Base functionality for all form view helpers
@@ -48,20 +50,20 @@ abstract class AbstractHelper extends BaseAbstractHelper
      * @var array
      */
     protected $booleanAttributes = [
-        'autofocus'    => ['on' => 'autofocus', 'off' => ''],
-        'checked'      => ['on' => 'checked',   'off' => ''],
-        'disabled'     => ['on' => 'disabled',  'off' => ''],
-        'itemscope'    => ['on' => 'itemscope', 'off' => ''],
-        'multiple'     => ['on' => 'multiple',  'off' => ''],
-        'readonly'     => ['on' => 'readonly',  'off' => ''],
-        'required'     => ['on' => 'required',  'off' => ''],
-        'selected'     => ['on' => 'selected',  'off' => ''],
+        'autofocus' => ['on' => 'autofocus', 'off' => ''], // https://html.spec.whatwg.org/#attr-fe-autofocus
+        'checked'   => ['on' => 'checked',   'off' => ''], // https://html.spec.whatwg.org/#attr-input-checked
+        'disabled'  => ['on' => 'disabled',  'off' => ''], // https://html.spec.whatwg.org/#attr-fe-disabled
+        'itemscope' => ['on' => 'itemscope', 'off' => ''], // https://html.spec.whatwg.org/#attr-itemscope
+        'multiple'  => ['on' => 'multiple',  'off' => ''], // https://html.spec.whatwg.org/#attr-input-multiple
+        'readonly'  => ['on' => 'readonly',  'off' => ''], // https://html.spec.whatwg.org/#attr-input-readonly
+        'required'  => ['on' => 'required',  'off' => ''], // https://html.spec.whatwg.org/#attr-input-required
+        'selected'  => ['on' => 'selected',  'off' => ''], // https://html.spec.whatwg.org/#attr-option-selected
     ];
 
     /**
      * Translatable attributes
      *
-     * @var array
+     * @var array<string, bool>
      */
     protected $translatableAttributes = [
         'placeholder' => true,
@@ -74,19 +76,13 @@ abstract class AbstractHelper extends BaseAbstractHelper
      */
     protected $translatableAttributePrefixes = [];
 
-    /**
-     * @var Doctype
-     */
+    /** @var null|Doctype */
     protected $doctypeHelper;
 
-    /**
-     * @var EscapeHtml
-     */
+    /** @var null|EscapeHtml */
     protected $escapeHtmlHelper;
 
-    /**
-     * @var EscapeHtmlAttr
-     */
+    /** @var null|EscapeHtmlAttr */
     protected $escapeHtmlAttrHelper;
 
     /**
@@ -95,80 +91,91 @@ abstract class AbstractHelper extends BaseAbstractHelper
      * @var array
      */
     protected $validGlobalAttributes = [
-        'accesskey'          => true,
-        'class'              => true,
-        'contenteditable'    => true,
-        'contextmenu'        => true,
-        'dir'                => true,
-        'draggable'          => true,
-        'dropzone'           => true,
-        'hidden'             => true,
-        'id'                 => true,
-        'itemprop'           => true,
-        'itemscope'          => true,
-        'itemtype'           => true,
-        'lang'               => true,
-        'onabort'            => true,
-        'onblur'             => true,
-        'oncanplay'          => true,
-        'oncanplaythrough'   => true,
-        'onchange'           => true,
-        'onclick'            => true,
-        'oncontextmenu'      => true,
-        'ondblclick'         => true,
-        'ondrag'             => true,
-        'ondragend'          => true,
-        'ondragenter'        => true,
-        'ondragleave'        => true,
-        'ondragover'         => true,
-        'ondragstart'        => true,
-        'ondrop'             => true,
-        'ondurationchange'   => true,
-        'onemptied'          => true,
-        'onended'            => true,
-        'onerror'            => true,
-        'onfocus'            => true,
-        'oninput'            => true,
-        'oninvalid'          => true,
-        'onkeydown'          => true,
-        'onkeypress'         => true,
-        'onkeyup'            => true,
-        'onload'             => true,
-        'onloadeddata'       => true,
-        'onloadedmetadata'   => true,
-        'onloadstart'        => true,
-        'onmousedown'        => true,
-        'onmousemove'        => true,
-        'onmouseout'         => true,
-        'onmouseover'        => true,
-        'onmouseup'          => true,
-        'onmousewheel'       => true,
-        'onpause'            => true,
-        'onplay'             => true,
-        'onplaying'          => true,
-        'onprogress'         => true,
-        'onratechange'       => true,
-        'onreadystatechange' => true,
-        'onreset'            => true,
-        'onscroll'           => true,
-        'onseeked'           => true,
-        'onseeking'          => true,
-        'onselect'           => true,
-        'onshow'             => true,
-        'onstalled'          => true,
-        'onsubmit'           => true,
-        'onsuspend'          => true,
-        'ontimeupdate'       => true,
-        'onvolumechange'     => true,
-        'onwaiting'          => true,
-        'role'               => true,
-        'spellcheck'         => true,
-        'style'              => true,
-        'tabindex'           => true,
-        'title'              => true,
-        'xml:base'           => true,
-        'xml:lang'           => true,
-        'xml:space'          => true,
+        'accesskey'       => true, // https://html.spec.whatwg.org/#the-accesskey-attribute
+        'autocapitalize'  => true, // https://html.spec.whatwg.org/#attr-autocapitalize
+        'class'           => true, // https://html.spec.whatwg.org/#classes
+        'contenteditable' => true, // https://html.spec.whatwg.org/#contenteditable
+        'contextmenu'     => true, // Obsolete: https://html.spec.whatwg.org/#attr-contextmenu
+        'dir'             => true, // https://html.spec.whatwg.org/#the-dir-attribute
+        'draggable'       => true, // https://html.spec.whatwg.org/#the-draggable-attribute
+        'dropzone'        => true, // Obsolete: https://html.spec.whatwg.org/#attr-dropzone
+        'enterkeyhint'    => true, // https://html.spec.whatwg.org/#input-modalities:-the-enterkeyhint-attribute
+        'hidden'          => true, // https://html.spec.whatwg.org/#the-hidden-attribute
+        'id'              => true, // https://html.spec.whatwg.org/#the-id-attribute
+        'inputmode'       => true, // https://html.spec.whatwg.org/#attr-inputmode
+        'is'              => true, // https://html.spec.whatwg.org/#attr-is
+        //'itemid'             => true, // https://html.spec.whatwg.org/#attr-itemid
+        'itemprop'  => true, // https://html.spec.whatwg.org/#names:-the-itemprop-attribute
+        'itemref'   => true, // https://html.spec.whatwg.org/#attr-itemref
+        'itemscope' => true, // https://html.spec.whatwg.org/#attr-itemscope
+        'itemtype'  => true, // https://html.spec.whatwg.org/#attr-itemtype
+        'lang'      => true, // https://html.spec.whatwg.org/#the-lang-and-xml:lang-attributes
+        //'nonce'              => true, // https://html.spec.whatwg.org/#attr-nonce
+        'onabort'            => true, // https://html.spec.whatwg.org/#handler-onabort
+        'onblur'             => true, // https://html.spec.whatwg.org/#handler-onblur
+        'oncanplay'          => true, // https://html.spec.whatwg.org/#handler-oncanplay
+        'oncanplaythrough'   => true, // https://html.spec.whatwg.org/#handler-oncanplaythrough
+        'onchange'           => true, // https://html.spec.whatwg.org/#handler-onchange
+        'onclick'            => true, // https://html.spec.whatwg.org/#handler-onclick
+        'oncontextmenu'      => true, // https://html.spec.whatwg.org/#handler-oncontextmenu
+        'ondblclick'         => true, // https://html.spec.whatwg.org/#handler-ondblclick
+        'ondrag'             => true, // https://html.spec.whatwg.org/#handler-ondrag
+        'ondragend'          => true, // https://html.spec.whatwg.org/#handler-ondragend
+        'ondragenter'        => true, // https://html.spec.whatwg.org/#handler-ondragenter
+        'ondragleave'        => true, // https://html.spec.whatwg.org/#handler-ondragleave
+        'ondragover'         => true, // https://html.spec.whatwg.org/#handler-ondragover
+        'ondragstart'        => true, // https://html.spec.whatwg.org/#handler-ondragstart
+        'ondrop'             => true, // https://html.spec.whatwg.org/#handler-ondrop
+        'ondurationchange'   => true, // https://html.spec.whatwg.org/#handler-ondurationchange
+        'onemptied'          => true, // https://html.spec.whatwg.org/#handler-onemptied
+        'onended'            => true, // https://html.spec.whatwg.org/#handler-onended
+        'onerror'            => true, // https://html.spec.whatwg.org/#handler-onerror
+        'onfocus'            => true, // https://html.spec.whatwg.org/#handler-onfocus
+        'onfocusin'          => true, // https://developer.mozilla.org/fr/docs/Web/API/Element/focusin_event
+        'onfocusout'         => true, // https://developer.mozilla.org/fr/docs/Web/API/Element/focusout_event
+        'oninput'            => true, // https://html.spec.whatwg.org/#handler-oninput
+        'oninvalid'          => true, // https://html.spec.whatwg.org/#handler-oninvalid
+        'onkeydown'          => true, // https://html.spec.whatwg.org/#handler-onkeydown
+        'onkeypress'         => true, // https://html.spec.whatwg.org/#handler-onkeypress
+        'onkeyup'            => true, // https://html.spec.whatwg.org/#handler-onkeyup
+        'onload'             => true, // https://html.spec.whatwg.org/#handler-onload
+        'onloadeddata'       => true, // https://html.spec.whatwg.org/#handler-onloadeddata
+        'onloadedmetadata'   => true, // https://html.spec.whatwg.org/#handler-onloadedmetadata
+        'onloadstart'        => true, // https://html.spec.whatwg.org/#handler-onloadstart
+        'onmousedown'        => true, // https://html.spec.whatwg.org/#handler-onmousedown
+        'onmousemove'        => true, // https://html.spec.whatwg.org/#handler-onmousemove
+        'onmouseout'         => true, // https://html.spec.whatwg.org/#handler-onmouseout
+        'onmouseover'        => true, // https://html.spec.whatwg.org/#handler-onmouseover
+        'onmouseup'          => true, // https://html.spec.whatwg.org/#handler-onmouseup
+        'onmousewheel'       => true, // https://html.spec.whatwg.org/#handler-onmousewheel
+        'onpause'            => true, // https://html.spec.whatwg.org/#handler-onpause
+        'onplay'             => true, // https://html.spec.whatwg.org/#handler-onplay
+        'onplaying'          => true, // https://html.spec.whatwg.org/#handler-onplaying
+        'onprogress'         => true, // https://html.spec.whatwg.org/#handler-onprogress
+        'onratechange'       => true, // https://html.spec.whatwg.org/#handler-onratechange
+        'onreadystatechange' => true, // https://html.spec.whatwg.org/#handler-onreadystatechange
+        'onreset'            => true, // https://html.spec.whatwg.org/#handler-onreset
+        'onscroll'           => true, // https://html.spec.whatwg.org/#handler-onscroll
+        'onseeked'           => true, // https://html.spec.whatwg.org/#handler-onseeked
+        'onseeking'          => true, // https://html.spec.whatwg.org/#handler-onseeking
+        'onselect'           => true, // https://html.spec.whatwg.org/#handler-onselect
+        'onshow'             => true, // https://html.spec.whatwg.org/#handler-onshow
+        'onstalled'          => true, // https://html.spec.whatwg.org/#handler-onstalled
+        'onsubmit'           => true, // https://html.spec.whatwg.org/#handler-onsubmit
+        'onsuspend'          => true, // https://html.spec.whatwg.org/#handler-onsuspend
+        'ontimeupdate'       => true, // https://html.spec.whatwg.org/#handler-ontimeupdate
+        'onvolumechange'     => true, // https://html.spec.whatwg.org/#handler-onvolumechange
+        'onwaiting'          => true, // https://html.spec.whatwg.org/#handler-onwaiting
+        'role'               => true, // https://html.spec.whatwg.org/#attr-aria-role
+        'slot'               => true, // https://html.spec.whatwg.org/#attr-slot
+        'spellcheck'         => true, // https://html.spec.whatwg.org/#attr-spellcheck
+        'style'              => true, // https://html.spec.whatwg.org/#attr-style
+        'tabindex'           => true, // https://html.spec.whatwg.org/#attr-tabindex
+        'title'              => true, // https://html.spec.whatwg.org/#attr-title
+        //'translate'          => true, // https://html.spec.whatwg.org/#attr-translate
+        'xml:base'  => true, // https://www.w3.org/TR/xmlbase/#syntax
+        'xml:lang'  => true, // https://html.spec.whatwg.org/#the-lang-and-xml:lang-attributes
+        'xml:space' => true, // https://www.w3.org/TR/xml/#sec-white-space
     ];
 
     /**
@@ -177,8 +184,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
      * @var array
      */
     protected $validTagAttributePrefixes = [
-        'data-',
-        'aria-',
+        'data-', // https://html.spec.whatwg.org/#attr-data-*
+        'aria-', // https://html.spec.whatwg.org/#attr-aria-*
         'x-',
     ];
 
@@ -194,10 +201,9 @@ abstract class AbstractHelper extends BaseAbstractHelper
     /**
      * Set value for doctype
      *
-     * @param  string $doctype
      * @return $this
      */
-    public function setDoctype($doctype)
+    public function setDoctype(string $doctype)
     {
         $this->getDoctypeHelper()->setDoctype($doctype);
         return $this;
@@ -205,10 +211,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
 
     /**
      * Get value for doctype
-     *
-     * @return string
      */
-    public function getDoctype()
+    public function getDoctype(): string
     {
         return $this->getDoctypeHelper()->getDoctype();
     }
@@ -216,10 +220,9 @@ abstract class AbstractHelper extends BaseAbstractHelper
     /**
      * Set value for character encoding
      *
-     * @param  string $encoding
      * @return $this
      */
-    public function setEncoding($encoding)
+    public function setEncoding(string $encoding)
     {
         $this->getEscapeHtmlHelper()->setEncoding($encoding);
         $this->getEscapeHtmlAttrHelper()->setEncoding($encoding);
@@ -228,10 +231,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
 
     /**
      * Get character encoding
-     *
-     * @return string
      */
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return $this->getEscapeHtmlHelper()->getEncoding();
     }
@@ -242,21 +243,26 @@ abstract class AbstractHelper extends BaseAbstractHelper
      * Escapes all attribute values
      *
      * @param  array $attributes
-     * @return string
      */
-    public function createAttributesString(array $attributes)
+    public function createAttributesString(array $attributes): string
     {
-        $attributes = $this->prepareAttributes($attributes);
-        $escape     = $this->getEscapeHtmlHelper();
-        $escapeAttr = $this->getEscapeHtmlAttrHelper();
-        $strings    = [];
+        $attributes    = $this->prepareAttributes($attributes);
+        $escape        = $this->getEscapeHtmlHelper();
+        $escapeAttr    = $this->getEscapeHtmlAttrHelper();
+        $doctypeHelper = $this->getDoctypeHelper();
+        $strings       = [];
 
         foreach ($attributes as $key => $value) {
             $key = strtolower($key);
 
-            if (! $value && isset($this->booleanAttributes[$key])) {
-                // Skip boolean attributes that expect empty string as false value
-                if ('' === $this->booleanAttributes[$key]['off']) {
+            if (isset($this->booleanAttributes[$key])) {
+                if (! $value) {
+                    // Skip boolean attributes that expect empty string as false value
+                    if ('' === $this->booleanAttributes[$key]['off']) {
+                        continue;
+                    }
+                } elseif ($doctypeHelper->isHtml5() && ! $doctypeHelper->isXhtml()) {
+                    $strings[] = $escape($key);
                     continue;
                 }
             }
@@ -267,8 +273,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
             // @todo Escape event attributes like AbstractHtmlElement view helper does in htmlAttribs ??
             try {
                 $escapedAttribute = $escapeAttr($value);
-                $strings[] = sprintf('%s="%s"', $escape($key), $escapedAttribute);
-            } catch (EscaperException $x) {
+                $strings[]        = sprintf('%s="%s"', $escape($key), $escapedAttribute);
+            } catch (EscaperException) {
                 // If an escaper exception happens, escape only the key, and use a blank value.
                 $strings[] = sprintf('%s=""', $escape($key));
             }
@@ -282,14 +288,11 @@ abstract class AbstractHelper extends BaseAbstractHelper
      *
      * If no ID attribute present, attempts to use the name attribute.
      * If no name attribute is present, either, returns null.
-     *
-     * @param  ElementInterface $element
-     * @return null|string
      */
-    public function getId(ElementInterface $element)
+    public function getId(ElementInterface $element): ?string
     {
         $id = $element->getAttribute('id');
-        if (null !== $id) {
+        if (is_string($id) && $id !== '') {
             return $id;
         }
 
@@ -300,10 +303,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
      * Get the closing bracket for an inline tag
      *
      * Closes as either "/>" for XHTML doctypes or ">" otherwise.
-     *
-     * @return string
      */
-    public function getInlineClosingBracket()
+    public function getInlineClosingBracket(): string
     {
         $doctypeHelper = $this->getDoctypeHelper();
         if ($doctypeHelper->isXhtml()) {
@@ -314,10 +315,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
 
     /**
      * Retrieve the doctype helper
-     *
-     * @return Doctype
      */
-    protected function getDoctypeHelper()
+    protected function getDoctypeHelper(): Doctype
     {
         if ($this->doctypeHelper) {
             return $this->doctypeHelper;
@@ -336,10 +335,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
 
     /**
      * Retrieve the escapeHtml helper
-     *
-     * @return EscapeHtml
      */
-    protected function getEscapeHtmlHelper()
+    protected function getEscapeHtmlHelper(): EscapeHtml
     {
         if ($this->escapeHtmlHelper) {
             return $this->escapeHtmlHelper;
@@ -358,10 +355,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
 
     /**
      * Retrieve the escapeHtmlAttr helper
-     *
-     * @return EscapeHtmlAttr
      */
-    protected function getEscapeHtmlAttrHelper()
+    protected function getEscapeHtmlAttrHelper(): EscapeHtmlAttr
     {
         if ($this->escapeHtmlAttrHelper) {
             return $this->escapeHtmlAttrHelper;
@@ -389,12 +384,13 @@ abstract class AbstractHelper extends BaseAbstractHelper
      * @param  array $attributes
      * @return array
      */
-    protected function prepareAttributes(array $attributes)
+    protected function prepareAttributes(array $attributes): array
     {
         foreach ($attributes as $key => $value) {
             $attribute = strtolower($key);
 
-            if (! isset($this->validGlobalAttributes[$attribute])
+            if (
+                ! isset($this->validGlobalAttributes[$attribute])
                 && ! isset($this->validTagAttributes[$attribute])
                 && ! $this->hasAllowedPrefix($attribute)
             ) {
@@ -403,7 +399,7 @@ abstract class AbstractHelper extends BaseAbstractHelper
             }
 
             // Normalize attribute key, if needed
-            if ($attribute != $key) {
+            if ($attribute !== $key) {
                 unset($attributes[$key]);
                 $attributes[$attribute] = $value;
             }
@@ -411,6 +407,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
             // Normalize boolean attribute values
             if (isset($this->booleanAttributes[$attribute])) {
                 $attributes[$attribute] = $this->prepareBooleanAttributeValue($attribute, $value);
+            } elseif (! is_string($value)) {
+                $attributes[$attribute] = (string) $value;
             }
         }
 
@@ -421,14 +419,10 @@ abstract class AbstractHelper extends BaseAbstractHelper
      * Prepare a boolean attribute value
      *
      * Prepares the expected representation for the boolean attribute specified.
-     *
-     * @param  string $attribute
-     * @param  mixed $value
-     * @return string
      */
-    protected function prepareBooleanAttributeValue($attribute, $value)
+    protected function prepareBooleanAttributeValue(string $attribute, mixed $value): string
     {
-        if (! is_bool($value) && in_array($value, $this->booleanAttributes[$attribute])) {
+        if (! is_bool($value) && in_array($value, $this->booleanAttributes[$attribute], true)) {
             return $value;
         }
 
@@ -440,13 +434,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
 
     /**
      * Translates the value of the HTML attribute if it should be translated and this view helper has a translator
-     *
-     * @param string $key
-     * @param string $value
-     *
-     * @return string
      */
-    protected function translateHtmlAttributeValue($key, $value)
+    protected function translateHtmlAttributeValue(string $key, ?string $value): ?string
     {
         if (empty($value) || ($this->getTranslator() === null)) {
             return $value;
@@ -475,12 +464,10 @@ abstract class AbstractHelper extends BaseAbstractHelper
     /**
      * Adds an HTML attribute to the list of valid attributes
      *
-     * @param string $attribute
      * @return $this
-     * @throws InvalidArgumentException for attribute names that are invalid
-     *     per the HTML specifications.
+     * @throws InvalidArgumentException For attribute names that are invalid per the HTML specifications.
      */
-    public function addValidAttribute($attribute)
+    public function addValidAttribute(string $attribute)
     {
         if (! $this->isValidAttributeName($attribute)) {
             throw new InvalidArgumentException(sprintf('%s is not a valid attribute name', $attribute));
@@ -493,12 +480,11 @@ abstract class AbstractHelper extends BaseAbstractHelper
     /**
      * Adds a prefix to the list of valid attribute prefixes
      *
-     * @param string $prefix
      * @return $this
-     * @throws InvalidArgumentException for attribute prefixes that are invalid
-     *     per the HTML specifications for attribute names.
+     * @throws InvalidArgumentException For attribute prefixes that are invalid
+     *                                  per the HTML specifications for attribute names.
      */
-    public function addValidAttributePrefix($prefix)
+    public function addValidAttributePrefix(string $prefix)
     {
         if (! $this->isValidAttributeName($prefix)) {
             throw new InvalidArgumentException(sprintf('%s is not a valid attribute prefix', $prefix));
@@ -511,11 +497,9 @@ abstract class AbstractHelper extends BaseAbstractHelper
     /**
      * Adds an HTML attribute to the list of translatable attributes
      *
-     * @param string $attribute
-     *
      * @return $this
      */
-    public function addTranslatableAttribute($attribute)
+    public function addTranslatableAttribute(string $attribute)
     {
         $this->translatableAttributes[$attribute] = true;
 
@@ -524,10 +508,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
 
     /**
      * Adds an HTML attribute to the list of the default translatable attributes
-     *
-     * @param string $attribute
      */
-    public static function addDefaultTranslatableAttribute($attribute)
+    public static function addDefaultTranslatableAttribute(string $attribute): void
     {
         self::$defaultTranslatableHtmlAttributes[$attribute] = true;
     }
@@ -535,11 +517,9 @@ abstract class AbstractHelper extends BaseAbstractHelper
     /**
      * Adds an HTML attribute to the list of translatable attributes
      *
-     * @param string $prefix
-     *
      * @return $this
      */
-    public function addTranslatableAttributePrefix($prefix)
+    public function addTranslatableAttributePrefix(string $prefix)
     {
         $this->translatableAttributePrefixes[] = $prefix;
 
@@ -548,10 +528,8 @@ abstract class AbstractHelper extends BaseAbstractHelper
 
     /**
      * Adds an HTML attribute to the list of translatable attributes
-     *
-     * @param string $prefix
      */
-    public static function addDefaultTranslatableAttributePrefix($prefix)
+    public static function addDefaultTranslatableAttributePrefix(string $prefix): void
     {
         self::$defaultTranslatableHtmlAttributePrefixes[] = $prefix;
     }
@@ -561,24 +539,19 @@ abstract class AbstractHelper extends BaseAbstractHelper
      *
      * @see https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
      *     Description of valid attributes
-     * @param string  $attribute
-     * @return bool
      */
-    protected function isValidAttributeName($attribute)
+    protected function isValidAttributeName(string $attribute): bool
     {
-        return preg_match('/^[^\t\n\f \/>"\'=]+$/', $attribute);
+        return (bool) preg_match('/^[^\t\n\f \/>"\'=]+$/', $attribute);
     }
 
     /**
      * Whether the passed attribute has a valid prefix or not
-     *
-     * @param string  $attribute
-     * @return bool
      */
-    protected function hasAllowedPrefix($attribute)
+    protected function hasAllowedPrefix(string $attribute): bool
     {
         foreach ($this->validTagAttributePrefixes as $prefix) {
-            if (substr($attribute, 0, strlen($prefix)) === $prefix) {
+            if (str_starts_with($attribute, $prefix)) {
                 return true;
             }
         }

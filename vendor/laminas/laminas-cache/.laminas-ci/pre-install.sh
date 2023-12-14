@@ -2,8 +2,7 @@
 
 WORKING_DIRECTORY=$2
 JOB=$3
-PHP_VERSION=$(echo "${JOB}" | jq -r '.php')
-
+PHP_VERSION=$(php -nr "echo PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;")
 
 if [ ! -z "$GITHUB_BASE_REF" ] && [[ "$GITHUB_BASE_REF" =~ ^[0-9]+\.[0-9] ]]; then
   readarray -td. TARGET_BRANCH_VERSION_PARTS <<<"${GITHUB_BASE_REF}.";
@@ -16,4 +15,4 @@ if [ ! -z "$GITHUB_BASE_REF" ] && [[ "$GITHUB_BASE_REF" =~ ^[0-9]+\.[0-9] ]]; th
   echo "Exported COMPOSER_ROOT_VERISON as ${COMPOSER_ROOT_VERISON}"
 fi
 
-${WORKING_DIRECTORY}/.laminas-ci/install-apcu-extension-from-source.sh "${PHP_VERSION}" || exit 1
+${WORKING_DIRECTORY}/.laminas-ci/install-apcu-extension-via-pecl.sh "${PHP_VERSION}" || exit 1

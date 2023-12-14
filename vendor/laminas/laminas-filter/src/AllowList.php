@@ -10,6 +10,15 @@ use Traversable;
 use function in_array;
 use function is_array;
 
+/**
+ * @psalm-type Options = array{
+ *     strict?: bool,
+ *     list?: array,
+ *     ...
+ * }
+ * @extends AbstractFilter<Options>
+ * @final
+ */
 class AllowList extends AbstractFilter
 {
     /** @var bool */

@@ -10,29 +10,30 @@ use function is_file;
 use function preg_match;
 use function sprintf;
 
+/**
+ * @internal
+ */
 abstract class AbstractDiscovery implements DiscoveryInterface
 {
     /**
      * Configuration file to look for.
      *
-     * Implementations MUST overwite this.
+     * Implementations MUST overwrite this.
      *
-     * @var string
+     * @var non-empty-string
      */
-    protected $configFile;
+    protected string $configFile = 'to-be-overridden';
 
     /**
      * Expected pattern to match if the configuration file exists.
      *
      * Implementations MUST overwrite this.
      *
-     * @var string
+     * @var non-empty-string
      */
-    protected $expected;
+    protected string $expected = 'to-be-overridden';
 
     /**
-     * Constructor
-     *
      * Optionally specify project directory; $configFile will be relative to
      * this value.
      */
@@ -49,10 +50,8 @@ abstract class AbstractDiscovery implements DiscoveryInterface
 
     /**
      * Determine if the configuration file exists and contains modules.
-     *
-     * @return bool
      */
-    public function locate()
+    public function locate(): bool
     {
         if (! is_file($this->configFile)) {
             return false;

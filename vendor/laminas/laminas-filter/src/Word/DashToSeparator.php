@@ -8,12 +8,19 @@ use Closure;
 
 use function str_replace;
 
+/**
+ * @psalm-type Options = array{
+ *     separator?: string,
+ *     ...
+ * }
+ * @template TOptions of Options
+ * @extends AbstractSeparator<TOptions>
+ * @final
+ */
 class DashToSeparator extends AbstractSeparator
 {
     /**
-     * Defined by Laminas\Filter\Filter
-     *
-     * @param  mixed $value
+     * @param mixed $value
      * @return mixed
      */
     public function filter($value)

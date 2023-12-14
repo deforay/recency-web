@@ -17,7 +17,6 @@ use Webmozart\Assert\Assert;
 
 use function array_search;
 use function file_get_contents;
-use function get_class;
 use function getcwd;
 use function gettype;
 use function is_array;
@@ -30,7 +29,7 @@ use function preg_replace;
 use function realpath;
 use function rtrim;
 use function sprintf;
-use function strpos;
+use function str_starts_with;
 use function strtolower;
 
 use const PHP_EOL;
@@ -48,11 +47,8 @@ final class TerminateListener
 
     private const HOME_PATH_REGEX = '#^(~|\$HOME)#';
 
-    private array $config;
-
-    public function __construct(array $config)
+    public function __construct(private array $config)
     {
-        $this->config = $config;
     }
 
     public function __invoke(ConsoleTerminateEvent $event): void
@@ -64,7 +60,7 @@ final class TerminateListener
         $command = $event->getCommand();
         Assert::isInstanceOf($command, Command::class);
 
-        $class = get_class($command);
+        $class = $command::class;
         if (
             ! isset($this->config['chains'][$class])
             || ! is_array($this->config['chains'][$class])
@@ -123,7 +119,7 @@ final class TerminateListener
 
             $params   = ['command' => $nextCommandName] + $inputMapper($input);
             $exitCode = $application->run(new ArrayInput($params), $output);
-            /** @psalm-suppress DocblockTypeContradiction */
+            /** @psalm-suppress TypeDoesNotContainType */
             if (! is_int($exitCode)) {
                 $exitCode = 0;
             }
@@ -135,10 +131,7 @@ final class TerminateListener
         }
     }
 
-    /**
-     * @param mixed $inputMapperSpec
-     */
-    private function createInputMapper($inputMapperSpec, string $commandClass): InputMapperInterface
+    private function createInputMapper(mixed $inputMapperSpec, string $commandClass): InputMapperInterface
     {
         if (is_array($inputMapperSpec)) {
             $this->validateInputMap($inputMapperSpec, $commandClass);
@@ -150,7 +143,7 @@ final class TerminateListener
             'Expected array option map or %s class implementation name for %s input mapper; received "%s"',
             InputMapperInterface::class,
             $commandClass,
-            is_object($inputMapperSpec) ? get_class($inputMapperSpec) : gettype($inputMapperSpec)
+            is_object($inputMapperSpec) ? $inputMapperSpec::class : gettype($inputMapperSpec)
         ));
 
         Assert::classExists(
@@ -219,13 +212,13 @@ final class TerminateListener
         ));
 
         $filename = $this->normalizePath($filename);
-        if (0 !== strpos($filename, $vendorDir)) {
+        if (! str_starts_with($filename, $vendorDir)) {
             return true;
         }
 
         foreach (self::ALLOWED_VENDORS as $vendor) {
             $path = $vendorDir . $vendor . '/';
-            if (0 === strpos($filename, $path)) {
+            if (str_starts_with($filename, $path)) {
                 // Matches a Laminas or Mezzio command name
                 return true;
             }
@@ -260,6 +253,7 @@ final class TerminateListener
             return $directory;
         }
 
+        /** @psalm-suppress RedundantCondition */
         Assert::string($_SERVER['HOME']);
 
         $updated = preg_replace(self::HOME_PATH_REGEX, $_SERVER['HOME'], $directory);

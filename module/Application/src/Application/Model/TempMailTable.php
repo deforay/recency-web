@@ -36,7 +36,7 @@ class TempMailTable extends AbstractTableGateway {
                 'from_full_name' => $fromName,
                 'attachment' => $attachment,
             );
-            if(trim($to)!=""){
+            if(trim($to) != ""){
                 $this->insert($data);
             }
             return $this->lastInsertValue;

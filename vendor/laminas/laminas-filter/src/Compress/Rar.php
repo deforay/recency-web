@@ -11,6 +11,9 @@ use function extension_loaded;
 use function file_exists;
 use function is_callable;
 use function is_dir;
+use function rar_close;
+use function rar_list;
+use function rar_open;
 use function realpath;
 use function str_replace;
 
@@ -18,6 +21,17 @@ use const DIRECTORY_SEPARATOR;
 
 /**
  * Compression adapter for Rar
+ *
+ * @deprecated Since 2.28. This adapter will be removed in version 3.0 of this component. Other compression formats
+ *             remain available.
+ *
+ * @psalm-type Options = array{
+ *     callback?: callable|null,
+ *     archive?: string|null,
+ *     password?: string|null,
+ *     target?: string,
+ * }
+ * @extends AbstractCompressionAlgorithm<Options>
  */
 class Rar extends AbstractCompressionAlgorithm
 {
@@ -30,7 +44,7 @@ class Rar extends AbstractCompressionAlgorithm
      *     'target'   => Target to write the files to
      * )
      *
-     * @var array
+     * @var Options
      */
     protected $options = [
         'callback' => null,
@@ -40,7 +54,7 @@ class Rar extends AbstractCompressionAlgorithm
     ];
 
     /**
-     * @param array $options (Optional) Options to set
+     * @param Options|null $options (Optional) Options to set
      * @throws Exception\ExtensionNotLoadedException If rar extension not loaded.
      */
     public function __construct($options = null)
@@ -54,7 +68,7 @@ class Rar extends AbstractCompressionAlgorithm
     /**
      * Returns the set callback for compression
      *
-     * @return string
+     * @return callable|null
      */
     public function getCallback()
     {
@@ -64,7 +78,7 @@ class Rar extends AbstractCompressionAlgorithm
     /**
      * Sets the callback to use
      *
-     * @param  string $callback
+     * @param  callable $callback
      * @return self
      * @throws Exception\InvalidArgumentException If invalid callback provided.
      */
@@ -81,7 +95,7 @@ class Rar extends AbstractCompressionAlgorithm
     /**
      * Returns the set archive
      *
-     * @return string
+     * @return string|null
      */
     public function getArchive()
     {
@@ -105,7 +119,7 @@ class Rar extends AbstractCompressionAlgorithm
     /**
      * Returns the set password
      *
-     * @return string
+     * @return string|null
      */
     public function getPassword()
     {
@@ -156,7 +170,7 @@ class Rar extends AbstractCompressionAlgorithm
      * Compresses the given content
      *
      * @param  string|array $content
-     * @return string
+     * @return string|null
      * @throws Exception\RuntimeException If no callback available, or error during compression.
      */
     public function compress($content)

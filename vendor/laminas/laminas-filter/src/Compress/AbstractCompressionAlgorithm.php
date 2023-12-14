@@ -12,14 +12,16 @@ use function method_exists;
 
 /**
  * Abstract compression adapter
+ *
+ * @template TOptions of array
  */
 abstract class AbstractCompressionAlgorithm implements CompressionAlgorithmInterface
 {
-    /** @var array */
+    /** @var TOptions */
     protected $options = [];
 
     /**
-     * @param null|array|Traversable $options (Optional) Options to set
+     * @param null|iterable $options (Optional) Options to set
      */
     public function __construct($options = null)
     {
@@ -37,6 +39,7 @@ abstract class AbstractCompressionAlgorithm implements CompressionAlgorithmInter
      *
      * @param  string|null $option Option to return
      * @return mixed
+     * @psalm-return ($option is null ? TOptions : mixed)
      */
     public function getOptions($option = null)
     {
@@ -54,7 +57,6 @@ abstract class AbstractCompressionAlgorithm implements CompressionAlgorithmInter
     /**
      * Sets all or one option
      *
-     * @param  array $options
      * @return self
      */
     public function setOptions(array $options)

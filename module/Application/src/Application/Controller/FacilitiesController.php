@@ -69,31 +69,25 @@ class FacilitiesController extends AbstractActionController
     public function editAction()
     {
         $session = new Container('credo');
-        if($session->roleCode == 'user'){
+        if ($session->roleCode == 'user') {
             return $this->redirect()->toRoute('recency');
-        }else{
-
+        } elseif ($this->getRequest()->isPost()) {
+            $params=$this->getRequest()->getPost();
+            $result=$this->facilitiesService->updateFacilitiesDetails($params);
+            return $this->redirect()->toRoute('facilities');
+        } else
+        {
+            $facilityId=base64_decode( $this->params()->fromRoute('id') );
+            $result=$this->facilitiesService->getFacilitiesDetailsById($facilityId);
             
-            if($this->getRequest()->isPost())
-            {
-                $params=$this->getRequest()->getPost();
-                $result=$this->facilitiesService->updateFacilitiesDetails($params);
-                return $this->redirect()->toRoute('facilities');
-            }
-            else
-            {
-                $facilityId=base64_decode( $this->params()->fromRoute('id') );
-                $result=$this->facilitiesService->getFacilitiesDetailsById($facilityId);
-                
-                $userResult = $this->userService->getAllUserDetails();
-                
-                $globalConfigResult=$this->globalConfigService->getGlobalConfigAllDetails();
-                return new ViewModel(array(
-                    'userResult' => $userResult,
-                    'result' => $result,
-                    'globalConfigResult' => $globalConfigResult,
-                ));
-            }
+            $userResult = $this->userService->getAllUserDetails();
+            
+            $globalConfigResult=$this->globalConfigService->getGlobalConfigAllDetails();
+            return new ViewModel(array(
+                'userResult' => $userResult,
+                'result' => $result,
+                'globalConfigResult' => $globalConfigResult,
+            ));
         }
     }
     public function getFacilityByLocationAction()

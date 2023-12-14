@@ -26,10 +26,21 @@ use function unlink;
 
 use const DIRECTORY_SEPARATOR;
 
+/**
+ * @psalm-type Options = array{
+ *     file?: array{source?: string, target?: string, overwrite?: bool, randomize?: bool},
+ *     ...
+ * }
+ * @template TOptions of Options
+ * @template-extends Filter\AbstractFilter<TOptions>
+ * @final
+ */
 class Rename extends Filter\AbstractFilter
 {
     /**
      * Internal array of array(source, target, overwrite)
+     *
+     * @var list<array{source: string, target: string, overwrite: bool, randomize: bool}>
      */
     protected $files = [];
 
@@ -62,7 +73,7 @@ class Rename extends Filter\AbstractFilter
     /**
      * Returns the files to rename and their new name and location
      *
-     * @return array
+     * @return list<array{source: string, target: string, overwrite: bool, randomize: bool}>
      */
     public function getFile()
     {
@@ -78,7 +89,7 @@ class Rename extends Filter\AbstractFilter
      * 'overwrite' => Shall existing files be overwritten?
      * 'randomize' => Shall target files have a random postfix attached?
      *
-     * @param  string|array $options Old file or directory to be rewritten
+     * @param  string|array{source?: string, target?: string, overwrite?: bool, randomize?: bool} $options
      * @return self
      */
     public function setFile($options)
@@ -98,7 +109,7 @@ class Rename extends Filter\AbstractFilter
      * 'overwrite' => Shall existing files be overwritten?
      * 'randomize' => Shall target files have a random postfix attached?
      *
-     * @param  string|array $options Old file or directory to be rewritten
+     * @param  string|array{source?: string, target?: string, overwrite?: bool, randomize?: bool} $options $options
      * @return Rename
      * @throws Exception\InvalidArgumentException
      */

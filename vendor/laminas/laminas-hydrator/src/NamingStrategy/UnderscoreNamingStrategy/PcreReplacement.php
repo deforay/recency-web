@@ -11,15 +11,17 @@ namespace Laminas\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
  */
 class PcreReplacement
 {
-    /** @var string */
-    public $pattern;
-
     /** @var callable */
     public $replacement;
+    /** @var non-empty-string */
+    public string $pattern;
 
+    /**
+     * @param non-empty-string $pattern
+     */
     public function __construct(string $pattern, callable $replacement)
     {
-        $this->pattern     = $pattern;
         $this->replacement = $replacement;
+        $this->pattern     = $pattern;
     }
 }

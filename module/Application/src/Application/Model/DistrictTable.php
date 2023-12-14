@@ -20,7 +20,7 @@ class DistrictTable extends AbstractTableGateway {
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        if(isset($params['provinceId']) && $params['provinceId']!=''){
+        if(isset($params['provinceId']) && $params['provinceId'] != ''){
                 $sQuery = $sql->select()->from(array('dd' => 'district_details'))->columns(array('district_id','province_id','district_name'))
                 ->where(array('province_id' => $params['provinceId'] ));
         }
@@ -56,7 +56,7 @@ class DistrictTable extends AbstractTableGateway {
         //fetch facility data
         $fQuery = $sql->select()->from(array('f' => 'facilities'))
                             ->where(array('province' => $params['selectValue']));
-        if (isset($logincontainer->userId) && $logincontainer->userId != null && $logincontainer->userId != "") {
+        if (property_exists($logincontainer, 'userId') && $logincontainer->userId !== null && $logincontainer->userId != null && $logincontainer->userId != "") {
             $fQuery = $fQuery->join(array('ufm' => 'user_facility_map'), 'f.facility_id = ufm.facility_id', array())
                 ->where(array('ufm.user_id' => $logincontainer->userId))
                 ->where('(facility_type_id IS NULL OR facility_type_id="" OR facility_type_id="1"  OR facility_type_id="0")');
@@ -92,9 +92,9 @@ class DistrictTable extends AbstractTableGateway {
         /* Ordering */
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . " " . ($parameters['sSortDir_' . $i]) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $aColumns[(int) $parameters['iSortCol_' . $i]] . " " . ($parameters['sSortDir_' . $i]) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -130,9 +130,11 @@ class DistrictTable extends AbstractTableGateway {
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -178,18 +180,14 @@ class DistrictTable extends AbstractTableGateway {
         $tResult = $dbAdapter->query($tQueryStr, $dbAdapter::QUERY_MODE_EXECUTE);
         $iFilteredTotal = count($tResult);
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => count($tResult),
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
         );
 
         $roleCode = $sessionLogin->roleCode;
-		if ($acl->isAllowed($roleCode, 'Application\Controller\DistrictController', 'edit')) {
-            $update = true;
-        } else {
-            $update = false;
-        }
+		$update = (bool) $acl->isAllowed($roleCode, 'Application\Controller\DistrictController', 'edit');
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = ucwords($aRow['province_name']);
@@ -224,8 +222,7 @@ class DistrictTable extends AbstractTableGateway {
         $sQuery = $sql->select()->from(array('d' => 'district_details'))
             ->where(array('d.district_id' => $districtId));
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
     }
 
     
@@ -251,8 +248,7 @@ class DistrictTable extends AbstractTableGateway {
         $sQuery = $sql->select()->from(array('d' => 'district_details'));
 
         $sQueryStr = $sql->buildSqlString($sQuery);
-        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
-        return $rResult;
+        return $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
     }
 
 }

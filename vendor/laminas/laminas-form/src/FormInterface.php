@@ -1,52 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form;
 
-use ArrayAccess;
 use Laminas\InputFilter\InputFilterInterface;
 
+/**
+ * @template TFilteredValues
+ */
 interface FormInterface extends FieldsetInterface
 {
-    const BIND_ON_VALIDATE  = 0x00;
-    const BIND_MANUAL       = 0x01;
-    const VALIDATE_ALL      = 0x10;
-    const VALUES_NORMALIZED = 0x11;
-    const VALUES_RAW        = 0x12;
-    const VALUES_AS_ARRAY   = 0x13;
+    public const BIND_ON_VALIDATE  = 0x00;
+    public const BIND_MANUAL       = 0x01;
+    public const VALUES_NORMALIZED = 0x11;
+    public const VALUES_RAW        = 0x12;
+    public const VALUES_AS_ARRAY   = 0x13;
 
     /**
      * Set data to validate and/or populate elements
      *
      * Typically, also passes data on to the composed input filter.
      *
-     * @param  array|ArrayAccess $data
      * @return $this
      */
-    public function setData($data);
+    public function setData(iterable $data);
 
     /**
      * Bind an object to the element
      *
      * Allows populating the object with validated values.
      *
-     * @param  object $object
-     * @param  int $flags
      * @return mixed
      */
-    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED);
+    public function bind(object $object, int $flags = FormInterface::VALUES_NORMALIZED);
 
     /**
      * Whether or not to bind values to the bound object when validation succeeds
      *
-     * @param  int $bindOnValidateFlag
-     * @return void
+     * @return $this
      */
-    public function setBindOnValidate($bindOnValidateFlag);
+    public function setBindOnValidate(int $bindOnValidateFlag);
 
     /**
      * Set input filter
      *
-     * @param  InputFilterInterface $inputFilter
+     * @param InputFilterInterface<TFilteredValues> $inputFilter
      * @return $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter);
@@ -54,18 +53,16 @@ interface FormInterface extends FieldsetInterface
     /**
      * Retrieve input filter
      *
-     * @return InputFilterInterface
+     * @return InputFilterInterface<TFilteredValues>
      */
-    public function getInputFilter();
+    public function getInputFilter(): InputFilterInterface;
 
     /**
      * Validate the form
      *
      * Typically, will proxy to the composed input filter.
-     *
-     * @return bool
      */
-    public function isValid();
+    public function isValid(): bool;
 
     /**
      * Retrieve the validated data
@@ -73,10 +70,15 @@ interface FormInterface extends FieldsetInterface
      * By default, retrieves normalized values; pass one of the VALUES_*
      * constants to shape the behavior.
      *
-     * @param  int $flag
-     * @return array|object
+     * @param self::VALUES_* $flag
+     * @return TFilteredValues|object|array<string, mixed>
+     * @psalm-return (
+     *     $flag is self::VALUES_NORMALIZED
+     *          ? TFilteredValues|object
+     *          : ($flag is self::VALUES_RAW ? array<string, mixed> : TFilteredValues)
+     * )
      */
-    public function getData($flag = FormInterface::VALUES_NORMALIZED);
+    public function getData(int $flag = FormInterface::VALUES_NORMALIZED);
 
     /**
      * Set the validation group (set of values to validate)
@@ -85,5 +87,10 @@ interface FormInterface extends FieldsetInterface
      *
      * @return $this
      */
-    public function setValidationGroup();
+    public function setValidationGroup(array $group);
+
+    /**
+     * Reset the form to validate all elements
+     */
+    public function setValidateAll(): void;
 }

@@ -2,8 +2,155 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.3.1 - 2021-04-19
+## 1.3.0 - 2023-11-22
 
+
+-----
+
+### Release Notes for [1.3.0](https://github.com/laminas/laminas-skeleton-installer/milestone/22)
+
+Feature release (minor)
+
+### 1.3.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Enhancement
+
+ - [48: Add support for php 8.3](https://github.com/laminas/laminas-skeleton-installer/pull/48) thanks to @Xerkus
+
+## 1.2.0 - 2022-12-21
+
+
+-----
+
+### Release Notes for [1.2.0](https://github.com/laminas/laminas-skeleton-installer/milestone/20)
+
+Feature release (minor)
+
+### 1.2.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Enhancement,dependencies,renovate
+
+ - [44: Update dependency vimeo/psalm to v5, Improve type inference](https://github.com/laminas/laminas-skeleton-installer/pull/44) thanks to @renovate[bot]
+
+## 1.1.0 - 2022-11-15
+
+
+-----
+
+### Release Notes for [1.1.0](https://github.com/laminas/laminas-skeleton-installer/milestone/17)
+
+Feature release (minor)
+
+### 1.1.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Enhancement
+
+ - [43: Feature: Support PHP 8.2 ](https://github.com/laminas/laminas-skeleton-installer/pull/43) thanks to @ghostwriter
+
+## 0.7.0 - TBD
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
+## 0.6.0 - 2022-04-13
+
+
+-----
+
+### Release Notes for [0.6.0](https://github.com/laminas/laminas-skeleton-installer/milestone/13)
+
+Feature release (minor)
+
+### 0.6.0
+
+- Total issues resolved: **1**
+- Total pull requests resolved: **2**
+- Total contributors: **3**
+
+#### Bug
+
+ - [32: Fix type incompatiblity with `Composer\IO\IOInterface::ask()`](https://github.com/laminas/laminas-skeleton-installer/pull/32) thanks to @Xerkus and @pgrafe
+
+#### Enhancement
+
+ - [29: Prepare for Renovate with reusable workflows](https://github.com/laminas/laminas-skeleton-installer/pull/29) thanks to @ghostwriter
+
+## 0.5.0 - 2022-02-22
+
+
+-----
+
+### Release Notes for [0.5.0](https://github.com/laminas/laminas-skeleton-installer/milestone/11)
+
+Feature release (minor)
+
+### 0.5.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Enhancement
+
+ - [30: Forward compat for Composer 2.3+](https://github.com/laminas/laminas-skeleton-installer/pull/30) thanks to @Seldaek
+
+## 0.4.0 - 2021-12-14
+
+
+-----
+
+### Release Notes for [0.4.0](https://github.com/laminas/laminas-skeleton-installer/milestone/8)
+
+Feature release (minor)
+
+### 0.4.0
+
+- Total issues resolved: **1**
+- Total pull requests resolved: **6**
+- Total contributors: **4**
+
+#### Duplicate,Enhancement
+
+ - [28: Re-generate composer.lock](https://github.com/laminas/laminas-skeleton-installer/pull/28) thanks to @samsonasik
+
+#### Enhancement
+
+ - [27: Add PHP 8.1 Support](https://github.com/laminas/laminas-skeleton-installer/pull/27) thanks to @samsonasik
+ - [26: Restore CI](https://github.com/laminas/laminas-skeleton-installer/pull/26) thanks to @PowerKiKi
+ - [25: Drop `laminas/laminas-zendframework-bridge` and `zendframework/*` compatibility](https://github.com/laminas/laminas-skeleton-installer/pull/25) thanks to @PowerKiKi
+ - [24: Psalm integration](https://github.com/laminas/laminas-skeleton-installer/pull/24) thanks to @ghostwriter and @boesing
+ - [22: Remove file headers](https://github.com/laminas/laminas-skeleton-installer/pull/22) thanks to @ghostwriter
+
+## 0.3.1 - 2021-04-19
 
 -----
 
@@ -17,7 +164,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - Total pull requests resolved: **1**
 - Total contributors: **1**
 
- - [17: Merge release 0.2.2 into 0.3.x](https://github.com/laminas/laminas-skeleton-installer/pull/17) thanks to @github-actions[bot]
+- [17: Merge release 0.2.2 into 0.3.x](https://github.com/laminas/laminas-skeleton-installer/pull/17) thanks to @github-actions[bot]
 
 ## 0.3.0 - 2021-04-15
 

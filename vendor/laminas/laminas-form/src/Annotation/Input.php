@@ -1,6 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\Annotation;
+
+use Attribute;
+use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 
 /**
  * Input annotation
@@ -10,16 +16,23 @@ namespace Laminas\Form\Annotation;
  * input to use.
  *
  * @Annotation
+ * @NamedArgumentConstructor
  */
-class Input extends AbstractStringAnnotation
+#[Attribute]
+final class Input
 {
     /**
-     * Retrieve the input class
-     *
-     * @return null|string
+     * Receive and process the contents of an annotation
      */
-    public function getInput()
+    public function __construct(private string $input)
     {
-        return $this->value;
+    }
+
+    /**
+     * Retrieve the input class
+     */
+    public function getInput(): string
+    {
+        return $this->input;
     }
 }

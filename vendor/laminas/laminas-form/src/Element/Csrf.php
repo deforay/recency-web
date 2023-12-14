@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Form\Element;
 
 use Laminas\Filter\StringTrim;
@@ -8,39 +10,30 @@ use Laminas\Form\ElementPrepareAwareInterface;
 use Laminas\Form\FormInterface;
 use Laminas\InputFilter\InputProviderInterface;
 use Laminas\Validator\Csrf as CsrfValidator;
-use Traversable;
 
 use function array_merge;
+use function assert;
 
 class Csrf extends Element implements InputProviderInterface, ElementPrepareAwareInterface
 {
-    /**
-     * Seed attributes
-     *
-     * @var array
-     */
+    /** @var array<string, scalar|null>  */
     protected $attributes = [
         'type' => 'hidden',
     ];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $csrfValidatorOptions = [];
 
-    /**
-     * @var CsrfValidator
-     */
+    /** @var null|CsrfValidator */
     protected $csrfValidator;
 
     /**
      * Accepted options for Csrf:
      * - csrf_options: an array used in the Csrf
      *
-     * @param array|Traversable $options
      * @return $this
      */
-    public function setOptions($options)
+    public function setOptions(iterable $options)
     {
         parent::setOptions($options);
 
@@ -54,13 +47,12 @@ class Csrf extends Element implements InputProviderInterface, ElementPrepareAwar
     /**
      * @return array
      */
-    public function getCsrfValidatorOptions()
+    public function getCsrfValidatorOptions(): array
     {
         return $this->csrfValidatorOptions;
     }
 
     /**
-     * @param  array $options
      * @return $this
      */
     public function setCsrfValidatorOptions(array $options)
@@ -71,21 +63,19 @@ class Csrf extends Element implements InputProviderInterface, ElementPrepareAwar
 
     /**
      * Get CSRF validator
-     *
-     * @return CsrfValidator
      */
-    public function getCsrfValidator()
+    public function getCsrfValidator(): CsrfValidator
     {
         if (null === $this->csrfValidator) {
             $csrfOptions = $this->getCsrfValidatorOptions();
-            $csrfOptions = array_merge($csrfOptions, ['name' => $this->getName()]);
+            $csrfOptions = array_merge(['name' => $this->getName()], $csrfOptions);
             $this->setCsrfValidator(new CsrfValidator($csrfOptions));
+            assert(null !== $this->csrfValidator);
         }
         return $this->csrfValidator;
     }
 
     /**
-     * @param  CsrfValidator $validator
      * @return $this
      */
     public function setCsrfValidator(CsrfValidator $validator)
@@ -98,10 +88,8 @@ class Csrf extends Element implements InputProviderInterface, ElementPrepareAwar
      * Retrieve value
      *
      * Retrieves the hash from the validator
-     *
-     * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         $validator = $this->getCsrfValidator();
         return $validator->getHash();
@@ -112,12 +100,12 @@ class Csrf extends Element implements InputProviderInterface, ElementPrepareAwar
      *
      * Seeds 'value' attribute with validator hash
      *
-     * @return array
+     * @inheritDoc
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
-        $attributes = parent::getAttributes();
-        $validator  = $this->getCsrfValidator();
+        $attributes          = parent::getAttributes();
+        $validator           = $this->getCsrfValidator();
         $attributes['value'] = $validator->getHash();
         return $attributes;
     }
@@ -127,26 +115,32 @@ class Csrf extends Element implements InputProviderInterface, ElementPrepareAwar
      *
      * Attaches the captcha as a validator.
      *
-     * @return array
+     * @inheritDoc
      */
-    public function getInputSpecification()
+    public function getInputSpecification(): array
     {
-        return [
-            'name' => $this->getName(),
-            'required' => true,
-            'filters' => [
+        $spec = [
+            'required'   => true,
+            'filters'    => [
                 ['name' => StringTrim::class],
             ],
             'validators' => [
                 $this->getCsrfValidator(),
             ],
         ];
+
+        $name = $this->getName();
+        if ($name !== null) {
+            $spec['name'] = $name;
+        }
+
+        return $spec;
     }
 
     /**
      * Prepare the form element
      */
-    public function prepareElement(FormInterface $form)
+    public function prepareElement(FormInterface $form): void
     {
         $this->getCsrfValidator()->getHash(true);
     }

@@ -13,17 +13,14 @@ use Traversable;
 
 use function call_user_func;
 use function count;
-use function get_class;
-use function gettype;
+use function get_debug_type;
 use function is_array;
 use function is_callable;
-use function is_object;
 use function sprintf;
 use function strtolower;
 
 /**
  * @final
- * @implements IteratorAggregate<array-key, FilterInterface|callable(mixed): mixed>
  * @psalm-type FilterChainConfiguration = array{
  *    filters?: list<array{
  *        name: string|class-string<FilterInterface>,
@@ -35,6 +32,8 @@ use function strtolower;
  *        priority?: int,
  *    }>
  * }
+ * @extends AbstractFilter<FilterChainConfiguration>
+ * @implements IteratorAggregate<array-key, FilterInterface|callable(mixed): mixed>
  */
 class FilterChain extends AbstractFilter implements Countable, IteratorAggregate
 {
@@ -77,7 +76,7 @@ class FilterChain extends AbstractFilter implements Countable, IteratorAggregate
         if (! is_array($options) && ! $options instanceof Traversable) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Expected array or Traversable; received "%s"',
-                is_object($options) ? get_class($options) : gettype($options)
+                get_debug_type($options)
             ));
         }
 
@@ -153,7 +152,6 @@ class FilterChain extends AbstractFilter implements Countable, IteratorAggregate
      * Retrieve a filter plugin by name
      *
      * @param string $name
-     * @param array $options
      * @return FilterInterface|callable(mixed): mixed
      */
     public function plugin($name, array $options = [])
@@ -176,7 +174,7 @@ class FilterChain extends AbstractFilter implements Countable, IteratorAggregate
             if (! $callback instanceof FilterInterface) {
                 throw new Exception\InvalidArgumentException(sprintf(
                     'Expected a valid PHP callback; received "%s"',
-                    is_object($callback) ? get_class($callback) : gettype($callback)
+                    get_debug_type($callback)
                 ));
             }
             $callback = [$callback, 'filter'];
@@ -192,11 +190,10 @@ class FilterChain extends AbstractFilter implements Countable, IteratorAggregate
      * with the retrieved instance.
      *
      * @param  string $name
-     * @param  mixed $options
      * @param  int $priority Priority at which to enqueue filter; defaults to 1000 (higher executes earlier)
      * @return self
      */
-    public function attachByName($name, $options = [], $priority = self::DEFAULT_PRIORITY)
+    public function attachByName($name, mixed $options = [], $priority = self::DEFAULT_PRIORITY)
     {
         if (! is_array($options)) {
             $options = (array) $options;

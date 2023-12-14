@@ -8,7 +8,6 @@ use Laminas\Hydrator\Exception\InvalidArgumentException;
 use Laminas\Serializer\Adapter\AdapterInterface as SerializerAdapter;
 use Laminas\Serializer\Serializer as SerializerFactory;
 
-use function get_class;
 use function gettype;
 use function is_array;
 use function is_object;
@@ -65,14 +64,14 @@ class SerializableStrategy implements StrategyInterface
      *     SerializerAdapter instance
      * @throws InvalidArgumentException For invalid $serializer values.
      */
-    public function setSerializer($serializer): void
+    public function setSerializer(mixed $serializer): void
     {
         if (! is_string($serializer) && ! $serializer instanceof SerializerAdapter) {
             throw new InvalidArgumentException(sprintf(
                 '%s expects either a string serializer name or Laminas\Serializer\Adapter\AdapterInterface instance; '
                 . 'received "%s"',
                 __METHOD__,
-                is_object($serializer) ? get_class($serializer) : gettype($serializer)
+                is_object($serializer) ? $serializer::class : gettype($serializer)
             ));
         }
         $this->serializer = $serializer;

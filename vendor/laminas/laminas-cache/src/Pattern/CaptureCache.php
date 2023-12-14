@@ -18,14 +18,13 @@ use function mkdir;
 use function ob_implicit_flush;
 use function ob_start;
 use function rtrim;
+use function str_ends_with;
 use function str_replace;
-use function substr;
 use function umask;
 use function unlink;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
-use const PHP_MAJOR_VERSION;
 
 class CaptureCache extends AbstractPattern
 {
@@ -49,12 +48,7 @@ class CaptureCache extends AbstractPattern
             return false;
         });
 
-        /**
-         * TODO: remove when PHP 7.4 support is dropped
-         *
-         * @psalm-suppress PossiblyFalseArgument
-         */
-        ob_implicit_flush(PHP_MAJOR_VERSION >= 8 ? false : 0);
+        ob_implicit_flush(false);
     }
 
     /**
@@ -224,7 +218,7 @@ class CaptureCache extends AbstractPattern
      */
     protected function pageId2Filename($pageId)
     {
-        if (substr($pageId, -1) === '/') {
+        if (str_ends_with($pageId, '/')) {
             return $this->getOptions()->getIndexFilename();
         }
 
@@ -239,7 +233,7 @@ class CaptureCache extends AbstractPattern
      */
     protected function pageId2Path($pageId)
     {
-        if (substr($pageId, -1) === '/') {
+        if (str_ends_with($pageId, '/')) {
             $path = rtrim($pageId, '/');
         } else {
             $path = dirname($pageId);
@@ -320,14 +314,14 @@ class CaptureCache extends AbstractPattern
             // built-in mkdir function is enough
 
             $umask = $umask !== false ? umask($umask) : false;
-            $res   = mkdir($pathname, $perm !== false ? $perm : 0775, true);
+            $res   = mkdir($pathname, 0775, true);
 
             if ($umask !== false) {
                 umask($umask);
             }
 
             if (! $res) {
-                $oct = $perm === false ? '775' : decoct($perm);
+                $oct = '775';
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("mkdir('{$pathname}', 0{$oct}, true) failed", 0, $err);
             }
@@ -360,20 +354,20 @@ class CaptureCache extends AbstractPattern
 
                 // create a single directory, set and reset umask immediately
                 $umask = $umask !== false ? umask($umask) : false;
-                $res   = mkdir($path, $perm === false ? 0775 : $perm, false);
+                $res   = mkdir($path, $perm, false);
                 if ($umask !== false) {
                     umask($umask);
                 }
 
                 if (! $res) {
-                    $oct = $perm === false ? '775' : decoct($perm);
+                    $oct = decoct($perm);
                     ErrorHandler::stop();
                     throw new Exception\RuntimeException(
                         "mkdir('{$path}', 0{$oct}, false) failed"
                     );
                 }
 
-                if ($perm !== false && ! chmod($path, $perm)) {
+                if (! chmod($path, $perm)) {
                     $oct = decoct($perm);
                     ErrorHandler::stop();
                     throw new Exception\RuntimeException(

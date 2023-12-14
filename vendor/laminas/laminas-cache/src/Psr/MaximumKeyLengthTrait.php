@@ -8,7 +8,6 @@ use Laminas\Cache\Psr\SimpleCache\SimpleCacheInvalidArgumentException;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\StorageInterface;
 
-use function get_class;
 use function min;
 use function preg_match;
 use function sprintf;
@@ -54,11 +53,10 @@ trait MaximumKeyLengthTrait
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'The storage adapter "%s" does not fulfill the minimum requirements for PSR-6/PSR-16:'
                 . ' The maximum key length capability must allow at least 64 characters.',
-                get_class($storage)
+                $storage::class
             ));
         }
 
-        /** @psalm-suppress PropertyTypeCoercion The result of this will always be > 0 */
         $this->maximumKeyLength = min($maximumKeyLength, self::$pcreMaximumQuantifierLength - 1);
     }
 

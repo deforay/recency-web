@@ -15,22 +15,31 @@ use function is_string;
 use function preg_match;
 use function preg_replace;
 use function realpath;
+use function str_starts_with;
 use function stripos;
-use function strpos;
 use function substr;
 
 use const DIRECTORY_SEPARATOR;
 use const PHP_OS;
 
+/**
+ * @psalm-type Options = array{
+ *     exists?: bool,
+ *     ...
+ * }
+ * @template TOptions of Options
+ * @extends AbstractFilter<TOptions>
+ * @final
+ */
 class RealPath extends AbstractFilter
 {
-    /** @var array $options */
+    /** @var TOptions $options */
     protected $options = [
         'exists' => true,
     ];
 
     /**
-     * @param  bool|Traversable $existsOrOptions Options to set
+     * @param  bool|Traversable|Options $existsOrOptions Options to set
      */
     public function __construct($existsOrOptions = true)
     {
@@ -74,8 +83,9 @@ class RealPath extends AbstractFilter
      *
      * If the value provided is non-scalar, the value will remain unfiltered
      *
-     * @param  string $value
+     * @param  mixed $value
      * @return string|mixed
+     * @psalm-return ($value is string ? string : mixed)
      */
     public function filter($value)
     {
@@ -103,11 +113,11 @@ class RealPath extends AbstractFilter
             } else {
                 $cwd   = getcwd();
                 $drive = substr($cwd, 0, 2);
-                if (strpos($path, DIRECTORY_SEPARATOR) !== 0) {
+                if (! str_starts_with($path, DIRECTORY_SEPARATOR)) {
                     $path = substr($cwd, 3) . DIRECTORY_SEPARATOR . $path;
                 }
             }
-        } elseif (strpos($path, DIRECTORY_SEPARATOR) !== 0) {
+        } elseif (! str_starts_with($path, DIRECTORY_SEPARATOR)) {
             $path = getcwd() . DIRECTORY_SEPARATOR . $path;
         }
 

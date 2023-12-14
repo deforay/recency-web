@@ -10,7 +10,6 @@ use ReflectionClass;
 
 use function array_map;
 use function class_exists;
-use function get_class;
 use function gettype;
 use function is_array;
 use function is_object;
@@ -18,14 +17,12 @@ use function sprintf;
 
 class CollectionStrategy implements StrategyInterface
 {
-    private HydratorInterface $objectHydrator;
-
     private string $objectClassName;
 
     /**
      * @throws Exception\InvalidArgumentException
      */
-    public function __construct(HydratorInterface $objectHydrator, string $objectClassName)
+    public function __construct(private HydratorInterface $objectHydrator, string $objectClassName)
     {
         if (! class_exists($objectClassName)) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -33,8 +30,6 @@ class CollectionStrategy implements StrategyInterface
                 $objectClassName
             ));
         }
-
-        $this->objectHydrator  = $objectHydrator;
         $this->objectClassName = $objectClassName;
     }
 
@@ -50,16 +45,16 @@ class CollectionStrategy implements StrategyInterface
         if (! is_array($value)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Value needs to be an array, got "%s" instead.',
-                is_object($value) ? get_class($value) : gettype($value)
+                is_object($value) ? $value::class : gettype($value)
             ));
         }
 
-        return array_map(function ($object) {
+        return array_map(function ($object): array {
             if (! $object instanceof $this->objectClassName) {
                 throw new Exception\InvalidArgumentException(sprintf(
                     'Value needs to be an instance of "%s", got "%s" instead.',
                     $this->objectClassName,
-                    is_object($object) ? get_class($object) : gettype($object)
+                    is_object($object) ? $object::class : gettype($object)
                 ));
             }
 
@@ -79,7 +74,7 @@ class CollectionStrategy implements StrategyInterface
         if (! is_array($value)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Value needs to be an array, got "%s" instead.',
-                is_object($value) ? get_class($value) : gettype($value)
+                is_object($value) ? $value::class : gettype($value)
             ));
         }
 

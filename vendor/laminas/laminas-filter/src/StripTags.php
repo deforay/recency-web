@@ -16,6 +16,7 @@ use function is_scalar;
 use function is_string;
 use function preg_match;
 use function preg_match_all;
+use function str_contains;
 use function str_replace;
 use function strlen;
 use function strpos;
@@ -23,6 +24,15 @@ use function strtolower;
 use function substr;
 use function trim;
 
+/**
+ * @psalm-type Options = array{
+ *     tags_allowed?: array<string>|string,
+ *     attributes_allowed?: array<string>|string,
+ *     ...
+ * }
+ * @extends AbstractFilter<Options>
+ * @final
+ */
 class StripTags extends AbstractFilter
 {
     /**
@@ -297,7 +307,7 @@ class StripTags extends AbstractFilter
         }
 
         // Reconstruct tags ending with "/>" as backwards-compatible XHTML tag
-        if (strpos($tagEnd, '/') !== false) {
+        if (str_contains($tagEnd, '/')) {
             $tagEnd = " $tagEnd";
         }
 

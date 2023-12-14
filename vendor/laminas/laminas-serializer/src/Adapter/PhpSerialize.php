@@ -12,7 +12,6 @@ use Laminas\Serializer\Exception;
 use Laminas\Stdlib\ErrorHandler;
 use Traversable;
 
-use function get_class;
 use function gettype;
 use function is_object;
 use function is_string;
@@ -22,7 +21,9 @@ use function sprintf;
 use function unserialize;
 
 use const E_NOTICE;
+use const E_WARNING;
 use const PHP_MAJOR_VERSION;
+use const PHP_VERSION_ID;
 
 class PhpSerialize extends AbstractAdapter
 {
@@ -114,7 +115,7 @@ class PhpSerialize extends AbstractAdapter
         if (! is_string($serialized) || ! preg_match('/^((s|i|d|b|a|O|C):|N;)/', $serialized)) {
             $value = $serialized;
             if (is_object($value)) {
-                $value = get_class($value);
+                $value = $value::class;
             } elseif (! is_string($value)) {
                 $value = gettype($value);
             }
@@ -131,7 +132,12 @@ class PhpSerialize extends AbstractAdapter
             return false;
         }
 
-        ErrorHandler::start(E_NOTICE);
+        $errorLevel = E_NOTICE;
+        if (PHP_VERSION_ID >= 80300) {
+            $errorLevel = E_WARNING;
+        }
+
+        ErrorHandler::start($errorLevel);
 
         // The second parameter to unserialize() is only available on PHP 7.0 or higher
         $ret = PHP_MAJOR_VERSION >= 7

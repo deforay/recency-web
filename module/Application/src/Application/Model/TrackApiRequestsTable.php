@@ -28,7 +28,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
         $this->adapter = $adapter;
     }
 
-    public function addApiTracking($transactionId, $user, $numberOfRecords, $requestType, $testType, $url, $requestData = null, $responseData = null, $format){
+    public function addApiTracking($transactionId, $user, $numberOfRecords, $requestType, $testType, $url, $format, $requestData = null, $responseData = null){
 
         $folderPath = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'track-api';
         if (!empty($requestData) && $requestData !== '[]') {
@@ -46,7 +46,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
 
         $responseDataJson = json_encode($responseData, JSON_PRETTY_PRINT);
 
-        if (!empty($responseDataJson) && $responseDataJson !== '[]') {
+        if ($responseDataJson !== '' && $responseDataJson !== false && $responseDataJson !== '[]') {
             if (!is_dir($folderPath . DIRECTORY_SEPARATOR . 'responses')) {
                 mkdir($folderPath . DIRECTORY_SEPARATOR . 'responses', 0777, true);
             }
@@ -98,9 +98,9 @@ class TrackApiRequestsTable extends AbstractTableGateway {
 
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
-                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
+            for ($i = 0; $i < (int) $parameters['iSortingCols']; $i++) {
+                if ($parameters['bSortable_' . (int) $parameters['iSortCol_' . $i]] == "true") {
+                    $sOrder .= $orderColumns[(int) $parameters['iSortCol_' . $i]] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
                 }
             }
             $sOrder = substr_replace($sOrder, "", -1);
@@ -136,9 +136,11 @@ class TrackApiRequestsTable extends AbstractTableGateway {
             }
             $sWhere .= $sWhereSub;
         }
+        /* Individual column filtering */
+        $counter = count($aColumns);
 
         /* Individual column filtering */
-        for ($i = 0; $i < count($aColumns); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
                 if ($sWhere == "") {
                     $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
@@ -199,7 +201,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
         /* Total data set length */
         $iTotal = $this->select()->count();
         $output = array(
-            "sEcho" => intval($parameters['sEcho']),
+            "sEcho" => (int) $parameters['sEcho'],
             "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
@@ -246,7 +248,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
             if (is_dir($requestsDirectory)) {
                 $requestFiles = glob($requestsDirectory . DIRECTORY_SEPARATOR . $result['transaction_id'] . '.json.zip');
 
-                if (!empty($requestFiles)) {
+                if ($requestFiles !== [] && $requestFiles !== false) {
                     $userRequestFile = reset($requestFiles);
 
                     $zip = new ZipArchive();
@@ -267,7 +269,7 @@ class TrackApiRequestsTable extends AbstractTableGateway {
             if (is_dir($responsesDirectory)) {
                 $responseFiles = glob($responsesDirectory . DIRECTORY_SEPARATOR . $result['transaction_id'] . '.json.zip');
 
-                if (!empty($responseFiles)) {
+                if ($responseFiles !== [] && $responseFiles !== false) {
                     $userResponseFile = reset($responseFiles);
 
                     $zip = new ZipArchive();
@@ -283,12 +285,10 @@ class TrackApiRequestsTable extends AbstractTableGateway {
                 }
             }
         }
-        
-        $data = [
+        return [
             'userRequest' => $userRequest,
             'userResponse' => $userResponse,
         ];
-        return $data;
     }
     
 }
