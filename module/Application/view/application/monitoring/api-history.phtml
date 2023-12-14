@@ -5,7 +5,7 @@ use Laminas\Session\Container;
 $sessionLogin = new Container('credo');
 $roleCode = $sessionLogin->roleCode;
 $acl=$this->layout()->acl;
-
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 ?>
 <link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
 <div class="bg-body-light">
@@ -125,7 +125,9 @@ $acl=$this->layout()->acl;
             "bAutoWidth": false,
             "bProcessing": true,
             "bServerSide": true,
-          
+            "aoColumns": [
+                <?php echo $editAction; ?>
+            ],
             "sAjaxSource": "<?php echo $this->url('monitoring', array('action' => 'api-history')); ?>",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 aoData.push({
