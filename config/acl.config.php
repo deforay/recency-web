@@ -78,6 +78,7 @@ return array(
         ),
         'Application\\Controller\\MonitoringController' => array(
             'all-user-login-history' => 'allow',
+            'api-history' => 'allow',
             'audit-trail' => 'allow',
             'system-alerts' => 'allow',
             'user-activity-log' => 'allow',
