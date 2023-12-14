@@ -170,13 +170,8 @@ class TrackApiRequestsTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array("DATE(t.requested_on) >='" . $start_date . "'", "DATE(t.requested_on) <='" . $end_date . "'"));
         }
 
-
-        if ($parameters['testType'] != '') {
-            $sQuery->where(array('t.test_type' => trim($parameters['testType'])));
-        }
-
         if ($parameters['syncType'] != '') {
-            $sQuery->where(array('t.request_type' => base64_decode($parameters['syncType'])));
+            $sQuery->where(array('t.request_type' => $parameters['syncType']));
         }
 
         if (!empty($sWhere)) {

@@ -26,15 +26,6 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                     <td>
                         <input type="text" class="form-control" id="requestedOn" placeholder="Requested On" name="requestedOn" title="Please select requested On Date" style="width:100%;" readonly>
                     </td>
-                    <td><b>Test Type:</b></td>
-                    <td>
-                    <select class="form-control" id="testType" name="testType" title="Please select test type" style="width:100%;">
-                        <option value="">All</option>
-                        <option value="vl">Viral Load</option>
-                    </select>
-                    </td>
-                </tr>
-                <tr>
                     <td><b>Sync Type:</b></td>
                     <td>
                         <select class="form-control" id="syncType" name="syncType" title="Please select sync Type" style="width:100%;">
@@ -43,8 +34,6 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                             <option value="fetch-results">fetch results</option>
                         </select>
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
                     <td colspan="12" style=""><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
@@ -133,10 +122,6 @@ $editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sCl
                 aoData.push({
                     "name": "requestedOn",
                     "value": $("#requestedOn").val()
-                });
-                aoData.push({
-                    "name": "testType",
-                    "value": $("#testType").val()
                 });
                 aoData.push({
                     "name": "syncType",
