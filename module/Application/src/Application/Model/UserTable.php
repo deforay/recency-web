@@ -580,4 +580,17 @@ class UserTable extends AbstractTableGateway
         }
         return $response;
     }
+
+    public function fetchUserDetailsByauthToken($authToken)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+        $sQuery = $sql->select()->from(array('u' => 'users'))
+            ->join(array('r' => 'roles'), 'u.role_id = r.role_id')
+            ->where(array('u.auth_token' => $authToken))
+            ->where(array('u.status' => 'active'));
+        $sQueryStr = $sql->buildSqlString($sQuery); // Get the string of the Sql, instead of the Select-instance
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+        return $rResult;
+    }
 }

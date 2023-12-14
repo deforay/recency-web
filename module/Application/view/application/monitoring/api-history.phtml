@@ -1,0 +1,210 @@
+<?php
+
+use Laminas\Session\Container;
+
+$sessionLogin = new Container('credo');
+$roleCode = $sessionLogin->roleCode;
+$acl=$this->layout()->acl;
+$editAction = '{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
+?>
+<link rel="stylesheet" href="<?php echo $this->basePath() . '/assets/plugins/datepicker/daterangepicker.css' ?>" rel="stylesheet">
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+            <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">API History</h1>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="block block-rounded block-bordered">
+        <div class="block-header block-header-default">
+        </div>
+        <div class="block-content block-content-full">
+        <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+                <tr>
+                    <td><b> Date Range:</b></td>
+                    <td>
+                        <input type="text" class="form-control" id="requestedOn" placeholder="Requested On" name="requestedOn" title="Please select requested On Date" style="width:100%;" readonly>
+                    </td>
+                    <td><b>Test Type:</b></td>
+                    <td>
+                    <select class="form-control" id="testType" name="testType" title="Please select test type" style="width:100%;">
+                        <option value="">All</option>
+                        <option value="vl">Viral Load</option>
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Sync Type:</b></td>
+                    <td>
+                        <select class="form-control" id="syncType" name="syncType" title="Please select sync Type" style="width:100%;">
+                            <option value="">All</option>
+                            <option value="save-request">save request</option>
+                            <option value="fetch-results">fetch results</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="12" style=""><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-info btn-sm">
+                        &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+                    </td>
+                </tr>
+            </table>
+            <table id="apiHistoryDataTable" class="table table-bordered table-striped table-vcenter">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Number of Records Synced</th>
+                        <th>Sync Type</th>
+                        <th>Test Type</th>
+                        <th>URL</th>
+                        <th>Synced On</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+              <td colspan='7' class='dataTables_empty'>Loading data from server</td>
+                       
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Number of Records Synced</th>
+                        <th>Sync Type</th>
+                        <th>Test Type</th>
+                        <th>URL</th>
+                        <th>Synced On</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal for Payment Details -->
+<div class="modal fade" id="apiDataModal" tabindex="-1" role="dialog" aria-labelledby="apiDataModalLabel" aria-hidden="true">   
+<div class="modal-dialog" role="document">   
+<div class="modal-content">
+   <div class="modal-body">  
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">   
+            <span aria-hidden="true">&times;</span>   
+        </button>   
+                    <!-- Add tabs -->
+        <ul class="nav nav-tabs" id="apiDataTabs" role="tablist">   
+                <li class="nav-item">   
+                        <a class="nav-link active" id="userRequestTab" data-toggle="tab" href="#userRequestContent" role="tab" aria-controls="userRequestContent" aria-selected="true">Request</a>   
+                </li>
+                <li class="nav-item">   
+                        <a class="nav-link" id="userResponseTab" data-toggle="tab" href="#userResponseContent" role="tab" aria-controls="userResponseContent" aria-selected="false">Response</a>   
+                </li>   
+        </ul>   
+                    <!-- Add tab content -->
+        <div class="tab-content" id="apiDataTabsContent">   
+                <div class="tab-pane fade show active" id="userRequestContent" role="tabpanel" aria-labelledby="userRequestTab">   
+                </div>   
+                <div class="tab-pane fade" id="userResponseContent" role="tabpanel" aria-labelledby="userResponseTab">   
+                </div>   
+        </div>   
+   </div>   
+</div>   
+</div>   
+</div>
+<script src="<?php echo $this->basePath() . '/assets/js/plugins/moment/moment.min.js'; ?>"></script>
+<script type="text/javascript">
+    
+    let searchExecuted = false;
+    /* Table initialisation */
+    oTable = null;
+    $(document).ready(function() {
+      
+        oTable = $('#apiHistoryDataTable').dataTable({
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bServerSide": true,
+            "aoColumns": [
+                <?php echo $editAction; ?>
+            ],
+            "sAjaxSource": "<?php echo $this->url('monitoring', array('action' => 'api-history')); ?>",
+            "fnServerData": function(sSource, aoData, fnCallback) {
+                aoData.push({
+                    "name": "requestedOn",
+                    "value": $("#requestedOn").val()
+                });
+                aoData.push({
+                    "name": "testType",
+                    "value": $("#testType").val()
+                });
+                aoData.push({
+                    "name": "syncType",
+                    "value": $("#syncType").val()
+                });
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }
+        });
+
+        $('#requestedOn').daterangepicker({
+            format: 'DD-MMM-YYYY',
+            autoUpdateInput: false,
+            separator: ' to ',
+            startDate: moment().subtract('days', 29),
+            endDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'Last 60 Days': [moment().subtract('days', 59), moment()],
+                'Last 180 Days': [moment().subtract('days', 179), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
+        },
+        function(start, end) {
+            startDate = start.format('YYYY-MM-DD');
+            endDate = end.format('YYYY-MM-DD');
+            $('input[name="requestedOn"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD-MMM-YYYY') + ' to ' + picker.endDate.format('DD-MMM-YYYY'));
+            });
+
+        });
+
+    });
+
+    function searchVlRequestData() {
+        searchExecuted = true;
+        $.blockUI();
+        oTable.fnDraw();
+        $.unblockUI();
+    }
+
+    function showParams(val) {
+		if (val != '') {
+            $.post("<?php echo $this->url('monitoring', array('action' => 'get-api-params')); ?>", {
+                    apiTrackId: val,
+                },
+                function(data) {
+                    console.log(data);
+                    if (data != "") {
+                        var apiData = JSON.parse(data);
+                        console.log(apiData);
+                        var userRequestContent = '<pre>' + JSON.stringify(apiData.userRequest, null, 2) + '</pre>';
+                        var userResponseContent = '<pre>' + JSON.stringify(apiData.userResponse, null, 2) + '</pre>';
+                        $("#userRequestContent").html(userRequestContent);
+                        $("#userResponseContent").html(userResponseContent);
+                        $('#apiDataModal').modal('show');
+                    }
+                });
+		}
+	}
+</script>

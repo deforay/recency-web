@@ -34,6 +34,7 @@ use Application\Model\ManageColumnsMapTable;
 use Application\Model\EventLogTable;
 use Application\Model\ManifestsTable;
 use Application\Model\SystemAlertsTable;
+use Application\Model\TrackApiRequestsTable;
 use Application\Model\Acl;
 // Service
 
@@ -348,6 +349,14 @@ class Module implements ConfigProviderInterface
                     {
                         $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
                         return new SystemAlertsTable($dbAdapter);
+                    }
+                },
+                'TrackApiRequestsTable'  => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        $dbAdapter = $diContainer->get('Laminas\Db\Adapter\Adapter');
+                        return new TrackApiRequestsTable($dbAdapter);
                     }
                 },
                 //service

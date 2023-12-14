@@ -120,6 +120,9 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\Monitoring
 if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\MonitoringController', 'system-alerts')) {
      $monitoringMenu .= "<li id='nav-main-item'><a id='alerts' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'system-alerts')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-list'></i> Alerts</span></a></li>";
 }
+if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\MonitoringController', 'api-history')) {
+     $monitoringMenu .= "<li id='nav-main-item'><a id='api-history' class='nav-main-link' href=" . $this->url('monitoring', array('action' => 'api-history')) . "><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i>Api History</span></a></li>";
+}
 // $uploadResultMenu = "";
 // $uploadResultMenu="<li id='nav-main-item'><a id='upload-result' class='nav-main-link' href=". $this->url('vl-data', array('action' => 'upload-result')) ."><span class='nav-main-link-name'><i class='nav-main-link-icon si si-notebook'></i> Upload Results</span></a></li>";
 

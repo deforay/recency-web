@@ -194,4 +194,16 @@ class UserService
         $systmeAlertsDb = $this->sm->get('SystemAlertsTable');
         return $systmeAlertsDb->UpdateAlertStatus($params);
     }
+
+    public function getAllTrackApiDetails($params)
+    {
+        $trackapiDb = $this->sm->get('TrackApiRequestsTable');
+        return $trackapiDb->fetchAllTrackApiDetails($params);
+    }
+
+    public function getApiParamsDetails($params)
+    {
+        $trackapiDb = $this->sm->get('TrackApiRequestsTable');
+        return $trackapiDb->fetchApiParamsDetails($params);
+    }
 }

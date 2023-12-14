@@ -1685,6 +1685,9 @@ class RecencyService
                         'appVersion' => 'v1.1',
                         'data' => $dataArray,
                     );
+                    $requestData = json_encode($params, JSON_PRETTY_PRINT);
+                    $dataArrayCount = count($dataArray);
+                    
                     $response = $client->request('POST', $urlVlsm, [
                         'headers' => [
                             'Authorization' => 'Bearer ' . $authToken,
@@ -1695,17 +1698,23 @@ class RecencyService
                     //echo $response->getBody();
                     $statusValue = $response->getStatusCode();
                     $vlSampleCode = "";
-                    if ($statusValue == 200 && (isset($data['recency_id']) && $data['recency_id'] != "")) {
-                        $jsonResponse = $response->getBody();
-                        $response = json_decode($jsonResponse, true);
-                        if ($response != '' && isset($response['data']) && $response['data'] != '') {
-                            $responseData = $response['data'][0];
-                            if ($responseData != '' && isset($responseData['sampleCode'])) {
-                                $vlSampleCode = $responseData['sampleCode'];
+                    $jsonResponse = $response->getBody();
+                    $response = json_decode($jsonResponse, true);
+                    if ($response != '' ){
+                        if ($statusValue == 200 && (isset($data['recency_id']) && $data['recency_id'] != "")) {
+                            if ($response != '' && isset($response['data']) && $response['data'] != '') {
+                                $responseData = $response['data'][0];
+                                if ($responseData != '' && isset($responseData['sampleCode'])) {
+                                    $vlSampleCode = $responseData['sampleCode'];
+                                }
                             }
+                            $recencyDb->updateVlRequestSentNO($data['recency_id'], $vlSampleCode);
                         }
-                        //echo "SUCCESS";
-                        $recencyDb->updateVlRequestSentNO($data['recency_id'], $vlSampleCode);
+                        $transactionId = isset($response['transactionId']) ? $response['transactionId'] : null;
+                        $userDb = $this->sm->get('UserTable');
+                        $user = $userDb->fetchUserDetailsByauthToken($authToken);
+                        $trackApiDb = $this->sm->get('TrackApiRequestsTable');
+                        $trackApiDb->addApiTracking($transactionId, $user['user_id'], $dataArrayCount, 'save-request', 'vl', '/api/v1.1/vl/save-request.php', $requestData, $response, 'json');
                     }
                 }
             }
@@ -1757,6 +1766,8 @@ class RecencyService
                     'sampleCode' => $sampleCodes,
                     'sampleCollectionDate' => $fromAndToDate
                 );
+                $requestData = json_encode($params, JSON_PRETTY_PRINT);
+
                 $response = $client->request('GET', $urlVlsm, [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $authToken,
@@ -1766,21 +1777,28 @@ class RecencyService
                 ]);
                 $jsonResponse = $response->getBody();
                 $response = json_decode($jsonResponse, true);
-
-                if ($response['status'] === 'success') {
+                
+                if ($response != '' ){
                     $responseData = $response['data'];
-                    foreach ($responseData as $data) {
-                        $finaloutcome = '';
-                        if ((isset($data['vlResult']) && $data['vlResult'] > 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")) {
-                            $finaloutcome = "RITA Recent";
-                        }
-                        if ((isset($data['vlResult']) && $data['vlResult'] <= 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")) {
-                            $finaloutcome = "Long Term";
-                        }
-                        if (isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined' && $finaloutcome != '') {
-                            $recencyDb->updatefinalOutComeBySampleId($data, $finaloutcome);
+                    if ($response['status'] === 'success') {
+                        foreach ($responseData as $data) {
+                            $finaloutcome = '';
+                            if ((isset($data['vlResult']) && $data['vlResult'] > 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "not suppressed")) {
+                                $finaloutcome = "RITA Recent";
+                            }
+                            if ((isset($data['vlResult']) && $data['vlResult'] <= 1000) || (isset($data['vlResultCategory']) && $data['vlResultCategory'] == "suppressed")) {
+                                $finaloutcome = "Long Term";
+                            }
+                            if (isset($data['serialNo']) && $data['serialNo'] != '' && $data['serialNo'] != 'undefined' && $finaloutcome != '') {
+                                $recencyDb->updatefinalOutComeBySampleId($data, $finaloutcome);
+                            }
                         }
                     }
+                    $transactionId = isset($response['transactionId']) ? $response['transactionId'] : null;
+                    $userDb = $this->sm->get('UserTable');
+                    $user = $userDb->fetchUserDetailsByauthToken($authToken);
+                    $trackApiDb = $this->sm->get('TrackApiRequestsTable');
+                    $trackApiDb->addApiTracking($transactionId, $user['user_id'], count($responseData), 'fetch-results', 'vl', '/api/v1.1/vl/fetch-results.php', $requestData, $response, 'json');
                 }
             }
         } catch (Exception $e) {

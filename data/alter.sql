@@ -631,7 +631,7 @@ ALTER TABLE `recency_change_trails` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER 
 save-request  - ./vendor/bin/laminas vlsm-send-requests
 fetch-results - ./vendor/bin/laminas vlsm-receive-results
 send-mail     - ./vendor/bin/laminas send-mail
-system-alerts - ./vendor/bin/laminas system-alerts
+system-alerts - ./vendor/bin/laminas system-alerts  
 
 -- Brindha 14-July-2023
 INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'Reports');
@@ -695,3 +695,19 @@ UPDATE `privileges` SET `display_name` = 'Export Long Term' WHERE `privileges`.`
 
 -- Brindha 01-August-2023
 ALTER TABLE system_alerts MODIFY COLUMN alert_type INT NOT NULL;
+
+-- Brindha 12-December-2023
+INSERT INTO `privileges` (`resource_id`, `privilege_name`, `display_name`) VALUES ('Application\\Controller\\MonitoringController', 'api-history', 'Api History');
+
+CREATE TABLE `track_api_requests` ( 
+  `api_track_id` int NOT NULL AUTO_INCREMENT, 
+  `transaction_id` varchar(256) DEFAULT NULL, 
+  `requested_by` varchar(255) DEFAULT NULL, 
+  `requested_on` datetime DEFAULT NULL, 
+  `number_of_records` varchar(50) DEFAULT NULL, 
+  `request_type` varchar(50) DEFAULT NULL, 
+  `test_type` varchar(255) DEFAULT NULL, 
+  `api_url` text DEFAULT NULL, 
+  `data_format` varchar(255) DEFAULT NULL, 
+  PRIMARY KEY (`api_track_id`) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

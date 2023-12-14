@@ -111,5 +111,27 @@ class MonitoringController extends AbstractActionController
             return $this->getResponse()->setContent(Json::encode($result));
         }
     }
-    
+
+    public function apiHistoryAction()
+    {
+        $session = new Container('credo');
+        /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $result = $this->userService->getAllTrackApiDetails($params);
+            return $this->getResponse()->setContent(Json::encode($result));
+        }
+    }
+    public function getApiParamsAction()
+    {
+        $session = new Container('credo');
+        /** @var \Laminas\Http\Request $request */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $params = $request->getPost();
+            $result = $this->userService->getApiParamsDetails($params);
+            return $this->getResponse()->setContent(Json::encode($result));
+        }
+    }
 }
