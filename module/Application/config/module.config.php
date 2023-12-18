@@ -9,8 +9,9 @@
  */
 
 use Application\Command\SystemAlerts;
-use Application\Command\VlsmReceiveResults;
 use Application\Command\VlsmSendRequests;
+use Application\Command\VlsmReceiveResults;
+use Application\Command\VlsmSampleStatus;
 
 return array(
      'router' => array(
@@ -308,6 +309,7 @@ return array(
           'factories' => [
                Application\Command\VlsmSendRequests::class => Application\Command\VlsmSendRequestsFactory::class,
                Application\Command\VlsmReceiveResults::class => Application\Command\VlsmReceiveResultsFactory::class,
+               Application\Command\VlsmSampleStatus::class => Application\Command\VlsmSampleStatusFactory::class,
                Application\Command\SendMail::class => Application\Command\SendMailFactory::class,
                Application\Command\SystemAlerts::class => Application\Command\SystemAlertsFactory::class,
           ],
@@ -346,6 +348,7 @@ return array(
                'send-mail' => Application\Command\SendMail::class,
                'vlsm-send-requests' => VlsmSendRequests::class,
                'vlsm-receive-results' => VlsmReceiveResults::class,
+               'vlsm-sample-status' => VlsmSampleStatus::class,
                'system-alerts' => SystemAlerts::class,
           ],
      ],

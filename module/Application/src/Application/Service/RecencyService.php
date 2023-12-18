@@ -1779,7 +1779,7 @@ class RecencyService
                 $jsonResponse = $response->getBody();
                 $response = json_decode($jsonResponse, true);
 
-                if ($response != '') {
+                if ($response != '' && isset($response['data']) && $response['data'] != '') {
                     $responseData = $response['data'];
                     if ($response['status'] === 'success') {
                         foreach ($responseData as $data) {
@@ -1794,12 +1794,70 @@ class RecencyService
                                 $recencyDb->updatefinalOutComeBySampleId($data, $finaloutcome);
                             }
                         }
+                        $transactionId = $response['transactionId'] ?? null;
+                        $userDb = $this->sm->get('UserTable');
+                        $user = $userDb->fetchUserDetailsByauthToken($authToken);
+                        $trackApiDb = $this->sm->get('TrackApiRequestsTable');
+                        $trackApiDb->addApiTracking($transactionId, $user['user_id'], count($responseData), 'fetch-results', 'vl', '/api/v1.1/vl/fetch-results.php', $requestData, $response, 'json');
                     }
-                    $transactionId = $response['transactionId'] ?? null;
-                    $userDb = $this->sm->get('UserTable');
-                    $user = $userDb->fetchUserDetailsByauthToken($authToken);
-                    $trackApiDb = $this->sm->get('TrackApiRequestsTable');
-                    $trackApiDb->addApiTracking($transactionId, $user['user_id'], count($responseData), 'fetch-results', 'vl', '/api/v1.1/vl/fetch-results.php', $requestData, $response, 'json');
+                }
+            }
+        } catch (Exception $e) {
+            error_log('Error :' . $e->getMessage());
+        }
+    }
+    public function VlsmSampleStatus()
+    {
+        try {
+            $recencyDb = $this->sm->get('RecencyTable');
+            $client = new GuzzleHttp\Client();
+            $configResult = $this->sm->get('Config');
+            $authToken = $configResult['authToken'];
+            $urlVlsm = rtrim($configResult['vlsm']['domain'], "/") . '/api/v1.1/sample-status.php';
+            //echo $urlVlsm."     ";
+            $rResult = $recencyDb->fetchPendingVlSampleData();
+            $uniqueIds = array();
+            $sampleCodes = array();
+            if (count($rResult) > 0) {
+                foreach ($rResult as $row) {
+                    if (isset($row['unique_id']) && $row['unique_id'] != '') {
+                        $uniqueIds[] = $row['unique_id'];
+                    }
+                    if (isset($row['lis_vl_sample_code']) && $row['lis_vl_sample_code'] != '') {
+                        $sampleCodes[] = $row['lis_vl_sample_code'];
+                    }
+                }
+            }
+            if ($sampleCodes !== [] && $uniqueIds !== []) {
+                $params = array(
+                    'uniqueId'   => $uniqueIds,
+                    'sampleCode' => $sampleCodes,
+                    'testType' => 'vl',
+                );
+                $requestData = json_encode($params, JSON_PRETTY_PRINT);
+                $response = $client->request('GET', $urlVlsm, [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $authToken,
+                        'Content-Type' => 'application/json',
+                    ],
+                    'json' => $params,
+                ]);
+                $jsonResponse = $response->getBody();
+                $response = json_decode($jsonResponse, true);
+                if ($response != '' && isset($response['data']) && $response['data'] != '') {
+                    $responseData = $response['data'];
+                    if ($response['status'] === 'success') {
+                        foreach ($responseData as $data) {
+                            if (isset($data['appSampleCode']) && $data['appSampleCode'] != '' && $data['appSampleCode'] != 'undefined') {
+                                $recencyDb->updateSampleStatusBySampleId($data);
+                            }
+                        }
+                        $transactionId = $response['transactionId'] ?? null;
+                        $userDb = $this->sm->get('UserTable');
+                        $user = $userDb->fetchUserDetailsByauthToken($authToken);
+                        $trackApiDb = $this->sm->get('TrackApiRequestsTable');
+                        $trackApiDb->addApiTracking($transactionId, $user['user_id'], count($responseData), 'sample-status', 'vl', '/api/v1.1/sample-status.php', $requestData, $response, 'json');
+                    }
                 }
             }
         } catch (Exception $e) {

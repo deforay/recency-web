@@ -5191,6 +5191,14 @@ class RecencyTable extends AbstractTableGateway
         ), array('sample_id' => $data['serialNo']));
     }
 
+    //refer updateSampleStatusBySampleId Function
+    public function updateSampleStatusBySampleId($data)
+    {
+        $this->update(array(
+            'vl_sample_status'   => $data['resultStatus']
+        ), array('sample_id' => $data['appSampleCode']));
+    }
+
     //refer fetchPendingVlSampleData Function
     public function fetchPendingVlSampleData()
     {

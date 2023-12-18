@@ -31,7 +31,7 @@ class TrackApiRequestsTable extends AbstractTableGateway
         $this->adapter = $adapter;
     }
 
-    public function addApiTracking($transactionId, $user, $numberOfRecords, $requestType, $testType, $url, $format, $requestData = null, $responseData = null)
+    public function addApiTracking($transactionId, $user, $numberOfRecords, $requestType, $testType, $url, $requestData = null, $responseData = null, $format)
     {
 
         $folderPath = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'track-api';
@@ -43,14 +43,17 @@ class TrackApiRequestsTable extends AbstractTableGateway
             $zipFileName = "$folderPath/requests/$transactionId.json.zip";
 
             if ($zip->open($zipFileName, ZipArchive::CREATE) === true) {
-                $zip->addFromString("$transactionId.json", $requestData);
+                if (is_array($requestData)) {
+                   $requestDataString = json_encode($requestData, JSON_PRETTY_PRINT);
+                } else {
+                    $requestDataString = $requestData;
+                }
+                $zip->addFromString("$transactionId.json", $requestDataString);
                 $zip->close();
             }
         }
 
-        $responseDataJson = json_encode($responseData, JSON_PRETTY_PRINT);
-
-        if ($responseDataJson !== '' && $responseDataJson !== false && $responseDataJson !== '[]') {
+        if (!empty($responseData) && $responseData !== '[]') {
             if (!is_dir($folderPath . DIRECTORY_SEPARATOR . 'responses')) {
                 mkdir($folderPath . DIRECTORY_SEPARATOR . 'responses', 0777, true);
             }
@@ -58,7 +61,12 @@ class TrackApiRequestsTable extends AbstractTableGateway
             $zipFileName = "$folderPath/responses/$transactionId.json.zip";
 
             if ($zip->open($zipFileName, ZipArchive::CREATE) === true) {
-                $zip->addFromString("$transactionId.json", $responseDataJson);
+                if (is_array($responseData)) {
+                    $responseDataString = json_encode($responseData, JSON_PRETTY_PRINT);
+                 } else {
+                     $responseDataString = $responseData;
+                 }
+                $zip->addFromString("$transactionId.json", $responseDataString);
                 $zip->close();
             }
         }

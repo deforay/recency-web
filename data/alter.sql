@@ -631,7 +631,8 @@ ALTER TABLE `recency_change_trails` ADD `vl_lab_id` INT NULL DEFAULT NULL AFTER 
 save-request  - ./vendor/bin/laminas vlsm-send-requests
 fetch-results - ./vendor/bin/laminas vlsm-receive-results
 send-mail     - ./vendor/bin/laminas send-mail
-system-alerts - ./vendor/bin/laminas system-alerts  
+system-alerts - ./vendor/bin/laminas system-alerts
+sample-status - ./vendor/bin/laminas vlsm-sample-status
 
 -- Brindha 14-July-2023
 INSERT INTO `resources` (`resource_id`, `display_name`) VALUES ('Application\\Controller\\ReportsController', 'Reports');
@@ -711,3 +712,7 @@ CREATE TABLE `track_api_requests` (
   `data_format` varchar(255) DEFAULT NULL, 
   PRIMARY KEY (`api_track_id`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Brindha 14-December-2023
+ALTER TABLE `recency` ADD `vl_sample_status` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_lab_id`;
+ALTER TABLE `audit_recency` ADD `vl_sample_status` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_lab_id`;
