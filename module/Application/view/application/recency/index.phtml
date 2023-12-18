@@ -10,7 +10,7 @@ $acl=$this->layout()->acl;
 // {"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center"},{"sClass":"center",bSortable:false}';
 
 $formFields = array(
-    'sample_id', 'facility_name', 'hiv_recency_test_date', 'vl_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'term_outcome', 'vl_result', 'final_outcome', 'gender', 'age', 'patient_id', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type', 'testing_facility_type', 'testing_facility_type_name', 'hiv_diagnosis_date',
+    'sample_id', 'facility_name', 'hiv_recency_test_date', 'vl_test_date', 'control_line', 'positive_verification_line', 'long_term_verification_line', 'term_outcome', 'vl_result', 'vl_sample_status', 'final_outcome', 'gender', 'age', 'patient_id', 'sample_collection_date', 'sample_receipt_date', 'received_specimen_type', 'testing_facility_type', 'testing_facility_type_name', 'hiv_diagnosis_date',
     'kit_lot_no', 'kit_expiry_date', 'tester_name', 'dob', 'marital_status', 'residence', 'education_level', 'name', 'pregnancy_status', 'current_sexual_partner', 'past_hiv_testing', 'last_hiv_status', 'patient_on_art', 'test_last_12_month', 'exp_violence_last_12_month',
     'form_initiation_datetime', 'form_transfer_datetime'
 );
@@ -220,6 +220,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                         <th>Long Term Line</th>
                         <th>Assay Outcome</th>
                         <th>VL Result</th>
+                        <th>VL Sample Status</th>
                         <th>Final Outcome</th>
                         <th>Gender</th>
                         <th>Age</th>
@@ -255,9 +256,9 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                 <tbody>
                     <tr>
                         <?php if ($roleCode == "user") {
-                            echo "<td colspan='36' class='dataTables_empty'>Loading data from server</td>";
-                        } else {
                             echo "<td colspan='37' class='dataTables_empty'>Loading data from server</td>";
+                        } else {
+                            echo "<td colspan='38' class='dataTables_empty'>Loading data from server</td>";
                         } ?>
                     </tr>
                 </tbody>
@@ -272,6 +273,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
                         <th>Long Term Line</th>
                         <th>Assay Outcome</th>
                         <th>VL Result</th>
+                        <th>VL Sample Status</th>
                         <th>Final Outcome</th>
                         <th>Gender</th>
                         <th>Age</th>
@@ -404,8 +406,8 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
             }
         });
         //count($arrFields)
-        // var i = <?php //echo count($arrFields); 
-                    ?>;
+        // var i = < ?php //echo count($arrFields); 
+                   // ?>;
         // for(colNo=0;colNo <i;colNo++){
         //     $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
         //     console.log("#iCol"+colNo);

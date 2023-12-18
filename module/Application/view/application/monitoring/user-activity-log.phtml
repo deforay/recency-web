@@ -20,8 +20,10 @@ $acti = $manageColumnsResult['manage_columns'];
 $resultArr = array_diff($arrnum, $arrFields);
 $HideVal = implode(',', $resultArr);
 
-for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
-    $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
+if(isset($globalConfigResult)){
+    for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
+        $arr[$globalConfigResult[$i]['global_name']] = $globalConfigResult[$i]['global_value'];
+    }
 }
 $resultArr2 = array();
 if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
