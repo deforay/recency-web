@@ -46,6 +46,7 @@ $roleCode = $sessionLogin->roleCode;
                 <th>Viral Load Result</th>
                 <th>Recency Outcome</th>
                 <th>Final Outcome</th>
+                <th>Viral Load Status</th>
                 <th>Action</th>
                 </tr>
             </thead>
@@ -130,6 +131,7 @@ $roleCode = $sessionLogin->roleCode;
                         </td>
                         <td><?php echo $sample['term_outcome']; ?></td>
                         <td><?php echo $sample['final_outcome']; ?></td>
+                        <td><?php echo $sample['vl_sample_status']; ?></td>
                         <td>
                             <?php
                             if ($sample['vl_result'] != '' && $sample['term_outcome'] == 'Assay Recent' && $roleCode != "manager") {
@@ -145,7 +147,7 @@ $roleCode = $sessionLogin->roleCode;
         } else {
             ?>
                 <tr>
-                    <td colspan="8" class="dataTables_empty">No data available</td>
+                    <td colspan="9" class="dataTables_empty">No data available</td>
                 </tr>
             <?php
         }
@@ -159,6 +161,7 @@ $roleCode = $sessionLogin->roleCode;
                     <th>VL Result</th>
                     <th>Recency Outcome</th>
                     <th>Final outcome</th>
+                    <th>Viral Load Status</th>
                     <th>Action</th>
                 </tr>
             </tfoot>

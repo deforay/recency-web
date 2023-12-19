@@ -1354,7 +1354,7 @@ class RecencyTable extends AbstractTableGateway
         $dbAdapter = $this->adapter;
         $sql = new Sql($dbAdapter);
 
-        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome', 'facility_id'))
+        $sQuery = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'patient_id', 'recency_id', 'vl_test_date', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome', 'facility_id', 'vl_sample_status'))
             ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
             ->where(array('r.term_outcome' => 'Assay Recent'));
 
@@ -1380,7 +1380,7 @@ class RecencyTable extends AbstractTableGateway
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult['withTermOutcome'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
 
-        $sQueryTerm = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'vl_lab', 'vl_request_sent_date_time', 'vl_test_date', 'vl_request_sent', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome'))
+        $sQueryTerm = $sql->select()->from(array('r' => 'recency'))->columns(array('sample_id', 'vl_lab', 'vl_request_sent_date_time', 'vl_test_date', 'vl_request_sent', 'hiv_recency_test_date', 'term_outcome', 'vl_result', 'final_outcome', 'vl_sample_status'))
             ->join(array('f' => 'facilities'), 'f.facility_id = r.facility_id', array('facility_name'))
             ->where('(r.vl_result is null OR r.vl_result="")')
             ->where('r.vl_request_sent != "no"');
