@@ -725,38 +725,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
         var jsonArr = [];
         if (($("#sampleId").val() != "") || ($("#patientId").val() != "")) {
 
-            /*if ($('#sendVlsm').val() == 'yes') {
-                jsonArr['sampleId'] = $("#sampleId").val();
-                jsonArr['patientId'] = $("#patientId").val();
-                jsonArr['facilityId'] = $("#isFacilityLab").val();
-                jsonArr['province'] = $("#location_one").val();
-                jsonArr['district'] = $("#location_two").val();
-                jsonArr['sampleCollectionDate'] = $("#sampleCollectionDate").val();
-                jsonArr['sampleType'] = $("#receivedSpecimenType").val();
-                jsonArr['viralLoad'] = $("#isVlLab").val();
-                jsonArr['request_created_by'] = 'recency##< ?php echo $sessionLogin->userId; ?>';
-                jsonArr['dob'] = $("#dob").val();
-                jsonArr['age'] = $("#age").val();
-                jsonArr['gender'] = $("#gender").val();
-                var params = '' + jsonArr['sampleId'] + '&' + jsonArr['patientId'] + '&' + jsonArr['facilityId'] + '&' + jsonArr['province'] + '&' + jsonArr['district'] + '&' + jsonArr['sampleCollectionDate'] + '&' + jsonArr['sampleType'] + '&' + jsonArr['viralLoad'] + '&' + jsonArr['request_created_by'] + '&' + jsonArr['dob'] + '&' + jsonArr['age'] + '&' + jsonArr[''] + '';
 
-                var http = new XMLHttpRequest();
-
-                var url = '< ?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/requestVlTest.php';
-                http.open('POST', url, true);
-                http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                http.onreadystatechange = function() {
-                    if (http.readyState == 4 && http.status == 200) {
-                        if (confirm(http.responseText));
-                        if (http.responseText != "Viral Load Test Request has been sent successfully") {
-                            $("#sendVlsm").val('no');
-                        } else {
-                            $("#sendVlsm").val() == 'yes';
-                        }
-                    }
-                }
-                http.send(params);
-            }*/
             // if (($("#dob").val() != "") || ($("#age").val() != "")) {
             flag = deforayValidator.init({
                 formId: 'recencyInformation'
@@ -774,11 +743,6 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 $.blockUI();
                 document.getElementById('recencyInformation').submit();
             }
-            /*  } else {
-                 $("#age").focus();
-                 $("#age").css("border", "1px solid rgb(207, 51, 57)");
-                 alert("Please enter either DOB or age  ", 'err');
-             } */
         } else {
             $("#sampleId").focus();
             $("#sampleId").css("border", "1px solid rgb(207, 51, 57)");
@@ -999,28 +963,7 @@ ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; } */
                 $('.is-facility').append($newOption).trigger('change');
             }
 
-            /*var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open("GET", '< ?php echo rtrim($configResult['vlsm']['domain'], "/"); ?>/recency/fetchFacilities.php', false); // false for synchronous request
-            xmlHttp.send(null);
-            if (typeof xmlHttp.responseText != 'undefined' && xmlHttp.responseText != "") {
-                jsonData = JSON.parse(xmlHttp.responseText);
-                $('.vlsync').append('<option value=""></option>');
-                jsonData.forEach(function(item) {
-                    // if (item.facility_type == '1') {
 
-                    //     var selectedText = (selectedFacility > 0 && selectedFacility == item.facility_id) ? 'selected="selected"' : '';
-                    //     $('.is-facility').append('<option value="' + item.facility_id + '"' + selectedText + '>' + item.facility_name + '</option>');
-                    // } else if (item.facility_type == '2') {
-                    //     $('.is-viral-lab').append('<option value="' + item.facility_id + '">' + item.facility_name + '</option>');
-                    // }
-                    if (item.facility_type == '2') {
-                        $('.is-viral-lab').append('<option value="' + item.facility_id + '">' + item.facility_name + '</option>');
-                    }
-                });
-            } else {
-                console.log('Facility API from VLSM is not working! Please check domain url of vlsm');
-                return;
-            }*/
         <?php } ?>
         //}
     }

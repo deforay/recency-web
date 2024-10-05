@@ -30,11 +30,11 @@
         "laminas/laminas-di": "^3.13",
         "laminas/laminas-validator": "^2.44",
         "laminas/laminas-router": "^3.12",
+        "laminas/laminas-permissions-acl": "^2.16",
         "phpoffice/phpspreadsheet": "^1.29",
         "halaxa/json-machine": "^1.1",
         "guzzlehttp/guzzle": "^7.4",
-        "tecnickcom/tcpdf": "^6.4",
-        "laminas/laminas-permissions-acl": "^2.16"
+        "tecnickcom/tcpdf": "^6.4"
     },
     "autoload": {
         "psr-4": {
