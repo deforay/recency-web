@@ -7,12 +7,10 @@ use DateTimeZone;
 use Laminas\Session\Container;
 use Exception;
 use Laminas\Db\Sql\Sql;
-use Laminas\Mail\Transport\Smtp as SmtpTransport;
-use Laminas\Mail\Transport\SmtpOptions;
-use Laminas\Mail;
-use Laminas\Mime\Message as MimeMessage;
-use Laminas\Mime\Part as MimePart;
-use Laminas\Mime\Mime as Mime;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
 use TCPDFBarcode;
 
 
@@ -216,19 +214,6 @@ class CommonService
                $dbAdapter = $this->sm->get('Laminas\Db\Adapter\Adapter');
                $sql = new Sql($dbAdapter);
 
-               // Setup SMTP transport using LOGIN authentication
-               $transport = new SmtpTransport();
-               $options = new SmtpOptions(array(
-                    'host' => $configResult["email"]["host"],
-                    'port' => $configResult["email"]["config"]["port"],
-                    'connection_class' => $configResult["email"]["config"]["auth"],
-                    'connection_config' => array(
-                         'username' => $configResult["email"]["config"]["username"],
-                         'password' => $configResult["email"]["config"]["password"],
-                         'ssl' => $configResult["email"]["config"]["ssl"],
-                    ),
-               ));
-               $transport->setOptions($options);
                $limit = '10';
                $mailQuery = $sql->select()->from(array('tm' => 'temp_mail'))
                     ->where("status='pending'")
@@ -236,79 +221,75 @@ class CommonService
                $mailQueryStr = $sql->buildSqlString($mailQuery);
                $mailResult = $dbAdapter->query($mailQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
                if (count($mailResult) > 0) {
+                   
+                    $dsn = sprintf(
+                         'smtp://%s:%s@%s:%s?encryption=%s&auth_mode=%s',
+                         $configResult["email"]["config"]["username"],  // Username (e.g., your Gmail address)
+                         $configResult["email"]["config"]["password"],  // Password (e.g., your app password)
+                         $configResult["email"]["host"],                // SMTP Host (e.g., smtp.gmail.com)
+                         $configResult["email"]["config"]["port"],      // Port (e.g., 587 for TLS, 465 for SSL)
+                         $configResult["email"]["config"]["ssl"],       // Encryption (e.g., 'tls' or 'ssl')
+                         $configResult["email"]["config"]["auth"]       // Auth Mode (e.g., 'login' or 'plain')
+                     );
+
+                    $transport = Transport::fromDsn($dsn);
+                    $mailer = new Mailer($transport);
+
                     foreach ($mailResult as $result) {
-                         $alertMail = new Mail\Message();
                          $id = $result['temp_id'];
                          $tempDb->updateTempMailStatus($id);
 
                          $fromEmail = $globalDb->getGlobalValue('email_id');
-                         //\Zend\Debug\Debug::dump($globalDb->getGlobalValue('email_password'));die;
-                         if (trim($result['attachment']) != '') {
-                              $options = new SmtpOptions(array(
-                                   'host' => $configResult["email"]["host"],
-                                   'port' => $configResult["email"]["config"]["port"],
-                                   'connection_class' => $configResult["email"]["config"]["auth"],
-                                   'connection_config' => array(
-                                        'username' => $fromEmail,
-                                        'password' => $globalDb->getGlobalValue('email_password'),
-                                        'ssl' => $configResult["email"]["config"]["ssl"],
-                                   ),
-                              ));
-                              $transport->setOptions($options);
-                         }
                          $fromFullName = $result['from_full_name'];
                          $subject = $result['subject'];
 
-                         $html = new MimePart($result['message']);
-                         $html->type = "text/html";
+                         // Create the Email
+                         $email = (new Email())
+                         ->from(new Address($fromEmail, $fromFullName))
+                         ->subject($subject)
+                         ->html($result['message']);
+                         
 
-                         $body = new MimeMessage();
-                         if (trim($result['attachment']) != '') {
-                              $extension = strtolower(pathinfo($result['attachment'], PATHINFO_EXTENSION));
-                              $attachment = new MimePart(fopen($result['attachment'], 'r'));
-                              if ($extension == 'pdf') {
-                                   $attachment->type = 'application/pdf';
-                                   $attachment->filename = 'hiv-recency-results-' . date('dmYhis') . '.pdf';
-                              }
-                              $attachment->encoding    = Mime::ENCODING_BASE64;
-                              $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-
-                              $body->setParts(array($html, $attachment));
-                         } else {
-                              $body->setParts(array($html));
-                         }
-
-                         $alertMail->setBody($body);
-                         $alertMail->addFrom($fromEmail, $fromFullName);
-                         $alertMail->addReplyTo($fromEmail, $fromFullName);
-
+                         // Add recipients
                          $toArray = explode(",", $result['to_email']);
                          foreach ($toArray as $toId) {
                               if ($toId != '') {
-                                   $alertMail->addTo($toId);
+                                   $email->addTo($toId);
                               }
                          }
+
                          if (isset($result['cc']) && trim($result['cc']) != "") {
                               $ccArray = explode(",", $result['cc']);
                               foreach ($ccArray as $ccId) {
-                                   if ($ccId != '') {
-                                        $alertMail->addCc($ccId);
-                                   }
+                                  if ($ccId != '') {
+                                      $email->addCc($ccId);
+                                  }
                               }
                          }
 
                          if (isset($result['bcc']) && trim($result['bcc']) != "") {
                               $bccArray = explode(",", $result['bcc']);
                               foreach ($bccArray as $bccId) {
-                                   if ($bccId != '') {
-                                        $alertMail->addBcc($bccId);
-                                   }
+                                  if ($bccId != '') {
+                                      $email->addBcc($bccId);
+                                  }
                               }
                          }
 
-                         $alertMail->setSubject($subject);
-                         $transport->send($alertMail);
-                         $tempDb->deleteTempMail($id);
+                         // Check if there's an attachment
+                         if (trim($result['attachment']) != '') {
+                              $attachmentPath = $result['attachment'];
+                              $extension = strtolower(pathinfo($result['attachment'], PATHINFO_EXTENSION));
+                              if ($extension == 'pdf') {
+                                   if (file_exists($attachmentPath)) {
+                                        $newFilename = 'hiv-recency-results-' . date('dmYhis') . '.pdf';
+                                        $email->attachFromPath($attachmentPath, $newFilename, 'application/pdf');
+                                    }
+                              }
+                         }
+                         // Send the email
+                         $mailer->send($email);
+                         //$tempDb->deleteTempMail($id);
                     }
                }
           } catch (Exception $e) {

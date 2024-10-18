@@ -19,7 +19,7 @@ if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityChe
             <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheckController', 'edit')) { ?>
+                        <?php if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheckController', 'add')) { ?>
                             <a href="<?php echo $this->url('quality-check', array('action' => 'add')); ?>" class="btn btn-primary pull-right" style="margin-top:-5px;"><i class="fa fa-plus"></i>&nbsp;Add QC Testing</a>
                         <?php }
                         if (isset($acl) && $acl->isAllowed($roleCode, 'Application\Controller\QualityCheckController', 'export-qc-data')) { ?>

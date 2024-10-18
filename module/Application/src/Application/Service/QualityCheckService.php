@@ -3,7 +3,6 @@
 namespace Application\Service;
 
 use Exception;
-use Laminas\Mail;
 use Laminas\Db\Sql\Sql;
 use Laminas\Session\Container;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;

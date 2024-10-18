@@ -18,9 +18,17 @@ class SendMail extends Command
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->commonService->sendTempMail();
-        return 1;
+        try {
+            // Call the CommonService's method to send the mail
+            $this->commonService->sendTempMail();
+            // Return success status code
+            return Command::SUCCESS;
+        } catch (\Exception $e) {
+            // Log error and return failure status code
+            $output->writeln('<error>Error sending mail: ' . $e->getMessage() . '</error>');
+            return Command::FAILURE;
+        }
     }
 }

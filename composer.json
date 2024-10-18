@@ -34,7 +34,9 @@
         "phpoffice/phpspreadsheet": "^1.29",
         "halaxa/json-machine": "^1.1",
         "guzzlehttp/guzzle": "^7.4",
-        "tecnickcom/tcpdf": "^6.4"
+        "tecnickcom/tcpdf": "^6.4",
+        "symfony/mailer": "^7.1",
+        "symfony/mime": "^7.1"
     },
     "autoload": {
         "psr-4": {
