@@ -9,7 +9,6 @@ return array(
     'modules' => array(
         'Laminas\Form',
         'Laminas\Cache',
-        'Laminas\Mail',
         'Laminas\Serializer',
         'Laminas\Mvc\Plugin\FilePrg',
         'Laminas\Mvc\Plugin\FlashMessenger',
