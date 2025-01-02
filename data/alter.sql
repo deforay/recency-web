@@ -716,3 +716,6 @@ CREATE TABLE `track_api_requests` (
 -- Brindha 14-December-2023
 ALTER TABLE `recency` ADD `vl_sample_status` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_lab_id`;
 ALTER TABLE `audit_recency` ADD `vl_sample_status` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_lab_id`;
+
+-- Brindha 02-January-2025
+ALTER TABLE `recency_change_trails` ADD `vl_sample_status` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_lab_id`;
