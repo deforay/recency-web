@@ -118,4 +118,17 @@ class CommonController extends AbstractActionController
         return $viewModel;
     }
 
+    public function getProvinceDistrictIdAction()
+    {
+      $result = "";
+      /** @var Request $request */
+      $request = $this->getRequest();
+      if ($request->isPost()) {
+         $params = $request->getPost();
+         $facilityId=base64_decode($params['facilityId']);
+         $result = $this->commonService->getProvinceDistrictId($facilityId);
+      }
+      $viewModel = new ViewModel();
+      return $viewModel->setVariables(array('result' => $result))->setTerminal(true);
+    }
 }

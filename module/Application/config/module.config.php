@@ -304,7 +304,7 @@ return array(
      'service_manager' => array(
           'abstract_factories' => array(
                'Laminas\Cache\Service\StorageCacheAbstractServiceFactory',
-               'Laminas\Log\LoggerAbstractServiceFactory',
+               //'Laminas\Log\LoggerAbstractServiceFactory',
           ),
           'factories' => [
                Application\Command\VlsmSendRequests::class => Application\Command\VlsmSendRequestsFactory::class,

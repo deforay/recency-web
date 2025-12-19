@@ -577,4 +577,10 @@ class CommonService
           $barcodeobj = new TCPDFBarcode($code, $type);
           return 'data:image/png;base64,' . base64_encode($barcodeobj->getBarcodePngData($width, $height, $color));
      }
+
+     public function getProvinceDistrictId($facilityId)
+     {
+          $facilityDb = $this->sm->get('FacilitiesTable');
+          return $facilityDb->fetchProvinceDistrictId($facilityId);
+     }
 }

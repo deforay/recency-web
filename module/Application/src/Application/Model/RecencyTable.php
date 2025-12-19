@@ -1375,7 +1375,7 @@ class RecencyTable extends AbstractTableGateway
             $sQuery = $sQuery->where(array('(r.vl_result is null OR r.vl_result="")'));
         }
         if ($this->sessionLogin->facilityMap != null && $params['facility'] == '') {
-            $sQuery = $sQuery->where('r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . ')');
+            $sQuery = $sQuery->where('(r.facility_id IN (' . $this->sessionLogin->facilityMap . ') OR r.testing_facility_id IN (' . $this->sessionLogin->facilityMap . '))');
         }
         $sQueryStr = $sql->buildSqlString($sQuery);
         $rResult['withTermOutcome'] = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->toArray();
@@ -4871,7 +4871,7 @@ class RecencyTable extends AbstractTableGateway
             }
         }
 
-        if ($params['hivRecencyTest'] != '') {
+        if (isset($params['hivRecencyTest']) && $params['hivRecencyTest'] != '') {
             $sQuery = $sQuery->where(array("r.hiv_recency_test_date >='" . $start_date . "'", "r.hiv_recency_test_date <='" . $end_date . "'"));
         }
         if (isset($params['sampleTestedDates']) && trim($params['sampleTestedDates']) != '') {

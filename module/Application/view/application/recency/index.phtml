@@ -79,7 +79,7 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
             <tr>
                     <td><b>Facility Name :</b></td>
                     <td>
-                        <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:100%;">
+                        <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:100%;" onchange="checkProvince();">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach ($facilityResult['facility'] as $facilityRow) {
@@ -606,4 +606,30 @@ if (isset($arr['display_fields']) && trim($arr['display_fields']) != '') {
         }
     }
 
+    function checkProvince(){
+        facilityId=$("#facilityName").val();
+        if(facilityId!=""){
+            $.blockUI();
+            $.post("<?php echo $this->url('common', array('action' => 'get-province-district-id')); ?>", {
+                facilityId: facilityId
+            },
+            function(data) {
+                var obj = JSON.parse(data);
+                if(obj.provinceId>0){
+                    $("#<?php echo $globalConfigResult[0]['global_name']; ?>").val(obj.provinceId);
+                    $.post("/common/get-district", {
+                    selectValue: obj.provinceId
+                    },
+                    function(data) {
+                        var splitOption = data.split("##");
+                        $("#<?php echo $globalConfigResult[1]['global_name']; ?>").html(splitOption[0]);
+                        if(obj.districtId>0){
+                            $("#<?php echo $globalConfigResult[1]['global_name']; ?>").val(obj.districtId);
+                        }
+                    });
+                }
+                $.unblockUI();
+            });
+        }
+    }
 </script>

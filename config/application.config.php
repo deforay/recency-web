@@ -7,6 +7,9 @@
  */
 return array(
     'modules' => array(
+        'Laminas\InputFilter',
+        'Laminas\Filter',
+        'Laminas\Validator',
         'Laminas\Form',
         'Laminas\Cache',
         'Laminas\Serializer',

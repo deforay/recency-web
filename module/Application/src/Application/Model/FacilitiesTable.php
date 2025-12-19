@@ -439,4 +439,22 @@ class FacilitiesTable extends AbstractTableGateway
         }
         return $result;
     }
+
+    public function fetchProvinceDistrictId($facilityId)
+    {
+        $dbAdapter = $this->adapter;
+        $sql = new Sql($dbAdapter);
+
+        $sQuery = $sql->select()->from(array('f' => 'facilities'))
+            ->columns(['province', 'district'])
+            ->where(array('f.facility_id' => $facilityId));
+        $sQueryStr = $sql->buildSqlString($sQuery);
+        $rResult = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
+
+        if($rResult) {
+            $result['provinceId'] = $rResult['province'];
+            $result['districtId'] = $rResult['district'];
+        }
+        return json_encode($result);
+    }
 }

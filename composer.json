@@ -12,7 +12,6 @@
     "require": {
         "php": "^8.2 || ^8.3 || ^8.4",
         "laminas/laminas-component-installer": "^3.7",
-        "laminas/laminas-development-mode": "^3.15",
         "laminas/laminas-mvc": "^3.8",
         "laminas/laminas-cache-storage-adapter-filesystem": "^2.5",
         "laminas/laminas-serializer": "^2.18",
