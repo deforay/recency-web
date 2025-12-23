@@ -62,7 +62,7 @@ $sessionLogin = new Container('credo');
                          } ?>
                          <label style=" margin-bottom: 2.5%; " class="col-sm-2 col-form-label" for="">Facility</label>
                          <div class="col-sm-4">
-                              <select class="form-control" id="facilityId" name="facilityId" title="Please choose facility">
+                              <select class="form-control" id="facilityId" name="facilityId" title="Please choose facility" onchange="checkProvince();">
                                    <option value="">-- Select --</option>
                               </select>
                          </div>
@@ -255,4 +255,39 @@ $sessionLogin = new Container('credo');
                allowClear: true,
           });
      });
+
+     function checkProvince(){
+          facilityId=$("#facilityId").val();
+          if(facilityId!=""){
+               $.blockUI();
+               $.post("<?php echo $this->url('common', array('action' => 'get-province-district-id')); ?>", {
+                    facilityId: facilityId
+               },
+               function(data) {
+                    var obj = JSON.parse(data);
+                    //if(obj.provinceId>0){
+                         $('#location_one').select2('destroy');
+                         // ... code to load new options ...
+                         $('#location_one').val(obj.provinceId);
+                         $("#location_one").select2({
+                              placeholder: "Choose Province",
+                              width: "280px",
+                              allowClear: true,
+                         });
+
+                         $.post("/common/get-district", {
+                         selectValue: obj.provinceId
+                         },
+                         function(data) {
+                              var splitOption = data.split("##");
+                              $("#<?php echo $globalConfigResult[1]['global_name']; ?>").html(splitOption[0]);
+                              if(obj.districtId>0){
+                                   $("#<?php echo $globalConfigResult[1]['global_name']; ?>").val(obj.districtId);
+                              }
+                         });
+                    //}
+                    $.unblockUI();
+               });
+          }
+     }
 </script>

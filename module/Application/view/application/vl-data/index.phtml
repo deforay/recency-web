@@ -300,11 +300,16 @@ $acl=$this->layout()->acl;
             },
             function(data) {
                 var obj = JSON.parse(data);
-                if(obj.provinceId>0){
+                //if(obj.provinceId>0){
                     $('#<?php echo $globalConfigResult[0]['global_name']; ?>').select2('destroy');
                     // ... code to load new options ...
                     $('#<?php echo $globalConfigResult[0]['global_name']; ?>').val(obj.provinceId);
-                    $('#<?php echo $globalConfigResult[0]['global_name']; ?>').select2();
+                    
+                    $("#<?php echo $globalConfigResult[0]['global_name']; ?>").select2({
+                         placeholder: "Choose Province",
+                         width: "280px",
+                         allowClear: true,
+                    });
 
                     $.post("/common/get-district", {
                     selectValue: obj.provinceId
@@ -316,7 +321,7 @@ $acl=$this->layout()->acl;
                             $("#<?php echo $globalConfigResult[1]['global_name']; ?>").val(obj.districtId);
                         }
                     });
-                }
+                //}
                 $.unblockUI();
             });
         }
