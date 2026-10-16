@@ -58,7 +58,11 @@
         ],
         "serve": "php -S 0.0.0.0:8080 -t public",
         "test": "vendor/bin/phpunit",
-        "static-analysis": "vendor/bin/psalm --shepherd --stats"
+        "static-analysis": "vendor/bin/psalm --shepherd --stats",
+        "migrate": "@php vendor/bin/laminas migrate",
+        "post-update-cmd": [
+            "@migrate"
+        ]
     },
     "scripts-descriptions": {
         "cs-check": "Run coding standards checks.",

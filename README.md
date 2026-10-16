@@ -3,10 +3,11 @@
 
 #### How do I get set up?
 * Download the Source Code and put it into your server's root folder (www or htdocs).
-* Create a database and import the initial sql file
+* Create a database and load the schema: `mysql recency_web < sql/schema.sql`
 * Copy `config/autoload/local.php.dist` to `config/autoload/local.php` and set the database parameters
 * Copy `config/autoload/custom.local.php.dist` to `config/autoload/custom.local.php` and set this install's URLs, email account, InteLIS API token and cross-login settings
 * Git ignores both copies. Never put a real password, salt or token in a tracked file: this repository is public
+* Run `composer install`, then `composer migrate` to apply the schema changes made since `sql/schema.sql`
 * Ensure that the apache rewrite module is enabled
 * Create a virtual host pointing to the public folder of the source code. You can see an example below : 
 
