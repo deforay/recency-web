@@ -24,3 +24,6 @@ public/temporary/*
 # Application and scheduled job logs
 data/logs/*
 !data/logs/index.php
+
+# Written by bin/upgrade.sh on each deploy
+VERSION.txt
