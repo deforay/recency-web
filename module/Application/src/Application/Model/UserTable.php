@@ -38,7 +38,13 @@ class UserTable extends AbstractTableGateway
 
         $userLoginHistoryDb = new UserLoginHistoryTable($this->adapter);
 
-        if (!isset($captchaSession) || empty($captchaSession->status) || $captchaSession->status == 'fail') {
+        // A solved captcha covers one sign-in attempt. It used to stay solved for
+        // the whole session, so one solved image allowed unlimited password guesses.
+        // A cross-login skips the captcha: its token needs the crosslogin-salt key.
+        $captchaSolved = ($captchaSession->status ?? '') === 'success';
+        unset($captchaSession->status);
+        $isCrossLogin = !empty($params['u']) && !empty($params['t']) && !empty($configResult['vlsm']['crosslogin']);
+        if (!$captchaSolved && !$isCrossLogin) {
             //User log details
             $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
             $alertContainer->alertMsg = 'Please check if you entered the text from image correctly';

@@ -26,25 +26,22 @@ class LoginController extends AbstractActionController
         if ($request->isPost()) {
             $params = $request->getPost();
             $redirectUrl = $this->userService->loginProcess($params);
-        } elseif ($request->getQuery() != "") {
-            $params = $request->getQuery();
-            $captchaSession = new Container('captcha');
-            $captchaSession->status = 'success';
-            // bypassing captcha
-            if (!isset($params['u']) || $params['u'] == "" || !isset($params['t']) || $params['t'] == "") {
-                $viewModel = new ViewModel();
-                $viewModel->setTerminal(true);
-                return $viewModel;
-            } else {
-                $redirectUrl = $this->userService->loginProcess($params);
-                return $this->redirect()->toRoute($redirectUrl);
-            }
+        } elseif ($request->getQuery('u', '') != '' && $request->getQuery('t', '') != '') {
+            // Cross-login from InteLIS. The token is encrypted with the shared
+            // crosslogin-salt key, so loginProcessDetails lets it in without a captcha.
+            // Any other query string used to mark the captcha as solved.
+            $redirectUrl = $this->userService->loginProcess($request->getQuery());
+            return $this->redirect()->toRoute($redirectUrl);
         }
         /* Cross login credential check end*/
         if (!empty($logincontainer->userId)) {
             //$alertContainer = new Container('alert');
             return $this->redirect()->toRoute("recency");
         } else {
+            if ($request->isPost()) {
+                // A failed sign-in shows the login page again, with the reason in the alert
+                $this->getResponse()->setStatusCode(401);
+            }
             $viewModel = new ViewModel();
             $viewModel->setTerminal(true);
             return $viewModel;

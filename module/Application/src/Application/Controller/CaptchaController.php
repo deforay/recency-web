@@ -27,8 +27,12 @@ class CaptchaController extends AbstractActionController
         if ($request->isPost()) {
             $params = $request->getPost();
             $captchaSession = new Container('captcha');
-            $params['challenge_field'] = htmlspecialchars($params['challenge_field']);
-            if ($captchaSession->code == $params['challenge_field']) {
+            $code = (string) ($captchaSession->code ?? '');
+            $answer = htmlspecialchars((string) ($params['challenge_field'] ?? ''));
+            // One guess per image. Without this, one image took unlimited guesses,
+            // and an empty answer matched when no image had been loaded.
+            unset($captchaSession->code);
+            if ($code !== '' && hash_equals($code, $answer)) {
                 $result = "success";
                 $captchaSession->status = 'success';
             } else {
