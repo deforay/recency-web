@@ -10,5 +10,7 @@
 --   * Make it safe to run twice where possible. bin/migrate skips ADD COLUMN,
 --     ADD INDEX, DROP COLUMN and ADD FOREIGN KEY that are already applied.
 --     INSERT and CREATE TABLE without IF NOT EXISTS are not skipped.
+--   * Write one action per ALTER TABLE. A multi-action ALTER runs as one unit,
+--     so a second run fails on it instead of skipping it.
 --   * Never reuse a version that has been deployed. Use the next one.
 --   * Set the same version in composer.json.

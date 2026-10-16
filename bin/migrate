@@ -129,11 +129,19 @@ function fetch_column(Adapter $adapter, string $sql, array $params = []): array
 }
 
 /** Extract the underlying MySQL error code from a wrapped DB exception. */
+/**
+ * The MySQL error number (1091, 1060...), not the SQLSTATE. A PDOException's
+ * getCode() is the SQLSTATE, so the warnable checks never matched it.
+ */
 function db_error_code(Throwable $e): string
 {
-    $prev = $e->getPrevious();
-    if ($prev instanceof PDOException && isset($prev->errorInfo[1])) {
-        return (string) $prev->errorInfo[1];
+    for ($x = $e; $x !== null; $x = $x->getPrevious()) {
+        if ($x instanceof PDOException && isset($x->errorInfo[1])) {
+            return (string) $x->errorInfo[1];
+        }
+        if (preg_match('/SQLSTATE\[[0-9A-Z]+\][^:]*:\s*(\d{4})\b/', $x->getMessage(), $m)) {
+            return $m[1];
+        }
     }
     return (string) $e->getCode();
 }
@@ -311,9 +319,64 @@ function apply_add_primary_key(Adapter $adapter, string $table, string $colsList
  * Route known DDL patterns through idempotent helpers.
  * Returns MIG_EXECUTED / MIG_SKIPPED if handled, MIG_NOT_HANDLED to fall through.
  */
+/**
+ * The actions of an ALTER TABLE, each as its own ALTER. Commas inside parentheses
+ * or quotes do not split. Any other statement comes back unchanged. Used only to
+ * tell a multi-action ALTER apart: the actions are never run one by one, because
+ * they can depend on each other (AUTO_INCREMENT with its PRIMARY KEY, a foreign
+ * key with its column or index).
+ *
+ * @return string[]
+ */
+function alter_actions(string $q): array
+{
+    if (!preg_match('/^(alter\s+table\s+`?[a-z0-9_]+`?\s+)(.+)$/is', trim($q), $m)) {
+        return [$q];
+    }
+    [$head, $body] = [$m[1], rtrim($m[2], "; \n\r\t")];
+    $actions = [];
+    $depth = 0;
+    $quote = null;
+    $start = 0;
+    $len = strlen($body);
+    for ($i = 0; $i < $len; $i++) {
+        $c = $body[$i];
+        if ($quote !== null) {
+            if ($c === '\\') {
+                $i++;
+            } elseif ($c === $quote) {
+                $quote = null;
+            }
+            continue;
+        }
+        if ($c === "'" || $c === '"' || $c === '`') {
+            $quote = $c;
+        } elseif ($c === '(') {
+            $depth++;
+        } elseif ($c === ')') {
+            $depth--;
+        } elseif ($c === ',' && $depth === 0) {
+            $actions[] = trim(substr($body, $start, $i - $start));
+            $start = $i + 1;
+        }
+    }
+    $actions[] = trim(substr($body, $start));
+    if (count($actions) < 2) {
+        return [$q];
+    }
+    return array_map(fn(string $action): string => $head . $action, $actions);
+}
+
 function handle_idempotent_ddl(Adapter $adapter, string $query): int
 {
     $q = trim($query);
+
+    // The helpers below judge an ALTER by its first action. A multi-action ALTER
+    // runs as written, and any error from it fails the file.
+    if (count(alter_actions($q)) > 1) {
+        return MIG_NOT_HANDLED;
+    }
+
 
     if (preg_match('/^alter\s+table\s+`?([a-z0-9_]+)`?\s+add\s+(?:column\s+)?`?([a-z0-9_]+)`?\s+/i', $q, $m)) {
         $kw = strtolower($m[2]);
@@ -398,6 +461,11 @@ function migration_error_is_warnable(string $errorCode, string $statement): bool
     ];
 
     $errorCode = trim($errorCode);
+    // A multi-action ALTER fails as a unit. One duplicate or missing column does
+    // not show that its other actions are done.
+    if (count(alter_actions($statement)) > 1) {
+        return false;
+    }
     if (in_array($errorCode, $unconditionalWarn, true)) {
         return true;
     }
@@ -419,6 +487,21 @@ function migration_error_is_warnable(string $errorCode, string $statement): bool
 }
 
 /* ---------------------- Version persistence ---------------------- */
+
+/**
+ * Record one completed migration file. Returns false, with a FAIL line, when the
+ * version cannot be written, so the run stops before the next file.
+ */
+function stamp_db_version(Adapter $adapter, string $version): bool
+{
+    try {
+        stamp_global_config($adapter, VERSION_KEY_DB, $version, 'Database Schema Version');
+        return true;
+    } catch (Throwable $e) {
+        echo "  \033[31mFAIL\033[0m  could not record version {$version}: {$e->getMessage()}\n";
+        return false;
+    }
+}
 
 function stamp_global_config(Adapter $adapter, string $key, string $value, string $displayName): void
 {
@@ -549,11 +632,26 @@ foreach ($pending as $m) {
     $sql = (string) file_get_contents($m['file']);
     if (trim($sql) === '') {
         echo "  (empty file — version marker only)\n\n";
+        if (!$dryRun && !stamp_db_version($adapter, $m['version'])) {
+            $failed++;
+            break;
+        }
         $lastVersion = $m['version'];
         continue;
     }
 
     $parser = new Parser($sql);
+
+    // The parser drops a statement it cannot read and keeps the rest. Running the
+    // rest would record a half-applied file as done.
+    if (!empty($parser->errors)) {
+        echo "  \033[31mFAIL\033[0m  the file has SQL the parser cannot read:\n";
+        foreach ($parser->errors as $error) {
+            echo "        ({$error->getMessage()})\n";
+        }
+        $failed++;
+        break;
+    }
 
     $statements = [];
     foreach ($parser->statements as $statement) {
@@ -624,6 +722,9 @@ foreach ($pending as $m) {
                 echo "        ({$e->getMessage()})\n";
                 $failed++;
                 $fileFailed++;
+                // Stop the file here. A later statement, such as a DELETE, may
+                // depend on the one that failed.
+                break;
             }
         }
     }
@@ -642,14 +743,23 @@ foreach ($pending as $m) {
             echo "  " . implode(', ', $bits) . "\n";
     }
 
-    $lastVersion = $m['version'];
     echo "\n";
+    // Stop at the first failed file. Each completed file is recorded at once, so a
+    // re-run starts at the file that failed and never replays one that completed.
+    if ($fileFailed > 0) {
+        break;
+    }
+    if (!stamp_db_version($adapter, $m['version'])) {
+        $failed++;
+        break;
+    }
+    $lastVersion = $m['version'];
 }
 
-// Nothing is stamped when a statement failed, so the summary has to report the
-// version the database is actually left on — the one it came in with. Printing
-// the last file attempted reads as a successful upgrade next to the failures.
-$finalDbVersion = $failed === 0 ? $lastVersion : $dbVersion;
+// $lastVersion is the last file recorded, so the summary reports the version the
+// database is left on, also after a failure. The app version is stamped only when
+// every pending file completed.
+$finalDbVersion = $dryRun ? $dbVersion : $lastVersion;
 $finalAppVersion = $finalDbVersion;
 if (!$dryRun && $failed === 0) {
     $appVersion = read_app_version();
@@ -657,7 +767,6 @@ if (!$dryRun && $failed === 0) {
         $appVersion = $lastVersion;
     }
     try {
-        stamp_global_config($adapter, VERSION_KEY_DB, $lastVersion, 'Database Schema Version');
         stamp_global_config($adapter, VERSION_KEY_APP, $appVersion, 'Application Version');
         $finalAppVersion = $appVersion;
     } catch (Throwable $e) {

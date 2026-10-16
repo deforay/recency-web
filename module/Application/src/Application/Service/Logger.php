@@ -77,7 +77,14 @@ final class Logger
             }
             $this->getLogger()->log($level, $message, $context);
         } catch (Throwable $e) {
-            @error_log('Logger::log failed: ' . $e->getMessage() . ' | original: ' . substr($message, 0, 300));
+            // The file handler failed, for example on a log file owned by another
+            // account. Keep the context too: for an exception it holds the trace.
+            try {
+                $details = (string) json_encode($context, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
+            } catch (Throwable) {
+                $details = '[context could not be encoded]';
+            }
+            @error_log('Logger::log failed: ' . $e->getMessage() . ' | ' . $level->getName() . ': ' . $message . ' ' . $details);
         }
     }
 
