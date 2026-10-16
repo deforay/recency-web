@@ -1,0 +1,14 @@
+-- 1.0.0: baseline marker.
+--
+-- This file is empty on purpose. It gives bin/migrate a version to record in
+-- global_config.db_version on its first run. The schema before 1.0.0 is in
+-- sql/schema.sql for a new install, built from the changes in data/alter.sql.
+-- data/alter.sql is history only: never add to it.
+--
+-- Each new change goes here as its own file:
+--   * Name it <semver>-<short-slug>.sql, for example 1.0.1-users-login-id.sql.
+--   * Make it safe to run twice where possible. bin/migrate skips ADD COLUMN,
+--     ADD INDEX, DROP COLUMN and ADD FOREIGN KEY that are already applied.
+--     INSERT and CREATE TABLE without IF NOT EXISTS are not skipped.
+--   * Never reuse a version that has been deployed. Use the next one.
+--   * Set the same version in composer.json.

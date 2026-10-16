@@ -1,6 +1,7 @@
 {
     "name": "deforay/recency-web",
     "description": "HIV Recency Web Application",
+    "version": "1.0.0",
     "type": "project",
     "license": "BSD-3-Clause",
     "keywords": [
@@ -32,7 +33,9 @@
         "symfony/mailer": "^7.4",
         "symfony/mime": "^7.4",
         "ramsey/uuid": "^4.9",
-        "psr/simple-cache": "^1.0"
+        "psr/simple-cache": "^1.0",
+        "composer/semver": "^3.4",
+        "phpmyadmin/sql-parser": "^6.0"
     },
     "autoload": {
         "psr-4": {
@@ -59,9 +62,16 @@
         "serve": "php -S 0.0.0.0:8080 -t public",
         "test": "vendor/bin/phpunit",
         "static-analysis": "vendor/bin/psalm --shepherd --stats",
-        "migrate": "@php vendor/bin/laminas migrate",
-        "post-update-cmd": [
-            "@migrate"
+        "migrate": "@php bin/migrate",
+        "migrate-status": "@php bin/migrate --status",
+        "migrate-dry-run": "@php bin/migrate --dry-run",
+        "post-update": [
+            "@php bin/migrate || true"
+        ],
+        "refresh": [
+            "git refresh",
+            "@composer install",
+            "@composer post-update"
         ]
     },
     "scripts-descriptions": {

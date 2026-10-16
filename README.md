@@ -8,6 +8,11 @@
 * Copy `config/autoload/custom.local.php.dist` to `config/autoload/custom.local.php` and set this install's URLs, email account, InteLIS API token and cross-login settings
 * Git ignores both copies. Never put a real password, salt or token in a tracked file: this repository is public
 * Run `composer install`, then `composer migrate` to apply the schema changes made since `sql/schema.sql`
+
+#### Updating an install
+* Run `composer refresh`. It rebases onto origin, reinstalls the packages and runs `composer post-update`, which applies pending migrations.
+* `composer migrate-status` lists pending migrations. `composer migrate-dry-run` shows what would run.
+* Migrations are in `migrations/`, named `<semver>-<slug>.sql`. See `migrations/1.0.0-baseline.sql` for the rules.
 * Ensure that the apache rewrite module is enabled
 * Create a virtual host pointing to the public folder of the source code. You can see an example below : 
 
