@@ -19,11 +19,11 @@ $env = getenv('APP_ENV') ?: 'production';
 if ($env == 'development') {
     $local['db'] = array(
         'username' => 'root',
-        'password' => 'zaq12345',
+        'password' => '',
     );
     $local['db']['adapters']['db1'] = array(
         'username' => 'root',
-        'password' => 'zaq12345',
+        'password' => '',
     );
 }
 
@@ -32,12 +32,12 @@ if ($env == 'development') {
 if ($env == 'testing') {
     $local['db'] = array(
         'username' => 'root',
-        'password' => 'zaq12345',
+        'password' => '',
     );
 
     $local['db']['adapters']['db1'] = array(
         'username' => 'root',
-        'password' => 'zaq12345',
+        'password' => '',
     );
 }
 
@@ -46,12 +46,12 @@ if ($env == 'testing') {
 if ($env == 'production') {
     $local['db'] = array(
         'username' => 'root',
-        'password' => 'zaq12345',
+        'password' => '',
     );
 
     $local['db']['adapters']['db1'] = array(
         'username' => 'root',
-        'password' => 'zaq12345',
+        'password' => '',
     );
 }
 

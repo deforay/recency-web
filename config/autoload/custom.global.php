@@ -1,24 +1,32 @@
 <?php
 
+/**
+ * Defaults only. This file is tracked and public: never put a real value here.
+ *
+ * Each install sets its own values in config/autoload/custom.local.php, which
+ * git ignores and which is loaded after this file, so any key it sets wins.
+ * Copy custom.local.php.dist to start one.
+ */
+
 return [
-    'domain' => 'http://recency-web',
+    'domain' => '',
     'vlsm' => [
-        'domain' => 'http://vlsm/',
-        'crosslogin' => true,
-        'crosslogin-salt' => 'LP0fznuQV/IVNd2SQ0OfOcJ/4kC5UL6vHKWPILD6Yno='
+        'domain' => '',
+        'crosslogin' => false,
+        'crosslogin-salt' => ''
     ],
     'password' => [
-        'salt' => '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later'
+        'salt' => ''
     ],
     'email' => [
-        'host' => 'smtp.gmail.com',
+        'host' => '',
         'config' => [
             'port' => 587,
-            'username' => 'zfmailexample@gmail.com',
-            'password' => 'mko)(*&^@123',
+            'username' => '',
+            'password' => '',
             'ssl' => 'tls',
             'auth' => 'login'
         ],
     ],
-    'authToken' => 'LTBjNDZmOA=='
+    'authToken' => ''
 ];

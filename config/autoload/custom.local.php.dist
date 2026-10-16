@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * This install's own settings. Copy this file to custom.local.php (git ignores
+ * it) and fill in the values. Keys left out keep the defaults in
+ * custom.global.php.
+ */
+
+return [
+    // This Recency install's URL
+    'domain' => 'https://recency.example.org',
+    'vlsm' => [
+        // The InteLIS (VLSM) install Recency sends requests to
+        'domain' => 'https://intelis.example.org',
+        // Sign-in across Recency and InteLIS. The salt must match InteLIS's
+        // recency.crossloginSalt.
+        'crosslogin' => false,
+        'crosslogin-salt' => ''
+    ],
+    'password' => [
+        // Only for users whose password is still an old sha1 hash
+        'salt' => ''
+    ],
+    'email' => [
+        'host' => 'smtp.example.org',
+        'config' => [
+            'port' => 587,
+            'username' => '',
+            'password' => '',
+            'ssl' => 'tls',
+            'auth' => 'login'
+        ],
+    ],
+    // The InteLIS API token Recency sends with its requests to InteLIS
+    'authToken' => ''
+];
