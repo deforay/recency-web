@@ -113,15 +113,27 @@ class Module implements ConfigProviderInterface
 
 
 
+        $controller = (string) $e->getRouteMatch()->getParam('controller');
+        $isAjax = $request->isXmlHttpRequest();
+
+        // Every request needs a signed-in user except the sign-in pages. AJAX
+        // requests and /api/* used to skip this check, so anyone sending the
+        // X-Requested-With header could read any page or API without signing in.
         if (
-            !$request->isXmlHttpRequest()
-            && ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\LoginController') &&
-            ($e->getRouteMatch()->getParam('controller') != 'Application\Controller\CaptchaController')
+            $controller != 'Application\Controller\LoginController' &&
+            $controller != 'Application\Controller\CaptchaController'
         ) {
-
-
             $session = new Container('credo');
-            if (empty($session) || empty($session->userId) || empty($session->userId)) {
+            if ($isAjax && empty($session->userId)) {
+                $response = $e->getResponse();
+                $response->setStatusCode(401);
+                return $response;
+            }
+            if ($isAjax) {
+                // A signed-in page's AJAX calls are not checked against the ACL, as before
+                return;
+            }
+            if (empty($session) || empty($session->userId)) {
                 $url = $e->getRouter()->assemble(array(), array('name' => 'login'));
                 /** @var Response $response */
                 $response = $e->getResponse();
