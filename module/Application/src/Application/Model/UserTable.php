@@ -71,7 +71,15 @@ class UserTable extends AbstractTableGateway
                 ->where(array('u.email' => $params['userName'], 'u.web_access' => 'yes'));
             $sQueryStr = $sql->buildSqlString($sQuery);
             $userRow = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-            if ($userRow['hash_algorithm'] == 'sha1' && !isset($params['u'])) {
+            // Every sign-in checks the password, cross-login included. A cross-login
+            // used to skip the check for a user still on an sha1 hash, and a hash of
+            // any other kind skipped it for everyone.
+            if (!$userRow || !in_array($userRow['hash_algorithm'], ['sha1', 'phb'], true)) {
+                $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
+                $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
+                return 'login';
+            }
+            if ($userRow['hash_algorithm'] == 'sha1') {
                 $password = sha1($params['loginPassword'] . $configResult["password"]["salt"]);
                 if ($password == $userRow['server_password']) {
                     $newPassword = $common->passwordHash($params['loginPassword']);
