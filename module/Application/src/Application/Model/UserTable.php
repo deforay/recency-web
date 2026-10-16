@@ -52,11 +52,16 @@ class UserTable extends AbstractTableGateway
         }
         /* Cross login credential check */
         if ((isset($params['u']) && $params['u'] != "") && (isset($params['t']) && $params['t'] != "") && $configResult['vlsm']['crosslogin']) {
-            $params['u'] = $params['u'];
-            $params['t'] = $params['t'];
-            $decryptedPassword = CommonService::decrypt($params['t'], base64_decode($configResult['vlsm']['crosslogin-salt']));
-            $params['loginPassword'] = $decryptedPassword;
             $params['userName'] = base64_decode($params['u']);
+            try {
+                $decryptedPassword = CommonService::decrypt($params['t'], base64_decode($configResult['vlsm']['crosslogin-salt']));
+            } catch (\Throwable) {
+                // Not made with the shared key, or altered on the way
+                $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
+                $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
+                return 'login';
+            }
+            $params['loginPassword'] = $decryptedPassword;
         } elseif (!$configResult['vlsm']['crosslogin'] && !isset($params['userName']) && trim($params['userName']) == "") {
             //User log details
             $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
@@ -77,9 +82,10 @@ class UserTable extends AbstractTableGateway
                 ->where(array('u.email' => $params['userName'], 'u.web_access' => 'yes'));
             $sQueryStr = $sql->buildSqlString($sQuery);
             $userRow = $dbAdapter->query($sQueryStr, $dbAdapter::QUERY_MODE_EXECUTE)->current();
-            // Every sign-in checks the password, cross-login included. A cross-login
-            // used to skip the check for a user still on an sha1 hash, and a hash of
-            // any other kind skipped it for everyone.
+            // Every sign-in checks the password, cross-login included. The token
+            // authenticates the password only, not the email in u, so a cross-login
+            // must never be trusted on its own: a valid token with another user's
+            // email would sign in as that user.
             if (!$userRow || !in_array($userRow['hash_algorithm'], ['sha1', 'phb'], true)) {
                 $userLoginHistoryDb->addUserLoginHistory($params, 'failed');
                 $alertContainer->alertMsg = 'The email id or password that you entered is incorrect';
