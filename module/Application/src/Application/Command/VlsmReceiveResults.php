@@ -18,9 +18,9 @@ class VlsmReceiveResults extends Command
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->recencyService->VlsmReceiveResults();
-        return 1;
+        return Command::SUCCESS;
     }
 }

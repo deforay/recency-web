@@ -8,7 +8,7 @@ use Application\Command\VlsmReceiveResults;
 
 class VlsmReceiveResultsFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $recencyService = $container->get('RecencyService');
 
