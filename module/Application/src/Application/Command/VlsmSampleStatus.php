@@ -18,6 +18,11 @@ class VlsmSampleStatus extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->setDescription('Fetch the status of samples sent to InteLIS');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->recencyService->VlsmSampleStatus();

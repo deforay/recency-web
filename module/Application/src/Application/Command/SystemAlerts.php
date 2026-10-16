@@ -18,6 +18,11 @@ class SystemAlerts extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->setDescription('Raise an alert for each sample waiting over 30 days for a viral load result');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->recencyService->systemAlerts();

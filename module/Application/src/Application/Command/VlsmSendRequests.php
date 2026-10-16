@@ -18,6 +18,11 @@ class VlsmSendRequests extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->setDescription('Send viral load test requests to InteLIS');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->recencyService->vlsmSendRequests();

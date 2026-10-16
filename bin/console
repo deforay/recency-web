@@ -1,0 +1,74 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Console runner for Recency, ported from odkdash's bin/console.
+ *
+ * Replaces vendor/bin/laminas. The commands were always plain Symfony
+ * Console classes; laminas-cli supplied only three things — a container, a
+ * command loader, and the binding of a name to a class — and all three fit
+ * in this file.
+ *
+ * Commands are declared under the 'console' key in
+ * module/Application/config/module.config.php, mapping a command name to a
+ * class the service manager can build.
+ *
+ * Usage:
+ *   php bin/console list             show the available commands
+ *   php bin/console <name> [options]
+ */
+
+chdir(dirname(__DIR__));
+require_once 'vendor/autoload.php';
+
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\CommandLoader\FactoryCommandLoader;
+
+// The same bootstrap bin/migrate uses, and the same one laminas-cli did:
+// build the service manager and load modules, but do not call
+// Application::bootstrap(). Its onBootstrap listeners read global_config out
+// of the database, which a console command should not depend on. Commands
+// therefore see exactly the container they saw before.
+$configuration = require 'config/application.config.php';
+$serviceManager = new ServiceManager();
+(new ServiceManagerConfig($configuration['service_manager'] ?? []))
+    ->configureServiceManager($serviceManager);
+$serviceManager->setService('ApplicationConfig', $configuration);
+$serviceManager->get('ModuleManager')->loadModules();
+
+$commands = $serviceManager->get('config')['console']['commands'] ?? [];
+
+// Lazy, so a single command run does not construct the others and their
+// database adapters. The name lives in the config map rather than on the
+// class — as it did under laminas-cli — so it is bound at construction.
+$factories = [];
+foreach ($commands as $name => $class) {
+    $factories[$name] = static function () use ($serviceManager, $class, $name): Command {
+        $command = $serviceManager->get($class);
+
+        if (!$command instanceof Command) {
+            throw new RuntimeException(sprintf(
+                'Command "%s" maps to %s, which is not a %s.',
+                $name,
+                get_debug_type($command),
+                Command::class
+            ));
+        }
+
+        $command->setName($name);
+
+        return $command;
+    };
+}
+
+$version = json_decode((string) file_get_contents('composer.json'), true)['version'] ?? 'unknown';
+
+$application = new Application('Recency', (string) $version);
+$application->setCommandLoader(new FactoryCommandLoader($factories));
+
+exit($application->run());

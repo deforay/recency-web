@@ -343,7 +343,7 @@ return array(
                __DIR__ . '/../view',
           ),
      ),
-     'laminas-cli' => [
+     'console' => [
           'commands' => [
                'send-mail' => Application\Command\SendMail::class,
                'vlsm-send-requests' => VlsmSendRequests::class,

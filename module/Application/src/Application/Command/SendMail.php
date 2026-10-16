@@ -18,6 +18,11 @@ class SendMail extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->setDescription('Send the queued emails');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

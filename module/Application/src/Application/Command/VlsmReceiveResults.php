@@ -18,6 +18,11 @@ class VlsmReceiveResults extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->setDescription('Fetch viral load results from InteLIS');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->recencyService->VlsmReceiveResults();
