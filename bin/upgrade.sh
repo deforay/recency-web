@@ -6,9 +6,8 @@
 #
 #   sudo bash -c "$(curl -fsSL "https://raw.githubusercontent.com/deforay/recency-web/master/bin/upgrade.sh?v=$(date +%s)")"
 #
-# Or from an install that already has it:
-#
-#   sudo /var/www/recency-web/bin/upgrade.sh
+# Always run it this way, never from the copy inside the install: www-data owns
+# that copy, so running it as root would let a compromised web app become root.
 #
 # Pass the script as an argument, as above. Piping it in with `curl ... | sudo bash`
 # breaks the prompts: where sudoers sets use_pty (the default on Ubuntu 22.04 and
@@ -26,6 +25,11 @@
 #   4. Runs composer install, then bin/migrate, then checks bin/migrate --status.
 #   5. Sets ownership, creates the runtime folders, adds the crunz cron line when
 #      the code has cron.sh, and reloads Apache and php-fpm.
+#
+# Root takes the backups and fixes ownership with chown -hR, which never follows
+# a symlink. Everything that writes into the install (the deploy, composer,
+# bin/migrate, the runtime folders) runs as www-data, so a symlink planted in the
+# install cannot redirect a root write elsewhere.
 #
 # It does no system-level work: PHP, MySQL and Apache belong to the server setup.
 #
@@ -48,6 +52,14 @@ set -o pipefail
 
 if [ "$EUID" -ne 0 ]; then
     echo "Need admin privileges for this script. Run it with sudo."
+    exit 1
+fi
+
+# Run as a file, this script must be root's own. A copy inside the install is
+# owned by www-data, and root running it would run whatever www-data wrote there.
+if [ -f "$0" ] && [ "$(stat -c '%U' "$0" 2>/dev/null)" != "root" ]; then
+    echo "Refusing to run ${0}: it is not owned by root. Run it from GitHub:"
+    echo "  sudo bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/deforay/recency-web/master/bin/upgrade.sh)\""
     exit 1
 fi
 
@@ -311,6 +323,8 @@ check_mirror_path() {
 acquire_source() {
     print header "Downloading Recency Web"
     temp_dir="$(mktemp -d)"
+    # The deploy reads the source as the web user
+    chmod 755 "$temp_dir"
 
     if command -v git &>/dev/null && [ -d "$SRC_DIR/.git" ]; then
         print info "Updating the source mirror..."
@@ -460,11 +474,15 @@ done
 for file in "${KEPT_FILES[@]}"; do
     rsync_excludes+=("--exclude=/${file}")
 done
-rsync -a -K "${rsync_excludes[@]}" "$src_dir/" "$app_path/" 2>>"$log_file" ||
+# Ownership first, as root and without following symlinks, so the web user can
+# write every file the deploy replaces (vendor/ may belong to another account).
+chown -hR "$web_user":"$web_user" "$app_path"
+
+as_web rsync -a -K "${rsync_excludes[@]}" "$src_dir/" "$app_path/" 2>>"$log_file" ||
     die "rsync deploy failed. See ${log_file}."
 
 # config/autoload: add files that are new, never overwrite one that exists
-rsync -a --ignore-existing "$src_dir/config/autoload/" "$app_path/config/autoload/" 2>>"$log_file" ||
+as_web rsync -a --ignore-existing "$src_dir/config/autoload/" "$app_path/config/autoload/" 2>>"$log_file" ||
     die "Could not add new files to config/autoload."
 for file in "$src_dir"/config/autoload/*.php; do
     name="$(basename "$file")"
@@ -475,7 +493,7 @@ done
 
 for file in "${KEPT_FILES[@]}"; do
     if [ ! -e "$app_path/$file" ]; then
-        cp -a "$src_dir/$file" "$app_path/$file" || die "Could not add ${file}."
+        as_web cp "$src_dir/$file" "$app_path/$file" || die "Could not add ${file}."
     elif ! cmp -s "$src_dir/$file" "$app_path/$file"; then
         say warning "${file} differs from the repo and was kept (the app saves role permissions there). Compare with: diff ${src_dir}/${file} ${app_path}/${file}"
     fi
@@ -489,11 +507,8 @@ else
 fi
 
 for dir in "${RUNTIME_DIRS[@]}"; do
-    mkdir -p "$app_path/$dir"
+    as_web mkdir -p "$app_path/$dir"
 done
-
-# Before composer, which runs as the web user
-chown -R "$web_user":"$web_user" "$app_path"
 
 # ----------------------------------------------------------- dependencies ---
 
@@ -510,7 +525,7 @@ say success "Dependencies installed."
 # ------------------------------------------------------------- migrations ---
 
 print header "Database migrations"
-chmod +x bin/migrate bin/console bin/upgrade.sh 2>/dev/null
+as_web chmod +x bin/migrate bin/console 2>/dev/null
 as_web php bin/migrate 2>&1 | tee -a "$log_file" ||
     die "Migrations failed. The database backup is ${db_backup:-not taken}. See ${log_file}."
 
@@ -528,9 +543,9 @@ say success "The schema is at the version this code expects."
 
 # ------------------------------------------------------------ permissions ---
 
-chown -R "$web_user":"$web_user" "$app_path"
+chown -hR "$web_user":"$web_user" "$app_path"
 for dir in "${RUNTIME_DIRS[@]}"; do
-    chmod -R u+rwX,g+rwX "$app_path/$dir"
+    as_web chmod -R u+rwX,g+rwX "$app_path/$dir"
 done
 say success "Ownership set to ${web_user}. Runtime folders are writable."
 
@@ -539,7 +554,7 @@ say success "Ownership set to ${web_user}. Runtime folders are writable."
 # Only when the code has a crunz schedule. cron.sh changes to the app folder
 # itself, so the crontab line needs no cd.
 if [ -f "$app_path/cron.sh" ]; then
-    chmod +x "$app_path/cron.sh"
+    as_web chmod +x "$app_path/cron.sh"
     cron_line="* * * * * ${app_path}/cron.sh >> ${app_path}/data/logs/crunz.log 2>&1"
     current_crontab="$(crontab -u "$web_user" -l 2>/dev/null || true)"
     if printf '%s\n' "$current_crontab" | grep -Fq "${app_path}/cron.sh"; then
