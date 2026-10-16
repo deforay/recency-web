@@ -91,17 +91,21 @@ class UserController extends AbstractActionController
     }
     public function editProfileAction()
     {
+        // A user edits only their own profile. The id in the URL or the form is
+        // ignored: trusting it let any signed-in user read or change another
+        // user's profile and password.
+        $userId = (string) ((new Container('credo'))->userId ?? '');
 
         /** @var Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $params = $request->getPost();
+            $params['userId'] = base64_encode($userId);
             $this->userService->updateProfile($params);
             return $this->redirect()->toRoute("home");
         }
         else
         {
-            $userId=base64_decode( $this->params()->fromRoute('id'));
             if($userId != ''){
             $result=$this->userService->getuserDetailsById($userId);
             return new ViewModel(array(
