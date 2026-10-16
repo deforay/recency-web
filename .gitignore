@@ -1,0 +1,22 @@
+# Carried over from .hgignore
+vendor/
+config/development.config.php
+.env
+.idea/
+.DS_Store
+Thumbs.db
+error_log
+error.log
+errors.log
+npm-debug.log
+rector.php
+
+# Runtime folders: keep each folder's index.php, ignore what the app writes there
+data/cache/*
+!data/cache/index.php
+backup/*
+!backup/index.php
+public/uploads/*
+!public/uploads/index.php
+public/temporary/*
+!public/temporary/index.php
