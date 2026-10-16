@@ -328,16 +328,21 @@ return array(
           ),
      ),
      'view_manager' => array(
-          'display_not_found_reason' => true,
-          'display_exceptions'     => true,
+          // Off in production, so error pages never show traces, paths or SQL.
+          // Turn both on in config/autoload/local.php on a development machine.
+          'display_not_found_reason' => false,
+          'display_exceptions'     => false,
           'doctype'                => 'HTML5',
           'not_found_template'     => 'error/404',
           'exception_template'     => 'error/index',
           'template_map' => array(
                'layout/layout'         => __DIR__ . '/../view/layout/layout.phtml',
+               'layout/error'          => __DIR__ . '/../view/layout/error.phtml',
                'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
                'error/404'             => __DIR__ . '/../view/error/404.phtml',
                'error/index'           => __DIR__ . '/../view/error/index.phtml',
+               'error/403'             => __DIR__ . '/../view/error/403.phtml',
+               'error/_details'        => __DIR__ . '/../view/error/_details.phtml',
           ),
           'template_path_stack' => array(
                __DIR__ . '/../view',

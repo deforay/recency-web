@@ -1,0 +1,214 @@
+<?php
+
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ *
+ * Layout for error pages (403, 404, 500). It reads no session and queries no
+ * database, so it still renders when the error came from the database.
+ * Module::onBootstrap sets it on every dispatch or render error.
+ */
+
+$statusCode = (int) ($this->statusCode ?? 500);
+$pageTitle = $this->pageTitle ?? 'Something went wrong';
+$reference = $this->reference ?? null;
+$base = rtrim($this->basePath(), '/');
+?>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title><?= $this->escapeHtml($pageTitle) ?> | Recency Web</title>
+    <link rel="shortcut icon" href="<?= $base ?>/assets/media/favicons/favicon.png">
+    <style>
+        :root {
+            --primary: #0665d0;
+            --primary-dark: #054d9e;
+            --text: #1f2933;
+            --muted: #6b7785;
+            --bg: #eef2f7;
+            --card: #ffffff;
+            --border: #dde3ea;
+            --code-bg: #f5f7fa;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #4c9bf0;
+                --primary-dark: #7ab4f5;
+                --text: #e4e9ef;
+                --muted: #98a4b3;
+                --bg: #14181d;
+                --card: #1d232a;
+                --border: #2e3640;
+                --code-bg: #161b21;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            background: var(--bg);
+            color: var(--text);
+            font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Nunito Sans", Helvetica, Arial, sans-serif;
+        }
+
+        .error-card {
+            width: 100%;
+            max-width: 560px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 10px;
+            padding: 36px 32px 28px;
+            box-shadow: 0 10px 30px rgba(15, 30, 50, .08);
+        }
+
+        .wordmark {
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: -.01em;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .wordmark span {
+            color: var(--primary);
+        }
+
+        .status {
+            margin: 28px 0 4px;
+            font-size: 64px;
+            line-height: 1;
+            font-weight: 800;
+            color: var(--primary);
+            opacity: .18;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 24px;
+            line-height: 1.3;
+        }
+
+        p {
+            margin: 0 0 12px;
+            color: var(--muted);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 9px 18px;
+            border-radius: 6px;
+            border: 1px solid var(--primary);
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn:hover {
+            border-color: var(--primary-dark);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .reference {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        code,
+        pre {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 13px;
+        }
+
+        .reference code {
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: var(--code-bg);
+            color: var(--text);
+            user-select: all;
+        }
+
+        details {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        pre {
+            overflow-x: auto;
+            max-height: 360px;
+            padding: 12px;
+            border-radius: 6px;
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        @media (max-width: 480px) {
+            .error-card {
+                padding: 28px 20px 22px;
+            }
+
+            .status {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="error-card">
+        <a class="wordmark" href="<?= $base ?>/">Recency <span>Web</span></a>
+        <div class="status" aria-hidden="true"><?= $statusCode ?></div>
+        <?= $this->content ?>
+        <div class="actions">
+            <a class="btn btn-primary" href="<?= $base ?>/">Go to the home page</a>
+            <button class="btn" type="button" onclick="history.length > 1 ? history.back() : location.assign('<?= $base ?>/')">Go back</button>
+        </div>
+        <?php if (!empty($reference)) : ?>
+            <div class="reference">
+                Reference <code><?= $this->escapeHtml($reference) ?></code>. Give this code to the administrator, who can find the details in the application log.
+            </div>
+        <?php endif; ?>
+    </main>
+</body>
+
+</html>

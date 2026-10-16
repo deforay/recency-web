@@ -6,6 +6,8 @@ namespace Application;
 use Laminas\Http\Request;
 use Laminas\Mvc\MvcEvent;
 use Application\Model\Acl;
+use Application\Service\Logger;
+use Laminas\View\Model\ViewModel;
 use Laminas\Http\Response;
 use Laminas\Session\Container;
 use Application\Model\CityTable;
@@ -99,6 +101,39 @@ class Module implements ConfigProviderInterface
                 return $this->preSetter($e);
             }, 100);
         }
+
+        // Error pages use layout/error, which needs no session or database. Each
+        // exception goes to data/logs with a reference code, and the page shows
+        // the same code, so an admin can find the trace without showing it to users.
+        $serviceManager = $application->getServiceManager();
+        $prepareErrorPage = function (MvcEvent $event) use ($serviceManager): void {
+            if (!$event->getResult() instanceof ViewModel) {
+                return;
+            }
+            $layout = $event->getViewModel();
+            $layout->setTemplate('layout/error');
+            $layout->setVariable('statusCode', $event->getResponse()->getStatusCode());
+
+            $exception = $event->getParam('exception');
+            if ($exception instanceof \Throwable) {
+                $reference = strtoupper(bin2hex(random_bytes(4)));
+                $layout->setVariable('reference', $reference);
+                try {
+                    $request = $event->getRequest();
+                    $serviceManager->get('Logger')->logException($exception, sprintf(
+                        'Reference %s [%s] %s',
+                        $reference,
+                        $event->getName(),
+                        method_exists($request, 'getUriString') ? $request->getUriString() : ''
+                    ));
+                } catch (\Throwable $t) {
+                    @error_log('Error page logging failed: ' . $t->getMessage());
+                }
+            }
+        };
+        // After the exception and not-found strategies (priority 1) build the error view
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $prepareErrorPage, -100);
+        $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, $prepareErrorPage, -100);
     }
 
 
@@ -169,6 +204,7 @@ class Module implements ConfigProviderInterface
                     /** @var Response $response */
                     $response = $e->getResponse();
                     $response->setStatusCode(403);
+                    $response->setContent($this->renderErrorPage($e, 403, 'error/403'));
                     $response->sendHeaders();
 
                     // To avoid additional processing
@@ -185,10 +221,32 @@ class Module implements ConfigProviderInterface
         }
     }
 
+    /**
+     * Render an error view inside layout/error, for a response sent before dispatch
+     */
+    private function renderErrorPage(MvcEvent $e, int $statusCode, string $template): string
+    {
+        $renderer = $e->getApplication()->getServiceManager()->get('ViewRenderer');
+        $content = new ViewModel();
+        $content->setTemplate($template);
+        $layout = $e->getViewModel();
+        $layout->setTemplate('layout/error');
+        $layout->setVariable('statusCode', $statusCode);
+        $layout->setVariable('content', $renderer->render($content));
+        return $renderer->render($layout);
+    }
+
     public function getServiceConfig()
     {
         return array(
             'factories' => array(
+                'Logger' => new class
+                {
+                    public function __invoke($diContainer)
+                    {
+                        return new Logger();
+                    }
+                },
                 'UserTable'  => new class
                 {
                     public function __invoke($diContainer)

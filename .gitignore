@@ -20,3 +20,7 @@ public/uploads/*
 !public/uploads/index.php
 public/temporary/*
 !public/temporary/index.php
+
+# Application and scheduled job logs
+data/logs/*
+!data/logs/index.php

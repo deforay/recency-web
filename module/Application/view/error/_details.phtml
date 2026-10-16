@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ *
+ * Exception details, shown only when view_manager.display_exceptions is true.
+ * Production keeps it false. Turn it on in config/autoload/local.php on a
+ * development machine.
+ */
+
+if (empty($this->display_exceptions) || !($this->exception ?? null) instanceof Throwable) {
+    return;
+}
+?>
+<details open>
+    <summary>Developer details</summary>
+    <?php for ($ex = $this->exception, $i = 0; $ex !== null && $i < 10; $ex = $ex->getPrevious(), $i++) : ?>
+        <p><strong><?= $this->escapeHtml($ex::class) ?></strong> at <code><?= $this->escapeHtml($ex->getFile() . ':' . $ex->getLine()) ?></code></p>
+        <pre><?= $this->escapeHtml($ex->getMessage()) ?></pre>
+        <pre><?= $this->escapeHtml($ex->getTraceAsString()) ?></pre>
+    <?php endfor; ?>
+</details>
