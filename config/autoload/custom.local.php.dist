@@ -12,6 +12,9 @@ return [
     'vlsm' => [
         // The InteLIS (VLSM) install Recency sends requests to
         'domain' => 'https://intelis.example.org',
+        // true runs the scheduled InteLIS jobs: send VL requests, fetch results
+        // and sample status. Needs authToken below.
+        'sync' => false,
         // Sign-in across Recency and InteLIS. The salt must match InteLIS's
         // recency.crossloginSalt.
         'crosslogin' => false,

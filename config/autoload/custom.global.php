@@ -12,6 +12,8 @@ return [
     'domain' => '',
     'vlsm' => [
         'domain' => '',
+        // Run the scheduled InteLIS jobs (send requests, fetch results and status)
+        'sync' => false,
         'crosslogin' => false,
         'crosslogin-salt' => ''
     ],

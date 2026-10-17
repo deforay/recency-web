@@ -36,7 +36,8 @@
         "composer/semver": "^3.4",
         "phpmyadmin/sql-parser": "^6.0",
         "symfony/console": "^7.4",
-        "monolog/monolog": "^3.9"
+        "monolog/monolog": "^3.9",
+        "crunzphp/crunz": "^3.9"
     },
     "autoload": {
         "psr-4": {

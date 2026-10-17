@@ -1,0 +1,15 @@
+# crunz settings. cron.sh runs crunz every minute, and the jobs are in
+# tasks/RecencyTasks.php.
+#
+# crunz itself runs on UTC. A job set for a given hour uses the timezone that
+# tasks/RecencyTasks.php gives it: custom config 'timezone', else the server's.
+
+source: tasks
+suffix: Tasks.php
+timezone: UTC
+
+# Without these, crunz drops what each job prints, even with appendOutputTo.
+# Job output goes to the log each job names. Failures go to the errors file.
+log_output: true
+log_errors: true
+errors_log_file: data/logs/crunz-errors.log
